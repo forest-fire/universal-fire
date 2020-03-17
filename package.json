@@ -1,0 +1,18 @@
+{
+  "name": "@forest-fire/sdk",
+  "version": "0.1.0",
+  "description": "Forest Fire SDK for Firebase",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forest-fire/sdk.git"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^3.20.2",
+    "prettier": "^1.19.1"
+  },
+  "license": "MIT"
+}
