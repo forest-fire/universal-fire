@@ -1,0 +1,14 @@
+{
+  "name": "@forest-fire/types",
+  "version": "0.1.0",
+  "description": "@forest-fire/* Types",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forest-fire/sdk.git"
+  },
+  "files": [
+    "index.d.ts"
+  ],
+  "license": "UNLICENSED"
+}
