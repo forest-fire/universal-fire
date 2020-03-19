@@ -10,5 +10,10 @@
   "files": [
     "index.d.ts"
   ],
+  "devDependencies": {
+    "@firebase/app-types": "^0.5.3",
+    "firebase-admin": "^8.10.0",
+    "typescript": "^3.8.3"
+  },
   "license": "UNLICENSED"
 }
