@@ -6,5 +6,13 @@
     "type": "git",
     "url": "git+https://github.com/forest-fire/sdk.git"
   },
+  "devDependencies": {
+    "@firebase/app": "^0.5.6",
+    "@firebase/app-types": "^0.5.3",
+    "@firebase/auth-types": "^0.10.0",
+    "@firebase/firestore": "^1.12.1",
+    "@firebase/firestore-types": "^1.10.1",
+    "typescript": "^3.8.3"
+  },
   "license": "MIT"
 }
