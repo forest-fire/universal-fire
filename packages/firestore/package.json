@@ -6,5 +6,9 @@
     "type": "git",
     "url": "git+https://github.com/forest-fire/sdk.git"
   },
+  "devDependencies": {
+    "@firebase/firestore": "^1.12.1",
+    "typescript": "^3.8.3"
+  },
   "license": "MIT"
 }
