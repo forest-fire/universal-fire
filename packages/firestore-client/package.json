@@ -1,0 +1,10 @@
+{
+  "name": "@forest-fire/firestore-client",
+  "version": "0.1.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forest-fire/sdk.git"
+  },
+  "license": "MIT"
+}
