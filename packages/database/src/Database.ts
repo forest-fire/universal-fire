@@ -4,17 +4,17 @@ import { FirebaseAuth } from '@firebase/auth-types';
 import { FirebaseDatabase } from '@firebase/database-types';
 import { FirebaseFirestore } from '@firebase/firestore-types';
 import firebase from '@firebase/app';
-import { FirestoreClient } from '@forest-fire/firestore-client';
 
 type IConfig = AdminConfig | ClientConfig;
 
 export abstract class Database {
-  static connect(config: IConfig) {
+  static async connect(config: IConfig) {
     // Right now we are assuming it's just Firestore.
     const isAdmin = isAdminConfig(config);
     if (isAdmin) {
       throw new Error('Not implemented');
     }
+    const { FirestoreClient } = await import('@forest-fire/firestore-client');
     return FirestoreClient.connect(config as ClientConfig);
   }
   /**
@@ -22,13 +22,9 @@ export abstract class Database {
    */
   protected _app: FirebaseApp;
   /**
-   * The authentication API of the database.
-   */
-  protected _auth: FirebaseAuth;
-  /**
    * The database.
    */
-  protected _database: FirebaseDatabase | FirebaseFirestore;
+  protected _database: FirebaseDatabase | FirebaseFirestore | undefined;
   /**
    * Returns the `_app`.
    */
@@ -54,20 +50,19 @@ export abstract class Database {
     return this._database;
   }
   /**
-   * Initializes Firebase.
-   */
-  protected initializeApp() {
-    this._app = firebase.initializeApp(this.config);
-  }
-  /**
    * Creates a new instance.
    */
-  protected constructor(protected _config: IConfig) {}
+  protected constructor(protected _config: IConfig) {
+    this._app = firebase.initializeApp(_config);
+  }
   /**
    * Returns the authentication API of the database.
    */
   public get auth(): FirebaseAuth {
-    return this.app.auth();
+    if (this.app.auth) return this.app.auth();
+    throw new Error(
+      'Attempt to use auth module without having installed Firebase auth dependency'
+    );
   }
   /**
    * Connects to the database.
