@@ -2,17 +2,34 @@
   "name": "@forest-fire/firestore-client",
   "version": "0.1.0",
   "description": "",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/forest-fire/sdk.git"
   },
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "tsc -P tsconfig.json",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:e2e": "jest --config test/jest-e2e.json"
+  },
   "devDependencies": {
-    "@firebase/app": "^0.5.6",
-    "@firebase/app-types": "^0.5.3",
-    "@firebase/auth-types": "^0.10.0",
-    "@firebase/firestore": "^1.12.1",
-    "@firebase/firestore-types": "^1.10.1",
     "typescript": "^3.8.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": ".",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "testEnvironment": "node"
   },
   "license": "MIT"
 }
