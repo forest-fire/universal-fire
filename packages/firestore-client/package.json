@@ -1,35 +1,22 @@
 {
   "name": "@forest-fire/firestore-client",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/commonjs",
+  "module": "dist/esnext",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/forest-fire/sdk.git"
   },
   "scripts": {
-    "postinstall": "npm run build",
-    "build": "tsc -P tsconfig.json",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test:e2e": "jest --config test/jest-e2e.json"
+    "build": "rimraf dist/ && tsc --module commonjs --outDir dist/commonjs && tsc --module esnext --outDir dist/esnext",
+    "test": "mocha --require ts-node/register src/**/*.spec.ts",
+    "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files src src/**/*.ts",
+    "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*.spec.ts",
+    "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
-  "devDependencies": {
-    "typescript": "^3.8.3"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": ".",
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "testEnvironment": "node"
+  "dependencies": {
+    "@firebase/app": "^0.6.0"
   },
   "license": "MIT"
 }

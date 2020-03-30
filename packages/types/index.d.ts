@@ -4,12 +4,7 @@ import { FirebaseOptions } from '@firebase/app-types';
 /**
  * The interface that abstract databases must implement.
  */
-export interface AbstractedDatabase {
-  /**
-   * Connects to the database.
-   */
-  connect(): void;
-}
+export interface AbstractedDatabase {}
 
 /**
  * The interface that client databases must implement.

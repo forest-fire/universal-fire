@@ -1,43 +1,26 @@
 {
   "name": "@forest-fire/database",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/commonjs",
+  "module": "dist/esnext",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/forest-fire/sdk.git"
   },
   "scripts": {
-    "postinstall": "npm run build",
-    "build": "tsc -P tsconfig.json",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "test:e2e": "jest --config test/jest-e2e.json"
+    "build": "rimraf dist/ && tsc --module commonjs --outDir dist/commonjs && tsc --module esnext --outDir dist/esnext",
+    "test": "mocha --require ts-node/register src/**/*.spec.ts",
+    "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files src src/**/*.ts",
+    "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*.spec.ts",
+    "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
   "devDependencies": {
-    "@firebase/app": "^0.5.6",
+    "@firebase/app": "^0.6.0",
     "@firebase/app-types": "^0.5.3",
     "@firebase/auth-types": "^0.10.0",
     "@firebase/database-types": "^0.4.14",
-    "@firebase/firestore-types": "^1.10.1",
-    "@types/jest": "^25.1.4",
-    "firebase-admin": "^8.10.0",
-    "jest": "^25.1.0",
-    "ts-jest": "^25.2.1",
-    "typescript": "^3.8.3"
+    "@firebase/firestore-types": "^1.10.1"
   },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": ".",
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "testEnvironment": "node"
-  }
+  "license": "MIT"
 }

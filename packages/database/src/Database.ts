@@ -1,41 +1,44 @@
-import { AdminConfig, ClientConfig } from '@forest-fire/types';
 import { FirebaseApp } from '@firebase/app-types';
 import { FirebaseAuth } from '@firebase/auth-types';
 import { FirebaseDatabase } from '@firebase/database-types';
 import { FirebaseFirestore } from '@firebase/firestore-types';
-import firebase from '@firebase/app';
 
-type IConfig = AdminConfig | ClientConfig;
+type IConfig = Record<string, any>;
 
 export abstract class Database {
-  static async connect(config: IConfig) {
-    // Right now we are assuming it's just Firestore.
-    const isAdmin = isAdminConfig(config);
-    if (isAdmin) {
-      throw new Error('Not implemented');
-    }
-    const { FirestoreClient } = await import('@forest-fire/firestore-client');
-    return FirestoreClient.connect(config as ClientConfig);
+  static async connect<T extends Database>(
+    constructor: new () => T,
+    config: IConfig
+  ) {
+    const db = new constructor();
+    db._initializeApp(config);
+    db._connect();
+    return db;
   }
   /**
    * The Firebase app.
    */
-  protected _app: FirebaseApp;
+  protected _app: FirebaseApp | undefined;
   /**
    * The database.
    */
   protected _database: FirebaseDatabase | FirebaseFirestore | undefined;
   /**
+   * Sets the `_app`.
+   */
+  protected set app(value) {
+    this._app = value;
+  }
+  /**
    * Returns the `_app`.
    */
   protected get app() {
-    return this._app;
-  }
-  /**
-   * Returns the `_config`.
-   */
-  protected get config() {
-    return this._config;
+    if (this._app) {
+      return this._app;
+    }
+    throw new Error(
+      'Attempt to access Firebase App without having instantiated it'
+    );
   }
   /**
    * Sets the `_database`.
@@ -50,29 +53,22 @@ export abstract class Database {
     return this._database;
   }
   /**
-   * Creates a new instance.
+   * Initializes the Firebase app.
    */
-  protected constructor(protected _config: IConfig) {
-    this._app = firebase.initializeApp(_config);
-  }
+  protected abstract _initializeApp(config: IConfig): void;
+  /**
+   * Connects to the database.
+   */
+  protected abstract async _connect(): Promise<this>;
   /**
    * Returns the authentication API of the database.
    */
   public get auth(): FirebaseAuth {
-    if (this.app.auth) return this.app.auth();
+    if (this.app.auth) {
+      return this.app.auth();
+    }
     throw new Error(
       'Attempt to use auth module without having installed Firebase auth dependency'
     );
   }
-  /**
-   * Connects to the database.
-   */
-  public abstract connect(): void;
 }
-
-/**
- * Returns true if `config` is the Firebase admin configuration, false
- * otherwise.
- */
-const isAdminConfig = (config: IConfig): config is AdminConfig =>
-  'serviceAccountId' in config;
