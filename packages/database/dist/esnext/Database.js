@@ -36,6 +36,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var Database = /** @class */ (function () {
     function Database() {
+        /**
+         * Indicates if the database is using the admin SDK.
+         */
+        this._isAdminApi = false;
+        /**
+         * Indicates if the database is a mock database.
+         */
+        this._isMock = false;
     }
     Database.connect = function (constructor, config) {
         return __awaiter(this, void 0, void 0, function () {
@@ -83,15 +91,40 @@ var Database = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Database.prototype, "auth", {
+    /**
+     * Returns the authentication API of the database.
+     */
+    Database.prototype.auth = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, import('@firebase/auth')];
+                    case 1:
+                        _a.sent();
+                        if (this.app.auth) {
+                            return [2 /*return*/, this.app.auth()];
+                        }
+                        throw new Error('Attempt to use auth module without having installed Firebase auth dependency');
+                }
+            });
+        });
+    };
+    Object.defineProperty(Database.prototype, "isAdminApi", {
         /**
-         * Returns the authentication API of the database.
+         * Indicates if the database is using the admin SDK.
          */
         get: function () {
-            if (this.app.auth) {
-                return this.app.auth();
-            }
-            throw new Error('Attempt to use auth module without having installed Firebase auth dependency');
+            return this._isAdminApi;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Database.prototype, "isMockDb", {
+        /**
+         * Indicates if the database is a mock database.
+         */
+        get: function () {
+            return this._isMock;
         },
         enumerable: true,
         configurable: true
