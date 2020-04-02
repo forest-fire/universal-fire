@@ -1,7 +1,7 @@
 {
-  "name": "@forest-fire/sdk",
+  "name": "@forest-fire/monorepo",
   "version": "0.1.0",
-  "description": "Forest Fire SDK for Firebase",
+  "description": "Forest Fire monorepo for Firebase",
   "private": true,
   "repository": {
     "type": "git",

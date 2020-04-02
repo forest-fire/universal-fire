@@ -1,9 +1,9 @@
-import { ClientConfig, ClientDatabase } from '@forest-fire/types';
+import { IClientConfig, IClientDatabase } from '@forest-fire/types';
 import { FirestoreDb } from '@forest-fire/firestore';
 import firebase from '@firebase/app';
 
-export class FirestoreClient extends FirestoreDb implements ClientDatabase {
-  protected async _initializeApp(config: ClientConfig) {
+export class FirestoreClient extends FirestoreDb implements IClientDatabase {
+  protected async _initializeApp(config: IClientConfig) {
     this.app = firebase.initializeApp(config);
   }
 
