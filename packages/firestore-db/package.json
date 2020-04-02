@@ -1,5 +1,5 @@
 {
-  "name": "@forest-fire/firestore",
+  "name": "@forest-fire/firestore-db",
   "version": "0.3.0",
   "description": "",
   "main": "dist/commonjs",
