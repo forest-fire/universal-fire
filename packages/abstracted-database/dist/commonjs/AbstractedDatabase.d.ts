@@ -1,13 +1,12 @@
 import { ISerializedQuery } from '@forest-fire/types';
 import type { DocumentChangeType as IFirestoreDbEvent } from '@firebase/firestore-types';
-import type { EventType as IRealTimeDbEvent } from "@firebase/database-types";
+import type { EventType as IRealTimeDbEvent, FirebaseDatabase } from "@firebase/database-types";
 import type { FirebaseApp } from '@firebase/app-types';
-import type { FirebaseDatabase } from '@firebase/database-types';
 import type { FirebaseFirestore } from '@firebase/firestore-types';
 import type { Mock as MockDb } from 'firemock';
 declare type IConfig = Record<string, any>;
-export declare abstract class Database {
-    static connect<T extends Database>(constructor: new () => T, config: IConfig): Promise<T>;
+export declare abstract class AbstractedDatabase {
+    static connect<T extends AbstractedDatabase>(constructor: new () => T, config: IConfig): Promise<T>;
     /**
      * Indicates if the database is using the admin SDK.
      */

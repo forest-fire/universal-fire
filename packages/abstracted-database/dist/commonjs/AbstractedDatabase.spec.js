@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var chai_1 = require("chai");
 var _1 = require(".");
-describe('Database', function () {
+describe('AbstractedDatabase', function () {
     it('should be defined', function () {
-        chai_1.expect(_1.Database).to.exist;
+        chai_1.expect(_1.AbstractedDatabase).to.exist;
     });
 });
-//# sourceMappingURL=Database.spec.js.map
+//# sourceMappingURL=AbstractedDatabase.spec.js.map

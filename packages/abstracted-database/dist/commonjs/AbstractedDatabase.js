@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,8 +35,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var Database = /** @class */ (function () {
-    function Database() {
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var AbstractedDatabase = /** @class */ (function () {
+    function AbstractedDatabase() {
         /**
          * Indicates if the database is using the admin SDK.
          */
@@ -45,7 +54,7 @@ var Database = /** @class */ (function () {
          */
         this._isMock = false;
     }
-    Database.connect = function (constructor, config) {
+    AbstractedDatabase.connect = function (constructor, config) {
         return __awaiter(this, void 0, void 0, function () {
             var db;
             return __generator(this, function (_a) {
@@ -56,7 +65,7 @@ var Database = /** @class */ (function () {
             });
         });
     };
-    Object.defineProperty(Database.prototype, "app", {
+    Object.defineProperty(AbstractedDatabase.prototype, "app", {
         /**
          * Returns the `_app`.
          */
@@ -75,7 +84,7 @@ var Database = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Database.prototype, "database", {
+    Object.defineProperty(AbstractedDatabase.prototype, "database", {
         /**
          * Returns the `_database`.
          */
@@ -94,11 +103,11 @@ var Database = /** @class */ (function () {
     /**
      * Returns the authentication API of the database.
      */
-    Database.prototype.auth = function () {
+    AbstractedDatabase.prototype.auth = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, import('@firebase/auth')];
+                    case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('@firebase/auth')); })];
                     case 1:
                         _a.sent();
                         if (this.app.auth) {
@@ -109,7 +118,7 @@ var Database = /** @class */ (function () {
             });
         });
     };
-    Object.defineProperty(Database.prototype, "isAdminApi", {
+    Object.defineProperty(AbstractedDatabase.prototype, "isAdminApi", {
         /**
          * Indicates if the database is using the admin SDK.
          */
@@ -119,7 +128,7 @@ var Database = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Database.prototype, "isMockDb", {
+    Object.defineProperty(AbstractedDatabase.prototype, "isMockDb", {
         /**
          * Indicates if the database is a mock database.
          */
@@ -129,7 +138,7 @@ var Database = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    return Database;
+    return AbstractedDatabase;
 }());
-export { Database };
-//# sourceMappingURL=Database.js.map
+exports.AbstractedDatabase = AbstractedDatabase;
+//# sourceMappingURL=AbstractedDatabase.js.map

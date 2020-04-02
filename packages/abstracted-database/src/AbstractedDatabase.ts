@@ -7,8 +7,8 @@ import type { Mock as MockDb } from 'firemock'
 
 type IConfig = Record<string, any>;
 
-export abstract class Database {
-  static async connect<T extends Database>(
+export abstract class AbstractedDatabase {
+  static async connect<T extends AbstractedDatabase>(
     constructor: new () => T,
     config: IConfig
   ) {
