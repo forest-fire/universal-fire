@@ -2,19 +2,14 @@ import { AppOptions } from 'firebase-admin';
 import { FirebaseOptions } from '@firebase/app-types';
 
 /**
- * The interface that abstract databases must implement.
- */
-export interface AbstractedDatabase {}
-
-/**
  * The interface that client databases must implement.
  */
-export interface ClientDatabase {}
+export interface IClientDatabase {}
 
 /**
  * Available admin configurations.
  */
-export interface AdminConfig extends AppOptions {
+export interface IAdminConfig extends AppOptions {
   /**
    * The ID of the service account to be used for signing custom tokens. This
    * can be found in the `client_email` field of a service account JSON file.
@@ -29,7 +24,7 @@ export interface AdminConfig extends AppOptions {
 /**
  * Available client configurations.
  */
-export interface ClientConfig extends FirebaseOptions {
+export interface IClientConfig extends FirebaseOptions {
   /**
    * The URL of the database from which to read and write data.
    */
@@ -39,3 +34,5 @@ export interface ClientConfig extends FirebaseOptions {
    */
   projectId: string;
 }
+
+export interface ISerializedQuery {}
