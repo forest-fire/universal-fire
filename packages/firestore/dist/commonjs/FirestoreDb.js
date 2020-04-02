@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var database_1 = require("@forest-fire/database");
+var abstracted_database_1 = require("abstracted-database");
 require("@firebase/firestore");
 var FirestoreDb = /** @class */ (function (_super) {
     __extends(FirestoreDb, _super);
@@ -21,6 +21,6 @@ var FirestoreDb = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return FirestoreDb;
-}(database_1.Database));
+}(abstracted_database_1.AbstractedDatabase));
 exports.FirestoreDb = FirestoreDb;
 //# sourceMappingURL=FirestoreDb.js.map

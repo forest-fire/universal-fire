@@ -1,5 +1,4 @@
-import { AbstractedDatabase } from '@forest-fire/types';
-import { Database } from '@forest-fire/database';
+import { AbstractedDatabase } from 'abstracted-database';
 import '@firebase/firestore';
-export declare abstract class FirestoreDb extends Database implements AbstractedDatabase {
+export declare abstract class FirestoreDb extends AbstractedDatabase {
 }

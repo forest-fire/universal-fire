@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Database } from '@forest-fire/database';
+import { AbstractedDatabase } from 'abstracted-database';
 import '@firebase/firestore';
 var FirestoreDb = /** @class */ (function (_super) {
     __extends(FirestoreDb, _super);
@@ -19,6 +19,6 @@ var FirestoreDb = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return FirestoreDb;
-}(Database));
+}(AbstractedDatabase));
 export { FirestoreDb };
 //# sourceMappingURL=FirestoreDb.js.map
