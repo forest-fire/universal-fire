@@ -5,7 +5,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/forest-fire/sdk.git"
+    "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
   "workspaces": [
     "packages/*"
