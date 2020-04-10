@@ -1,9 +1,15 @@
+import {
+  DocumentChangeType as IFirestoreDbEvent,
+  FirebaseFirestore
+} from '@firebase/firestore-types';
+import {
+  EventType as IRealTimeDbEvent,
+  FirebaseDatabase
+} from '@firebase/database-types';
+import { FirebaseApp } from '@firebase/app-types';
+import { FirebaseAuth } from '@firebase/auth-types';
 import { ISerializedQuery } from '@forest-fire/types';
-import type { DocumentChangeType as IFirestoreDbEvent } from '@firebase/firestore-types'
-import type { EventType as IRealTimeDbEvent, FirebaseDatabase } from "@firebase/database-types";
-import type { FirebaseApp } from '@firebase/app-types';
-import type { FirebaseFirestore } from '@firebase/firestore-types';
-import type { Mock as MockDb } from 'firemock'
+import type { Mock as MockDb } from 'firemock';
 
 type IConfig = Record<string, any>;
 
@@ -51,18 +57,6 @@ export abstract class AbstractedDatabase {
     this._app = value;
   }
   /**
-   * Returns the `_database`.
-   */
-  protected get database() {
-    return this._database;
-  }
-  /**
-   * Sets the `_database`.
-   */
-  protected set database(value) {
-    this._database = value;
-  }
-  /**
    * Initializes the Firebase app.
    */
   protected abstract _initializeApp(config: IConfig): void;
@@ -73,15 +67,7 @@ export abstract class AbstractedDatabase {
   /**
    * Returns the authentication API of the database.
    */
-  public async auth() {
-    await import('@firebase/auth')
-    if (this.app.auth) {
-      return this.app.auth();
-    }
-    throw new Error(
-      'Attempt to use auth module without having installed Firebase auth dependency'
-    );
-  }
+  public abstract async auth(): Promise<FirebaseAuth>;
   /**
    * Indicates if the database is using the admin SDK.
    */
@@ -105,7 +91,7 @@ export abstract class AbstractedDatabase {
    */
   public abstract async getList<T = any>(
     path: string | ISerializedQuery,
-    idProp?: string
+    idProp: string
   ): Promise<T[]>;
   /**
    * Get's a push-key from the server at a given path. This ensures that
@@ -114,23 +100,27 @@ export abstract class AbstractedDatabase {
    *
    * @param path the path in the database where the push-key will be pushed to
    */
-  public abstract async getPushKey(path: string): Promise<string>;
+  public abstract async getPushKey(path: string): Promise<string | void>;
   /**
-   * Gets a snapshot from a given path in the Firebase DB and converts it to an
-   * object where the snapshot's key is included as part of the record.
+   * Gets a record from a given path in the Firebase DB and converts it to an
+   * object where the record's key is included as part of the record.
    */
   public abstract async getRecord<T = any>(
     path: string,
-    idProp?: string
+    idProp: string
   ): Promise<T>;
   /**
    * Returns the value at a given path in the database. This method is a
    * typescript _generic_ which defaults to `any` but you can set the type to
    * whatever value you expect at that path in the database.
    */
-  public abstract async getValue<T = any>(path: string): Promise<T>;
+  public abstract async getValue<T = any>(path: string): Promise<T | void>;
   /**
-   * Update the database at a given path. Note that this operation is
+   * Add a value in the database at a given path.
+   */
+  public abstract async add<T = any>(path: string, value: T): Promise<void>;
+  /**
+   * Updates the database at a given path. Note that this operation is
    * **non-destructive**, so assuming that the value you are passing in a
    * POJO/object then the properties sent in will be updated but if properties
    * that exist in the DB, but not in the value passed in then these properties
@@ -145,15 +135,9 @@ export abstract class AbstractedDatabase {
    */
   public abstract async set<T = any>(path: string, value: T): Promise<void>;
   /**
-   * Removes a path from the database. By default if you attempt to remove a
-   * path in the database which _didn't_ exist it will throw a `database/remove`
-   * error. If you'd prefer for this error to be ignored than you can pass in
-   * **true** to the `ignoreMissing` parameter.
+   * Removes a path from the database.
    */
-  public abstract async remove<T = any>(
-    path: string,
-    ignoreMissing?: boolean
-  ): Promise<T>;
+  public abstract async remove(path: string): Promise<void>;
   /**
    * Watch for Firebase events based on a DB path.
    */
@@ -165,7 +149,10 @@ export abstract class AbstractedDatabase {
   /**
    * Unwatches existing Firebase events.
    */
-  public abstract unWatch(events: IFirestoreDbEvent[] | IRealTimeDbEvent[], cb?: any): void;
+  public abstract unWatch(
+    events: IFirestoreDbEvent[] | IRealTimeDbEvent[],
+    cb?: any
+  ): void;
   /**
    * Returns a reference for a given path in Firebase
    */

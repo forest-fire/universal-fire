@@ -75,40 +75,6 @@ var AbstractedDatabase = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(AbstractedDatabase.prototype, "database", {
-        /**
-         * Returns the `_database`.
-         */
-        get: function () {
-            return this._database;
-        },
-        /**
-         * Sets the `_database`.
-         */
-        set: function (value) {
-            this._database = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * Returns the authentication API of the database.
-     */
-    AbstractedDatabase.prototype.auth = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, import('@firebase/auth')];
-                    case 1:
-                        _a.sent();
-                        if (this.app.auth) {
-                            return [2 /*return*/, this.app.auth()];
-                        }
-                        throw new Error('Attempt to use auth module without having installed Firebase auth dependency');
-                }
-            });
-        });
-    };
     Object.defineProperty(AbstractedDatabase.prototype, "isAdminApi", {
         /**
          * Indicates if the database is using the admin SDK.
