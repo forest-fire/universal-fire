@@ -51,10 +51,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var firestore_db_1 = require("@forest-fire/firestore-db");
+require("@firebase/firestore");
 var app_1 = __importDefault(require("@firebase/app"));
-// @ts-ignore
+var firestore_db_1 = require("@forest-fire/firestore-db");
 var FirestoreClient = /** @class */ (function (_super) {
     __extends(FirestoreClient, _super);
     function FirestoreClient() {
@@ -73,6 +80,21 @@ var FirestoreClient = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 this.database = this.app.firestore();
                 return [2 /*return*/, this];
+            });
+        });
+    };
+    FirestoreClient.prototype.auth = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, Promise.resolve().then(function () { return __importStar(require('@firebase/auth')); })];
+                    case 1:
+                        _a.sent();
+                        if (this.app.auth) {
+                            return [2 /*return*/, this.app.auth()];
+                        }
+                        throw new Error('Attempt to use auth module without having installed Firebase auth dependency');
+                }
             });
         });
     };

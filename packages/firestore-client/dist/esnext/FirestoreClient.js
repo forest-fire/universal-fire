@@ -47,9 +47,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { FirestoreDb } from '@forest-fire/firestore-db';
+import '@firebase/firestore';
 import firebase from '@firebase/app';
-// @ts-ignore
+import { FirestoreDb } from '@forest-fire/firestore-db';
 var FirestoreClient = /** @class */ (function (_super) {
     __extends(FirestoreClient, _super);
     function FirestoreClient() {
@@ -68,6 +68,21 @@ var FirestoreClient = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 this.database = this.app.firestore();
                 return [2 /*return*/, this];
+            });
+        });
+    };
+    FirestoreClient.prototype.auth = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, import('@firebase/auth')];
+                    case 1:
+                        _a.sent();
+                        if (this.app.auth) {
+                            return [2 /*return*/, this.app.auth()];
+                        }
+                        throw new Error('Attempt to use auth module without having installed Firebase auth dependency');
+                }
             });
         });
     };
