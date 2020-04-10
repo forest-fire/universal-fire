@@ -1,2 +1,2 @@
-export * from './src';
+export * from './FirestoreDb';
 //# sourceMappingURL=index.js.map

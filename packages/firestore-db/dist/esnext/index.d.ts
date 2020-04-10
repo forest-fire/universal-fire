@@ -1,1 +1,1 @@
-export * from './FirestoreDb';
+export * from './src';

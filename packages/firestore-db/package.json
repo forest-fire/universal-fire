@@ -16,7 +16,7 @@
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
   "devDependencies": {
-    "@firebase/firestore": "^1.12.1"
+    "@firebase/firestore-types": "^1.10.1"
   },
   "license": "MIT"
 }
