@@ -8,18 +8,13 @@ import { ISerializedQuery } from '@forest-fire/types';
 export abstract class FirestoreDb extends AbstractedDatabase {
   _database: FirebaseFirestore | undefined;
 
-  /**
-   * Returns the `_database`.
-   */
   protected get database() {
     if (this._database) {
       return this._database;
     }
     throw new Error('Attempt to use Firestore without having instantiated it');
   }
-  /**
-   * Sets the `_database`.
-   */
+
   protected set database(value: FirebaseFirestore) {
     this._database = value;
   }
