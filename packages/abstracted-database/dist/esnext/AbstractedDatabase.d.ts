@@ -73,7 +73,7 @@ export declare abstract class AbstractedDatabase {
      * Gets a record from a given path in the Firebase DB and converts it to an
      * object where the record's key is included as part of the record.
      */
-    abstract getRecord<T = any>(path: string, idProp: string): Promise<T>;
+    abstract getRecord<T = any>(path: string, idProp?: string): Promise<T>;
     /**
      * Returns the value at a given path in the database. This method is a
      * typescript _generic_ which defaults to `any` but you can set the type to

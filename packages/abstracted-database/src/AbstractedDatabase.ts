@@ -107,7 +107,7 @@ export abstract class AbstractedDatabase {
    */
   public abstract async getRecord<T = any>(
     path: string,
-    idProp: string
+    idProp?: string
   ): Promise<T>;
   /**
    * Returns the value at a given path in the database. This method is a
