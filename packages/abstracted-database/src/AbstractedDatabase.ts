@@ -100,7 +100,7 @@ export abstract class AbstractedDatabase {
    *
    * @param path the path in the database where the push-key will be pushed to
    */
-  public abstract async getPushKey(path: string): Promise<string | void>;
+  public abstract async getPushKey(path: string): Promise<string>;
   /**
    * Gets a record from a given path in the Firebase DB and converts it to an
    * object where the record's key is included as part of the record.
