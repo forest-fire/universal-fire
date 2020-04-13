@@ -111,11 +111,11 @@ export declare abstract class AbstractedDatabase {
     /**
      * Watch for Firebase events based on a DB path.
      */
-    abstract watch(target: string | ISerializedQuery, events: IFirestoreDbEvent[] | IRealTimeDbEvent[], cb: any): void;
+    abstract watch(target: string | ISerializedQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRealTimeDbEvent | IRealTimeDbEvent[], cb: any): void;
     /**
      * Unwatches existing Firebase events.
      */
-    abstract unWatch(events?: IFirestoreDbEvent[] | IRealTimeDbEvent[], cb?: any): void;
+    abstract unWatch(events?: IFirestoreDbEvent | IFirestoreDbEvent[] | IRealTimeDbEvent | IRealTimeDbEvent[], cb?: any): void;
     /**
      * Returns a reference for a given path in Firebase
      */

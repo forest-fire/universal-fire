@@ -151,14 +151,14 @@ export abstract class AbstractedDatabase {
    */
   public abstract watch(
     target: string | ISerializedQuery,
-    events: IFirestoreDbEvent[] | IRealTimeDbEvent[],
+    events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRealTimeDbEvent | IRealTimeDbEvent[],
     cb: any
   ): void;
   /**
    * Unwatches existing Firebase events.
    */
   public abstract unWatch(
-    events?: IFirestoreDbEvent[] | IRealTimeDbEvent[],
+    events?: IFirestoreDbEvent | IFirestoreDbEvent[] | IRealTimeDbEvent | IRealTimeDbEvent[],
     cb?: any
   ): void;
   /**
