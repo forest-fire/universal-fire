@@ -58,7 +58,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import '@firebase/firestore';
 import { AbstractedDatabase } from 'abstracted-database';
 var FirestoreDb = /** @class */ (function (_super) {
     __extends(FirestoreDb, _super);
@@ -120,7 +119,7 @@ var FirestoreDb = /** @class */ (function (_super) {
     FirestoreDb.prototype.getPushKey = function (path) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                throw new Error('Not implemented');
+                return [2 /*return*/, this.database.collection(path).doc().id];
             });
         });
     };

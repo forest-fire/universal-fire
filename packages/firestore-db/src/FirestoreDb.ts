@@ -51,7 +51,7 @@ export abstract class FirestoreDb extends AbstractedDatabase {
   }
 
   public async getPushKey(path: string) {
-    throw new Error('Not implemented');
+    return this.database.collection(path).doc().id;
   }
 
   public async getRecord<T = any>(path: string, idProp: string) {

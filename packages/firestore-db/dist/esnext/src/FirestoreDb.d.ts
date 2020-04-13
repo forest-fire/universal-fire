@@ -1,8 +1,6 @@
-import '@firebase/firestore';
 import { AbstractedDatabase } from 'abstracted-database';
-import { DocumentChangeType as IFirestoreDbEvent } from '@firebase/firestore-types';
+import { DocumentChangeType as IFirestoreDbEvent, FirebaseFirestore } from '@firebase/firestore-types';
 import { ISerializedQuery } from '@forest-fire/types';
-import { FirebaseFirestore } from '@firebase/firestore-types';
 export declare abstract class FirestoreDb extends AbstractedDatabase {
     _database: FirebaseFirestore | undefined;
     /**
@@ -17,7 +15,7 @@ export declare abstract class FirestoreDb extends AbstractedDatabase {
     protected isDocument(path: string | ISerializedQuery): boolean;
     get mock(): void;
     getList<T = any>(path: string, idProp: string): Promise<T[]>;
-    getPushKey(path: string): Promise<void>;
+    getPushKey(path: string): Promise<string>;
     getRecord<T = any>(path: string, idProp: string): Promise<T>;
     getValue<T = any>(path: string): Promise<void>;
     add<T = any>(path: string, value: T): Promise<void>;
