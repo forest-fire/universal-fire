@@ -1,4 +1,4 @@
-import { AppOptions } from 'firebase-admin';
+import type { AppOptions } from 'firebase-admin';
 import { FirebaseOptions } from '@firebase/app-types';
 
 /**
