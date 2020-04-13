@@ -2,7 +2,6 @@
   "name": "@forest-fire/types",
   "version": "0.1.0",
   "description": "@forest-fire/* Types",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/forest-fire/universal-fire.git"
