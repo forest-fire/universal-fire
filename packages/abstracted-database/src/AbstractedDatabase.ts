@@ -57,6 +57,14 @@ export abstract class AbstractedDatabase {
     this._app = value;
   }
   /**
+   * Returns the `_database`.
+   */
+  protected abstract get database(): FirebaseDatabase | FirebaseFirestore
+  /**
+   * Sets the `_database`.
+   */
+  protected abstract set database(value: FirebaseDatabase | FirebaseFirestore)
+  /**
    * Initializes the Firebase app.
    */
   protected abstract _initializeApp(config: IConfig): void;
