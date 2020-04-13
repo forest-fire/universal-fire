@@ -83,15 +83,15 @@ var FirestoreDb = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    FirestoreDb.prototype.isCollection = function (path) {
+    FirestoreDb.prototype._isCollection = function (path) {
         if (typeof path === 'string') {
             return path.split('/').length % 2 === 0;
         }
         // Just for now.
         throw new Error('Serialized queries are not supported by Firestore');
     };
-    FirestoreDb.prototype.isDocument = function (path) {
-        return this.isCollection(path) === false;
+    FirestoreDb.prototype._isDocument = function (path) {
+        return this._isCollection(path) === false;
     };
     Object.defineProperty(FirestoreDb.prototype, "mock", {
         get: function () {
@@ -179,7 +179,7 @@ var FirestoreDb = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             var pathIsCollection;
             return __generator(this, function (_a) {
-                pathIsCollection = this.isCollection(path);
+                pathIsCollection = this._isCollection(path);
                 if (pathIsCollection) {
                     this._removeCollection(path);
                 }

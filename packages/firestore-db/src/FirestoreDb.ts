@@ -24,7 +24,7 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     this._database = value;
   }
 
-  protected isCollection(path: string | ISerializedQuery) {
+  protected _isCollection(path: string | ISerializedQuery) {
     if (typeof path === 'string') {
       return path.split('/').length % 2 === 0;
     }
@@ -32,8 +32,8 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     throw new Error('Serialized queries are not supported by Firestore');
   }
 
-  protected isDocument(path: string | ISerializedQuery) {
-    return this.isCollection(path) === false;
+  protected _isDocument(path: string | ISerializedQuery) {
+    return this._isCollection(path) === false;
   }
 
   public get mock() {
@@ -79,7 +79,7 @@ export abstract class FirestoreDb extends AbstractedDatabase {
   }
 
   public async remove(path: string) {
-    const pathIsCollection = this.isCollection(path);
+    const pathIsCollection = this._isCollection(path);
     if (pathIsCollection) {
       this._removeCollection(path);
     } else {

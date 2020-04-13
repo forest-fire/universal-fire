@@ -11,8 +11,8 @@ export declare abstract class FirestoreDb extends AbstractedDatabase {
      * Sets the `_database`.
      */
     protected set database(value: FirebaseFirestore);
-    protected isCollection(path: string | ISerializedQuery): boolean;
-    protected isDocument(path: string | ISerializedQuery): boolean;
+    protected _isCollection(path: string | ISerializedQuery): boolean;
+    protected _isDocument(path: string | ISerializedQuery): boolean;
     get mock(): void;
     getList<T = any>(path: string, idProp: string): Promise<T[]>;
     getPushKey(path: string): Promise<string>;
