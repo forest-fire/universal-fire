@@ -60,7 +60,7 @@ export declare abstract class AbstractedDatabase {
      * the record is the `id` property but that can be changed with the optional
      * `idProp` parameter.
      */
-    abstract getList<T = any>(path: string | ISerializedQuery, idProp: string): Promise<T[]>;
+    abstract getList<T = any>(path: string | ISerializedQuery, idProp?: string): Promise<T[]>;
     /**
      * Get's a push-key from the server at a given path. This ensures that
      * multiple client's who are writing to the database will use the server's

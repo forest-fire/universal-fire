@@ -91,7 +91,7 @@ export abstract class AbstractedDatabase {
    */
   public abstract async getList<T = any>(
     path: string | ISerializedQuery,
-    idProp: string
+    idProp?: string
   ): Promise<T[]>;
   /**
    * Get's a push-key from the server at a given path. This ensures that
