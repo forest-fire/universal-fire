@@ -1,8 +1,8 @@
-import { ISerializedQuery } from '@forest-fire/types';
-import { FirebaseAuth } from '@firebase/auth-types';
 import { DocumentChangeType as IFirestoreDbEvent, FirebaseFirestore } from '@firebase/firestore-types';
 import { EventType as IRealTimeDbEvent, FirebaseDatabase } from '@firebase/database-types';
 import { FirebaseApp } from '@firebase/app-types';
+import { FirebaseAuth } from '@firebase/auth-types';
+import { ISerializedQuery } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 declare type IConfig = Record<string, any>;
 export declare abstract class AbstractedDatabase {
@@ -107,7 +107,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * Unwatches existing Firebase events.
      */
-    abstract unWatch(events: IFirestoreDbEvent[] | IRealTimeDbEvent[], cb?: any): void;
+    abstract unWatch(events?: IFirestoreDbEvent[] | IRealTimeDbEvent[], cb?: any): void;
     /**
      * Returns a reference for a given path in Firebase
      */

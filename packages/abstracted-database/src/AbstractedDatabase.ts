@@ -150,7 +150,7 @@ export abstract class AbstractedDatabase {
    * Unwatches existing Firebase events.
    */
   public abstract unWatch(
-    events: IFirestoreDbEvent[] | IRealTimeDbEvent[],
+    events?: IFirestoreDbEvent[] | IRealTimeDbEvent[],
     cb?: any
   ): void;
   /**
