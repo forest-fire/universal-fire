@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/firestore-db",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "",
   "main": "dist/commonjs",
   "module": "dist/esnext",
