@@ -35,4 +35,4 @@ export interface IClientConfig extends FirebaseOptions {
   projectId: string;
 }
 
-export interface ISerializedQuery {}
+export type ISerializedQuery = any
