@@ -6,7 +6,7 @@ import {
 import { ISerializedQuery } from '@forest-fire/types';
 
 export abstract class FirestoreDb extends AbstractedDatabase {
-  _database: FirebaseFirestore | undefined;
+  protected _database: FirebaseFirestore | undefined;
 
   protected get database() {
     if (this._database) {
@@ -35,7 +35,8 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     throw new Error('Not implemented');
   }
 
-  public async getList<T = any>(path: string, idProp: string) {
+  public async getList<T = any>(path: string | ISerializedQuery, idProp: string = 'id') {
+    path = typeof path !== 'string' ? path.path : path
     const querySnapshot = await this.database.collection(path).get();
     return querySnapshot.docs.map(doc => {
       return {
@@ -49,7 +50,7 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     return this.database.collection(path).doc().id;
   }
 
-  public async getRecord<T = any>(path: string, idProp: string) {
+  public async getRecord<T = any>(path: string, idProp: string = 'idProp') {
     const documentSnapshot = await this.database.doc(path).get();
     return {
       ...documentSnapshot.data(),
@@ -61,16 +62,12 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     throw new Error('Not implemented');
   }
 
-  public async add<T = any>(path: string, value: T) {
-    await this.database.collection(path).add(value);
-  }
-
   public async update<T = any>(path: string, value: Partial<T>) {
     await this.database.doc(path).update(value);
   }
 
   public async set<T = any>(path: string, value: T) {
-    throw new Error('Not implemented');
+    await this.database.doc(path).set({ ...value });
   }
 
   public async remove(path: string) {

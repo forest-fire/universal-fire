@@ -67,18 +67,12 @@ var FirestoreDb = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(FirestoreDb.prototype, "database", {
-        /**
-         * Returns the `_database`.
-         */
         get: function () {
             if (this._database) {
                 return this._database;
             }
             throw new Error('Attempt to use Firestore without having instantiated it');
         },
-        /**
-         * Sets the `_database`.
-         */
         set: function (value) {
             this._database = value;
         },
@@ -103,11 +97,14 @@ var FirestoreDb = /** @class */ (function (_super) {
         configurable: true
     });
     FirestoreDb.prototype.getList = function (path, idProp) {
+        if (idProp === void 0) { idProp = 'id'; }
         return __awaiter(this, void 0, void 0, function () {
             var querySnapshot;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.database.collection(path).get()];
+                    case 0:
+                        path = typeof path !== 'string' ? path.path : path;
+                        return [4 /*yield*/, this.database.collection(path).get()];
                     case 1:
                         querySnapshot = _a.sent();
                         return [2 /*return*/, querySnapshot.docs.map(function (doc) {
@@ -126,6 +123,7 @@ var FirestoreDb = /** @class */ (function (_super) {
         });
     };
     FirestoreDb.prototype.getRecord = function (path, idProp) {
+        if (idProp === void 0) { idProp = 'idProp'; }
         return __awaiter(this, void 0, void 0, function () {
             var documentSnapshot;
             var _a;
@@ -146,18 +144,6 @@ var FirestoreDb = /** @class */ (function (_super) {
             });
         });
     };
-    FirestoreDb.prototype.add = function (path, value) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.database.collection(path).add(value)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
     FirestoreDb.prototype.update = function (path, value) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -173,7 +159,12 @@ var FirestoreDb = /** @class */ (function (_super) {
     FirestoreDb.prototype.set = function (path, value) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                throw new Error('Not implemented');
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.database.doc(path).set(__assign({}, value))];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
             });
         });
     };
