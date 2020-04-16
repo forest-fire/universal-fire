@@ -89,10 +89,6 @@ export declare abstract class AbstractedDatabase {
      */
     abstract getValue<T = any>(path: string): Promise<T | void>;
     /**
-     * Add a value in the database at a given path.
-     */
-    abstract add<T = any>(path: string, value: T): Promise<void>;
-    /**
      * Updates the database at a given path. Note that this operation is
      * **non-destructive**, so assuming that the value you are passing in a
      * POJO/object then the properties sent in will be updated but if properties
