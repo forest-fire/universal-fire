@@ -10,6 +10,7 @@ import { FirebaseApp } from '@firebase/app-types';
 import { FirebaseAuth } from '@firebase/auth-types';
 import { ISerializedQuery } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
+export { MockDb }
 
 type IConfig = Record<string, any>;
 
@@ -91,7 +92,7 @@ export abstract class AbstractedDatabase {
   /**
    * Returns a mocked database.
    */
-  public abstract get mock(): MockDb | void;
+  public abstract get mock(): MockDb;
   /**
    * Get a list of a given type (defaults to _any_). Assumes that the "key" for
    * the record is the `id` property but that can be changed with the optional
@@ -141,7 +142,7 @@ export abstract class AbstractedDatabase {
   /**
    * Removes a path from the database.
    */
-  public abstract async remove(path: string): Promise<void>;
+  public abstract async remove(path: string): Promise<any>;
   /**
    * Watch for Firebase events based on a DB path.
    */

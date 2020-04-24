@@ -4,6 +4,7 @@ import {
   FirebaseFirestore
 } from '@firebase/firestore-types';
 import { ISerializedQuery } from '@forest-fire/types';
+import { MockDb } from 'abstracted-database';
 
 export abstract class FirestoreDb extends AbstractedDatabase {
   protected _database: FirebaseFirestore | undefined;
@@ -31,12 +32,15 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     return this._isCollection(path) === false;
   }
 
-  public get mock() {
+  public get mock(): MockDb {
     throw new Error('Not implemented');
   }
 
-  public async getList<T = any>(path: string | ISerializedQuery, idProp: string = 'id') {
-    path = typeof path !== 'string' ? path.path : path
+  public async getList<T = any>(
+    path: string | ISerializedQuery,
+    idProp: string = 'id'
+  ) {
+    path = typeof path !== 'string' ? path.path : path;
     const querySnapshot = await this.database.collection(path).get();
     return querySnapshot.docs.map(doc => {
       return {
