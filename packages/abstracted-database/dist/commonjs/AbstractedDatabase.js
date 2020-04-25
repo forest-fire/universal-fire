@@ -51,10 +51,8 @@ var AbstractedDatabase = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var db;
             return __generator(this, function (_a) {
-                db = new constructor();
-                db._initializeApp(config);
-                db._connect();
-                return [2 /*return*/, db];
+                db = new constructor(config);
+                return [2 /*return*/, db._connect()];
             });
         });
     };

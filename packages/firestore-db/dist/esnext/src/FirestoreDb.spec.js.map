@@ -1,1 +1,0 @@
-{"version":3,"file":"FirestoreDb.spec.js","sourceRoot":"","sources":["../../../src/FirestoreDb.spec.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,MAAM,CAAC;AAC9B,OAAO,EAAE,WAAW,EAAE,MAAM,eAAe,CAAC;AAE5C,QAAQ,CAAC,aAAa,EAAE;IACtB,EAAE,CAAC,mBAAmB,EAAE;QACtB,MAAM,CAAC,WAAW,CAAC,CAAC,EAAE,CAAC,KAAK,CAAC;IAC/B,CAAC,CAAC,CAAC;AACL,CAAC,CAAC,CAAC"}

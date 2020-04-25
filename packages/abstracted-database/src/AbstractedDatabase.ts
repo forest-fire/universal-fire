@@ -14,16 +14,19 @@ export { MockDb }
 
 type IConfig = Record<string, any>;
 
-export abstract class AbstractedDatabase {
-  static async connect<T extends AbstractedDatabase>(
-    constructor: new () => T,
-    config: IConfig
+export abstract class AbstractedDatabase<TApi extends AbstractedDatabase<any>> {
+  static async connect<T extends AbstractedDatabase<T>>(
+    constructor: new (config: any) => T,
+    config: T["config"]
   ) {
-    const db = new constructor();
-    db._initializeApp(config);
-    db._connect();
-    return db;
+    const db = new constructor(config);
+    return db._connect();
   }
+
+  /** 
+   * The configuration used to setup/configure the database. 
+   */
+  public readonly config: any;
   /**
    * Indicates if the database is using the admin SDK.
    */
@@ -66,13 +69,11 @@ export abstract class AbstractedDatabase {
    */
   protected abstract set database(value: FirebaseDatabase | FirebaseFirestore)
   /**
-   * Initializes the Firebase app.
+   * How a particular DB and SDK _connects_ to the database. This is
+   * leveraged by the `AbstractedDatabase.connect()` static initializer
+   * to allow any subclass to connect via the same API/initializer.
    */
-  protected abstract _initializeApp(config: IConfig): void;
-  /**
-   * Connects to the database.
-   */
-  protected abstract async _connect(): Promise<this>;
+  protected abstract async _connect(): Promise<TApi>;
   /**
    * Returns the authentication API of the database.
    */

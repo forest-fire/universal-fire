@@ -1,0 +1,73 @@
+{
+  "name": "@forest-fire/real-time-client",
+  "version": "0.38.1",
+  "description": "Helpful abstraction on the Firebase client API",
+  "license": "MIT",
+  "repository": "https://github.com/forest-fire/universal-fire",
+  "author": "Ken Snyder <ken@ken.net>",
+  "keywords": [
+    "firebase",
+    "typescript",
+    "nodejs",
+    "utility",
+    "admin"
+  ],
+  "files": [
+    "dist"
+  ],
+  "module": "dist/esnext/db.js",
+  "main": "dist/cjs/db.js",
+  "typings": "dist/esnext/db.d.ts",
+  "scripts": {
+    "clean": "rimraf dist",
+    "clean:nuclear": "rimraf dist node_modules yarn.lock && yarn cache clean && yarn && yarn upgrade",
+    "build": "rimraf dist && tsc -P tsconfig.esnext.json && tsc -P tsconfig.umd.json && tsc -P tsconfig.cjs.json",
+    "build:nuclear": "yarn clean:nuclear && yarn build",
+    "test": "ts-node ./scripts/test.ts",
+    "deploy": "yarn build:nuclear && yarn test && yarn publish",
+    "watch:test": "npm run test -- --watch"
+  },
+  "dependencies": {
+    "@firebase/app": "^0.6.2",
+    "@firebase/app-types": "^0.6.0",
+    "@firebase/auth": "^0.14.3",
+    "@firebase/auth-types": "^0.10.0",
+    "@firebase/database": "^0.6.1",
+    "@firebase/database-types": "^0.5.0",
+    "abstracted-firebase": "^0.38.5",
+    "common-types": "^1.14.2",
+    "events": "^3.1.0",
+    "lodash.first": "^3.0.0",
+    "lodash.last": "^3.0.0",
+    "serialized-query": "^0.11.2",
+    "typed-conversions": "^0.10.2"
+  },
+  "peerDependencies": {
+    "firemock": "^0.38.6"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.4",
+    "@types/events": "^3.0.0",
+    "@types/faker": "^4.1.7",
+    "@types/js-yaml": "^3.12.1",
+    "@types/lodash.first": "^3.0.3",
+    "@types/lodash.last": "^3.0.3",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^10.16.0",
+    "@types/rimraf": "^2.0.2",
+    "async-shelljs": "^0.1.4",
+    "chai": "^4.2.0",
+    "faker": "^4.1.0",
+    "firemock": "^0.38.6",
+    "js-yaml": "^3.13.1",
+    "mocha": "^7.1.1",
+    "rimraf": "^3.0.0",
+    "test-console": "^1.1.0",
+    "ts-node": "^8.9.0",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3"
+  },
+  "engines": {
+    "node": ">=8.13.0"
+  }
+}

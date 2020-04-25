@@ -9,7 +9,7 @@
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
   "scripts": {
-    "build": "rimraf dist/ && tsc --module commonjs --outDir dist/commonjs && tsc --module esnext --outDir dist/esnext",
+    "build": "rimraf dist/**/* && tsc --module commonjs --outDir dist/commonjs && tsc --module esnext --outDir dist/esnext",
     "test": "mocha --require ts-node/register src/**/*.spec.ts",
     "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files src src/**/*.ts",
     "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*.spec.ts",

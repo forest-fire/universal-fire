@@ -1,5 +1,5 @@
 import { AbstractedError } from './errors';
-import { RealTimeDb } from './db';
+import { RealTimeDb } from './RealTimeDb';
 
 export function slashNotation(path: string) {
   return path.substr(0, 5) === '.info'

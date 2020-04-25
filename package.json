@@ -7,6 +7,10 @@
     "type": "git",
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
+  "scripts": {
+    "build:all": "yarn lerna exec --scope abstracted-database yarn build && yarn lerna exec --scope @forest-fire/* yarn build ",
+    "build:types": "yarn lerna exec --scope @forest-fire/types yarn build"
+  },
   "workspaces": [
     "packages/*"
   ],

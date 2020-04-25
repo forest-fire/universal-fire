@@ -7,7 +7,7 @@ import {
 } from '@firebase/database-types';
 import { IDictionary } from 'common-types';
 import { IFirebaseClientConfig, IFirebaseAdminConfig } from '.';
-import { RealTimeDb } from './db';
+import { RealTimeDb } from './RealTimeDb';
 
 export type IMockLoadingState =
   | 'not-applicable'

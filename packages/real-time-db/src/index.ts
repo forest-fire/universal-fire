@@ -1,6 +1,6 @@
 import { IDictionary } from 'common-types';
 
-export { RealTimeDb } from './db';
+export { RealTimeDb } from './RealTimeDb';
 export { FileDepthExceeded } from './errors/FileDepthExceeded';
 export { UndefinedAssignment } from './errors/UndefinedAssignment';
 export { _getFirebaseType } from './util';
