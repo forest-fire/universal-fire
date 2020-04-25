@@ -3,6 +3,8 @@
   "compilerOptions": {
     "noEmit": false,
     "module": "commonjs",
-    "outDir": "dist/real-time-client/cjs"
+    "outDir": "dist/cjs",
+    "strictNullChecks": false,
+    "strict": false
   }
 }

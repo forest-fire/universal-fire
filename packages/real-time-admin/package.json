@@ -16,21 +16,24 @@
     "dist"
   ],
   "main": "dist/cjs/index.js",
-  "module": "dist/esnext/index.js",
-  "typings": "dist/esnext/index.d.ts",
+  "module": "dist/es/index.js",
+  "typings": "dist/es/index.d.ts",
   "scripts": {
-    "clean": "rimraf lib",
+    "clean": "rimraf dist/**/*",
     "clean:nuclear": "rimraf lib node_modules && rm yarn.lock && yarn cache clean && yarn && yarn upgrade",
+    "build": "run-s clean build:all",
+    "build:all": "run-p build:esnext build:cjs",
+    "build:esnext": "tsc -P tsconfig.es.json",
+    "build:cjs": "tsc -P tsconfig.cjs.json",
+    "watch": "run-p watch:esnext watch:cjs",
+    "watch:esnext": "tsc -P tsconfig.es.json -w",
+    "watch:cjs": "tsc -P tsconfig.es.json -w",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
-    "build": "rm -rf lib && tsc -P tsconfig.esnext.json && tsc -P tsconfig.cjs.json",
     "build:nuclear": "yarn clean:nuclear && yarn build",
     "test": "ts-node ./scripts/test.ts",
     "docs": "vuepress dev docs",
     "build:docs": "vuepress build docs",
-    "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'",
-    "watch": "npm run build -- --watch",
-    "deploy": "ts-node ./scripts/deploy.ts ",
-    "watch:test": "npm run test -- --watch"
+    "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'"
   },
   "dependencies": {
     "@firebase/app": "^0.6.2",

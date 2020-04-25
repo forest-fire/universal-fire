@@ -3,6 +3,8 @@
   "compilerOptions": {
     "noEmit": false,
     "module": "ESNext",
-    "outDir": "dist/real-time-client/es"
+    "outDir": "dist/es",
+    "strictNullChecks": false,
+    "strict": false
   }
 }

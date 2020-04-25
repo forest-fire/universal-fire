@@ -1,5 +1,4 @@
 import { IDictionary } from 'common-types';
-
 export { RealTimeDb } from './RealTimeDb';
 export { FileDepthExceeded } from './errors/FileDepthExceeded';
 export { UndefinedAssignment } from './errors/UndefinedAssignment';
@@ -82,3 +81,7 @@ export function isRealDbConfig(
 ): config is IFirebaseAdminConfigProps | IFirebaseClientConfigProps {
   return config.mocking !== true;
 }
+
+//TODO: Clean this file up; should ONLY be exports not function definitions!
+
+export * from './RealTimeDb';

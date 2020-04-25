@@ -13,7 +13,7 @@ import {
   EventType,
   Reference
 } from '@firebase/database-types';
-import { AbstractedDatabase } from 'abstracted-database';
+import { AbstractedDatabase, MockDb } from 'abstracted-database';
 
 export type FirebaseNamespace = import('@firebase/app-types').FirebaseNamespace;
 
@@ -33,13 +33,11 @@ import {
 } from '.';
 import { AbstractedError } from './errors/AbstractedError';
 
-type Mock = import('firemock').Mock;
-type IMockAuthConfig = import('firemock').IMockAuthConfig;
 type IMockConfigOptions = import('firemock').IMockConfigOptions;
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
-export abstract class RealTimeDb extends AbstractedDatabase {
+export abstract class RealTimeDb extends AbstractedDatabase<any> {
   protected _isAdminApi: boolean = false;
 
   public get isMockDb() {
@@ -64,32 +62,32 @@ export abstract class RealTimeDb extends AbstractedDatabase {
     return key;
   }
 
-  // public get mock(): Mock {
-  //   if (!this._mocking && !this._allowMocking) {
-  //     const e = new Error(
-  //       'You can not mock the database without setting mocking in the constructor'
-  //     );
-  //     e.name = 'AbstractedFirebase::NotAllowed';
-  //     throw e;
-  //   }
-  //   if (this._mockLoadingState === 'loading') {
-  //     const e = new Error(
-  //       `Loading the mock library is an asynchronous task; typically it takes very little time but it is currently in process. You can listen to "waitForConnection()" to ensure the mock library is ready.`
-  //     );
-  //     e.name = 'AbstractedFirebase::AsyncError';
-  //     throw e;
-  //   }
+  public get mock(): MockDb {
+    if (!this._mocking && !this._allowMocking) {
+      const e = new Error(
+        'You can not mock the database without setting mocking in the constructor'
+      );
+      e.name = 'AbstractedFirebase::NotAllowed';
+      throw e;
+    }
+    if (this._mockLoadingState === 'loading') {
+      const e = new Error(
+        `Loading the mock library is an asynchronous task; typically it takes very little time but it is currently in process. You can listen to "waitForConnection()" to ensure the mock library is ready.`
+      );
+      e.name = 'AbstractedFirebase::AsyncError';
+      throw e;
+    }
 
-  //   if (!this._mock) {
-  //     const e = new Error(
-  //       `Attempting to reference mock() on DB but _mock is not set [ mocking: ${this._mocking} ]!`
-  //     );
-  //     e.name = 'AbstractedFirebase::NotAllowed';
-  //     throw e;
-  //   }
+    if (!this._mock) {
+      const e = new Error(
+        `Attempting to reference mock() on DB but _mock is not set [ mocking: ${this._mocking} ]!`
+      );
+      e.name = 'AbstractedFirebase::NotAllowed';
+      throw e;
+    }
 
-  //   return this._mock;
-  // }
+    return this._mock;
+  }
 
   public get isConnected() {
     return this._isConnected;
@@ -109,11 +107,10 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   ) => any;
 
   protected abstract _eventManager: IClientEmitter | IAdminEmitter;
-  protected abstract _clientType: 'client' | 'admin';
   protected _isConnected: boolean = false;
   protected _mockLoadingState: IMockLoadingState = 'not-applicable';
   // tslint:disable-next-line:whitespace
-  protected _mock: Mock;
+  protected _mock: MockDb;
   protected _resetMockDb: () => void;
   protected _waitingForConnection: Array<() => void> = [];
   protected _debugging: boolean = false;
@@ -130,6 +127,7 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   public constructor(config: IFirebaseConfig = {}) {
     super();
     this._config = config;
+    this._mocking = config.mocking ? true : false;
     if (config.timeout) {
       this.CONNECTION_TIMEOUT = config.timeout;
     }
@@ -139,7 +137,6 @@ export abstract class RealTimeDb extends AbstractedDatabase {
    * called by `client` and `admin` whil
    */
   public initialize(config: IFirebaseConfig = {}) {
-    this._mocking = config.mocking ? true : false;
     this.connectToFirebase(config).then(() => this.listenForConnectionStatus());
   }
 
@@ -229,15 +226,10 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   }
 
   /**
-   * Provides a promise-based way of waiting for the connection to be
-   * established before resolving.
-   *
-   * Alternatively, users of this library
-   * are recommended to just use the `AbstractedDatabase.connect(config)`
-   * static initializer which will return a promise that resolves on
-   * the connection being established.
+   * Connects the database configuration to a database;
+   * the promise is resolved once the database is connected.
    */
-  public async waitForConnection() {
+  public async connect() {
     const config = this._config;
     if (isMockConfig(config)) {
       // MOCKING

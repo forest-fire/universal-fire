@@ -7,8 +7,6 @@ import {
   isMockConfig,
   IFirebaseClientConfigProps
 } from '@forest-fire/real-time-db';
-import { IClientConfig } from '@forest-fire/types';
-import { IFirebaseConfig } from 'abstracted-firebase/dist/esnext/types';
 
 export enum FirebaseBoolean {
   true = 1,
@@ -24,15 +22,15 @@ export { IFirebaseClientConfig } from 'abstracted-firebase';
 
 export class RealTimeClient extends RealTimeDb {
   /**
-   * Instantiates a DB and then waits for the connection
-   * to finish.
+   * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
+   * and then returns a promise which is resolved once the _connection_ is established.
    */
-  protected async _connect(): Promise<RealTimeClient> {
-    const obj = new RealTimeClient(this.config);
-    await obj.waitForConnection();
-
-    return obj;
+  public static async connect(config: IFirebaseClientConfig) {
+    const obj = new RealTimeClient(config);
+    return obj.connect();
   }
+
+  _isAdminApi = false;
 
   public readonly config: IFirebaseClientConfig;
 
@@ -88,7 +86,7 @@ export class RealTimeClient extends RealTimeDb {
       return this._auth;
     }
     if (!this.isConnected) {
-      await this.waitForConnection();
+      await this.connect();
     }
     if (this._mocking) {
       this._auth = await this.mock.auth();
@@ -153,7 +151,9 @@ export class RealTimeClient extends RealTimeDb {
             : fb.firebase.initializeApp(config, config.name);
         } catch (e) {
           if (e.message && e.message.indexOf('app/duplicate-app') !== -1) {
-            console.log(`The "${name}" app already exists; will proceed.`);
+            console.log(
+              `The "${config.name}" app already exists; will proceed.`
+            );
             this._isConnected = true;
           } else {
             throw e;

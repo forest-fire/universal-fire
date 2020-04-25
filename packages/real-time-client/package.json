@@ -15,16 +15,21 @@
   "files": [
     "dist"
   ],
-  "module": "dist/esnext/db.js",
-  "main": "dist/cjs/db.js",
-  "typings": "dist/esnext/db.d.ts",
+  "module": "dist/es",
+  "main": "dist/cjs",
+  "typings": "dist/es",
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "rimraf dist/**/*",
     "clean:nuclear": "rimraf dist node_modules yarn.lock && yarn cache clean && yarn && yarn upgrade",
-    "build": "rimraf dist && tsc -P tsconfig.esnext.json && tsc -P tsconfig.umd.json && tsc -P tsconfig.cjs.json",
-    "build:nuclear": "yarn clean:nuclear && yarn build",
+    "build": "run-s clean build:all",
+    "build:all": "run-p build:esnext build:cjs",
+    "build:esnext": "tsc -P tsconfig.es.json",
+    "build:cjs": "tsc -P tsconfig.cjs.json",
+    "watch": "run-p 'watch:esnext' 'watch:cjs'",
+    "watch:esnext": "tsc -P tsconfig.es.json -w",
+    "watch:cjs": "tsc -P tsconfig.es.json -w",
+    "build:nuclear": "run-s clean:nuclear build",
     "test": "ts-node ./scripts/test.ts",
-    "deploy": "yarn build:nuclear && yarn test && yarn publish",
     "watch:test": "npm run test -- --watch"
   },
   "dependencies": {

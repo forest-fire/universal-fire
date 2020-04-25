@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "lib": [],
     "moduleResolution": "node",
+    "module": "commonjs",
     "noImplicitAny": true,
     "sourceMap": true,
     "strict": true,

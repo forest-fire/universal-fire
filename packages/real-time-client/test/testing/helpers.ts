@@ -1,12 +1,12 @@
 // tslint:disable:no-implicit-dependencies
-import { IDictionary } from "common-types";
-import first = require("lodash.first");
-import last = require("lodash.last");
-import * as fs from "fs";
-import * as yaml from "js-yaml";
-import * as process from "process";
-import "./test-console"; // TS declaration
-import { stdout, stderr } from "test-console";
+import { IDictionary } from 'common-types';
+import first from 'lodash.first';
+import last from 'lodash.last';
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+import * as process from 'process';
+import './test-console'; // TS declaration
+import { stdout, stderr } from 'test-console';
 
 // tslint:disable-next-line
 interface Console {
@@ -38,15 +38,15 @@ export async function timeout(ms: number) {
 
 export function setupEnv() {
   if (!process.env.AWS_STAGE) {
-    process.env.AWS_STAGE = "test";
+    process.env.AWS_STAGE = 'test';
   }
 
   if (process.env.MOCK === undefined) {
-    process.env.MOCK = "true";
+    process.env.MOCK = 'true';
   }
 
   const current = process.env;
-  const yamlConfig = yaml.safeLoad(fs.readFileSync("./env.yml", "utf8"));
+  const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env

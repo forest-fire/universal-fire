@@ -12,15 +12,13 @@ import { ISerializedQuery } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 export { MockDb }
 
-type IConfig = Record<string, any>;
-
 export abstract class AbstractedDatabase<TApi extends AbstractedDatabase<any>> {
   static async connect<T extends AbstractedDatabase<T>>(
     constructor: new (config: any) => T,
     config: T["config"]
   ) {
     const db = new constructor(config);
-    return db._connect();
+    return db.connect();
   }
 
   /** 
@@ -60,20 +58,25 @@ export abstract class AbstractedDatabase<TApi extends AbstractedDatabase<any>> {
   protected set app(value) {
     this._app = value;
   }
+
+  // TODO: validate that removing this getter/setter is ok to remove
   /**
    * Returns the `_database`.
    */
-  protected abstract get database(): FirebaseDatabase | FirebaseFirestore
+  // protected abstract get database(): FirebaseDatabase | FirebaseFirestore
   /**
    * Sets the `_database`.
    */
-  protected abstract set database(value: FirebaseDatabase | FirebaseFirestore)
+  // protected abstract set database(value: FirebaseDatabase | FirebaseFirestore)
+
+  // TODO: review with rationalle with Marcello
   /**
    * How a particular DB and SDK _connects_ to the database. This is
    * leveraged by the `AbstractedDatabase.connect()` static initializer
    * to allow any subclass to connect via the same API/initializer.
    */
-  protected abstract async _connect(): Promise<TApi>;
+  abstract async connect(): Promise<TApi>;
+
   /**
    * Returns the authentication API of the database.
    */

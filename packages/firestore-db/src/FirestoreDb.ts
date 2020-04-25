@@ -6,7 +6,7 @@ import {
 import { ISerializedQuery } from '@forest-fire/types';
 import { MockDb } from 'abstracted-database';
 
-export abstract class FirestoreDb extends AbstractedDatabase {
+export abstract class FirestoreDb extends AbstractedDatabase<any> {
   protected _database: FirebaseFirestore | undefined;
 
   protected get database() {
