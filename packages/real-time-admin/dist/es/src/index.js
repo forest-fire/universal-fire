@@ -1,4 +1,3 @@
 export { SerializedQuery } from 'serialized-query';
-export { RealTimeAdmin as DB } from './RealTimeAdmin';
-export { RealTimeDB, FirebaseBoolean } from 'abstracted-firebase';
+export * from './RealTimeAdmin';
 //# sourceMappingURL=index.js.map

@@ -20,10 +20,6 @@ import {
 } from '@forest-fire/utility';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 
-export type FirebaseDatabase = import('@firebase/database-types').FirebaseDatabase;
-// tslint:disable-next-line: no-implicit-dependencies
-export type FirebaseAuth = import('@firebase/auth-types').FirebaseAuth;
-
 export interface IFirebaseListener {
   id: string;
   cb: (db: RealTimeAdmin) => void;
@@ -44,7 +40,7 @@ export class RealTimeAdmin extends RealTimeDb {
   protected _eventManager: EventManager;
   protected _clientType = 'admin';
   protected _isAuthorized: boolean = true;
-  protected _auth?: FirebaseAuth;
+  protected _auth?: IAdminAuth;
   protected _config!: IAdminConfigCompleted | IMockConfig;
   protected app: any;
 

@@ -1,8 +1,6 @@
 import { RealTimeDb } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
 import { IAdminConfig, IMockConfig, IAdminConfigCompleted, IAdminAuth } from '@forest-fire/types';
-export declare type FirebaseDatabase = import('@firebase/database-types').FirebaseDatabase;
-export declare type FirebaseAuth = import('@firebase/auth-types').FirebaseAuth;
 export interface IFirebaseListener {
     id: string;
     cb: (db: RealTimeAdmin) => void;
@@ -16,7 +14,7 @@ export declare class RealTimeAdmin extends RealTimeDb {
     protected _eventManager: EventManager;
     protected _clientType: string;
     protected _isAuthorized: boolean;
-    protected _auth?: FirebaseAuth;
+    protected _auth?: IAdminAuth;
     protected _config: IAdminConfigCompleted | IMockConfig;
     protected app: any;
     constructor(config?: IAdminConfig | IMockConfig);

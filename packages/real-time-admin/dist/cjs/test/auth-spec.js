@@ -12,22 +12,22 @@ const src_1 = require("../src/");
 const helpers = __importStar(require("./testing/helpers"));
 const chai_1 = require("chai");
 helpers.setupEnv();
-describe("Admin Auth API", () => {
-    it("before connecting throws error", async () => {
-        const db = new src_1.DB();
+describe('Admin Auth API', () => {
+    it('before connecting throws error', async () => {
+        const db = new src_1.RealTimeAdmin({ mocking: true });
         try {
             const fail = await db.auth();
-            throw new Error("Should have failed");
+            throw new Error('Should have failed');
         }
         catch (e) {
-            chai_1.expect(e.code, `Expected error code to be "not-ready" [ ${e.message} ]`).to.equal("not-ready");
+            chai_1.expect(e.code, `Expected error code to be "not-ready" [ ${e.message} ]`).to.equal('not-ready');
         }
     });
-    it("after connecting can reference auth", async () => {
-        const db = await src_1.DB.connect();
+    it('after connecting can reference auth', async () => {
+        const db = new src_1.RealTimeAdmin({ mocking: true });
         const success = await db.auth();
-        chai_1.expect(success).to.be.an("object");
-        chai_1.expect(success.createCustomToken).to.be.a("function");
+        chai_1.expect(success).to.be.an('object');
+        chai_1.expect(success.createCustomToken).to.be.a('function');
     });
 });
 //# sourceMappingURL=auth-spec.js.map

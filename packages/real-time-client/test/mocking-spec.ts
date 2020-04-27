@@ -150,12 +150,13 @@ describe('Mocking', () => {
   });
 
   it('setting initial DB state works', async () => {
-    const db2 = await RealTimeClient.connect({
+    const db2 = new RealTimeClient({
       mocking: true,
       mockData: {
         foo: 'bar'
       }
     });
+    await db2.connect();
     expect(db2.mock.db.foo).to.equal('bar');
   });
 
