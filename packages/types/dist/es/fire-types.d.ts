@@ -1,7 +1,7 @@
-import { IDictionary } from 'common-types';
-import { IServiceAccount } from './index';
+import type { IDictionary } from 'common-types';
+import type { IServiceAccount } from './index';
+import type { IMockAuthConfig, AsyncMockData } from 'firemock';
 export declare type ISerializedQuery = any;
-export declare type AsyncMockData = import('firemock').AsyncMockData;
 export declare type DebuggingCallback = (message: string) => void;
 export interface IFirebaseBaseConfig {
     /** set debugging override from logging config */
@@ -31,7 +31,7 @@ export interface IMockConfig extends IFirebaseBaseConfig {
      */
     mockData?: IDictionary | AsyncMockData;
     /** optionally configure mocking for Firebase Authentication */
-    mockAuth?: import('firemock').IMockAuthConfig;
+    mockAuth?: IMockAuthConfig;
 }
 export interface IClientConfig extends IFirebaseBaseConfig {
     apiKey: string;
@@ -73,4 +73,4 @@ export declare type IAdminConfigCompleted = (IAdminConfig & {
     serviceAccount: IServiceAccount;
     databaseUrl: string;
 }) | IMockConfig;
-export declare type IDatabaseConfig = IAdminConfig | IClientConfig | IMockConfig;
+export declare type IDatabaseConfig = IAdminConfig | IAdminConfigCompleted | IClientConfig | IMockConfig;

@@ -1,4 +1,4 @@
-import { AbstractedDatabase, MockDb } from 'abstracted-database';
+import { AbstractedDatabase, MockDb } from '@forest-fire/abstracted-database';
 import { DocumentChangeType as IFirestoreDbEvent } from '@firebase/firestore-types';
 import { ISerializedQuery, IFirestoreDatabase, IFirebaseApp } from '@forest-fire/types';
 export declare abstract class FirestoreDb extends AbstractedDatabase {

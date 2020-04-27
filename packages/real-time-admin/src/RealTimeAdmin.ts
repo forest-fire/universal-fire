@@ -1,7 +1,11 @@
 // TODO: reduce this to just named symbols which we need!
 import * as firebase from 'firebase-admin';
 import * as process from 'process';
-import { RealTimeDb, _getFirebaseType } from '@forest-fire/real-time-db';
+import {
+  RealTimeDb,
+  IRealTimeDb,
+  _getFirebaseType
+} from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
 import { debug } from './util';
 import {
@@ -25,7 +29,7 @@ export interface IFirebaseListener {
   cb: (db: RealTimeAdmin) => void;
 }
 
-export class RealTimeAdmin extends RealTimeDb {
+export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   protected _isAdminApi = true;
   /**
    * Instantiates a DB and then waits for the connection

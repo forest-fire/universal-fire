@@ -1,10 +1,9 @@
 import { DataSnapshot, OnDisconnect, Query, ThenableReference, EventType } from '@firebase/database-types';
-import { IDictionary } from 'common-types';
-import { IFirebaseClientConfig, IFirebaseAdminConfig } from '.';
-import { RealTimeDb } from './RealTimeDb';
+import type { IDictionary } from 'common-types';
+import type { RealTimeDb } from './index';
+import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
 export declare type IMockLoadingState = 'not-applicable' | 'loaded' | 'loading' | 'timed-out';
 export declare type DebuggingCallback = (message: string) => void;
-export declare type IFirebaseConfig = IFirebaseClientConfig | IFirebaseAdminConfig;
 export interface IFirebaseListener {
     id: string;
     cb: IFirebaseConnectionCallback;
@@ -90,3 +89,8 @@ export interface ITransactionResult<T = any> {
     snapshot: DataSnapshot;
     toJSON?: () => IDictionary;
 }
+/**
+ * Because Typescript can't type a _chain_ of dependencies (aka., A => B => C),
+ * we have created this type represents the full typing of `RealTimeDb`
+ */
+export declare type IRealTimeDb = RealTimeDb & AbstractedDatabase;

@@ -2,18 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const convert = require("typed-conversions");
 const serialized_query_1 = require("serialized-query");
-const util_1 = require("./util");
-const FileDepthExceeded_1 = require("./errors/FileDepthExceeded");
-const WatcherEventWrapper_1 = require("./WatcherEventWrapper");
-const abstracted_database_1 = require("abstracted-database");
-const errors_1 = require("./errors");
-const AbstractedProxyError_1 = require("./errors/AbstractedProxyError");
-const AbstractedError_1 = require("./errors/AbstractedError");
+const abstracted_database_1 = require("@forest-fire/abstracted-database");
+const index_1 = require("./index");
 /** time by which the dynamically loaded mock library should be loaded */
 exports.MOCK_LOADING_TIMEOUT = 2000;
 class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
     constructor() {
-        super(...arguments);
+        super();
         this._isAdminApi = false;
         /** how many miliseconds before the attempt to connect to DB is timed out */
         this.CONNECTION_TIMEOUT = 5000;
@@ -64,12 +59,12 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         }
         try {
             events.map(evt => {
-                const dispatch = WatcherEventWrapper_1.WatcherEventWrapper({
+                const dispatch = index_1.WatcherEventWrapper({
                     eventType: evt,
                     targetType: 'path'
                 })(cb);
                 if (typeof target === 'string') {
-                    this.ref(util_1.slashNotation(target)).on(evt, dispatch);
+                    this.ref(index_1.slashNotation(target)).on(evt, dispatch);
                 }
                 else {
                     target
@@ -81,7 +76,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         }
         catch (e) {
             console.warn(`abstracted-firebase: failure trying to watch event ${JSON.stringify(events)}`);
-            throw new AbstractedProxyError_1.AbstractedProxyError(e);
+            throw new index_1.AbstractedProxyError(e);
         }
     }
     unWatch(events, cb) {
@@ -192,7 +187,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         }
         else {
             if (this._onConnected.map(i => i.id).includes(id)) {
-                throw new AbstractedError_1.AbstractedError(`Request for onConnect() notifications was done with an explicit key [ ${id} ] which is already in use!`, `duplicate-listener`);
+                throw new index_1.AbstractedError(`Request for onConnect() notifications was done with an explicit key [ ${id} ] which is already in use!`, `duplicate-listener`);
             }
         }
         this._onConnected = this._onConnected.concat({ id, cb, ctx });
@@ -213,17 +208,17 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         }
         catch (e) {
             if (e.code === 'PERMISSION_DENIED') {
-                throw new errors_1.PermissionDenied(e, `The attempt to set a value at path "${path}" failed due to incorrect permissions.`);
+                throw new index_1.PermissionDenied(e, `The attempt to set a value at path "${path}" failed due to incorrect permissions.`);
             }
             if (e.message.indexOf('path specified exceeds the maximum depth that can be written') !== -1) {
-                throw new FileDepthExceeded_1.FileDepthExceeded(e);
+                throw new index_1.FileDepthExceeded(e);
             }
             if (e.message.indexOf('First argument includes undefined in property') !==
                 -1) {
                 e.name = 'FirebaseUndefinedValueAssignment';
-                throw new errors_1.UndefinedAssignment(e);
+                throw new index_1.UndefinedAssignment(e);
             }
-            throw new AbstractedProxyError_1.AbstractedProxyError(e, 'unknown', JSON.stringify({ path, value }));
+            throw new index_1.AbstractedProxyError(e, 'unknown', JSON.stringify({ path, value }));
         }
     }
     /**
@@ -283,10 +278,10 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         }
         catch (e) {
             if (e.code === 'PERMISSION_DENIED') {
-                throw new errors_1.PermissionDenied(e, `The attempt to update a value at path "${path}" failed due to incorrect permissions.`);
+                throw new index_1.PermissionDenied(e, `The attempt to update a value at path "${path}" failed due to incorrect permissions.`);
             }
             else {
-                throw new AbstractedProxyError_1.AbstractedProxyError(e, undefined, `While updating the path "${path}", an error occurred`);
+                throw new index_1.AbstractedProxyError(e, undefined, `While updating the path "${path}", an error occurred`);
             }
         }
     }
@@ -309,10 +304,10 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         }
         catch (e) {
             if (e.code === 'PERMISSION_DENIED') {
-                throw new errors_1.PermissionDenied(e, `The attempt to remove a value at path "${path}" failed due to incorrect permissions.`);
+                throw new index_1.PermissionDenied(e, `The attempt to remove a value at path "${path}" failed due to incorrect permissions.`);
             }
             else {
-                throw new AbstractedProxyError_1.AbstractedProxyError(e, undefined, `While removing the path "${path}", an error occurred`);
+                throw new index_1.AbstractedProxyError(e, undefined, `While removing the path "${path}", an error occurred`);
             }
         }
     }
@@ -324,13 +319,13 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
     async getSnapshot(path) {
         try {
             const response = await (typeof path === 'string'
-                ? this.ref(util_1.slashNotation(path)).once('value')
+                ? this.ref(index_1.slashNotation(path)).once('value')
                 : path.setDB(this).execute());
             return response;
         }
         catch (e) {
             console.warn(`There was a problem trying to get a snapshot from the database [ path parameter was of type "${typeof path}", fn: "getSnapshot()" ]:`, e.message);
-            throw new AbstractedProxyError_1.AbstractedProxyError(e);
+            throw new index_1.AbstractedProxyError(e);
         }
     }
     /**
@@ -346,7 +341,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
             return snap.val();
         }
         catch (e) {
-            throw new AbstractedProxyError_1.AbstractedProxyError(e);
+            throw new index_1.AbstractedProxyError(e);
         }
     }
     /**
@@ -366,7 +361,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
             return Object.assign(Object.assign({}, object), { [idProp]: snap.key });
         }
         catch (e) {
-            throw new AbstractedProxyError_1.AbstractedProxyError(e);
+            throw new index_1.AbstractedProxyError(e);
         }
     }
     /**
@@ -385,7 +380,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
             return snap.val() ? convert.snapshotToArray(snap, idProp) : [];
         }
         catch (e) {
-            throw new AbstractedProxyError_1.AbstractedProxyError(e);
+            throw new index_1.AbstractedProxyError(e);
         }
     }
     /**
@@ -406,7 +401,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
             });
         }
         catch (e) {
-            throw new AbstractedProxyError_1.AbstractedProxyError(e);
+            throw new index_1.AbstractedProxyError(e);
         }
     }
     /**
@@ -428,10 +423,10 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         }
         catch (e) {
             if (e.code === 'PERMISSION_DENIED') {
-                throw new errors_1.PermissionDenied(e, `The attempt to push a value to path "${path}" failed due to incorrect permissions.`);
+                throw new index_1.PermissionDenied(e, `The attempt to push a value to path "${path}" failed due to incorrect permissions.`);
             }
             else {
-                throw new AbstractedProxyError_1.AbstractedProxyError(e, undefined, `While pushing to the path "${path}", an error occurred`);
+                throw new index_1.AbstractedProxyError(e, undefined, `While pushing to the path "${path}", an error occurred`);
             }
         }
     }
@@ -494,7 +489,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
             this._isConnected = true;
         }
         catch (e) {
-            throw new AbstractedProxyError_1.AbstractedProxyError(e, 'abstracted-firebase/firemock-load-failure', `Failed to load the FireMock library asynchronously. The config passed in was ${JSON.stringify(config, null, 2)}`);
+            throw new index_1.AbstractedProxyError(e, 'abstracted-firebase/firemock-load-failure', `Failed to load the FireMock library asynchronously. The config passed in was ${JSON.stringify(config, null, 2)}`);
         }
     }
 }

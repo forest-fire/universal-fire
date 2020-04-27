@@ -1,17 +1,12 @@
 import * as convert from 'typed-conversions';
 import { SerializedQuery } from 'serialized-query';
-import { slashNotation } from './util';
-import { FileDepthExceeded } from './errors/FileDepthExceeded';
-import { WatcherEventWrapper } from './WatcherEventWrapper';
-import { AbstractedDatabase } from 'abstracted-database';
-import { PermissionDenied, UndefinedAssignment } from './errors';
-import { AbstractedProxyError } from './errors/AbstractedProxyError';
-import { AbstractedError } from './errors/AbstractedError';
+import { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import { PermissionDenied, UndefinedAssignment, slashNotation, AbstractedProxyError, AbstractedError, WatcherEventWrapper, FileDepthExceeded } from './index';
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 export class RealTimeDb extends AbstractedDatabase {
     constructor() {
-        super(...arguments);
+        super();
         this._isAdminApi = false;
         /** how many miliseconds before the attempt to connect to DB is timed out */
         this.CONNECTION_TIMEOUT = 5000;

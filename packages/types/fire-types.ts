@@ -1,10 +1,8 @@
-import { IDictionary } from 'common-types';
-import { IServiceAccount } from './index';
-
-// TYPES THAT ARE SCOPED ACROSS ALL PARTS of FIREBASE
+import type { IDictionary } from 'common-types';
+import type { IServiceAccount } from './index';
+import type { IMockAuthConfig, AsyncMockData } from 'firemock'
 
 export type ISerializedQuery = any;
-export type AsyncMockData = import('firemock').AsyncMockData;
 export type DebuggingCallback = (message: string) => void;
 
 export interface IFirebaseBaseConfig {
@@ -36,7 +34,7 @@ export interface IMockConfig extends IFirebaseBaseConfig {
    */
   mockData?: IDictionary | AsyncMockData;
   /** optionally configure mocking for Firebase Authentication */
-  mockAuth?: import('firemock').IMockAuthConfig;
+  mockAuth?: IMockAuthConfig;
 }
 
 export interface IClientConfig extends IFirebaseBaseConfig {
@@ -84,4 +82,21 @@ export type IAdminConfigCompleted =
     })
   | IMockConfig;
 
-export type IDatabaseConfig = IAdminConfig | IClientConfig | IMockConfig;
+export type IDatabaseConfig =
+  | IAdminConfig
+  | IAdminConfigCompleted
+  | IClientConfig
+  | IMockConfig;
+
+// /**
+//  * Because Typescript can't type a _chain_ of dependencies (aka., A => B => C),
+//  * we have created this type represents the full typing of `FirestoreDb`
+//  */
+// export type IFirestoreDb = FirestoreDb & AbstractedDatabase;
+
+// /**
+//  * Because Typescript can't type a _chain_ of dependencies (aka., A => B => C),
+//  * we have created this class which represents the full typing of either `RealTimeDb`
+//  * or `FirestoreDb`
+//  */
+// export type ISdkClass = IRealTimeDb | IFirestoreDb;

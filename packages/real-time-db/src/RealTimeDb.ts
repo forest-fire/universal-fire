@@ -1,21 +1,22 @@
 import { IDictionary } from 'common-types';
 import * as convert from 'typed-conversions';
 import { SerializedQuery } from 'serialized-query';
-import { slashNotation } from './util';
-import { FileDepthExceeded } from './errors/FileDepthExceeded';
-import { WatcherEventWrapper } from './WatcherEventWrapper';
-import { AbstractedDatabase } from 'abstracted-database';
-
+import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import {
+  IFirebaseListener,
+  IFirebaseConnectionCallback,
   IMockLoadingState,
   IFirebaseWatchHandler,
   IClientEmitter,
-  IAdminEmitter
-} from './types';
-import { PermissionDenied, UndefinedAssignment } from './errors';
-import { AbstractedProxyError } from './errors/AbstractedProxyError';
-import { IFirebaseListener, IFirebaseConnectionCallback } from '.';
-import { AbstractedError } from './errors/AbstractedError';
+  IAdminEmitter,
+  PermissionDenied,
+  UndefinedAssignment,
+  slashNotation,
+  AbstractedProxyError,
+  AbstractedError,
+  WatcherEventWrapper,
+  FileDepthExceeded
+} from './index';
 import {
   IMockConfigOptions,
   IRtdbDatabase,
@@ -31,6 +32,10 @@ export const MOCK_LOADING_TIMEOUT = 2000;
 
 export abstract class RealTimeDb extends AbstractedDatabase {
   protected _isAdminApi: boolean = false;
+
+  constructor() {
+    super();
+  }
 
   public get isMockDb() {
     return this._mocking;
@@ -76,10 +81,10 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   protected _debugging: boolean = false;
   protected _mocking: boolean = false;
   protected _allowMocking: boolean = false;
-  protected _onConnected: IFirebaseListener[] = [];
-  protected _onDisconnected: IFirebaseListener[] = [];
   protected _app: IFirebaseApp;
   protected _database: IRtdbDatabase;
+  protected _onConnected: IFirebaseListener[] = [];
+  protected _onDisconnected: IFirebaseListener[] = [];
   /** the config the db was started with */
   protected _config: IDatabaseConfig;
   protected abstract _auth?: any;

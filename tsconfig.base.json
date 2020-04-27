@@ -9,5 +9,6 @@
     "sourceMap": true,
     "strict": true,
     "target": "ESNext"
-  }
+  },
+  "exclude": ["test"]
 }

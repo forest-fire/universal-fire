@@ -4,5 +4,6 @@
     "noEmit": false,
     "module": "ESNext",
     "outDir": "dist/es"
-  }
+  },
+  "exclude": ["test"]
 }
