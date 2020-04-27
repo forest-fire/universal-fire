@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { DB } from '../src';
+import { RealTimeAdmin } from '../src';
 import * as chai from 'chai';
 import * as helpers from './testing/helpers';
 
@@ -8,7 +8,7 @@ const expect = chai.expect;
 describe('Connecting to Database', () => {
   it('can not instantiate without setting FIREBASE_SERVICE_ACCOUNT and FIREBASE_DATA_ROOT_URL', () => {
     try {
-      const db = new DB();
+      const db = new RealTimeAdmin();
       expect(true).to.equal(false);
     } catch (e) {
       expect(true).to.equal(true);
@@ -17,12 +17,12 @@ describe('Connecting to Database', () => {
 
   it('once ENV is setup, can instantiate', () => {
     helpers.setupEnv();
-    const db = new DB();
+    const db = new RealTimeAdmin();
     expect(true).to.equal(true);
   });
 
   it('can get a value from database once waitForConnection() returns', async () => {
-    const db = new DB();
+    const db = new RealTimeAdmin();
     expect(db.isConnected).to.be.a('boolean');
     await db.connect();
     expect(db.isConnected).to.equal(true);
@@ -34,7 +34,7 @@ describe('Connecting to Database', () => {
 
 describe('Write Operations', () => {
   helpers.setupEnv();
-  const db = new DB();
+  const db = new RealTimeAdmin();
   afterEach(async () => {
     await db.remove('scratch');
   });
@@ -117,7 +117,7 @@ describe('Write Operations', () => {
 
 describe('Other Operations', () => {
   helpers.setupEnv();
-  const db = new DB();
+  const db = new RealTimeAdmin();
   afterEach(async () => {
     await db.remove('scratch');
   });

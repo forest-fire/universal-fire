@@ -22,11 +22,11 @@ export class RealTimeClient extends RealTimeDb {
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
    * and then returns a promise which is resolved once the _connection_ is established.
    */
-  // public static async connect(config: IClientConfig | IMockConfig) {
-  //   const obj = new RealTimeClient(config);
-  //   await obj.connect();
-  //   return obj;
-  // }
+  public static async connect(config: IClientConfig | IMockConfig) {
+    const obj = new RealTimeClient(config);
+    await obj.connect();
+    return obj;
+  }
 
   /** lists the database names which are currently connected */
   public static async connectedTo() {

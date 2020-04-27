@@ -11,6 +11,7 @@ export declare class RealTimeAdmin extends RealTimeDb {
      * Instantiates a DB and then waits for the connection
      * to finish before resolving the promise.
      */
+    static connect(config?: IAdminConfig | IMockConfig): Promise<RealTimeAdmin>;
     protected _eventManager: EventManager;
     protected _clientType: string;
     protected _isAuthorized: boolean;

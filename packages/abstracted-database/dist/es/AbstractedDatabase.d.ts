@@ -1,15 +1,7 @@
 import { FirebaseApp } from '@firebase/app-types';
-import { ISerializedQuery, IDatabaseConfig, MockDb, IRtdbDatabase, IFirestoreDatabase, IRtdbEventType, IFirestoreDbEvent, IClientAuth, IAdminAuth, IAdminConfig, IClientConfig, IMockConfig } from '@forest-fire/types';
+import { ISerializedQuery, IDatabaseConfig, MockDb, IRtdbDatabase, IFirestoreDatabase, IRtdbEventType, IFirestoreDbEvent, IClientAuth, IAdminAuth } from '@forest-fire/types';
 export { MockDb };
 export declare abstract class AbstractedDatabase {
-    /**
-     * A static initializer which can hand back any of the supported SDK's for either
-     * Firestore or Real-Time Database.
-     *
-     * @param constructor The DB/SDK class which you wish to use
-     * @param config The database configuration
-     */
-    static connect<T extends AbstractedDatabase>(constructor: new (config: any) => T, config: IAdminConfig | IClientConfig | IMockConfig): Promise<T>;
     /**
      * The configuration used to setup/configure the database.
      */

@@ -9,11 +9,11 @@ import {
 } from '@forest-fire/types';
 
 export class FirestoreClient extends FirestoreDb implements IClientSdk {
-  // static async connect(config: IClientConfig | IMockConfig) {
-  //   const obj = new FirestoreClient(config);
-  //   await obj.connect();
-  //   return obj;
-  // }
+  static async connect(config: IClientConfig | IMockConfig) {
+    const obj = new FirestoreClient(config);
+    await obj.connect();
+    return obj;
+  }
 
   protected _config: IClientConfig | IMockConfig;
   protected _isAdminApi = false;

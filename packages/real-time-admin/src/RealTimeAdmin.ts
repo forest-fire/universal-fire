@@ -31,11 +31,11 @@ export class RealTimeAdmin extends RealTimeDb {
    * Instantiates a DB and then waits for the connection
    * to finish before resolving the promise.
    */
-  // public static async connect(config: IAdminConfig | IMockConfig = {}) {
-  //   const obj = new RealTimeAdmin(config);
-  //   await obj.connect();
-  //   return obj;
-  // }
+  public static async connect(config: IAdminConfig | IMockConfig = {}) {
+    const obj = new RealTimeAdmin(config);
+    await obj.connect();
+    return obj;
+  }
 
   protected _eventManager: EventManager;
   protected _clientType = 'admin';

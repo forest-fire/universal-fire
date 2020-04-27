@@ -32,6 +32,15 @@ export class RealTimeAdmin extends RealTimeDb {
         this.listenForConnectionStatus();
     }
     /**
+     * Instantiates a DB and then waits for the connection
+     * to finish before resolving the promise.
+     */
+    static async connect(config = {}) {
+        const obj = new RealTimeAdmin(config);
+        await obj.connect();
+        return obj;
+    }
+    /**
      * Provides access to the Firebase Admin Auth API.
      *
      * > If using a _mocked_ database then the Auth API will be redirected to **firemock**

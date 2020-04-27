@@ -1,4 +1,4 @@
-import { DB } from '../src/index';
+import { RealTimeAdmin } from '../src/index';
 // tslint:disable-next-line:no-implicit-dependencies
 import * as chai from 'chai';
 import * as helpers from './testing/helpers';
@@ -7,7 +7,7 @@ helpers.setupEnv();
 describe('Debugging: ', () => {
     it('debugging set to "true" results in logging to STDOUT', async () => {
         const restore = helpers.captureStdout();
-        const db = new DB({ debugging: true });
+        const db = new RealTimeAdmin({ debugging: true });
         await db.connect();
         await db.getValue('foo');
         const output = restore();
@@ -21,7 +21,7 @@ describe('Debugging: ', () => {
             expect(message).to.be.a('string');
             count++;
         };
-        const db = new DB({ debugging: callback });
+        const db = new RealTimeAdmin({ debugging: callback });
         await db.connect();
         db.getValue('foo');
         db.set('foo2', 'happy happy');

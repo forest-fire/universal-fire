@@ -19,6 +19,11 @@ class FirestoreClient extends firestore_db_1.FirestoreDb {
         }
         this._config = config;
     }
+    static async connect(config) {
+        const obj = new FirestoreClient(config);
+        await obj.connect();
+        return obj;
+    }
     async connect() {
         // TODO: explain rationale of async import
         //  1. delay parsing JS until ready to connect

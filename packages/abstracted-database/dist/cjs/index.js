@@ -4,4 +4,5 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./AbstractedDatabase"));
+__export(require("./DB"));
 //# sourceMappingURL=index.js.map

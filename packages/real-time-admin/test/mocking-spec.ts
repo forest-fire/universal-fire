@@ -1,8 +1,6 @@
-import { DB } from '../src/index';
-// tslint:disable-next-line:no-implicit-dependencies
-import * as chai from 'chai';
+import { RealTimeAdmin } from '../src/index';
+import { expect } from 'chai';
 import * as helpers from './testing/helpers';
-const expect = chai.expect;
 helpers.setupEnv();
 type SchemaCallback = import('firemock').SchemaCallback;
 
@@ -14,16 +12,16 @@ const animalMocker: SchemaCallback = h => () => ({
 
 describe('Mocking', async () => {
   it('ref() returns a mock reference', async () => {
-    const db = new DB();
+    const db = new RealTimeAdmin();
     await db.connect();
     expect(db.ref('foo')).to.have.property('once');
-    const mockDb = await DB.connect({ mocking: true });
+    const mockDb = await RealTimeAdmin.connect({ mocking: true });
     await mockDb.connect();
     expect(mockDb.ref('foo')).to.have.property('once');
   });
 
   it('getSnapshot() returns a mock snapshot', async () => {
-    const db = await DB.connect({ mocking: true });
+    const db = await RealTimeAdmin.connect({ mocking: true });
     await db.connect();
     addAnimals(db, 10);
     const animals = await db.getSnapshot('/animals');
@@ -34,7 +32,7 @@ describe('Mocking', async () => {
   });
 
   it('getValue() returns a value from mock DB', async () => {
-    const db = await DB.connect({ mocking: true });
+    const db = await RealTimeAdmin.connect({ mocking: true });
     await db.connect();
     addAnimals(db, 10);
     const animals = await db.getValue('/animals');
@@ -46,7 +44,7 @@ describe('Mocking', async () => {
   });
 
   it('getRecord() returns a record from mock DB', async () => {
-    const db = await DB.connect({ mocking: true });
+    const db = await RealTimeAdmin.connect({ mocking: true });
     addAnimals(db, 10);
     const firstKey = helpers.firstKey(db.mock.db.animals);
     const animal = await db.getRecord(`/animals/${firstKey}`);
@@ -57,7 +55,7 @@ describe('Mocking', async () => {
   });
 
   it('getRecord() returns a record from mock DB with bespoke id prop', async () => {
-    const db = await DB.connect({ mocking: true });
+    const db = await RealTimeAdmin.connect({ mocking: true });
     addAnimals(db, 10);
     const firstKey = helpers.firstKey(db.mock.db.animals);
     const animal = await db.getRecord(`/animals/${firstKey}`, 'key');
@@ -69,7 +67,7 @@ describe('Mocking', async () => {
   });
 
   it('getList() returns an array of records', async () => {
-    const db = await DB.connect({ mocking: true });
+    const db = await RealTimeAdmin.connect({ mocking: true });
     addAnimals(db, 10);
     const animals = await db.getList('/animals');
     expect(animals).to.be.an('array');
@@ -80,7 +78,7 @@ describe('Mocking', async () => {
   });
 
   it('getList() returns an array of records, with bespoke "id" property', async () => {
-    const db = new DB({ mocking: true });
+    const db = new RealTimeAdmin({ mocking: true });
     await db.connect();
     addAnimals(db, 10);
     const animals = await db.getList('/animals', 'key');
@@ -92,7 +90,7 @@ describe('Mocking', async () => {
   });
 
   it('set() sets to the mock DB', async () => {
-    const db = new DB({ mocking: true });
+    const db = new RealTimeAdmin({ mocking: true });
     await db.connect();
     db.set('/people/abcd', {
       name: 'Frank Black',
@@ -105,7 +103,7 @@ describe('Mocking', async () => {
   });
 
   it('update() updates the mock DB', async () => {
-    const db = new DB({ mocking: true });
+    const db = new RealTimeAdmin({ mocking: true });
     await db.connect();
     db.mock.updateDB({
       people: {
@@ -126,7 +124,7 @@ describe('Mocking', async () => {
   });
 
   it('push() pushes records into the mock DB', async () => {
-    const db = new DB({ mocking: true });
+    const db = new RealTimeAdmin({ mocking: true });
     await db.connect();
     db.push('/people', {
       name: 'Frank Black',
@@ -142,7 +140,7 @@ describe('Mocking', async () => {
   });
 
   it('read operations on mock with a schema prefix are offset correctly', async () => {
-    const db = new DB({ mocking: true });
+    const db = new RealTimeAdmin({ mocking: true });
     await db.connect();
     db.mock
       .addSchema('meal', h => () => ({
@@ -160,7 +158,7 @@ describe('Mocking', async () => {
   });
 });
 
-function addAnimals(db: DB, count: number) {
+function addAnimals(db: RealTimeAdmin, count: number) {
   db.mock.addSchema('animal', animalMocker as any);
   db.mock.queueSchema('animal', count);
   db.mock.generate();

@@ -12,6 +12,7 @@ export declare class RealTimeClient extends RealTimeDb {
      * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
      * and then returns a promise which is resolved once the _connection_ is established.
      */
+    static connect(config: IClientConfig | IMockConfig): Promise<RealTimeClient>;
     /** lists the database names which are currently connected */
     static connectedTo(): Promise<string[]>;
     protected _isAdminApi: boolean;
