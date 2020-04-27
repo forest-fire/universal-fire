@@ -1,22 +1,17 @@
-// tslint:disable: member-ordering
-// tslint:disable:no-implicit-dependencies
-import { wait } from 'common-types';
 import * as convert from 'typed-conversions';
 import { SerializedQuery } from 'serialized-query';
 import { slashNotation } from './util';
 import { FileDepthExceeded } from './errors/FileDepthExceeded';
-import { UndefinedAssignment } from './errors/UndefinedAssignment';
 import { WatcherEventWrapper } from './WatcherEventWrapper';
 import { AbstractedDatabase } from 'abstracted-database';
-import { PermissionDenied } from './errors';
+import { PermissionDenied, UndefinedAssignment } from './errors';
 import { AbstractedProxyError } from './errors/AbstractedProxyError';
-import { isMockConfig } from '.';
 import { AbstractedError } from './errors/AbstractedError';
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 export class RealTimeDb extends AbstractedDatabase {
-    constructor(config = {}) {
-        super();
+    constructor() {
+        super(...arguments);
         this._isAdminApi = false;
         /** how many miliseconds before the attempt to connect to DB is timed out */
         this.CONNECTION_TIMEOUT = 5000;
@@ -28,11 +23,6 @@ export class RealTimeDb extends AbstractedDatabase {
         this._allowMocking = false;
         this._onConnected = [];
         this._onDisconnected = [];
-        this._config = config;
-        this._mocking = config.mocking ? true : false;
-        if (config.timeout) {
-            this.CONNECTION_TIMEOUT = config.timeout;
-        }
     }
     get isMockDb() {
         return this._mocking;
@@ -53,35 +43,8 @@ export class RealTimeDb extends AbstractedDatabase {
         const key = await this.ref(path).push().key;
         return key;
     }
-    get mock() {
-        if (!this._mocking && !this._allowMocking) {
-            const e = new Error('You can not mock the database without setting mocking in the constructor');
-            e.name = 'AbstractedFirebase::NotAllowed';
-            throw e;
-        }
-        if (this._mockLoadingState === 'loading') {
-            const e = new Error(`Loading the mock library is an asynchronous task; typically it takes very little time but it is currently in process. You can listen to "waitForConnection()" to ensure the mock library is ready.`);
-            e.name = 'AbstractedFirebase::AsyncError';
-            throw e;
-        }
-        if (!this._mock) {
-            const e = new Error(`Attempting to reference mock() on DB but _mock is not set [ mocking: ${this._mocking} ]!`);
-            e.name = 'AbstractedFirebase::NotAllowed';
-            throw e;
-        }
-        return this._mock;
-    }
     get isConnected() {
         return this._isConnected;
-    }
-    get config() {
-        return this._config;
-    }
-    /**
-     * called by `client` and `admin` whil
-     */
-    initialize(config = {}) {
-        this.connectToFirebase(config).then(() => this.listenForConnectionStatus());
     }
     // public abstract async auth(): Promise<A>;
     /**
@@ -161,44 +124,49 @@ export class RealTimeDb extends AbstractedDatabase {
      * Connects the database configuration to a database;
      * the promise is resolved once the database is connected.
      */
-    async connect() {
-        const config = this._config;
-        if (isMockConfig(config)) {
-            // MOCKING
-            await this.getFireMock({ db: config.mockData, auth: config.mockAuth });
-        }
-        else {
-            // NON-MOCKING
-            if (this._isConnected) {
-                return;
-            }
-            const connectionEvent = () => {
-                try {
-                    return new Promise((resolve, reject) => {
-                        this._eventManager.once('connection', (state) => {
-                            if (state) {
-                                resolve();
-                            }
-                            else {
-                                reject(new AbstractedError(`While waiting for a connection received a disconnect message instead`, `no-connection`));
-                            }
-                        });
-                    });
-                }
-                catch (e) {
-                    throw e;
-                }
-            };
-            const timeout = async () => {
-                await wait(this.CONNECTION_TIMEOUT);
-                throw new AbstractedError(`The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`, 'connection-timeout');
-            };
-            await Promise.race([connectionEvent(), timeout()]);
-            this._isConnected = true;
-            return this;
-        }
-        this._onConnected.map(i => i.cb(this, i.ctx));
-    }
+    // public async connect() {
+    //   const config = this._config;
+    //   if (isMockConfig(config)) {
+    //     // MOCKING
+    //     await this.getFireMock({ db: config.mockData, auth: config.mockAuth });
+    //   } else {
+    //     // NON-MOCKING
+    //     if (this._isConnected) {
+    //       return;
+    //     }
+    //     const connectionEvent = () => {
+    //       try {
+    //         return new Promise((resolve, reject) => {
+    //           this._eventManager.once('connection', (state: boolean) => {
+    //             if (state) {
+    //               resolve();
+    //             } else {
+    //               reject(
+    //                 new AbstractedError(
+    //                   `While waiting for a connection received a disconnect message instead`,
+    //                   `no-connection`
+    //                 )
+    //               );
+    //             }
+    //           });
+    //         });
+    //       } catch (e) {
+    //         throw e;
+    //       }
+    //     };
+    //     const timeout = async () => {
+    //       await wait(this.CONNECTION_TIMEOUT);
+    //       throw new AbstractedError(
+    //         `The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`,
+    //         'connection-timeout'
+    //       );
+    //     };
+    //     await Promise.race([connectionEvent(), timeout()]);
+    //     this._isConnected = true;
+    //     return this;
+    //   }
+    //   this._onConnected.map(i => i.cb(this, i.ctx));
+    // }
     /**
      * get a notification when DB is connected; returns a unique id
      * which can be used to remove the callback. You may, optionally,

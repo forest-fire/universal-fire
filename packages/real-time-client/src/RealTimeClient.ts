@@ -1,13 +1,15 @@
 import { EventManager } from './EventManager';
 import { ClientError } from './ClientError';
 import { FirebaseNamespace, FirebaseApp } from '@firebase/app-types';
+import { RealTimeDb } from '@forest-fire/real-time-db';
 import {
-  RealTimeDb,
-  IFirebaseClientConfig,
   isMockConfig,
-  IFirebaseClientConfigProps
-} from '@forest-fire/real-time-db';
-
+  isClientConfig,
+  IClientConfig,
+  IClientAuth,
+  IMockConfig,
+  IRtdbDatabase
+} from '@forest-fire/types';
 export enum FirebaseBoolean {
   true = 1,
   false = 0
@@ -15,97 +17,49 @@ export enum FirebaseBoolean {
 
 export let MOCK_LOADING_TIMEOUT = 200;
 
-export type FirebaseDatabase = import('@firebase/database-types').FirebaseDatabase;
-export type FirebaseAuth = import('@firebase/auth-types').FirebaseAuth;
-
-export { IFirebaseClientConfig } from 'abstracted-firebase';
-
 export class RealTimeClient extends RealTimeDb {
   /**
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
    * and then returns a promise which is resolved once the _connection_ is established.
    */
-  public static async connect(config: IFirebaseClientConfig) {
-    const obj = new RealTimeClient(config);
-    return obj.connect();
-  }
-
-  _isAdminApi = false;
-
-  public readonly config: IFirebaseClientConfig;
+  // public static async connect(config: IClientConfig | IMockConfig) {
+  //   const obj = new RealTimeClient(config);
+  //   await obj.connect();
+  //   return obj;
+  // }
 
   /** lists the database names which are currently connected */
   public static async connectedTo() {
     // tslint:disable-next-line:no-submodule-imports
-    const fb = await import('@firebase/app');
-    await import('@firebase/database');
+    const fb = await import(
+      /* webpackChunkName: 'firebase-auth' */ '@firebase/app'
+    );
+    await import(
+      /* webpackChunkName: 'firebase-database' */ '@firebase/database'
+    );
     return Array.from(new Set(fb.firebase.apps.map(i => i.name)));
   }
 
+  protected _isAdminApi = false;
   protected _eventManager: EventManager;
-  protected _database: FirebaseDatabase;
-  protected _auth: FirebaseAuth;
-  protected _config: IFirebaseClientConfig;
-
+  protected _database: IRtdbDatabase;
+  protected _auth: IClientAuth;
+  protected _config: IClientConfig | IMockConfig;
   protected _fbClass:
     | FirebaseNamespace
     | (FirebaseNamespace & { auth: () => FirebaseNamespace['auth'] });
   protected _authProviders: FirebaseNamespace['auth'];
   protected app: FirebaseApp;
 
-  constructor(config: IFirebaseClientConfig) {
-    super(config);
+  constructor(config: IClientConfig | IMockConfig) {
+    super();
     this._config = config;
     this._eventManager = new EventManager();
+    this.listenForConnectionStatus();
   }
 
-  /**
-   * access to provider specific providers
-   */
-  get authProviders(): FirebaseNamespace['auth'] {
-    if (!this._fbClass) {
-      throw new ClientError(
-        `There was a problem getting the Firebase default export/class!`
-      );
-    }
-
-    if (!this._authProviders) {
-      if (!this._fbClass.auth) {
-        throw new ClientError(
-          `Attempt to get the authProviders getter before connecting to the database!`
-        );
-      }
-      this._authProviders = this._fbClass.auth;
-    }
-
-    return this._authProviders;
-  }
-
-  public async auth(): Promise<FirebaseAuth> {
-    if (this._auth) {
-      return this._auth;
-    }
-    if (!this.isConnected) {
-      await this.connect();
-    }
-    if (this._mocking) {
-      this._auth = await this.mock.auth();
-      return this._auth;
-    }
-    this._auth = this.app.auth() as FirebaseAuth;
-    return this._auth;
-  }
-
-  /**
-   * connect
-   *
-   * Asynchronously loads the firebase/app library and then
-   * initializes a connection to the database.
-   */
-  protected async connectToFirebase(
-    config: IFirebaseClientConfig,
-    useAuth: boolean = true
-  ) {
+  public async connect() {
+    const config = this._config;
     if (isMockConfig(config)) {
       // MOCK DB
       await this.getFireMock({
@@ -115,21 +69,22 @@ export class RealTimeClient extends RealTimeDb {
       this._authProviders = this._mock
         .authProviders as FirebaseNamespace['auth'];
       this._isConnected = true;
-    } else {
+    } else if (isClientConfig(config)) {
       // REAL DB
       if (!this._isConnected) {
-        if (process.env['FIREBASE_CONFIG']) {
-          config = { ...config, ...JSON.parse(process.env['FIREBASE_CONFIG']) };
-        }
-        config = config as IFirebaseClientConfigProps;
-        if (!config.apiKey || !config.authDomain || !config.databaseURL) {
-          throw new Error(
-            'Trying to connect without appropriate firebase configuration!'
+        if (isClientConfig(config)) {
+          config.name =
+            config.name ||
+            config.databaseURL.replace(/.*https:\W*([\w-]*)\.((.|\n)*)/g, '$1');
+        } else {
+          throw new ClientError(
+            `The client configuration passed into the database was not correctly formed. The configuration was:\n${JSON.stringify(
+              config,
+              null,
+              2
+            )}`
           );
         }
-        config.name =
-          config.name ||
-          config.databaseURL.replace(/.*https:\W*([\w-]*)\.((.|\n)*)/g, '$1');
 
         // tslint:disable-next-line:no-submodule-imports
         const fb = await import(
@@ -138,7 +93,7 @@ export class RealTimeClient extends RealTimeDb {
         await import(
           /* webpackChunkName: "firebase-db" */ '@firebase/database'
         );
-        if (useAuth) {
+        if (config.useAuth) {
           await import(
             /* webpackChunkName: "firebase-auth" */ '@firebase/auth'
           );
@@ -172,7 +127,48 @@ export class RealTimeClient extends RealTimeDb {
             : (message: string) => console.log('[FIREBASE]', message)
         );
       }
+    } else {
+      throw new Error(
+        `The configuration is of an unknown type: ${JSON.stringify(config)}`
+      );
     }
+  }
+
+  /**
+   * access to provider specific providers
+   */
+  get authProviders(): FirebaseNamespace['auth'] {
+    if (!this._fbClass) {
+      throw new ClientError(
+        `There was a problem getting the Firebase default export/class!`
+      );
+    }
+
+    if (!this._authProviders) {
+      if (!this._fbClass.auth) {
+        throw new ClientError(
+          `Attempt to get the authProviders getter before connecting to the database!`
+        );
+      }
+      this._authProviders = this._fbClass.auth;
+    }
+
+    return this._authProviders;
+  }
+
+  public async auth(): Promise<IClientAuth> {
+    if (this._auth) {
+      return this._auth;
+    }
+    if (!this.isConnected) {
+      await this.connect();
+    }
+    if (this._mocking) {
+      this._auth = await this.mock.auth();
+      return this._auth;
+    }
+    this._auth = this.app.auth() as IClientAuth;
+    return this._auth;
   }
 
   /**

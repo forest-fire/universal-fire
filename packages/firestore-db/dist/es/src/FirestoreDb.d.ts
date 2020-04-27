@@ -1,11 +1,11 @@
-import { AbstractedDatabase } from 'abstracted-database';
-import { DocumentChangeType as IFirestoreDbEvent, FirebaseFirestore } from '@firebase/firestore-types';
-import { ISerializedQuery } from '@forest-fire/types';
-import { MockDb } from 'abstracted-database';
-export declare abstract class FirestoreDb extends AbstractedDatabase<any> {
-    protected _database: FirebaseFirestore | undefined;
-    protected get database(): FirebaseFirestore;
-    protected set database(value: FirebaseFirestore);
+import { AbstractedDatabase, MockDb } from 'abstracted-database';
+import { DocumentChangeType as IFirestoreDbEvent } from '@firebase/firestore-types';
+import { ISerializedQuery, IFirestoreDatabase, IFirebaseApp } from '@forest-fire/types';
+export declare abstract class FirestoreDb extends AbstractedDatabase {
+    protected _database: IFirestoreDatabase | undefined;
+    protected _app: IFirebaseApp | undefined;
+    protected get database(): IFirestoreDatabase;
+    protected set database(value: IFirestoreDatabase);
     protected _isCollection(path: string | ISerializedQuery): boolean;
     protected _isDocument(path: string | ISerializedQuery): boolean;
     get mock(): MockDb;

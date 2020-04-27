@@ -1,32 +1,42 @@
-import { DocumentChangeType as IFirestoreDbEvent, FirebaseFirestore } from '@firebase/firestore-types';
-import { EventType as IRealTimeDbEvent, FirebaseDatabase } from '@firebase/database-types';
 import { FirebaseApp } from '@firebase/app-types';
-import { FirebaseAuth } from '@firebase/auth-types';
-import { ISerializedQuery } from '@forest-fire/types';
-import type { Mock as MockDb } from 'firemock';
+import { ISerializedQuery, IDatabaseConfig, MockDb, IRtdbDatabase, IFirestoreDatabase, IRtdbEventType, IFirestoreDbEvent, IClientAuth, IAdminAuth, IAdminConfig, IClientConfig, IMockConfig } from '@forest-fire/types';
 export { MockDb };
-export declare abstract class AbstractedDatabase<TApi extends AbstractedDatabase<any>> {
-    static connect<T extends AbstractedDatabase<T>>(constructor: new (config: any) => T, config: T["config"]): Promise<T>;
+export declare abstract class AbstractedDatabase {
+    /**
+     * A static initializer which can hand back any of the supported SDK's for either
+     * Firestore or Real-Time Database.
+     *
+     * @param constructor The DB/SDK class which you wish to use
+     * @param config The database configuration
+     */
+    static connect<T extends AbstractedDatabase>(constructor: new (config: any) => T, config: IAdminConfig | IClientConfig | IMockConfig): Promise<T>;
     /**
      * The configuration used to setup/configure the database.
      */
-    readonly config: any;
+    get config(): IDatabaseConfig;
+    /**
+     * the configuration to connect to the database; based on
+     * subclass this will be either a _client_ or _admin_ configuration
+     * OR a _mock_ configuration.
+     */
+    protected abstract _config: IDatabaseConfig;
     /**
      * Indicates if the database is using the admin SDK.
      */
     protected _isAdminApi: boolean;
     /**
-     * Indicates if the database is a mock database.
+     * The mock API provided by **firemock**
      */
-    protected _isMock: boolean;
+    protected _mock: MockDb | undefined;
     /**
-     * The Firebase app.
+     * The Firebase App API.
      */
     protected _app: FirebaseApp | undefined;
     /**
-     * The database.
+     * The database API provided by Firebase (admin or client sdk of either
+     * Firestore or RTDB)
      */
-    protected _database: FirebaseDatabase | FirebaseFirestore | undefined;
+    protected _database: IRtdbDatabase | IFirestoreDatabase | undefined;
     /**
      * Returns the `_app`.
      */
@@ -36,33 +46,31 @@ export declare abstract class AbstractedDatabase<TApi extends AbstractedDatabase
      */
     protected set app(value: FirebaseApp);
     /**
-     * Returns the `_database`.
+     * Connects to the database and returns a promise which resolves when this
+     * connection has been established.
      */
-    /**
-     * Sets the `_database`.
-     */
-    /**
-     * How a particular DB and SDK _connects_ to the database. This is
-     * leveraged by the `AbstractedDatabase.connect()` static initializer
-     * to allow any subclass to connect via the same API/initializer.
-     */
-    abstract connect(): Promise<TApi>;
+    abstract connect(): Promise<any>;
     /**
      * Returns the authentication API of the database.
      */
-    abstract auth(): Promise<FirebaseAuth>;
+    abstract auth(): Promise<IClientAuth | IAdminAuth>;
     /**
      * Indicates if the database is using the admin SDK.
      */
     get isAdminApi(): boolean;
     /**
-     * Indicates if the database is a mock database.
+     * Indicates if the database is a mock database or not
      */
-    get isMockDb(): boolean;
+    get isMockDb(): boolean | undefined;
     /**
-     * Returns a mocked database.
+     * Returns the mock API provided by **firemock**
+     * which in turn gives access to the actual database _state_ off of the
+     * `db` property.
+     *
+     * This is only available if the database has been configured as a mocking database; if it is _not_
+     * a mocked database a `AbstractedDatabase/not-allowed` error will be thrown.
      */
-    abstract get mock(): MockDb;
+    get mock(): MockDb;
     /**
      * Get a list of a given type (defaults to _any_). Assumes that the "key" for
      * the record is the `id` property but that can be changed with the optional
@@ -107,11 +115,11 @@ export declare abstract class AbstractedDatabase<TApi extends AbstractedDatabase
     /**
      * Watch for Firebase events based on a DB path.
      */
-    abstract watch(target: string | ISerializedQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRealTimeDbEvent | IRealTimeDbEvent[], cb: any): void;
+    abstract watch(target: string | ISerializedQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[], cb: any): void;
     /**
      * Unwatches existing Firebase events.
      */
-    abstract unWatch(events?: IFirestoreDbEvent | IFirestoreDbEvent[] | IRealTimeDbEvent | IRealTimeDbEvent[], cb?: any): void;
+    abstract unWatch(events?: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[], cb?: any): void;
     /**
      * Returns a reference for a given path in Firebase
      */

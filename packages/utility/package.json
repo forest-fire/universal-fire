@@ -1,0 +1,31 @@
+{
+  "name": "@forest-fire/utility",
+  "version": "0.1.0",
+  "description": "Utility functions that are shared across the monorepo",
+  "main": "dist/cjs",
+  "module": "dist/es",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forest-fire/universal-fire.git"
+  },
+  "scripts": {
+    "clean": "rimraf dist/**/*",
+    "build": "run-s clean build:all",
+    "build:all": "run-p build:esnext build:cjs",
+    "build:esnext": "tsc -P tsconfig.es.json",
+    "build:cjs": "tsc -P tsconfig.cjs.json",
+    "watch": "run-p watch:esnext watch:cjs",
+    "watch:esnext": "tsc -P tsconfig.es.json -w",
+    "watch:cjs": "tsc -P tsconfig.es.json -w",
+    "test": "mocha --require ts-node/register src/**/*.spec.ts",
+    "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files src src/**/*.ts",
+    "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*.spec.ts",
+    "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
+  },
+  "dependencies": {
+    "common-types": "^1.14.3",
+    "is-gzip": "^2.0.0"
+  },
+  "devDependencies": {},
+  "license": "MIT"
+}

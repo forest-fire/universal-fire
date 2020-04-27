@@ -1,9 +1,10 @@
-import { first, last } from "lodash";
-import * as fs from "fs";
-import * as yaml from "js-yaml";
-import * as process from "process";
-import "./test-console"; // TS declaration
-import { stdout, stderr } from "test-console";
+import first from 'lodash.first';
+import last from 'lodash.last';
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+import * as process from 'process';
+import './test-console'; // TS declaration
+import { stdout, stderr } from 'test-console';
 export function restoreStdoutAndStderr() {
     console._restored = true;
 }
@@ -12,18 +13,17 @@ export async function timeout(ms) {
 }
 export function setupEnv() {
     if (!process.env.AWS_STAGE) {
-        process.env.AWS_STAGE = "test";
+        process.env.AWS_STAGE = 'test';
     }
     if (process.env.MOCK === undefined) {
-        process.env.MOCK = "true";
+        process.env.MOCK = 'true';
     }
     const current = process.env;
-    const yamlConfig = yaml.safeLoad(fs.readFileSync("./env.yml", "utf8"));
+    const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
     const combined = {
         ...yamlConfig[process.env.AWS_STAGE],
         ...process.env
     };
-    // console.log(`Loading ENV for "${process.env.AWS_STAGE}"`);
     Object.keys(combined).forEach(key => (process.env[key] = combined[key]));
     return combined;
 }
@@ -81,7 +81,7 @@ export function firstKey(dictionary) {
  * The first record in a Hash/Dictionary of records
  */
 export function firstRecord(dictionary) {
-    return dictionary[this.firstKey(dictionary)];
+    return dictionary[firstKey(dictionary)];
 }
 /**
  * The last key in a Hash/Dictionary
@@ -93,7 +93,7 @@ export function lastKey(listOf) {
  * The last record in a Hash/Dictionary of records
  */
 export function lastRecord(dictionary) {
-    return dictionary[this.lastKey(dictionary)];
+    return dictionary[lastKey(dictionary)];
 }
 export function valuesOf(listOf, property) {
     const keys = Object.keys(listOf);

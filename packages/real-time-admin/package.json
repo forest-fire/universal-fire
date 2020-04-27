@@ -30,7 +30,7 @@
     "watch:cjs": "tsc -P tsconfig.es.json -w",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build:nuclear": "yarn clean:nuclear && yarn build",
-    "test": "ts-node ./scripts/test.ts",
+    "test": "yarn do test",
     "docs": "vuepress dev docs",
     "build:docs": "vuepress build docs",
     "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'"
@@ -41,6 +41,7 @@
     "abstracted-firebase": "^0.38.5",
     "common-types": "^1.14.2",
     "firebase-admin": "^8.10.0",
+    "is-gzip": "^2.0.0",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
     "serialized-query": "^0.11.2",

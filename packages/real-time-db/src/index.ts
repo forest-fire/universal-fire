@@ -70,18 +70,6 @@ export interface IFirebaseConfigMocked extends IAbstractedFirebaseConfig {
   mockAuth?: import('firemock').IMockAuthConfig;
 }
 
-export function isMockConfig(
-  config: IFirebaseConfig = {}
-): config is IFirebaseConfigMocked {
-  return (config as IFirebaseConfigMocked).mocking === true;
-}
-
-export function isRealDbConfig(
-  config: IFirebaseConfig
-): config is IFirebaseAdminConfigProps | IFirebaseClientConfigProps {
-  return config.mocking !== true;
-}
-
 //TODO: Clean this file up; should ONLY be exports not function definitions!
 
 export * from './RealTimeDb';

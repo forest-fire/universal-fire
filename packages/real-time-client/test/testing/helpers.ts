@@ -121,7 +121,7 @@ export function firstKey<T = any>(dictionary: IDictionary<T>) {
  * The first record in a Hash/Dictionary of records
  */
 export function firstRecord<T = any>(dictionary: IDictionary<T>) {
-  return dictionary[this.firstKey(dictionary)];
+  return dictionary[firstKey(dictionary) as keyof typeof dictionary];
 }
 
 /**
@@ -135,7 +135,7 @@ export function lastKey<T = any>(listOf: IDictionary<T>) {
  * The last record in a Hash/Dictionary of records
  */
 export function lastRecord<T = any>(dictionary: IDictionary<T>) {
-  return dictionary[this.lastKey(dictionary)];
+  return dictionary[lastKey(dictionary) as keyof typeof dictionary];
 }
 
 export function valuesOf<T = any>(listOf: IDictionary<T>, property: string) {

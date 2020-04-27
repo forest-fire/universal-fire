@@ -18,7 +18,7 @@
   "typings": "dist/es/index.d.ts",
   "scripts": {
     "clean": "rimraf dist/**/*",
-    "clean:nuclear": "rimraf lib node_modules && rm yarn.lock && yarn cache clean && yarn && yarn upgrade",
+    "clean:nuclear": "rimraf dist node_modules && rm yarn.lock && yarn cache clean && yarn && yarn upgrade",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build": "run-s clean build:all",
     "build:all": "run-p build:esnext build:cjs",

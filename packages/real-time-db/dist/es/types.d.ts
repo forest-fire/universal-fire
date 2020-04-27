@@ -26,57 +26,6 @@ export interface IPathSetter<T = any> {
     path: string;
     value: T;
 }
-export interface IMultiPathSet extends IDictionary {
-    /**
-     * **paths**
-     *
-     * the _relative_ paths from the base which will be updated upon execution
-     */
-    paths: string[];
-    /**
-     * the _absolute_ paths (including the base offset) which will be updated
-     * upon execution
-     */
-    fullPaths: string[];
-    /**
-     * **payload**
-     *
-     * Returns a name/value pairing of database paths as the **keys** and the value
-     * to be set at those paths as the **value**. This is what will be passed to
-     * Firebase's `update()` operation when this API's `execute()` function is
-     * called.
-     */
-    payload: Array<IPathSetter<any>>;
-    findPathItem(path: string): string;
-    /**
-     * **callback**
-     *
-     * Allows adding a callback which is executed on conclusion of the set attempt
-     */
-    callback(cb: (err: any, pathSetters: IPathSetter[]) => void): IMultiPathSet;
-    /**
-     * **basePath**
-     *
-     * Sets the base path which all paths are rooted from
-     */
-    basePath(path?: string): IMultiPathSet;
-    /**
-     * **add**
-     *
-     * Add in a new _path_ and _value_ to be included in the operation.
-     * Note that the _path_ will be an "offset" from the base path which
-     * was set with the call to _multiPathSet()_ (or _mps()_ if using in
-     * FireModel)
-     */
-    add<T = any>(pathValue: IPathSetter<T>): IMultiPathSet;
-    /**
-     * **execute**
-     *
-     * Sends the `payload()` to Firebase using Firebase's
-     * multi-path `update()` operation.
-     */
-    execute(): Promise<void>;
-}
 export declare type IFirebaseWatchEvent = IValueBasedWatchEvent | IPathBasedWatchEvent;
 export interface IFirebaseWatchContext {
     eventType: EventType;

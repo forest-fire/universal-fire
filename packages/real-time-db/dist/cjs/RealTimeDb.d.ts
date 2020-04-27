@@ -1,14 +1,12 @@
 import { IDictionary } from 'common-types';
 import { SerializedQuery } from 'serialized-query';
-import { FirebaseDatabase, DataSnapshot, EventType, Reference } from '@firebase/database-types';
-import { AbstractedDatabase, MockDb } from 'abstracted-database';
-export declare type FirebaseNamespace = import('@firebase/app-types').FirebaseNamespace;
-import { IFirebaseConfig, IMockLoadingState, IFirebaseWatchHandler, IClientEmitter, IAdminEmitter } from './types';
+import { AbstractedDatabase } from 'abstracted-database';
+import { IMockLoadingState, IFirebaseWatchHandler, IClientEmitter, IAdminEmitter } from './types';
 import { IFirebaseListener, IFirebaseConnectionCallback } from '.';
-declare type IMockConfigOptions = import('firemock').IMockConfigOptions;
+import { IMockConfigOptions, IRtdbDatabase, IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IDatabaseConfig, IFirebaseApp } from '@forest-fire/types';
 /** time by which the dynamically loaded mock library should be loaded */
 export declare const MOCK_LOADING_TIMEOUT = 2000;
-export declare abstract class RealTimeDb extends AbstractedDatabase<any> {
+export declare abstract class RealTimeDb extends AbstractedDatabase {
     protected _isAdminApi: boolean;
     get isMockDb(): boolean;
     get isAdminApi(): boolean;
@@ -22,10 +20,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase<any> {
      * @param path the path in the database where the push-key will be pushed to
      */
     getPushKey(path: string): Promise<string>;
-    get mock(): MockDb;
     get isConnected(): boolean;
-    get config(): import(".").IFirebaseConfig;
-    static connect: (config: any) => Promise<any>;
     /** how many miliseconds before the attempt to connect to DB is timed out */
     CONNECTION_TIMEOUT: number;
     /** Logs debugging information to the console */
@@ -33,7 +28,6 @@ export declare abstract class RealTimeDb extends AbstractedDatabase<any> {
     protected abstract _eventManager: IClientEmitter | IAdminEmitter;
     protected _isConnected: boolean;
     protected _mockLoadingState: IMockLoadingState;
-    protected _mock: MockDb;
     protected _resetMockDb: () => void;
     protected _waitingForConnection: Array<() => void>;
     protected _debugging: boolean;
@@ -41,16 +35,11 @@ export declare abstract class RealTimeDb extends AbstractedDatabase<any> {
     protected _allowMocking: boolean;
     protected _onConnected: IFirebaseListener[];
     protected _onDisconnected: IFirebaseListener[];
-    protected app: any;
-    protected _database: FirebaseDatabase;
+    protected app: IFirebaseApp;
+    protected _database: IRtdbDatabase;
     /** the config the db was started with */
-    protected _config: IFirebaseConfig;
-    protected abstract _auth: any;
-    constructor(config?: IFirebaseConfig);
-    /**
-     * called by `client` and `admin` whil
-     */
-    initialize(config?: IFirebaseConfig): void;
+    protected _config: IDatabaseConfig;
+    protected abstract _auth?: any;
     /**
      * watch
      *
@@ -60,8 +49,8 @@ export declare abstract class RealTimeDb extends AbstractedDatabase<any> {
      * @param events an event type or an array of event types (e.g., "value", "child_added")
      * @param cb the callback function to call when event triggered
      */
-    watch(target: string | SerializedQuery<any>, events: EventType | EventType[], cb: IFirebaseWatchHandler): void;
-    unWatch(events?: EventType | EventType[], cb?: any): void;
+    watch(target: string | SerializedQuery<any>, events: IRtdbEventType | IRtdbEventType[], cb: IFirebaseWatchHandler): void;
+    unWatch(events?: IRtdbEventType | IRtdbEventType[], cb?: any): void;
     /**
      * Get a Firebase SerializedQuery reference
      *
@@ -69,12 +58,11 @@ export declare abstract class RealTimeDb extends AbstractedDatabase<any> {
      */
     query<T extends object = any>(path: string): SerializedQuery<T>;
     /** Get a DB reference for a given path in Firebase */
-    ref(path?: string): Reference;
+    ref(path?: string): IRtdbReference;
     /**
      * Connects the database configuration to a database;
      * the promise is resolved once the database is connected.
      */
-    connect(): Promise<this>;
     /**
      * get a notification when DB is connected; returns a unique id
      * which can be used to remove the callback. You may, optionally,
@@ -157,7 +145,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase<any> {
      *
      * returns the Firebase snapshot at a given path in the database
      */
-    getSnapshot<T = any>(path: string | SerializedQuery<T>): Promise<DataSnapshot>;
+    getSnapshot<T = any>(path: string | SerializedQuery<T>): Promise<IRtdbDataSnapshot>;
     /**
      * **getValue**
      *
@@ -223,8 +211,14 @@ export declare abstract class RealTimeDb extends AbstractedDatabase<any> {
      * allows interested parties to hook into event messages when the
      * DB connection either connects or disconnects
      */
-    protected _monitorConnection(snap: DataSnapshot): void;
-    protected abstract connectToFirebase(config: any): Promise<void>;
+    protected _monitorConnection(snap: IRtdbDataSnapshot): void;
+    /**
+     * Ensure that client and admin SDK's do whatever they need to
+     * do to watch for changes in connection status.
+     *
+     * When a status change is detected it function should **emit**
+     * a `connection` event.
+     */
     protected abstract listenForConnectionStatus(): void;
     /**
      * When using the **Firebase** Authentication solution, the primary API
@@ -240,4 +234,3 @@ export declare abstract class RealTimeDb extends AbstractedDatabase<any> {
      */
     protected getFireMock(config?: IMockConfigOptions): Promise<void>;
 }
-export {};

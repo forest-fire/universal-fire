@@ -1,5 +1,5 @@
-export declare class ClientError extends Error {
+import { FireError } from '@forest-fire/utility';
+export declare class ClientError extends FireError {
     kind: string;
-    code: string;
-    constructor(message: string, classification?: string);
+    constructor(message: string, classification?: string, statusCode?: number);
 }

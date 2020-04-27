@@ -1,11 +1,8 @@
-export class ClientError extends Error {
-    constructor(message, classification = "abstracted-client/unknown") {
-        super(message);
-        this.kind = "ClientError";
-        const parts = classification.split("/");
-        const [type, subType] = parts.length === 1 ? ["abstracted-client", parts[0]] : parts;
-        this.name = `${type}/${subType}`;
-        this.code = subType;
+import { FireError } from '@forest-fire/utility';
+export class ClientError extends FireError {
+    constructor(message, classification = 'RealTimeClient/unknown', statusCode = 400) {
+        super(message, classification, 400);
+        this.kind = 'RealTimeClient';
     }
 }
 //# sourceMappingURL=ClientError.js.map

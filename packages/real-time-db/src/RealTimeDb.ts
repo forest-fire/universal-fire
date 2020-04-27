@@ -1,43 +1,35 @@
-// tslint:disable: member-ordering
-// tslint:disable:no-implicit-dependencies
-import { IDictionary, wait } from 'common-types';
+import { IDictionary } from 'common-types';
 import * as convert from 'typed-conversions';
 import { SerializedQuery } from 'serialized-query';
 import { slashNotation } from './util';
 import { FileDepthExceeded } from './errors/FileDepthExceeded';
-import { UndefinedAssignment } from './errors/UndefinedAssignment';
 import { WatcherEventWrapper } from './WatcherEventWrapper';
-import {
-  FirebaseDatabase,
-  DataSnapshot,
-  EventType,
-  Reference
-} from '@firebase/database-types';
-import { AbstractedDatabase, MockDb } from 'abstracted-database';
-
-export type FirebaseNamespace = import('@firebase/app-types').FirebaseNamespace;
+import { AbstractedDatabase } from 'abstracted-database';
 
 import {
-  IFirebaseConfig,
   IMockLoadingState,
   IFirebaseWatchHandler,
   IClientEmitter,
   IAdminEmitter
 } from './types';
-import { PermissionDenied } from './errors';
+import { PermissionDenied, UndefinedAssignment } from './errors';
 import { AbstractedProxyError } from './errors/AbstractedProxyError';
-import {
-  isMockConfig,
-  IFirebaseListener,
-  IFirebaseConnectionCallback
-} from '.';
+import { IFirebaseListener, IFirebaseConnectionCallback } from '.';
 import { AbstractedError } from './errors/AbstractedError';
-
-type IMockConfigOptions = import('firemock').IMockConfigOptions;
+import {
+  IMockConfigOptions,
+  IRtdbDatabase,
+  IRtdbEventType,
+  IRtdbReference,
+  IRtdbDataSnapshot,
+  IDatabaseConfig,
+  IFirebaseApp
+} from '@forest-fire/types';
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
-export abstract class RealTimeDb extends AbstractedDatabase<any> {
+
+export abstract class RealTimeDb extends AbstractedDatabase {
   protected _isAdminApi: boolean = false;
 
   public get isMockDb() {
@@ -62,42 +54,10 @@ export abstract class RealTimeDb extends AbstractedDatabase<any> {
     return key;
   }
 
-  public get mock(): MockDb {
-    if (!this._mocking && !this._allowMocking) {
-      const e = new Error(
-        'You can not mock the database without setting mocking in the constructor'
-      );
-      e.name = 'AbstractedFirebase::NotAllowed';
-      throw e;
-    }
-    if (this._mockLoadingState === 'loading') {
-      const e = new Error(
-        `Loading the mock library is an asynchronous task; typically it takes very little time but it is currently in process. You can listen to "waitForConnection()" to ensure the mock library is ready.`
-      );
-      e.name = 'AbstractedFirebase::AsyncError';
-      throw e;
-    }
-
-    if (!this._mock) {
-      const e = new Error(
-        `Attempting to reference mock() on DB but _mock is not set [ mocking: ${this._mocking} ]!`
-      );
-      e.name = 'AbstractedFirebase::NotAllowed';
-      throw e;
-    }
-
-    return this._mock;
-  }
-
   public get isConnected() {
     return this._isConnected;
   }
 
-  public get config() {
-    return this._config;
-  }
-
-  public static connect: (config: any) => Promise<any>;
   /** how many miliseconds before the attempt to connect to DB is timed out */
   public CONNECTION_TIMEOUT = 5000;
   /** Logs debugging information to the console */
@@ -110,7 +70,7 @@ export abstract class RealTimeDb extends AbstractedDatabase<any> {
   protected _isConnected: boolean = false;
   protected _mockLoadingState: IMockLoadingState = 'not-applicable';
   // tslint:disable-next-line:whitespace
-  protected _mock: MockDb;
+
   protected _resetMockDb: () => void;
   protected _waitingForConnection: Array<() => void> = [];
   protected _debugging: boolean = false;
@@ -118,27 +78,11 @@ export abstract class RealTimeDb extends AbstractedDatabase<any> {
   protected _allowMocking: boolean = false;
   protected _onConnected: IFirebaseListener[] = [];
   protected _onDisconnected: IFirebaseListener[] = [];
-  protected app: any;
-  protected _database: FirebaseDatabase;
+  protected app: IFirebaseApp;
+  protected _database: IRtdbDatabase;
   /** the config the db was started with */
-  protected _config: IFirebaseConfig;
-  protected abstract _auth: any;
-
-  public constructor(config: IFirebaseConfig = {}) {
-    super();
-    this._config = config;
-    this._mocking = config.mocking ? true : false;
-    if (config.timeout) {
-      this.CONNECTION_TIMEOUT = config.timeout;
-    }
-  }
-
-  /**
-   * called by `client` and `admin` whil
-   */
-  public initialize(config: IFirebaseConfig = {}) {
-    this.connectToFirebase(config).then(() => this.listenForConnectionStatus());
-  }
+  protected _config: IDatabaseConfig;
+  protected abstract _auth?: any;
 
   // public abstract async auth(): Promise<A>;
 
@@ -153,7 +97,7 @@ export abstract class RealTimeDb extends AbstractedDatabase<any> {
    */
   public watch(
     target: string | SerializedQuery<any>,
-    events: EventType | EventType[],
+    events: IRtdbEventType | IRtdbEventType[],
     cb: IFirebaseWatchHandler
   ) {
     if (!Array.isArray(events)) {
@@ -186,7 +130,7 @@ export abstract class RealTimeDb extends AbstractedDatabase<any> {
     }
   }
 
-  public unWatch(events?: EventType | EventType[], cb?: any) {
+  public unWatch(events?: IRtdbEventType | IRtdbEventType[], cb?: any) {
     try {
       if (!Array.isArray(events)) {
         events = [events];
@@ -221,7 +165,7 @@ export abstract class RealTimeDb extends AbstractedDatabase<any> {
   }
 
   /** Get a DB reference for a given path in Firebase */
-  public ref(path: string = '/'): Reference {
+  public ref(path: string = '/'): IRtdbReference {
     return this._mocking ? this.mock.ref(path) : this._database.ref(path);
   }
 
@@ -229,54 +173,54 @@ export abstract class RealTimeDb extends AbstractedDatabase<any> {
    * Connects the database configuration to a database;
    * the promise is resolved once the database is connected.
    */
-  public async connect() {
-    const config = this._config;
-    if (isMockConfig(config)) {
-      // MOCKING
-      await this.getFireMock({ db: config.mockData, auth: config.mockAuth });
-    } else {
-      // NON-MOCKING
-      if (this._isConnected) {
-        return;
-      }
+  // public async connect() {
+  //   const config = this._config;
+  //   if (isMockConfig(config)) {
+  //     // MOCKING
+  //     await this.getFireMock({ db: config.mockData, auth: config.mockAuth });
+  //   } else {
+  //     // NON-MOCKING
+  //     if (this._isConnected) {
+  //       return;
+  //     }
 
-      const connectionEvent = () => {
-        try {
-          return new Promise((resolve, reject) => {
-            this._eventManager.once('connection', (state: boolean) => {
-              if (state) {
-                resolve();
-              } else {
-                reject(
-                  new AbstractedError(
-                    `While waiting for a connection received a disconnect message instead`,
-                    `no-connection`
-                  )
-                );
-              }
-            });
-          });
-        } catch (e) {
-          throw e;
-        }
-      };
+  //     const connectionEvent = () => {
+  //       try {
+  //         return new Promise((resolve, reject) => {
+  //           this._eventManager.once('connection', (state: boolean) => {
+  //             if (state) {
+  //               resolve();
+  //             } else {
+  //               reject(
+  //                 new AbstractedError(
+  //                   `While waiting for a connection received a disconnect message instead`,
+  //                   `no-connection`
+  //                 )
+  //               );
+  //             }
+  //           });
+  //         });
+  //       } catch (e) {
+  //         throw e;
+  //       }
+  //     };
 
-      const timeout = async () => {
-        await wait(this.CONNECTION_TIMEOUT);
-        throw new AbstractedError(
-          `The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`,
-          'connection-timeout'
-        );
-      };
+  //     const timeout = async () => {
+  //       await wait(this.CONNECTION_TIMEOUT);
+  //       throw new AbstractedError(
+  //         `The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`,
+  //         'connection-timeout'
+  //       );
+  //     };
 
-      await Promise.race([connectionEvent(), timeout()]);
-      this._isConnected = true;
+  //     await Promise.race([connectionEvent(), timeout()]);
+  //     this._isConnected = true;
 
-      return this;
-    }
+  //     return this;
+  //   }
 
-    this._onConnected.map(i => i.cb(this, i.ctx));
-  }
+  //   this._onConnected.map(i => i.cb(this, i.ctx));
+  // }
 
   /**
    * get a notification when DB is connected; returns a unique id
@@ -471,7 +415,7 @@ export abstract class RealTimeDb extends AbstractedDatabase<any> {
    */
   public async getSnapshot<T = any>(
     path: string | SerializedQuery<T>
-  ): Promise<DataSnapshot> {
+  ): Promise<IRtdbDataSnapshot> {
     try {
       const response = await (typeof path === 'string'
         ? this.ref(slashNotation(path as string)).once('value')
@@ -617,7 +561,7 @@ export abstract class RealTimeDb extends AbstractedDatabase<any> {
    * allows interested parties to hook into event messages when the
    * DB connection either connects or disconnects
    */
-  protected _monitorConnection(snap: DataSnapshot) {
+  protected _monitorConnection(snap: IRtdbDataSnapshot) {
     this._isConnected = snap.val();
     // call active listeners
     if (this._isConnected) {
@@ -634,7 +578,13 @@ export abstract class RealTimeDb extends AbstractedDatabase<any> {
     }
   }
 
-  protected abstract connectToFirebase(config: any): Promise<void>;
+  /**
+   * Ensure that client and admin SDK's do whatever they need to
+   * do to watch for changes in connection status.
+   *
+   * When a status change is detected it function should **emit**
+   * a `connection` event.
+   */
   protected abstract listenForConnectionStatus(): void;
 
   /**

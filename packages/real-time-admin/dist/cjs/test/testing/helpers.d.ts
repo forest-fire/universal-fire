@@ -1,5 +1,5 @@
-import { IDictionary } from "common-types";
-import "./test-console";
+import { IDictionary } from 'common-types';
+import './test-console';
 export declare function restoreStdoutAndStderr(): void;
 export declare function timeout(ms: number): Promise<unknown>;
 export declare function setupEnv(): any;

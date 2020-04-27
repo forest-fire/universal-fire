@@ -9,7 +9,7 @@ describe('CRUD Testing > ', () => {
   let db: RealTimeAdmin;
   beforeEach(async () => {
     db = new RealTimeAdmin({ mocking: true });
-    await db.waitForConnection();
+    await db.connect();
   });
 
   describe('Multi-path operations', () => {

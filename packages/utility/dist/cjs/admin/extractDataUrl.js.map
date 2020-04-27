@@ -1,0 +1,1 @@
+{"version":3,"file":"extractDataUrl.js","sourceRoot":"","sources":["../../../src/admin/extractDataUrl.ts"],"names":[],"mappings":";;AACA,oCAAqC;AAErC;;;GAGG;AACH,SAAgB,cAAc,CAAC,MAAoB;IACjD,MAAM,OAAO,GAAG,MAAM,CAAC,WAAW,IAAI,OAAO,CAAC,GAAG,CAAC,uBAAuB,CAAC,CAAC;IAC3E,IAAI,CAAC,OAAO,EAAE;QACZ,MAAM,IAAI,iBAAS,CACjB,mJAAmJ,CACpJ,CAAC;KACH;IACD,OAAO,OAAO,CAAC;AACjB,CAAC;AARD,wCAQC"}

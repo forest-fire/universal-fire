@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -7,7 +10,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const lodash_1 = require("lodash");
+const lodash_first_1 = __importDefault(require("lodash.first"));
+const lodash_last_1 = __importDefault(require("lodash.last"));
 const fs = __importStar(require("fs"));
 const yaml = __importStar(require("js-yaml"));
 const process = __importStar(require("process"));
@@ -23,18 +27,17 @@ async function timeout(ms) {
 exports.timeout = timeout;
 function setupEnv() {
     if (!process.env.AWS_STAGE) {
-        process.env.AWS_STAGE = "test";
+        process.env.AWS_STAGE = 'test';
     }
     if (process.env.MOCK === undefined) {
-        process.env.MOCK = "true";
+        process.env.MOCK = 'true';
     }
     const current = process.env;
-    const yamlConfig = yaml.safeLoad(fs.readFileSync("./env.yml", "utf8"));
+    const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
     const combined = {
         ...yamlConfig[process.env.AWS_STAGE],
         ...process.env
     };
-    // console.log(`Loading ENV for "${process.env.AWS_STAGE}"`);
     Object.keys(combined).forEach(key => (process.env[key] = combined[key]));
     return combined;
 }
@@ -92,28 +95,28 @@ exports.ignoreBoth = ignoreBoth;
  * The first key in a Hash/Dictionary
  */
 function firstKey(dictionary) {
-    return lodash_1.first(Object.keys(dictionary));
+    return lodash_first_1.default(Object.keys(dictionary));
 }
 exports.firstKey = firstKey;
 /**
  * The first record in a Hash/Dictionary of records
  */
 function firstRecord(dictionary) {
-    return dictionary[this.firstKey(dictionary)];
+    return dictionary[firstKey(dictionary)];
 }
 exports.firstRecord = firstRecord;
 /**
  * The last key in a Hash/Dictionary
  */
 function lastKey(listOf) {
-    return lodash_1.last(Object.keys(listOf));
+    return lodash_last_1.default(Object.keys(listOf));
 }
 exports.lastKey = lastKey;
 /**
  * The last record in a Hash/Dictionary of records
  */
 function lastRecord(dictionary) {
-    return dictionary[this.lastKey(dictionary)];
+    return dictionary[lastKey(dictionary)];
 }
 exports.lastRecord = lastRecord;
 function valuesOf(listOf, property) {

@@ -13,17 +13,17 @@ const chai = __importStar(require("chai"));
 const helpers = __importStar(require("./testing/helpers"));
 const expect = chai.expect;
 helpers.setupEnv();
-describe("Basics: ", () => {
-    it("Can connect to mock DB", async () => {
+describe('Basics: ', () => {
+    it('Can connect to mock DB', async () => {
         const db = new src_1.DB({ mocking: true });
         expect(db.isConnected).to.equal(false);
-        await db.waitForConnection();
+        await db.connect();
         expect(db.isConnected).to.equal(true);
     });
-    it("Can connect to Firebase DB", async () => {
+    it('Can connect to Firebase DB', async () => {
         const db = new src_1.DB();
-        expect(db.isConnected).to.be.a("boolean");
-        await db.waitForConnection();
+        expect(db.isConnected).to.be.a('boolean');
+        await db.connect();
         expect(db.isConnected).to.equal(true);
     });
 });

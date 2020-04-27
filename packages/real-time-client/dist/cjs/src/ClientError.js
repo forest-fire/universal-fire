@@ -1,13 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class ClientError extends Error {
-    constructor(message, classification = "abstracted-client/unknown") {
-        super(message);
-        this.kind = "ClientError";
-        const parts = classification.split("/");
-        const [type, subType] = parts.length === 1 ? ["abstracted-client", parts[0]] : parts;
-        this.name = `${type}/${subType}`;
-        this.code = subType;
+const utility_1 = require("@forest-fire/utility");
+class ClientError extends utility_1.FireError {
+    constructor(message, classification = 'RealTimeClient/unknown', statusCode = 400) {
+        super(message, classification, 400);
+        this.kind = 'RealTimeClient';
     }
 }
 exports.ClientError = ClientError;

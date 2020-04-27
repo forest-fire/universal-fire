@@ -1,15 +1,12 @@
-export class ClientError extends Error {
-  public kind: string = "ClientError";
-  public code: string;
+import { FireError } from '@forest-fire/utility';
+
+export class ClientError extends FireError {
+  public kind: string = 'RealTimeClient';
   constructor(
     message: string,
-    classification: string = "abstracted-client/unknown"
+    classification: string = 'RealTimeClient/unknown',
+    statusCode: number = 400
   ) {
-    super(message);
-    const parts = classification.split("/");
-    const [type, subType] =
-      parts.length === 1 ? ["abstracted-client", parts[0]] : parts;
-    this.name = `${type}/${subType}`;
-    this.code = subType;
+    super(message, classification, 400);
   }
 }

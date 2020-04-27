@@ -1,21 +1,24 @@
 // TODO: reduce this to just named symbols which we need!
 import * as firebase from 'firebase-admin';
 import * as process from 'process';
-import {
-  RealTimeDb,
-  _getFirebaseType,
-  IFirebaseAdminConfigProps,
-  IFirebaseAdminConfig,
-  isMockConfig,
-  IFirebaseConfig,
-  IFirebaseConfigMocked
-} from '@forest-fire/real-time-db';
+import { RealTimeDb, _getFirebaseType } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
 import { debug } from './util';
-import { gunzip } from 'zlib';
-import { promisify } from 'util';
-import { AbstractedAdminError } from './errors/AbstractedAdminError';
-const gunzipAsync = promisify<Buffer, Buffer>(gunzip);
+import {
+  IAdminConfig,
+  IMockConfig,
+  isMockConfig,
+  isAdminConfig,
+  IAdminConfigCompleted,
+  IAdminAuth
+} from '@forest-fire/types';
+import {
+  extractServiceAccount,
+  FireError,
+  runningApps,
+  extractDataUrl
+} from '@forest-fire/utility';
+import { RealTimeAdminError } from './errors/RealTimeAdminError';
 
 export type FirebaseDatabase = import('@firebase/database-types').FirebaseDatabase;
 // tslint:disable-next-line: no-implicit-dependencies
@@ -32,47 +35,45 @@ export class RealTimeAdmin extends RealTimeDb {
    * Instantiates a DB and then waits for the connection
    * to finish before resolving the promise.
    */
-  public static async connect(config?: IFirebaseAdminConfig) {
-    const obj = new RealTimeAdmin(config);
-    await obj.waitForConnection();
-    return obj;
-  }
+  // public static async connect(config: IAdminConfig | IMockConfig = {}) {
+  //   const obj = new RealTimeAdmin(config);
+  //   await obj.connect();
+  //   return obj;
+  // }
 
   protected _eventManager: EventManager;
   protected _clientType = 'admin';
   protected _isAuthorized: boolean = true;
   protected _auth?: FirebaseAuth;
+  protected _config!: IAdminConfigCompleted | IMockConfig;
   protected app: any;
 
-  constructor(config?: IFirebaseAdminConfig) {
-    super(config);
+  constructor(config: IAdminConfig | IMockConfig = {}) {
+    super();
     this._eventManager = new EventManager();
-    const defaults: IFirebaseAdminConfig = {
-      name: '[DEFAULT]'
-    };
-    if (process.env['FIREBASE_SERVICE_ACCOUNT']) {
-      defaults.serviceAccount = process.env['FIREBASE_SERVICE_ACCOUNT'];
-    }
-    if (process.env['FIREBASE_DATA_ROOT_URL']) {
-      defaults.databaseUrl = process.env['FIREBASE_DATA_ROOT_URL'];
+    this._mocking = config.mocking ? true : false;
+    if (config.timeout) {
+      this.CONNECTION_TIMEOUT = config.timeout || 5000;
     }
 
-    config = {
-      ...defaults,
-      ...(config || {})
-    };
-
-    if (
-      !isMockConfig(config) &&
-      (!config.serviceAccount || !config.databaseUrl)
-    ) {
-      throw new AbstractedAdminError(
-        `You must have both the "serviceAccount" and "databaseUrl" set if you are starting a non-mocking database. You can include these as ENV variables (FIREBASE_SERVICE_ACCOUNT and FIREBASE_DATA_ROOT_URL) or pass them with the constructor's configuration hash`,
-        'abstracted-admin/bad-configuration'
+    if (isAdminConfig(config)) {
+      config.serviceAccount = extractServiceAccount(config);
+      config.databaseUrl = extractDataUrl(config);
+      this._config = config as IAdminConfigCompleted;
+    } else if (isMockConfig(config)) {
+      this._mocking = true;
+    } else {
+      throw new FireError(
+        `The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(
+          config,
+          null,
+          2
+        )}`,
+        'invalid-configuration'
       );
     }
 
-    this.initialize(config);
+    this.listenForConnectionStatus();
   }
 
   /**
@@ -88,8 +89,8 @@ export class RealTimeAdmin extends RealTimeDb {
    * - [Introduction](https://firebase.google.com/docs/auth/admin)
    * - [API](https://firebase.google.com/docs/reference/admin/node/admin.auth.Auth)
    */
-  public async auth(): Promise<firebase.auth.Auth> {
-    return _getFirebaseType(this, 'auth') as firebase.auth.Auth;
+  public async auth(): Promise<IAdminAuth> {
+    return firebase.auth();
   }
 
   public goOnline() {
@@ -116,75 +117,47 @@ export class RealTimeAdmin extends RealTimeDb {
     }
   }
 
-  protected async connectToFirebase(config: IFirebaseConfig) {
-    if (isMockConfig(config)) {
+  public async connect() {
+    if (isMockConfig(this._config)) {
       // MOCK DB
       await this.getFireMock({
-        db: config.mockData || {},
-        auth: { providers: [], ...config.mockAuth }
+        db: this._config.mockData || {},
+        auth: { providers: [], ...this._config.mockAuth }
       });
       this._isConnected = true;
     } else {
       if (this._isConnected && this.app) {
-        // note: next two lines may not be necessary but better safe than sorry
         this.goOnline();
         new EventManager().connection(true);
-        return;
+        return this;
       }
 
-      if (!this._isAuthorized) {
-        const serviceAcctEncoded = process.env
-          .FIREBASE_SERVICE_ACCOUNT_COMPRESSED
-          ? (
-              await gunzipAsync(
-                Buffer.from(
-                  config.serviceAccount ||
-                    process.env['FIREBASE_SERVICE_ACCOUNT']
-                )
-              )
-            ).toString('utf-8')
-          : config.serviceAccount || process.env['FIREBASE_SERVICE_ACCOUNT'];
+      if (this._isAuthorized) {
+        console.log(`already authorized`);
+        return this;
+      }
 
-        if (!serviceAcctEncoded) {
-          throw new Error(
-            'Problem loading the credientials for Firebase admin API. Please ensure FIREBASE_SERVICE_ACCOUNT is set with base64 encoded version of Firebase private key or pass it in explicitly as part of the config object.'
-          );
-        }
-        if (
-          !config.serviceAccount &&
-          !process.env['FIREBASE_SERVICE_ACCOUNT']
-        ) {
-          throw new Error(
-            `Service account was not defined in passed in configuration nor the FIREBASE_SERVICE_ACCOUNT environment variable.`
-          );
-        }
-
-        const serviceAccount: firebase.ServiceAccount = JSON.parse(
-          Buffer.from(
-            config.serviceAccount
-              ? config.serviceAccount
-              : process.env['FIREBASE_SERVICE_ACCOUNT'],
-            'base64'
-          ).toString()
-        );
+      if (isAdminConfig(this._config)) {
         console.log(
-          `Connecting to Firebase: [${process.env['FIREBASE_DATA_ROOT_URL']}]`
+          `Connecting to Firebase: [${process.env['FIREBASE_DATABASE_URL']}]`
         );
 
         try {
-          const { name } = config;
-          const runningApps = new Set(firebase.apps.map(i => i.name));
+          const name = this._config.name || '[DEFAULT]';
+          const apps = runningApps(firebase.apps);
+          const serviceAccount = this._config.serviceAccount;
+          const databaseURL = this._config.databaseUrl;
           debug(
-            `abstracted-admin: the DB "${name}" ` + runningApps.has(name)
+            `abstracted-admin: the DB "${name}" ` + apps.includes(name)
               ? 'appears to be already connected'
               : 'has not yet been connected'
           );
 
-          this.app = runningApps.has(name)
+          this.app = apps.includes(name)
             ? firebase.app()
             : firebase.initializeApp({
                 credential: firebase.credential.cert(serviceAccount),
-                databaseURL: config.databaseUrl
+                databaseURL
               });
           this._isAuthorized = true;
           this._database = firebase.database() as any;
@@ -209,16 +182,23 @@ export class RealTimeAdmin extends RealTimeDb {
             throw new Error(err);
           }
         }
+      } else {
+        throw new RealTimeAdminError(
+          'The configuation passed is not valid for an admin SDK!',
+          'invalid-configuration'
+        );
       }
     }
 
-    if (config.debugging) {
+    if (this._config.debugging) {
       this.enableDatabaseLogging(
-        typeof config.debugging === 'function'
-          ? (message: string) => (config.debugging as any)(message)
+        typeof this._config.debugging === 'function'
+          ? (message: string) => (this._config.debugging as any)(message)
           : (message: string) => console.log('[FIREBASE]', message)
       );
     }
+
+    return this;
   }
 
   /**

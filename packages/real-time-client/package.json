@@ -29,7 +29,7 @@
     "watch:esnext": "tsc -P tsconfig.es.json -w",
     "watch:cjs": "tsc -P tsconfig.es.json -w",
     "build:nuclear": "run-s clean:nuclear build",
-    "test": "ts-node ./scripts/test.ts",
+    "test": "yarn do test",
     "watch:test": "npm run test -- --watch"
   },
   "dependencies": {
@@ -39,15 +39,12 @@
     "@firebase/auth-types": "^0.10.0",
     "@firebase/database": "^0.6.1",
     "@firebase/database-types": "^0.5.0",
-    "abstracted-firebase": "^0.38.5",
-    "common-types": "^1.14.2",
+    "common-types": "^1.14.3",
     "events": "^3.1.0",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
     "serialized-query": "^0.11.2",
-    "typed-conversions": "^0.10.2"
-  },
-  "peerDependencies": {
+    "typed-conversions": "^0.10.2",
     "firemock": "^0.38.6"
   },
   "devDependencies": {
@@ -63,12 +60,11 @@
     "async-shelljs": "^0.1.4",
     "chai": "^4.2.0",
     "faker": "^4.1.0",
-    "firemock": "^0.38.6",
     "js-yaml": "^3.13.1",
     "mocha": "^7.1.1",
     "rimraf": "^3.0.0",
     "test-console": "^1.1.0",
-    "ts-node": "^8.9.0",
+    "ts-node": "^8.9.1",
     "tslint": "^6.1.1",
     "typescript": "^3.8.3"
   },

@@ -1,13 +1,14 @@
-import { AbstractedDatabase } from 'abstracted-database';
+import { AbstractedDatabase, MockDb } from 'abstracted-database';
+import { DocumentChangeType as IFirestoreDbEvent } from '@firebase/firestore-types';
 import {
-  DocumentChangeType as IFirestoreDbEvent,
-  FirebaseFirestore
-} from '@firebase/firestore-types';
-import { ISerializedQuery } from '@forest-fire/types';
-import { MockDb } from 'abstracted-database';
+  ISerializedQuery,
+  IFirestoreDatabase,
+  IFirebaseApp
+} from '@forest-fire/types';
 
-export abstract class FirestoreDb extends AbstractedDatabase<any> {
-  protected _database: FirebaseFirestore | undefined;
+export abstract class FirestoreDb extends AbstractedDatabase {
+  protected _database: IFirestoreDatabase | undefined;
+  protected _app: IFirebaseApp | undefined;
 
   protected get database() {
     if (this._database) {
@@ -16,7 +17,7 @@ export abstract class FirestoreDb extends AbstractedDatabase<any> {
     throw new Error('Attempt to use Firestore without having instantiated it');
   }
 
-  protected set database(value: FirebaseFirestore) {
+  protected set database(value: IFirestoreDatabase) {
     this._database = value;
   }
 

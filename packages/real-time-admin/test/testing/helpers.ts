@@ -1,11 +1,12 @@
 // tslint:disable:no-implicit-dependencies
-import { IDictionary } from "common-types";
-import { first, last } from "lodash";
-import * as fs from "fs";
-import * as yaml from "js-yaml";
-import * as process from "process";
-import "./test-console"; // TS declaration
-import { stdout, stderr } from "test-console";
+import { IDictionary } from 'common-types';
+import first from 'lodash.first';
+import last from 'lodash.last';
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+import * as process from 'process';
+import './test-console'; // TS declaration
+import { stdout, stderr } from 'test-console';
 
 // tslint:disable-next-line
 interface Console {
@@ -37,21 +38,20 @@ export async function timeout(ms: number) {
 
 export function setupEnv() {
   if (!process.env.AWS_STAGE) {
-    process.env.AWS_STAGE = "test";
+    process.env.AWS_STAGE = 'test';
   }
 
   if (process.env.MOCK === undefined) {
-    process.env.MOCK = "true";
+    process.env.MOCK = 'true';
   }
 
   const current = process.env;
-  const yamlConfig: IDictionary = yaml.safeLoad(fs.readFileSync("./env.yml", "utf8"));
+  const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env
   };
 
-  // console.log(`Loading ENV for "${process.env.AWS_STAGE}"`);
   Object.keys(combined).forEach(key => (process.env[key] = combined[key]));
   return combined;
 }
@@ -121,7 +121,7 @@ export function firstKey<T = any>(dictionary: IDictionary<T>) {
  * The first record in a Hash/Dictionary of records
  */
 export function firstRecord<T = any>(dictionary: IDictionary<T>) {
-  return dictionary[this.firstKey(dictionary)];
+  return dictionary[firstKey(dictionary) as keyof typeof dictionary];
 }
 
 /**
@@ -135,7 +135,7 @@ export function lastKey<T = any>(listOf: IDictionary<T>) {
  * The last record in a Hash/Dictionary of records
  */
 export function lastRecord<T = any>(dictionary: IDictionary<T>) {
-  return dictionary[this.lastKey(dictionary)];
+  return dictionary[lastKey(dictionary) as keyof typeof dictionary];
 }
 
 export function valuesOf<T = any>(listOf: IDictionary<T>, property: string) {

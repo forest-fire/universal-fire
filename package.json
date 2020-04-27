@@ -8,8 +8,11 @@
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
   "scripts": {
-    "build": "run-s build:base build:db build:sdk",
-    "build:base": "run-p build:adb build:types",
+    "build": "run-s build:shared build:base build:db build:sdk",
+    "build:shared": "run-p build:shared:types build:shared:utility",
+    "build:shared:types": "lerna exec --scope @forest-fire/types yarn build",
+    "build:shared:utility": "lerna exec --scope @forest-fire/utility yarn build",
+    "build:base": "lerna exec --scope abstracted-database yarn build",
     "build:db": "run-p build:db:rtdb build:db:firestore",
     "build:db:rtdb": "lerna exec --scope @forest-fire/real-time-db yarn build",
     "build:db:firestore": "lerna exec --scope @forest-fire/firestore-db yarn build",
@@ -17,8 +20,6 @@
     "build:sdk:rtdb:client": "lerna exec --scope @forest-fire/real-time-client yarn build",
     "build:sdk:rtdb:admin": "lerna exec --scope @forest-fire/real-time-admin yarn build",
     "build:sdk:firestore:client": "lerna exec --scope @forest-fire/firestore-client yarn build",
-    "build:adb": "lerna exec --scope abstracted-database yarn build",
-    "build:types": "lerna exec --scope @forest-fire/types yarn build",
     "watch": "run-p watch:rtdb watch:firestore",
     "watch:rtdb": "run-p 'yarn lerna exec --scope @forest-fire/real-time-db yarn watch' 'yarn lerna exec --scope @forest-fire/real-time-client yarn watch' 'yarn lerna exec --scope @forest-fire/real-time-admin yarn watch'",
     "watch:firestore": "run-p 'yarn lerna exec --scope @forest-fire/firestore-db yarn watch' 'yarn lerna exec --scope @forest-fire/firestore-client yarn watch' 'yarn lerna exec --scope @forest-fire/firestore-admin yarn watch'"
@@ -30,6 +31,7 @@
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
+    "do-devops": "^0.3.6",
     "lerna": "^3.20.2",
     "mocha": "^7.1.1",
     "npm-run-all": "^4.1.5",
