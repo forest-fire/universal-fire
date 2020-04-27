@@ -7,7 +7,7 @@ helpers.setupEnv();
 
 describe('Basics: ', () => {
   it('Can connect to mock DB', async () => {
-    const db = new RealTimeAdmin({ mocking: true });
+    const db = await RealTimeAdmin.connect({ mocking: true });
     expect(db.isConnected).to.equal(false);
     await db.connect();
     expect(db.isConnected).to.equal(true);

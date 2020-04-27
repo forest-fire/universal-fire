@@ -42,7 +42,7 @@ export class RealTimeAdmin extends RealTimeDb {
   protected _isAuthorized: boolean = true;
   protected _auth?: IAdminAuth;
   protected _config!: IAdminConfigCompleted | IMockConfig;
-  protected app: any;
+  protected _app: any;
 
   constructor(config: IAdminConfig | IMockConfig = {}) {
     super();
@@ -58,6 +58,7 @@ export class RealTimeAdmin extends RealTimeDb {
       this._config = config as IAdminConfigCompleted;
     } else if (isMockConfig(config)) {
       this._mocking = true;
+      this._config = config;
     } else {
       throw new FireError(
         `The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(
@@ -113,16 +114,18 @@ export class RealTimeAdmin extends RealTimeDb {
     }
   }
 
-  public async connect() {
+  public async connect(): Promise<RealTimeAdmin> {
     if (isMockConfig(this._config)) {
       // MOCK DB
+      // TODO: where are we attaching the mock API; seems like somethings missing
       await this.getFireMock({
         db: this._config.mockData || {},
         auth: { providers: [], ...this._config.mockAuth }
       });
       this._isConnected = true;
+      return this;
     } else {
-      if (this._isConnected && this.app) {
+      if (this._isConnected && this._app) {
         this.goOnline();
         new EventManager().connection(true);
         return this;
@@ -149,7 +152,7 @@ export class RealTimeAdmin extends RealTimeDb {
               : 'has not yet been connected'
           );
 
-          this.app = apps.includes(name)
+          this._app = apps.includes(name)
             ? firebase.app()
             : firebase.initializeApp({
                 credential: firebase.credential.cert(serviceAccount),
@@ -160,7 +163,7 @@ export class RealTimeAdmin extends RealTimeDb {
           this.enableDatabaseLogging = firebase.database.enableLogging.bind(
             firebase.database
           );
-          this.app = firebase;
+          this._app = firebase;
           this.goOnline();
           new EventManager().connection(true);
         } catch (err) {

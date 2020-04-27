@@ -77,7 +77,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
                 }
                 try {
                     const runningApps = new Set(fb.firebase.apps.map(i => i.name));
-                    this.app = runningApps.has(config.name)
+                    this._app = runningApps.has(config.name)
                         ? // TODO: does this connect to the right named DB?
                             fb.firebase.app(config.name)
                         : fb.firebase.initializeApp(config, config.name);
@@ -92,7 +92,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
                     }
                 }
                 this._fbClass = fb.default;
-                this._database = this.app.database();
+                this._database = this._app.database();
             }
             else {
                 console.info(`Database ${config.name} already connected`);
@@ -107,6 +107,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
         else {
             throw new Error(`The configuration is of an unknown type: ${JSON.stringify(config)}`);
         }
+        return this;
     }
     /**
      * access to provider specific providers
@@ -134,7 +135,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
             this._auth = await this.mock.auth();
             return this._auth;
         }
-        this._auth = this.app.auth();
+        this._auth = this._app.auth();
         return this._auth;
     }
     /**

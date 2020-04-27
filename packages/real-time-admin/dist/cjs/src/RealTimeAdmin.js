@@ -34,6 +34,7 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
         }
         else if (types_1.isMockConfig(config)) {
             this._mocking = true;
+            this._config = config;
         }
         else {
             throw new utility_1.FireError(`The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(config, null, 2)}`, 'invalid-configuration');
@@ -94,9 +95,10 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
                 auth: { providers: [], ...this._config.mockAuth }
             });
             this._isConnected = true;
+            return this;
         }
         else {
-            if (this._isConnected && this.app) {
+            if (this._isConnected && this._app) {
                 this.goOnline();
                 new EventManager_1.EventManager().connection(true);
                 return this;
@@ -115,7 +117,7 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
                     util_1.debug(`abstracted-admin: the DB "${name}" ` + apps.includes(name)
                         ? 'appears to be already connected'
                         : 'has not yet been connected');
-                    this.app = apps.includes(name)
+                    this._app = apps.includes(name)
                         ? firebase.app()
                         : firebase.initializeApp({
                             credential: firebase.credential.cert(serviceAccount),
@@ -124,7 +126,7 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
                     this._isAuthorized = true;
                     this._database = firebase.database();
                     this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
-                    this.app = firebase;
+                    this._app = firebase;
                     this.goOnline();
                     new EventManager_1.EventManager().connection(true);
                 }

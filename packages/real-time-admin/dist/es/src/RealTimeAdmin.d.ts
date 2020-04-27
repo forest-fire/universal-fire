@@ -17,7 +17,7 @@ export declare class RealTimeAdmin extends RealTimeDb {
     protected _isAuthorized: boolean;
     protected _auth?: IAdminAuth;
     protected _config: IAdminConfigCompleted | IMockConfig;
-    protected app: any;
+    protected _app: any;
     constructor(config?: IAdminConfig | IMockConfig);
     /**
      * Provides access to the Firebase Admin Auth API.
@@ -35,7 +35,7 @@ export declare class RealTimeAdmin extends RealTimeDb {
     auth(): Promise<IAdminAuth>;
     goOnline(): void;
     goOffline(): void;
-    connect(): Promise<this>;
+    connect(): Promise<RealTimeAdmin>;
     /**
      * listenForConnectionStatus
      *

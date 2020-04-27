@@ -26,7 +26,7 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
     this._config = config;
   }
 
-  public async connect() {
+  public async connect(): Promise<FirestoreClient> {
     // TODO: explain rationale of async import
     //  1. delay parsing JS until ready to connect
     //  2. provide bundling that helps users to understand cost of various deps
@@ -36,12 +36,14 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
     );
     this._database = this._app?.firestore!();
     // TODO: implement a way to validate when connection is established
+
+    return this;
   }
 
   public async auth() {
     await import(/* webpackChunkName: 'firebase-auth' */ '@firebase/auth');
-    if (this.app?.auth) {
-      return this.app.auth();
+    if (this._app?.auth) {
+      return this._app.auth();
     }
     throw new Error(
       'Attempt to use auth module without having installed Firebase auth dependency'

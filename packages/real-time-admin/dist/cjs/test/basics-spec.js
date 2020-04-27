@@ -15,7 +15,7 @@ const expect = chai.expect;
 helpers.setupEnv();
 describe('Basics: ', () => {
     it('Can connect to mock DB', async () => {
-        const db = new src_1.RealTimeAdmin({ mocking: true });
+        const db = await src_1.RealTimeAdmin.connect({ mocking: true });
         expect(db.isConnected).to.equal(false);
         await db.connect();
         expect(db.isConnected).to.equal(true);

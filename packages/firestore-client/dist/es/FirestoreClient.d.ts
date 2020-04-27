@@ -5,6 +5,6 @@ export declare class FirestoreClient extends FirestoreDb implements IClientSdk {
     protected _config: IClientConfig | IMockConfig;
     protected _isAdminApi: boolean;
     constructor(config: IClientConfig | IMockConfig);
-    connect(): Promise<void>;
+    connect(): Promise<FirestoreClient>;
     auth(): Promise<import("@firebase/auth-types").FirebaseAuth>;
 }

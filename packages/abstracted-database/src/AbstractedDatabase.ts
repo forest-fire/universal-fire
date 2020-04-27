@@ -8,10 +8,7 @@ import {
   IRtdbEventType,
   IFirestoreDbEvent,
   IClientAuth,
-  IAdminAuth,
-  IAdminConfig,
-  IClientConfig,
-  IMockConfig
+  IAdminAuth
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
 export { MockDb };

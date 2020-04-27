@@ -49,7 +49,7 @@ export class RealTimeClient extends RealTimeDb {
     | FirebaseNamespace
     | (FirebaseNamespace & { auth: () => FirebaseNamespace['auth'] });
   protected _authProviders: FirebaseNamespace['auth'];
-  protected app: FirebaseApp;
+  protected _app: FirebaseApp;
 
   constructor(config: IClientConfig | IMockConfig) {
     super();
@@ -58,7 +58,7 @@ export class RealTimeClient extends RealTimeDb {
     this.listenForConnectionStatus();
   }
 
-  public async connect() {
+  public async connect(): Promise<RealTimeClient> {
     const config = this._config;
     if (isMockConfig(config)) {
       // MOCK DB
@@ -100,7 +100,7 @@ export class RealTimeClient extends RealTimeDb {
         }
         try {
           const runningApps = new Set(fb.firebase.apps.map(i => i.name));
-          this.app = runningApps.has(config.name)
+          this._app = runningApps.has(config.name)
             ? // TODO: does this connect to the right named DB?
               fb.firebase.app(config.name)
             : fb.firebase.initializeApp(config, config.name);
@@ -115,7 +115,7 @@ export class RealTimeClient extends RealTimeDb {
           }
         }
         this._fbClass = fb.default;
-        this._database = this.app.database();
+        this._database = this._app.database();
       } else {
         console.info(`Database ${config.name} already connected`);
       }
@@ -132,6 +132,8 @@ export class RealTimeClient extends RealTimeDb {
         `The configuration is of an unknown type: ${JSON.stringify(config)}`
       );
     }
+
+    return this;
   }
 
   /**
@@ -167,7 +169,7 @@ export class RealTimeClient extends RealTimeDb {
       this._auth = await this.mock.auth();
       return this._auth;
     }
-    this._auth = this.app.auth() as IClientAuth;
+    this._auth = this._app.auth() as IClientAuth;
     return this._auth;
   }
 

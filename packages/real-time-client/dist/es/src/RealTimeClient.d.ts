@@ -24,9 +24,9 @@ export declare class RealTimeClient extends RealTimeDb {
         auth: () => FirebaseNamespace['auth'];
     });
     protected _authProviders: FirebaseNamespace['auth'];
-    protected app: FirebaseApp;
+    protected _app: FirebaseApp;
     constructor(config: IClientConfig | IMockConfig);
-    connect(): Promise<void>;
+    connect(): Promise<RealTimeClient>;
     /**
      * access to provider specific providers
      */
