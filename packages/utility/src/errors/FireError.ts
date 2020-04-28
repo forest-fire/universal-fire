@@ -5,7 +5,7 @@ export class FireError extends Error {
   public statusCode: number;
   constructor(
     message: string,
-    classification: string = 'FireError/error',
+    classification: string = 'UniversalFire/error',
     statusCode: number = 400
   ) {
     super(message);

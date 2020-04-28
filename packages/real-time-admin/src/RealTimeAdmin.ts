@@ -73,8 +73,6 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
         'invalid-configuration'
       );
     }
-
-    this.listenForConnectionStatus();
   }
 
   /**
@@ -200,6 +198,8 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
           : (message: string) => console.log('[FIREBASE]', message)
       );
     }
+
+    this.listenForConnectionStatus();
 
     return this;
   }

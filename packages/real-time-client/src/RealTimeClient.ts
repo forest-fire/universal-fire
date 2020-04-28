@@ -51,11 +51,14 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
   protected _authProviders: FirebaseNamespace['auth'];
   protected _app: FirebaseApp;
 
+  /**
+   * Builds the client and then waits for all to `connect()` to
+   * start the connection process.
+   */
   constructor(config: IClientConfig | IMockConfig) {
     super();
     this._config = config;
     this._eventManager = new EventManager();
-    this.listenForConnectionStatus();
   }
 
   public async connect(): Promise<RealTimeClient> {
@@ -113,6 +116,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
           } else {
             throw e;
           }
+          this.listenForConnectionStatus();
         }
         this._fbClass = fb.default;
         this._database = this._app.database();
