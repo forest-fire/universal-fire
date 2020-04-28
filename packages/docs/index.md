@@ -1,49 +1,45 @@
-# Abstracted Firebase
+# Universal Fire
 
-> Abstracting Firebase's SDK's for both **client** and **admin** applications
+> Abstracting Firebase's SDK's for the **client** and **admin** applications of both **Firestore** and the **Real-Time Database**
 
 ## Installing
 
-If you're using `npm`:
+Installing is as easy as:
 
 ```sh
-# Client SDK
-npm install --save-dev abstracted-client
-# Admin SDK
-npm install --save-dev abstracted-admin
+# npm
+npm install --save-dev universal-fire
+# yarn
+yarn add universal-fire
 ```
 
-If you're using `yarn` ... I think you can figure it out.
-
-## What is Abstracted Firebase?
-
-Firebase is an awesome database for getting start fast and _can_ be an awesome database for big projects too. The API is decently documented and the API is "ok" but I continually found myself wrapping little convenience methods around it.
-
-For instance, whether it's reacting to events from the `on()` or getting back one-off's from `once()` I don't really want the "snapshot" I want the `key` and `value`. Also if what I'm pulling down is a _list_ of things I'd rather it come back to as an JS array of things.
+To use you will add something like the following to your code:
 
 ```typescript
-// Connect to a DB
-import DB from 'abstracted-admin';
-const db = await DB.connect(config);
-// Get a record from DB (with typescript typings)
-const user = await db.getValue<User>('users/1234');
-// Get a list of records
-const user = await db.getList<User[]>('users');
+import { DB, RealTimeClient, FirestoreAdmin } from 'universal-fire';
+// use the real-time database with the Client SDK
+const db = DB.connect(RealTimeClient, config);
+// use the firestore database with the Admin SDK
+const db = DB.connect(FirestoreAdmin, config);
 ```
 
-There are many more examples in these docs but this section is meant to let you quickly qualify if you give a shit about this package. So in general this library is meant to:
+## What is Universal Fire?
 
-- Provide a set of simplifications for people use the Firebase SDK regularly
-- It is lightweight and will not interfere with you using the SDK in any way if you want to drop back to the SDK
-- Because this author also created a little mocking library ([`firemock`](https://github.com/forest-fire/firemock)), it is meant to play nicely with firemock when you want to use it.
-- This library also plays a foundational role in connecting to Firebase for the [`firemodel`](https://firemodel.info/)
-- You can use this abstraction with _both_ the Firebase Client SDK and the Admin SDK
+The original Firebase database -- the "real-time database" -- was an awesome database for getting started fast and _could be_ an awesome database for big projects too. The API is decently documented and the API is "ok" but it can also be somewhat awkward and due to it's lack of opinion, it could lead the inexperienced down non-performant paths.
 
-## Abstracted What?
+Universal Fire -- or as it was known until recently as "abstracted-firebase" -- was intended to provide a nicer API surface and reinforce best practices with some opinion. However, since Firebase now has a newer database called Firestore, we also wanted to include this same API surface to both databases and make operating with either very much the same.
 
-When I first wrote this wrapper I was focusing almost entirely on the backend and therefore the Admin SDK. When I started switching to the frontend I realized I'd missed a trick. In order to not manage to code bases I create the following micro-architecture:
+As it turned out, this was made easier because Firestore actually followed similar conventions (or at least aligned conventions) to what was already in place. Today, Universal Fire provides the following benefits to developers:
 
-![dependencies](./images/abstracted-deps.png)
+1. **Consistent API.** A 100% consistent way to use 95% of the functionality between the Admin and Client SDK's across BOTH databases. For the last 5% (which varies between client and admin or possibly Firestore/RTDB), the functionality is exposed as well. 
+2. **Simple Migration.** Should you want to move from one database to the other, the abstraction of the API means that changing from one database to the other is ideally just one line of code!
+3. **Simple Learning Curve.** Everything in Universal Fire is fully typed with Typescript and effort has been made to expose understandable comments (which you get via intellisense) along with sensible and descriptive error messages. And then there is this documentation too as a topper.
+4. **Eco-System.** Universal Fire is cool by itself but it's attached to an ecosystem that will greatly expand what you can do when using a Firebase database in the backend. This ecosystem includes:
 
-In essence the vast majority of the code is in `abstracted-firebase` but if you're just consuming this library you should just choose between the _admin_ and _client_ SDK's by choosing between the [`abstracted-admin`](https://github.com/forest-fire/abstracted-admin) and [`abstracted-client`](https://github.com/forest-fire/abstracted-client) libraries repectively.
+  - **Firemock** - an in-memory database that mocks a real Firebase database. Great for development and testing where fast performance as well as being able to reset your data to a know state can be highly adventagous.
+  - **[`Firemodel`](https://firemodel.info/)** - a data modeling layer that allows you to structure you data in a strongly typed manner while lowering the friction in interacting with the database to incredibly low levels.
+  - **[Vuex Plugin](https://vuex.firemodel.info)** - if you're using VueJS as an SPA, and more specifically Vuex as a client state management framework, we have a plugin to Firemodel that further reduces friction while also making extremely performant caching (with Vuex, IndexedDB, and Firebase) super easy.
+
+Hopefully what you've heard so far sounds interesting, please check out the remaining docs for more examples and instruction and please let us know if you run into issues (github issues) or better yet help us fix things you find broken with pull requests.
+
 

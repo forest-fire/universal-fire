@@ -24,7 +24,9 @@
     "build:closure": "lerna exec --scope universal-fire yarn build",
     "watch": "run-p watch:rtdb watch:firestore",
     "watch:rtdb": "run-p 'yarn lerna exec --scope @forest-fire/real-time-db yarn watch' 'yarn lerna exec --scope @forest-fire/real-time-client yarn watch' 'yarn lerna exec --scope @forest-fire/real-time-admin yarn watch'",
-    "watch:firestore": "run-p 'yarn lerna exec --scope @forest-fire/firestore-db yarn watch' 'yarn lerna exec --scope @forest-fire/firestore-client yarn watch' 'yarn lerna exec --scope @forest-fire/firestore-admin yarn watch'"
+    "watch:firestore": "run-p 'yarn lerna exec --scope @forest-fire/firestore-db yarn watch' 'yarn lerna exec --scope @forest-fire/firestore-client yarn watch' 'yarn lerna exec --scope @forest-fire/firestore-admin yarn watch'",
+    "docs": "yarn lerna exec --scope @forest-fire/docs yarn docs",
+    "docs:build": "yarn lerna exec --scope @forest-fire/docs yarn docs:build"
   },
   "workspaces": [
     "packages/*"
@@ -40,7 +42,7 @@
     "nyc": "^15.0.0",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.2",
-    "ts-node": "^8.8.1",
+    "ts-node": "^8.9.1",
     "typescript": "^3.8.3"
   },
   "license": "MIT"

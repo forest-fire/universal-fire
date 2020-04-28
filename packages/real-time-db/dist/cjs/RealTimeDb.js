@@ -118,53 +118,6 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         return this._mocking ? this.mock.ref(path) : this._database.ref(path);
     }
     /**
-     * Connects the database configuration to a database;
-     * the promise is resolved once the database is connected.
-     */
-    // public async connect() {
-    //   const config = this._config;
-    //   if (isMockConfig(config)) {
-    //     // MOCKING
-    //     await this.getFireMock({ db: config.mockData, auth: config.mockAuth });
-    //   } else {
-    //     // NON-MOCKING
-    //     if (this._isConnected) {
-    //       return;
-    //     }
-    //     const connectionEvent = () => {
-    //       try {
-    //         return new Promise((resolve, reject) => {
-    //           this._eventManager.once('connection', (state: boolean) => {
-    //             if (state) {
-    //               resolve();
-    //             } else {
-    //               reject(
-    //                 new AbstractedError(
-    //                   `While waiting for a connection received a disconnect message instead`,
-    //                   `no-connection`
-    //                 )
-    //               );
-    //             }
-    //           });
-    //         });
-    //       } catch (e) {
-    //         throw e;
-    //       }
-    //     };
-    //     const timeout = async () => {
-    //       await wait(this.CONNECTION_TIMEOUT);
-    //       throw new AbstractedError(
-    //         `The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`,
-    //         'connection-timeout'
-    //       );
-    //     };
-    //     await Promise.race([connectionEvent(), timeout()]);
-    //     this._isConnected = true;
-    //     return this;
-    //   }
-    //   this._onConnected.map(i => i.cb(this, i.ctx));
-    // }
-    /**
      * get a notification when DB is connected; returns a unique id
      * which can be used to remove the callback. You may, optionally,
      * state a unique id of your own.
@@ -205,6 +158,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         // return new Promise((resolve, reject))
         try {
             const results = await this.ref(path).set(value);
+            return results;
         }
         catch (e) {
             if (e.code === 'PERMISSION_DENIED') {

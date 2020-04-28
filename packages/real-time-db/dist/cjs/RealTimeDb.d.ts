@@ -60,10 +60,6 @@ export declare abstract class RealTimeDb extends AbstractedDatabase {
     /** Get a DB reference for a given path in Firebase */
     ref(path?: string): IRtdbReference;
     /**
-     * Connects the database configuration to a database;
-     * the promise is resolved once the database is connected.
-     */
-    /**
      * get a notification when DB is connected; returns a unique id
      * which can be used to remove the callback. You may, optionally,
      * state a unique id of your own.

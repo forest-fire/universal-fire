@@ -127,14 +127,10 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
       this._isConnected = true;
       return this;
     } else {
-      if (this._isConnected && this._app) {
+      if (this._isConnected && this._app && this._database) {
         this.goOnline();
         new EventManager().connection(true);
-        return this;
-      }
-
-      if (this._isAuthorized) {
-        console.log(`already authorized`);
+        this._database = firebase.database() as any;
         return this;
       }
 

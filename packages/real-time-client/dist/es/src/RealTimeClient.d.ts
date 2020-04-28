@@ -25,6 +25,10 @@ export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb {
     });
     protected _authProviders: FirebaseNamespace['auth'];
     protected _app: FirebaseApp;
+    /**
+     * Builds the client and then waits for all to `connect()` to
+     * start the connection process.
+     */
     constructor(config: IClientConfig | IMockConfig);
     connect(): Promise<RealTimeClient>;
     /**

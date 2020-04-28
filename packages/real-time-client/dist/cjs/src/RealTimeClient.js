@@ -18,12 +18,15 @@ var FirebaseBoolean;
 })(FirebaseBoolean = exports.FirebaseBoolean || (exports.FirebaseBoolean = {}));
 exports.MOCK_LOADING_TIMEOUT = 200;
 class RealTimeClient extends real_time_db_1.RealTimeDb {
+    /**
+     * Builds the client and then waits for all to `connect()` to
+     * start the connection process.
+     */
     constructor(config) {
         super();
         this._isAdminApi = false;
         this._config = config;
         this._eventManager = new EventManager_1.EventManager();
-        this.listenForConnectionStatus();
     }
     /**
      * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
@@ -90,6 +93,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
                     else {
                         throw e;
                     }
+                    this.listenForConnectionStatus();
                 }
                 this._fbClass = fb.default;
                 this._database = this._app.database();

@@ -1,5 +1,5 @@
 export class FireError extends Error {
-    constructor(message, classification = 'FireError/error', statusCode = 400) {
+    constructor(message, classification = 'UniversalFire/error', statusCode = 400) {
         super(message);
         this.universalFire = true;
         this.kind = 'FireError';

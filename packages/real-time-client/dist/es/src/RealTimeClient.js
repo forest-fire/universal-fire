@@ -9,12 +9,15 @@ export var FirebaseBoolean;
 })(FirebaseBoolean || (FirebaseBoolean = {}));
 export let MOCK_LOADING_TIMEOUT = 200;
 export class RealTimeClient extends RealTimeDb {
+    /**
+     * Builds the client and then waits for all to `connect()` to
+     * start the connection process.
+     */
     constructor(config) {
         super();
         this._isAdminApi = false;
         this._config = config;
         this._eventManager = new EventManager();
-        this.listenForConnectionStatus();
     }
     /**
      * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
@@ -81,6 +84,7 @@ export class RealTimeClient extends RealTimeDb {
                     else {
                         throw e;
                     }
+                    this.listenForConnectionStatus();
                 }
                 this._fbClass = fb.default;
                 this._database = this._app.database();

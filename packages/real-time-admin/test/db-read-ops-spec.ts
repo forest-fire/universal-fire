@@ -2,21 +2,26 @@
 import { RealTimeAdmin } from '../src';
 import * as chai from 'chai';
 import * as helpers from './testing/helpers';
-import { wait } from 'common-types';
-
 const expect = chai.expect;
+helpers.setupEnv();
 
 describe('DB Read operations: ', () => {
-  helpers.setupEnv();
-  const db = new RealTimeAdmin();
-  const dbMock = new RealTimeAdmin({ mocking: true });
+  let db: RealTimeAdmin;
+  let dbMock: RealTimeAdmin;
 
   before(async () => {
+    console.log({ FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL });
+
+    db = await RealTimeAdmin.connect();
+    dbMock = await RealTimeAdmin.connect({ mocking: true });
+    console.log('db connected', db.isConnected);
+
     await db.set('test-data', {
       one: 'foo',
       two: 'bar',
       three: 'baz'
     });
+
     await db.set('test-records', {
       123456: {
         name: 'Chris',

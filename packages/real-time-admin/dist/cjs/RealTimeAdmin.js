@@ -39,7 +39,6 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
         else {
             throw new utility_1.FireError(`The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(config, null, 2)}`, 'invalid-configuration');
         }
-        this.listenForConnectionStatus();
     }
     /**
      * Instantiates a DB and then waits for the connection
@@ -153,6 +152,7 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
                 ? (message) => this._config.debugging(message)
                 : (message) => console.log('[FIREBASE]', message));
         }
+        this.listenForConnectionStatus();
         return this;
     }
     /**
