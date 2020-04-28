@@ -112,14 +112,13 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
             console.log(
               `The "${config.name}" app already exists; will proceed.`
             );
-            this._isConnected = true;
           } else {
             throw e;
           }
-          this.listenForConnectionStatus();
         }
         this._fbClass = fb.default;
         this._database = this._app.database();
+        this.listenForConnectionStatus();
       } else {
         console.info(`Database ${config.name} already connected`);
       }

@@ -9,9 +9,9 @@
   "files": [
     "dist"
   ],
-  "main": "dist/cjs",
-  "module": "dist/es",
-  "typings": "dist/es",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "typings": "dist/es/index.js",
   "scripts": {
     "clean": "rimraf dist/**/*",
     "build": "run-s clean build:all",
@@ -19,8 +19,8 @@
     "build:esnext": "tsc -P tsconfig.es.json",
     "build:cjs": "tsc -P tsconfig.cjs.json",
     "watch": "run-p 'watch:esnext' 'watch:cjs'",
-    "watch:esnext": "tsc -P tsconfig.es.json -w",
-    "watch:cjs": "tsc -P tsconfig.es.json -w"
+    "watch:esnext": "tsc -P tsconfig.es.json ",
+    "watch:cjs": "tsc -P tsconfig.es.json "
   },
   "devDependencies": {
     "@firebase/app-types": "^0.6.0",

@@ -1,4 +1,5 @@
 export * from './extractServiceAccount';
 export * from './extractDataUrl';
-export * from './runningApps';
+export * from './getRunningApps';
+export * from './getRunningFirebaseApp';
 //# sourceMappingURL=index.js.map

@@ -1,0 +1,1 @@
+{"version":3,"file":"getRunningFirebaseApp.js","sourceRoot":"","sources":["../../../src/admin/getRunningFirebaseApp.ts"],"names":[],"mappings":"AAGA,gBAAgB;AAChB,MAAM,UAAU,qBAAqB,CACnC,IAAwB,EACxB,IAA4B;IAE5B,OAAO,IAAI;QACT,CAAC,CAAE,IAAI,CAAC,IAAI,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,IAAI,CAAC,CAAC,IAAI,KAAK,IAAI,CAAuB;QAC7D,CAAC,CAAC,SAAS,CAAC;AAChB,CAAC"}

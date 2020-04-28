@@ -5,7 +5,7 @@ import { RealTimeDb } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
 import { debug } from './util';
 import { isMockConfig, isAdminConfig } from '@forest-fire/types';
-import { extractServiceAccount, FireError, runningApps, extractDataUrl } from '@forest-fire/utility';
+import { extractServiceAccount, FireError, getRunningApps, extractDataUrl, getRunningFirebaseApp } from '@forest-fire/utility';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 export class RealTimeAdmin extends RealTimeDb {
     constructor(config = {}) {
@@ -18,10 +18,19 @@ export class RealTimeAdmin extends RealTimeDb {
         if (config.timeout) {
             this.CONNECTION_TIMEOUT = config.timeout || 5000;
         }
+        config.name = config.name || '[DEFAULT]';
         if (isAdminConfig(config)) {
             config.serviceAccount = extractServiceAccount(config);
             config.databaseUrl = extractDataUrl(config);
             this._config = config;
+            const running = getRunningApps(firebase.apps);
+            if (running.includes(config.name)) {
+                console.info(`the Firebase app "${this._config.name}" was already initialized`);
+                this._app = getRunningFirebaseApp(this._config.name, firebase.apps);
+            }
+            else {
+                this._app = firebase.initializeApp();
+            }
         }
         else if (isMockConfig(config)) {
             this._mocking = true;
@@ -89,35 +98,33 @@ export class RealTimeAdmin extends RealTimeDb {
             return this;
         }
         else {
-            if (this._isConnected && this._app) {
+            if (this._isConnected && this._app && this._database) {
                 this.goOnline();
                 new EventManager().connection(true);
-                return this;
-            }
-            if (this._isAuthorized) {
-                console.log(`already authorized`);
+                this._database = firebase.database();
                 return this;
             }
             if (isAdminConfig(this._config)) {
                 console.log(`Connecting to Firebase: [${process.env['FIREBASE_DATABASE_URL']}]`);
                 try {
-                    const name = this._config.name || '[DEFAULT]';
-                    const apps = runningApps(firebase.apps);
-                    const serviceAccount = this._config.serviceAccount;
-                    const databaseURL = this._config.databaseUrl;
-                    debug(`abstracted-admin: the DB "${name}" ` + apps.includes(name)
+                    const { name, serviceAccount, databaseUrl: databaseURL } = this._config;
+                    const runningApps = getRunningApps(firebase.apps);
+                    debug(`RealTimeAdmin: the DB "${name}" ` +
+                        runningApps.includes(name)
                         ? 'appears to be already connected'
                         : 'has not yet been connected');
-                    this._app = apps.includes(name)
-                        ? firebase.app()
-                        : firebase.initializeApp({
-                            credential: firebase.credential.cert(serviceAccount),
-                            databaseURL
-                        });
+                    const appOptions = {
+                        credential: firebase.credential.cert(serviceAccount),
+                        databaseURL
+                    };
+                    this._app = runningApps.includes(name)
+                        ? getRunningFirebaseApp(name, firebase.apps)
+                        : firebase.initializeApp(appOptions);
+                    this._app.database(appOptions.databaseURL);
+                    this._database = this._app.database(appOptions.databaseURL);
                     this._isAuthorized = true;
-                    this._database = firebase.database();
                     this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
-                    this._app = firebase;
+                    // this._app = firebase;
                     this.goOnline();
                     new EventManager().connection(true);
                 }

@@ -5,5 +5,6 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./extractServiceAccount"));
 __export(require("./extractDataUrl"));
-__export(require("./runningApps"));
+__export(require("./getRunningApps"));
+__export(require("./getRunningFirebaseApp"));
 //# sourceMappingURL=index.js.map

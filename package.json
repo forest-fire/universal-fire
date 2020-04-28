@@ -8,9 +8,9 @@
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
   "scripts": {
-    "build": "run-s build:shared build:base build:db build:sdk build:closure",
-    "build:shared": "run-p build:shared:types build:shared:utility",
-    "build:shared:types": "lerna exec --scope @forest-fire/types yarn build",
+    "build": "run-s build:types build:shared build:base build:db build:sdk build:closure",
+    "build:shared": "run-p build:shared:utility",
+    "build:types": "lerna exec --scope @forest-fire/types yarn build",
     "build:shared:utility": "lerna exec --scope @forest-fire/utility yarn build",
     "build:base": "lerna exec --scope @forest-fire/abstracted-database yarn build",
     "build:db": "run-p build:db:rtdb build:db:firestore",

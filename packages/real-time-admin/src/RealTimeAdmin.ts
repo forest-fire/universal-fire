@@ -14,20 +14,17 @@ import {
   isMockConfig,
   isAdminConfig,
   IAdminConfigCompleted,
-  IAdminAuth
+  IAdminAuth,
+  IAdminFirebaseApp
 } from '@forest-fire/types';
 import {
   extractServiceAccount,
   FireError,
-  runningApps,
-  extractDataUrl
+  getRunningApps,
+  extractDataUrl,
+  getRunningFirebaseApp
 } from '@forest-fire/utility';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
-
-export interface IFirebaseListener {
-  id: string;
-  cb: (db: RealTimeAdmin) => void;
-}
 
 export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   protected _isAdminApi = true;
@@ -46,7 +43,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   protected _isAuthorized: boolean = true;
   protected _auth?: IAdminAuth;
   protected _config!: IAdminConfigCompleted | IMockConfig;
-  protected _app: any;
+  protected _app!: IAdminFirebaseApp;
 
   constructor(config: IAdminConfig | IMockConfig = {}) {
     super();
@@ -55,11 +52,24 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     if (config.timeout) {
       this.CONNECTION_TIMEOUT = config.timeout || 5000;
     }
+    config.name = config.name || '[DEFAULT]';
 
     if (isAdminConfig(config)) {
       config.serviceAccount = extractServiceAccount(config);
       config.databaseUrl = extractDataUrl(config);
       this._config = config as IAdminConfigCompleted;
+      const running = getRunningApps(firebase.apps);
+      if (running.includes(config.name as string)) {
+        console.info(
+          `the Firebase app "${this._config.name}" was already initialized`
+        );
+        this._app = getRunningFirebaseApp(
+          this._config.name,
+          firebase.apps
+        ) as IAdminFirebaseApp;
+      } else {
+        this._app = firebase.initializeApp();
+      }
     } else if (isMockConfig(config)) {
       this._mocking = true;
       this._config = config;
@@ -140,28 +150,35 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
         );
 
         try {
-          const name = this._config.name || '[DEFAULT]';
-          const apps = runningApps(firebase.apps);
-          const serviceAccount = this._config.serviceAccount;
-          const databaseURL = this._config.databaseUrl;
+          const {
+            name,
+            serviceAccount,
+            databaseUrl: databaseURL
+          } = this._config;
+          const runningApps = getRunningApps(firebase.apps);
           debug(
-            `abstracted-admin: the DB "${name}" ` + apps.includes(name)
+            `RealTimeAdmin: the DB "${name}" ` +
+              runningApps.includes(name as string)
               ? 'appears to be already connected'
               : 'has not yet been connected'
           );
+          const appOptions = {
+            credential: firebase.credential.cert(serviceAccount),
+            databaseURL
+          };
+          this._app = runningApps.includes(name as string)
+            ? getRunningFirebaseApp(name, firebase.apps)
+            : firebase.initializeApp(appOptions);
+          (this._app as firebase.app.App).database(appOptions.databaseURL);
 
-          this._app = apps.includes(name)
-            ? firebase.app()
-            : firebase.initializeApp({
-                credential: firebase.credential.cert(serviceAccount),
-                databaseURL
-              });
+          this._database = (this._app as firebase.app.App).database(
+            appOptions.databaseURL
+          ) as any;
           this._isAuthorized = true;
-          this._database = firebase.database() as any;
           this.enableDatabaseLogging = firebase.database.enableLogging.bind(
             firebase.database
           );
-          this._app = firebase;
+          // this._app = firebase;
           this.goOnline();
           new EventManager().connection(true);
         } catch (err) {

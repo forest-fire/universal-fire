@@ -2,7 +2,7 @@ import { IDictionary } from 'common-types';
 import { SerializedQuery } from 'serialized-query';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IFirebaseListener, IFirebaseConnectionCallback, IMockLoadingState, IFirebaseWatchHandler, IClientEmitter, IAdminEmitter } from './index';
-import { IMockConfigOptions, IRtdbDatabase, IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IDatabaseConfig, IFirebaseApp } from '@forest-fire/types';
+import { IMockConfigOptions, IRtdbDatabase, IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IDatabaseConfig, IFirebaseApp, IAdminFirebaseApp } from '@forest-fire/types';
 /** time by which the dynamically loaded mock library should be loaded */
 export declare const MOCK_LOADING_TIMEOUT = 2000;
 export declare abstract class RealTimeDb extends AbstractedDatabase {
@@ -33,7 +33,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase {
     protected _debugging: boolean;
     protected _mocking: boolean;
     protected _allowMocking: boolean;
-    protected _app: IFirebaseApp;
+    protected _app: IFirebaseApp | IAdminFirebaseApp;
     protected _database: IRtdbDatabase;
     protected _onConnected: IFirebaseListener[];
     protected _onDisconnected: IFirebaseListener[];

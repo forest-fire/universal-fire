@@ -24,7 +24,8 @@ import {
   IRtdbReference,
   IRtdbDataSnapshot,
   IDatabaseConfig,
-  IFirebaseApp
+  IFirebaseApp,
+  IAdminFirebaseApp
 } from '@forest-fire/types';
 
 /** time by which the dynamically loaded mock library should be loaded */
@@ -81,7 +82,7 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   protected _debugging: boolean = false;
   protected _mocking: boolean = false;
   protected _allowMocking: boolean = false;
-  protected _app: IFirebaseApp;
+  protected _app: IFirebaseApp | IAdminFirebaseApp;
   protected _database: IRtdbDatabase;
   protected _onConnected: IFirebaseListener[] = [];
   protected _onDisconnected: IFirebaseListener[] = [];
@@ -515,6 +516,8 @@ export abstract class RealTimeDb extends AbstractedDatabase {
    * DB connection either connects or disconnects
    */
   protected _monitorConnection(snap: IRtdbDataSnapshot) {
+    console.log('monitor:', snap.val());
+
     this._isConnected = snap.val();
     // call active listeners
     if (this._isConnected) {

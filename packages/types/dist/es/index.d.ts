@@ -1,4 +1,4 @@
-export * from './fire-types';
 export * from './fire-type-fns';
-export * from './fire-proxies';
-export * from './fire-apis';
+export * from './@types/fire-types';
+export * from './@types/fire-proxies';
+export * from './@types/fire-apis';

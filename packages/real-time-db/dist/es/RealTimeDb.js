@@ -397,6 +397,7 @@ export class RealTimeDb extends AbstractedDatabase {
      * DB connection either connects or disconnects
      */
     _monitorConnection(snap) {
+        console.log('monitor:', snap.val());
         this._isConnected = snap.val();
         // call active listeners
         if (this._isConnected) {
