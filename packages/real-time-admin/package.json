@@ -32,7 +32,7 @@
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build:nuclear": "yarn clean:nuclear && yarn build",
     "test": "yarn do test",
-    "docs": "vuepress dev docs",
+    "docs": "cd ../.. && yarn docs && cd -",
     "build:docs": "vuepress build docs",
     "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'"
   },

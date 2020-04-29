@@ -22,6 +22,7 @@
     "build:sdk:rtdb:admin": "lerna exec --scope @forest-fire/real-time-admin yarn build",
     "build:sdk:firestore:client": "lerna exec --scope @forest-fire/firestore-client yarn build",
     "build:closure": "lerna exec --scope universal-fire yarn build",
+    "build:docs": "yarn docs:build",
     "watch": "run-p watch:rtdb watch:firestore",
     "watch:rtdb": "run-p 'yarn lerna exec --scope @forest-fire/real-time-db yarn watch' 'yarn lerna exec --scope @forest-fire/real-time-client yarn watch' 'yarn lerna exec --scope @forest-fire/real-time-admin yarn watch'",
     "watch:firestore": "run-p 'yarn lerna exec --scope @forest-fire/firestore-db yarn watch' 'yarn lerna exec --scope @forest-fire/firestore-client yarn watch' 'yarn lerna exec --scope @forest-fire/firestore-admin yarn watch'",
