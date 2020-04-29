@@ -12,9 +12,4 @@ describe('RealTimeAdmin => Inheritance => ', () => {
     const db = new RealTimeAdmin({ mocking: true });
     expect(db).to.be.instanceOf(AbstractedDatabase);
   });
-
-  it('RealTimeAdmin has all inherited properties from generic sub-classes', async () => {
-    const db = new RealTimeAdmin({ mocking: true });
-    console.log(Object.keys(db));
-  });
 });

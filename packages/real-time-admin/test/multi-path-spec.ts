@@ -1,9 +1,6 @@
 // tslint:disable:no-implicit-dependencies
 import { RealTimeAdmin } from '../src/RealTimeAdmin';
-import * as chai from 'chai';
-import * as helpers from './testing/helpers';
-import { IDictionary } from 'common-types';
-const expect = chai.expect;
+import { expect } from 'chai';
 
 describe('CRUD Testing > ', () => {
   let db: RealTimeAdmin;
@@ -35,7 +32,6 @@ describe('CRUD Testing > ', () => {
       };
 
       await db.multiPathSet(updates);
-      console.log(db.mock.db);
 
       const foofoo = await db.getValue('/foofoo');
       const foobar = await db.getValue('/foobar');

@@ -1,42 +1,30 @@
 // tslint:disable:no-implicit-dependencies
 import { RealTimeAdmin } from '../src';
-import * as chai from 'chai';
+import { expect } from 'chai';
 import * as helpers from './testing/helpers';
 
-const expect = chai.expect;
+helpers.setupEnv();
 
 describe('Connecting to Database', () => {
-  it('can not instantiate without setting FIREBASE_SERVICE_ACCOUNT and FIREBASE_DATA_ROOT_URL', () => {
-    try {
-      const db = new RealTimeAdmin();
-      expect(true).to.equal(false);
-    } catch (e) {
-      expect(true).to.equal(true);
-    }
-  });
-
-  it('once ENV is setup, can instantiate', () => {
-    helpers.setupEnv();
-    const db = new RealTimeAdmin();
-    expect(true).to.equal(true);
-  });
-
-  it('can get a value from database once waitForConnection() returns', async () => {
-    const db = new RealTimeAdmin();
-    expect(db.isConnected).to.be.a('boolean');
-    await db.connect();
+  it('can get a value from database once connected', async () => {
+    const db = await RealTimeAdmin.connect();
     expect(db.isConnected).to.equal(true);
-    const connected = await db.getValue<boolean>('.info/connected');
-    // TODO: come back at some point and explore why this wasn't working
-    // expect(connected).to.equal(true);
+    const root = await db.getValue('/');
+    expect(root).to.be.an('object');
   });
 });
 
 describe('Write Operations', () => {
-  helpers.setupEnv();
-  const db = new RealTimeAdmin();
+  let db: RealTimeAdmin;
+  before(async () => {
+    db = await RealTimeAdmin.connect();
+  });
   afterEach(async () => {
-    await db.remove('scratch');
+    try {
+      await db.remove('scratch');
+    } catch (e) {
+      //
+    }
   });
 
   interface INameAndAge {
@@ -116,8 +104,10 @@ describe('Write Operations', () => {
 });
 
 describe('Other Operations', () => {
-  helpers.setupEnv();
-  const db = new RealTimeAdmin();
+  let db: RealTimeAdmin;
+  before(async () => {
+    db = await RealTimeAdmin.connect();
+  });
   afterEach(async () => {
     await db.remove('scratch');
   });
@@ -125,9 +115,9 @@ describe('Other Operations', () => {
   it('exists() tests to true/false based on existance of data', async () => {
     await db.set('/scratch/existance', 'foobar');
     let exists = await db.exists('/scratch/existance');
-    expect(exists).to.equal(true);
+    expect(exists).to.equal(true, 'existance proven true after setting value');
     await db.remove('/scratch/existance');
     exists = await db.exists('/scratch/existance');
-    expect(exists).to.equal(false);
+    expect(exists).to.equal(false, 'existance disproven after removal');
   });
 });

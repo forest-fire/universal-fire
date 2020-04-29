@@ -11,9 +11,9 @@ interface IPerson {
   name: string;
   age: number;
 }
+helpers.setupEnv();
 
 describe('Query based Read ops:', async () => {
-  helpers.setupEnv();
   let db: RealTimeAdmin;
   before(async () => {
     db = await RealTimeAdmin.connect({ mocking: true });
@@ -103,7 +103,7 @@ describe('Query based Read ops:', async () => {
    * this is in contrast to the "hashArray" where the value
    * is set to TRUE only
    */
-  it('getList() works with a hashLookup list', async () => {
+  it.only('getList() works with a hashLookup list', async () => {
     db.mock.updateDB({
       hash: {
         '-LFsnvrP4aDu3wcbxfVk': 1529961496026,

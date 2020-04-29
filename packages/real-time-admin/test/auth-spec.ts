@@ -10,22 +10,21 @@ describe('Admin Auth API', () => {
     const db = new RealTimeAdmin();
     expect(db.isConnected).to.equal(false);
     const auth = await db.auth();
-    expect(auth.createCustomToken).to.be.a('function');
-    expect(auth.createUser).to.be.a('function');
+    expect(auth.updateUser).to.be.a('function', 'updateUser is a function');
+    expect(auth.createUser).to.be.a('function', 'createUser is a function');
   });
 
   it('Real Auth: after connecting can also reference auth', async () => {
     const db = await RealTimeAdmin.connect();
     const auth: auth.Auth = await db.auth();
-    expect(auth).to.be.an('object');
-    expect(auth.createCustomToken).to.be.a('function');
-    expect(auth.createUser).to.be.a('function');
+    expect(auth.updateUser).to.be.a('function', 'updateUser is a function');
+    expect(auth.createUser).to.be.a('function', 'createUser is a function');
   });
 
   it('Mock Auth: can access the mocked Admin Auth API', async () => {
     const db = await RealTimeAdmin.connect({ mocking: true });
-    const success: auth.Auth = await db.auth();
-    expect(success).to.be.an('object');
-    expect(success.createCustomToken).to.be.a('function');
+    const auth: auth.Auth = await db.auth();
+    expect(auth.updateUser).to.be.a('function', 'updateUser is a function');
+    expect(auth.createUser).to.be.a('function', 'createUser is a function');
   });
 });

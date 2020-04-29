@@ -1,13 +1,11 @@
 // tslint:disable-next-line:no-implicit-dependencies
-import * as chai from "chai";
-import * as helpers from "./testing/helpers";
+import { expect } from 'chai';
+import * as helpers from './testing/helpers';
 
-const expect = chai.expect;
-
-describe("Events", () => {
+describe('Events', () => {
   it.skip(
-    "waitForConnection calls back on connect and cleans up after connection established"
+    'waitForConnection calls back on connect and cleans up after connection established'
   );
-  it.skip("onConnect calls back on connection and continues to listen");
-  it.skip("onDisconnect calls back on disconnection and continues to listen");
+  it.skip('onConnect calls back on connection and continues to listen');
+  it.skip('onDisconnect calls back on disconnection and continues to listen');
 });

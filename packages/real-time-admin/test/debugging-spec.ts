@@ -8,8 +8,7 @@ helpers.setupEnv();
 describe('Debugging: ', () => {
   it('debugging set to "true" results in logging to STDOUT', async () => {
     const restore = helpers.captureStdout();
-    const db = new RealTimeAdmin({ debugging: true });
-    await db.connect();
+    const db = await RealTimeAdmin.connect({ debugging: true });
     await db.getValue('foo');
     const output: string[] = restore();
     expect(output).to.be.an('array');
@@ -27,8 +26,7 @@ describe('Debugging: ', () => {
       expect(message).to.be.a('string');
       count++;
     };
-    const db = new RealTimeAdmin({ debugging: callback });
-    await db.connect();
+    const db = await RealTimeAdmin.connect({ debugging: callback });
     db.getValue('foo');
     db.set('foo2', 'happy happy');
     const output: string[] = restore();

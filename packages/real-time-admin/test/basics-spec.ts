@@ -7,15 +7,21 @@ helpers.setupEnv();
 describe('Basics: ', () => {
   it('Can connect to mock DB', async () => {
     const db = await RealTimeAdmin.connect({ mocking: true });
-    expect(db.isConnected).to.equal(false);
-    await db.connect();
     expect(db.isConnected).to.equal(true);
   });
 
-  it('Can connect to Firebase DB', async () => {
-    const db = new RealTimeAdmin();
+  it('Can connect to real DB', async () => {
+    const db = await RealTimeAdmin.connect({
+      serviceAccount: process.env.FIREBASE_SERVICE_ACCOUNT_JSON,
+      databaseUrl: process.env.FIREBASE_DATABASE_URL
+    });
     expect(db.isConnected).to.be.a('boolean');
-    await db.connect();
-    expect(db.isConnected).to.equal(true);
+    expect(db.isConnected).to.equal(true, 'isConnected returns true');
+  });
+
+  it('Connecting provides access to all API endpoints that are expected', async () => {
+    const db = await RealTimeAdmin.connect();
+    const root = await db.getRecord('/');
+    expect(root).to.be.an('object');
   });
 });
