@@ -14,7 +14,7 @@ module.exports = {
       site: {
         name: 'Universal Fire'
       },
-      canonical_base: 'https://universal-fire.com',
+      canonical_base: 'https://universal-fire.net',
       author: {
         name: 'Ken Snyder',
         twitter: 'yankeeinlondon'
@@ -26,7 +26,7 @@ module.exports = {
     "A simple wrapper for Firebase SDK's (with a view toward mocking)",
   head: [
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
-    ['meta', { name: 'application-name', content: 'FireModel' }],
+    ['meta', { name: 'application-name', content: 'Universal Fire' }],
     [
       'link',
       {
