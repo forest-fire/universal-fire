@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "noEmit": false,
+    "module": "commonjs",
+    "outDir": "dist/cjs"
+  },
+  "exclude": ["test"]
+}

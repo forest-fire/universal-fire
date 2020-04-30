@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "noEmit": false,
+    "module": "ESNext",
+    "outDir": "dist/es"
+  },
+  "exclude": ["test"]
+}
