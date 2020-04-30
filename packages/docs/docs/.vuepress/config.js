@@ -12,7 +12,7 @@ module.exports = {
     '@vuepress/medium-zoom': true,
     autometa: {
       site: {
-        name: 'Universal Fire'
+        name: 'UniversalFire'
       },
       canonical_base: 'https://universal-fire.net',
       author: {

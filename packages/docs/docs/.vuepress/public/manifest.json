@@ -1,7 +1,7 @@
 {
   "short_name": "Universal Fire",
   "name": "Universal Fire",
-  "description": "A consistent and elegant API for all Firebase APIs (with a view toward mocking)",
+  "description": "One API to rule them all",
   "start_url": ".",
   "background_color": "#000000",
   "display": "fullscreen",
