@@ -13,13 +13,15 @@ module.exports = {
     autometa: {
       site: {
         name: 'Universal Fire',
-        twitter: 'https://twitter.com/inocangroup',
-        og: 'https://www.facebook.com/inocangroup'
+        twitter: '@inocangroup',
+        og: 'https://www.facebook.com/inocangroup',
+        image: 'https://icons/universal-fire-image-1024.jpg'
       },
       canonical_base: 'https://universal-fire.net',
       author: {
         name: 'Ken Snyder',
-        twitter: 'https://twitter.com/yankeeinlondon'
+        title: 'entrepreneur, technologist, real person',
+        twitter: 'yankeeinlondon'
       }
     }
   },
@@ -40,14 +42,14 @@ module.exports = {
       'meta',
       {
         name: 'twitter:image',
-        content: 'https://universal-fire-image-1024.jpg'
+        content: 'https://icons/universal-fire-image-1024.jpg'
       }
     ],
     [
       'meta',
       {
         name: 'og:image',
-        content: 'https://universal-fire-image-1024.jpg'
+        content: 'https://icons/universal-fire-image-1024.jpg'
       }
     ],
     [
