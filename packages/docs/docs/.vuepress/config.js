@@ -38,6 +38,20 @@ module.exports = {
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     [
       'meta',
+      {
+        name: 'twitter:image',
+        content: 'https://universal-fire-image-1024.jpg'
+      }
+    ],
+    [
+      'meta',
+      {
+        name: 'og:image',
+        content: 'https://universal-fire-image-1024.jpg'
+      }
+    ],
+    [
+      'meta',
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
     ],
     [
