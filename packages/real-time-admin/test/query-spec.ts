@@ -29,10 +29,9 @@ describe('Query based Read ops:', async () => {
     db.mock.queueSchema('person', 5, { age: 1 });
     db.mock.queueSchema('person', 3, { age: 3 });
     db.mock.generate();
-    await db.set('people', db.mock.db);
   });
 
-  it.only('getSnapshot() works with query passed in', async () => {
+  it('getSnapshot() works with query passed in', async () => {
     let data = await db.getSnapshot('people');
     expect(data.numChildren()).to.equal(33); // baseline check
     const q = SerializedQuery.path('people')
@@ -99,7 +98,7 @@ describe('Query based Read ops:', async () => {
    * this is in contrast to the "hashArray" where the value
    * is set to TRUE only
    */
-  it.only('getList() works with a hashLookup list', async () => {
+  it('getList() works with a hashLookup list', async () => {
     db.mock.updateDB({
       hash: {
         '-LFsnvrP4aDu3wcbxfVk': 1529961496026,
