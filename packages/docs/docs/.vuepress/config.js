@@ -23,15 +23,33 @@ module.exports = {
   },
   title: 'Universal Fire',
   description:
-    "A simple wrapper for Firebase SDK's (with a view toward mocking)",
+    'A consistent and elegant API for all Firebase APIs (with a view toward mocking)',
   head: [
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+    [
+      'meta',
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }
+    ],
     ['meta', { name: 'application-name', content: 'Universal Fire' }],
+    ['link', { rel: 'manifest', href: '/manifest.json' }],
+    ['meta', { name: 'theme-color', content: '#3eaf7c' }],
+    ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+    [
+      'meta',
+      {
+        name: 'msapplication-TileImage',
+        content: '/icons/universal-fire-logo-32.png'
+      }
+    ],
+    ['meta', { name: 'msapplication-TileColor', content: '#000000' }][
+      ('meta',
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'black' })
+    ],
     [
       'link',
       {
         rel: 'favicon',
-        href: '/icon/universal-fire-logo-32.png',
+        href: '/icons/universal-fire-logo-32.png',
         type: 'image/png',
         sizes: '16x16'
       }
@@ -40,7 +58,7 @@ module.exports = {
       'link',
       {
         rel: 'favicon',
-        href: '/icon/universal-fire-logo-32.png',
+        href: '/icons/universal-fire-logo-32.png',
         type: 'image/png',
         sizes: '32x32'
       }
@@ -49,24 +67,24 @@ module.exports = {
       'link',
       {
         rel: 'favicon',
-        href: '/icon/universal-fire-logo-48.png',
+        href: '/icons/universal-fire-logo-48.png',
         type: 'image/png',
         sizes: '48x48'
       }
     ],
     [
       'link',
-      { rel: 'icon', href: '/icon/universal-fire-logo-32.png', sizes: '32x32' }
+      { rel: 'icon', href: '/icons/universal-fire-logo-32.png', sizes: '32x32' }
     ],
     [
       'link',
-      { rel: 'icon', href: '/icon/universal-fire-logo-48.png', sizes: '48x48' }
+      { rel: 'icon', href: '/icons/universal-fire-logo-48.png', sizes: '48x48' }
     ],
     [
       'link',
       {
         rel: 'apple-touch-icon',
-        href: '/icon/universal-fire-logo-57.png',
+        href: '/icons/universal-fire-logo-57.png',
         sizes: '57x57'
       }
     ],
@@ -74,7 +92,7 @@ module.exports = {
       'link',
       {
         rel: 'apple-touch-icon',
-        href: '/icon/universal-fire-logo-72.png',
+        href: '/icons/universal-fire-logo-72.png',
         sizes: '72x72'
       }
     ],
@@ -82,7 +100,7 @@ module.exports = {
       'link',
       {
         rel: 'apple-touch-icon',
-        href: '/icon/universal-fire-logo-76.png',
+        href: '/icons/universal-fire-logo-76.png',
         sizes: '76x76'
       }
     ],
@@ -90,7 +108,7 @@ module.exports = {
       'link',
       {
         rel: 'apple-touch-icon',
-        href: '/icon/universal-fire-logo-114.png',
+        href: '/icons/universal-fire-logo-114.png',
         sizes: '114x114'
       }
     ],
@@ -98,14 +116,14 @@ module.exports = {
       'link',
       {
         rel: 'apple-touch-icon',
-        href: '/icon/universal-fire-logo-120.png',
+        href: '/icons/universal-fire-logo-120.png',
         sizes: '120x120'
       }
     ],
     [
       {
         rel: 'icon',
-        href: '/icon/universal-fire-logo-144.png',
+        href: '/icons/universal-fire-logo-144.png',
         sizes: '144x144'
       }
     ],
@@ -113,7 +131,7 @@ module.exports = {
       'link',
       {
         rel: 'apple-touch-icon',
-        href: '/icon/universal-fire-logo-152.png',
+        href: '/icons/universal-fire-logo-152.png',
         sizes: '152x152'
       }
     ],
@@ -121,7 +139,7 @@ module.exports = {
       'link',
       {
         rel: 'apple-touch-icon',
-        href: '/icon/universal-fire-logo-180.png',
+        href: '/icons/universal-fire-logo-180.png',
         sizes: '180x180'
       }
     ],
@@ -129,7 +147,7 @@ module.exports = {
       'link',
       {
         rel: 'icon',
-        href: '/icon/universal-fire-logo-192.png',
+        href: '/icons/universal-fire-logo-192.png',
         sizes: '192x192'
       }
     ],
@@ -137,7 +155,7 @@ module.exports = {
       'link',
       {
         rel: 'icon',
-        href: '/icon/universal-fire-logo-225.png',
+        href: '/icons/universal-fire-logo-225.png',
         sizes: '225x225'
       }
     ],
@@ -145,7 +163,7 @@ module.exports = {
       'link',
       {
         rel: 'icon',
-        href: '/icon/universal-fire-logo-512.png',
+        href: '/icons/universal-fire-logo-512.png',
         sizes: '512x512'
       }
     ],
@@ -154,7 +172,7 @@ module.exports = {
       'link',
       {
         rel: 'apple-touch-icon-precomposed',
-        href: '/icon/universal-fire-logo-192.png',
+        href: '/icons/universal-fire-logo-192.png',
         sizes: '192x192'
       }
     ],
