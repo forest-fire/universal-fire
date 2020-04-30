@@ -12,12 +12,14 @@ module.exports = {
     '@vuepress/medium-zoom': true,
     autometa: {
       site: {
-        name: 'UniversalFire'
+        name: 'Universal Fire',
+        twitter: 'https://twitter.com/inocangroup',
+        og: 'https://www.facebook.com/inocangroup'
       },
       canonical_base: 'https://universal-fire.net',
       author: {
         name: 'Ken Snyder',
-        twitter: 'yankeeinlondon'
+        twitter: 'https://twitter.com/yankeeinlondon'
       }
     }
   },
