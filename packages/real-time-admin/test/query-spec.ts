@@ -18,8 +18,6 @@ describe('Query based Read ops:', async () => {
   before(async () => {
     db = await RealTimeAdmin.connect({ mocking: true });
     const personMockGenerator: SchemaCallback = h => () => {
-      console.log('CONTEXT', h);
-
       return {
         name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
         age: h.faker.random.number({ min: 10, max: 99 })
@@ -31,12 +29,10 @@ describe('Query based Read ops:', async () => {
     db.mock.queueSchema('person', 5, { age: 1 });
     db.mock.queueSchema('person', 3, { age: 3 });
     db.mock.generate();
-    if (!process.env.MOCK) {
-      await db.set('people', db.mock.db);
-    }
+    await db.set('people', db.mock.db);
   });
 
-  it('getSnapshot() works with query passed in', async () => {
+  it.only('getSnapshot() works with query passed in', async () => {
     let data = await db.getSnapshot('people');
     expect(data.numChildren()).to.equal(33); // baseline check
     const q = SerializedQuery.path('people')
