@@ -1,3 +1,7 @@
+---
+prev: /crud.html
+next: /watch.html
+---
 # Query Operations
 
 All of the READ operations above used a simple DB path to query the database but of course Firebase provides many tools to fine tune what we want the server to return. All of these parameters we're used to having off the Firebase Query API are available from a separate `SerializedQuery` class which is exported as a named export of **abstraced-admin**. You would use it like so:

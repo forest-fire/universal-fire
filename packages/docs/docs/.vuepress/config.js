@@ -13,7 +13,7 @@ module.exports = {
     autometa: {
       site: {
         name: 'Universal Fire',
-        twitter: '@inocangroup',
+        twitter: 'inocangroup',
         og: 'https://www.facebook.com/inocangroup',
         image: 'https://icons/universal-fire-image-1024.jpg'
       },
@@ -207,24 +207,32 @@ module.exports = {
     docsDir: 'docs',
     nav: [
       {
-        text: 'Read',
-        link: '/read/'
+        text: 'Getting Started',
+        link: '/getting-started.html'
       },
       {
-        text: 'Write',
-        link: '/write/'
+        text: 'CRUD',
+        link: '/crud.html'
       },
       {
         text: 'Query',
-        link: '/query/'
+        link: '/query.html'
       },
       {
-        text: 'Events',
-        link: '/events/'
+        text: 'Watch',
+        link: '/watch.html'
       },
       {
-        text: 'Mock',
-        link: '/mocking/'
+        text: 'Lifecycle Events',
+        link: '/events.html'
+      },
+      {
+        text: 'Mock DB',
+        link: '/mock-db.html'
+      },
+      {
+        text: 'Mock Data',
+        link: '/mocking.html'
       }
     ],
     sidebar: 'auto'
