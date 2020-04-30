@@ -43,9 +43,10 @@ module.exports = {
         content: '/icons/universal-fire-logo-32.png'
       }
     ],
-    ['meta', { name: 'msapplication-TileColor', content: '#000000' }][
-      ('meta',
-      { name: 'apple-mobile-web-app-status-bar-style', content: 'black' })
+    ['meta', { name: 'msapplication-TileColor', content: '#000000' }],
+    [
+      'meta',
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }
     ],
     [
       'link',
@@ -123,6 +124,7 @@ module.exports = {
       }
     ],
     [
+      'link',
       {
         rel: 'icon',
         href: '/icons/universal-fire-logo-144.png',
