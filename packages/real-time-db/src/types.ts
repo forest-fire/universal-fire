@@ -8,6 +8,7 @@ import {
 import type { IDictionary } from 'common-types';
 import type { RealTimeDb } from './index';
 import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import { IRtdbDatabase } from '@forest-fire/types';
 
 export type IMockLoadingState =
   | 'not-applicable'
@@ -24,7 +25,7 @@ export interface IFirebaseListener {
 }
 
 export type IFirebaseConnectionCallback = (
-  db: RealTimeDb,
+  db: IRealTimeDb,
   ctx?: IDictionary
 ) => void;
 

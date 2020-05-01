@@ -1,8 +1,12 @@
 export type {ServiceAccount as IServiceAccount} from 'firebase-admin';
-import type {auth as adminAuth, app as adminApp} from 'firebase-admin';
+import type {auth as adminAuth, app as adminApp, database as adminDatabase} from 'firebase-admin';
+import { IClientRtdbDatabase } from '..';
 export type IAdminApp = adminApp.App
 /** The Admin SDK for Firebase Auth */
 export type IAdminAuth = adminAuth.Auth;
+
+/** The Admin database API provided by RTDB */
+export type IAdminRtdbDatabase = adminDatabase.Database
 
 /** The Client SDK for Firebase Auth */
 export type IClientAuth = import('@firebase/auth-types').FirebaseAuth;
@@ -18,7 +22,7 @@ export type {
 
 export type {
   /** the `FirebaseDatabase` API from `@firebase/database-types` */
-  FirebaseDatabase as IRtdbDatabase,
+  FirebaseDatabase as IClientRtdbDatabase,
   DataSnapshot as IRtdbDataSnapshot,
   EventType as IRtdbEventType,
   Reference as IRtdbReference
@@ -32,3 +36,5 @@ export type {
   FirebaseFirestore as IFirestoreDatabase,
   DocumentChangeType as IFirestoreDbEvent,
 } from '@firebase/firestore-types'
+
+export type IRtdbDatabase = IClientRtdbDatabase | IAdminRtdbDatabase

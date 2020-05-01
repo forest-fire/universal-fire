@@ -21,7 +21,7 @@ export function isRealDbConfig(
  * by letting typescript know that it is a `IClientConfig` configuration.
  */
 export function isClientConfig(
-  config: IClientConfig | IMockConfig
+  config?: IClientConfig | IMockConfig
 ): config is IClientConfig {
   return config &&
     config.mocking !== true &&
@@ -32,7 +32,12 @@ export function isClientConfig(
 }
 
 export function isAdminConfig(
-  config: IAdminConfig | IMockConfig
+  config?: IAdminConfig | IMockConfig
 ): config is IAdminConfig {
-  return config.mocking !== true && (config as any).apiKey === undefined;
+  return config &&
+    config.mocking !== true &&
+    (config as any).apiKey === undefined &&
+    (config as any).databaseURL !== undefined
+    ? true
+    : false;
 }

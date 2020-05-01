@@ -1,11 +1,11 @@
 import { IDictionary } from 'common-types';
 import { SerializedQuery } from 'serialized-query';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
-import { IFirebaseListener, IFirebaseConnectionCallback, IMockLoadingState, IFirebaseWatchHandler, IClientEmitter, IAdminEmitter } from './index';
-import { IMockConfigOptions, IRtdbDatabase, IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IDatabaseConfig, IClientApp, IAdminApp } from '@forest-fire/types';
+import { IFirebaseListener, IMockLoadingState, IClientEmitter, IAdminEmitter, IRealTimeDb, IFirebaseWatchHandler, IFirebaseConnectionCallback } from './index';
+import { IRtdbDatabase, IDatabaseConfig, IClientApp, IAdminApp, IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IMockConfigOptions } from '@forest-fire/types';
 /** time by which the dynamically loaded mock library should be loaded */
 export declare const MOCK_LOADING_TIMEOUT = 2000;
-export declare abstract class RealTimeDb extends AbstractedDatabase {
+export declare abstract class RealTimeDb extends AbstractedDatabase implements IRealTimeDb {
     protected _isAdminApi: boolean;
     constructor();
     get isMockDb(): boolean;
@@ -34,12 +34,13 @@ export declare abstract class RealTimeDb extends AbstractedDatabase {
     protected _mocking: boolean;
     protected _allowMocking: boolean;
     protected _app: IClientApp | IAdminApp;
-    protected _database: IRtdbDatabase;
+    protected _database: IRtdbDatabase | undefined;
     protected _onConnected: IFirebaseListener[];
     protected _onDisconnected: IFirebaseListener[];
-    /** the config the db was started with */
     protected _config: IDatabaseConfig;
     protected abstract _auth?: any;
+    protected get database(): IRtdbDatabase;
+    protected set database(value: IRtdbDatabase);
     /**
      * watch
      *
@@ -202,10 +203,14 @@ export declare abstract class RealTimeDb extends AbstractedDatabase {
      */
     exists(path: string): Promise<boolean>;
     /**
-     * monitorConnection
-     *
-     * allows interested parties to hook into event messages when the
-     * DB connection either connects or disconnects
+     * Sets up an emitter based listener for database connection
+     * status. The Client SDK needs this but we will fake this with
+     * the Mock DB as well.
+     */
+    protected _setupConnectionListener(): void;
+    /**
+     * Connects the **Firebase** connection events into the general event listener; this only
+     * applies to the RTDB Client SDK.
      */
     protected _monitorConnection(snap: IRtdbDataSnapshot): void;
     /**
@@ -215,7 +220,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase {
      * When a status change is detected it function should **emit**
      * a `connection` event.
      */
-    protected abstract listenForConnectionStatus(): void;
+    protected abstract _listenForConnectionStatus(): Promise<void>;
     /**
      * When using the **Firebase** Authentication solution, the primary API
      * resides off the `db.auth()` call but each _provider_ also has an API

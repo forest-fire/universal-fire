@@ -11,4 +11,4 @@ import { IServiceAccount, IAdminConfig } from '@forest-fire/types';
  * - a base64 encoded GZIP of a `IServiceAccount` object (_this is ideal for ENV vars
  * which have limited length and must be string_)
  */
-export declare function extractServiceAccount(config: IAdminConfig): IServiceAccount;
+export declare function extractServiceAccount(config?: IAdminConfig): IServiceAccount;

@@ -1,6 +1,6 @@
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
-import { IAdminConfig, IMockConfig, IAdminConfigCompleted, IAdminAuth, IAdminApp } from '@forest-fire/types';
+import { IAdminConfig, IMockConfig, IAdminAuth, IAdminApp, IAdminRtdbDatabase } from '@forest-fire/types';
 export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     protected _isAdminApi: boolean;
     /**
@@ -12,8 +12,9 @@ export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     protected _clientType: string;
     protected _isAuthorized: boolean;
     protected _auth?: IAdminAuth;
-    protected _config: IAdminConfigCompleted | IMockConfig;
+    protected _config: IAdminConfig | IMockConfig;
     protected _app: IAdminApp;
+    protected _database?: IAdminRtdbDatabase;
     constructor(config?: IAdminConfig | IMockConfig);
     /**
      * Provides access to the Firebase Admin Auth API.
@@ -32,6 +33,8 @@ export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     goOnline(): void;
     goOffline(): void;
     connect(): Promise<RealTimeAdmin>;
+    protected _connectMockDb(config: IMockConfig): Promise<this>;
+    protected _connectRealDb(config: IAdminConfig): Promise<void>;
     /**
      * listenForConnectionStatus
      *
@@ -39,5 +42,5 @@ export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
      * we remain connected; this is unlike the client API
      * which provides an endpoint to lookup
      */
-    protected listenForConnectionStatus(): void;
+    protected _listenForConnectionStatus(): Promise<void>;
 }

@@ -1,1 +1,1 @@
-export declare function extractEncodedString(data?: string): any;
+export declare function extractEncodedString<T>(data?: string): T | undefined;

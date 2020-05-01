@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const abstracted_database_1 = require("@forest-fire/abstracted-database");
+const utility_1 = require("@forest-fire/utility");
 class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
     get database() {
         if (this._database) {
             return this._database;
         }
-        throw new Error('Attempt to use Firestore without having instantiated it');
+        throw new utility_1.FireError('Attempt to use Firestore without having instantiated it', 'not-ready');
     }
     set database(value) {
         this._database = value;

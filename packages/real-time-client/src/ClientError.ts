@@ -1,12 +1,26 @@
 import { FireError } from '@forest-fire/utility';
+import { HttpStatusCodes } from 'common-types';
 
 export class ClientError extends FireError {
-  public kind: string = 'RealTimeClient';
   constructor(
+    /** a human friendly error message */
     message: string,
-    classification: string = 'RealTimeClient/unknown',
-    statusCode: number = 400
+    /**
+     * either of the syntax `type/subType` or alternatively just
+     * `subType` where type will be defaulted to **RealTimeDb**
+     */
+    classification: string,
+    /**
+     * A numeric HTTP status code; defaults to 400 if not stated
+     */
+    httpStatusCode: number = HttpStatusCodes.BadRequest
   ) {
-    super(message, classification, 400);
+    super(
+      message,
+      classification.includes('/')
+        ? classification
+        : `RealTimeClient/${classification}`,
+      httpStatusCode
+    );
   }
 }

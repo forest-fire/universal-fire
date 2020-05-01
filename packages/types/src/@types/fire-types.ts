@@ -12,6 +12,11 @@ export interface IFirebaseBaseConfig {
   mocking?: boolean;
   /** set a name for the database; useful when there's more than one */
   name?: string;
+  /**
+   * The URL of the database from which to read and write data.
+   */
+  databaseURL?: string;
+  apiKey?: string;
   /** TBD  */
   logging?: any;
   /** override the default timeout of 5 seconds */
@@ -40,9 +45,6 @@ export interface IMockConfig extends IFirebaseBaseConfig {
 export interface IClientConfig extends IFirebaseBaseConfig {
   apiKey: string;
   authDomain: string;
-  /**
-   * The URL of the database from which to read and write data.
-   */
   databaseURL: string;
   /**
    * The ID of the Google Cloud project associated with the App.
@@ -62,29 +64,16 @@ export interface IAdminConfig extends IFirebaseBaseConfig {
    * This is a required attribute for using the Admin SDK but you can leave it off of the passed in
    * configuration so long as the ENV variable `FIREBASE_SERVICE_ACCOUNT` is set.
    */
-  serviceAccount?: string | IServiceAccount;
+  serviceAccount: string | IServiceAccount;
   /**
    * The databaseURL _is_ required for use of the Admin SDK but if not passed in as a parameter
    * it can be found in the `FIREBASE_DATABASE_URL` environment variable.
    */
-  databaseUrl?: string;
+  databaseURL: string;
 }
-
-/**
- * The data structure saved to a class managing the Admin SDK. The data sourced for this comes from
- * either a combination of the configuration passed in (`IAdminConfig`) and environment variables
- * which were set.
- */
-export type IAdminConfigCompleted =
-  | (IAdminConfig & {
-      serviceAccount: IServiceAccount;
-      databaseUrl: string;
-    })
-  | IMockConfig;
 
 export type IDatabaseConfig =
   | IAdminConfig
-  | IAdminConfigCompleted
   | IClientConfig
   | IMockConfig;
 

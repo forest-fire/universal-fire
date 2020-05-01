@@ -1,6 +1,6 @@
 import { looksLikeJson, FireError } from '../index';
 
-export function extractEncodedString(data?: string) {
+export function extractEncodedString<T>(data?: string): T | undefined {
   if (!data) {
     return undefined;
   }
@@ -15,7 +15,7 @@ export function extractEncodedString(data?: string) {
   }
   try {
     const buffer = Buffer.from(data, 'base64');
-    return JSON.parse(buffer.toString());
+    return JSON.parse(buffer.toString()) as T;
   } catch (e) {
     if (failedJsonParse) {
       throw new FireError(

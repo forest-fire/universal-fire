@@ -6,6 +6,7 @@ import {
   IClientApp,
   IAdminApp
 } from '@forest-fire/types';
+import { FireError } from '@forest-fire/utility';
 
 export abstract class FirestoreDb extends AbstractedDatabase {
   protected _database: IFirestoreDatabase | undefined;
@@ -15,7 +16,10 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     if (this._database) {
       return this._database;
     }
-    throw new Error('Attempt to use Firestore without having instantiated it');
+    throw new FireError(
+      'Attempt to use Firestore without having instantiated it',
+      'not-ready'
+    );
   }
 
   protected set database(value: IFirestoreDatabase) {

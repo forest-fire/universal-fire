@@ -18,6 +18,11 @@ export function isClientConfig(config) {
         : false;
 }
 export function isAdminConfig(config) {
-    return config.mocking !== true && config.apiKey === undefined;
+    return config &&
+        config.mocking !== true &&
+        config.apiKey === undefined &&
+        config.databaseURL !== undefined
+        ? true
+        : false;
 }
 //# sourceMappingURL=fire-type-fns.js.map

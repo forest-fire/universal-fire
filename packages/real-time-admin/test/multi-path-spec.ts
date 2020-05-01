@@ -16,7 +16,6 @@ describe('CRUD Testing > ', () => {
         foobar: 'bar',
         foobaz: 'baz'
       });
-      console.log(db.mock.db);
 
       expect(Object.keys(db.mock.db).length).to.equal(3);
       expect(Object.keys(db.mock.db)).contains('foofoo');

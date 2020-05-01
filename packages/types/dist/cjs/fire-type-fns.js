@@ -23,7 +23,12 @@ function isClientConfig(config) {
 }
 exports.isClientConfig = isClientConfig;
 function isAdminConfig(config) {
-    return config.mocking !== true && config.apiKey === undefined;
+    return config &&
+        config.mocking !== true &&
+        config.apiKey === undefined &&
+        config.databaseURL !== undefined
+        ? true
+        : false;
 }
 exports.isAdminConfig = isAdminConfig;
 //# sourceMappingURL=fire-type-fns.js.map

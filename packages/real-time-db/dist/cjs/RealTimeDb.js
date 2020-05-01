@@ -4,6 +4,7 @@ const convert = require("typed-conversions");
 const serialized_query_1 = require("serialized-query");
 const abstracted_database_1 = require("@forest-fire/abstracted-database");
 const index_1 = require("./index");
+const utility_1 = require("@forest-fire/utility");
 /** time by which the dynamically loaded mock library should be loaded */
 exports.MOCK_LOADING_TIMEOUT = 2000;
 class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
@@ -43,7 +44,15 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
     get isConnected() {
         return this._isConnected;
     }
-    // public abstract async auth(): Promise<A>;
+    get database() {
+        if (!this._database) {
+            throw new index_1.RealTimeDbError(`Attempt to use the RealTimeDB.database getter prior to the database being set!`, `not-ready`);
+        }
+        return this._database;
+    }
+    set database(value) {
+        this._database = value;
+    }
     /**
      * watch
      *
@@ -64,7 +73,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
                     targetType: 'path'
                 })(cb);
                 if (typeof target === 'string') {
-                    this.ref(index_1.slashNotation(target)).on(evt, dispatch);
+                    this.ref(utility_1.slashNotation(target)).on(evt, dispatch);
                 }
                 else {
                     target
@@ -113,7 +122,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
     }
     /** Get a DB reference for a given path in Firebase */
     ref(path = '/') {
-        return this._mocking ? this.mock.ref(path) : this._database.ref(path);
+        return this.isMockDb ? this.mock.ref(path) : this._database.ref(path);
     }
     /**
      * get a notification when DB is connected; returns a unique id
@@ -138,7 +147,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         }
         else {
             if (this._onConnected.map(i => i.id).includes(id)) {
-                throw new index_1.AbstractedError(`Request for onConnect() notifications was done with an explicit key [ ${id} ] which is already in use!`, `duplicate-listener`);
+                throw new index_1.RealTimeDbError(`Request for onConnect() notifications was done with an explicit key [ ${id} ] which is already in use!`, `duplicate-listener`);
             }
         }
         this._onConnected = this._onConnected.concat({ id, cb, ctx });
@@ -271,7 +280,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
     async getSnapshot(path) {
         try {
             const response = await (typeof path === 'string'
-                ? this.ref(index_1.slashNotation(path)).once('value')
+                ? this.ref(utility_1.slashNotation(path)).once('value')
                 : path.setDB(this).execute());
             return response;
         }
@@ -391,25 +400,29 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         return this.getSnapshot(path).then(snap => (snap.val() ? true : false));
     }
     /**
-     * monitorConnection
-     *
-     * allows interested parties to hook into event messages when the
-     * DB connection either connects or disconnects
+     * Sets up an emitter based listener for database connection
+     * status. The Client SDK needs this but we will fake this with
+     * the Mock DB as well.
+     */
+    _setupConnectionListener() {
+        this._eventManager.on('connection', (isConnected) => {
+            if (isConnected) {
+                this._onConnected.forEach(listener => listener.cb(this, listener.ctx || {}));
+            }
+            else {
+                this._onDisconnected.forEach(listener => {
+                    listener.cb(this, listener.ctx || {});
+                });
+            }
+        });
+    }
+    /**
+     * Connects the **Firebase** connection events into the general event listener; this only
+     * applies to the RTDB Client SDK.
      */
     _monitorConnection(snap) {
         this._isConnected = snap.val();
-        // call active listeners
-        if (this._isConnected) {
-            if (this._eventManager.connection) {
-                this._eventManager.connection(this._isConnected);
-            }
-            this._onConnected.forEach(listener => listener.ctx
-                ? listener.cb.bind(listener.ctx)(this)
-                : listener.cb.bind(this)());
-        }
-        else {
-            this._onDisconnected.forEach(listener => listener.cb(this));
-        }
+        this._eventManager.connection(this._isConnected);
     }
     /**
      * When using the **Firebase** Authentication solution, the primary API
@@ -417,7 +430,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
      * that can be useful and this has links to various providers.
      */
     get authProviders() {
-        throw new Error(`The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`);
+        throw new index_1.RealTimeDbError(`The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`, 'missing-auth-providers');
     }
     /**
      * **getFireMock**
@@ -429,7 +442,6 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         const FireMock = await Promise.resolve().then(() => require(
         /* webpackChunkName: "firemock" */ 'firemock'));
         this._mock = await FireMock.Mock.prepare(config);
-        this._isConnected = true;
     }
 }
 exports.RealTimeDb = RealTimeDb;

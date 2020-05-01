@@ -1,10 +1,6 @@
 // TODO: reduce this to just named symbols which we need!
 import * as firebase from 'firebase-admin';
-import {
-  RealTimeDb,
-  IRealTimeDb,
-  _getFirebaseType
-} from '@forest-fire/real-time-db';
+import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
 import { debug } from './util';
 import {
@@ -12,16 +8,17 @@ import {
   IMockConfig,
   isMockConfig,
   isAdminConfig,
-  IAdminConfigCompleted,
   IAdminAuth,
-  IAdminApp
+  IAdminApp,
+  IAdminRtdbDatabase
 } from '@forest-fire/types';
 import {
   extractServiceAccount,
   FireError,
   getRunningApps,
   extractDataUrl,
-  getRunningFirebaseApp
+  getRunningFirebaseApp,
+  determineDefaultAppName
 } from '@forest-fire/utility';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { adminAuthSdk } from 'firemock';
@@ -32,7 +29,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
    * Instantiates a DB and then waits for the connection
    * to finish before resolving the promise.
    */
-  public static async connect(config: IAdminConfig | IMockConfig = {}) {
+  public static async connect(config?: IAdminConfig | IMockConfig) {
     const obj = new RealTimeAdmin(config);
     await obj.connect();
     return obj;
@@ -42,36 +39,43 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   protected _clientType = 'admin';
   protected _isAuthorized: boolean = true;
   protected _auth?: IAdminAuth;
-  protected _config!: IAdminConfigCompleted | IMockConfig;
+  protected _config: IAdminConfig | IMockConfig;
   protected _app!: IAdminApp;
+  protected _database: IAdminRtdbDatabase | undefined;
 
-  constructor(config: IAdminConfig | IMockConfig = {}) {
+  constructor(config?: IAdminConfig | IMockConfig) {
     super();
     this._eventManager = new EventManager();
-    this.CONNECTION_TIMEOUT = config.timeout || 5000;
-    config.name = config.name || '[DEFAULT]';
+    this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
+    if (!config) {
+      config = {
+        serviceAccount: extractServiceAccount(config),
+        databaseURL: extractDataUrl(config)
+      };
+    }
+    if (isAdminConfig(config)) {
+      config.serviceAccount =
+        config.serviceAccount || extractServiceAccount(config);
+      config.databaseURL = config.databaseURL || extractDataUrl(config);
+      config.name = determineDefaultAppName(config);
+      this._config = config;
 
-    if (isAdminConfig(config) || !config) {
-      config.serviceAccount = extractServiceAccount(config);
-      config.databaseUrl = extractDataUrl(config);
-
-      this._config = config as IAdminConfigCompleted;
-      const running = getRunningApps(firebase.apps);
-      if (running.includes(config.name as string)) {
-        console.info(
-          `the Firebase app "${this._config.name}" was already initialized`
-        );
-        this._app = getRunningFirebaseApp<IAdminApp>(
-          this._config.name,
-          (firebase.apps as unknown[]) as IAdminApp[]
-        );
-      } else {
-        this._app = firebase.initializeApp({
-          databaseURL: config.databaseUrl,
-          credential: firebase.credential.cert(config.serviceAccount)
-        });
-      }
+      const runningApps = getRunningApps(firebase.apps);
+      const credential = firebase.credential.cert(config.serviceAccount);
+      this._app = runningApps.includes(config.name)
+        ? getRunningFirebaseApp<IAdminApp>(
+            config.name,
+            (firebase.apps as unknown) as IAdminApp[]
+          )
+        : firebase.initializeApp(
+            {
+              credential,
+              databaseURL: config.databaseURL
+            },
+            config.name
+          );
     } else if (isMockConfig(config)) {
+      config.name = determineDefaultAppName(config);
       this._config = config;
     } else {
       throw new FireError(
@@ -102,7 +106,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     if (this._config.mocking) {
       return adminAuthSdk;
     }
-    return firebase.auth();
+    return firebase.auth(this._app);
   }
 
   public goOnline() {
@@ -131,73 +135,36 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
 
   public async connect(): Promise<RealTimeAdmin> {
     if (isMockConfig(this._config)) {
-      // MOCK DB
-      // TODO: where are we attaching the mock API; seems like somethings missing
-      await this.getFireMock({
-        db: this._config.mockData || {},
-        auth: { providers: [], ...this._config.mockAuth }
-      });
-      this._isConnected = true;
-      return this;
+      await this._connectMockDb(this._config);
+    } else if (isAdminConfig(this._config)) {
+      await this._connectRealDb(this._config);
     } else {
-      if (isAdminConfig(this._config)) {
-        try {
-          const {
-            name,
-            serviceAccount,
-            databaseUrl: databaseURL
-          } = this._config;
-
-          const appOptions = {
-            credential: firebase.credential.cert(serviceAccount),
-            databaseURL
-          };
-          // const runningApps = getRunningApps(firebase.apps);
-          // this._app = runningApps.includes(name as string)
-          //   ? getRunningFirebaseApp(name, firebase.apps)
-          //   : firebase.initializeApp(appOptions);
-          (this._app as firebase.app.App).database(appOptions.databaseURL);
-
-          this._database = (this._app as firebase.app.App).database(
-            appOptions.databaseURL
-          ) as any;
-          this.enableDatabaseLogging = firebase.database.enableLogging.bind(
-            firebase.database
-          );
-          this.goOnline();
-          new EventManager().connection(true);
-        } catch (err) {
-          if (
-            err.message.indexOf('The default Firebase app already exists.') !==
-            -1
-          ) {
-            console.warn(
-              'DB was already logged in, however flag had not been set!'
-            );
-            this._isConnected = true;
-          } else {
-            this._isConnected = false;
-            console.warn('Problem connecting to Firebase', err);
-            throw new Error(err);
-          }
-        }
-        this.listenForConnectionStatus();
-        if (this._config.debugging) {
-          this.enableDatabaseLogging(
-            typeof this._config.debugging === 'function'
-              ? (message: string) => (this._config.debugging as any)(message)
-              : (message: string) => console.log('[FIREBASE]', message)
-          );
-        }
-
-        return this;
-      }
-
       throw new RealTimeAdminError(
         'The configuation passed is not valid for an admin SDK!',
         'invalid-configuration'
       );
     }
+
+    return this;
+  }
+
+  protected async _connectMockDb(config: IMockConfig) {
+    await this.getFireMock({
+      db: config.mockData || {},
+      auth: { providers: [], ...config.mockAuth }
+    });
+    this._isConnected = true;
+    return this;
+  }
+
+  protected async _connectRealDb(config: IAdminConfig) {
+    this._database = this._app.database() as IAdminRtdbDatabase;
+    this.enableDatabaseLogging = firebase.database.enableLogging.bind(
+      firebase.database
+    );
+    this.goOnline();
+    this._eventManager.connection(true);
+    await this._listenForConnectionStatus();
   }
 
   /**
@@ -207,7 +174,8 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
    * we remain connected; this is unlike the client API
    * which provides an endpoint to lookup
    */
-  protected listenForConnectionStatus() {
+  protected async _listenForConnectionStatus() {
+    this._setupConnectionListener();
     this._isConnected = true;
     this._eventManager.connection(true);
   }

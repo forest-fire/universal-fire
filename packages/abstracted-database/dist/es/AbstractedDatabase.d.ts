@@ -38,6 +38,15 @@ export declare abstract class AbstractedDatabase {
      */
     protected set app(value: IClientApp | import("firebase-admin").app.App);
     /**
+     * Returns a type safe accessor to the database; when the database has not been set yet
+     * it will throw a `not-ready` error.
+     */
+    protected abstract get database(): IRtdbDatabase | IFirestoreDatabase;
+    /**
+     * Sets the `_database`.
+     */
+    protected abstract set database(value: IRtdbDatabase | IFirestoreDatabase);
+    /**
      * Connects to the database and returns a promise which resolves when this
      * connection has been established.
      */

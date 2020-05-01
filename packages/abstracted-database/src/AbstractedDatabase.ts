@@ -64,22 +64,16 @@ export abstract class AbstractedDatabase {
     this._app = value;
   }
 
-  // TODO: why do we need this getter/setter? This is protected so why not just use a variable;
-  // getter/setter doesn't seem to add value. Also since I already had the `_database` prop I just
-  // moved the implementation to use this more traditional naming convention of non-public variables
+  /**
+   * Returns a type safe accessor to the database; when the database has not been set yet
+   * it will throw a `not-ready` error.
+   */
+  protected abstract get database(): IRtdbDatabase | IFirestoreDatabase;
+  /**
+   * Sets the `_database`.
+   */
+  protected abstract set database(value: IRtdbDatabase | IFirestoreDatabase);
 
-  // /**
-  //  * Returns the `_database`.
-  //  */
-  // protected get database(): IRtdbDatabase | FirebaseFirestore {
-  //   return this._database;
-  // }
-  // /**
-  //  * Sets the `_database`.
-  //  */
-  // protected abstract set database(value: IRtdbDatabase | FirebaseFirestore);
-
-  // TODO: review with rationalle with Marcello
   /**
    * Connects to the database and returns a promise which resolves when this
    * connection has been established.

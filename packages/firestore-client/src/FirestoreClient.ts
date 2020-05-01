@@ -6,7 +6,8 @@ import {
   isClientConfig,
   IClientConfig,
   isMockConfig,
-  IClientApp
+  IClientApp,
+  IFirestoreDatabase
 } from '@forest-fire/types';
 import { extractClientConfig, FireError } from '@forest-fire/utility';
 
@@ -41,10 +42,6 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
 
   public async connect(): Promise<FirestoreClient> {
     if (isClientConfig(this._config)) {
-      // TODO: explain rationale of async import
-      //  1. delay parsing JS until ready to connect
-      //  2. provide bundling that helps users to understand cost of various deps
-      //  3. _might_ make non-bocking resource where would have been blocking
       await import(
         /* webpackChunkName: 'firebase-firestore' */ '@firebase/firestore'
       );

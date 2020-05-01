@@ -14,7 +14,6 @@ describe('DB Read operations: ', () => {
 
     db = await RealTimeAdmin.connect();
     dbMock = await RealTimeAdmin.connect({ mocking: true });
-    console.log('db connected', db.isConnected);
 
     await db.set('test-data', {
       one: 'foo',

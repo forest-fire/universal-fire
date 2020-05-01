@@ -4,34 +4,36 @@ import { SerializedQuery } from 'serialized-query';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import {
   IFirebaseListener,
-  IFirebaseConnectionCallback,
   IMockLoadingState,
-  IFirebaseWatchHandler,
   IClientEmitter,
   IAdminEmitter,
   PermissionDenied,
   UndefinedAssignment,
-  slashNotation,
   AbstractedProxyError,
-  AbstractedError,
   WatcherEventWrapper,
-  FileDepthExceeded
+  FileDepthExceeded,
+  RealTimeDbError,
+  IRealTimeDb,
+  IFirebaseWatchHandler,
+  IFirebaseConnectionCallback
 } from './index';
 import {
-  IMockConfigOptions,
   IRtdbDatabase,
+  IDatabaseConfig,
+  IClientApp,
+  IAdminApp,
   IRtdbEventType,
   IRtdbReference,
   IRtdbDataSnapshot,
-  IDatabaseConfig,
-  IClientApp,
-  IAdminApp
+  IMockConfigOptions
 } from '@forest-fire/types';
+import { slashNotation } from '@forest-fire/utility';
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
-export abstract class RealTimeDb extends AbstractedDatabase {
+export abstract class RealTimeDb extends AbstractedDatabase
+  implements IRealTimeDb {
   protected _isAdminApi: boolean = false;
 
   constructor() {
@@ -83,14 +85,25 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   protected _mocking: boolean = false;
   protected _allowMocking: boolean = false;
   protected _app: IClientApp | IAdminApp;
-  protected _database: IRtdbDatabase;
+  protected _database: IRtdbDatabase | undefined;
   protected _onConnected: IFirebaseListener[] = [];
   protected _onDisconnected: IFirebaseListener[] = [];
-  /** the config the db was started with */
   protected _config: IDatabaseConfig;
   protected abstract _auth?: any;
 
-  // public abstract async auth(): Promise<A>;
+  protected get database(): IRtdbDatabase {
+    if (!this._database) {
+      throw new RealTimeDbError(
+        `Attempt to use the RealTimeDB.database getter prior to the database being set!`,
+        `not-ready`
+      );
+    }
+    return this._database;
+  }
+
+  protected set database(value: IRtdbDatabase) {
+    this._database = value;
+  }
 
   /**
    * watch
@@ -168,7 +181,7 @@ export abstract class RealTimeDb extends AbstractedDatabase {
 
   /** Get a DB reference for a given path in Firebase */
   public ref(path: string = '/'): IRtdbReference {
-    return this._mocking ? this.mock.ref(path) : this._database.ref(path);
+    return this.isMockDb ? this.mock.ref(path) : this._database.ref(path);
   }
 
   /**
@@ -196,7 +209,7 @@ export abstract class RealTimeDb extends AbstractedDatabase {
         .substr(2, 10);
     } else {
       if (this._onConnected.map(i => i.id).includes(id)) {
-        throw new AbstractedError(
+        throw new RealTimeDbError(
           `Request for onConnect() notifications was done with an explicit key [ ${id} ] which is already in use!`,
           `duplicate-listener`
         );
@@ -506,26 +519,31 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   }
 
   /**
-   * monitorConnection
-   *
-   * allows interested parties to hook into event messages when the
-   * DB connection either connects or disconnects
+   * Sets up an emitter based listener for database connection
+   * status. The Client SDK needs this but we will fake this with
+   * the Mock DB as well.
+   */
+  protected _setupConnectionListener() {
+    this._eventManager.on('connection', (isConnected: boolean) => {
+      if (isConnected) {
+        this._onConnected.forEach(listener =>
+          listener.cb(this, listener.ctx || {})
+        );
+      } else {
+        this._onDisconnected.forEach(listener => {
+          listener.cb(this, listener.ctx || {});
+        });
+      }
+    });
+  }
+
+  /**
+   * Connects the **Firebase** connection events into the general event listener; this only
+   * applies to the RTDB Client SDK.
    */
   protected _monitorConnection(snap: IRtdbDataSnapshot) {
     this._isConnected = snap.val();
-    // call active listeners
-    if (this._isConnected) {
-      if (this._eventManager.connection) {
-        this._eventManager.connection(this._isConnected);
-      }
-      this._onConnected.forEach(listener =>
-        listener.ctx
-          ? listener.cb.bind(listener.ctx)(this)
-          : listener.cb.bind(this)()
-      );
-    } else {
-      this._onDisconnected.forEach(listener => listener.cb(this));
-    }
+    this._eventManager.connection(this._isConnected);
   }
 
   /**
@@ -535,7 +553,7 @@ export abstract class RealTimeDb extends AbstractedDatabase {
    * When a status change is detected it function should **emit**
    * a `connection` event.
    */
-  protected abstract listenForConnectionStatus(): void;
+  protected abstract _listenForConnectionStatus(): Promise<void>;
 
   /**
    * When using the **Firebase** Authentication solution, the primary API
@@ -543,8 +561,9 @@ export abstract class RealTimeDb extends AbstractedDatabase {
    * that can be useful and this has links to various providers.
    */
   public get authProviders(): any {
-    throw new Error(
-      `The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`
+    throw new RealTimeDbError(
+      `The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`,
+      'missing-auth-providers'
     );
   }
 
@@ -559,6 +578,5 @@ export abstract class RealTimeDb extends AbstractedDatabase {
       /* webpackChunkName: "firemock" */ 'firemock'
     );
     this._mock = await FireMock.Mock.prepare(config);
-    this._isConnected = true;
   }
 }

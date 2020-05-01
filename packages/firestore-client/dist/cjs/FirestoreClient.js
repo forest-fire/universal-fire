@@ -36,10 +36,6 @@ class FirestoreClient extends firestore_db_1.FirestoreDb {
     }
     async connect() {
         if (types_1.isClientConfig(this._config)) {
-            // TODO: explain rationale of async import
-            //  1. delay parsing JS until ready to connect
-            //  2. provide bundling that helps users to understand cost of various deps
-            //  3. _might_ make non-bocking resource where would have been blocking
             await Promise.resolve().then(() => __importStar(require(
             /* webpackChunkName: 'firebase-firestore' */ '@firebase/firestore')));
             this._database = this._app.firestore();

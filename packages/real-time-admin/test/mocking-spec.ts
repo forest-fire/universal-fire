@@ -1,6 +1,7 @@
 import { RealTimeAdmin } from '../src/index';
 import { expect } from 'chai';
 import * as helpers from './testing/helpers';
+import { IMockConfig } from '@forest-fire/types';
 helpers.setupEnv();
 type SchemaCallback = import('firemock').SchemaCallback;
 
@@ -10,9 +11,13 @@ const animalMocker: SchemaCallback = h => () => ({
   age: h.faker.random.number({ min: 1, max: 15 })
 });
 
+const config: IMockConfig = {
+  mocking: true
+};
+
 describe('Mocking', async () => {
   it('ref() returns a mock reference', async () => {
-    const db = new RealTimeAdmin();
+    const db = new RealTimeAdmin(config);
     await db.connect();
     expect(db.ref('foo')).to.have.property('once');
     const mockDb = await RealTimeAdmin.connect({ mocking: true });

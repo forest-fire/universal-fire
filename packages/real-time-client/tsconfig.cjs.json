@@ -6,5 +6,6 @@
     "outDir": "dist/cjs",
     "strictNullChecks": false,
     "strict": false
-  }
+  },
+  "exclude": ["test"]
 }

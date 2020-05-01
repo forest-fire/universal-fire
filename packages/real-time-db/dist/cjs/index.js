@@ -5,7 +5,6 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./RealTimeDb"));
 __export(require("./errors/index"));
-__export(require("./util"));
 __export(require("./mockingSymbols"));
 __export(require("./types"));
 __export(require("./WatcherEventWrapper"));

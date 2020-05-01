@@ -11,10 +11,7 @@ describe('Basics: ', () => {
   });
 
   it('Can connect to real DB', async () => {
-    const db = await RealTimeAdmin.connect({
-      serviceAccount: process.env.FIREBASE_SERVICE_ACCOUNT_JSON,
-      databaseUrl: process.env.FIREBASE_DATABASE_URL
-    });
+    const db = await RealTimeAdmin.connect();
     expect(db.isConnected).to.be.a('boolean');
     expect(db.isConnected).to.equal(true, 'isConnected returns true');
   });

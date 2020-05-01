@@ -7,4 +7,7 @@ __export(require("./getRunningApps"));
 __export(require("./getRunningFirebaseApp"));
 __export(require("./looksLikeJson"));
 __export(require("./extractEncodedString"));
+__export(require("./slashNotation"));
+__export(require("./dotNotation"));
+__export(require("./determineDefaultAppName"));
 //# sourceMappingURL=index.js.map

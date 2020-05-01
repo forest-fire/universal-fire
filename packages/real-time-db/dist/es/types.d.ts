@@ -9,7 +9,7 @@ export interface IFirebaseListener {
     cb: IFirebaseConnectionCallback;
     ctx?: IDictionary;
 }
-export declare type IFirebaseConnectionCallback = (db: RealTimeDb, ctx?: IDictionary) => void;
+export declare type IFirebaseConnectionCallback = (db: IRealTimeDb, ctx?: IDictionary) => void;
 export interface IEmitter {
     emit: (event: string | symbol, ...args: any[]) => boolean;
     on: (event: string, value: any) => any;
