@@ -1,18 +1,17 @@
-import {
-  ISerializedQuery,
-  IDatabaseConfig,
-  MockDb,
-  IRtdbDatabase,
-  IFirestoreDatabase,
-  IRtdbEventType,
-  IFirestoreDbEvent,
-  IClientAuth,
-  IAdminAuth,
+import type {
   IAdminApp,
-  IClientApp
+  IAdminAuth,
+  IClientApp,
+  IClientAuth,
+  IDatabaseConfig,
+  IFirestoreDatabase,
+  IFirestoreDbEvent,
+  IRtdbDatabase,
+  IRtdbEventType,
+  MockDb
 } from '@forest-fire/types';
+import type { SerializedQuery } from '@forest-fire/serialized-query';
 import { FireError } from '@forest-fire/utility';
-export { MockDb };
 
 export abstract class AbstractedDatabase {
   /**
@@ -125,8 +124,8 @@ export abstract class AbstractedDatabase {
    * `idProp` parameter.
    */
   public abstract async getList<T = any>(
-    path: string | ISerializedQuery,
-    idProp?: string
+    path: string | SerializedQuery,
+    idProp: string
   ): Promise<T[]>;
   /**
    * Get's a push-key from the server at a given path. This ensures that
@@ -142,7 +141,7 @@ export abstract class AbstractedDatabase {
    */
   public abstract async getRecord<T = any>(
     path: string,
-    idProp?: string
+    idProp: string
   ): Promise<T>;
   /**
    * Returns the value at a given path in the database. This method is a
@@ -173,7 +172,7 @@ export abstract class AbstractedDatabase {
    * Watch for Firebase events based on a DB path.
    */
   public abstract watch(
-    target: string | ISerializedQuery,
+    target: string | SerializedQuery,
     events:
       | IFirestoreDbEvent
       | IFirestoreDbEvent[]
