@@ -2,7 +2,6 @@ import type { IDictionary } from 'common-types';
 import type { IServiceAccount } from '../index';
 import type { IMockAuthConfig, AsyncMockData } from 'firemock'
 
-export type ISerializedQuery = any;
 export type DebuggingCallback = (message: string) => void;
 
 export interface IFirebaseBaseConfig {

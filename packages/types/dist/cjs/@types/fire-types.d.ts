@@ -1,7 +1,6 @@
 import type { IDictionary } from 'common-types';
 import type { IServiceAccount } from '../index';
 import type { IMockAuthConfig, AsyncMockData } from 'firemock';
-export declare type ISerializedQuery = any;
 export declare type DebuggingCallback = (message: string) => void;
 export interface IFirebaseBaseConfig {
     /** set debugging override from logging config */
