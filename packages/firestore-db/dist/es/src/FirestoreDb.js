@@ -13,11 +13,8 @@ class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
         this._database = value;
     }
     _isCollection(path) {
-        if (typeof path === 'string') {
-            return path.split('/').length % 2 === 0;
-        }
-        // Just for now.
-        throw new Error('Serialized queries are not supported by Firestore');
+        path = typeof path !== 'string' ? path.path : path;
+        return path.split('/').length % 2 === 0;
     }
     _isDocument(path) {
         return this._isCollection(path) === false;
@@ -25,13 +22,13 @@ class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
     get mock() {
         throw new Error('Not implemented');
     }
-    async getList(path, idProp = 'id') {
+    async getList(path, idProp) {
         path = typeof path !== 'string' ? path.path : path;
         const querySnapshot = await this.database.collection(path).get();
-        return querySnapshot.docs.map(doc => {
+        return querySnapshot.docs.map((doc) => {
             return {
                 [idProp]: doc.id,
-                ...doc.data()
+                ...doc.data(),
             };
         });
     }
@@ -42,7 +39,7 @@ class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
         const documentSnapshot = await this.database.doc(path).get();
         return {
             ...documentSnapshot.data(),
-            [idProp]: documentSnapshot.id
+            [idProp]: documentSnapshot.id,
         };
     }
     async getValue(path) {
@@ -77,8 +74,8 @@ class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
     }
     async _removeCollection(path) {
         const batch = this.database.batch();
-        this.database.collection(path).onSnapshot(snapshot => {
-            snapshot.docs.forEach(doc => {
+        this.database.collection(path).onSnapshot((snapshot) => {
+            snapshot.docs.forEach((doc) => {
                 batch.delete(doc.ref);
             });
         });

@@ -1,13 +1,12 @@
 import { firebase } from '@firebase/app';
 import { FirestoreDb } from '@forest-fire/firestore-db';
 import {
-  IMockConfig,
-  IClientSdk,
-  isClientConfig,
-  IClientConfig,
-  isMockConfig,
   IClientApp,
-  IFirestoreDatabase
+  IClientConfig,
+  IClientSdk,
+  IMockConfig,
+  isClientConfig,
+  isMockConfig,
 } from '@forest-fire/types';
 import { extractClientConfig, FireError } from '@forest-fire/utility';
 
