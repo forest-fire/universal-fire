@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { FirestoreClient } from '.';
+import { FirestoreClient } from '../src';
 
 describe('FirestoreClient', () => {
   it('should be defined', () => {
