@@ -24,8 +24,8 @@ import {
   IRtdbReference,
   IRtdbDataSnapshot,
   IDatabaseConfig,
-  IFirebaseApp,
-  IAdminFirebaseApp
+  IClientApp,
+  IAdminApp
 } from '@forest-fire/types';
 
 /** time by which the dynamically loaded mock library should be loaded */
@@ -39,7 +39,7 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   }
 
   public get isMockDb() {
-    return this._mocking;
+    return this._config.mocking;
   }
 
   public get isAdminApi() {
@@ -82,7 +82,7 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   protected _debugging: boolean = false;
   protected _mocking: boolean = false;
   protected _allowMocking: boolean = false;
-  protected _app: IFirebaseApp | IAdminFirebaseApp;
+  protected _app: IClientApp | IAdminApp;
   protected _database: IRtdbDatabase;
   protected _onConnected: IFirebaseListener[] = [];
   protected _onDisconnected: IFirebaseListener[] = [];
@@ -128,9 +128,7 @@ export abstract class RealTimeDb extends AbstractedDatabase {
       });
     } catch (e) {
       console.warn(
-        `abstracted-firebase: failure trying to watch event ${JSON.stringify(
-          events
-        )}`
+        `RealTimeDb: failure trying to watch event ${JSON.stringify(events)}`
       );
       throw new AbstractedProxyError(e);
     }
@@ -153,10 +151,8 @@ export abstract class RealTimeDb extends AbstractedDatabase {
         }
       });
     } catch (e) {
-      e.name = e.code.includes('abstracted-firebase')
-        ? 'AbstractedFirebase'
-        : e.code;
-      e.code = 'abstracted-firebase/unWatch';
+      e.name = e.code.includes('RealTimeDb') ? 'AbstractedFirebase' : e.code;
+      e.code = 'RealTimeDb/unWatch';
       throw e;
     }
   }
@@ -335,7 +331,7 @@ export abstract class RealTimeDb extends AbstractedDatabase {
    *
    * Removes a path from the database. By default if you attempt to
    * remove a path in the database which _didn't_ exist it will throw
-   * a `abstracted-firebase/remove` error. If you'd prefer for this
+   * a `RealTimeDb/remove` error. If you'd prefer for this
    * error to be ignored than you can pass in **true** to the `ignoreMissing`
    * parameter.
    *
@@ -516,8 +512,6 @@ export abstract class RealTimeDb extends AbstractedDatabase {
    * DB connection either connects or disconnects
    */
   protected _monitorConnection(snap: IRtdbDataSnapshot) {
-    console.log('monitor:', snap.val());
-
     this._isConnected = snap.val();
     // call active listeners
     if (this._isConnected) {
@@ -561,32 +555,10 @@ export abstract class RealTimeDb extends AbstractedDatabase {
    * then sets `isConnected` to **true**
    */
   protected async getFireMock(config: IMockConfigOptions = {}) {
-    try {
-      this._mocking = true;
-      this._mockLoadingState = 'loading';
-      const FireMock = await import(
-        /* webpackChunkName: "firemock" */ 'firemock'
-      );
-      this._mockLoadingState = 'loaded';
-      try {
-        this._mock = await FireMock.Mock.prepare(config);
-      } catch (e) {
-        console.info(
-          'There was an error trying to produce a mock object but because this requires the Faker library there are reasonable use cases where this may have been intentionally blocked\n\n',
-          e.message
-        );
-      }
-      this._isConnected = true;
-    } catch (e) {
-      throw new AbstractedProxyError(
-        e,
-        'abstracted-firebase/firemock-load-failure',
-        `Failed to load the FireMock library asynchronously. The config passed in was ${JSON.stringify(
-          config,
-          null,
-          2
-        )}`
-      );
-    }
+    const FireMock = await import(
+      /* webpackChunkName: "firemock" */ 'firemock'
+    );
+    this._mock = await FireMock.Mock.prepare(config);
+    this._isConnected = true;
   }
 }

@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function isMockConfig(config) {
-    return config.mocking === true;
+    return config && config.mocking === true;
 }
 exports.isMockConfig = isMockConfig;
 function isRealDbConfig(config) {
-    return config.mocking !== true;
+    return config && config.mocking !== true;
 }
 exports.isRealDbConfig = isRealDbConfig;
 /**
@@ -14,7 +14,8 @@ exports.isRealDbConfig = isRealDbConfig;
  * by letting typescript know that it is a `IClientConfig` configuration.
  */
 function isClientConfig(config) {
-    return config.mocking !== true &&
+    return config &&
+        config.mocking !== true &&
         config.apiKey !== undefined &&
         config.databaseURL !== undefined
         ? true

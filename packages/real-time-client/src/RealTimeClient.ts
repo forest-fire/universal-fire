@@ -1,6 +1,6 @@
 import { EventManager } from './EventManager';
 import { ClientError } from './ClientError';
-import { FirebaseNamespace, FirebaseApp } from '@firebase/app-types';
+import type { FirebaseNamespace } from '@firebase/app-types';
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
 import {
   isMockConfig,
@@ -8,12 +8,20 @@ import {
   IClientConfig,
   IClientAuth,
   IMockConfig,
-  IRtdbDatabase
+  IRtdbDatabase,
+  IClientApp
 } from '@forest-fire/types';
+import {
+  extractClientConfig,
+  FireError,
+  getRunningApps,
+  getRunningFirebaseApp
+} from '@forest-fire/utility';
 export enum FirebaseBoolean {
   true = 1,
   false = 0
 }
+import { firebase } from '@firebase/app';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 
@@ -30,7 +38,6 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
 
   /** lists the database names which are currently connected */
   public static async connectedTo() {
-    // tslint:disable-next-line:no-submodule-imports
     const fb = await import(
       /* webpackChunkName: 'firebase-auth' */ '@firebase/app'
     );
@@ -49,90 +56,59 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
     | FirebaseNamespace
     | (FirebaseNamespace & { auth: () => FirebaseNamespace['auth'] });
   protected _authProviders: FirebaseNamespace['auth'];
-  protected _app: FirebaseApp;
+  protected _app: IClientApp;
 
   /**
    * Builds the client and then waits for all to `connect()` to
    * start the connection process.
    */
-  constructor(config: IClientConfig | IMockConfig) {
+  constructor(config?: IClientConfig | IMockConfig) {
     super();
-    this._config = config;
     this._eventManager = new EventManager();
+    this.CONNECTION_TIMEOUT = config.timeout || 5000;
+    if (!config) {
+      config = extractClientConfig();
+      if (!config) {
+        throw new FireError(``, ``);
+      }
+    }
+    if (isClientConfig(config)) {
+      config.name =
+        config.name || config.databaseURL
+          ? config.databaseURL.replace(/.*https:\W*([\w-]*)\.((.|\n)*)/g, '$1')
+          : '[DEFAULT]';
+
+      try {
+        const runningApps = getRunningApps(firebase.apps);
+        this._app = runningApps.includes(config.name)
+          ? getRunningFirebaseApp<IClientApp>(config.name, firebase.apps)
+          : firebase.initializeApp(config, config.name);
+      } catch (e) {
+        if (e.message && e.message.indexOf('app/duplicate-app') !== -1) {
+          console.log(`The "${config.name}" app already exists; will proceed.`);
+        } else {
+          throw e;
+        }
+      }
+    } else if (!isMockConfig(config)) {
+      throw new FireError(
+        `The configuration passed to RealTimeClient was invalid!`,
+        `invalid-configuration`
+      );
+    }
+    this._config = config;
   }
 
   public async connect(): Promise<RealTimeClient> {
-    const config = this._config;
-    if (isMockConfig(config)) {
-      // MOCK DB
-      await this.getFireMock({
-        db: config.mockData || {},
-        auth: { providers: [], ...config.mockAuth }
-      });
-      this._authProviders = this._mock
-        .authProviders as FirebaseNamespace['auth'];
-      this._isConnected = true;
-    } else if (isClientConfig(config)) {
-      // REAL DB
-      if (!this._isConnected) {
-        if (isClientConfig(config)) {
-          config.name =
-            config.name ||
-            config.databaseURL.replace(/.*https:\W*([\w-]*)\.((.|\n)*)/g, '$1');
-        } else {
-          throw new ClientError(
-            `The client configuration passed into the database was not correctly formed. The configuration was:\n${JSON.stringify(
-              config,
-              null,
-              2
-            )}`
-          );
-        }
-
-        // tslint:disable-next-line:no-submodule-imports
-        const fb = await import(
-          /* webpackChunkName: "firebase-app" */ '@firebase/app'
-        );
-        await import(
-          /* webpackChunkName: "firebase-db" */ '@firebase/database'
-        );
-        if (config.useAuth) {
-          await import(
-            /* webpackChunkName: "firebase-auth" */ '@firebase/auth'
-          );
-        }
-        try {
-          const runningApps = new Set(fb.firebase.apps.map(i => i.name));
-          this._app = runningApps.has(config.name)
-            ? // TODO: does this connect to the right named DB?
-              fb.firebase.app(config.name)
-            : fb.firebase.initializeApp(config, config.name);
-        } catch (e) {
-          if (e.message && e.message.indexOf('app/duplicate-app') !== -1) {
-            console.log(
-              `The "${config.name}" app already exists; will proceed.`
-            );
-          } else {
-            throw e;
-          }
-        }
-        this._fbClass = fb.default;
-        this._database = this._app.database();
-        this.listenForConnectionStatus();
-      } else {
-        console.info(`Database ${config.name} already connected`);
-      }
-      // TODO: relook at debugging func
-      if (config.debugging) {
-        this.enableDatabaseLogging(
-          typeof config.debugging === 'function'
-            ? (message: string) => (config.debugging as any)(message)
-            : (message: string) => console.log('[FIREBASE]', message)
-        );
-      }
+    if (isMockConfig(this._config)) {
+      this.connectMockDb(this._config);
+    } else if (isClientConfig(this._config)) {
+      this.connectRealDb(this._config);
     } else {
       throw new Error(
-        `The configuration is of an unknown type: ${JSON.stringify(config)}`
+        `The configuration is of an unknown type: ${JSON.stringify(
+          this._config
+        )}`
       );
     }
 
@@ -166,14 +142,59 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
       return this._auth;
     }
     if (!this.isConnected) {
+      this._config.useAuth = true;
       await this.connect();
     }
-    if (this._mocking) {
+    if (this.isMockDb) {
       this._auth = await this.mock.auth();
       return this._auth;
     }
+    if (!this._app.auth) {
+    }
     this._auth = this._app.auth() as IClientAuth;
     return this._auth;
+  }
+
+  /**
+   * The steps needed to connect a database to a Firemock
+   * mocked DB.
+   */
+  protected async connectMockDb(config: IMockConfig) {
+    await this.getFireMock({
+      db: config.mockData || {},
+      auth: { providers: [], ...config.mockAuth }
+    });
+    this._authProviders = this._mock.authProviders as FirebaseNamespace['auth'];
+    this._isConnected = true;
+  }
+
+  protected async connectRealDb(config: IClientConfig) {
+    if (!this._isConnected) {
+      await this.loadDatabaseApi();
+      if (config.useAuth) {
+        await this.loadAuthApi();
+      }
+      this._database = this._app.database();
+      this.listenForConnectionStatus();
+    } else {
+      console.info(`Database ${config.name} already connected`);
+    }
+    // TODO: relook at debugging func
+    if (config.debugging) {
+      this.enableDatabaseLogging(
+        typeof config.debugging === 'function'
+          ? (message: string) => (config.debugging as any)(message)
+          : (message: string) => console.log('[FIREBASE]', message)
+      );
+    }
+  }
+
+  protected async loadAuthApi() {
+    await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
+  }
+
+  protected async loadDatabaseApi() {
+    await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
   }
 
   /**

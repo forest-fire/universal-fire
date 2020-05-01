@@ -1,6 +1,6 @@
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
-import { IAdminConfig, IMockConfig, IAdminConfigCompleted, IAdminAuth, IAdminFirebaseApp } from '@forest-fire/types';
+import { IAdminConfig, IMockConfig, IAdminConfigCompleted, IAdminAuth, IAdminApp } from '@forest-fire/types';
 export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     protected _isAdminApi: boolean;
     /**
@@ -13,7 +13,7 @@ export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     protected _isAuthorized: boolean;
     protected _auth?: IAdminAuth;
     protected _config: IAdminConfigCompleted | IMockConfig;
-    protected _app: IAdminFirebaseApp;
+    protected _app: IAdminApp;
     constructor(config?: IAdminConfig | IMockConfig);
     /**
      * Provides access to the Firebase Admin Auth API.

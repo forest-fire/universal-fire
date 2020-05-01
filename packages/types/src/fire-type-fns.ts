@@ -6,13 +6,13 @@ import {
 } from './@types/fire-types';
 
 export function isMockConfig(config: IDatabaseConfig): config is IMockConfig {
-  return (config as IMockConfig).mocking === true;
+  return config && (config as IMockConfig).mocking === true;
 }
 
 export function isRealDbConfig(
   config: IDatabaseConfig
 ): config is IAdminConfig | IClientConfig {
-  return config.mocking !== true;
+  return config && config.mocking !== true;
 }
 
 /**
@@ -23,7 +23,8 @@ export function isRealDbConfig(
 export function isClientConfig(
   config: IClientConfig | IMockConfig
 ): config is IClientConfig {
-  return config.mocking !== true &&
+  return config &&
+    config.mocking !== true &&
     (config as IClientConfig).apiKey !== undefined &&
     (config as IClientConfig).databaseURL !== undefined
     ? true

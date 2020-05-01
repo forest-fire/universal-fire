@@ -22,7 +22,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         this._onDisconnected = [];
     }
     get isMockDb() {
-        return this._mocking;
+        return this._config.mocking;
     }
     get isAdminApi() {
         return this._isAdminApi;
@@ -75,7 +75,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
             });
         }
         catch (e) {
-            console.warn(`abstracted-firebase: failure trying to watch event ${JSON.stringify(events)}`);
+            console.warn(`RealTimeDb: failure trying to watch event ${JSON.stringify(events)}`);
             throw new index_1.AbstractedProxyError(e);
         }
     }
@@ -98,10 +98,8 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
             });
         }
         catch (e) {
-            e.name = e.code.includes('abstracted-firebase')
-                ? 'AbstractedFirebase'
-                : e.code;
-            e.code = 'abstracted-firebase/unWatch';
+            e.name = e.code.includes('RealTimeDb') ? 'AbstractedFirebase' : e.code;
+            e.code = 'RealTimeDb/unWatch';
             throw e;
         }
     }
@@ -244,7 +242,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
      *
      * Removes a path from the database. By default if you attempt to
      * remove a path in the database which _didn't_ exist it will throw
-     * a `abstracted-firebase/remove` error. If you'd prefer for this
+     * a `RealTimeDb/remove` error. If you'd prefer for this
      * error to be ignored than you can pass in **true** to the `ignoreMissing`
      * parameter.
      *
@@ -399,7 +397,6 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
      * DB connection either connects or disconnects
      */
     _monitorConnection(snap) {
-        console.log('monitor:', snap.val());
         this._isConnected = snap.val();
         // call active listeners
         if (this._isConnected) {
@@ -429,23 +426,10 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
      * then sets `isConnected` to **true**
      */
     async getFireMock(config = {}) {
-        try {
-            this._mocking = true;
-            this._mockLoadingState = 'loading';
-            const FireMock = await Promise.resolve().then(() => require(
-            /* webpackChunkName: "firemock" */ 'firemock'));
-            this._mockLoadingState = 'loaded';
-            try {
-                this._mock = await FireMock.Mock.prepare(config);
-            }
-            catch (e) {
-                console.info('There was an error trying to produce a mock object but because this requires the Faker library there are reasonable use cases where this may have been intentionally blocked\n\n', e.message);
-            }
-            this._isConnected = true;
-        }
-        catch (e) {
-            throw new index_1.AbstractedProxyError(e, 'abstracted-firebase/firemock-load-failure', `Failed to load the FireMock library asynchronously. The config passed in was ${JSON.stringify(config, null, 2)}`);
-        }
+        const FireMock = await Promise.resolve().then(() => require(
+        /* webpackChunkName: "firemock" */ 'firemock'));
+        this._mock = await FireMock.Mock.prepare(config);
+        this._isConnected = true;
     }
 }
 exports.RealTimeDb = RealTimeDb;

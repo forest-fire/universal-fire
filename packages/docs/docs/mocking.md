@@ -1,5 +1,5 @@
 ---
-prev: '/events/'
+prev: '/events.html'
 ---
 # Debugging and Mocking
 

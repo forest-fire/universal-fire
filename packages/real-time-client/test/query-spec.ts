@@ -2,6 +2,7 @@ import { RealTimeClient } from '../src';
 import { expect } from 'chai';
 import { SerializedQuery } from 'serialized-query';
 import * as helpers from './testing/helpers';
+import { wait } from 'common-types';
 
 interface IPerson {
   name: string;
@@ -17,15 +18,13 @@ describe('Query based Read ops:', () => {
   });
   beforeEach(async () => {
     db = await RealTimeClient.connect({ mocking: true });
+    await wait(100);
     db.mock.addSchema('person', personMockGenerator);
     db.mock.queueSchema('person', 20);
     db.mock.queueSchema('person', 5, { age: 100 });
     db.mock.queueSchema('person', 5, { age: 1 });
     db.mock.queueSchema('person', 3, { age: 3 });
     db.mock.generate();
-    if (!process.env.MOCK) {
-      await db.set('people', db.mock.db);
-    }
   });
 
   it('getSnapshot() works with query passed in', async () => {

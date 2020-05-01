@@ -1,0 +1,198 @@
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+// tslint:disable:no-implicit-dependencies
+const src_1 = require("../src");
+const chai = __importStar(require("chai"));
+const helpers = __importStar(require("./testing/helpers"));
+const common_types_1 = require("common-types");
+const expect = chai.expect;
+const config = {
+    apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',
+    authDomain: 'abstracted-admin.firebaseapp.com',
+    databaseURL: 'https://abstracted-admin.firebaseio.com',
+    projectId: 'abstracted-admin',
+    storageBucket: 'abstracted-admin.appspot.com',
+    messagingSenderId: '547394508788'
+};
+helpers.setupEnv();
+describe('Connecting to Database', () => {
+    it('can instantiate', async () => {
+        const db = new src_1.RealTimeClient(config);
+        expect(db).to.be.an('object');
+        expect(db).to.be.instanceof(src_1.RealTimeClient);
+        expect(db.getValue).to.be.a('function');
+    });
+    it('isConnected is true once waitForConnection() returns', async () => {
+        const db = new src_1.RealTimeClient(config);
+        expect(db.isConnected).to.equal(false);
+        await db.connect();
+        expect(db.isConnected).to.equal(true);
+        const result = await db.getValue('.info/connected');
+        expect(result).to.equal(true);
+    });
+    it('adding an onConnect callback with context works', async () => {
+        const db = new src_1.RealTimeClient(config);
+        const itHappened = { status: false };
+        const notificationId = db.notifyWhenConnected(database => {
+            expect(database).to.be.an('object');
+            expect(database.isConnected).to.be.a('boolean');
+            expect(database.config.apiKey).to.equal(config.apiKey);
+            itHappened.status = true;
+        }, 'my-test', { itHappened });
+        await db.connect();
+        await common_types_1.wait(5);
+        expect(itHappened.status).to.equal(true);
+        expect(db._onConnected).to.have.lengthOf(1);
+        db.removeNotificationOnConnection(notificationId);
+        expect(db._onConnected).to.have.lengthOf(0);
+    });
+});
+describe('Read operations: ', () => {
+    // tslint:disable-next-line:one-variable-per-declaration
+    let db;
+    let dbMock;
+    const personMockGenerator = (h) => () => ({
+        name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
+        age: h.faker.random.number({ min: 10, max: 99 })
+    });
+    before(async () => {
+        db = await src_1.RealTimeClient.connect(config);
+        dbMock = await src_1.RealTimeClient.connect({ mocking: true });
+        dbMock.mock.addSchema('person', personMockGenerator);
+        dbMock.mock.queueSchema('person', 20);
+        await db.set('client-test-data', {
+            one: 'foo',
+            two: 'bar',
+            three: 'baz'
+        });
+        await db.set('client-test-records', {
+            123456: {
+                name: 'Chris',
+                age: 50
+            },
+            654321: {
+                name: 'Bob',
+                age: 68
+            }
+        });
+    });
+    it('getSnapshot() gets statically set data in test DB', async () => {
+        const data = await db.getSnapshot('client-test-data');
+        expect(data.val()).to.be.an('object');
+        expect(data.val().one).to.be.equal('foo');
+        expect(data.val().two).to.be.equal('bar');
+        expect(data.val().three).to.be.equal('baz');
+        expect(data.key).to.equal('client-test-data');
+    });
+    it('getValue() gets statically set data in test DB', async () => {
+        const data = await db.getValue('client-test-data');
+        expect(data).to.be.an('object');
+        expect(data.one).to.be.equal('foo');
+        expect(data.two).to.be.equal('bar');
+        expect(data.three).to.be.equal('baz');
+    });
+    it('getRecord() gets statically set data in test DB', async () => {
+        const record = await db.getRecord('/client-test-records/123456');
+        expect(record).to.be.an('object');
+        expect(record.id).to.be.equal('123456');
+        expect(record.name).to.be.equal('Chris');
+        expect(record.age).to.be.equal(50);
+    });
+});
+describe('Write Operations', () => {
+    let db;
+    beforeEach(async () => {
+        db = await src_1.RealTimeClient.connect(config);
+        await db.remove('client-test-data/pushed');
+    });
+    it('push() variables into database', async () => {
+        await db.push('client-test-data/pushed', {
+            name: 'Charlie',
+            age: 25
+        });
+        await db.push('client-test-data/pushed', {
+            name: 'Sandy',
+            age: 32
+        });
+        const users = await db
+            .getValue('client-test-data/pushed')
+            .catch(e => new Error(e.message));
+        expect(Object.keys(users).length).to.equal(2);
+        expect(helpers.valuesOf(users, 'name')).to.include('Charlie');
+        expect(helpers.valuesOf(users, 'name')).to.include('Sandy');
+    });
+    it('set() sets data at a given path in DB', async () => {
+        await db.set('client-test-data/set/user', {
+            name: 'Charlie',
+            age: 25
+        });
+        const user = await db.getValue('client-test-data/set/user');
+        expect(user.name).to.equal('Charlie');
+        expect(user.age).to.equal(25);
+    });
+    it('update() can "set" and then "update" contents', async () => {
+        await db.update('client-test-data/update/user', {
+            name: 'Charlie',
+            age: 25
+        });
+        let user = await db.getValue('client-test-data/update/user');
+        expect(user.name).to.equal('Charlie');
+        expect(user.age).to.equal(25);
+        await db.update('client-test-data/update/user', {
+            name: 'Charles',
+            age: 34
+        });
+        user = await db.getValue('client-test-data/update/user');
+        expect(user.name).to.equal('Charles');
+        expect(user.age).to.equal(34);
+    });
+    it('update() leaves unchanged attributes as they were', async () => {
+        await db.update('client-test-data/update/user', {
+            name: 'Rodney',
+            age: 25
+        });
+        let user = await db.getValue('client-test-data/update/user');
+        expect(user.name).to.equal('Rodney');
+        expect(user.age).to.equal(25);
+        await db.update('client-test-data/update/user', {
+            age: 34
+        });
+        user = await db.getValue('client-test-data/update/user');
+        expect(user.name).to.equal('Rodney');
+        expect(user.age).to.equal(34);
+    });
+    it('remove() eliminates a path -- and all children -- in DB', async () => {
+        await db.set('client-test-data/removal/user', {
+            name: 'Rodney',
+            age: 25
+        });
+        let user = await db.getValue('client-test-data/removal/user');
+        expect(user.name).to.equal('Rodney');
+        await db.remove('client-test-data/removal/user');
+        user = await db.getValue('client-test-data/removal/user');
+        expect(user).to.equal(null);
+    });
+});
+describe('Other Operations', () => {
+    let db;
+    beforeEach(async () => {
+        db = new src_1.RealTimeClient(config);
+        await db.connect();
+    });
+    it('exists() tests to true/false based on existance of data', async () => {
+        await db.set('/client-test-data/existance', 'foobar');
+        let exists = await db.exists('/client-test-data/existance');
+        expect(exists).to.equal(true);
+        await db.remove('/client-test-data/existance');
+        exists = await db.exists('/client-test-data/existance');
+        expect(exists).to.equal(false);
+    });
+});
+//# sourceMappingURL=db-spec.js.map

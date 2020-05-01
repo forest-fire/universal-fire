@@ -1,6 +1,6 @@
 export type {ServiceAccount as IServiceAccount} from 'firebase-admin';
 import type {auth as adminAuth, app as adminApp} from 'firebase-admin';
-export type IAdminFirebaseApp = adminApp.App
+export type IAdminApp = adminApp.App
 /** The Admin SDK for Firebase Auth */
 export type IAdminAuth = adminAuth.Auth;
 
@@ -25,7 +25,7 @@ export type {
 } from '@firebase/database-types';
 
 export type {
-  FirebaseApp as IFirebaseApp
+  FirebaseApp as IClientApp
 } from '@firebase/app-types'
 
 export type {

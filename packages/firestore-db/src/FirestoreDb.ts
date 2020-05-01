@@ -3,12 +3,13 @@ import { DocumentChangeType as IFirestoreDbEvent } from '@firebase/firestore-typ
 import {
   ISerializedQuery,
   IFirestoreDatabase,
-  IFirebaseApp
+  IClientApp,
+  IAdminApp
 } from '@forest-fire/types';
 
 export abstract class FirestoreDb extends AbstractedDatabase {
   protected _database: IFirestoreDatabase | undefined;
-  protected _app: IFirebaseApp | undefined;
+  protected _app: IClientApp | IAdminApp | undefined;
 
   protected get database() {
     if (this._database) {

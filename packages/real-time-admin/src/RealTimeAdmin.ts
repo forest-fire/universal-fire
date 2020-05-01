@@ -14,7 +14,7 @@ import {
   isAdminConfig,
   IAdminConfigCompleted,
   IAdminAuth,
-  IAdminFirebaseApp
+  IAdminApp
 } from '@forest-fire/types';
 import {
   extractServiceAccount,
@@ -43,18 +43,15 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   protected _isAuthorized: boolean = true;
   protected _auth?: IAdminAuth;
   protected _config!: IAdminConfigCompleted | IMockConfig;
-  protected _app!: IAdminFirebaseApp;
+  protected _app!: IAdminApp;
 
   constructor(config: IAdminConfig | IMockConfig = {}) {
     super();
     this._eventManager = new EventManager();
-    this._mocking = config.mocking ? true : false;
-    if (config.timeout) {
-      this.CONNECTION_TIMEOUT = config.timeout || 5000;
-    }
+    this.CONNECTION_TIMEOUT = config.timeout || 5000;
     config.name = config.name || '[DEFAULT]';
 
-    if (isAdminConfig(config)) {
+    if (isAdminConfig(config) || !config) {
       config.serviceAccount = extractServiceAccount(config);
       config.databaseUrl = extractDataUrl(config);
 
@@ -64,10 +61,10 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
         console.info(
           `the Firebase app "${this._config.name}" was already initialized`
         );
-        this._app = getRunningFirebaseApp(
+        this._app = getRunningFirebaseApp<IAdminApp>(
           this._config.name,
-          firebase.apps
-        ) as IAdminFirebaseApp;
+          (firebase.apps as unknown[]) as IAdminApp[]
+        );
       } else {
         this._app = firebase.initializeApp({
           databaseURL: config.databaseUrl,
@@ -75,7 +72,6 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
         });
       }
     } else if (isMockConfig(config)) {
-      this._mocking = true;
       this._config = config;
     } else {
       throw new FireError(

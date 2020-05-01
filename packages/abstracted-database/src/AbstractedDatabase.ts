@@ -8,8 +8,8 @@ import {
   IFirestoreDbEvent,
   IClientAuth,
   IAdminAuth,
-  IAdminFirebaseApp,
-  IFirebaseApp
+  IAdminApp,
+  IClientApp
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
 export { MockDb };
@@ -40,7 +40,7 @@ export abstract class AbstractedDatabase {
   /**
    * The Firebase App API.
    */
-  protected _app: IFirebaseApp | IAdminFirebaseApp | undefined;
+  protected _app: IClientApp | IAdminApp | undefined;
   /**
    * The database API provided by Firebase (admin or client sdk of either
    * Firestore or RTDB)

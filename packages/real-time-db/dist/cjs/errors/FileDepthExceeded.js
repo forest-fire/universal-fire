@@ -4,11 +4,11 @@ class FileDepthExceeded extends Error {
     constructor(e) {
         super(e.message);
         this.stack = e.stack;
-        const name = "abstracted-firebase/depth-exceeded";
-        if (e.name === "Error") {
+        const name = 'RealTimeDb/depth-exceeded';
+        if (e.name === 'Error') {
             this.name = name;
         }
-        this.code = name.split("/")[1];
+        this.code = name.split('/')[1];
         this.stack = e.stack;
     }
 }

@@ -1,12 +1,12 @@
 // TODO: reduce this to just named symbols which we need!
 import * as firebase from 'firebase-admin';
-import * as process from 'process';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
 import { debug } from './util';
 import { isMockConfig, isAdminConfig } from '@forest-fire/types';
 import { extractServiceAccount, FireError, getRunningApps, extractDataUrl, getRunningFirebaseApp } from '@forest-fire/utility';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
+import { adminAuthSdk } from 'firemock';
 export class RealTimeAdmin extends RealTimeDb {
     constructor(config = {}) {
         super();
@@ -14,12 +14,9 @@ export class RealTimeAdmin extends RealTimeDb {
         this._clientType = 'admin';
         this._isAuthorized = true;
         this._eventManager = new EventManager();
-        this._mocking = config.mocking ? true : false;
-        if (config.timeout) {
-            this.CONNECTION_TIMEOUT = config.timeout || 5000;
-        }
+        this.CONNECTION_TIMEOUT = config.timeout || 5000;
         config.name = config.name || '[DEFAULT]';
-        if (isAdminConfig(config)) {
+        if (isAdminConfig(config) || !config) {
             config.serviceAccount = extractServiceAccount(config);
             config.databaseUrl = extractDataUrl(config);
             this._config = config;
@@ -29,11 +26,13 @@ export class RealTimeAdmin extends RealTimeDb {
                 this._app = getRunningFirebaseApp(this._config.name, firebase.apps);
             }
             else {
-                this._app = firebase.initializeApp();
+                this._app = firebase.initializeApp({
+                    databaseURL: config.databaseUrl,
+                    credential: firebase.credential.cert(config.serviceAccount)
+                });
             }
         }
         else if (isMockConfig(config)) {
-            this._mocking = true;
             this._config = config;
         }
         else {
@@ -63,6 +62,9 @@ export class RealTimeAdmin extends RealTimeDb {
      * - [API](https://firebase.google.com/docs/reference/admin/node/admin.auth.Auth)
      */
     async auth() {
+        if (this._config.mocking) {
+            return adminAuthSdk;
+        }
         return firebase.auth();
     }
     goOnline() {
@@ -98,33 +100,20 @@ export class RealTimeAdmin extends RealTimeDb {
             return this;
         }
         else {
-            if (this._isConnected && this._app && this._database) {
-                this.goOnline();
-                new EventManager().connection(true);
-                this._database = firebase.database();
-                return this;
-            }
             if (isAdminConfig(this._config)) {
-                console.log(`Connecting to Firebase: [${process.env['FIREBASE_DATABASE_URL']}]`);
                 try {
                     const { name, serviceAccount, databaseUrl: databaseURL } = this._config;
-                    const runningApps = getRunningApps(firebase.apps);
-                    debug(`RealTimeAdmin: the DB "${name}" ` +
-                        runningApps.includes(name)
-                        ? 'appears to be already connected'
-                        : 'has not yet been connected');
                     const appOptions = {
                         credential: firebase.credential.cert(serviceAccount),
                         databaseURL
                     };
-                    this._app = runningApps.includes(name)
-                        ? getRunningFirebaseApp(name, firebase.apps)
-                        : firebase.initializeApp(appOptions);
+                    // const runningApps = getRunningApps(firebase.apps);
+                    // this._app = runningApps.includes(name as string)
+                    //   ? getRunningFirebaseApp(name, firebase.apps)
+                    //   : firebase.initializeApp(appOptions);
                     this._app.database(appOptions.databaseURL);
                     this._database = this._app.database(appOptions.databaseURL);
-                    this._isAuthorized = true;
                     this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
-                    // this._app = firebase;
                     this.goOnline();
                     new EventManager().connection(true);
                 }
@@ -140,18 +129,16 @@ export class RealTimeAdmin extends RealTimeDb {
                         throw new Error(err);
                     }
                 }
+                this.listenForConnectionStatus();
+                if (this._config.debugging) {
+                    this.enableDatabaseLogging(typeof this._config.debugging === 'function'
+                        ? (message) => this._config.debugging(message)
+                        : (message) => console.log('[FIREBASE]', message));
+                }
+                return this;
             }
-            else {
-                throw new RealTimeAdminError('The configuation passed is not valid for an admin SDK!', 'invalid-configuration');
-            }
+            throw new RealTimeAdminError('The configuation passed is not valid for an admin SDK!', 'invalid-configuration');
         }
-        if (this._config.debugging) {
-            this.enableDatabaseLogging(typeof this._config.debugging === 'function'
-                ? (message) => this._config.debugging(message)
-                : (message) => console.log('[FIREBASE]', message));
-        }
-        this.listenForConnectionStatus();
-        return this;
     }
     /**
      * listenForConnectionStatus

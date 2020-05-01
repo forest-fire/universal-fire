@@ -22,7 +22,7 @@ describe('Permissions', () => {
       );
     } catch (e) {
       expect(e.message).to.include('no-write/foobar');
-      expect(e.name).to.equal('abstracted-firebase/permission-denied');
+      expect(e.name).to.equal('RealTimeDb/permission-denied');
       expect(e.code).to.equal('permission-denied');
     }
   });
@@ -39,7 +39,7 @@ describe('Permissions', () => {
       );
     } catch (e) {
       expect(e.code).to.equal('permission-denied');
-      expect(e.name).to.equal('abstracted-firebase/permission-denied');
+      expect(e.name).to.equal('RealTimeDb/permission-denied');
       expect(e.message).to.include('no-write/foobar');
     }
   });

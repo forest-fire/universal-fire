@@ -1,8 +1,8 @@
 export function isMockConfig(config) {
-    return config.mocking === true;
+    return config && config.mocking === true;
 }
 export function isRealDbConfig(config) {
-    return config.mocking !== true;
+    return config && config.mocking !== true;
 }
 /**
  * In a client SDK setting, this checks that the typing is NOT a mock
@@ -10,7 +10,8 @@ export function isRealDbConfig(config) {
  * by letting typescript know that it is a `IClientConfig` configuration.
  */
 export function isClientConfig(config) {
-    return config.mocking !== true &&
+    return config &&
+        config.mocking !== true &&
         config.apiKey !== undefined &&
         config.databaseURL !== undefined
         ? true

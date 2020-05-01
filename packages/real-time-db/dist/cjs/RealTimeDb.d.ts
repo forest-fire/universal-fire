@@ -2,7 +2,7 @@ import { IDictionary } from 'common-types';
 import { SerializedQuery } from 'serialized-query';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IFirebaseListener, IFirebaseConnectionCallback, IMockLoadingState, IFirebaseWatchHandler, IClientEmitter, IAdminEmitter } from './index';
-import { IMockConfigOptions, IRtdbDatabase, IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IDatabaseConfig, IFirebaseApp, IAdminFirebaseApp } from '@forest-fire/types';
+import { IMockConfigOptions, IRtdbDatabase, IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IDatabaseConfig, IClientApp, IAdminApp } from '@forest-fire/types';
 /** time by which the dynamically loaded mock library should be loaded */
 export declare const MOCK_LOADING_TIMEOUT = 2000;
 export declare abstract class RealTimeDb extends AbstractedDatabase {
@@ -33,7 +33,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase {
     protected _debugging: boolean;
     protected _mocking: boolean;
     protected _allowMocking: boolean;
-    protected _app: IFirebaseApp | IAdminFirebaseApp;
+    protected _app: IClientApp | IAdminApp;
     protected _database: IRtdbDatabase;
     protected _onConnected: IFirebaseListener[];
     protected _onDisconnected: IFirebaseListener[];
@@ -129,7 +129,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase {
      *
      * Removes a path from the database. By default if you attempt to
      * remove a path in the database which _didn't_ exist it will throw
-     * a `abstracted-firebase/remove` error. If you'd prefer for this
+     * a `RealTimeDb/remove` error. If you'd prefer for this
      * error to be ignored than you can pass in **true** to the `ignoreMissing`
      * parameter.
      *

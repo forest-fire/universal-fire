@@ -1,6 +1,5 @@
 /// <reference types="firebase-admin" />
-import { FirebaseApp } from '@firebase/app-types';
-import { ISerializedQuery, IDatabaseConfig, MockDb, IRtdbDatabase, IFirestoreDatabase, IRtdbEventType, IFirestoreDbEvent, IClientAuth, IAdminAuth, IAdminFirebaseApp, IFirebaseApp } from '@forest-fire/types';
+import { ISerializedQuery, IDatabaseConfig, MockDb, IRtdbDatabase, IFirestoreDatabase, IRtdbEventType, IFirestoreDbEvent, IClientAuth, IAdminAuth, IAdminApp, IClientApp } from '@forest-fire/types';
 export { MockDb };
 export declare abstract class AbstractedDatabase {
     /**
@@ -24,7 +23,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * The Firebase App API.
      */
-    protected _app: IFirebaseApp | IAdminFirebaseApp | undefined;
+    protected _app: IClientApp | IAdminApp | undefined;
     /**
      * The database API provided by Firebase (admin or client sdk of either
      * Firestore or RTDB)
@@ -33,11 +32,11 @@ export declare abstract class AbstractedDatabase {
     /**
      * Returns the `_app`.
      */
-    protected get app(): FirebaseApp | import("firebase-admin").app.App;
+    protected get app(): IClientApp | import("firebase-admin").app.App;
     /**
      * Sets the `_app`.
      */
-    protected set app(value: FirebaseApp | import("firebase-admin").app.App);
+    protected set app(value: IClientApp | import("firebase-admin").app.App);
     /**
      * Connects to the database and returns a promise which resolves when this
      * connection has been established.

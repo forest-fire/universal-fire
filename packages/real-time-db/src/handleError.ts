@@ -1,13 +1,17 @@
-import { IDictionary, createError } from "common-types";
+import { IDictionary, createError } from 'common-types';
 
-export function handleError(err: IDictionary, method: string, props: IDictionary = {}) {
-  const name = err.code || err.name !== "Error" ? err.name : "AbstractedFirebase";
+export function handleError(
+  err: IDictionary,
+  method: string,
+  props: IDictionary = {}
+) {
+  const name = err.code || err.name !== 'Error' ? err.name : 'RealTimeDb';
   const e = createError(
-    `abstracted-firebase/${name}`,
-    `An error [ ${name} ] occurred in abstracted-firebase while calling the ${method}() method.` +
+    `RealTimeDb/${name}`,
+    `An error [ ${name} ] occurred in RealTimeDb while calling the ${method}() method.` +
       props
       ? `\n${JSON.stringify(props, null, 2)}`
-      : ""
+      : ''
   );
   e.name = name;
   e.stack = err.stack;

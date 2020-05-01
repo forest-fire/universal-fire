@@ -4,7 +4,16 @@ next: /watch.html
 ---
 # Query Operations
 
-All of the READ operations above used a simple DB path to query the database but of course Firebase provides many tools to fine tune what we want the server to return. All of these parameters we're used to having off the Firebase Query API are available from a separate `SerializedQuery` class which is exported as a named export of **abstraced-admin**. You would use it like so:
+All of the READ operations discussed in the CRUD section returned a single database path and this resembles in a more typical database where you query the database for a single "record". The concept of a record does now exist in **Firestore** but in the **Real Time Database** the terms and data structure were all a little bit loose. In any case, most people would recognize that both databases typically do have structure in the database and that the idea of a model/schema and then consequently a "record" all makes a lot of sense.
+
+That said, where the GET operation was about getting a single record, a query is about getting a _list_ of records. This section will show the methods available to you -- using either underlying database -- to query the database.
+
+
+
+
+to query the database but of course Firebase provides many tools to fine tune what we want the server to return. All of these parameters we're used to having off the Firebase Query API are available from a separate `SerializedQuery` class which is exported as a named export of **abstraced-admin**. You would use it like so:
+
+## Query Building
 
 ```ts
 import { SerializedQuery } from "abstracted-admin";

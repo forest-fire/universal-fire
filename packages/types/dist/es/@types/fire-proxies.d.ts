@@ -1,6 +1,6 @@
 export type { ServiceAccount as IServiceAccount } from 'firebase-admin';
 import type { auth as adminAuth, app as adminApp } from 'firebase-admin';
-export declare type IAdminFirebaseApp = adminApp.App;
+export declare type IAdminApp = adminApp.App;
 /** The Admin SDK for Firebase Auth */
 export declare type IAdminAuth = adminAuth.Auth;
 /** The Client SDK for Firebase Auth */
@@ -15,5 +15,5 @@ IMockConfigOptions, } from 'firemock';
 export type { 
 /** the `FirebaseDatabase` API from `@firebase/database-types` */
 FirebaseDatabase as IRtdbDatabase, DataSnapshot as IRtdbDataSnapshot, EventType as IRtdbEventType, Reference as IRtdbReference } from '@firebase/database-types';
-export type { FirebaseApp as IFirebaseApp } from '@firebase/app-types';
+export type { FirebaseApp as IClientApp } from '@firebase/app-types';
 export type { FirebaseFirestore as IFirestoreDatabase, DocumentChangeType as IFirestoreDbEvent, } from '@firebase/firestore-types';
