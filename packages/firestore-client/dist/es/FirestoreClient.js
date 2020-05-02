@@ -30,13 +30,12 @@ export class FirestoreClient extends FirestoreDb {
             await import(
             /* webpackChunkName: 'firebase-firestore' */ '@firebase/firestore');
             this._database = this._app.firestore();
-            // TODO: implement a way to validate when connection is established
         }
         return this;
     }
     async auth() {
         await import(/* webpackChunkName: 'firebase-auth' */ '@firebase/auth');
-        if (this._app?.auth) {
+        if (this._app && this._app.auth) {
             return this._app.auth();
         }
         throw new Error('Attempt to use auth module without having installed Firebase auth dependency');
