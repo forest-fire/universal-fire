@@ -17,7 +17,7 @@ Mock as MockDb,
 IMockConfigOptions, } from 'firemock';
 export type { 
 /** the `FirebaseDatabase` API from `@firebase/database-types` */
-FirebaseDatabase as IClientRtdbDatabase, DataSnapshot as IRtdbDataSnapshot, EventType as IRtdbEventType, Reference as IRtdbReference } from '@firebase/database-types';
+FirebaseDatabase as IClientRtdbDatabase, DataSnapshot as IRtdbDataSnapshot, EventType as IRtdbEventType, Reference as IRtdbReference, ThenableReference as IRtdbThenableReference, OnDisconnect as IRtdbOnDisconnect } from '@firebase/database-types';
 export type { FirebaseApp as IClientApp } from '@firebase/app-types';
 export type { FirebaseFirestore as IFirestoreDatabase, DocumentChangeType as IFirestoreDbEvent, } from '@firebase/firestore-types';
 export declare type IRtdbDatabase = IClientRtdbDatabase | IAdminRtdbDatabase;

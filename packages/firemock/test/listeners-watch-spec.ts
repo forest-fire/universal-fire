@@ -3,7 +3,6 @@ import 'mocha';
 import { expect } from 'chai';
 import * as helpers from './testing/helpers';
 import { SchemaHelper, Mock, Reference } from '../src';
-import { DataSnapshot } from '@firebase/database-types';
 import {
   updateDB,
   removeDB,
@@ -16,6 +15,7 @@ import {
 } from '../src/rtdb';
 import { wait, IDictionary } from 'common-types';
 import { SerializedQuery } from 'serialized-query';
+import { IRtdbDataSnapshot } from '@forest-fire/types';
 
 describe('Listener events ->', () => {
   it('listening on a "value" event detects changes', async () => {
@@ -26,7 +26,7 @@ describe('Listener events ->', () => {
     let events: IDictionary[] = [];
     let ready = false;
 
-    const cb = (snap: DataSnapshot, prevKey: any) => {
+    const cb = (snap: IRtdbDataSnapshot, prevKey: any) => {
       if (ready) {
         events.push({ key: snap.key, snap: snap.val(), prevKey });
       }
@@ -66,7 +66,10 @@ describe('Listener events ->', () => {
     reset();
     const queryRef = Reference.createQuery('userProfile', 10);
     let events: IDictionary[] = [];
-    const cb = (eventType: string) => (snap: DataSnapshot, prevKey?: any) => {
+    const cb = (eventType: string) => (
+      snap: IRtdbDataSnapshot,
+      prevKey?: any
+    ) => {
       events.push({ eventType, val: snap.val(), key: snap.key, prevKey, snap });
     };
     queryRef.on('child_added', cb('child_added'));
@@ -128,7 +131,10 @@ describe('Listener events ->', () => {
     reset();
     const queryRef = Reference.createQuery('userProfile', 10);
     let events: IDictionary[] = [];
-    const cb = (eventType: string) => (snap: DataSnapshot, prevKey?: any) => {
+    const cb = (eventType: string) => (
+      snap: IRtdbDataSnapshot,
+      prevKey?: any
+    ) => {
       events.push({ eventType, val: snap.val(), key: snap.key, prevKey, snap });
     };
     queryRef.on('child_added', cb('child_added'));
@@ -155,7 +161,10 @@ describe('Listener events ->', () => {
     reset();
     const queryRef = Reference.createQuery('userProfile', 10);
     const events: IDictionary[] = [];
-    const cb = (eventType: string) => (snap: DataSnapshot, prevKey?: any) => {
+    const cb = (eventType: string) => (
+      snap: IRtdbDataSnapshot,
+      prevKey?: any
+    ) => {
       events.push({ eventType, val: snap.val(), key: snap.key, prevKey, snap });
     };
     queryRef.on('child_added', cb('child_added'));
@@ -170,7 +179,10 @@ describe('Listener events ->', () => {
     clearDatabase();
     const queryRef = Reference.createQuery('userProfile', 10);
     let events: IDictionary[] = [];
-    const cb = (eventType: string) => (snap: DataSnapshot, prevKey?: any) => {
+    const cb = (eventType: string) => (
+      snap: IRtdbDataSnapshot,
+      prevKey?: any
+    ) => {
       events.push({ eventType, val: snap.val(), key: snap.key, prevKey, snap });
     };
     queryRef.on('child_added', cb('child_added'));
@@ -222,7 +234,7 @@ describe('Listener events ->', () => {
       key: string;
       value: IDictionary;
     }> = [];
-    const cb = (eventType: string) => (event: DataSnapshot) =>
+    const cb = (eventType: string) => (event: IRtdbDataSnapshot) =>
       events.push({ eventType, key: event.key, value: event.val() });
 
     qEmployee.on('child_changed', cb('employee'));

@@ -25,7 +25,9 @@ export type {
   FirebaseDatabase as IClientRtdbDatabase,
   DataSnapshot as IRtdbDataSnapshot,
   EventType as IRtdbEventType,
-  Reference as IRtdbReference
+  Reference as IRtdbReference,
+  ThenableReference as IRtdbThenableReference,
+  OnDisconnect as IRtdbOnDisconnect
 } from '@firebase/database-types';
 
 export type {
