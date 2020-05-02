@@ -1,5 +1,4 @@
 import { EventManager } from './EventManager';
-import type { FirebaseNamespace } from '@firebase/app-types';
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
 import { IClientConfig, IClientAuth, IMockConfig, IRtdbDatabase, IClientApp } from '@forest-fire/types';
 export declare enum FirebaseBoolean {
@@ -20,10 +19,10 @@ export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb {
     protected _database?: IRtdbDatabase;
     protected _auth: IClientAuth;
     protected _config: IClientConfig | IMockConfig;
-    protected _fbClass: FirebaseNamespace | (FirebaseNamespace & {
-        auth: () => FirebaseNamespace['auth'];
+    protected _fbClass: IClientApp | (IClientApp & {
+        auth: () => IClientApp['auth'];
     });
-    protected _authProviders: FirebaseNamespace['auth'];
+    protected _authProviders: IClientApp['auth'];
     protected _app: IClientApp;
     /**
      * Builds the client and then waits for all to `connect()` to
@@ -34,7 +33,7 @@ export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb {
     /**
      * access to provider specific providers
      */
-    get authProviders(): FirebaseNamespace['auth'];
+    get authProviders(): IClientApp['auth'];
     auth(): Promise<IClientAuth>;
     /**
      * The steps needed to connect a database to a Firemock

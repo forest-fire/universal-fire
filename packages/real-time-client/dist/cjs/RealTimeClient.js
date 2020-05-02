@@ -184,7 +184,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
         const connectionEvent = () => {
             try {
                 return new Promise((resolve, reject) => {
-                    this._eventManager.once("connection", (state) => {
+                    this._eventManager.once('connection', (state) => {
                         if (state) {
                             resolve();
                         }
@@ -200,7 +200,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
         };
         const timeout = async () => {
             await common_types_1.wait(this.CONNECTION_TIMEOUT);
-            throw new ClientError_1.ClientError(`The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`, "connection-timeout");
+            throw new ClientError_1.ClientError(`The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`, 'connection-timeout');
         };
         await Promise.race([connectionEvent(), timeout()]);
     }

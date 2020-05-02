@@ -175,7 +175,7 @@ export class RealTimeClient extends RealTimeDb {
         const connectionEvent = () => {
             try {
                 return new Promise((resolve, reject) => {
-                    this._eventManager.once("connection", (state) => {
+                    this._eventManager.once('connection', (state) => {
                         if (state) {
                             resolve();
                         }
@@ -191,7 +191,7 @@ export class RealTimeClient extends RealTimeDb {
         };
         const timeout = async () => {
             await wait(this.CONNECTION_TIMEOUT);
-            throw new ClientError(`The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`, "connection-timeout");
+            throw new ClientError(`The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`, 'connection-timeout');
         };
         await Promise.race([connectionEvent(), timeout()]);
     }
