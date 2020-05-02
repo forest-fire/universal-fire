@@ -14,9 +14,11 @@
   "files": [
     "dist"
   ],
-  "module": "dist/esnext/index.js",
-  "typings": "dist/esnext/index.d.ts",
+  "module": "dist/es/index.js",
+  "esnext": "dist/es/index.js",
+  "typings": "dist/es/index.d.ts",
   "main": "dist/cjs/index.js",
+  "sideEffects": false,
   "scripts": {
     "clean": "rimraf dist/**/*",
     "build": "run-s clean build:all",
@@ -38,7 +40,7 @@
     "@firebase/auth-types": "^0.10.0",
     "@firebase/database-types": "^0.5.0",
     "@types/faker": "^4.1.9",
-    "common-types": "^1.14.2",
+    "common-types": "^1.14.3",
     "deepmerge": "^4.2.2",
     "email-validator": "^2.0.4",
     "faker": "^4.1.0",

@@ -37,9 +37,13 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
             config.name = utility_1.determineDefaultAppName(config);
             this._config = config;
             const runningApps = utility_1.getRunningApps(firebase.apps);
+            const credential = firebase.credential.cert(config.serviceAccount);
             this._app = runningApps.includes(config.name)
                 ? utility_1.getRunningFirebaseApp(config.name, firebase.apps)
-                : firebase.initializeApp(config, config.name);
+                : firebase.initializeApp({
+                    credential,
+                    databaseURL: config.databaseURL
+                }, config.name);
         }
         else if (types_1.isMockConfig(config)) {
             config.name = utility_1.determineDefaultAppName(config);
@@ -75,7 +79,7 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
         if (this._config.mocking) {
             return firemock_1.adminAuthSdk;
         }
-        return firebase.auth();
+        return firebase.auth(this._app);
     }
     goOnline() {
         if (this._database) {
@@ -123,6 +127,7 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
         this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
         this.goOnline();
         this._eventManager.connection(true);
+        await this._listenForConnectionStatus();
     }
     /**
      * listenForConnectionStatus
@@ -132,6 +137,7 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
      * which provides an endpoint to lookup
      */
     async _listenForConnectionStatus() {
+        this._setupConnectionListener();
         this._isConnected = true;
         this._eventManager.connection(true);
     }

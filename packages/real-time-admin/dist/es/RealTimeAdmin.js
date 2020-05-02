@@ -28,9 +28,13 @@ export class RealTimeAdmin extends RealTimeDb {
             config.name = determineDefaultAppName(config);
             this._config = config;
             const runningApps = getRunningApps(firebase.apps);
+            const credential = firebase.credential.cert(config.serviceAccount);
             this._app = runningApps.includes(config.name)
                 ? getRunningFirebaseApp(config.name, firebase.apps)
-                : firebase.initializeApp(config, config.name);
+                : firebase.initializeApp({
+                    credential,
+                    databaseURL: config.databaseURL
+                }, config.name);
         }
         else if (isMockConfig(config)) {
             config.name = determineDefaultAppName(config);
@@ -66,7 +70,7 @@ export class RealTimeAdmin extends RealTimeDb {
         if (this._config.mocking) {
             return adminAuthSdk;
         }
-        return firebase.auth();
+        return firebase.auth(this._app);
     }
     goOnline() {
         if (this._database) {
@@ -114,6 +118,7 @@ export class RealTimeAdmin extends RealTimeDb {
         this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
         this.goOnline();
         this._eventManager.connection(true);
+        await this._listenForConnectionStatus();
     }
     /**
      * listenForConnectionStatus
@@ -123,6 +128,7 @@ export class RealTimeAdmin extends RealTimeDb {
      * which provides an endpoint to lookup
      */
     async _listenForConnectionStatus() {
+        this._setupConnectionListener();
         this._isConnected = true;
         this._eventManager.connection(true);
     }
