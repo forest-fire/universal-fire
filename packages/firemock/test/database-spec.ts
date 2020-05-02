@@ -1,7 +1,6 @@
 // tslint:disable:no-implicit-dependencies
-import * as chai from 'chai';
+import { expect } from 'chai';
 import * as helpers from './testing/helpers';
-import set from 'lodash.set';
 import {
   Mock,
   SchemaCallback,
@@ -29,8 +28,6 @@ import {
 } from '../src/rtdb/listeners';
 import 'mocha';
 import { wait } from 'common-types';
-
-const expect = chai.expect;
 
 interface IPerson {
   name: string;

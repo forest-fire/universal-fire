@@ -1,11 +1,10 @@
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
-import * as chai from 'chai';
+import { expect } from 'chai';
 import * as helpers from './testing/helpers';
 import { IDictionary } from 'common-types';
 import { IMockConfig } from '@forest-fire/types';
 
-const expect = chai.expect;
 const config: IMockConfig = {
   mocking: true
 };

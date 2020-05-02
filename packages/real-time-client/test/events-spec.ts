@@ -1,8 +1,6 @@
 import { RealTimeClient } from '../src'; // tslint:disable-next-line:no-implicit-dependencies
-import * as chai from 'chai';
+import { expect } from 'chai';
 import * as helpers from './testing/helpers';
-
-const expect = chai.expect;
 
 describe('Events', () => {
   it.skip(

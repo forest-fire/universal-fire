@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import * as chai from 'chai';
+import { expect } from 'chai';
 import * as helpers from './testing/helpers';
 import { RealTimeAdmin } from '../src';
 
