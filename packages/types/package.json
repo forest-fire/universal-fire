@@ -7,11 +7,24 @@
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
   "files": [
-    "index.d.ts"
+    "dist"
   ],
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "typings": "dist/es/index.js",
+  "scripts": {
+    "clean": "rimraf dist/**/*",
+    "build": "run-s clean build:all",
+    "build:all": "run-p build:esnext build:cjs",
+    "build:esnext": "tsc -P tsconfig.es.json",
+    "build:cjs": "tsc -P tsconfig.cjs.json",
+    "watch": "run-p 'watch:esnext' 'watch:cjs'",
+    "watch:esnext": "tsc -P tsconfig.es.json ",
+    "watch:cjs": "tsc -P tsconfig.es.json "
+  },
   "devDependencies": {
-    "@firebase/app-types": "^0.5.3",
-    "firebase-admin": "^8.10.0"
+    "@firebase/app-types": "^0.6.0",
+    "firebase-admin": "^8.11.0"
   },
   "license": "UNLICENSED"
 }

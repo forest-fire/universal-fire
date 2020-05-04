@@ -1,0 +1,84 @@
+{
+  "name": "@forest-fire/real-time-db",
+  "version": "0.38.7",
+  "description": "Core functional library supporting 'abstracted-admin' and 'abstracted-client'",
+  "license": "MIT",
+  "repository": "https://github.com/forest-fire/abstracted-firebase",
+  "author": "Ken Snyder <ken@ken.net>",
+  "keywords": [
+    "firebase",
+    "typescript",
+    "utility"
+  ],
+  "files": [
+    "dist"
+  ],
+  "module": "dist/es/index.js",
+  "main": "dist/cjs/index.js",
+  "typings": "dist/es/index.d.ts",
+  "scripts": {
+    "clean": "rimraf dist/**/*",
+    "clean:nuclear": "rimraf dist node_modules && rm yarn.lock && yarn cache clean && yarn && yarn upgrade",
+    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
+    "build": "run-s clean build:all",
+    "build:all": "run-p build:esnext build:cjs",
+    "build:esnext": "tsc -P tsconfig.es.json",
+    "build:cjs": "tsc -P tsconfig.cjs.json",
+    "watch": "run-p 'watch:esnext' 'watch:cjs'",
+    "watch:esnext": "tsc -P tsconfig.es.json -w",
+    "watch:cjs": "tsc -P tsconfig.es.json -w",
+    "build:nuclear": "yarn clean:nuclear && yarn build",
+    "test": "ts-node ./scripts/test.ts",
+    "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'",
+    "deploy": "ts-node ./scripts/deploy.ts ",
+    "watch:test": "npm run test -- --watch"
+  },
+  "dependencies": {
+    "@firebase/app": "^0.6.2",
+    "@firebase/app-types": "^0.6.0",
+    "@firebase/auth-types": "^0.10.0",
+    "@firebase/database-types": "^0.5.0",
+    "common-types": "^1.14.2",
+    "firemock": "^0.38.6",
+    "serialized-query": "^0.11.2",
+    "typed-conversions": "^0.10.2"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.4",
+    "@types/faker": "^4.1.7",
+    "@types/js-yaml": "^3.12.1",
+    "@types/lodash": "^4.14.144",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^8.10.0",
+    "@types/rimraf": "^2.0.3",
+    "async-shelljs": "^0.1.4",
+    "chai": "^4.2.0",
+    "js-yaml": "^3.13.1",
+    "lodash": "^4.17.15",
+    "mocha": "^7.1.1",
+    "rimraf": "^3.0.2",
+    "test-console": "^1.1.0",
+    "ts-node": "^8.9.0",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3"
+  },
+  "engines": {
+    "node": ">=8.13.0"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "lib"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [],
+    "all": true
+  }
+}

@@ -1,21 +1,28 @@
-import { AbstractedDatabase } from 'abstracted-database';
+import { AbstractedDatabase, MockDb } from '@forest-fire/abstracted-database';
+import { DocumentChangeType as IFirestoreDbEvent } from '@firebase/firestore-types';
 import {
-  DocumentChangeType as IFirestoreDbEvent,
-  FirebaseFirestore
-} from '@firebase/firestore-types';
-import { ISerializedQuery } from '@forest-fire/types';
+  ISerializedQuery,
+  IFirestoreDatabase,
+  IClientApp,
+  IAdminApp
+} from '@forest-fire/types';
+import { FireError } from '@forest-fire/utility';
 
 export abstract class FirestoreDb extends AbstractedDatabase {
-  protected _database: FirebaseFirestore | undefined;
+  protected _database: IFirestoreDatabase | undefined;
+  protected _app: IClientApp | IAdminApp | undefined;
 
   protected get database() {
     if (this._database) {
       return this._database;
     }
-    throw new Error('Attempt to use Firestore without having instantiated it');
+    throw new FireError(
+      'Attempt to use Firestore without having instantiated it',
+      'not-ready'
+    );
   }
 
-  protected set database(value: FirebaseFirestore) {
+  protected set database(value: IFirestoreDatabase) {
     this._database = value;
   }
 
@@ -31,12 +38,15 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     return this._isCollection(path) === false;
   }
 
-  public get mock() {
+  public get mock(): MockDb {
     throw new Error('Not implemented');
   }
 
-  public async getList<T = any>(path: string | ISerializedQuery, idProp: string = 'id') {
-    path = typeof path !== 'string' ? path.path : path
+  public async getList<T = any>(
+    path: string | ISerializedQuery,
+    idProp: string = 'id'
+  ) {
+    path = typeof path !== 'string' ? path.path : path;
     const querySnapshot = await this.database.collection(path).get();
     return querySnapshot.docs.map(doc => {
       return {
