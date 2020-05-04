@@ -45,7 +45,7 @@ export abstract class AbstractedDatabase {
    * The database API provided by Firebase (admin or client sdk of either
    * Firestore or RTDB)
    */
-  protected _database: IRtdbDatabase | IFirestoreDatabase | undefined;
+  protected _database?: IRtdbDatabase | IFirestoreDatabase;
   /**
    * Returns the `_app`.
    */

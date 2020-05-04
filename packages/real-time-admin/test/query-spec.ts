@@ -1,11 +1,9 @@
 // tslint:disable-next-line:no-implicit-dependencies
-import * as chai from 'chai';
+import { expect } from 'chai';
 import { RealTimeAdmin } from '../src/index';
 import { SerializedQuery } from 'serialized-query';
 import * as helpers from './testing/helpers';
 type SchemaCallback = import('firemock').SchemaCallback;
-
-const expect = chai.expect;
 
 interface IPerson {
   name: string;

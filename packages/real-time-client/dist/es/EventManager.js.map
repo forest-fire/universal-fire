@@ -1,0 +1,1 @@
+{"version":3,"file":"EventManager.js","sourceRoot":"","sources":["../../src/EventManager.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,MAAM,QAAQ,CAAC;AAGjC,MAAM,OAAO,YAAa,SAAQ,MAAM,CAAC,YAAY;IAC5C,UAAU,CAAC,KAAc;QAC9B,IAAI,CAAC,IAAI,CAAC,YAAY,EAAE,KAAK,CAAC,CAAC;IACjC,CAAC;CACF"}

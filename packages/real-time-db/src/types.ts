@@ -1,14 +1,7 @@
-import {
-  DataSnapshot,
-  OnDisconnect,
-  Query,
-  ThenableReference,
-  EventType
-} from '@firebase/database-types';
 import type { IDictionary } from 'common-types';
 import type { RealTimeDb } from './index';
 import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
-import { IRtdbDatabase } from '@forest-fire/types';
+import type { IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IRtdbOnDisconnect, IRtdbThenableReference } from '@forest-fire/types'; 
 
 export type IMockLoadingState =
   | 'not-applicable'
@@ -51,7 +44,7 @@ export interface IPathSetter<T = any> {
 export type IFirebaseWatchEvent = IValueBasedWatchEvent | IPathBasedWatchEvent;
 
 export interface IFirebaseWatchContext {
-  eventType: EventType;
+  eventType: IRtdbEventType;
   targetType: any;
   /**
    * this tagging has been added as optional to not break prior API but all
@@ -92,7 +85,7 @@ export enum FirebaseBoolean {
   false = 0
 }
 
-export interface IReference<T = any> extends Query {
+export interface IReference<T = any> extends IRtdbReference {
   readonly key: string | null;
   readonly parent: IReference | null;
   readonly root: IReference;
@@ -115,7 +108,7 @@ export interface IReference<T = any> extends Query {
   /** Atomically modifies the data at this location */
   transaction(
     transactionUpdate: (a: Partial<T>) => any,
-    onComplete?: (a: Error | null, b: boolean, c: DataSnapshot | null) => any,
+    onComplete?: (a: Error | null, b: boolean, c: IRtdbDataSnapshot | null) => any,
     applyLocally?: boolean
   ): Promise<ITransactionResult<T>>;
   /** Sets a priority for the data at this Database location. */
@@ -124,14 +117,14 @@ export interface IReference<T = any> extends Query {
     onComplete?: (a: Error | null) => void
   ): Promise<void>;
   /** Generates a new child location using a unique key and returns a Reference. */
-  push(value?: any, onComplete?: (a: Error | null) => void): ThenableReference;
+  push(value?: any, onComplete?: (a: Error | null) => void): IRtdbThenableReference;
   /** Returns an OnDisconnect object - see Enabling Offline Capabilities in JavaScript for more information on how to use it. */
-  onDisconnect(): OnDisconnect;
+  onDisconnect(): IRtdbOnDisconnect;
 }
 
 export interface ITransactionResult<T = any> {
   committed: boolean;
-  snapshot: DataSnapshot;
+  snapshot: IRtdbDataSnapshot;
   toJSON?: () => IDictionary;
 }
 

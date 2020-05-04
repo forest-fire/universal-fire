@@ -1,6 +1,5 @@
 import { EventManager } from './EventManager';
 import { ClientError } from './ClientError';
-import type { FirebaseNamespace } from '@firebase/app-types';
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
 import {
   isMockConfig,
@@ -56,9 +55,9 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
   protected _auth: IClientAuth;
   protected _config: IClientConfig | IMockConfig;
   protected _fbClass:
-    | FirebaseNamespace
-    | (FirebaseNamespace & { auth: () => FirebaseNamespace['auth'] });
-  protected _authProviders: FirebaseNamespace['auth'];
+    | IClientApp
+    | (IClientApp & { auth: () => IClientApp['auth'] });
+  protected _authProviders: IClientApp['auth'];
   protected _app: IClientApp;
 
   /**
@@ -72,10 +71,13 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
     if (!config) {
       config = extractClientConfig();
       if (!config) {
-        throw new FireError(`The client configuration was not set. Either set in the code or use the environment variables!`, `invalid-configuration`);
+        throw new FireError(
+          `The client configuration was not set. Either set in the code or use the environment variables!`,
+          `invalid-configuration`
+        );
       }
     }
-    config.name = determineDefaultAppName(config)
+    config.name = determineDefaultAppName(config);
 
     if (isClientConfig(config)) {
       try {
@@ -118,17 +120,19 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
   /**
    * access to provider specific providers
    */
-  get authProviders(): FirebaseNamespace['auth'] {
+  get authProviders(): IClientApp['auth'] {
     if (!this._fbClass) {
       throw new ClientError(
-        `There was a problem getting the Firebase default export/class!`, 'missing-firebase'
+        `There was a problem getting the Firebase default export/class!`,
+        'missing-firebase'
       );
     }
 
     if (!this._authProviders) {
       if (!this._fbClass.auth) {
         throw new ClientError(
-          `Attempt to get the authProviders getter before connecting to the database!`, 'missing-auth'
+          `Attempt to get the authProviders getter before connecting to the database!`,
+          'missing-auth'
         );
       }
       this._authProviders = this._fbClass.auth;
@@ -150,7 +154,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
       return this._auth;
     }
     if (!this._app.auth) {
-      await this.loadAuthApi()
+      await this.loadAuthApi();
     }
     this._auth = this._app.auth() as IClientAuth;
     return this._auth;
@@ -165,7 +169,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
       db: config.mockData || {},
       auth: { providers: [], ...config.mockAuth }
     });
-    this._authProviders = this._mock.authProviders as FirebaseNamespace['auth'];    
+    this._authProviders = this._mock.authProviders as IClientApp['auth'];
     await this._listenForConnectionStatus();
   }
 
@@ -175,7 +179,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
       this._database = this._app.database();
       if (config.useAuth) {
         await this.loadAuthApi();
-        this._auth = this._app.auth()
+        this._auth = this._app.auth();
       }
       await this._listenForConnectionStatus();
     } else {
@@ -201,31 +205,33 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
 
   /**
    * Sets up the listening process for connection status.
-   * 
+   *
    * In addition, will return a promise which resolves at the point
    * the database connects for the first time.
    */
   protected async _listenForConnectionStatus() {
-    this._setupConnectionListener()
+    this._setupConnectionListener();
     if (!this.isMockDb) {
       // setup ongoing listener
       this.database
         .ref('.info/connected')
-        .on('value', (snap: IRtdbDataSnapshot) => this._monitorConnection.bind(this)(snap));
+        .on('value', (snap: IRtdbDataSnapshot) =>
+          this._monitorConnection.bind(this)(snap)
+        );
       // detect connection
-      if(!this._isConnected) await this._detectConnection();
+      if (!this._isConnected) await this._detectConnection();
     } else {
-      this._eventManager.connection(true)
+      this._eventManager.connection(true);
     }
-    
-    this._isConnected = true
+
+    this._isConnected = true;
   }
 
   protected async _detectConnection() {
     const connectionEvent = () => {
       try {
         return new Promise((resolve, reject) => {
-          this._eventManager.once("connection", (state: boolean) => {
+          this._eventManager.once('connection', (state: boolean) => {
             if (state) {
               resolve();
             } else {
@@ -247,7 +253,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
       await wait(this.CONNECTION_TIMEOUT);
       throw new ClientError(
         `The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`,
-        "connection-timeout"
+        'connection-timeout'
       );
     };
     await Promise.race([connectionEvent(), timeout()]);

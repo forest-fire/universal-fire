@@ -1,8 +1,8 @@
 // tslint:disable:no-implicit-dependencies
 import { RealTimeAdmin } from '../src';
-import * as chai from 'chai';
+import { expect } from 'chai';
 import * as helpers from './testing/helpers';
-const expect = chai.expect;
+
 helpers.setupEnv();
 
 describe('DB Read operations: ', () => {

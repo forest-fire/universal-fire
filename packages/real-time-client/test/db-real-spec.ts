@@ -1,6 +1,6 @@
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
-import * as chai from 'chai';
+import { expect } from 'chai';
 import * as helpers from './testing/helpers';
 import { IDictionary, wait } from 'common-types';
 import {
@@ -8,7 +8,6 @@ import {
   IFirebaseClientConfigProps
 } from 'abstracted-firebase';
 
-const expect = chai.expect;
 const config = {
   apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',
   authDomain: 'abstracted-admin.firebaseapp.com',

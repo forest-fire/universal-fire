@@ -1,7 +1,7 @@
-import { DataSnapshot, OnDisconnect, Query, ThenableReference, EventType } from '@firebase/database-types';
 import type { IDictionary } from 'common-types';
 import type { RealTimeDb } from './index';
 import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import type { IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IRtdbOnDisconnect, IRtdbThenableReference } from '@forest-fire/types';
 export declare type IMockLoadingState = 'not-applicable' | 'loaded' | 'loading' | 'timed-out';
 export declare type DebuggingCallback = (message: string) => void;
 export interface IFirebaseListener {
@@ -27,7 +27,7 @@ export interface IPathSetter<T = any> {
 }
 export declare type IFirebaseWatchEvent = IValueBasedWatchEvent | IPathBasedWatchEvent;
 export interface IFirebaseWatchContext {
-    eventType: EventType;
+    eventType: IRtdbEventType;
     targetType: any;
     /**
      * this tagging has been added as optional to not break prior API but all
@@ -63,7 +63,7 @@ export declare enum FirebaseBoolean {
     true = 1,
     false = 0
 }
-export interface IReference<T = any> extends Query {
+export interface IReference<T = any> extends IRtdbReference {
     readonly key: string | null;
     readonly parent: IReference | null;
     readonly root: IReference;
@@ -76,17 +76,17 @@ export interface IReference<T = any> extends Query {
     /** Removes the data at this Database location. Any data at child locations will also be deleted. */
     remove(onComplete?: (a: Error | null) => void): Promise<void>;
     /** Atomically modifies the data at this location */
-    transaction(transactionUpdate: (a: Partial<T>) => any, onComplete?: (a: Error | null, b: boolean, c: DataSnapshot | null) => any, applyLocally?: boolean): Promise<ITransactionResult<T>>;
+    transaction(transactionUpdate: (a: Partial<T>) => any, onComplete?: (a: Error | null, b: boolean, c: IRtdbDataSnapshot | null) => any, applyLocally?: boolean): Promise<ITransactionResult<T>>;
     /** Sets a priority for the data at this Database location. */
     setPriority(priority: string | number | null, onComplete?: (a: Error | null) => void): Promise<void>;
     /** Generates a new child location using a unique key and returns a Reference. */
-    push(value?: any, onComplete?: (a: Error | null) => void): ThenableReference;
+    push(value?: any, onComplete?: (a: Error | null) => void): IRtdbThenableReference;
     /** Returns an OnDisconnect object - see Enabling Offline Capabilities in JavaScript for more information on how to use it. */
-    onDisconnect(): OnDisconnect;
+    onDisconnect(): IRtdbOnDisconnect;
 }
 export interface ITransactionResult<T = any> {
     committed: boolean;
-    snapshot: DataSnapshot;
+    snapshot: IRtdbDataSnapshot;
     toJSON?: () => IDictionary;
 }
 /**

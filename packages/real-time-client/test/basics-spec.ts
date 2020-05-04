@@ -1,11 +1,10 @@
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
-import * as chai from 'chai';
+import { expect } from 'chai';
 import * as helpers from './testing/helpers';
 import config from './testing/fb-config';
 import { wait } from 'common-types';
 
-const expect = chai.expect;
 helpers.setupEnv();
 
 describe('Basics: ', () => {
