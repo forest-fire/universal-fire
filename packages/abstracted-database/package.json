@@ -1,5 +1,5 @@
 {
-  "name": "@forest-fire/abstracted-database",
+  "name": "abstracted-database",
   "version": "0.7.0",
   "description": "",
   "main": "dist/cjs",

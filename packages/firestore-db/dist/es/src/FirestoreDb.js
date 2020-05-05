@@ -1,13 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const abstracted_database_1 = require("@forest-fire/abstracted-database");
-const utility_1 = require("@forest-fire/utility");
-class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
+import { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import { FireError } from '@forest-fire/utility';
+export class FirestoreDb extends AbstractedDatabase {
     get database() {
         if (this._database) {
             return this._database;
         }
-        throw new utility_1.FireError('Attempt to use Firestore without having instantiated it', 'not-ready');
+        throw new FireError('Attempt to use Firestore without having instantiated it', 'not-ready');
     }
     set database(value) {
         this._database = value;
@@ -83,5 +81,4 @@ class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
         await batch.commit();
     }
 }
-exports.FirestoreDb = FirestoreDb;
 //# sourceMappingURL=FirestoreDb.js.map

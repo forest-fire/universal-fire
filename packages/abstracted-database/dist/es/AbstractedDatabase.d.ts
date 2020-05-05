@@ -3,16 +3,6 @@ import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, I
 import type { SerializedQuery } from '@forest-fire/serialized-query';
 export declare abstract class AbstractedDatabase {
     /**
-     * The configuration used to setup/configure the database.
-     */
-    get config(): IDatabaseConfig;
-    /**
-     * the configuration to connect to the database; based on
-     * subclass this will be either a _client_ or _admin_ configuration
-     * OR a _mock_ configuration.
-     */
-    protected abstract _config: IDatabaseConfig;
-    /**
      * Indicates if the database is using the admin SDK.
      */
     protected _isAdminApi: boolean;
@@ -20,6 +10,10 @@ export declare abstract class AbstractedDatabase {
      * The mock API provided by **firemock**
      */
     protected _mock: MockDb | undefined;
+    /**
+     * Indicates if the database is connected.
+     */
+    protected _isConnected: boolean;
     /**
      * The Firebase App API.
      */
@@ -29,6 +23,16 @@ export declare abstract class AbstractedDatabase {
      * Firestore or RTDB)
      */
     protected _database?: IRtdbDatabase | IFirestoreDatabase;
+    /**
+     * The configuration to connect to the database; based on
+     * subclass this will be either a _client_ or _admin_ configuration
+     * OR a _mock_ configuration.
+     */
+    protected abstract _config: IDatabaseConfig;
+    /**
+     * The auth API.
+     */
+    protected abstract _auth: IAdminAuth | IClientAuth | undefined;
     /**
      * Returns the `_app`.
      */
@@ -64,6 +68,10 @@ export declare abstract class AbstractedDatabase {
      */
     get isMockDb(): boolean | undefined;
     /**
+     * The configuration used to setup/configure the database.
+     */
+    get config(): IDatabaseConfig;
+    /**
      * Returns the mock API provided by **firemock**
      * which in turn gives access to the actual database _state_ off of the
      * `db` property.
@@ -72,6 +80,10 @@ export declare abstract class AbstractedDatabase {
      * a mocked database a `AbstractedDatabase/not-allowed` error will be thrown.
      */
     get mock(): MockDb;
+    /**
+     * Returns true if the database is connected, false otherwis.
+     */
+    get isConnected(): boolean;
     /**
      * Get a list of a given type (defaults to _any_). Assumes that the "key" for
      * the record is the `id` property but that can be changed with the optional

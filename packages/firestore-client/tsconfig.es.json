@@ -3,6 +3,9 @@
   "compilerOptions": {
     "noEmit": false,
     "module": "ESNext",
-    "outDir": "dist/es"
-  }
+    "outDir": "dist/es",
+    "strictNullChecks": false,
+    "strict": false
+  },
+  "exclude": ["test"]
 }

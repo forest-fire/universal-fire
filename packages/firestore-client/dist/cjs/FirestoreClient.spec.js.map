@@ -1,1 +1,0 @@
-{"version":3,"file":"FirestoreClient.spec.js","sourceRoot":"","sources":["../../src/FirestoreClient.spec.ts"],"names":[],"mappings":";;AAAA,+BAA8B;AAC9B,wBAAoC;AAEpC,QAAQ,CAAC,iBAAiB,EAAE,GAAG,EAAE;IAC/B,EAAE,CAAC,mBAAmB,EAAE,GAAG,EAAE;QAC3B,aAAM,CAAC,kBAAe,CAAC,CAAC,EAAE,CAAC,KAAK,CAAC;IACnC,CAAC,CAAC,CAAC;AACL,CAAC,CAAC,CAAC"}
