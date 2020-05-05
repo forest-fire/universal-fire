@@ -3,6 +3,9 @@
   "compilerOptions": {
     "noEmit": false,
     "module": "commonjs",
-    "outDir": "dist/cjs"
-  }
+    "outDir": "dist/cjs",
+    "strictNullChecks": false,
+    "strict": false
+  },
+  "exclude": ["test"]
 }

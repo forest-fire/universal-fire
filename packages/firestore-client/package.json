@@ -18,10 +18,10 @@
     "watch": "run-p 'watch:esnext' 'watch:cjs'",
     "watch:esnext": "tsc -P tsconfig.es.json -w",
     "watch:cjs": "tsc -P tsconfig.es.json -w",
-    "test": "mocha --require ts-node/register src/**/*.spec.ts",
-    "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files src src/**/*.ts",
-    "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*.spec.ts",
-    "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
+    "test": "mocha --require ts-node/register test/**/*-spec.ts",
+    "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files src src/**/*-spec.ts",
+    "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*-spec.ts",
+    "test:e2e": "mocha --require ts-node/register test/*-e2e.ts"
   },
   "dependencies": {
     "@firebase/app": "^0.6.0",

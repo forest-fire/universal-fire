@@ -1,17 +1,7 @@
 /// <reference types="firebase-admin" />
-import { ISerializedQuery, IDatabaseConfig, MockDb, IRtdbDatabase, IFirestoreDatabase, IRtdbEventType, IFirestoreDbEvent, IClientAuth, IAdminAuth, IAdminApp, IClientApp } from '@forest-fire/types';
-export { MockDb };
+import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbEventType, MockDb } from '@forest-fire/types';
+import type { SerializedQuery } from '@forest-fire/serialized-query';
 export declare abstract class AbstractedDatabase {
-    /**
-     * The configuration used to setup/configure the database.
-     */
-    get config(): IDatabaseConfig;
-    /**
-     * the configuration to connect to the database; based on
-     * subclass this will be either a _client_ or _admin_ configuration
-     * OR a _mock_ configuration.
-     */
-    protected abstract _config: IDatabaseConfig;
     /**
      * Indicates if the database is using the admin SDK.
      */
@@ -21,6 +11,10 @@ export declare abstract class AbstractedDatabase {
      */
     protected _mock: MockDb | undefined;
     /**
+     * Indicates if the database is connected.
+     */
+    protected _isConnected: boolean;
+    /**
      * The Firebase App API.
      */
     protected _app: IClientApp | IAdminApp | undefined;
@@ -29,6 +23,16 @@ export declare abstract class AbstractedDatabase {
      * Firestore or RTDB)
      */
     protected _database?: IRtdbDatabase | IFirestoreDatabase;
+    /**
+     * The configuration to connect to the database; based on
+     * subclass this will be either a _client_ or _admin_ configuration
+     * OR a _mock_ configuration.
+     */
+    protected abstract _config: IDatabaseConfig;
+    /**
+     * The auth API.
+     */
+    protected abstract _auth: IAdminAuth | IClientAuth | undefined;
     /**
      * Returns the `_app`.
      */
@@ -64,6 +68,10 @@ export declare abstract class AbstractedDatabase {
      */
     get isMockDb(): boolean | undefined;
     /**
+     * The configuration used to setup/configure the database.
+     */
+    get config(): IDatabaseConfig;
+    /**
      * Returns the mock API provided by **firemock**
      * which in turn gives access to the actual database _state_ off of the
      * `db` property.
@@ -73,11 +81,15 @@ export declare abstract class AbstractedDatabase {
      */
     get mock(): MockDb;
     /**
+     * Returns true if the database is connected, false otherwis.
+     */
+    get isConnected(): boolean;
+    /**
      * Get a list of a given type (defaults to _any_). Assumes that the "key" for
      * the record is the `id` property but that can be changed with the optional
      * `idProp` parameter.
      */
-    abstract getList<T = any>(path: string | ISerializedQuery, idProp?: string): Promise<T[]>;
+    abstract getList<T = any>(path: string | SerializedQuery, idProp: string): Promise<T[]>;
     /**
      * Get's a push-key from the server at a given path. This ensures that
      * multiple client's who are writing to the database will use the server's
@@ -90,7 +102,7 @@ export declare abstract class AbstractedDatabase {
      * Gets a record from a given path in the Firebase DB and converts it to an
      * object where the record's key is included as part of the record.
      */
-    abstract getRecord<T = any>(path: string, idProp?: string): Promise<T>;
+    abstract getRecord<T = any>(path: string, idProp: string): Promise<T>;
     /**
      * Returns the value at a given path in the database. This method is a
      * typescript _generic_ which defaults to `any` but you can set the type to
@@ -116,7 +128,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * Watch for Firebase events based on a DB path.
      */
-    abstract watch(target: string | ISerializedQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[], cb: any): void;
+    abstract watch(target: string | SerializedQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[], cb: any): void;
     /**
      * Unwatches existing Firebase events.
      */

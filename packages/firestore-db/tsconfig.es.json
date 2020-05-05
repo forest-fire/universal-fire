@@ -2,6 +2,10 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "noEmit": false,
-    "outDir": "dist/es"
-  }
+    "module": "ESNext",
+    "outDir": "dist/es",
+    "strictNullChecks": false,
+    "strict": false
+  },
+  "exclude": ["test"]
 }

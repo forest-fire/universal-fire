@@ -7,12 +7,10 @@ class AbstractedDatabase {
          * Indicates if the database is using the admin SDK.
          */
         this._isAdminApi = false;
-    }
-    /**
-     * The configuration used to setup/configure the database.
-     */
-    get config() {
-        return this._config;
+        /**
+         * Indicates if the database is connected.
+         */
+        this._isConnected = false;
     }
     /**
      * Returns the `_app`.
@@ -42,6 +40,12 @@ class AbstractedDatabase {
         return this._config.mocking;
     }
     /**
+     * The configuration used to setup/configure the database.
+     */
+    get config() {
+        return this._config;
+    }
+    /**
      * Returns the mock API provided by **firemock**
      * which in turn gives access to the actual database _state_ off of the
      * `db` property.
@@ -57,6 +61,12 @@ class AbstractedDatabase {
             throw new utility_1.FireError(`Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`);
         }
         return this._mock;
+    }
+    /**
+     * Returns true if the database is connected, false otherwis.
+     */
+    get isConnected() {
+        return this._isConnected;
     }
 }
 exports.AbstractedDatabase = AbstractedDatabase;

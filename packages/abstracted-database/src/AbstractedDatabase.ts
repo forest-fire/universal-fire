@@ -1,34 +1,19 @@
-import {
-  ISerializedQuery,
-  IDatabaseConfig,
-  MockDb,
-  IRtdbDatabase,
-  IFirestoreDatabase,
-  IRtdbEventType,
-  IFirestoreDbEvent,
-  IClientAuth,
-  IAdminAuth,
+import type {
   IAdminApp,
-  IClientApp
+  IAdminAuth,
+  IClientApp,
+  IClientAuth,
+  IDatabaseConfig,
+  IFirestoreDatabase,
+  IFirestoreDbEvent,
+  IRtdbDatabase,
+  IRtdbEventType,
+  MockDb,
 } from '@forest-fire/types';
+import type { SerializedQuery } from '@forest-fire/serialized-query';
 import { FireError } from '@forest-fire/utility';
-export { MockDb };
 
 export abstract class AbstractedDatabase {
-  /**
-   * The configuration used to setup/configure the database.
-   */
-  public get config() {
-    return this._config;
-  }
-
-  /**
-   * the configuration to connect to the database; based on
-   * subclass this will be either a _client_ or _admin_ configuration
-   * OR a _mock_ configuration.
-   */
-  protected abstract _config: IDatabaseConfig;
-
   /**
    * Indicates if the database is using the admin SDK.
    */
@@ -38,6 +23,10 @@ export abstract class AbstractedDatabase {
    */
   protected _mock: MockDb | undefined;
   /**
+   * Indicates if the database is connected.
+   */
+  protected _isConnected: boolean = false;
+  /**
    * The Firebase App API.
    */
   protected _app: IClientApp | IAdminApp | undefined;
@@ -46,6 +35,16 @@ export abstract class AbstractedDatabase {
    * Firestore or RTDB)
    */
   protected _database?: IRtdbDatabase | IFirestoreDatabase;
+  /**
+   * The configuration to connect to the database; based on
+   * subclass this will be either a _client_ or _admin_ configuration
+   * OR a _mock_ configuration.
+   */
+  protected abstract _config: IDatabaseConfig;
+  /**
+   * The auth API.
+   */
+  protected abstract _auth: IAdminAuth | IClientAuth | undefined;
   /**
    * Returns the `_app`.
    */
@@ -63,7 +62,6 @@ export abstract class AbstractedDatabase {
   protected set app(value) {
     this._app = value;
   }
-
   /**
    * Returns a type safe accessor to the database; when the database has not been set yet
    * it will throw a `not-ready` error.
@@ -73,18 +71,15 @@ export abstract class AbstractedDatabase {
    * Sets the `_database`.
    */
   protected abstract set database(value: IRtdbDatabase | IFirestoreDatabase);
-
   /**
    * Connects to the database and returns a promise which resolves when this
    * connection has been established.
    */
-  abstract async connect(): Promise<any>;
-
+  public abstract async connect(): Promise<any>;
   /**
    * Returns the authentication API of the database.
    */
   public abstract async auth(): Promise<IClientAuth | IAdminAuth>;
-
   /**
    * Indicates if the database is using the admin SDK.
    */
@@ -96,6 +91,12 @@ export abstract class AbstractedDatabase {
    */
   public get isMockDb() {
     return this._config.mocking;
+  }
+  /**
+   * The configuration used to setup/configure the database.
+   */
+  public get config() {
+    return this._config;
   }
   /**
    * Returns the mock API provided by **firemock**
@@ -120,13 +121,19 @@ export abstract class AbstractedDatabase {
     return this._mock;
   }
   /**
+   * Returns true if the database is connected, false otherwis.
+   */
+  public get isConnected() {
+    return this._isConnected;
+  }
+  /**
    * Get a list of a given type (defaults to _any_). Assumes that the "key" for
    * the record is the `id` property but that can be changed with the optional
    * `idProp` parameter.
    */
   public abstract async getList<T = any>(
-    path: string | ISerializedQuery,
-    idProp?: string
+    path: string | SerializedQuery,
+    idProp: string
   ): Promise<T[]>;
   /**
    * Get's a push-key from the server at a given path. This ensures that
@@ -142,7 +149,7 @@ export abstract class AbstractedDatabase {
    */
   public abstract async getRecord<T = any>(
     path: string,
-    idProp?: string
+    idProp: string
   ): Promise<T>;
   /**
    * Returns the value at a given path in the database. This method is a
@@ -173,7 +180,7 @@ export abstract class AbstractedDatabase {
    * Watch for Firebase events based on a DB path.
    */
   public abstract watch(
-    target: string | ISerializedQuery,
+    target: string | SerializedQuery,
     events:
       | IFirestoreDbEvent
       | IFirestoreDbEvent[]

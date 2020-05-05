@@ -1,23 +1,18 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const abstracted_database_1 = require("@forest-fire/abstracted-database");
-const utility_1 = require("@forest-fire/utility");
-class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
+import { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import { FireError } from '@forest-fire/utility';
+export class FirestoreDb extends AbstractedDatabase {
     get database() {
         if (this._database) {
             return this._database;
         }
-        throw new utility_1.FireError('Attempt to use Firestore without having instantiated it', 'not-ready');
+        throw new FireError('Attempt to use Firestore without having instantiated it', 'not-ready');
     }
     set database(value) {
         this._database = value;
     }
     _isCollection(path) {
-        if (typeof path === 'string') {
-            return path.split('/').length % 2 === 0;
-        }
-        // Just for now.
-        throw new Error('Serialized queries are not supported by Firestore');
+        path = typeof path !== 'string' ? path.path : path;
+        return path.split('/').length % 2 === 0;
     }
     _isDocument(path) {
         return this._isCollection(path) === false;
@@ -25,13 +20,13 @@ class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
     get mock() {
         throw new Error('Not implemented');
     }
-    async getList(path, idProp = 'id') {
+    async getList(path, idProp) {
         path = typeof path !== 'string' ? path.path : path;
         const querySnapshot = await this.database.collection(path).get();
-        return querySnapshot.docs.map(doc => {
+        return querySnapshot.docs.map((doc) => {
             return {
                 [idProp]: doc.id,
-                ...doc.data()
+                ...doc.data(),
             };
         });
     }
@@ -42,7 +37,7 @@ class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
         const documentSnapshot = await this.database.doc(path).get();
         return {
             ...documentSnapshot.data(),
-            [idProp]: documentSnapshot.id
+            [idProp]: documentSnapshot.id,
         };
     }
     async getValue(path) {
@@ -77,8 +72,8 @@ class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
     }
     async _removeCollection(path) {
         const batch = this.database.batch();
-        this.database.collection(path).onSnapshot(snapshot => {
-            snapshot.docs.forEach(doc => {
+        this.database.collection(path).onSnapshot((snapshot) => {
+            snapshot.docs.forEach((doc) => {
                 batch.delete(doc.ref);
             });
         });
@@ -86,5 +81,4 @@ class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
         await batch.commit();
     }
 }
-exports.FirestoreDb = FirestoreDb;
 //# sourceMappingURL=FirestoreDb.js.map

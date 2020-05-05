@@ -1,12 +1,13 @@
-import { AbstractedDatabase, MockDb } from '@forest-fire/abstracted-database';
-import { DocumentChangeType as IFirestoreDbEvent } from '@firebase/firestore-types';
-import {
-  ISerializedQuery,
-  IFirestoreDatabase,
+import { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import type {
+  IAdminApp,
   IClientApp,
-  IAdminApp
+  IFirestoreDatabase,
+  IFirestoreDbEvent,
+  MockDb,
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
+import type { SerializedFirestoreQuery } from '@forest-fire/serialized-query';
 
 export abstract class FirestoreDb extends AbstractedDatabase {
   protected _database: IFirestoreDatabase | undefined;
@@ -26,15 +27,12 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     this._database = value;
   }
 
-  protected _isCollection(path: string | ISerializedQuery) {
-    if (typeof path === 'string') {
-      return path.split('/').length % 2 === 0;
-    }
-    // Just for now.
-    throw new Error('Serialized queries are not supported by Firestore');
+  protected _isCollection(path: string | SerializedFirestoreQuery) {
+    path = typeof path !== 'string' ? path.path : path;
+    return path.split('/').length % 2 === 0;
   }
 
-  protected _isDocument(path: string | ISerializedQuery) {
+  protected _isDocument(path: string | SerializedFirestoreQuery) {
     return this._isCollection(path) === false;
   }
 
@@ -43,15 +41,15 @@ export abstract class FirestoreDb extends AbstractedDatabase {
   }
 
   public async getList<T = any>(
-    path: string | ISerializedQuery,
-    idProp: string = 'id'
-  ) {
+    path: string | SerializedFirestoreQuery,
+    idProp: string
+  ): Promise<T[]> {
     path = typeof path !== 'string' ? path.path : path;
     const querySnapshot = await this.database.collection(path).get();
-    return querySnapshot.docs.map(doc => {
+    return querySnapshot.docs.map((doc) => {
       return {
         [idProp]: doc.id,
-        ...doc.data()
+        ...doc.data(),
       };
     }) as T[];
   }
@@ -64,7 +62,7 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     const documentSnapshot = await this.database.doc(path).get();
     return {
       ...documentSnapshot.data(),
-      [idProp]: documentSnapshot.id
+      [idProp]: documentSnapshot.id,
     } as T;
   }
 
@@ -90,10 +88,10 @@ export abstract class FirestoreDb extends AbstractedDatabase {
   }
 
   public watch(
-    target: string | ISerializedQuery,
-    events: IFirestoreDbEvent[],
+    target: string | SerializedFirestoreQuery,
+    events: IFirestoreDbEvent | IFirestoreDbEvent[],
     cb: any
-  ) {
+  ): void {
     throw new Error('Not implemented');
   }
 
@@ -111,8 +109,8 @@ export abstract class FirestoreDb extends AbstractedDatabase {
 
   private async _removeCollection(path: string) {
     const batch = this.database.batch();
-    this.database.collection(path).onSnapshot(snapshot => {
-      snapshot.docs.forEach(doc => {
+    this.database.collection(path).onSnapshot((snapshot) => {
+      snapshot.docs.forEach((doc) => {
         batch.delete(doc.ref);
       });
     });
