@@ -3,27 +3,25 @@ import {
   CreateRequest,
   UserRecord,
   UpdateRequest,
-  ListUsersResult
-} from "../../../@types/auth-types";
+  ListUsersResult,
+} from '../../../@types/auth-types';
 import {
   addUser,
   updateUser,
   getUserById,
   removeUser,
   getUserByEmail,
-  allUsers
-} from "../../state-mgmt";
-import { networkDelay } from "../../../shared";
+  allUsers,
+} from '../../state-mgmt';
+import { networkDelay } from '../../../shared';
 
 export const users: Partial<Auth> = {
   // https://firebase.google.com/docs/auth/admin/manage-users#create_a_user
   async createUser(properties: CreateRequest): Promise<UserRecord> {
     addUser({
-      password: Math.random()
-        .toString(36)
-        .substr(2, 10),
+      password: Math.random().toString(36).substr(2, 10),
       multiFactor: null as any,
-      ...properties
+      ...properties,
     });
     return {
       ...(properties as Required<CreateRequest>),
@@ -32,11 +30,11 @@ export const users: Partial<Auth> = {
         creationTime: String(new Date()),
         toJSON() {
           return {};
-        }
+        },
       },
       multiFactor: null as any,
       toJSON: () => null as any,
-      providerData: null as any
+      providerData: null as any,
     };
   },
   /** Updates an existing user. */
@@ -64,5 +62,5 @@ export const users: Partial<Auth> = {
   ): Promise<ListUsersResult> {
     await networkDelay();
     return { users: maxResults ? allUsers().slice(0, maxResults) : allUsers() };
-  }
+  },
 };

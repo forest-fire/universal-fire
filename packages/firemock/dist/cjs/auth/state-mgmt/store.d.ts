@@ -1,5 +1,5 @@
-import { IMockUser, IMockAuthConfig, ISimplifiedMockUser, UpdateRequest } from "../../@types";
-import { UserCredential, User } from "@firebase/auth-types";
+import { IMockUser, IMockAuthConfig, ISimplifiedMockUser, UpdateRequest } from '../../@types';
+import { UserCredential, User } from '@firebase/auth-types';
 export declare type IAuthObserver = (user: User | null) => any;
 export declare function getAuthObservers(): IAuthObserver[];
 export declare function addAuthObserver(ob: IAuthObserver): void;
@@ -9,7 +9,7 @@ export declare function setCurrentUser(user: User | UserCredential): void;
 /**
  * Returns the `IMockUser` record for the currently logged in user
  */
-export declare function currentUser(): IMockUser | undefined;
+export declare function currentUser(): IMockUser;
 /**
  * Returns the full `UserCredential` object for the logged in user;
  * this is only relevant for client sdk.
@@ -27,8 +27,8 @@ export declare function clearAuthUsers(): void;
 export declare function setDefaultAnonymousUid(uid: string): void;
 export declare function getAnonymousUid(): string;
 export declare function addUser(user: ISimplifiedMockUser | User): void;
-export declare function getUserById(uid: string): IMockUser | undefined;
-export declare function getUserByEmail(email: string): IMockUser | undefined;
+export declare function getUserById(uid: string): IMockUser;
+export declare function getUserByEmail(email: string): IMockUser;
 /**
  * Converts the basic properties provided by a
  * `IMockUser` definition into a full fledged `User` object

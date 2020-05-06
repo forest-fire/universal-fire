@@ -1,5 +1,5 @@
-import { FacebookAuthProvider as GoogleFacebookAuthProvider, AuthCredential, AuthProvider, FacebookAuthProvider_Instance } from "@firebase/auth-types";
-import { IDictionary } from "common-types";
+import { FacebookAuthProvider as GoogleFacebookAuthProvider, AuthCredential, AuthProvider, FacebookAuthProvider_Instance } from '@firebase/auth-types';
+import { IDictionary } from 'common-types';
 export declare class FacebookAuthProvider implements FacebookAuthProvider_Instance, GoogleFacebookAuthProvider {
     static PROVIDER_ID: string;
     static FACEBOOK_SIGN_IN_METHOD: string;

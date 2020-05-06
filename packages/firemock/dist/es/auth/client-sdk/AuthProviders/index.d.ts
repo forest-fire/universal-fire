@@ -1,7 +1,7 @@
-import { FirebaseApp } from "@firebase/app-types";
-import { FirebaseAuth } from "@firebase/auth-types";
+import { FirebaseApp } from '@firebase/app-types';
+import { FirebaseAuth } from '@firebase/auth-types';
 declare const _default: {
-    (app?: FirebaseApp | undefined): FirebaseAuth;
+    (app?: FirebaseApp): FirebaseAuth;
     Auth: typeof FirebaseAuth;
     EmailAuthProvider: typeof import("@firebase/auth-types").EmailAuthProvider;
     EmailAuthProvider_Instance: typeof import("@firebase/auth-types").EmailAuthProvider_Instance;
@@ -20,5 +20,5 @@ declare const _default: {
     RecaptchaVerifier_Instance: typeof import("@firebase/auth-types").RecaptchaVerifier_Instance;
     TwitterAuthProvider: typeof import("@firebase/auth-types").TwitterAuthProvider;
     TwitterAuthProvider_Instance: typeof import("@firebase/auth-types").TwitterAuthProvider_Instance;
-} | undefined;
+};
 export default _default;

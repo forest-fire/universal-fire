@@ -1,7 +1,7 @@
 import {
   RecaptchaVerifier as GoogleRecaptchaVerifier,
-  RecaptchaVerifier_Instance
-} from "@firebase/auth-types";
+  RecaptchaVerifier_Instance,
+} from '@firebase/auth-types';
 
 export class RecaptchaVerifier
   implements RecaptchaVerifier_Instance, GoogleRecaptchaVerifier {
@@ -12,10 +12,10 @@ export class RecaptchaVerifier
   }
 
   public async render(): Promise<number> {
-    throw new Error("not-implemented");
+    throw new Error('not-implemented');
   }
 
   public async verify(): Promise<string> {
-    throw new Error("not-implemented");
+    throw new Error('not-implemented');
   }
 }

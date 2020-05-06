@@ -1,5 +1,5 @@
 /// <reference types="faker" />
-import { ISchemaHelper, FakerStatic } from "../@types/mocking-types";
+import { ISchemaHelper, FakerStatic } from '../@types/mocking-types';
 export declare class SchemaHelper<T = any> implements ISchemaHelper<T> {
     context: T;
     /**

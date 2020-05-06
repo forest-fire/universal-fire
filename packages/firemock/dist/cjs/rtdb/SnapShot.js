@@ -29,19 +29,19 @@ class SnapShot {
         return value ? new SnapShot(path, value) : null;
     }
     hasChild(path) {
-        if (typeof this._value === "object") {
+        if (typeof this._value === 'object') {
             return Object.keys(this._value).indexOf(path) !== -1;
         }
         return false;
     }
     hasChildren() {
-        if (typeof this._value === "object") {
+        if (typeof this._value === 'object') {
             return Object.keys(this._value).length > 0;
         }
         return false;
     }
     numChildren() {
-        if (typeof this._value === "object") {
+        if (typeof this._value === 'object') {
             return Object.keys(this._value).length;
         }
         return 0;

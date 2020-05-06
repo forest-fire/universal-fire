@@ -1,5 +1,6 @@
-import { IDictionary } from "common-types";
-import { SerializedQuery, QueryOrderType } from "serialized-query";
+import { IDictionary } from 'common-types';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { QueryOrderType } from 'serialized-query';
 
 export type ISortFns = (a: any, b: any) => number;
 
@@ -18,7 +19,7 @@ export const orderByValue = (a: IDictionary, b: IDictionary) => {
 };
 
 export function isOrderByChild(
-  query: SerializedQuery,
+  query: SerializedRealTimeQuery,
   fn: typeof orderByChild | typeof orderByKey
 ): fn is typeof orderByChild {
   return query.identity.orderBy === QueryOrderType.orderByChild;

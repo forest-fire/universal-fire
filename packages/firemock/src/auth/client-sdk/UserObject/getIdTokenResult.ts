@@ -1,14 +1,16 @@
-import {IdTokenResult} from "../../../@types";
-import {getIdToken} from "./getIdToken";
+import { IdTokenResult } from '../../../@types';
+import { getIdToken } from './getIdToken';
 
-export async function getIdTokenResult(forceRefresh?: boolean): Promise<IdTokenResult> {
+export async function getIdTokenResult(
+  forceRefresh?: boolean
+): Promise<IdTokenResult> {
   return {
-    authTime: "",
+    authTime: '',
     claims: {},
-    expirationTime: "",
-    issuedAtTime: "",
-    signInProvider: "",
-    signInSecondFactor: "",
-    token: await getIdToken()
+    expirationTime: '',
+    issuedAtTime: '',
+    signInProvider: '',
+    signInSecondFactor: '',
+    token: await getIdToken(),
   };
 }

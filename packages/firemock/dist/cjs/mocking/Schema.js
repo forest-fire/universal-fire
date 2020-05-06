@@ -6,8 +6,8 @@ const fakerInitialiation_1 = require("./fakerInitialiation");
 class Schema {
     constructor(schemaId, mockFn) {
         this.schemaId = schemaId;
-        this._schemas = new index_1.Queue("schemas");
-        this._relationships = new index_1.Queue("relationships");
+        this._schemas = new index_1.Queue('schemas');
+        this._relationships = new index_1.Queue('relationships');
         if (mockFn) {
             this.mock(mockFn);
         }
@@ -25,9 +25,9 @@ class Schema {
                     schema.prefix,
                     schema.modelName
                         ? shared_1.pluralize(schema.modelName)
-                        : shared_1.pluralize(this.schemaId)
-                ].join("/");
-            }
+                        : shared_1.pluralize(this.schemaId),
+                ].join('/');
+            },
         });
         return this;
     }
@@ -43,9 +43,9 @@ class Schema {
     }
     /** prefixes a static path to the beginning of the  */
     pathPrefix(prefix) {
-        prefix = prefix.replace(/\./g, "/"); // slash reference preferred over dot
+        prefix = prefix.replace(/\./g, '/'); // slash reference preferred over dot
         prefix =
-            prefix.slice(-1) === "/" ? prefix.slice(0, prefix.length - 1) : prefix;
+            prefix.slice(-1) === '/' ? prefix.slice(0, prefix.length - 1) : prefix;
         this._schemas.update(this.schemaId, { prefix });
         return this;
     }
@@ -66,10 +66,10 @@ class Schema {
      */
     belongsTo(target, sourceProperty) {
         this._relationships.push({
-            type: "belongsTo",
+            type: 'belongsTo',
             source: this.schemaId,
             target,
-            sourceProperty: sourceProperty ? sourceProperty : `${target}Id`
+            sourceProperty: sourceProperty ? sourceProperty : `${target}Id`,
         });
         return this;
     }
@@ -78,10 +78,10 @@ class Schema {
      */
     hasMany(target, sourceProperty) {
         this._relationships.push({
-            type: "hasMany",
+            type: 'hasMany',
             source: this.schemaId,
             target,
-            sourceProperty: sourceProperty ? sourceProperty : shared_1.pluralize(target)
+            sourceProperty: sourceProperty ? sourceProperty : shared_1.pluralize(target),
         });
         return this;
     }

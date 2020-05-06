@@ -21,10 +21,10 @@ const api = {
     SAMLAuthProvider: SAMLAuthProvider_1.SAMLAuthProvider,
     OAuthProvider: OAuthProvider_1.OAuthProvider,
     PhoneAuthProvider: PhoneAuthProvider_1.PhoneAuthProvider,
-    RecaptchaVerifier: RecaptchaVerifier_1.RecaptchaVerifier
+    RecaptchaVerifier: RecaptchaVerifier_1.RecaptchaVerifier,
 };
 const fn = () => {
-    throw new Error("not allowed");
+    throw new Error('not allowed');
 };
 exports.default = (api || fn);
 //# sourceMappingURL=index.js.map

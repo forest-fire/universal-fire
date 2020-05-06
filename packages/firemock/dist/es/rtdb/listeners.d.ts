@@ -1,6 +1,6 @@
-import { SerializedQuery } from "serialized-query";
-import { RtdbEventType, IFirebaseEventHandler, RtdbDataSnapshot, IListener } from "../@types/rtdb-types";
-import { IDictionary } from "common-types";
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { RtdbEventType, IFirebaseEventHandler, RtdbDataSnapshot, IListener } from '../@types/rtdb-types';
+import { IDictionary } from 'common-types';
 /**
  * **addListener**
  *
@@ -13,7 +13,7 @@ import { IDictionary } from "common-types";
  * interested in the _paths_ which are being watched
  * you can call `listenerPaths()`.
  */
-export declare function addListener(pathOrQuery: string | SerializedQuery<any>, eventType: RtdbEventType, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<RtdbDataSnapshot>;
+export declare function addListener(pathOrQuery: string | SerializedRealTimeQuery<any>, eventType: RtdbEventType, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<RtdbDataSnapshot>;
 /**
  * **removeListener**
  *
@@ -34,7 +34,7 @@ export declare function removeAllListeners(): number;
  * of only this type of event.
  */
 export declare function listenerCount(type?: RtdbEventType): number;
-export declare type EventTypePlusChild = RtdbEventType | "child";
+export declare type EventTypePlusChild = RtdbEventType | 'child';
 /**
  * **listenerPaths**
  *

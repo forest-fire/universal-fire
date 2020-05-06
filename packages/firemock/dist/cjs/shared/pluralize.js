@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const exceptions = {
-    child: "children",
-    man: "men",
-    woman: "women",
-    tooth: "teeth",
-    foot: "feet",
-    mouse: "mice",
-    person: "people",
-    company: "companies"
+    child: 'children',
+    man: 'men',
+    woman: 'women',
+    tooth: 'teeth',
+    foot: 'feet',
+    mouse: 'mice',
+    person: 'people',
+    company: 'companies',
 };
 /**
  * Exceptions when moving from plural to singular
@@ -18,9 +18,9 @@ const singularExceptions = () => {
 };
 function pluralize(singular) {
     const rules = [
-        { find: /(.*)(ch|sh|ax|ss)$/, replace: "$1$2es" },
-        { find: /(.*)(fe|f)$/, replace: "$1ves" },
-        { find: /(.*)us$/, replace: "$1i" }
+        { find: /(.*)(ch|sh|ax|ss)$/, replace: '$1$2es' },
+        { find: /(.*)(fe|f)$/, replace: '$1ves' },
+        { find: /(.*)us$/, replace: '$1i' },
     ];
     for (const r of rules) {
         if (r.find.test(singular)) {

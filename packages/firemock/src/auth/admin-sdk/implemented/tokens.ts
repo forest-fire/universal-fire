@@ -1,4 +1,4 @@
-import { DecodedIdToken, Auth } from "../../../@types/auth-types";
+import { DecodedIdToken, Auth } from '../../../@types/auth-types';
 
 export const tokens: Partial<Auth> = {
   /**
@@ -16,5 +16,5 @@ export const tokens: Partial<Auth> = {
     checkRevoked?: undefined | boolean
   ): Promise<DecodedIdToken> {
     return;
-  }
+  },
 };

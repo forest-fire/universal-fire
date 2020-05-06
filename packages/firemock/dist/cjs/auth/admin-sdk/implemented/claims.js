@@ -8,6 +8,6 @@ exports.claims = {
      */
     async setCustomUserClaims(uid, customUserClaims) {
         state_mgmt_1.updateUser(uid, { customClaims: customUserClaims });
-    }
+    },
 };
 //# sourceMappingURL=claims.js.map

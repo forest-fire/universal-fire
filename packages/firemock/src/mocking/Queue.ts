@@ -1,6 +1,6 @@
-import { IDictionary } from "common-types";
-import first from "lodash.first";
-import * as fbKey from "firebase-key";
+import { IDictionary } from 'common-types';
+import first from 'lodash.first';
+import * as fbKey from 'firebase-key';
 
 export type Key = string | number;
 
@@ -16,11 +16,11 @@ export class Queue<T = any> {
     Queue._queues = {};
   }
   private static _queues: IDictionary = {};
-  public pkProperty = "id";
+  public pkProperty = 'id';
 
   constructor(private _name: string) {
     if (!_name) {
-      throw new Error("A queue MUST have a named passed in to be managed");
+      throw new Error('A queue MUST have a named passed in to be managed');
     }
 
     if (!Queue._queues[_name]) {
@@ -48,8 +48,8 @@ export class Queue<T = any> {
    */
   public push(queueItem: any) {
     const id = fbKey.key();
-    if (typeof queueItem !== "object") {
-      throw new Error("Using push() requires that the payload is an object");
+    if (typeof queueItem !== 'object') {
+      throw new Error('Using push() requires that the payload is an object');
     }
     queueItem[this.pkProperty] = id;
     this.enqueue(queueItem);
@@ -67,7 +67,7 @@ export class Queue<T = any> {
     }
 
     Queue._queues[this._name] =
-      typeof first(queue) === "object"
+      typeof first(queue) === 'object'
         ? queue.filter((item: any) => item[this.pkProperty] !== key)
         : queue.filter((item: any) => item !== key);
 
@@ -110,7 +110,7 @@ export class Queue<T = any> {
     if (currently) {
       this.dequeue(key);
     }
-    if (typeof currently === "object" && typeof value === "object") {
+    if (typeof currently === 'object' && typeof value === 'object') {
       value[this.pkProperty] = key;
       const updated = { ...(currently as any), ...(value as any) };
       this.enqueue(updated as T);
@@ -139,7 +139,7 @@ export class Queue<T = any> {
       return new Object();
     }
 
-    return typeof first(queue) === "object"
+    return typeof first(queue) === 'object'
       ? queue.reduce((obj: IDictionary, item: any) => {
           const pk: string = item[this.pkProperty];
           // tslint:disable-next-line
@@ -174,7 +174,7 @@ export class Queue<T = any> {
 
   private _find(key: string | number) {
     const queue = Queue._queues[this._name];
-    const objectPayload = typeof first(queue) === "object";
+    const objectPayload = typeof first(queue) === 'object';
 
     let index = 0;
     let result: any[] = [null, -1];

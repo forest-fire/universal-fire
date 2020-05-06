@@ -1,15 +1,15 @@
-import { User } from "../../../@types";
-import { getRandomMockUid, getAnonymousUid } from "../../state-mgmt/index";
+import { User } from '../../../@types';
+import { getRandomMockUid, getAnonymousUid } from '../../state-mgmt/index';
 
 export const userProperties: () => Partial<User> = () => ({
-  displayName: "",
-  email: "",
+  displayName: '',
+  email: '',
   isAnonymous: true,
   metadata: {},
-  phoneNumber: "",
-  photoURL: "",
+  phoneNumber: '',
+  photoURL: '',
   providerData: [],
-  providerId: "",
-  refreshToken: "",
-  uid: getAnonymousUid()
+  providerId: '',
+  refreshToken: '',
+  uid: getAnonymousUid(),
 });

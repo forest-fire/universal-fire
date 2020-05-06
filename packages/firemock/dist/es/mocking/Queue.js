@@ -1,5 +1,5 @@
-import first from "lodash.first";
-import * as fbKey from "firebase-key";
+import first from 'lodash.first';
+import * as fbKey from 'firebase-key';
 /**
  * Queue Class
  *
@@ -10,9 +10,9 @@ import * as fbKey from "firebase-key";
 export class Queue {
     constructor(_name) {
         this._name = _name;
-        this.pkProperty = "id";
+        this.pkProperty = 'id';
         if (!_name) {
-            throw new Error("A queue MUST have a named passed in to be managed");
+            throw new Error('A queue MUST have a named passed in to be managed');
         }
         if (!Queue._queues[_name]) {
             Queue._queues[_name] = [];
@@ -39,8 +39,8 @@ export class Queue {
      */
     push(queueItem) {
         const id = fbKey.key();
-        if (typeof queueItem !== "object") {
-            throw new Error("Using push() requires that the payload is an object");
+        if (typeof queueItem !== 'object') {
+            throw new Error('Using push() requires that the payload is an object');
         }
         queueItem[this.pkProperty] = id;
         this.enqueue(queueItem);
@@ -55,7 +55,7 @@ export class Queue {
             throw new Error(`Queue ${this._name} is empty. Can not dequeue ${key}.`);
         }
         Queue._queues[this._name] =
-            typeof first(queue) === "object"
+            typeof first(queue) === 'object'
                 ? queue.filter((item) => item[this.pkProperty] !== key)
                 : queue.filter((item) => item !== key);
         return this;
@@ -89,7 +89,7 @@ export class Queue {
         if (currently) {
             this.dequeue(key);
         }
-        if (typeof currently === "object" && typeof value === "object") {
+        if (typeof currently === 'object' && typeof value === 'object') {
             value[this.pkProperty] = key;
             const updated = { ...currently, ...value };
             this.enqueue(updated);
@@ -114,7 +114,7 @@ export class Queue {
         if (!queue || queue.length === 0) {
             return new Object();
         }
-        return typeof first(queue) === "object"
+        return typeof first(queue) === 'object'
             ? queue.reduce((obj, item) => {
                 const pk = item[this.pkProperty];
                 // tslint:disable-next-line
@@ -140,7 +140,7 @@ export class Queue {
     }
     _find(key) {
         const queue = Queue._queues[this._name];
-        const objectPayload = typeof first(queue) === "object";
+        const objectPayload = typeof first(queue) === 'object';
         let index = 0;
         let result = [null, -1];
         for (const item of queue) {

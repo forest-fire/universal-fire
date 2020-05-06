@@ -13,6 +13,6 @@ exports.tokens = {
      */
     async verifyIdToken(idToken, checkRevoked) {
         return;
-    }
+    },
 };
 //# sourceMappingURL=tokens.js.map

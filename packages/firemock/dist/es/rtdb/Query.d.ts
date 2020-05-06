@@ -1,13 +1,13 @@
-import { RtdbQuery, RtdbReference, RtdbDataSnapshot, RtdbEventType, QueryValue, IFirebaseEventHandler } from "../@types/rtdb-types";
-import { SerializedQuery } from "serialized-query";
-import { DelayType } from "../shared/index";
-import { IDictionary } from "common-types";
+import { RtdbQuery, RtdbReference, RtdbDataSnapshot, RtdbEventType, QueryValue, IFirebaseEventHandler } from '../@types/rtdb-types';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { DelayType } from '../shared/index';
+import { IDictionary } from 'common-types';
 /** tslint:ignore:member-ordering */
 export declare abstract class Query<T = any> implements RtdbQuery {
     path: string;
-    protected _query: SerializedQuery;
+    protected _query: SerializedRealTimeQuery;
     protected _delay: DelayType;
-    constructor(path: string | SerializedQuery, delay?: DelayType);
+    constructor(path: string | SerializedRealTimeQuery, delay?: DelayType);
     get ref(): RtdbReference;
     limitToLast(num: number): Query<T>;
     limitToFirst(num: number): Query<T>;
@@ -19,7 +19,7 @@ export declare abstract class Query<T = any> implements RtdbQuery {
      * Setup an event listener for a given eventType
      */
     on(eventType: RtdbEventType, callback: (a: RtdbDataSnapshot, b?: null | string) => any, cancelCallbackOrContext?: (err?: Error) => void | null, context?: object | null): (a: RtdbDataSnapshot, b?: null | string) => Promise<null>;
-    once(eventType: "value"): Promise<RtdbDataSnapshot>;
+    once(eventType: 'value'): Promise<RtdbDataSnapshot>;
     off(): void;
     /**
      * Returns a boolean flag based on whether the two queries --
@@ -67,7 +67,7 @@ export declare abstract class Query<T = any> implements RtdbQuery {
      * typing provided by Google
      */
     protected getRoot(): RtdbReference;
-    protected abstract addListener(pathOrQuery: string | SerializedQuery<any>, eventType: RtdbEventType, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<RtdbDataSnapshot>;
+    protected abstract addListener(pathOrQuery: string | SerializedRealTimeQuery<any>, eventType: RtdbEventType, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<RtdbDataSnapshot>;
     /**
      * Reduce the dataset using _filters_ (after sorts) but do not apply sort
      * order to new SnapShot (so natural order is preserved)

@@ -1,12 +1,12 @@
-import { Queue, Schema, Deployment } from "../mocking/index";
-import { Reference, clearDatabase, updateDatabase, restoreEvents, silenceEvents, getDb, } from "../rtdb/index";
-import { setNetworkDelay } from "../shared";
-import { auth as fireAuth } from "../auth";
-import { clearAuthUsers, initializeAuth } from "../auth/state-mgmt";
-import { FireMockError } from "../errors/FireMockError";
-import authProviders from "../auth/client-sdk/AuthProviders";
-import { getFakerLibrary, importFakerLibrary } from "./fakerInitialiation";
-import { adminAuthSdk } from "../auth/admin-sdk";
+import { Queue, Schema, Deployment } from '../mocking/index';
+import { Reference, clearDatabase, updateDatabase, restoreEvents, silenceEvents, getDb, } from '../rtdb/index';
+import { setNetworkDelay } from '../shared';
+import { auth as fireAuth } from '../auth';
+import { clearAuthUsers, initializeAuth } from '../auth/state-mgmt';
+import { FireMockError } from '../errors/FireMockError';
+import authProviders from '../auth/client-sdk/AuthProviders';
+import { getFakerLibrary, importFakerLibrary } from './fakerInitialiation';
+import { adminAuthSdk } from '../auth/admin-sdk';
 /* tslint:disable:max-classes-per-file */
 export class Mock {
     constructor(
@@ -17,20 +17,20 @@ export class Mock {
      * DB to be setup via mocking.
      */
     dataOrMock, authConfig = {
-        providers: ["anonymous"],
+        providers: ['anonymous'],
         users: [],
     }) {
         // TODO: should these attributes be removed?
-        this._schemas = new Queue("schemas").clear();
-        this._relationships = new Queue("relationships").clear();
-        this._queues = new Queue("queues").clear();
+        this._schemas = new Queue('schemas').clear();
+        this._relationships = new Queue('relationships').clear();
+        this._queues = new Queue('queues').clear();
         Queue.clearAll();
         clearDatabase();
         clearAuthUsers();
-        if (dataOrMock && typeof dataOrMock === "object") {
+        if (dataOrMock && typeof dataOrMock === 'object') {
             this.updateDB(dataOrMock);
         }
-        if (dataOrMock && typeof dataOrMock === "function") {
+        if (dataOrMock && typeof dataOrMock === 'function') {
             this._mockInitializer = dataOrMock(this);
         }
         initializeAuth(authConfig);
@@ -50,11 +50,11 @@ export class Mock {
         const defaultDbConfig = {};
         await importFakerLibrary();
         const obj = new Mock(options.db
-            ? typeof options.db === "function"
+            ? typeof options.db === 'function'
                 ? {}
                 : options.db || defaultDbConfig
             : defaultDbConfig, options.auth);
-        if (typeof options.db === "function") {
+        if (typeof options.db === 'function') {
             obj.updateDB(await options.db(obj));
         }
         return obj;
@@ -139,7 +139,7 @@ export class Mock {
     generate() {
         const faker = getFakerLibrary();
         if (!faker && !faker.address) {
-            throw new FireMockError(`The Faker library must be loaded before you can generate mocked data can be returned`, "firemock/faker-not-ready");
+            throw new FireMockError(`The Faker library must be loaded before you can generate mocked data can be returned`, 'firemock/faker-not-ready');
         }
         return new Deployment().generate();
     }

@@ -1,4 +1,4 @@
-import { updateUser, currentUser } from "../../state-mgmt";
+import { updateUser, currentUser } from '../../state-mgmt';
 /**
  * Updates a user's profile data.
  *

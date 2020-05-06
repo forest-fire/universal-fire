@@ -1,5 +1,5 @@
-import { FireMockError } from "../../../errors/FireMockError";
-import { updateUser, currentUser } from "../../state-mgmt";
+import { FireMockError } from '../../../errors/FireMockError';
+import { updateUser, currentUser } from '../../state-mgmt';
 
 /**
  * **updatePassword**
@@ -24,11 +24,11 @@ export async function updatePassword(
   if (notRecentLogin) {
     throw new FireMockError(
       "updating a user's password requires that the user have recently logged in; use 'reauthenticateWithCredential' to address this error.",
-      "auth/required-recent-login"
+      'auth/required-recent-login'
     );
   }
 
   updateUser(currentUser().uid, {
-    password: newPassword
+    password: newPassword,
   });
 }

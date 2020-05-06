@@ -5,25 +5,27 @@ import {
   RtdbEventType,
   QueryValue,
   IFirebaseEventHandler,
-} from "../@types/rtdb-types";
-import { getDb, SnapShot } from "../rtdb/index";
-import { SerializedQuery, QueryOrderType } from "serialized-query";
-import { leafNode, DelayType, networkDelay } from "../shared/index";
-import { runQuery } from "../shared/index";
-import { IDictionary } from "common-types";
+} from '../@types/rtdb-types';
+import { getDb, SnapShot } from '../rtdb/index';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { QueryOrderType } from 'serialized-query';
+import { leafNode, DelayType, networkDelay } from '../shared/index';
+import { runQuery } from '../shared/index';
+import { IDictionary } from 'common-types';
 
 /** tslint:ignore:member-ordering */
 export abstract class Query<T = any> implements RtdbQuery {
   public path: string;
-  protected _query: SerializedQuery;
+  protected _query: SerializedRealTimeQuery;
   protected _delay: DelayType;
 
-  constructor(path: string | SerializedQuery, delay: DelayType = 5) {
-    this.path = (typeof path === "string"
+  constructor(path: string | SerializedRealTimeQuery, delay: DelayType = 5) {
+    this.path = (typeof path === 'string'
       ? path
-      : SerializedQuery.path) as string;
+      : SerializedRealTimeQuery.path) as string;
     this._delay = delay;
-    this._query = typeof path === "string" ? SerializedQuery.path(path) : path;
+    this._query =
+      typeof path === 'string' ? SerializedRealTimeQuery.path(path) : path;
   }
 
   public get ref(): RtdbReference {
@@ -85,13 +87,13 @@ export abstract class Query<T = any> implements RtdbQuery {
     return null;
   }
 
-  public async once(eventType: "value"): Promise<RtdbDataSnapshot> {
+  public async once(eventType: 'value'): Promise<RtdbDataSnapshot> {
     await networkDelay();
     return this.getQuerySnapShot();
   }
 
   public off() {
-    console.log("off() not implemented yet on Firemock");
+    console.log('off() not implemented yet on Firemock');
   }
 
   /**
@@ -175,7 +177,7 @@ export abstract class Query<T = any> implements RtdbQuery {
   }
 
   protected abstract addListener(
-    pathOrQuery: string | SerializedQuery<any>,
+    pathOrQuery: string | SerializedRealTimeQuery<any>,
     eventType: RtdbEventType,
     callback: IFirebaseEventHandler,
     cancelCallbackOrContext?: (err?: Error) => void,

@@ -9,27 +9,27 @@ export interface IAuthProviders {
   EmailAuthProvider: EmailAuthProvider;
 }
 
-export type MockKlass = import("../mocking/Mock").Mock;
-import { EmailAuthProvider } from "@firebase/auth-types";
-import { IDictionary } from "common-types";
+export type MockKlass = import('../mocking/Mock').Mock;
+import { EmailAuthProvider } from '@firebase/auth-types';
+import { IDictionary } from 'common-types';
 
-export type UserCredential = import("@firebase/auth-types").UserCredential;
-export type User = import("@firebase/auth-types").User;
-export type AuthSettings = import("@firebase/auth-types").AuthSettings;
-export type AuthCredential = import("@firebase/auth-types").AuthCredential;
-export type AuthProvider = import("@firebase/auth-types").AuthProvider;
-export type AdditionalUserInfo = import("@firebase/auth-types").AdditionalUserInfo;
-export type FirebaseAuth = import("@firebase/auth-types").FirebaseAuth;
-export type FirebaseApp = import("@firebase/app-types").FirebaseApp;
-export type IdTokenResult = import("@firebase/auth-types").IdTokenResult;
-export type ApplicationVerifier = import("@firebase/auth-types").ApplicationVerifier;
-export type ActionCodeSettings = import("@firebase/auth-types").ActionCodeSettings;
-export type Auth = import("firebase-admin").auth.Auth;
-export type CreateRequest = import("firebase-admin").auth.CreateRequest;
-export type UserRecord = import("firebase-admin").auth.UserRecord;
-export type UpdateRequest = import("firebase-admin").auth.UpdateRequest;
-export type DecodedIdToken = import("firebase-admin").auth.DecodedIdToken;
-export type ListUsersResult = import("firebase-admin").auth.ListUsersResult;
+export type UserCredential = import('@firebase/auth-types').UserCredential;
+export type User = import('@firebase/auth-types').User;
+export type AuthSettings = import('@firebase/auth-types').AuthSettings;
+export type AuthCredential = import('@firebase/auth-types').AuthCredential;
+export type AuthProvider = import('@firebase/auth-types').AuthProvider;
+export type AdditionalUserInfo = import('@firebase/auth-types').AdditionalUserInfo;
+export type FirebaseAuth = import('@firebase/auth-types').FirebaseAuth;
+export type FirebaseApp = import('@firebase/app-types').FirebaseApp;
+export type IdTokenResult = import('@firebase/auth-types').IdTokenResult;
+export type ApplicationVerifier = import('@firebase/auth-types').ApplicationVerifier;
+export type ActionCodeSettings = import('@firebase/auth-types').ActionCodeSettings;
+export type Auth = import('firebase-admin').auth.Auth;
+export type CreateRequest = import('firebase-admin').auth.CreateRequest;
+export type UserRecord = import('firebase-admin').auth.UserRecord;
+export type UpdateRequest = import('firebase-admin').auth.UpdateRequest;
+export type DecodedIdToken = import('firebase-admin').auth.DecodedIdToken;
+export type ListUsersResult = import('firebase-admin').auth.ListUsersResult;
 
 /**
  * Create a user in the Auth system which can be logged in via the
@@ -79,18 +79,18 @@ export interface IMockAuthConfig {
 }
 
 export const enum AuthProviderName {
-  emailPassword = "emailPassword",
-  phone = "phone",
-  google = "google",
-  playGames = "playGames",
-  gameCenter = "gameCenter",
-  facebook = "facebook",
-  twitter = "twitter",
-  github = "github",
-  yahoo = "yahoo",
-  microsoft = "microsoft",
-  apple = "apple",
-  anonymous = "anonymous",
+  emailPassword = 'emailPassword',
+  phone = 'phone',
+  google = 'google',
+  playGames = 'playGames',
+  gameCenter = 'gameCenter',
+  facebook = 'facebook',
+  twitter = 'twitter',
+  github = 'github',
+  yahoo = 'yahoo',
+  microsoft = 'microsoft',
+  apple = 'apple',
+  anonymous = 'anonymous',
 }
 
 export type IAuthProviderName = keyof typeof AuthProviderName;
@@ -129,7 +129,7 @@ export interface IMockUser extends UserRecord {
  */
 export type ISimplifiedMockUser = Omit<
   IMockUser,
-  "emailVerified" | "disabled" | "uid" | "toJSON" | "providerData" | "metadata"
+  'emailVerified' | 'disabled' | 'uid' | 'toJSON' | 'providerData' | 'metadata'
 > & {
   emailVerified?: boolean;
   disabled?: boolean;

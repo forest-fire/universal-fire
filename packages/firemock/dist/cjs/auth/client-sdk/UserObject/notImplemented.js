@@ -4,7 +4,7 @@ const completeUserCredential_1 = require("../completeUserCredential");
 exports.notImplemented = {
     /** Deletes and signs out the user. */
     async delete() {
-        throw new Error("the Mock Auth feature for delete() is not yet implemented");
+        throw new Error('the Mock Auth feature for delete() is not yet implemented');
     },
     async linkAndRetrieveDataWithCredential(credential) {
         throw new Error(`linkAndRetrieveDataWithCredential() is not implemented yet in the client-sdk's mock auth`);
@@ -50,6 +50,6 @@ exports.notImplemented = {
     },
     async updatePhoneNumber(phoneCredential) {
         throw new Error(`updatePhoneNumber() is not implemented yet in the client-sdk's mock auth`);
-    }
+    },
 };
 //# sourceMappingURL=notImplemented.js.map

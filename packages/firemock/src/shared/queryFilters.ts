@@ -1,6 +1,6 @@
-import { SerializedQuery } from "serialized-query";
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 
-export function startAt(query: SerializedQuery) {
+export function startAt(query: SerializedRealTimeQuery) {
   const key = query.identity.startAtKey || query.identity.orderByKey;
   const value = query.identity.startAt;
 
@@ -13,7 +13,7 @@ export function startAt(query: SerializedQuery) {
   };
 }
 
-export function endAt(query: SerializedQuery) {
+export function endAt(query: SerializedRealTimeQuery) {
   const key = query.identity.endAtKey || query.identity.orderByKey;
   const value = query.identity.endAt;
 
@@ -27,7 +27,7 @@ export function endAt(query: SerializedQuery) {
 }
 
 /** a filter function for queries with a `equalTo` value */
-export function equalTo(query: SerializedQuery) {
+export function equalTo(query: SerializedRealTimeQuery) {
   const key = query.identity.equalToKey || query.identity.orderByKey;
   const value = query.identity.equalTo;
 

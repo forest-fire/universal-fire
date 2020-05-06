@@ -19,9 +19,9 @@ const index_1 = require("../mocking/index");
 const rtdb_1 = require("../rtdb");
 class Deployment {
     constructor() {
-        this._queue = new index_1.Queue("queue");
-        this._schemas = new index_1.Queue("schemas");
-        this._relationships = new index_1.Queue("relationships");
+        this._queue = new index_1.Queue('queue');
+        this._schemas = new index_1.Queue('schemas');
+        this._relationships = new index_1.Queue('relationships');
     }
     /**
      * Queue a schema for deployment to the mock DB
@@ -45,7 +45,7 @@ class Deployment {
                 schema: schemaId,
                 prefix: schema.prefix,
                 quantity,
-                overrides
+                overrides,
             };
             this._queue.enqueue(newQueueItem);
         }
@@ -57,8 +57,8 @@ class Deployment {
      * the schema currently being queued.
      */
     quantifyHasMany(targetSchema, quantity) {
-        const hasMany = this._relationships.filter(r => r.type === "hasMany" && r.source === this.schemaId);
-        const targetted = hasMany.filter(r => r.target === targetSchema);
+        const hasMany = this._relationships.filter((r) => r.type === 'hasMany' && r.source === this.schemaId);
+        const targetted = hasMany.filter((r) => r.target === targetSchema);
         if (hasMany.length === 0) {
             console.log(`Attempt to quantify "hasMany" relationships with schema "${this.schemaId}" is not possible; no such relationships exist`);
         }
@@ -70,8 +70,8 @@ class Deployment {
             this._queue.update(this.queueId, {
                 hasMany: {
                     ...queue.hasMany,
-                    ...{ [shared_1.pluralize(targetSchema)]: quantity }
-                }
+                    ...{ [shared_1.pluralize(targetSchema)]: quantity },
+                },
             });
         }
         return this;
@@ -83,15 +83,15 @@ class Deployment {
     fulfillBelongsTo(targetSchema) {
         const schema = this._schemas.find(this.schemaId);
         const relationship = lodash_first_1.default(this._relationships
-            .filter(r => r.source === this.schemaId)
-            .filter(r => r.target === targetSchema));
+            .filter((r) => r.source === this.schemaId)
+            .filter((r) => r.target === targetSchema));
         const sourceProperty = schema.path();
         const queue = this._queue.find(this.queueId);
         this._queue.update(this.queueId, {
             belongsTo: {
                 ...queue.belongsTo,
-                ...{ [`${targetSchema}Id`]: true }
-            }
+                ...{ [`${targetSchema}Id`]: true },
+            },
         });
         return this;
     }
@@ -119,9 +119,9 @@ class Deployment {
         const path = schema.path();
         const key = overrides.id || fbKey.key();
         const dbPath = shared_1.dotNotation(path) + `.${key}`;
-        const payload = typeof mock === "object"
+        const payload = typeof mock === 'object'
             ? { ...mock, ...overrides }
-            : overrides && typeof overrides !== "object"
+            : overrides && typeof overrides !== 'object'
                 ? overrides
                 : mock;
         // set(db, dbPath, payload);
@@ -129,13 +129,13 @@ class Deployment {
         return key;
     }
     insertRelationshipLinks(queue) {
-        const relationships = this._relationships.filter(r => r.source === queue.schema);
-        const belongsTo = relationships.filter(r => r.type === "belongsTo");
-        const hasMany = relationships.filter(r => r.type === "hasMany");
+        const relationships = this._relationships.filter((r) => r.source === queue.schema);
+        const belongsTo = relationships.filter((r) => r.type === 'belongsTo');
+        const hasMany = relationships.filter((r) => r.type === 'hasMany');
         const db = rtdb_1.getDb();
-        belongsTo.forEach(r => {
+        belongsTo.forEach((r) => {
             const fulfill = Object.keys(queue.belongsTo || {})
-                .filter(v => queue.belongsTo[v] === true)
+                .filter((v) => queue.belongsTo[v] === true)
                 .indexOf(r.sourceProperty) !== -1;
             const source = this._schemas.find(r.source);
             const target = this._schemas.find(r.target);
@@ -155,16 +155,16 @@ class Deployment {
                     : fbKey.key();
             }
             else {
-                getID = () => "";
+                getID = () => '';
             }
             const property = r.sourceProperty;
             const path = source.path();
             const recordList = lodash_get_1.default(db, shared_1.dotNotation(source.path()), {});
-            Object.keys(recordList).forEach(key => {
+            Object.keys(recordList).forEach((key) => {
                 lodash_set_1.default(db, `${shared_1.dotNotation(source.path())}.${key}.${property}`, getID());
             });
         });
-        hasMany.forEach(r => {
+        hasMany.forEach((r) => {
             const fulfill = Object.keys(queue.hasMany || {}).indexOf(r.sourceProperty) !== -1;
             const howMany = fulfill ? queue.hasMany[r.sourceProperty] : 0;
             const source = this._schemas.find(r.source);
@@ -185,7 +185,7 @@ class Deployment {
                     return this.insertMockIntoDB(r.target, {});
                 };
                 getID = () => mockAvailable
-                    ? choice(available.filter(a => used.indexOf(a) === -1))
+                    ? choice(available.filter((a) => used.indexOf(a) === -1))
                     : fbKey.key();
             }
             else {
@@ -194,7 +194,7 @@ class Deployment {
             const property = r.sourceProperty;
             const path = source.path();
             const sourceRecords = lodash_get_1.default(db, shared_1.dotNotation(source.path()), {});
-            Object.keys(sourceRecords).forEach(key => {
+            Object.keys(sourceRecords).forEach((key) => {
                 for (let i = 1; i <= howMany; i++) {
                     lodash_set_1.default(db, `${shared_1.dotNotation(source.path())}.${key}.${property}.${getID()}`, true);
                 }

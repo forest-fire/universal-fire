@@ -17,9 +17,10 @@ Here's a simple example :
 ```js
 it('test something about appointments', () => {
   // ... setup data ...
-  return m.ref('/appointments')
+  return m
+    .ref('/appointments')
     .once('value')
-    .then(snap => {
+    .then((snap) => {
       expect(snap.val()).is.an('object');
       expect(snap.key).is.equal('appointments');
       expect(snap.numChildren()).is.equal(25);
@@ -45,11 +46,12 @@ Cool but basic. What if we wanted to test for appointments scheduled in the next
 import * as moment from 'moment';
 it('appointments in the next week should exist', () => {
   // ... setup data ...
-  return m.ref('/appointments')
+  return m
+    .ref('/appointments')
     .startAt(moment().toISOString(), 'when')
     .endAt(moment().add(7, 'days').toISOString(), 'when')
     .once('value')
-    .then(snap => {
+    .then((snap) => {
       expect(snap.val()).is.an('object');
       expect(snap.key).is.a('string');
       expect(snap.numChildren()).is.equal(x);
@@ -117,4 +119,3 @@ it('pushing a new customer works', (done) => {
   m.ref('customers').push({ first: 'John', last: 'Smith' });
 }
 ```
-

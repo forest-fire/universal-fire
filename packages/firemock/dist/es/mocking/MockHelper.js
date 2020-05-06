@@ -1,5 +1,5 @@
-import { createError } from "common-types";
-import { getFakerLibrary } from "./fakerInitialiation";
+import { createError } from 'common-types';
+import { getFakerLibrary } from './fakerInitialiation';
 export class MockHelper {
     constructor(context) {
         this.context = context;

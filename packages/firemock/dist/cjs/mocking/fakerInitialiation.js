@@ -20,7 +20,7 @@ let faker;
  */
 async function importFakerLibrary() {
     if (!faker) {
-        faker = await Promise.resolve().then(() => __importStar(require(/* webpackChunkName: "faker-lib" */ "faker")));
+        faker = await Promise.resolve().then(() => __importStar(require(/* webpackChunkName: "faker-lib" */ 'faker')));
     }
     return faker;
 }
@@ -31,7 +31,7 @@ exports.importFakerLibrary = importFakerLibrary;
  */
 function getFakerLibrary() {
     if (!faker) {
-        throw new FireMockError_1.FireMockError(`The faker library has not been loaded yet! Use the importFakerLibrary() directly to ensure this happens first;or altnernatively you can use Mock.prepare().`, "not-ready");
+        throw new FireMockError_1.FireMockError(`The faker library has not been loaded yet! Use the importFakerLibrary() directly to ensure this happens first;or altnernatively you can use Mock.prepare().`, 'not-ready');
     }
     return faker;
 }

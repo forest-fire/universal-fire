@@ -1,16 +1,16 @@
 // tslint:disable:no-implicit-dependencies
-import { IDictionary, pathJoin } from "common-types";
-import set from "lodash.set";
-import get from "lodash.get";
-import { key as fbKey } from "firebase-key";
-import { deepEqual } from "fast-equals";
-import copy from "fast-copy";
-import deepmerge from "deepmerge";
+import { IDictionary, pathJoin } from 'common-types';
+import set from 'lodash.set';
+import get from 'lodash.get';
+import { key as fbKey } from 'firebase-key';
+import { deepEqual } from 'fast-equals';
+import copy from 'fast-copy';
+import deepmerge from 'deepmerge';
 
-import { auth as mockedAuth } from "../auth";
-import { IMockWatcherGroupEvent } from "../@types/rtdb-types";
-import { join, getParent, getKey, dotifyKeys, dotify } from "../shared/index";
-import { getListeners, removeAllListeners, notify } from "../rtdb/index";
+import { auth as mockedAuth } from '../auth';
+import { IMockWatcherGroupEvent } from '../@types/rtdb-types';
+import { join, getParent, getKey, dotifyKeys, dotify } from '../shared/index';
+import { getListeners, removeAllListeners, notify } from '../rtdb/index';
 
 /**
  * The in-memory dictionary/hash mantained by the mock RTDB to represent
@@ -44,7 +44,7 @@ export function shouldSendEvents() {
 /** clears the DB without losing reference to DB object */
 export function clearDatabase() {
   const keys = Object.keys(db);
-  keys.forEach(key => delete db[key]);
+  keys.forEach((key) => delete db[key]);
 }
 
 /**
@@ -71,8 +71,8 @@ export function getDb<T = any>(path?: string) {
 export function setDB(path: string, value: any, silent: boolean = false) {
   const dotPath = join(path);
   const oldRef = get(db, dotPath);
-  const oldValue = typeof oldRef === "object" ? { ...oldRef, ...{} } : oldRef;
-  const isReference = ["object", "array"].includes(typeof value);
+  const oldValue = typeof oldRef === 'object' ? { ...oldRef, ...{} } : oldRef;
+  const isReference = ['object', 'array'].includes(typeof value);
   const dbSnapshot = copy({ ...db });
 
   // ignore if no change
@@ -85,7 +85,7 @@ export function setDB(path: string, value: any, silent: boolean = false) {
 
   if (value === null) {
     const parentValue: any = get(db, getParent(dotPath));
-    if (typeof parentValue === "object") {
+    if (typeof parentValue === 'object') {
       delete parentValue[getKey(dotPath)];
 
       set(db, getParent(dotPath), parentValue);
@@ -111,9 +111,9 @@ export function updateDB<T = any>(path: string, value: T) {
   const oldValue: T = get(db, dotPath);
   let changed = true;
   if (
-    typeof value === "object" &&
+    typeof value === 'object' &&
     Object.keys(value).every(
-      k =>
+      (k) =>
         (oldValue ? (oldValue as IDictionary)[k] : null) ===
         (value as IDictionary)[k]
     )
@@ -121,7 +121,7 @@ export function updateDB<T = any>(path: string, value: T) {
     changed = false;
   }
 
-  if (typeof value !== "object" && value === oldValue) {
+  if (typeof value !== 'object' && value === oldValue) {
     changed = false;
   }
 
@@ -130,7 +130,7 @@ export function updateDB<T = any>(path: string, value: T) {
   }
 
   const newValue: T =
-    typeof oldValue === "object" ? { ...oldValue, ...value } : value;
+    typeof oldValue === 'object' ? { ...oldValue, ...value } : value;
 
   setDB(dotPath, newValue);
 }
@@ -147,7 +147,7 @@ export function updateDB<T = any>(path: string, value: T) {
 export function multiPathUpdateDB(data: IDictionary) {
   const snapshot = copy(db);
 
-  Object.keys(data).map(key => {
+  Object.keys(data).map((key) => {
     const value = data[key];
     const path = key;
     if (get(db, path) !== value) {
@@ -160,8 +160,8 @@ export function multiPathUpdateDB(data: IDictionary) {
 }
 
 const slashify = (path: string) => {
-  const slashPath = path.replace(/\./g, "/");
-  return slashPath.slice(0, 1) === "/" ? slashPath.slice(1) : slashPath;
+  const slashPath = path.replace(/\./g, '/');
+  return slashPath.slice(0, 1) === '/' ? slashPath.slice(1) : slashPath;
 };
 
 /**
@@ -176,19 +176,19 @@ export function groupEventsByWatcher(
   data = dotifyKeys(data);
 
   const getFromSnapshot = (path: string) => get(dbSnapshot, dotify(path));
-  const eventPaths = Object.keys(data).map(i => dotify(i));
+  const eventPaths = Object.keys(data).map((i) => dotify(i));
 
   const response: IMockWatcherGroupEvent[] = [];
   const relativePath = (full: string, partial: string) => {
-    return full.replace(partial, "");
+    return full.replace(partial, '');
   };
 
   const justKey = (obj: IDictionary) => (obj ? Object.keys(obj)[0] : null);
   const justValue = (obj: IDictionary) =>
     justKey(obj) ? obj[justKey(obj)] : null;
 
-  getListeners().forEach(listener => {
-    const eventPathsUnderListener = eventPaths.filter(path =>
+  getListeners().forEach((listener) => {
+    const eventPathsUnderListener = eventPaths.filter((path) =>
       path.includes(dotify(listener.query.path))
     );
 
@@ -215,10 +215,10 @@ export function groupEventsByWatcher(
     );
 
     const key: string =
-      listener.eventType === "value"
+      listener.eventType === 'value'
         ? changeObject
           ? justKey(changeObject)
-          : listener.query.path.split(".").pop()
+          : listener.query.path.split('.').pop()
         : dotify(
             pathJoin(slashify(listener.query.path), justKey(changeObject))
           );
@@ -232,13 +232,13 @@ export function groupEventsByWatcher(
       key,
       changes: justValue(changeObject),
       value:
-        listener.eventType === "value"
+        listener.eventType === 'value'
           ? getDb(listener.query.path)
           : getDb(key),
       priorValue:
-        listener.eventType === "value"
+        listener.eventType === 'value'
           ? get(dbSnapshot, listener.query.path)
-          : justValue(get(dbSnapshot, listener.query.path))
+          : justValue(get(dbSnapshot, listener.query.path)),
     };
 
     response.push(newResponse);
@@ -266,7 +266,7 @@ export function pushDB(path: string, value: any): string {
   const pushId = fbKey();
   const fullPath = join(path, pushId);
   const valuePlusId =
-    typeof value === "object" ? { ...value, id: pushId } : value;
+    typeof value === 'object' ? { ...value, id: pushId } : value;
 
   setDB(fullPath, valuePlusId);
   return pushId;

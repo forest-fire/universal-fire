@@ -1,5 +1,5 @@
 /// <reference types="faker" />
-import { MockHelper } from "./index";
+import { MockHelper } from './index';
 /**
  * **importFakerLibrary**
  *

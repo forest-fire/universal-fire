@@ -1,4 +1,4 @@
-import { User } from "@firebase/auth-types";
+import { User } from '@firebase/auth-types';
 export declare function emailExistsAsUserInAuth(email: string): boolean;
 export declare function emailIsValidFormat(email: string): boolean;
 export declare function emailHasCorrectPassword(email: string, password: string): boolean;

@@ -1,14 +1,12 @@
-import { addUser, updateUser, getUserById, removeUser, getUserByEmail, allUsers } from "../../state-mgmt";
-import { networkDelay } from "../../../shared";
+import { addUser, updateUser, getUserById, removeUser, getUserByEmail, allUsers, } from '../../state-mgmt';
+import { networkDelay } from '../../../shared';
 export const users = {
     // https://firebase.google.com/docs/auth/admin/manage-users#create_a_user
     async createUser(properties) {
         addUser({
-            password: Math.random()
-                .toString(36)
-                .substr(2, 10),
+            password: Math.random().toString(36).substr(2, 10),
             multiFactor: null,
-            ...properties
+            ...properties,
         });
         return {
             ...properties,
@@ -17,11 +15,11 @@ export const users = {
                 creationTime: String(new Date()),
                 toJSON() {
                     return {};
-                }
+                },
             },
             multiFactor: null,
             toJSON: () => null,
-            providerData: null
+            providerData: null,
         };
     },
     /** Updates an existing user. */
@@ -43,6 +41,6 @@ export const users = {
     async listUsers(maxResults, pageToken) {
         await networkDelay();
         return { users: maxResults ? allUsers().slice(0, maxResults) : allUsers() };
-    }
+    },
 };
 //# sourceMappingURL=users.js.map

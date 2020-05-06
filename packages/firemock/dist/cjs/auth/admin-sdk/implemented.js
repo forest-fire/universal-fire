@@ -4,6 +4,6 @@ const index_1 = require("./implemented/index");
 exports.implemented = {
     ...index_1.users,
     ...index_1.claims,
-    ...index_1.tokens
+    ...index_1.tokens,
 };
 //# sourceMappingURL=implemented.js.map

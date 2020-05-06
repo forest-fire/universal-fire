@@ -1,7 +1,7 @@
-import { users, claims, tokens } from "./implemented/index";
+import { users, claims, tokens } from './implemented/index';
 export const implemented = {
     ...users,
     ...claims,
-    ...tokens
+    ...tokens,
 };
 //# sourceMappingURL=implemented.js.map

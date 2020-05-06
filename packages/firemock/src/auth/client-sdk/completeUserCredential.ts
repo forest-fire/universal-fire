@@ -1,11 +1,11 @@
 import {
   IPartialUserCredential,
-  UserCredential
-} from "../../@types/auth-types";
+  UserCredential,
+} from '../../@types/auth-types';
 
-import merge from "deepmerge";
-import { clientApiUser } from "./UserObject";
-import { allUsers, getRandomMockUid } from "../state-mgmt";
+import merge from 'deepmerge';
+import { clientApiUser } from './UserObject';
+import { allUsers, getRandomMockUid } from '../state-mgmt';
 
 /**
  * takes a partial user auth and adds enough to make it officially
@@ -17,29 +17,29 @@ export function completeUserCredential(
   const fakeUserCredential: UserCredential = {
     user: {
       ...clientApiUser,
-      displayName: "",
-      email: "",
+      displayName: '',
+      email: '',
       isAnonymous: true,
       metadata: {},
-      phoneNumber: "",
-      photoURL: "",
+      phoneNumber: '',
+      photoURL: '',
       providerData: [],
-      providerId: "",
-      refreshToken: "",
-      uid: getRandomMockUid()
+      providerId: '',
+      refreshToken: '',
+      uid: getRandomMockUid(),
     },
     additionalUserInfo: {
       isNewUser: false,
-      profile: "",
-      providerId: "",
-      username: "fake"
+      profile: '',
+      providerId: '',
+      username: 'fake',
     },
-    operationType: "",
+    operationType: '',
     credential: {
-      signInMethod: "fake",
-      providerId: "fake",
-      toJSON: () => "" // added recently
-    }
+      signInMethod: 'fake',
+      providerId: 'fake',
+      toJSON: () => '', // added recently
+    },
   };
 
   return merge(fakeUserCredential, partial) as UserCredential;
@@ -49,5 +49,5 @@ export const fakeApplicationVerifier = {
   async confirm(verificationCode: string) {
     return completeUserCredential({});
   },
-  verificationId: "verification"
+  verificationId: 'verification',
 };

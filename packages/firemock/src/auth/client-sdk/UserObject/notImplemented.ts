@@ -4,16 +4,16 @@ import {
   AuthCredential,
   ApplicationVerifier,
   AuthProvider,
-  ActionCodeSettings
-} from "../../../@types";
-import { UserCredential } from "@firebase/auth-types";
-import { fakeApplicationVerifier } from "../completeUserCredential";
+  ActionCodeSettings,
+} from '../../../@types';
+import { UserCredential } from '@firebase/auth-types';
+import { fakeApplicationVerifier } from '../completeUserCredential';
 
 export const notImplemented: Partial<User> = {
   /** Deletes and signs out the user. */
   async delete(): Promise<void> {
     throw new Error(
-      "the Mock Auth feature for delete() is not yet implemented"
+      'the Mock Auth feature for delete() is not yet implemented'
     );
   },
 
@@ -94,5 +94,5 @@ export const notImplemented: Partial<User> = {
     throw new Error(
       `updatePhoneNumber() is not implemented yet in the client-sdk's mock auth`
     );
-  }
+  },
 };

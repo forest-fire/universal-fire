@@ -1,17 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../rtdb/index");
-const serialized_query_1 = require("serialized-query");
+const serialized_query_1 = require("@forest-fire/serialized-query");
+const serialized_query_2 = require("serialized-query");
 const index_2 = require("../shared/index");
 const index_3 = require("../shared/index");
 /** tslint:ignore:member-ordering */
 class Query {
     constructor(path, delay = 5) {
-        this.path = (typeof path === "string"
+        this.path = (typeof path === 'string'
             ? path
-            : serialized_query_1.SerializedQuery.path);
+            : serialized_query_1.SerializedRealTimeQuery.path);
         this._delay = delay;
-        this._query = typeof path === "string" ? serialized_query_1.SerializedQuery.path(path) : path;
+        this._query =
+            typeof path === 'string' ? serialized_query_1.SerializedRealTimeQuery.path(path) : path;
     }
     get ref() {
         return this;
@@ -25,7 +27,7 @@ class Query {
         return this;
     }
     equalTo(value, key) {
-        if (key && this._query.identity.orderBy === serialized_query_1.QueryOrderType.orderByKey) {
+        if (key && this._query.identity.orderBy === serialized_query_2.QueryOrderType.orderByKey) {
             throw new Error(`You can not use "equalTo(val, key)" with a "key" property defined when using a key sort!`);
         }
         this._query.equalTo(value, key);
@@ -52,7 +54,7 @@ class Query {
         return this.getQuerySnapShot();
     }
     off() {
-        console.log("off() not implemented yet on Firemock");
+        console.log('off() not implemented yet on Firemock');
     }
     /**
      * Returns a boolean flag based on whether the two queries --

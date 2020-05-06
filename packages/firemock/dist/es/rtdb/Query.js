@@ -1,15 +1,17 @@
-import { getDb, SnapShot } from "../rtdb/index";
-import { SerializedQuery, QueryOrderType } from "serialized-query";
-import { leafNode, networkDelay } from "../shared/index";
-import { runQuery } from "../shared/index";
+import { getDb, SnapShot } from '../rtdb/index';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { QueryOrderType } from 'serialized-query';
+import { leafNode, networkDelay } from '../shared/index';
+import { runQuery } from '../shared/index';
 /** tslint:ignore:member-ordering */
 export class Query {
     constructor(path, delay = 5) {
-        this.path = (typeof path === "string"
+        this.path = (typeof path === 'string'
             ? path
-            : SerializedQuery.path);
+            : SerializedRealTimeQuery.path);
         this._delay = delay;
-        this._query = typeof path === "string" ? SerializedQuery.path(path) : path;
+        this._query =
+            typeof path === 'string' ? SerializedRealTimeQuery.path(path) : path;
     }
     get ref() {
         return this;
@@ -50,7 +52,7 @@ export class Query {
         return this.getQuerySnapShot();
     }
     off() {
-        console.log("off() not implemented yet on Firemock");
+        console.log('off() not implemented yet on Firemock');
     }
     /**
      * Returns a boolean flag based on whether the two queries --

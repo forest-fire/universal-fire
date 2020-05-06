@@ -3,6 +3,7 @@
 ![](docs/images/firemock.jpg)
 
 # firemock
+
 > Firebase, Typescript, and mocking ... what more could you ask for?
 
 ## Overview
@@ -14,6 +15,7 @@ This Typescript library is meant to serve as a type-aware solution for node deve
 3. Provide a Firebase [API surface](https://firebase.google.com/docs/reference/js/firebase.database.Reference) for querying the in-memory database
 
 It's worth pointing out that this library _does not_ do the typical mock/spy types of tracking that you get with frameworks like _sinon_ or _test-double_ in JS and/or _ts-mokito_ or _typemoq_ in TS. If that's what you want then use one of these already existing solutions.
+
 ## Installation
 
 To start using, simply type one of the following into your terminal window at the root of the project:
@@ -31,7 +33,7 @@ The documentation is hosted on Gitbook, point your browser to: [firemock documen
 
 ## Contribution: PRs and Issues
 
-I have developed this for my own needs but as with all my other open-source work I'd be happy to recieve PR's and issues. Not surprisingly, PR's are my preference but sometimes people don't feel they have the right skills or time to fix something they feel is broken so raising issues is a nice way to communicate something you've noticed. I can't promise issues will always get immediate attention but I will get back as soon as I can. 
+I have developed this for my own needs but as with all my other open-source work I'd be happy to recieve PR's and issues. Not surprisingly, PR's are my preference but sometimes people don't feel they have the right skills or time to fix something they feel is broken so raising issues is a nice way to communicate something you've noticed. I can't promise issues will always get immediate attention but I will get back as soon as I can.
 
 ## License
 

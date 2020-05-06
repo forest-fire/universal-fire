@@ -17,5 +17,6 @@
   - [Synchronous Queries](docs/other-features.md#synchronous)
   - [Advanced Typing](docs/other-features.md#typing)
 
----- 
+---
+
 - [Related Repos](docs/related.md)

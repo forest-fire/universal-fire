@@ -1,4 +1,4 @@
-import { IDictionary } from "common-types";
+import { IDictionary } from 'common-types';
 export declare type Key = string | number;
 /**
  * Queue Class

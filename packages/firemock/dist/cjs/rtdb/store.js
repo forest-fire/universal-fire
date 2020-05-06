@@ -44,7 +44,7 @@ exports.shouldSendEvents = shouldSendEvents;
 /** clears the DB without losing reference to DB object */
 function clearDatabase() {
     const keys = Object.keys(db);
-    keys.forEach(key => delete db[key]);
+    keys.forEach((key) => delete db[key]);
 }
 exports.clearDatabase = clearDatabase;
 /**
@@ -71,8 +71,8 @@ exports.getDb = getDb;
 function setDB(path, value, silent = false) {
     const dotPath = index_1.join(path);
     const oldRef = lodash_get_1.default(db, dotPath);
-    const oldValue = typeof oldRef === "object" ? { ...oldRef, ...{} } : oldRef;
-    const isReference = ["object", "array"].includes(typeof value);
+    const oldValue = typeof oldRef === 'object' ? { ...oldRef, ...{} } : oldRef;
+    const isReference = ['object', 'array'].includes(typeof value);
     const dbSnapshot = fast_copy_1.default({ ...db });
     // ignore if no change
     if ((isReference && fast_equals_1.deepEqual(oldValue, value)) ||
@@ -81,7 +81,7 @@ function setDB(path, value, silent = false) {
     }
     if (value === null) {
         const parentValue = lodash_get_1.default(db, index_1.getParent(dotPath));
-        if (typeof parentValue === "object") {
+        if (typeof parentValue === 'object') {
             delete parentValue[index_1.getKey(dotPath)];
             lodash_set_1.default(db, index_1.getParent(dotPath), parentValue);
         }
@@ -106,18 +106,18 @@ function updateDB(path, value) {
     const dotPath = index_1.join(path);
     const oldValue = lodash_get_1.default(db, dotPath);
     let changed = true;
-    if (typeof value === "object" &&
-        Object.keys(value).every(k => (oldValue ? oldValue[k] : null) ===
+    if (typeof value === 'object' &&
+        Object.keys(value).every((k) => (oldValue ? oldValue[k] : null) ===
             value[k])) {
         changed = false;
     }
-    if (typeof value !== "object" && value === oldValue) {
+    if (typeof value !== 'object' && value === oldValue) {
         changed = false;
     }
     if (!changed) {
         return;
     }
-    const newValue = typeof oldValue === "object" ? { ...oldValue, ...value } : value;
+    const newValue = typeof oldValue === 'object' ? { ...oldValue, ...value } : value;
     setDB(dotPath, newValue);
 }
 exports.updateDB = updateDB;
@@ -132,7 +132,7 @@ exports.updateDB = updateDB;
  */
 function multiPathUpdateDB(data) {
     const snapshot = fast_copy_1.default(db);
-    Object.keys(data).map(key => {
+    Object.keys(data).map((key) => {
         const value = data[key];
         const path = key;
         if (lodash_get_1.default(db, path) !== value) {
@@ -144,8 +144,8 @@ function multiPathUpdateDB(data) {
 }
 exports.multiPathUpdateDB = multiPathUpdateDB;
 const slashify = (path) => {
-    const slashPath = path.replace(/\./g, "/");
-    return slashPath.slice(0, 1) === "/" ? slashPath.slice(1) : slashPath;
+    const slashPath = path.replace(/\./g, '/');
+    return slashPath.slice(0, 1) === '/' ? slashPath.slice(1) : slashPath;
 };
 /**
  * Will aggregate the data passed in to dictionary objects of paths
@@ -155,15 +155,15 @@ const slashify = (path) => {
 function groupEventsByWatcher(data, dbSnapshot) {
     data = index_1.dotifyKeys(data);
     const getFromSnapshot = (path) => lodash_get_1.default(dbSnapshot, index_1.dotify(path));
-    const eventPaths = Object.keys(data).map(i => index_1.dotify(i));
+    const eventPaths = Object.keys(data).map((i) => index_1.dotify(i));
     const response = [];
     const relativePath = (full, partial) => {
-        return full.replace(partial, "");
+        return full.replace(partial, '');
     };
     const justKey = (obj) => (obj ? Object.keys(obj)[0] : null);
     const justValue = (obj) => justKey(obj) ? obj[justKey(obj)] : null;
-    index_2.getListeners().forEach(listener => {
-        const eventPathsUnderListener = eventPaths.filter(path => path.includes(index_1.dotify(listener.query.path)));
+    index_2.getListeners().forEach((listener) => {
+        const eventPathsUnderListener = eventPaths.filter((path) => path.includes(index_1.dotify(listener.query.path)));
         if (eventPathsUnderListener.length === 0) {
             // if there are no listeners then there's nothing to do
             return;
@@ -180,10 +180,10 @@ function groupEventsByWatcher(data, dbSnapshot) {
             }
             return changes;
         }, {});
-        const key = listener.eventType === "value"
+        const key = listener.eventType === 'value'
             ? changeObject
                 ? justKey(changeObject)
-                : listener.query.path.split(".").pop()
+                : listener.query.path.split('.').pop()
             : index_1.dotify(common_types_1.pathJoin(slashify(listener.query.path), justKey(changeObject)));
         const newResponse = {
             listenerId: listener.id,
@@ -193,12 +193,12 @@ function groupEventsByWatcher(data, dbSnapshot) {
             eventPaths: paths,
             key,
             changes: justValue(changeObject),
-            value: listener.eventType === "value"
+            value: listener.eventType === 'value'
                 ? getDb(listener.query.path)
                 : getDb(key),
-            priorValue: listener.eventType === "value"
+            priorValue: listener.eventType === 'value'
                 ? lodash_get_1.default(dbSnapshot, listener.query.path)
-                : justValue(lodash_get_1.default(dbSnapshot, listener.query.path))
+                : justValue(lodash_get_1.default(dbSnapshot, listener.query.path)),
         };
         response.push(newResponse);
     });
@@ -223,7 +223,7 @@ exports.removeDB = removeDB;
 function pushDB(path, value) {
     const pushId = firebase_key_1.key();
     const fullPath = index_1.join(path, pushId);
-    const valuePlusId = typeof value === "object" ? { ...value, id: pushId } : value;
+    const valuePlusId = typeof value === 'object' ? { ...value, id: pushId } : value;
     setDB(fullPath, valuePlusId);
     return pushId;
 }

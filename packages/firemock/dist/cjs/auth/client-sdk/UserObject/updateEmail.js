@@ -21,7 +21,7 @@ const util_1 = require("../../../shared/util");
  */
 async function updateEmail(newEmail, forceLogin) {
     if (forceLogin) {
-        throw new FireMockError_1.FireMockError("updating a user's email address requires that the user have recently logged in; use 'reauthenticateWithCredential' to address this error.", "auth/requires-recent-login");
+        throw new FireMockError_1.FireMockError("updating a user's email address requires that the user have recently logged in; use 'reauthenticateWithCredential' to address this error.", 'auth/requires-recent-login');
     }
     await util_1.networkDelay();
     state_mgmt_1.updateUser(state_mgmt_1.currentUser().uid, { email: newEmail });

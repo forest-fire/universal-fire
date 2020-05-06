@@ -36,10 +36,11 @@ function initializeAuth(config) {
     const baseUser = () => ({
         emailVerified: false,
         uid: getRandomMockUid(),
-        providerData: []
+        providerData: [],
     });
     _users =
-        (config.users || []).map(u => ({ ...baseUser(), ...u })) || [];
+        (config.users || []).map((u) => ({ ...baseUser(), ...u })) ||
+            [];
     _providers = config.providers || [];
 }
 exports.initializeAuth = initializeAuth;
@@ -55,14 +56,14 @@ function setCurrentUser(user) {
             additionalUserInfo: {
                 isNewUser: false,
                 profile: {},
-                providerId: "mock",
-                username: user.email
+                providerId: 'mock',
+                username: user.email,
             },
             credential: {
-                signInMethod: "mock",
-                providerId: "mock",
-                toJSON: () => user
-            }
+                signInMethod: 'mock',
+                providerId: 'mock',
+                toJSON: () => user,
+            },
         };
     }
     else {
@@ -70,14 +71,14 @@ function setCurrentUser(user) {
         _currentUserCredential = user;
     }
     // It should notify all auth observers on `setCurrentUser` call method
-    getAuthObservers().map(o => o(_currentUserCredential.user));
+    getAuthObservers().map((o) => o(_currentUserCredential.user));
 }
 exports.setCurrentUser = setCurrentUser;
 /**
  * Returns the `IMockUser` record for the currently logged in user
  */
 function currentUser() {
-    return _currentUser ? _users.find(u => u.uid === _currentUser) : undefined;
+    return _currentUser ? _users.find((u) => u.uid === _currentUser) : undefined;
 }
 exports.currentUser = currentUser;
 /**
@@ -96,7 +97,7 @@ function clearCurrentUser() {
     _currentUser = undefined;
     _currentUserCredential = undefined;
     // It should notify all auth observers on `clearCurrentUser` call method
-    getAuthObservers().map(o => o(undefined));
+    getAuthObservers().map((o) => o(undefined));
 }
 exports.clearCurrentUser = clearCurrentUser;
 /**
@@ -122,21 +123,21 @@ function addUser(user) {
     const defaultUser = {
         uid: getRandomMockUid(),
         disabled: false,
-        emailVerified: false
+        emailVerified: false,
     };
     const fullUser = { ...defaultUser, ...user };
-    if (_users.find(u => u.uid === fullUser.uid)) {
+    if (_users.find((u) => u.uid === fullUser.uid)) {
         throw new FireMockError_1.FireMockError(`Attempt to add user with UID of "${fullUser.uid}" failed as the user already exists!`);
     }
     _users = _users.concat(fullUser);
 }
 exports.addUser = addUser;
 function getUserById(uid) {
-    return _users.find(u => u.uid === uid);
+    return _users.find((u) => u.uid === uid);
 }
 exports.getUserById = getUserById;
 function getUserByEmail(email) {
-    return _users.find(u => u.email === email);
+    return _users.find((u) => u.email === email);
 }
 exports.getUserByEmail = getUserByEmail;
 /**
@@ -152,16 +153,16 @@ exports.getUserByEmail = getUserByEmail;
 function convertToFirebaseUser(user) {
     return {
         ...user,
-        ...UserObject_1.clientApiUser
+        ...UserObject_1.clientApiUser,
     };
 }
 exports.convertToFirebaseUser = convertToFirebaseUser;
 function updateUser(uid, update) {
-    const existing = _users.find(u => u.uid === uid);
+    const existing = _users.find((u) => u.uid === uid);
     if (!existing) {
         throw new FireMockError_1.FireMockError(`Attempt to update the user with UID of "${uid}" failed because this user is not defined in the mock Auth instance!`);
     }
-    _users = _users.map(u => u.uid === uid ? { ...u, ...update } : u);
+    _users = _users.map((u) => u.uid === uid ? { ...u, ...update } : u);
 }
 exports.updateUser = updateUser;
 function allUsers() {
@@ -169,10 +170,10 @@ function allUsers() {
 }
 exports.allUsers = allUsers;
 function removeUser(uid) {
-    if (!_users.find(u => u.uid === uid)) {
+    if (!_users.find((u) => u.uid === uid)) {
         throw new FireMockError_1.FireMockError(`Attempt to remove the user with UID of "${uid}" failed because this user was NOT in the mock Auth instance!`);
     }
-    _users = _users.filter(u => u.uid !== uid);
+    _users = _users.filter((u) => u.uid !== uid);
 }
 exports.removeUser = removeUser;
 function authProviders() {
@@ -180,9 +181,7 @@ function authProviders() {
 }
 exports.authProviders = authProviders;
 function getRandomMockUid() {
-    return `mock-uid-${Math.random()
-        .toString(36)
-        .substr(2, 10)}`;
+    return `mock-uid-${Math.random().toString(36).substr(2, 10)}`;
 }
 exports.getRandomMockUid = getRandomMockUid;
 //# sourceMappingURL=store.js.map

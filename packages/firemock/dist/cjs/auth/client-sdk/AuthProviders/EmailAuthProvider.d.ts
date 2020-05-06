@@ -1,6 +1,6 @@
-declare type AuthCredential = import("@firebase/auth-types").AuthCredential;
-declare type EmailAuthProvider_Instance = import("@firebase/auth-types").EmailAuthProvider_Instance;
-declare type GoogleEmailAuthProvider = import("@firebase/auth-types").EmailAuthProvider;
+declare type AuthCredential = import('@firebase/auth-types').AuthCredential;
+declare type EmailAuthProvider_Instance = import('@firebase/auth-types').EmailAuthProvider_Instance;
+declare type GoogleEmailAuthProvider = import('@firebase/auth-types').EmailAuthProvider;
 /**
  * **EmailAuthProvider** API mocking. Details on the API can be found
  * here: https://firebase.google.com/docs/reference/js/firebase.auth.EmailAuthProvider

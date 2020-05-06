@@ -2,9 +2,9 @@ import {
   TwitterAuthProvider as GoogleTwitterAuthProvider,
   AuthCredential,
   TwitterAuthProvider_Instance,
-  AuthProvider
-} from "@firebase/auth-types";
-import { IDictionary } from "common-types";
+  AuthProvider,
+} from '@firebase/auth-types';
+import { IDictionary } from 'common-types';
 
 export class TwitterAuthProvider
   implements GoogleTwitterAuthProvider, TwitterAuthProvider_Instance {
@@ -15,14 +15,14 @@ export class TwitterAuthProvider
     idToken?: string | null,
     accessToken?: string | null
   ): AuthCredential {
-    throw new Error("not implemented");
+    throw new Error('not implemented');
   }
 
   public providerId: string;
   public addScope(scope: string): AuthProvider {
-    throw new Error("not implemented");
+    throw new Error('not implemented');
   }
   public setCustomParameters(params: IDictionary): AuthProvider {
-    throw new Error("not implemented");
+    throw new Error('not implemented');
   }
 }

@@ -1,7 +1,7 @@
-import get from "lodash.get";
-import { Reference } from "../rtdb/index";
-import { arrayToHash } from "typed-conversions";
-import { getKey, join } from "../shared/index";
+import get from 'lodash.get';
+import { Reference } from '../rtdb/index';
+import { arrayToHash } from 'typed-conversions';
+import { getKey, join } from '../shared/index';
 export class SnapShot {
     constructor(_key, _value) {
         this._key = _key;
@@ -24,19 +24,19 @@ export class SnapShot {
         return value ? new SnapShot(path, value) : null;
     }
     hasChild(path) {
-        if (typeof this._value === "object") {
+        if (typeof this._value === 'object') {
             return Object.keys(this._value).indexOf(path) !== -1;
         }
         return false;
     }
     hasChildren() {
-        if (typeof this._value === "object") {
+        if (typeof this._value === 'object') {
             return Object.keys(this._value).length > 0;
         }
         return false;
     }
     numChildren() {
-        if (typeof this._value === "object") {
+        if (typeof this._value === 'object') {
             return Object.keys(this._value).length;
         }
         return 0;

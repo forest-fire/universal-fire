@@ -16,7 +16,7 @@ const limitFilters = __importStar(require("./limitFilters"));
 const orderByKey = (list) => {
     const keys = Object.keys(list).sort();
     let hash = {};
-    keys.forEach(k => {
+    keys.forEach((k) => {
         hash[k] = list[k];
     });
     return hash;
@@ -30,7 +30,7 @@ const orderByValue = (list, direction = query_types_1.SortOrder.asc) => {
         return agg;
     }, {});
 };
-const sortFn = query => query.identity.orderBy === serialized_query_1.QueryOrderType.orderByChild
+const sortFn = (query) => query.identity.orderBy === serialized_query_1.QueryOrderType.orderByChild
     ? sortFns.orderByChild(query.identity.orderByKey)
     : sortFns[query.identity.orderBy];
 function runQuery(query, data) {
@@ -38,17 +38,17 @@ function runQuery(query, data) {
      * A boolean _flag_ to indicate whether the path is of the query points to a Dictionary
      * of Objects. This is indicative of a **Firemodel** list node.
      */
-    const isListOfObjects = typeof data === "object" &&
-        Object.keys(data).every(i => typeof data[i] === "object");
-    const dataIsAScalar = ["string", "boolean", "number"].includes(typeof data);
+    const isListOfObjects = typeof data === 'object' &&
+        Object.keys(data).every((i) => typeof data[i] === 'object');
+    const dataIsAScalar = ['string', 'boolean', 'number'].includes(typeof data);
     if (dataIsAScalar) {
         return data;
     }
-    const anArrayOfScalar = Array.isArray(data) && data.every(i => typeof i !== "object");
-    const dataIsAnObject = !Array.isArray(data) && typeof data === "object";
+    const anArrayOfScalar = Array.isArray(data) && data.every((i) => typeof i !== 'object');
+    const dataIsAnObject = !Array.isArray(data) && typeof data === 'object';
     if (dataIsAnObject && !isListOfObjects) {
         data =
-            query.identity.orderBy === "orderByKey"
+            query.identity.orderBy === 'orderByKey'
                 ? orderByKey(data)
                 : orderByValue(data);
         // allows non-array data that can come from a 'value' listener
@@ -59,7 +59,7 @@ function runQuery(query, data) {
                 ? Object.keys(data).slice(-1 * query.identity.limitToLast)
                 : false;
         if (limitToKeys) {
-            Object.keys(data).forEach(k => {
+            Object.keys(data).forEach((k) => {
                 if (!limitToKeys.includes(k)) {
                     delete data[k];
                 }
@@ -95,7 +95,7 @@ function runQuery(query, data) {
                     else {
                         console.log({
                             message: `Unsure what to do with part of a data structure resulting from the the query: ${query.identity}.\n\nThe item in question was: "${curr}".`,
-                            severity: 0
+                            severity: 0,
                         });
                     }
                     return agg;

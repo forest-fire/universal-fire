@@ -1,14 +1,14 @@
 // tslint:disable:no-implicit-dependencies
-import { pathJoin } from "common-types";
-import set from "lodash.set";
-import get from "lodash.get";
-import { key as fbKey } from "firebase-key";
-import { deepEqual } from "fast-equals";
-import copy from "fast-copy";
-import deepmerge from "deepmerge";
-import { auth as mockedAuth } from "../auth";
-import { join, getParent, getKey, dotifyKeys, dotify } from "../shared/index";
-import { getListeners, removeAllListeners, notify } from "../rtdb/index";
+import { pathJoin } from 'common-types';
+import set from 'lodash.set';
+import get from 'lodash.get';
+import { key as fbKey } from 'firebase-key';
+import { deepEqual } from 'fast-equals';
+import copy from 'fast-copy';
+import deepmerge from 'deepmerge';
+import { auth as mockedAuth } from '../auth';
+import { join, getParent, getKey, dotifyKeys, dotify } from '../shared/index';
+import { getListeners, removeAllListeners, notify } from '../rtdb/index';
 /**
  * The in-memory dictionary/hash mantained by the mock RTDB to represent
  * the state of the database
@@ -36,7 +36,7 @@ export function shouldSendEvents() {
 /** clears the DB without losing reference to DB object */
 export function clearDatabase() {
     const keys = Object.keys(db);
-    keys.forEach(key => delete db[key]);
+    keys.forEach((key) => delete db[key]);
 }
 /**
  * updates the state of the database based on a
@@ -59,8 +59,8 @@ export function getDb(path) {
 export function setDB(path, value, silent = false) {
     const dotPath = join(path);
     const oldRef = get(db, dotPath);
-    const oldValue = typeof oldRef === "object" ? { ...oldRef, ...{} } : oldRef;
-    const isReference = ["object", "array"].includes(typeof value);
+    const oldValue = typeof oldRef === 'object' ? { ...oldRef, ...{} } : oldRef;
+    const isReference = ['object', 'array'].includes(typeof value);
     const dbSnapshot = copy({ ...db });
     // ignore if no change
     if ((isReference && deepEqual(oldValue, value)) ||
@@ -69,7 +69,7 @@ export function setDB(path, value, silent = false) {
     }
     if (value === null) {
         const parentValue = get(db, getParent(dotPath));
-        if (typeof parentValue === "object") {
+        if (typeof parentValue === 'object') {
             delete parentValue[getKey(dotPath)];
             set(db, getParent(dotPath), parentValue);
         }
@@ -93,18 +93,18 @@ export function updateDB(path, value) {
     const dotPath = join(path);
     const oldValue = get(db, dotPath);
     let changed = true;
-    if (typeof value === "object" &&
-        Object.keys(value).every(k => (oldValue ? oldValue[k] : null) ===
+    if (typeof value === 'object' &&
+        Object.keys(value).every((k) => (oldValue ? oldValue[k] : null) ===
             value[k])) {
         changed = false;
     }
-    if (typeof value !== "object" && value === oldValue) {
+    if (typeof value !== 'object' && value === oldValue) {
         changed = false;
     }
     if (!changed) {
         return;
     }
-    const newValue = typeof oldValue === "object" ? { ...oldValue, ...value } : value;
+    const newValue = typeof oldValue === 'object' ? { ...oldValue, ...value } : value;
     setDB(dotPath, newValue);
 }
 /**
@@ -118,7 +118,7 @@ export function updateDB(path, value) {
  */
 export function multiPathUpdateDB(data) {
     const snapshot = copy(db);
-    Object.keys(data).map(key => {
+    Object.keys(data).map((key) => {
         const value = data[key];
         const path = key;
         if (get(db, path) !== value) {
@@ -129,8 +129,8 @@ export function multiPathUpdateDB(data) {
     notify(data, snapshot);
 }
 const slashify = (path) => {
-    const slashPath = path.replace(/\./g, "/");
-    return slashPath.slice(0, 1) === "/" ? slashPath.slice(1) : slashPath;
+    const slashPath = path.replace(/\./g, '/');
+    return slashPath.slice(0, 1) === '/' ? slashPath.slice(1) : slashPath;
 };
 /**
  * Will aggregate the data passed in to dictionary objects of paths
@@ -140,15 +140,15 @@ const slashify = (path) => {
 export function groupEventsByWatcher(data, dbSnapshot) {
     data = dotifyKeys(data);
     const getFromSnapshot = (path) => get(dbSnapshot, dotify(path));
-    const eventPaths = Object.keys(data).map(i => dotify(i));
+    const eventPaths = Object.keys(data).map((i) => dotify(i));
     const response = [];
     const relativePath = (full, partial) => {
-        return full.replace(partial, "");
+        return full.replace(partial, '');
     };
     const justKey = (obj) => (obj ? Object.keys(obj)[0] : null);
     const justValue = (obj) => justKey(obj) ? obj[justKey(obj)] : null;
-    getListeners().forEach(listener => {
-        const eventPathsUnderListener = eventPaths.filter(path => path.includes(dotify(listener.query.path)));
+    getListeners().forEach((listener) => {
+        const eventPathsUnderListener = eventPaths.filter((path) => path.includes(dotify(listener.query.path)));
         if (eventPathsUnderListener.length === 0) {
             // if there are no listeners then there's nothing to do
             return;
@@ -165,10 +165,10 @@ export function groupEventsByWatcher(data, dbSnapshot) {
             }
             return changes;
         }, {});
-        const key = listener.eventType === "value"
+        const key = listener.eventType === 'value'
             ? changeObject
                 ? justKey(changeObject)
-                : listener.query.path.split(".").pop()
+                : listener.query.path.split('.').pop()
             : dotify(pathJoin(slashify(listener.query.path), justKey(changeObject)));
         const newResponse = {
             listenerId: listener.id,
@@ -178,12 +178,12 @@ export function groupEventsByWatcher(data, dbSnapshot) {
             eventPaths: paths,
             key,
             changes: justValue(changeObject),
-            value: listener.eventType === "value"
+            value: listener.eventType === 'value'
                 ? getDb(listener.query.path)
                 : getDb(key),
-            priorValue: listener.eventType === "value"
+            priorValue: listener.eventType === 'value'
                 ? get(dbSnapshot, listener.query.path)
-                : justValue(get(dbSnapshot, listener.query.path))
+                : justValue(get(dbSnapshot, listener.query.path)),
         };
         response.push(newResponse);
     });
@@ -206,7 +206,7 @@ export function removeDB(path) {
 export function pushDB(path, value) {
     const pushId = fbKey();
     const fullPath = join(path, pushId);
-    const valuePlusId = typeof value === "object" ? { ...value, id: pushId } : value;
+    const valuePlusId = typeof value === 'object' ? { ...value, id: pushId } : value;
     setDB(fullPath, valuePlusId);
     return pushId;
 }

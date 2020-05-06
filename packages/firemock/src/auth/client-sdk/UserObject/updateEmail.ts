@@ -1,6 +1,6 @@
-import { FireMockError } from "../../../errors/FireMockError";
-import { updateUser, currentUser } from "../../state-mgmt";
-import { networkDelay } from "../../../shared/util";
+import { FireMockError } from '../../../errors/FireMockError';
+import { updateUser, currentUser } from '../../state-mgmt';
+import { networkDelay } from '../../../shared/util';
 
 /**
  * **updateEmail**
@@ -25,7 +25,7 @@ export async function updateEmail(
   if (forceLogin) {
     throw new FireMockError(
       "updating a user's email address requires that the user have recently logged in; use 'reauthenticateWithCredential' to address this error.",
-      "auth/requires-recent-login"
+      'auth/requires-recent-login'
     );
   }
   await networkDelay();

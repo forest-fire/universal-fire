@@ -1,7 +1,7 @@
-import { IRelationship, ISchema, SchemaCallback } from "../@types";
-import { Queue, SchemaHelper } from "../mocking/index";
-import { pluralize, addException } from "../shared";
-import { getFakerLibrary } from "./fakerInitialiation";
+import { IRelationship, ISchema, SchemaCallback } from '../@types';
+import { Queue, SchemaHelper } from '../mocking/index';
+import { pluralize, addException } from '../shared';
+import { getFakerLibrary } from './fakerInitialiation';
 
 /**
  * The property that exists on the source scheme as a FK reference
@@ -10,8 +10,8 @@ import { getFakerLibrary } from "./fakerInitialiation";
 export type SourceProperty = string;
 
 export class Schema<T = any> {
-  private _schemas = new Queue<ISchema>("schemas");
-  private _relationships = new Queue<IRelationship>("relationships");
+  private _schemas = new Queue<ISchema>('schemas');
+  private _relationships = new Queue<IRelationship>('relationships');
 
   constructor(public schemaId: string, mockFn?: SchemaCallback) {
     if (mockFn) {
@@ -32,9 +32,9 @@ export class Schema<T = any> {
           schema.prefix,
           schema.modelName
             ? pluralize(schema.modelName)
-            : pluralize(this.schemaId)
-        ].join("/");
-      }
+            : pluralize(this.schemaId),
+        ].join('/');
+      },
     });
 
     return this;
@@ -53,9 +53,9 @@ export class Schema<T = any> {
 
   /** prefixes a static path to the beginning of the  */
   public pathPrefix(prefix: string) {
-    prefix = prefix.replace(/\./g, "/"); // slash reference preferred over dot
+    prefix = prefix.replace(/\./g, '/'); // slash reference preferred over dot
     prefix =
-      prefix.slice(-1) === "/" ? prefix.slice(0, prefix.length - 1) : prefix;
+      prefix.slice(-1) === '/' ? prefix.slice(0, prefix.length - 1) : prefix;
 
     this._schemas.update(this.schemaId, { prefix });
 
@@ -81,10 +81,10 @@ export class Schema<T = any> {
    */
   public belongsTo(target: string, sourceProperty?: SourceProperty) {
     this._relationships.push({
-      type: "belongsTo",
+      type: 'belongsTo',
       source: this.schemaId,
       target,
-      sourceProperty: sourceProperty ? sourceProperty : `${target}Id`
+      sourceProperty: sourceProperty ? sourceProperty : `${target}Id`,
     });
 
     return this;
@@ -95,10 +95,10 @@ export class Schema<T = any> {
    */
   public hasMany(target: string, sourceProperty?: SourceProperty) {
     this._relationships.push({
-      type: "hasMany",
+      type: 'hasMany',
       source: this.schemaId,
       target,
-      sourceProperty: sourceProperty ? sourceProperty : pluralize(target)
+      sourceProperty: sourceProperty ? sourceProperty : pluralize(target),
     });
 
     return this;

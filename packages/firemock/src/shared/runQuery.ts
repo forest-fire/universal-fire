@@ -1,16 +1,17 @@
-import { SerializedQuery, QueryOrderType } from "serialized-query";
-import { hashToArray, arrayToHash } from "typed-conversions";
-import { IDictionary } from "common-types";
-import { SortOrder } from "../@types/query-types";
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { QueryOrderType } from 'serialized-query';
+import { hashToArray, arrayToHash } from 'typed-conversions';
+import { IDictionary } from 'common-types';
+import { SortOrder } from '../@types/query-types';
 
-import * as sortFns from "./sortFns";
-import * as queryFilters from "./queryFilters";
-import * as limitFilters from "./limitFilters";
+import * as sortFns from './sortFns';
+import * as queryFilters from './queryFilters';
+import * as limitFilters from './limitFilters';
 
 const orderByKey = (list: IDictionary) => {
   const keys = Object.keys(list).sort();
   let hash: IDictionary = {};
-  keys.forEach(k => {
+  keys.forEach((k) => {
     hash[k] = list[k];
   });
   return hash;
@@ -27,34 +28,34 @@ const orderByValue = (list: IDictionary, direction = SortOrder.asc) => {
   }, {} as IDictionary);
 };
 
-const sortFn: (query: any) => sortFns.ISortFns = query =>
+const sortFn: (query: any) => sortFns.ISortFns = (query) =>
   query.identity.orderBy === QueryOrderType.orderByChild
     ? sortFns.orderByChild(query.identity.orderByKey)
     : (sortFns[
         query.identity.orderBy as keyof typeof sortFns
       ] as sortFns.ISortFns);
 
-export function runQuery(query: SerializedQuery, data: any) {
+export function runQuery(query: SerializedRealTimeQuery, data: any) {
   /**
    * A boolean _flag_ to indicate whether the path is of the query points to a Dictionary
    * of Objects. This is indicative of a **Firemodel** list node.
    */
   const isListOfObjects =
-    typeof data === "object" &&
-    Object.keys(data).every(i => typeof data[i] === "object");
-  const dataIsAScalar = ["string", "boolean", "number"].includes(typeof data);
+    typeof data === 'object' &&
+    Object.keys(data).every((i) => typeof data[i] === 'object');
+  const dataIsAScalar = ['string', 'boolean', 'number'].includes(typeof data);
 
   if (dataIsAScalar) {
     return data;
   }
 
   const anArrayOfScalar =
-    Array.isArray(data) && data.every(i => typeof i !== "object");
-  const dataIsAnObject = !Array.isArray(data) && typeof data === "object";
+    Array.isArray(data) && data.every((i) => typeof i !== 'object');
+  const dataIsAnObject = !Array.isArray(data) && typeof data === 'object';
 
   if (dataIsAnObject && !isListOfObjects) {
     data =
-      query.identity.orderBy === "orderByKey"
+      query.identity.orderBy === 'orderByKey'
         ? orderByKey(data)
         : orderByValue(data);
     // allows non-array data that can come from a 'value' listener
@@ -66,7 +67,7 @@ export function runQuery(query: SerializedQuery, data: any) {
       : false;
 
     if (limitToKeys) {
-      Object.keys(data).forEach(k => {
+      Object.keys(data).forEach((k) => {
         if (!limitToKeys.includes(k)) {
           delete data[k];
         }
@@ -106,7 +107,7 @@ export function runQuery(query: SerializedQuery, data: any) {
         } else {
           console.log({
             message: `Unsure what to do with part of a data structure resulting from the the query: ${query.identity}.\n\nThe item in question was: "${curr}".`,
-            severity: 0
+            severity: 0,
           });
         }
 
@@ -115,7 +116,7 @@ export function runQuery(query: SerializedQuery, data: any) {
     : list;
 }
 
-function _limitFilter(query: SerializedQuery) {
+function _limitFilter(query: SerializedRealTimeQuery) {
   const first = limitFilters.limitToFirst(query);
   const last = limitFilters.limitToLast(query);
 
@@ -124,7 +125,7 @@ function _limitFilter(query: SerializedQuery) {
   };
 }
 
-function _queryFilter(query: SerializedQuery) {
+function _queryFilter(query: SerializedRealTimeQuery) {
   return (list: any[]) => {
     return list
       .filter(queryFilters.equalTo(query))

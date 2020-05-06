@@ -6,11 +6,9 @@ exports.users = {
     // https://firebase.google.com/docs/auth/admin/manage-users#create_a_user
     async createUser(properties) {
         state_mgmt_1.addUser({
-            password: Math.random()
-                .toString(36)
-                .substr(2, 10),
+            password: Math.random().toString(36).substr(2, 10),
             multiFactor: null,
-            ...properties
+            ...properties,
         });
         return {
             ...properties,
@@ -19,11 +17,11 @@ exports.users = {
                 creationTime: String(new Date()),
                 toJSON() {
                     return {};
-                }
+                },
             },
             multiFactor: null,
             toJSON: () => null,
-            providerData: null
+            providerData: null,
         };
     },
     /** Updates an existing user. */
@@ -45,6 +43,6 @@ exports.users = {
     async listUsers(maxResults, pageToken) {
         await shared_1.networkDelay();
         return { users: maxResults ? state_mgmt_1.allUsers().slice(0, maxResults) : state_mgmt_1.allUsers() };
-    }
+    },
 };
 //# sourceMappingURL=users.js.map

@@ -5,6 +5,6 @@ const implemented_1 = require("./implemented");
 // tslint:disable-next-line:no-object-literal-type-assertion
 exports.authMockApi = {
     ...notImplemented_1.notImplemented,
-    ...implemented_1.implemented
+    ...implemented_1.implemented,
 };
 //# sourceMappingURL=index.js.map

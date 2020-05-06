@@ -1,5 +1,5 @@
-import { IDictionary } from "common-types";
-import { DataSnapshot } from "@firebase/database-types";
+import { IDictionary } from 'common-types';
+import { DataSnapshot } from '@firebase/database-types';
 export declare function normalizeRef(r: string): string;
 export declare function parts(r: string): string[];
 /**
@@ -7,13 +7,13 @@ export declare function parts(r: string): string[];
  * which typically would represent the 'id'
  * of a list-node
  */
-export declare function leafNode(r: string): string | undefined;
+export declare function leafNode(r: string): string;
 export declare function getRandomInt(min: number, max: number): number;
 export declare function firstProp<T = IDictionary>(listOf: IDictionary<any>): any;
 export declare function lastProp<T = IDictionary>(listOf: IDictionary<any>): T;
 export declare function objectIndex(obj: IDictionary, index: number): any;
-export declare function firstKey<T = any>(listOf: IDictionary<T>): string | undefined;
-export declare function lastKey<T = any>(listOf: IDictionary<T>): string | undefined;
+export declare function firstKey<T = any>(listOf: IDictionary<T>): string;
+export declare function lastKey<T = any>(listOf: IDictionary<T>): string;
 export declare function removeKeys(obj: IDictionary, remove: string[]): IDictionary<any>;
 /**
  * Joins a set of paths together and converts into
@@ -27,15 +27,15 @@ export declare function orderedSnapToJS<T = any>(snap: DataSnapshot): IDictionar
  */
 export declare function keyAndParent(dotPath: string): {
     parent: string;
-    key: string | undefined;
+    key: string;
 };
 /** converts a '/' delimited path to a '.' delimited one */
-export declare function dotNotation(path: string): string | undefined;
+export declare function dotNotation(path: string): string;
 export declare function slashNotation(path: string): string;
 /** Get the parent DB path */
 export declare function getParent(dotPath: string): string;
 /** Get the Key from the end of a path string */
-export declare function getKey(dotPath: string): string | undefined;
+export declare function getKey(dotPath: string): string;
 /** named network delays */
 export declare enum Delays {
     random = "random",
@@ -47,4 +47,4 @@ export declare type DelayType = number | number[] | IDictionary<number> | Delays
 export declare function setNetworkDelay(value: IDictionary | number | number[] | Delays): void;
 export declare function networkDelay<T = any>(returnValue?: T): Promise<T>;
 export declare function stripLeadingDot(str: string): string;
-export declare function removeDots(str?: string): string | undefined;
+export declare function removeDots(str?: string): string;

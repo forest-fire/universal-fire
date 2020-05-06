@@ -1,19 +1,19 @@
-import { IDictionary } from "common-types";
-import * as fbKey from "firebase-key";
-import set from "lodash.set";
-import get from "lodash.get";
-import first from "lodash.first";
-import { IRelationship, ISchema, IQueue } from "../@types";
-import { getRandomInt, dotNotation, pluralize } from "../shared";
-import { Queue } from "../mocking/index";
-import { setDB, getDb } from "../rtdb";
+import { IDictionary } from 'common-types';
+import * as fbKey from 'firebase-key';
+import set from 'lodash.set';
+import get from 'lodash.get';
+import first from 'lodash.first';
+import { IRelationship, ISchema, IQueue } from '../@types';
+import { getRandomInt, dotNotation, pluralize } from '../shared';
+import { Queue } from '../mocking/index';
+import { setDB, getDb } from '../rtdb';
 
 export class Deployment {
   private schemaId: string;
   private queueId: string;
-  private _queue = new Queue<IQueue>("queue");
-  private _schemas = new Queue<ISchema>("schemas");
-  private _relationships = new Queue<IRelationship>("relationships");
+  private _queue = new Queue<IQueue>('queue');
+  private _schemas = new Queue<ISchema>('schemas');
+  private _relationships = new Queue<IRelationship>('relationships');
 
   /**
    * Queue a schema for deployment to the mock DB
@@ -38,7 +38,7 @@ export class Deployment {
         schema: schemaId,
         prefix: schema.prefix,
         quantity,
-        overrides
+        overrides,
       };
       this._queue.enqueue(newQueueItem);
     }
@@ -53,9 +53,9 @@ export class Deployment {
    */
   public quantifyHasMany(targetSchema: string, quantity: number) {
     const hasMany = this._relationships.filter(
-      r => r.type === "hasMany" && r.source === this.schemaId
+      (r) => r.type === 'hasMany' && r.source === this.schemaId
     );
-    const targetted = hasMany.filter(r => r.target === targetSchema);
+    const targetted = hasMany.filter((r) => r.target === targetSchema);
 
     if (hasMany.length === 0) {
       console.log(
@@ -70,8 +70,8 @@ export class Deployment {
       this._queue.update(this.queueId, {
         hasMany: {
           ...queue.hasMany,
-          ...{ [pluralize(targetSchema)]: quantity }
-        }
+          ...{ [pluralize(targetSchema)]: quantity },
+        },
       });
     }
 
@@ -86,8 +86,8 @@ export class Deployment {
     const schema = this._schemas.find(this.schemaId);
     const relationship = first(
       this._relationships
-        .filter(r => r.source === this.schemaId)
-        .filter(r => r.target === targetSchema)
+        .filter((r) => r.source === this.schemaId)
+        .filter((r) => r.target === targetSchema)
     );
 
     const sourceProperty = schema.path();
@@ -95,8 +95,8 @@ export class Deployment {
     this._queue.update(this.queueId, {
       belongsTo: {
         ...queue.belongsTo,
-        ...{ [`${targetSchema}Id`]: true }
-      }
+        ...{ [`${targetSchema}Id`]: true },
+      },
     });
 
     return this;
@@ -130,9 +130,9 @@ export class Deployment {
     const key = overrides.id || fbKey.key();
     const dbPath = dotNotation(path) + `.${key}`;
     const payload =
-      typeof mock === "object"
+      typeof mock === 'object'
         ? { ...mock, ...overrides }
-        : overrides && typeof overrides !== "object"
+        : overrides && typeof overrides !== 'object'
         ? overrides
         : mock;
 
@@ -144,16 +144,16 @@ export class Deployment {
 
   private insertRelationshipLinks(queue: IQueue) {
     const relationships = this._relationships.filter(
-      r => r.source === queue.schema
+      (r) => r.source === queue.schema
     );
-    const belongsTo = relationships.filter(r => r.type === "belongsTo");
-    const hasMany = relationships.filter(r => r.type === "hasMany");
+    const belongsTo = relationships.filter((r) => r.type === 'belongsTo');
+    const hasMany = relationships.filter((r) => r.type === 'hasMany');
     const db = getDb();
 
-    belongsTo.forEach(r => {
+    belongsTo.forEach((r) => {
       const fulfill =
         Object.keys(queue.belongsTo || {})
-          .filter(v => queue.belongsTo[v] === true)
+          .filter((v) => queue.belongsTo[v] === true)
           .indexOf(r.sourceProperty) !== -1;
       const source = this._schemas.find(r.source);
       const target = this._schemas.find(r.target);
@@ -177,19 +177,19 @@ export class Deployment {
               : this.insertMockIntoDB(r.target, {})
             : fbKey.key();
       } else {
-        getID = () => "";
+        getID = () => '';
       }
 
       const property = r.sourceProperty;
       const path = source.path();
       const recordList: IDictionary = get(db, dotNotation(source.path()), {});
 
-      Object.keys(recordList).forEach(key => {
+      Object.keys(recordList).forEach((key) => {
         set(db, `${dotNotation(source.path())}.${key}.${property}`, getID());
       });
     });
 
-    hasMany.forEach(r => {
+    hasMany.forEach((r) => {
       const fulfill =
         Object.keys(queue.hasMany || {}).indexOf(r.sourceProperty) !== -1;
       const howMany = fulfill ? queue.hasMany[r.sourceProperty] : 0;
@@ -217,7 +217,7 @@ export class Deployment {
 
         getID = () =>
           mockAvailable
-            ? choice(available.filter(a => used.indexOf(a) === -1))
+            ? choice(available.filter((a) => used.indexOf(a) === -1))
             : fbKey.key();
       } else {
         getID = () => undefined;
@@ -232,7 +232,7 @@ export class Deployment {
         {}
       );
 
-      Object.keys(sourceRecords).forEach(key => {
+      Object.keys(sourceRecords).forEach((key) => {
         for (let i = 1; i <= howMany; i++) {
           set(
             db,

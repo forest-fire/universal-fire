@@ -3,22 +3,22 @@ import {
   UserCredential,
   AuthCredential,
   User,
-  IPartialUserCredential
-} from "../../@types/auth-types";
-import { networkDelay } from "../../shared";
-import { completeUserCredential } from "./completeUserCredential";
-import { Omit } from "common-types";
-import { notImplemented } from "./notImplemented";
-import { ActionCodeSettings } from "@firebase/auth-types";
-import { FireMockError } from "../../errors/FireMockError";
+  IPartialUserCredential,
+} from '../../@types/auth-types';
+import { networkDelay } from '../../shared';
+import { completeUserCredential } from './completeUserCredential';
+import { Omit } from 'common-types';
+import { notImplemented } from './notImplemented';
+import { ActionCodeSettings } from '@firebase/auth-types';
+import { FireMockError } from '../../errors/FireMockError';
 import {
   emailExistsAsUserInAuth,
   emailHasCorrectPassword,
   emailVerified,
   userUid,
   emailValidationAllowed,
-  emailIsValidFormat
-} from "./authMockHelpers";
+  emailIsValidFormat,
+} from './authMockHelpers';
 import {
   addUser,
   allUsers,
@@ -27,18 +27,18 @@ import {
   clearCurrentUser,
   IAuthObserver,
   addAuthObserver,
-  getAnonymousUid
-} from "../state-mgmt";
-import { clientApiUser } from "./UserObject";
+  getAnonymousUid,
+} from '../state-mgmt';
+import { clientApiUser } from './UserObject';
 
 export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
   app: {
-    name: "mocked-app",
+    name: 'mocked-app',
     options: {},
     async delete() {
       return;
     },
-    automaticDataCollectionEnabled: false
+    automaticDataCollectionEnabled: false,
   },
   onAuthStateChanged(observer: IAuthObserver) {
     addAuthObserver(observer);
@@ -51,20 +51,20 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
   signInAnonymously: async (): Promise<UserCredential> => {
     await networkDelay();
 
-    if (authProviders().includes("anonymous")) {
+    if (authProviders().includes('anonymous')) {
       const user: User = {
         ...clientApiUser,
         isAnonymous: true,
-        uid: getAnonymousUid()
+        uid: getAnonymousUid(),
       };
       const credential: AuthCredential = {
-        signInMethod: "anonymous",
-        providerId: "anonymous",
-        toJSON: () => "" // recently added
+        signInMethod: 'anonymous',
+        providerId: 'anonymous',
+        toJSON: () => '', // recently added
       };
       const credentials = {
         user,
-        credential
+        credential,
       };
 
       const userCredential = completeUserCredential(credentials);
@@ -74,8 +74,8 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
       return userCredential;
     } else {
       throw new FireMockError(
-        "you must enable anonymous auth in the Firebase Console",
-        "auth/operation-not-allowed"
+        'you must enable anonymous auth in the Firebase Console',
+        'auth/operation-not-allowed'
       );
     }
   },
@@ -83,14 +83,14 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
     await networkDelay();
     if (!emailValidationAllowed()) {
       throw new FireMockError(
-        "email authentication not allowed",
-        "auth/operation-not-allowed"
+        'email authentication not allowed',
+        'auth/operation-not-allowed'
       );
     }
     if (!emailIsValidFormat(email)) {
-      throw new FireMockError(`invalid email: ${email}`, "auth/invalid-email");
+      throw new FireMockError(`invalid email: ${email}`, 'auth/invalid-email');
     }
-    const found = allUsers().find(i => i.email === email);
+    const found = allUsers().find((i) => i.email === email);
     if (!found) {
       throw new FireMockError(
         `The email "${email}" was not found`,
@@ -101,7 +101,7 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
     if (!emailHasCorrectPassword(email, password)) {
       throw new FireMockError(
         `Invalid password for ${email}`,
-        "auth/wrong-password"
+        'auth/wrong-password'
       );
     }
     const partial: IPartialUserCredential = {
@@ -110,15 +110,15 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
         isAnonymous: false,
         emailVerified: found.emailVerified,
         uid: userUid(email),
-        displayName: found.displayName
+        displayName: found.displayName,
       },
       credential: {
-        signInMethod: "signInWithEmailAndPassword",
-        providerId: ""
+        signInMethod: 'signInWithEmailAndPassword',
+        providerId: '',
       },
       additionalUserInfo: {
-        username: email
-      }
+        username: email,
+      },
     };
     const u = completeUserCredential(partial);
     setCurrentUser(u);
@@ -133,22 +133,22 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
     await networkDelay();
     if (!emailValidationAllowed()) {
       throw new FireMockError(
-        "email authentication not allowed",
-        "auth/operation-not-allowed"
+        'email authentication not allowed',
+        'auth/operation-not-allowed'
       );
     }
 
     if (emailExistsAsUserInAuth(email)) {
       throw new FireMockError(
         `"${email}" user already exists`,
-        "auth/email-already-in-use"
+        'auth/email-already-in-use'
       );
     }
 
     if (!emailIsValidFormat(email)) {
       throw new FireMockError(
         `"${email}" is not a valid email format`,
-        "auth/invalid-email"
+        'auth/invalid-email'
       );
     }
 
@@ -157,15 +157,15 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
         email,
         isAnonymous: false,
         emailVerified: false,
-        uid: userUid(email)
+        uid: userUid(email),
       },
       credential: {
-        signInMethod: "signInWithEmailAndPassword",
-        providerId: ""
+        signInMethod: 'signInWithEmailAndPassword',
+        providerId: '',
       },
       additionalUserInfo: {
-        username: email
-      }
+        username: email,
+      },
     };
     const u = completeUserCredential(partial);
     addUser({ uid: partial.user.uid, email, password });
@@ -192,11 +192,11 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
   get currentUser() {
     return completeUserCredential({}).user;
   },
-  languageCode: "",
+  languageCode: '',
   async updateCurrentUser() {
     return;
   },
   settings: {
-    appVerificationDisabledForTesting: false
-  }
+    appVerificationDisabledForTesting: false,
+  },
 };

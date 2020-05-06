@@ -1,12 +1,12 @@
-import { IDictionary } from "common-types";
-import get from "lodash.get";
+import { IDictionary } from 'common-types';
+import get from 'lodash.get';
 import {
   RtdbReference,
   RtdbDataSnapshot,
   RtdbThenableReference,
   RtdbEventType,
-  IFirebaseEventHandler
-} from "../@types/rtdb-types";
+  IFirebaseEventHandler,
+} from '../@types/rtdb-types';
 
 import {
   setDB,
@@ -16,38 +16,40 @@ import {
   multiPathUpdateDB,
   SnapShot,
   addListener,
-  Query
-} from "../rtdb/index";
+  Query,
+} from '../rtdb/index';
 import {
   parts,
   join,
   slashNotation,
   networkDelay,
-  DelayType
-} from "../shared/index";
-import { SerializedQuery } from "serialized-query";
-import { getDb } from "./store";
+  DelayType,
+} from '../shared/index';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { getDb } from './store';
 
 function isMultiPath(data: IDictionary) {
   Object.keys(data).map((d: any) => {
     if (!d) {
-      data[d] = "/";
+      data[d] = '/';
     }
   });
-  const indexesAreStrings = Object.keys(data).every(i => typeof i === "string");
+  const indexesAreStrings = Object.keys(data).every(
+    (i) => typeof i === 'string'
+  );
   const indexesLookLikeAPath = Object.keys(data).every(
-    i => i.indexOf("/") !== -1
+    (i) => i.indexOf('/') !== -1
   );
   return indexesAreStrings && indexesLookLikeAPath ? true : false;
 }
 
 export class Reference<T = any> extends Query<T> implements RtdbReference {
   public static createQuery(
-    query: string | SerializedQuery,
+    query: string | SerializedRealTimeQuery,
     delay: DelayType = 5
   ) {
-    if (typeof query === "string") {
-      query = new SerializedQuery(query);
+    if (typeof query === 'string') {
+      query = new SerializedRealTimeQuery(query);
     }
     const obj = new Reference(query.path, delay);
     obj._query = query;
@@ -62,25 +64,21 @@ export class Reference<T = any> extends Query<T> implements RtdbReference {
   }
 
   public get key(): string | null {
-    return this.path.split(".").pop();
+    return this.path.split('.').pop();
   }
 
   public get parent(): RtdbReference | null {
-    const r = parts(this.path)
-      .slice(-1)
-      .join(".");
+    const r = parts(this.path).slice(-1).join('.');
     return new Reference(r, getDb(r));
   }
 
   public child<C = any>(path: string): Reference {
-    const r = parts(this.path)
-      .concat([path])
-      .join(".");
+    const r = parts(this.path).concat([path]).join('.');
     return new Reference<C>(r, getDb(r));
   }
 
   public get root(): Reference {
-    return new Reference("/", getDb("/"));
+    return new Reference('/', getDb('/'));
   }
 
   public push(
@@ -157,7 +155,7 @@ export class Reference<T = any> extends Query<T> implements RtdbReference {
       snapshot: null,
       toJSON() {
         return {};
-      }
+      },
     });
   }
 
@@ -167,8 +165,8 @@ export class Reference<T = any> extends Query<T> implements RtdbReference {
 
   public toString() {
     return this.path
-      ? slashNotation(join("FireMock::Reference@", this.path, this.key))
-      : "FireMock::Reference@uninitialized (aka, no path) mock Reference object";
+      ? slashNotation(join('FireMock::Reference@', this.path, this.key))
+      : 'FireMock::Reference@uninitialized (aka, no path) mock Reference object';
   }
 
   protected getSnapshot<T extends RtdbDataSnapshot>(key: string, value: any) {
@@ -176,7 +174,7 @@ export class Reference<T = any> extends Query<T> implements RtdbReference {
   }
 
   protected addListener(
-    pathOrQuery: string | SerializedQuery<any>,
+    pathOrQuery: string | SerializedRealTimeQuery<any>,
     eventType: RtdbEventType,
     callback: IFirebaseEventHandler,
     cancelCallbackOrContext?: (err?: Error) => void,

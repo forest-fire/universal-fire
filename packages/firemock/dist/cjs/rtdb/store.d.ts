@@ -1,5 +1,5 @@
-import { IDictionary } from "common-types";
-import { IMockWatcherGroupEvent } from "../@types/rtdb-types";
+import { IDictionary } from 'common-types';
+import { IMockWatcherGroupEvent } from '../@types/rtdb-types';
 /**
  * silences the database from sending events;
  * this is not typically done but can be done

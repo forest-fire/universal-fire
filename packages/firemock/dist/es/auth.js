@@ -1,5 +1,5 @@
-import { networkDelay } from "./shared";
-import { implemented } from "./auth/client-sdk/implemented";
+import { networkDelay } from './shared';
+import { implemented } from './auth/client-sdk/implemented';
 let hasConnectedToAuthService = false;
 export const auth = async () => {
     if (hasConnectedToAuthService) {
@@ -11,6 +11,6 @@ export const auth = async () => {
 };
 // tslint:disable-next-line:no-object-literal-type-assertion
 export const authApi = {
-    ...implemented
+    ...implemented,
 };
 //# sourceMappingURL=auth.js.map

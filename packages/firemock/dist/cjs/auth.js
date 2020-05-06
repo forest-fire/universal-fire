@@ -13,6 +13,6 @@ exports.auth = async () => {
 };
 // tslint:disable-next-line:no-object-literal-type-assertion
 exports.authApi = {
-    ...implemented_1.implemented
+    ...implemented_1.implemented,
 };
 //# sourceMappingURL=auth.js.map

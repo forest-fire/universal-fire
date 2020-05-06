@@ -1,10 +1,10 @@
-import { IDictionary } from "common-types";
-import { RtdbReference, RtdbDataSnapshot, RtdbThenableReference, RtdbEventType, IFirebaseEventHandler } from "../@types/rtdb-types";
-import { SnapShot, Query } from "../rtdb/index";
-import { DelayType } from "../shared/index";
-import { SerializedQuery } from "serialized-query";
+import { IDictionary } from 'common-types';
+import { RtdbReference, RtdbDataSnapshot, RtdbThenableReference, RtdbEventType, IFirebaseEventHandler } from '../@types/rtdb-types';
+import { SnapShot, Query } from '../rtdb/index';
+import { DelayType } from '../shared/index';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 export declare class Reference<T = any> extends Query<T> implements RtdbReference {
-    static createQuery(query: string | SerializedQuery, delay?: DelayType): Reference<any>;
+    static createQuery(query: string | SerializedRealTimeQuery, delay?: DelayType): Reference<any>;
     static create(path: string): Reference<any>;
     constructor(path: string, _delay?: DelayType);
     get key(): string | null;
@@ -19,11 +19,11 @@ export declare class Reference<T = any> extends Query<T> implements RtdbReferenc
     setWithPriority(newVal: any, newPriority: string | number | null, onComplete: (a: Error | null) => any): Promise<void>;
     transaction(transactionUpdate: (a: Partial<T>) => Partial<T>, onComplete?: (a: Error | null, b: boolean, c: RtdbDataSnapshot | null) => any, applyLocally?: boolean): Promise<{
         committed: boolean;
-        snapshot: null;
+        snapshot: any;
         toJSON(): {};
     }>;
     onDisconnect(): any;
     toString(): string;
     protected getSnapshot<T extends RtdbDataSnapshot>(key: string, value: any): SnapShot<T>;
-    protected addListener(pathOrQuery: string | SerializedQuery<any>, eventType: RtdbEventType, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<RtdbDataSnapshot>;
+    protected addListener(pathOrQuery: string | SerializedRealTimeQuery<any>, eventType: RtdbEventType, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<RtdbDataSnapshot>;
 }

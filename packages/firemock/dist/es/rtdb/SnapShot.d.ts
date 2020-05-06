@@ -1,6 +1,6 @@
-import { IDictionary, SortingFunction } from "common-types";
-import { Reference } from "../rtdb/index";
-import { RtdbDataSnapshot } from "../@types/rtdb-types";
+import { IDictionary, SortingFunction } from 'common-types';
+import { Reference } from '../rtdb/index';
+import { RtdbDataSnapshot } from '../@types/rtdb-types';
 /**
  * Each record in the forEach iteration will be passed
  * a snapshot synchronously; if you wish to exit early
@@ -12,11 +12,11 @@ export declare class SnapShot<T = any> implements RtdbDataSnapshot {
     private _value;
     private _sortingFunction;
     constructor(_key: string, _value: T[] | T);
-    get key(): string | undefined;
+    get key(): string;
     get ref(): Reference<T>;
     val(): T | IDictionary<T>;
     toJSON(): string;
-    child<TC = IDictionary>(path: string): SnapShot<TC> | null;
+    child<TC = IDictionary>(path: string): SnapShot<TC>;
     hasChild(path: string): boolean;
     hasChildren(): boolean;
     numChildren(): number;

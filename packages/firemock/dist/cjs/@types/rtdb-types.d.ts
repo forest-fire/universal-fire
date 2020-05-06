@@ -1,12 +1,12 @@
-import { IDictionary } from "common-types";
-import { SerializedQuery } from "serialized-query";
-import { ISchemaHelper } from "./mocking-types";
-export declare type RtdbQuery = import("@firebase/database-types").Query;
-export declare type RtdbReference = import("@firebase/database-types").Reference;
-export declare type RtdbDataSnapshot = import("@firebase/database-types").DataSnapshot;
-export declare type RtdbThenableReference = import("@firebase/database-types").ThenableReference;
-export declare type RtdbEventType = import("@firebase/database-types").EventType;
-export declare type FirebaseDatabase = import("@firebase/database-types").FirebaseDatabase;
+import { IDictionary } from 'common-types';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { ISchemaHelper } from './mocking-types';
+export declare type RtdbQuery = import('@firebase/database-types').Query;
+export declare type RtdbReference = import('@firebase/database-types').Reference;
+export declare type RtdbDataSnapshot = import('@firebase/database-types').DataSnapshot;
+export declare type RtdbThenableReference = import('@firebase/database-types').ThenableReference;
+export declare type RtdbEventType = import('@firebase/database-types').EventType;
+export declare type FirebaseDatabase = import('@firebase/database-types').FirebaseDatabase;
 export interface ISchema {
     id: string;
     /** path to the database which is the root for given schema list */
@@ -24,7 +24,7 @@ export interface ISchema {
 export interface IRelationship {
     id: string;
     /** cardinality type */
-    type: "hasMany" | "belongsTo";
+    type: 'hasMany' | 'belongsTo';
     /** the source model */
     source: string;
     /**
@@ -57,7 +57,7 @@ export interface IMockWatcherGroupEvent {
     /** the path that the listener is listening at */
     listenerPath: string;
     /** the event which is being listened to */
-    listenerEvent: import("@firebase/database-types").EventType;
+    listenerEvent: import('@firebase/database-types').EventType;
     /** the dispatch function for this listener */
     callback: IFirebaseEventHandler;
     /** the path where the event took place */
@@ -97,7 +97,7 @@ export interface IListener {
     /** random string */
     id: string;
     /** the _query_ the listener is based off of */
-    query: SerializedQuery;
+    query: SerializedRealTimeQuery;
     eventType: RtdbEventType;
     callback: (a: RtdbDataSnapshot | null, b?: string) => any;
     cancelCallbackOrContext?: object | null;

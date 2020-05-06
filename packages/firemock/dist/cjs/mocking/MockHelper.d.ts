@@ -1,7 +1,7 @@
 /// <reference types="faker" />
-import { IDictionary } from "common-types";
+import { IDictionary } from 'common-types';
 export declare class MockHelper {
-    context?: IDictionary<any> | undefined;
-    constructor(context?: IDictionary<any> | undefined);
+    context?: IDictionary;
+    constructor(context?: IDictionary);
     get faker(): Faker.FakerStatic;
 }

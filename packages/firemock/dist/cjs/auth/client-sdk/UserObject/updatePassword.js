@@ -20,10 +20,10 @@ const state_mgmt_1 = require("../../state-mgmt");
  */
 async function updatePassword(newPassword, notRecentLogin) {
     if (notRecentLogin) {
-        throw new FireMockError_1.FireMockError("updating a user's password requires that the user have recently logged in; use 'reauthenticateWithCredential' to address this error.", "auth/required-recent-login");
+        throw new FireMockError_1.FireMockError("updating a user's password requires that the user have recently logged in; use 'reauthenticateWithCredential' to address this error.", 'auth/required-recent-login');
     }
     state_mgmt_1.updateUser(state_mgmt_1.currentUser().uid, {
-        password: newPassword
+        password: newPassword,
     });
 }
 exports.updatePassword = updatePassword;

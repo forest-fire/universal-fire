@@ -1,9 +1,9 @@
-import { IDictionary, SortingFunction } from "common-types";
-import get from "lodash.get";
-import { Reference } from "../rtdb/index";
-import { arrayToHash } from "typed-conversions";
-import { getKey, join } from "../shared/index";
-import { RtdbDataSnapshot } from "../@types/rtdb-types";
+import { IDictionary, SortingFunction } from 'common-types';
+import get from 'lodash.get';
+import { Reference } from '../rtdb/index';
+import { arrayToHash } from 'typed-conversions';
+import { getKey, join } from '../shared/index';
+import { RtdbDataSnapshot } from '../@types/rtdb-types';
 
 /**
  * Each record in the forEach iteration will be passed
@@ -38,7 +38,7 @@ export class SnapShot<T = any> implements RtdbDataSnapshot {
   }
 
   public hasChild(path: string): boolean {
-    if (typeof this._value === "object") {
+    if (typeof this._value === 'object') {
       return Object.keys(this._value).indexOf(path) !== -1;
     }
 
@@ -46,7 +46,7 @@ export class SnapShot<T = any> implements RtdbDataSnapshot {
   }
 
   public hasChildren(): boolean {
-    if (typeof this._value === "object") {
+    if (typeof this._value === 'object') {
       return Object.keys(this._value).length > 0;
     }
 
@@ -54,7 +54,7 @@ export class SnapShot<T = any> implements RtdbDataSnapshot {
   }
 
   public numChildren(): number {
-    if (typeof this._value === "object") {
+    if (typeof this._value === 'object') {
       return Object.keys(this._value).length;
     }
 

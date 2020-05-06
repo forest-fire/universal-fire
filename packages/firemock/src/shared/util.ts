@@ -1,17 +1,17 @@
-import first from "lodash.first";
-import last from "lodash.last";
-import { IDictionary, wait } from "common-types";
-import { DataSnapshot } from "@firebase/database-types";
+import first from 'lodash.first';
+import last from 'lodash.last';
+import { IDictionary, wait } from 'common-types';
+import { DataSnapshot } from '@firebase/database-types';
 
 export function normalizeRef(r: string): string {
-  r = r.replace("/", ".");
-  r = r.slice(0, 1) === "." ? r.slice(1) : r;
+  r = r.replace('/', '.');
+  r = r.slice(0, 1) === '.' ? r.slice(1) : r;
 
   return r;
 }
 
 export function parts(r: string) {
-  return normalizeRef(r).split(".");
+  return normalizeRef(r).split('.');
 }
 
 /**
@@ -63,17 +63,17 @@ export function removeKeys(obj: IDictionary, remove: string[]) {
  */
 export function join(...paths: string[]) {
   return paths
-    .map(p => {
-      return p.replace(/[\/\\]/gm, ".");
+    .map((p) => {
+      return p.replace(/[\/\\]/gm, '.');
     })
-    .map(p => (p.slice(-1) === "." ? p.slice(0, p.length - 1) : p))
-    .map(p => (p.slice(0, 1) === "." ? p.slice(1) : p))
-    .join(".");
+    .map((p) => (p.slice(-1) === '.' ? p.slice(0, p.length - 1) : p))
+    .map((p) => (p.slice(0, 1) === '.' ? p.slice(1) : p))
+    .join('.');
 }
 
 export function pathDiff(longPath: string, pathSubset: string) {
-  const subset = pathSubset.split(".");
-  const long = longPath.split(".");
+  const subset = pathSubset.split('.');
+  const long = longPath.split('.');
   if (
     subset.length > long.length ||
     JSON.stringify(long.slice(0, subset.length)) !== JSON.stringify(subset)
@@ -82,13 +82,13 @@ export function pathDiff(longPath: string, pathSubset: string) {
   }
 
   return long.length === subset.length
-    ? ""
-    : long.slice(subset.length - long.length).join(".");
+    ? ''
+    : long.slice(subset.length - long.length).join('.');
 }
 
 export function orderedSnapToJS<T = any>(snap: DataSnapshot) {
   const jsObject: IDictionary<T> = {};
-  snap.forEach(record => (jsObject[record.key] = record.val()));
+  snap.forEach((record) => (jsObject[record.key] = record.val()));
 
   return jsObject;
 }
@@ -97,20 +97,20 @@ export function orderedSnapToJS<T = any>(snap: DataSnapshot) {
  * Given a path, returns the parent path and child key
  */
 export function keyAndParent(dotPath: string) {
-  const sections = dotPath.split(".");
+  const sections = dotPath.split('.');
   const changeKey = sections.pop();
-  const parent = sections.join(".");
+  const parent = sections.join('.');
   return { parent, key: changeKey };
 }
 
 /** converts a '/' delimited path to a '.' delimited one */
 export function dotNotation(path: string) {
-  path = path.slice(0, 1) === "/" ? path.slice(1) : path;
-  return path ? path.replace(/\//g, ".") : undefined;
+  path = path.slice(0, 1) === '/' ? path.slice(1) : path;
+  return path ? path.replace(/\//g, '.') : undefined;
 }
 
 export function slashNotation(path: string) {
-  return path.replace(/\./g, "/");
+  return path.replace(/\./g, '/');
 }
 
 /** Get the parent DB path */
@@ -125,10 +125,10 @@ export function getKey(dotPath: string) {
 
 /** named network delays */
 export enum Delays {
-  random = "random",
-  weak = "weak-mobile",
-  mobile = "mobile",
-  WiFi = "WIFI"
+  random = 'random',
+  weak = 'weak-mobile',
+  mobile = 'mobile',
+  WiFi = 'WIFI',
 }
 export type DelayType = number | number[] | IDictionary<number> | Delays;
 let _delay: IDictionary | number | number[] | Delays = 5;
@@ -146,7 +146,7 @@ export async function networkDelay<T = any>(returnValue?: T): Promise<T> {
 
 function calcDelay(): number {
   const delay = _delay as IDictionary | number | number[] | Delays;
-  if (typeof delay === "number") {
+  if (typeof delay === 'number') {
     return delay;
   }
 
@@ -155,32 +155,32 @@ function calcDelay(): number {
     return getRandomInt(min, max);
   }
 
-  if (typeof delay === "object" && !Array.isArray(delay)) {
+  if (typeof delay === 'object' && !Array.isArray(delay)) {
     const { min, max } = delay;
     return getRandomInt(min, max);
   }
 
   // these numbers need some reviewing
-  if (delay === "random") {
+  if (delay === 'random') {
     return getRandomInt(10, 300);
   }
   // if (delay === "weak") {
   //   return getRandomInt(400, 900);
   // }
-  if (delay === "mobile") {
+  if (delay === 'mobile') {
     return getRandomInt(300, 500);
   }
-  if (delay === "WIFI") {
+  if (delay === 'WIFI') {
     return getRandomInt(10, 100);
   }
 
-  throw new Error("Delay property is of unknown format: " + delay);
+  throw new Error('Delay property is of unknown format: ' + delay);
 }
 
 export function stripLeadingDot(str: string) {
-  return str.slice(0, 1) === "." ? str.slice(1) : str;
+  return str.slice(0, 1) === '.' ? str.slice(1) : str;
 }
 
 export function removeDots(str?: string) {
-  return str ? str.replace(/\./g, "") : undefined;
+  return str ? str.replace(/\./g, '') : undefined;
 }

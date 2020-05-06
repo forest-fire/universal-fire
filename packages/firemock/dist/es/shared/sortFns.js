@@ -1,4 +1,4 @@
-import { QueryOrderType } from "serialized-query";
+import { QueryOrderType } from 'serialized-query';
 export const orderByChild = (child) => {
     return (a, b) => {
         return a[child] > b[child] ? -1 : a[child] === b[child] ? 0 : 1;

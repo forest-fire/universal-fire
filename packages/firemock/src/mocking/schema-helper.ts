@@ -1,4 +1,4 @@
-import { ISchemaHelper, FakerStatic } from "../@types/mocking-types";
+import { ISchemaHelper, FakerStatic } from '../@types/mocking-types';
 
 export class SchemaHelper<T = any> implements ISchemaHelper<T> {
   /**

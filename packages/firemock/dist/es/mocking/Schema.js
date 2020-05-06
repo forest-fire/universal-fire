@@ -1,11 +1,11 @@
-import { Queue, SchemaHelper } from "../mocking/index";
-import { pluralize, addException } from "../shared";
-import { getFakerLibrary } from "./fakerInitialiation";
+import { Queue, SchemaHelper } from '../mocking/index';
+import { pluralize, addException } from '../shared';
+import { getFakerLibrary } from './fakerInitialiation';
 export class Schema {
     constructor(schemaId, mockFn) {
         this.schemaId = schemaId;
-        this._schemas = new Queue("schemas");
-        this._relationships = new Queue("relationships");
+        this._schemas = new Queue('schemas');
+        this._relationships = new Queue('relationships');
         if (mockFn) {
             this.mock(mockFn);
         }
@@ -23,9 +23,9 @@ export class Schema {
                     schema.prefix,
                     schema.modelName
                         ? pluralize(schema.modelName)
-                        : pluralize(this.schemaId)
-                ].join("/");
-            }
+                        : pluralize(this.schemaId),
+                ].join('/');
+            },
         });
         return this;
     }
@@ -41,9 +41,9 @@ export class Schema {
     }
     /** prefixes a static path to the beginning of the  */
     pathPrefix(prefix) {
-        prefix = prefix.replace(/\./g, "/"); // slash reference preferred over dot
+        prefix = prefix.replace(/\./g, '/'); // slash reference preferred over dot
         prefix =
-            prefix.slice(-1) === "/" ? prefix.slice(0, prefix.length - 1) : prefix;
+            prefix.slice(-1) === '/' ? prefix.slice(0, prefix.length - 1) : prefix;
         this._schemas.update(this.schemaId, { prefix });
         return this;
     }
@@ -64,10 +64,10 @@ export class Schema {
      */
     belongsTo(target, sourceProperty) {
         this._relationships.push({
-            type: "belongsTo",
+            type: 'belongsTo',
             source: this.schemaId,
             target,
-            sourceProperty: sourceProperty ? sourceProperty : `${target}Id`
+            sourceProperty: sourceProperty ? sourceProperty : `${target}Id`,
         });
         return this;
     }
@@ -76,10 +76,10 @@ export class Schema {
      */
     hasMany(target, sourceProperty) {
         this._relationships.push({
-            type: "hasMany",
+            type: 'hasMany',
             source: this.schemaId,
             target,
-            sourceProperty: sourceProperty ? sourceProperty : pluralize(target)
+            sourceProperty: sourceProperty ? sourceProperty : pluralize(target),
         });
         return this;
     }

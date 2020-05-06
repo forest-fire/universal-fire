@@ -1,2 +1,2 @@
-import { FirebaseAuth } from "@firebase/auth-types";
+import { FirebaseAuth } from '@firebase/auth-types';
 export declare const authMockApi: FirebaseAuth;

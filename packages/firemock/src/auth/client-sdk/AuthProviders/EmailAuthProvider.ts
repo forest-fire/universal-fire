@@ -1,10 +1,10 @@
-type AuthCredential = import("@firebase/auth-types").AuthCredential;
-type EmailAuthProvider_Instance = import("@firebase/auth-types").EmailAuthProvider_Instance;
-type GoogleEmailAuthProvider = import("@firebase/auth-types").EmailAuthProvider;
+type AuthCredential = import('@firebase/auth-types').AuthCredential;
+type EmailAuthProvider_Instance = import('@firebase/auth-types').EmailAuthProvider_Instance;
+type GoogleEmailAuthProvider = import('@firebase/auth-types').EmailAuthProvider;
 
 const data = {
-  providerId: "mock-provider-id-for-EmailAuthProvider",
-  signInMethod: "email-and-password"
+  providerId: 'mock-provider-id-for-EmailAuthProvider',
+  signInMethod: 'email-and-password',
 };
 
 /**
@@ -26,7 +26,7 @@ export class EmailAuthProvider
       ...data,
       toJSON() {
         return JSON.stringify(data);
-      }
+      },
     };
   }
 
@@ -42,7 +42,7 @@ export class EmailAuthProvider
       ...data,
       toJSON() {
         return JSON.stringify(data);
-      }
+      },
     };
   }
 

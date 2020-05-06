@@ -2,22 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../rtdb/index");
 const index_2 = require("../shared/index");
-const serialized_query_1 = require("serialized-query");
+const serialized_query_1 = require("@forest-fire/serialized-query");
 const store_1 = require("./store");
 function isMultiPath(data) {
     Object.keys(data).map((d) => {
         if (!d) {
-            data[d] = "/";
+            data[d] = '/';
         }
     });
-    const indexesAreStrings = Object.keys(data).every(i => typeof i === "string");
-    const indexesLookLikeAPath = Object.keys(data).every(i => i.indexOf("/") !== -1);
+    const indexesAreStrings = Object.keys(data).every((i) => typeof i === 'string');
+    const indexesLookLikeAPath = Object.keys(data).every((i) => i.indexOf('/') !== -1);
     return indexesAreStrings && indexesLookLikeAPath ? true : false;
 }
 class Reference extends index_1.Query {
     static createQuery(query, delay = 5) {
-        if (typeof query === "string") {
-            query = new serialized_query_1.SerializedQuery(query);
+        if (typeof query === 'string') {
+            query = new serialized_query_1.SerializedRealTimeQuery(query);
         }
         const obj = new Reference(query.path, delay);
         obj._query = query;
@@ -30,22 +30,18 @@ class Reference extends index_1.Query {
         super(path, _delay);
     }
     get key() {
-        return this.path.split(".").pop();
+        return this.path.split('.').pop();
     }
     get parent() {
-        const r = index_2.parts(this.path)
-            .slice(-1)
-            .join(".");
+        const r = index_2.parts(this.path).slice(-1).join('.');
         return new Reference(r, store_1.getDb(r));
     }
     child(path) {
-        const r = index_2.parts(this.path)
-            .concat([path])
-            .join(".");
+        const r = index_2.parts(this.path).concat([path]).join('.');
         return new Reference(r, store_1.getDb(r));
     }
     get root() {
-        return new Reference("/", store_1.getDb("/"));
+        return new Reference('/', store_1.getDb('/'));
     }
     push(value, onComplete) {
         const id = index_1.pushDB(this.path, value);
@@ -94,7 +90,7 @@ class Reference extends index_1.Query {
             snapshot: null,
             toJSON() {
                 return {};
-            }
+            },
         });
     }
     onDisconnect() {
@@ -102,8 +98,8 @@ class Reference extends index_1.Query {
     }
     toString() {
         return this.path
-            ? index_2.slashNotation(index_2.join("FireMock::Reference@", this.path, this.key))
-            : "FireMock::Reference@uninitialized (aka, no path) mock Reference object";
+            ? index_2.slashNotation(index_2.join('FireMock::Reference@', this.path, this.key))
+            : 'FireMock::Reference@uninitialized (aka, no path) mock Reference object';
     }
     getSnapshot(key, value) {
         return new index_1.SnapShot(key, value);

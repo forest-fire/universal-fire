@@ -1,2 +1,2 @@
-export * from "./store";
+export * from './store';
 //# sourceMappingURL=index.js.map

@@ -14,6 +14,6 @@ exports.clientApiUser = {
     getIdTokenResult: getIdTokenResult_1.getIdTokenResult,
     updateEmail: updateEmail_1.updateEmail,
     updatePassword: updatePassword_1.updatePassword,
-    updateProfile: updateProfile_1.updateProfile
+    updateProfile: updateProfile_1.updateProfile,
 };
 //# sourceMappingURL=index.js.map

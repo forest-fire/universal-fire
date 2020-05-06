@@ -46,16 +46,16 @@ m.addSchema('appointment', (h) => () => {
   .belongsTo('customer');
 ```
 
-The example here shows the definition of "attributes" of each schema as well as establishing relationships that exist between schema entities. 
+The example here shows the definition of "attributes" of each schema as well as establishing relationships that exist between schema entities.
 
-In the examples above, the mocking function is inline and as a result the variable `h` is known to be of type `SchemaHelper` which provides the  convenience intellisense for both faker and chance API's. However, it's often nice to define the mocking function externally to the `addSchema` call, here's an example of how you might do that and continue to get intellisense: 
+In the examples above, the mocking function is inline and as a result the variable `h` is known to be of type `SchemaHelper` which provides the convenience intellisense for both faker and chance API's. However, it's often nice to define the mocking function externally to the `addSchema` call, here's an example of how you might do that and continue to get intellisense:
 
 ```ts
 import { Mock, SchemaCallback } from 'firemock';
 
 const personMock: SchemaCallback = (h) => () => ({
   name: h.faker.name.firstName + ' ' + h.faker.name.lastName,
-  age: h.faker.random.number( {min: 1, max: 80} )
+  age: h.faker.random.number({ min: 1, max: 80 }),
 });
 ```
 
@@ -71,7 +71,7 @@ export interface IPerson {
 
 const personMock: SchemaCallback<IPerson> = (h) => () => ({
   name: h.faker.name.firstName + ' ' + h.faker.name.lastName,
-  age: h.faker.random.number( {min: 1, max: 80} )
+  age: h.faker.random.number({ min: 1, max: 80 }),
 });
 ```
 
@@ -114,18 +114,17 @@ Now in the database we have not only 25 appointments but each appointment has a 
 
 Now, let's assume that we have another test we want to support with data but this test is more concerned with the `pet` entity. In all likelihood, in the real world, this test would have a completely separate mocking setup but for demonstration purposes let's assume we're going to create mocking data for both tests. Here's what we'd add to our deployment logic:
 
-````js
+```js
 m.queueSchema('appointment', 25)
   .fulfillBelongsTo('pet')
   .fulfillBelongsTo('customer');
 
-m.queueSchema('pet', 10)
-  .quantifyHasMany('appointment', 5);
+m.queueSchema('pet', 10).quantifyHasMany('appointment', 5);
 
 m.queueSchema('pet', 1, { name: 'Flopsy' });
 
 m.generate();
-````
+```
 
 This additional configuration has made a few notable changes:
 
@@ -136,16 +135,15 @@ This additional configuration has made a few notable changes:
 
 ### Database Path
 
-You may have noticed that in the examples so far when we generate a schema it gets placed into the mock database off the root of the database and its name is the plural version of: 
+You may have noticed that in the examples so far when we generate a schema it gets placed into the mock database off the root of the database and its name is the plural version of:
 
-  |   schema    | DB path       |
-  | :---------: | :------------ |
-  |  customer   | /customers    |
-  |     pet     | /pets         |
-  | appointment | /appointments |
+|   schema    | DB path       |
+| :---------: | :------------ |
+|  customer   | /customers    |
+|     pet     | /pets         |
+| appointment | /appointments |
 
 This default makes sense for a lot of situations but we will need some flexibilty to modify this for edge cases. This flexibility is provided in several forms:
-
 
 - **Base Offset**
 
@@ -159,7 +157,7 @@ This default makes sense for a lot of situations but we will need some flexibilt
 
   **firemock** has a simple pluralization engine which takes the singular name of your schema and pluralizes it. It does get it right more often than not but doesn't account for all exceptions so if you ever need to you can explicitly state the pluralization by:
 
-  ```js 
+  ```js
   m.addSchema('covfefe', mock).pluralName('absurdities');
   ```
 

@@ -14,29 +14,29 @@ function completeUserCredential(partial) {
     const fakeUserCredential = {
         user: {
             ...UserObject_1.clientApiUser,
-            displayName: "",
-            email: "",
+            displayName: '',
+            email: '',
             isAnonymous: true,
             metadata: {},
-            phoneNumber: "",
-            photoURL: "",
+            phoneNumber: '',
+            photoURL: '',
             providerData: [],
-            providerId: "",
-            refreshToken: "",
-            uid: state_mgmt_1.getRandomMockUid()
+            providerId: '',
+            refreshToken: '',
+            uid: state_mgmt_1.getRandomMockUid(),
         },
         additionalUserInfo: {
             isNewUser: false,
-            profile: "",
-            providerId: "",
-            username: "fake"
+            profile: '',
+            providerId: '',
+            username: 'fake',
         },
-        operationType: "",
+        operationType: '',
         credential: {
-            signInMethod: "fake",
-            providerId: "fake",
-            toJSON: () => "" // added recently
-        }
+            signInMethod: 'fake',
+            providerId: 'fake',
+            toJSON: () => '',
+        },
     };
     return deepmerge_1.default(fakeUserCredential, partial);
 }
@@ -45,6 +45,6 @@ exports.fakeApplicationVerifier = {
     async confirm(verificationCode) {
         return completeUserCredential({});
     },
-    verificationId: "verification"
+    verificationId: 'verification',
 };
 //# sourceMappingURL=completeUserCredential.js.map

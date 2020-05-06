@@ -1,6 +1,6 @@
-import { Mock, MockHelper } from "./index";
-import { FakerStatic } from "../@types";
-import { FireMockError } from "../errors/FireMockError";
+import { Mock, MockHelper } from './index';
+import { FakerStatic } from '../@types';
+import { FireMockError } from '../errors/FireMockError';
 
 let faker: FakerStatic;
 
@@ -14,7 +14,7 @@ let faker: FakerStatic;
  */
 export async function importFakerLibrary() {
   if (!faker) {
-    faker = await import(/* webpackChunkName: "faker-lib" */ "faker");
+    faker = await import(/* webpackChunkName: "faker-lib" */ 'faker');
   }
   return faker;
 }
@@ -27,7 +27,7 @@ export function getFakerLibrary() {
   if (!faker) {
     throw new FireMockError(
       `The faker library has not been loaded yet! Use the importFakerLibrary() directly to ensure this happens first;or altnernatively you can use Mock.prepare().`,
-      "not-ready"
+      'not-ready'
     );
   }
 

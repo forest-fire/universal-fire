@@ -8,12 +8,12 @@ const state_mgmt_1 = require("../state-mgmt");
 const UserObject_1 = require("./UserObject");
 exports.implemented = {
     app: {
-        name: "mocked-app",
+        name: 'mocked-app',
         options: {},
         async delete() {
             return;
         },
-        automaticDataCollectionEnabled: false
+        automaticDataCollectionEnabled: false,
     },
     onAuthStateChanged(observer) {
         state_mgmt_1.addAuthObserver(observer);
@@ -23,20 +23,20 @@ exports.implemented = {
     },
     signInAnonymously: async () => {
         await shared_1.networkDelay();
-        if (state_mgmt_1.authProviders().includes("anonymous")) {
+        if (state_mgmt_1.authProviders().includes('anonymous')) {
             const user = {
                 ...UserObject_1.clientApiUser,
                 isAnonymous: true,
-                uid: state_mgmt_1.getAnonymousUid()
+                uid: state_mgmt_1.getAnonymousUid(),
             };
             const credential = {
-                signInMethod: "anonymous",
-                providerId: "anonymous",
-                toJSON: () => "" // recently added
+                signInMethod: 'anonymous',
+                providerId: 'anonymous',
+                toJSON: () => '',
             };
             const credentials = {
                 user,
-                credential
+                credential,
             };
             const userCredential = completeUserCredential_1.completeUserCredential(credentials);
             state_mgmt_1.addUser(userCredential.user);
@@ -44,23 +44,23 @@ exports.implemented = {
             return userCredential;
         }
         else {
-            throw new FireMockError_1.FireMockError("you must enable anonymous auth in the Firebase Console", "auth/operation-not-allowed");
+            throw new FireMockError_1.FireMockError('you must enable anonymous auth in the Firebase Console', 'auth/operation-not-allowed');
         }
     },
     async signInWithEmailAndPassword(email, password) {
         await shared_1.networkDelay();
         if (!authMockHelpers_1.emailValidationAllowed()) {
-            throw new FireMockError_1.FireMockError("email authentication not allowed", "auth/operation-not-allowed");
+            throw new FireMockError_1.FireMockError('email authentication not allowed', 'auth/operation-not-allowed');
         }
         if (!authMockHelpers_1.emailIsValidFormat(email)) {
-            throw new FireMockError_1.FireMockError(`invalid email: ${email}`, "auth/invalid-email");
+            throw new FireMockError_1.FireMockError(`invalid email: ${email}`, 'auth/invalid-email');
         }
-        const found = state_mgmt_1.allUsers().find(i => i.email === email);
+        const found = state_mgmt_1.allUsers().find((i) => i.email === email);
         if (!found) {
             throw new FireMockError_1.FireMockError(`The email "${email}" was not found`, `auth/user-not-found`);
         }
         if (!authMockHelpers_1.emailHasCorrectPassword(email, password)) {
-            throw new FireMockError_1.FireMockError(`Invalid password for ${email}`, "auth/wrong-password");
+            throw new FireMockError_1.FireMockError(`Invalid password for ${email}`, 'auth/wrong-password');
         }
         const partial = {
             user: {
@@ -68,15 +68,15 @@ exports.implemented = {
                 isAnonymous: false,
                 emailVerified: found.emailVerified,
                 uid: authMockHelpers_1.userUid(email),
-                displayName: found.displayName
+                displayName: found.displayName,
             },
             credential: {
-                signInMethod: "signInWithEmailAndPassword",
-                providerId: ""
+                signInMethod: 'signInWithEmailAndPassword',
+                providerId: '',
             },
             additionalUserInfo: {
-                username: email
-            }
+                username: email,
+            },
         };
         const u = completeUserCredential_1.completeUserCredential(partial);
         state_mgmt_1.setCurrentUser(u);
@@ -88,28 +88,28 @@ exports.implemented = {
     async createUserWithEmailAndPassword(email, password) {
         await shared_1.networkDelay();
         if (!authMockHelpers_1.emailValidationAllowed()) {
-            throw new FireMockError_1.FireMockError("email authentication not allowed", "auth/operation-not-allowed");
+            throw new FireMockError_1.FireMockError('email authentication not allowed', 'auth/operation-not-allowed');
         }
         if (authMockHelpers_1.emailExistsAsUserInAuth(email)) {
-            throw new FireMockError_1.FireMockError(`"${email}" user already exists`, "auth/email-already-in-use");
+            throw new FireMockError_1.FireMockError(`"${email}" user already exists`, 'auth/email-already-in-use');
         }
         if (!authMockHelpers_1.emailIsValidFormat(email)) {
-            throw new FireMockError_1.FireMockError(`"${email}" is not a valid email format`, "auth/invalid-email");
+            throw new FireMockError_1.FireMockError(`"${email}" is not a valid email format`, 'auth/invalid-email');
         }
         const partial = {
             user: {
                 email,
                 isAnonymous: false,
                 emailVerified: false,
-                uid: authMockHelpers_1.userUid(email)
+                uid: authMockHelpers_1.userUid(email),
             },
             credential: {
-                signInMethod: "signInWithEmailAndPassword",
-                providerId: ""
+                signInMethod: 'signInWithEmailAndPassword',
+                providerId: '',
             },
             additionalUserInfo: {
-                username: email
-            }
+                username: email,
+            },
         };
         const u = completeUserCredential_1.completeUserCredential(partial);
         state_mgmt_1.addUser({ uid: partial.user.uid, email, password });
@@ -128,12 +128,12 @@ exports.implemented = {
     get currentUser() {
         return completeUserCredential_1.completeUserCredential({}).user;
     },
-    languageCode: "",
+    languageCode: '',
     async updateCurrentUser() {
         return;
     },
     settings: {
-        appVerificationDisabledForTesting: false
-    }
+        appVerificationDisabledForTesting: false,
+    },
 };
 //# sourceMappingURL=implemented.js.map
