@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import { SerializedQuery } from 'serialized-query';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IFirebaseListener, IMockLoadingState, IClientEmitter, IAdminEmitter, IRealTimeDb, IFirebaseWatchHandler, IFirebaseConnectionCallback } from './index';
 import { IRtdbDatabase, IDatabaseConfig, IClientApp, IAdminApp, IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IMockConfigOptions } from '@forest-fire/types';
@@ -38,7 +38,6 @@ export declare abstract class RealTimeDb extends AbstractedDatabase implements I
     protected _onConnected: IFirebaseListener[];
     protected _onDisconnected: IFirebaseListener[];
     protected _config: IDatabaseConfig;
-    protected abstract _auth?: any;
     protected get database(): IRtdbDatabase;
     protected set database(value: IRtdbDatabase);
     /**
@@ -50,14 +49,14 @@ export declare abstract class RealTimeDb extends AbstractedDatabase implements I
      * @param events an event type or an array of event types (e.g., "value", "child_added")
      * @param cb the callback function to call when event triggered
      */
-    watch(target: string | SerializedQuery<any>, events: IRtdbEventType | IRtdbEventType[], cb: IFirebaseWatchHandler): void;
+    watch(target: string | SerializedRealTimeQuery, events: IRtdbEventType | IRtdbEventType[], cb: IFirebaseWatchHandler): void;
     unWatch(events?: IRtdbEventType | IRtdbEventType[], cb?: any): void;
     /**
      * Get a Firebase SerializedQuery reference
      *
      * @param path path for query
      */
-    query<T extends object = any>(path: string): SerializedQuery<T>;
+    query<T extends object = any>(path: string): SerializedRealTimeQuery<T>;
     /** Get a DB reference for a given path in Firebase */
     ref(path?: string): IRtdbReference;
     /**
@@ -142,7 +141,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase implements I
      *
      * returns the Firebase snapshot at a given path in the database
      */
-    getSnapshot<T = any>(path: string | SerializedQuery<T>): Promise<IRtdbDataSnapshot>;
+    getSnapshot<T = any>(path: string | SerializedRealTimeQuery<T>): Promise<IRtdbDataSnapshot>;
     /**
      * **getValue**
      *
@@ -158,7 +157,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase implements I
      * and converts it to a JS object where the snapshot's key
      * is included as part of the record (as `id` by default)
      */
-    getRecord<T = any>(path: string | SerializedQuery<T>, idProp?: string): Promise<T>;
+    getRecord<T = any>(path: string | SerializedRealTimeQuery<T>, idProp?: string): Promise<T>;
     /**
      * **getList**
      *
@@ -169,7 +168,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase implements I
      * @param path the path in the database to
      * @param idProp
      */
-    getList<T = any>(path: string | SerializedQuery<T>, idProp?: string): Promise<T[]>;
+    getList<T = any>(path: string | SerializedRealTimeQuery, idProp?: string): Promise<T[]>;
     /**
      * **getSortedList**
      *

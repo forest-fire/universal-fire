@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const convert = require("typed-conversions");
-const serialized_query_1 = require("serialized-query");
+const serialized_query_1 = require("@forest-fire/serialized-query");
 const abstracted_database_1 = require("@forest-fire/abstracted-database");
 const index_1 = require("./index");
 const utility_1 = require("@forest-fire/utility");
@@ -67,19 +67,16 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
             events = [events];
         }
         try {
-            events.map(evt => {
+            events.map((evt) => {
                 const dispatch = index_1.WatcherEventWrapper({
                     eventType: evt,
-                    targetType: 'path'
+                    targetType: 'path',
                 })(cb);
                 if (typeof target === 'string') {
                     this.ref(utility_1.slashNotation(target)).on(evt, dispatch);
                 }
                 else {
-                    target
-                        .setDB(this)
-                        .deserialize(this)
-                        .on(evt, dispatch);
+                    target.setDB(this).deserialize(this).on(evt, dispatch);
                 }
             });
         }
@@ -97,7 +94,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
                 this.ref().off();
                 return;
             }
-            events.map(evt => {
+            events.map((evt) => {
                 if (cb) {
                     this.ref().off(evt, cb);
                 }
@@ -118,7 +115,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
      * @param path path for query
      */
     query(path) {
-        return serialized_query_1.SerializedQuery.path(path);
+        return serialized_query_1.SerializedRealTimeQuery.path(path);
     }
     /** Get a DB reference for a given path in Firebase */
     ref(path = '/') {
@@ -141,12 +138,10 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
      */
     ctx) {
         if (!id) {
-            id = Math.random()
-                .toString(36)
-                .substr(2, 10);
+            id = Math.random().toString(36).substr(2, 10);
         }
         else {
-            if (this._onConnected.map(i => i.id).includes(id)) {
+            if (this._onConnected.map((i) => i.id).includes(id)) {
                 throw new index_1.RealTimeDbError(`Request for onConnect() notifications was done with an explicit key [ ${id} ] which is already in use!`, `duplicate-listener`);
             }
         }
@@ -157,7 +152,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
      * removes a callback notification previously registered
      */
     removeNotificationOnConnection(id) {
-        this._onConnected = this._onConnected.filter(i => i.id !== id);
+        this._onConnected = this._onConnected.filter((i) => i.id !== id);
         return this;
     }
     /** set a "value" in the database at a given path */
@@ -357,7 +352,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
      */
     async getSortedList(query, idProp = 'id') {
         try {
-            return this.getSnapshot(query).then(snap => {
+            return this.getSnapshot(query).then((snap) => {
                 return convert.snapshotToArray(snap, idProp);
             });
         }
@@ -397,7 +392,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
      * Validates the existance of a path in the database
      */
     async exists(path) {
-        return this.getSnapshot(path).then(snap => (snap.val() ? true : false));
+        return this.getSnapshot(path).then((snap) => (snap.val() ? true : false));
     }
     /**
      * Sets up an emitter based listener for database connection
@@ -407,10 +402,10 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
     _setupConnectionListener() {
         this._eventManager.on('connection', (isConnected) => {
             if (isConnected) {
-                this._onConnected.forEach(listener => listener.cb(this, listener.ctx || {}));
+                this._onConnected.forEach((listener) => listener.cb(this, listener.ctx || {}));
             }
             else {
-                this._onDisconnected.forEach(listener => {
+                this._onDisconnected.forEach((listener) => {
                     listener.cb(this, listener.ctx || {});
                 });
             }

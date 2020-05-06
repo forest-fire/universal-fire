@@ -1,6 +1,6 @@
 import { IDictionary } from 'common-types';
 import * as convert from 'typed-conversions';
-import { SerializedQuery } from 'serialized-query';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import {
   IFirebaseListener,
@@ -15,7 +15,7 @@ import {
   RealTimeDbError,
   IRealTimeDb,
   IFirebaseWatchHandler,
-  IFirebaseConnectionCallback
+  IFirebaseConnectionCallback,
 } from './index';
 import {
   IRtdbDatabase,
@@ -25,7 +25,7 @@ import {
   IRtdbEventType,
   IRtdbReference,
   IRtdbDataSnapshot,
-  IMockConfigOptions
+  IMockConfigOptions,
 } from '@forest-fire/types';
 import { slashNotation } from '@forest-fire/utility';
 
@@ -89,7 +89,6 @@ export abstract class RealTimeDb extends AbstractedDatabase
   protected _onConnected: IFirebaseListener[] = [];
   protected _onDisconnected: IFirebaseListener[] = [];
   protected _config: IDatabaseConfig;
-  protected abstract _auth?: any;
 
   protected get database(): IRtdbDatabase {
     if (!this._database) {
@@ -115,7 +114,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * @param cb the callback function to call when event triggered
    */
   public watch(
-    target: string | SerializedQuery<any>,
+    target: string | SerializedRealTimeQuery,
     events: IRtdbEventType | IRtdbEventType[],
     cb: IFirebaseWatchHandler
   ) {
@@ -124,19 +123,16 @@ export abstract class RealTimeDb extends AbstractedDatabase
     }
 
     try {
-      events.map(evt => {
+      events.map((evt) => {
         const dispatch = WatcherEventWrapper({
           eventType: evt,
-          targetType: 'path'
+          targetType: 'path',
         })(cb);
 
         if (typeof target === 'string') {
           this.ref(slashNotation(target)).on(evt, dispatch);
         } else {
-          target
-            .setDB(this)
-            .deserialize(this)
-            .on(evt, dispatch);
+          target.setDB(this).deserialize(this).on(evt, dispatch);
         }
       });
     } catch (e) {
@@ -156,7 +152,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
         this.ref().off();
         return;
       }
-      events.map(evt => {
+      events.map((evt) => {
         if (cb) {
           this.ref().off(evt, cb);
         } else {
@@ -176,7 +172,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * @param path path for query
    */
   public query<T extends object = any>(path: string) {
-    return SerializedQuery.path<T>(path);
+    return SerializedRealTimeQuery.path<T>(path);
   }
 
   /** Get a DB reference for a given path in Firebase */
@@ -204,11 +200,9 @@ export abstract class RealTimeDb extends AbstractedDatabase
     ctx?: IDictionary
   ): string {
     if (!id) {
-      id = Math.random()
-        .toString(36)
-        .substr(2, 10);
+      id = Math.random().toString(36).substr(2, 10);
     } else {
-      if (this._onConnected.map(i => i.id).includes(id)) {
+      if (this._onConnected.map((i) => i.id).includes(id)) {
         throw new RealTimeDbError(
           `Request for onConnect() notifications was done with an explicit key [ ${id} ] which is already in use!`,
           `duplicate-listener`
@@ -224,7 +218,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * removes a callback notification previously registered
    */
   public removeNotificationOnConnection(id: string) {
-    this._onConnected = this._onConnected.filter(i => i.id !== id);
+    this._onConnected = this._onConnected.filter((i) => i.id !== id);
 
     return this;
   }
@@ -377,12 +371,12 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * returns the Firebase snapshot at a given path in the database
    */
   public async getSnapshot<T = any>(
-    path: string | SerializedQuery<T>
+    path: string | SerializedRealTimeQuery<T>
   ): Promise<IRtdbDataSnapshot> {
     try {
       const response = await (typeof path === 'string'
         ? this.ref(slashNotation(path as string)).once('value')
-        : (path as SerializedQuery<T>).setDB(this).execute());
+        : (path as SerializedRealTimeQuery<T>).setDB(this).execute());
       return response;
     } catch (e) {
       console.warn(
@@ -418,7 +412,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * is included as part of the record (as `id` by default)
    */
   public async getRecord<T = any>(
-    path: string | SerializedQuery<T>,
+    path: string | SerializedRealTimeQuery<T>,
     idProp = 'id'
   ): Promise<T> {
     try {
@@ -445,7 +439,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * @param idProp
    */
   public async getList<T = any>(
-    path: string | SerializedQuery<T>,
+    path: string | SerializedRealTimeQuery,
     idProp = 'id'
   ): Promise<T[]> {
     try {
@@ -469,7 +463,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    */
   public async getSortedList<T = any>(query: any, idProp = 'id'): Promise<T[]> {
     try {
-      return this.getSnapshot(query).then(snap => {
+      return this.getSnapshot(query).then((snap) => {
         return convert.snapshotToArray<T>(snap, idProp);
       });
     } catch (e) {
@@ -515,7 +509,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * Validates the existance of a path in the database
    */
   public async exists(path: string): Promise<boolean> {
-    return this.getSnapshot(path).then(snap => (snap.val() ? true : false));
+    return this.getSnapshot(path).then((snap) => (snap.val() ? true : false));
   }
 
   /**
@@ -526,11 +520,11 @@ export abstract class RealTimeDb extends AbstractedDatabase
   protected _setupConnectionListener() {
     this._eventManager.on('connection', (isConnected: boolean) => {
       if (isConnected) {
-        this._onConnected.forEach(listener =>
+        this._onConnected.forEach((listener) =>
           listener.cb(this, listener.ctx || {})
         );
       } else {
-        this._onDisconnected.forEach(listener => {
+        this._onDisconnected.forEach((listener) => {
           listener.cb(this, listener.ctx || {});
         });
       }
