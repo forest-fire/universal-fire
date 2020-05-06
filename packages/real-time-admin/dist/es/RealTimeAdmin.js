@@ -17,7 +17,9 @@ export class RealTimeAdmin extends RealTimeDb {
         this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
         if (!config) {
             config = {
+                // @ts-ignore
                 serviceAccount: extractServiceAccount(config),
+                // @ts-ignore
                 databaseURL: extractDataUrl(config)
             };
         }

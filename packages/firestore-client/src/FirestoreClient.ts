@@ -24,7 +24,7 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
     return obj;
   }
 
-  protected _auth: IClientAuth | undefined;
+  protected _auth?: IClientAuth;
   protected _config: IClientConfig | IMockConfig;
   protected _isAdminApi = false;
 

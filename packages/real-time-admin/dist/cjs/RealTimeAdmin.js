@@ -26,7 +26,9 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
         this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
         if (!config) {
             config = {
+                // @ts-ignore
                 serviceAccount: utility_1.extractServiceAccount(config),
+                // @ts-ignore
                 databaseURL: utility_1.extractDataUrl(config)
             };
         }

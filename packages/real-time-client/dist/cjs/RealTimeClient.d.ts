@@ -17,7 +17,7 @@ export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb {
     protected _isAdminApi: boolean;
     protected _eventManager: EventManager;
     protected _database?: IRtdbDatabase;
-    protected _auth: IClientAuth;
+    protected _auth?: IClientAuth;
     protected _config: IClientConfig | IMockConfig;
     protected _fbClass: IClientApp | (IClientApp & {
         auth: () => IClientApp['auth'];

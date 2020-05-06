@@ -52,7 +52,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
   protected _isAdminApi = false;
   protected _eventManager: EventManager;
   protected _database?: IRtdbDatabase;
-  protected _auth: IClientAuth;
+  protected _auth?: IClientAuth;
   protected _config: IClientConfig | IMockConfig;
   protected _fbClass:
     | IClientApp

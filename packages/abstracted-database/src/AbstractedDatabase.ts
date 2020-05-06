@@ -29,7 +29,7 @@ export abstract class AbstractedDatabase {
   /**
    * The Firebase App API.
    */
-  protected _app: IClientApp | IAdminApp | undefined;
+  protected _app?: IClientApp | IAdminApp;
   /**
    * The database API provided by Firebase (admin or client sdk of either
    * Firestore or RTDB)
@@ -44,7 +44,7 @@ export abstract class AbstractedDatabase {
   /**
    * The auth API.
    */
-  protected abstract _auth: IAdminAuth | IClientAuth | undefined;
+  protected abstract _auth?: IAdminAuth | IClientAuth
   /**
    * Returns the `_app`.
    */
