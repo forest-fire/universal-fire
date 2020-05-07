@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/firestore-db",
-  "version": "0.7.0",
+  "version": "0.9.0",
   "description": "",
   "main": "dist/cjs",
   "module": "dist/es",
