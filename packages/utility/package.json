@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/utility",
-  "version": "0.1.0",
+  "version": "0.40.2",
   "description": "Utility functions that are shared across the monorepo",
   "main": "dist/cjs",
   "module": "dist/es",
@@ -26,6 +26,8 @@
     "common-types": "^1.14.3",
     "is-gzip": "^2.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@forest-fire/types": "^0.40.1"
+  },
   "license": "MIT"
 }

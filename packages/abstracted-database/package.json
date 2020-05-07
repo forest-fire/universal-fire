@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/abstracted-database",
-  "version": "0.8.0",
+  "version": "0.40.1",
   "description": "",
   "main": "dist/cjs",
   "module": "dist/es",
@@ -21,6 +21,13 @@
     "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files src src/**/*.ts",
     "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*.spec.ts",
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
+  },
+  "dependencies": {
+    "@forest-fire/utility": "^0.40.2"
+  },
+  "devDependencies": {
+    "@forest-fire/serialized-query": "^0.40.1",
+    "@forest-fire/types": "^0.40.1"
   },
   "license": "MIT"
 }
