@@ -22,14 +22,5 @@
     "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*.spec.ts",
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
-  "devDependencies": {
-    "@firebase/app-types": "^0.6.0",
-    "@firebase/auth-types": "^0.10.0",
-    "@firebase/database-types": "^0.4.14",
-    "@firebase/firestore-types": "^1.10.1"
-  },
-  "dependencies": {
-    "firemock": "^0.38.7"
-  },
   "license": "MIT"
 }
