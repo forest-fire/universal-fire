@@ -23,8 +23,5 @@
     "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*.spec.ts",
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
-  "devDependencies": {
-    "@firebase/firestore-types": "^1.10.1"
-  },
   "license": "MIT"
 }
