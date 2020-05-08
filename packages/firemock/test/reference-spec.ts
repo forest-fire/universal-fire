@@ -16,7 +16,7 @@ import {
 import * as convert from 'typed-conversions';
 
 import 'mocha';
-import { IDictionary } from '../node_modules/common-types/dist';
+import { IDictionary } from 'common-types';
 
 describe('Reference functions', () => {
   const mocker: SchemaCallback = (h) => () => ({
