@@ -1,10 +1,13 @@
 {
   "name": "@forest-fire/firestore-db",
-  "version": "0.40.2",
+  "version": "0.41.0",
   "description": "",
-  "main": "dist/cjs",
-  "module": "dist/es",
-  "typings": "dist/es",
+  "module": "dist/es/index.js",
+  "main": "dist/cjs/index.js",
+  "typings": "dist/es/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/forest-fire/universal-fire.git"
@@ -24,10 +27,10 @@
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.40.2",
-    "@forest-fire/utility": "^0.40.3",
-    "@forest-fire/serialized-query": "^0.40.2",
-    "@forest-fire/types": "^0.40.1"
+    "@forest-fire/abstracted-database": "^0.41.0",
+    "@forest-fire/utility": "^0.41.0",
+    "@forest-fire/serialized-query": "^0.41.0",
+    "@forest-fire/types": "^0.41.0"
   },
   "license": "MIT"
 }
