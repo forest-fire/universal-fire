@@ -7,7 +7,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const serialized_query_1 = require("serialized-query");
+const serialized_query_1 = require("@forest-fire/serialized-query");
 const typed_conversions_1 = require("typed-conversions");
 const query_types_1 = require("../@types/query-types");
 const sortFns = __importStar(require("./sortFns"));
@@ -30,7 +30,7 @@ const orderByValue = (list, direction = query_types_1.SortOrder.asc) => {
         return agg;
     }, {});
 };
-const sortFn = (query) => query.identity.orderBy === serialized_query_1.QueryOrderType.orderByChild
+const sortFn = (query) => query.identity.orderBy === serialized_query_1.RealQueryOrderType.orderByChild
     ? sortFns.orderByChild(query.identity.orderByKey)
     : sortFns[query.identity.orderBy];
 function runQuery(query, data) {

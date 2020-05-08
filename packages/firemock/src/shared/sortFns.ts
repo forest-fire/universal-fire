@@ -1,6 +1,5 @@
 import { IDictionary } from 'common-types';
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { QueryOrderType } from 'serialized-query';
+import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
 
 export type ISortFns = (a: any, b: any) => number;
 
@@ -22,5 +21,5 @@ export function isOrderByChild(
   query: SerializedRealTimeQuery,
   fn: typeof orderByChild | typeof orderByKey
 ): fn is typeof orderByChild {
-  return query.identity.orderBy === QueryOrderType.orderByChild;
+  return query.identity.orderBy === RealQueryOrderType.orderByChild;
 }

@@ -7,8 +7,7 @@ import {
   IFirebaseEventHandler,
 } from '../@types/rtdb-types';
 import { getDb, SnapShot } from '../rtdb/index';
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { QueryOrderType } from 'serialized-query';
+import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
 import { leafNode, DelayType, networkDelay } from '../shared/index';
 import { runQuery } from '../shared/index';
 import { IDictionary } from 'common-types';
@@ -45,7 +44,7 @@ export abstract class Query<T = any> implements RtdbQuery {
   }
 
   public equalTo(value: QueryValue, key?: Extract<keyof T, string>): Query<T> {
-    if (key && this._query.identity.orderBy === QueryOrderType.orderByKey) {
+    if (key && this._query.identity.orderBy === RealQueryOrderType.orderByKey) {
       throw new Error(
         `You can not use "equalTo(val, key)" with a "key" property defined when using a key sort!`
       );

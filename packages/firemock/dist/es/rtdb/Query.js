@@ -1,6 +1,5 @@
 import { getDb, SnapShot } from '../rtdb/index';
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { QueryOrderType } from 'serialized-query';
+import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
 import { leafNode, networkDelay } from '../shared/index';
 import { runQuery } from '../shared/index';
 /** tslint:ignore:member-ordering */
@@ -25,7 +24,7 @@ export class Query {
         return this;
     }
     equalTo(value, key) {
-        if (key && this._query.identity.orderBy === QueryOrderType.orderByKey) {
+        if (key && this._query.identity.orderBy === RealQueryOrderType.orderByKey) {
             throw new Error(`You can not use "equalTo(val, key)" with a "key" property defined when using a key sort!`);
         }
         this._query.equalTo(value, key);

@@ -1,5 +1,4 @@
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { QueryOrderType } from 'serialized-query';
+import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
 import { hashToArray, arrayToHash } from 'typed-conversions';
 import { IDictionary } from 'common-types';
 import { SortOrder } from '../@types/query-types';
@@ -29,7 +28,7 @@ const orderByValue = (list: IDictionary, direction = SortOrder.asc) => {
 };
 
 const sortFn: (query: any) => sortFns.ISortFns = (query) =>
-  query.identity.orderBy === QueryOrderType.orderByChild
+  query.identity.orderBy === RealQueryOrderType.orderByChild
     ? sortFns.orderByChild(query.identity.orderByKey)
     : (sortFns[
         query.identity.orderBy as keyof typeof sortFns

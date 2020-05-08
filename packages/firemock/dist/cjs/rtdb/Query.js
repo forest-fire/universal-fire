@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../rtdb/index");
 const serialized_query_1 = require("@forest-fire/serialized-query");
-const serialized_query_2 = require("serialized-query");
 const index_2 = require("../shared/index");
 const index_3 = require("../shared/index");
 /** tslint:ignore:member-ordering */
@@ -27,7 +26,7 @@ class Query {
         return this;
     }
     equalTo(value, key) {
-        if (key && this._query.identity.orderBy === serialized_query_2.QueryOrderType.orderByKey) {
+        if (key && this._query.identity.orderBy === serialized_query_1.RealQueryOrderType.orderByKey) {
             throw new Error(`You can not use "equalTo(val, key)" with a "key" property defined when using a key sort!`);
         }
         this._query.equalTo(value, key);
