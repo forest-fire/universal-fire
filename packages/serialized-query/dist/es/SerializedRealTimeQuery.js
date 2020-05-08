@@ -1,4 +1,4 @@
-import { RealQueryOrderType } from './@types/index';
+import { RealQueryOrderType } from './index';
 import { SerializedQuery } from './index';
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime

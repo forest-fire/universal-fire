@@ -5,7 +5,7 @@ import type {
   IFirestoreQuery,
   IFirestoreQueryOrderType,
   ISimplifiedDatabase
-} from './@types/index';
+} from './index';
 import { SerializedQuery } from './index';
 
 /**

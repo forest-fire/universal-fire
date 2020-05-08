@@ -1,5 +1,5 @@
 import type { IDictionary } from 'common-types';
-import type { IComparisonOperator, IFirestoreQuery, IFirestoreQueryOrderType, ISimplifiedDatabase } from './@types/index';
+import type { IComparisonOperator, IFirestoreQuery, IFirestoreQueryOrderType, ISimplifiedDatabase } from './index';
 import { SerializedQuery } from './index';
 /**
  * Provides a way to serialize the full characteristics of a Firebase Firestore

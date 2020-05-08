@@ -1,5 +1,5 @@
 import type { IDictionary } from 'common-types';
-import type { IComparisonOperator, IFirestoreQuery, IFirestoreQueryOrderType, IRealQueryOrderType, IRealTimeQuery, ISerializedIdentity, ISimplifiedDatabase } from './@types/index';
+import type { IComparisonOperator, IFirestoreQuery, IFirestoreQueryOrderType, IRealQueryOrderType, IRealTimeQuery, ISerializedIdentity, ISimplifiedDatabase } from './index';
 export declare abstract class SerializedQuery<T = IDictionary> {
     protected _endAtKey?: keyof T & string;
     protected _endAt?: string;

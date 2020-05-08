@@ -8,7 +8,7 @@ import type {
   IRealTimeQuery,
   ISerializedIdentity,
   ISimplifiedDatabase
-} from './@types/index';
+} from './index';
 
 export abstract class SerializedQuery<T = IDictionary> {
   protected _endAtKey?: keyof T & string;

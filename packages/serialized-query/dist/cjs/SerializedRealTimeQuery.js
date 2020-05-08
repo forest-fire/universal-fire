@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("./@types/index");
+const index_1 = require("./index");
 const index_2 = require("./index");
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime
