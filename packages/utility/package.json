@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/utility",
-  "version": "0.40.2",
+  "version": "0.40.3",
   "description": "Utility functions that are shared across the monorepo",
   "main": "dist/cjs",
   "module": "dist/es",
@@ -23,11 +23,9 @@
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
   "dependencies": {
+    "@forest-fire/types": "^0.40.1",
     "common-types": "^1.14.3",
     "is-gzip": "^2.0.0"
-  },
-  "devDependencies": {
-    "@forest-fire/types": "^0.40.1"
   },
   "license": "MIT"
 }
