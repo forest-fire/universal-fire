@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/firestore-admin",
-  "version": "0.1.0",
+  "version": "0.42.0",
   "description": "",
   "main": "dist/cjs",
   "module": "dist/es",
@@ -24,9 +24,9 @@
     "test:e2e": "mocha --require ts-node/register test/*-e2e.ts"
   },
   "dependencies": {
-    "@forest-fire/firestore-db": "^0.41.0",
-    "@forest-fire/types": "^0.41.0",
-    "@forest-fire/utility": "^0.41.0",
+    "@forest-fire/firestore-db": "^0.42.0",
+    "@forest-fire/types": "^0.42.0",
+    "@forest-fire/utility": "^0.42.0",
     "firebase-admin": "^8.12.1"
   },
   "license": "MIT"

@@ -1,6 +1,6 @@
 {
   "name": "firemock",
-  "version": "0.40.1",
+  "version": "0.42.0",
   "description": "firemock",
   "license": "MIT",
   "repository": "git@github.com:forest-fire/firemock.git",
@@ -39,7 +39,7 @@
     "@firebase/app-types": "^0.6.0",
     "@firebase/auth-types": "^0.10.0",
     "@firebase/database-types": "^0.5.0",
-    "@forest-fire/serialized-query": "^0.41.0",
+    "@forest-fire/serialized-query": "^0.42.0",
     "@types/faker": "^4.1.9",
     "common-types": "^1.14.3",
     "deepmerge": "^4.2.2",
