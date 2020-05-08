@@ -1,9 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import {
-  AbstractedProxyError,
-  PermissionDenied,
-  AbstractedError
-} from '../src/errors';
+import { AbstractedProxyError, PermissionDenied } from '../src/errors';
 import { expect } from 'chai';
 
 describe('Errors => ', () => {
@@ -20,7 +16,7 @@ describe('Errors => ', () => {
       name: 'FIREBASE',
       message: '',
       stack: new Error().stack,
-      code: 'PERMISSION_DENIED'
+      code: 'PERMISSION_DENIED',
     };
     const e: Error & { code?: string } = new Error('');
     e.code = 'PERMISSION_DENIED';
@@ -30,11 +26,5 @@ describe('Errors => ', () => {
     );
     expect(err.name).to.equal('RealTimeDb/permission-denied');
     expect(err.code).to.equal('permission-denied');
-  });
-
-  it('AbstractedError', async () => {
-    const e = new AbstractedError('this is my message', 'no-do');
-    expect(e.name).to.equal('RealTimeDb/no-do');
-    expect(e.code).to.equal('no-do');
   });
 });

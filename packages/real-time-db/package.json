@@ -28,8 +28,9 @@
     "watch:esnext": "tsc -P tsconfig.es.json -w",
     "watch:cjs": "tsc -P tsconfig.es.json -w",
     "build:nuclear": "yarn clean:nuclear && yarn build",
-    "test": "ts-node ./scripts/test.ts",
-    "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'",
+    "test": "mocha --require ts-node/register test/**/*-spec.ts",
+    "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files test test/**/*-spec.ts",
+    "test:coverage": "nyc --reporter=text mocha -require ts-node/register test/**/*-spec.ts",
     "deploy": "ts-node ./scripts/deploy.ts ",
     "watch:test": "npm run test -- --watch"
   },
