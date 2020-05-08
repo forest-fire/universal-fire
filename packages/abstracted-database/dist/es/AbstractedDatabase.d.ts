@@ -1,4 +1,3 @@
-/// <reference types="firebase-admin" />
 import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbEventType, MockDb } from '@forest-fire/types';
 import type { SerializedQuery } from '@forest-fire/serialized-query';
 export declare abstract class AbstractedDatabase {
@@ -7,17 +6,17 @@ export declare abstract class AbstractedDatabase {
      */
     protected _isAdminApi: boolean;
     /**
-     * The mock API provided by **firemock**
-     */
-    protected _mock: MockDb | undefined;
-    /**
      * Indicates if the database is connected.
      */
     protected _isConnected: boolean;
     /**
+     * The mock API provided by **firemock**
+     */
+    protected _mock?: MockDb;
+    /**
      * The Firebase App API.
      */
-    protected _app?: IClientApp | IAdminApp;
+    protected _app?: IAdminApp | IClientApp;
     /**
      * The database API provided by Firebase (admin or client sdk of either
      * Firestore or RTDB)
@@ -36,11 +35,11 @@ export declare abstract class AbstractedDatabase {
     /**
      * Returns the `_app`.
      */
-    protected get app(): IClientApp | import("firebase-admin").app.App;
+    protected abstract get app(): IAdminApp | IClientApp;
     /**
      * Sets the `_app`.
      */
-    protected set app(value: IClientApp | import("firebase-admin").app.App);
+    protected abstract set app(value: IAdminApp | IClientApp);
     /**
      * Returns a type safe accessor to the database; when the database has not been set yet
      * it will throw a `not-ready` error.

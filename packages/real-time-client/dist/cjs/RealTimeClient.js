@@ -73,7 +73,16 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
         /* webpackChunkName: 'firebase-auth' */ '@firebase/app')));
         await Promise.resolve().then(() => __importStar(require(
         /* webpackChunkName: 'firebase-database' */ '@firebase/database')));
-        return Array.from(new Set(fb.firebase.apps.map(i => i.name)));
+        return Array.from(new Set(fb.firebase.apps.map((i) => i.name)));
+    }
+    get app() {
+        if (this._app) {
+            return this._app;
+        }
+        throw new utility_1.FireError('Attempt to access Firebase App without having instantiated it');
+    }
+    set app(value) {
+        this._app = value;
     }
     async connect() {
         if (types_1.isMockConfig(this._config)) {
@@ -127,7 +136,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
     async _connectMockDb(config) {
         await this.getFireMock({
             db: config.mockData || {},
-            auth: { providers: [], ...config.mockAuth }
+            auth: { providers: [], ...config.mockAuth },
         });
         this._authProviders = this._mock.authProviders;
         await this._listenForConnectionStatus();

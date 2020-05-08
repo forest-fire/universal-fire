@@ -45,17 +45,25 @@ export class FirestoreClient extends FirestoreDb {
         await obj.connect();
         return obj;
     }
+    get app() {
+        if (this._app) {
+            return this._app;
+        }
+        throw new FireError('Attempt to access Firebase App without having instantiated it');
+    }
+    set app(value) {
+        this._app = value;
+    }
     async connect() {
         if (this._isConnected) {
-            console.info(`Database ${this.config.name} already connected`);
+            console.info(`Firestore ${this.config.name} already connected`);
             return this;
         }
         await this.loadFirestoreApi();
         if (this.config.useAuth) {
             await this.loadAuthApi();
         }
-        // @ts-ignore
-        this._database = this.app.firestore();
+        this.database = this.app.firestore();
         return this;
     }
     async auth() {

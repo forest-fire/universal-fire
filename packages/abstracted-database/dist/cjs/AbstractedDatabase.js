@@ -13,21 +13,6 @@ class AbstractedDatabase {
         this._isConnected = false;
     }
     /**
-     * Returns the `_app`.
-     */
-    get app() {
-        if (this._app) {
-            return this._app;
-        }
-        throw new Error('Attempt to access Firebase App without having instantiated it');
-    }
-    /**
-     * Sets the `_app`.
-     */
-    set app(value) {
-        this._app = value;
-    }
-    /**
      * Indicates if the database is using the admin SDK.
      */
     get isAdminApi() {

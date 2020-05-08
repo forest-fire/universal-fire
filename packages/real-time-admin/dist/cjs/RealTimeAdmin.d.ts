@@ -16,6 +16,8 @@ export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     protected _app: IAdminApp;
     protected _database?: IAdminRtdbDatabase;
     constructor(config?: IAdminConfig | IMockConfig);
+    protected get app(): IAdminApp;
+    protected set app(value: IAdminApp);
     /**
      * Provides access to the Firebase Admin Auth API.
      *

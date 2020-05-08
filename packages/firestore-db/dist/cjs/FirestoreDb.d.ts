@@ -2,8 +2,8 @@ import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import type { IAdminApp, IClientApp, IFirestoreDatabase, IFirestoreDbEvent, MockDb } from '@forest-fire/types';
 import type { SerializedFirestoreQuery } from '@forest-fire/serialized-query';
 export declare abstract class FirestoreDb extends AbstractedDatabase {
-    protected _database: IFirestoreDatabase | undefined;
-    protected _app: IClientApp | IAdminApp | undefined;
+    protected _database?: IFirestoreDatabase;
+    protected _app?: IClientApp | IAdminApp;
     protected get database(): IFirestoreDatabase;
     protected set database(value: IFirestoreDatabase);
     protected _isCollection(path: string | SerializedFirestoreQuery): boolean;

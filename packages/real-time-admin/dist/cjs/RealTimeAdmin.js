@@ -29,7 +29,7 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
                 // @ts-ignore
                 serviceAccount: utility_1.extractServiceAccount(config),
                 // @ts-ignore
-                databaseURL: utility_1.extractDataUrl(config)
+                databaseURL: utility_1.extractDataUrl(config),
             };
         }
         if (types_1.isAdminConfig(config)) {
@@ -40,11 +40,11 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
             this._config = config;
             const runningApps = utility_1.getRunningApps(firebase.apps);
             const credential = firebase.credential.cert(config.serviceAccount);
-            this._app = runningApps.includes(config.name)
+            this.app = runningApps.includes(config.name)
                 ? utility_1.getRunningFirebaseApp(config.name, firebase.apps)
                 : firebase.initializeApp({
                     credential,
-                    databaseURL: config.databaseURL
+                    databaseURL: config.databaseURL,
                 }, config.name);
         }
         else if (types_1.isMockConfig(config)) {
@@ -63,6 +63,15 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
         const obj = new RealTimeAdmin(config);
         await obj.connect();
         return obj;
+    }
+    get app() {
+        if (this._app) {
+            return this._app;
+        }
+        throw new utility_1.FireError('Attempt to access Firebase App without having instantiated it');
+    }
+    set app(value) {
+        this._app = value;
     }
     /**
      * Provides access to the Firebase Admin Auth API.
@@ -119,7 +128,7 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
     async _connectMockDb(config) {
         await this.getFireMock({
             db: config.mockData || {},
-            auth: { providers: [], ...config.mockAuth }
+            auth: { providers: [], ...config.mockAuth },
         });
         this._isConnected = true;
         return this;

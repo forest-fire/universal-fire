@@ -19,17 +19,17 @@ export abstract class AbstractedDatabase {
    */
   protected _isAdminApi: boolean = false;
   /**
-   * The mock API provided by **firemock**
-   */
-  protected _mock: MockDb | undefined;
-  /**
    * Indicates if the database is connected.
    */
   protected _isConnected: boolean = false;
   /**
+   * The mock API provided by **firemock**
+   */
+  protected _mock?: MockDb;
+  /**
    * The Firebase App API.
    */
-  protected _app?: IClientApp | IAdminApp;
+  protected _app?: IAdminApp | IClientApp;
   /**
    * The database API provided by Firebase (admin or client sdk of either
    * Firestore or RTDB)
@@ -44,24 +44,15 @@ export abstract class AbstractedDatabase {
   /**
    * The auth API.
    */
-  protected abstract _auth?: IAdminAuth | IClientAuth
+  protected abstract _auth?: IAdminAuth | IClientAuth;
   /**
    * Returns the `_app`.
    */
-  protected get app() {
-    if (this._app) {
-      return this._app;
-    }
-    throw new Error(
-      'Attempt to access Firebase App without having instantiated it'
-    );
-  }
+  protected abstract get app(): IAdminApp | IClientApp;
   /**
    * Sets the `_app`.
    */
-  protected set app(value) {
-    this._app = value;
-  }
+  protected abstract set app(value: IAdminApp | IClientApp);
   /**
    * Returns a type safe accessor to the database; when the database has not been set yet
    * it will throw a `not-ready` error.

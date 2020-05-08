@@ -8,7 +8,6 @@ import {
   IMockConfig,
   isClientConfig,
   isMockConfig,
-  IFirestoreDatabase,
 } from '@forest-fire/types';
 import {
   extractClientConfig,
@@ -24,9 +23,10 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
     return obj;
   }
 
-  protected _auth?: IClientAuth;
-  protected _config: IClientConfig | IMockConfig;
   protected _isAdminApi = false;
+  protected _auth?: IClientAuth;
+  protected _app?: IClientApp;
+  protected _config: IClientConfig | IMockConfig;
 
   constructor(config?: IClientConfig | IMockConfig) {
     super();
@@ -71,17 +71,29 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
     this._config = config;
   }
 
+  protected get app() {
+    if (this._app) {
+      return this._app;
+    }
+    throw new FireError(
+      'Attempt to access Firebase App without having instantiated it'
+    );
+  }
+
+  protected set app(value: IClientApp) {
+    this._app = value;
+  }
+
   public async connect(): Promise<FirestoreClient> {
     if (this._isConnected) {
-      console.info(`Database ${this.config.name} already connected`);
+      console.info(`Firestore ${this.config.name} already connected`);
       return this;
     }
     await this.loadFirestoreApi();
     if (this.config.useAuth) {
       await this.loadAuthApi();
     }
-    // @ts-ignore
-    this._database = this.app.firestore!();
+    this.database = this.app.firestore();
     return this;
   }
 

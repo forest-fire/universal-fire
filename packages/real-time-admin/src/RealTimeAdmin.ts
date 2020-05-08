@@ -10,7 +10,7 @@ import {
   isAdminConfig,
   IAdminAuth,
   IAdminApp,
-  IAdminRtdbDatabase
+  IAdminRtdbDatabase,
 } from '@forest-fire/types';
 import {
   extractServiceAccount,
@@ -18,7 +18,7 @@ import {
   getRunningApps,
   extractDataUrl,
   getRunningFirebaseApp,
-  determineDefaultAppName
+  determineDefaultAppName,
 } from '@forest-fire/utility';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { adminAuthSdk } from 'firemock';
@@ -50,7 +50,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     if (!config) {
       config = {
         serviceAccount: extractServiceAccount(config),
-        databaseURL: extractDataUrl(config)
+        databaseURL: extractDataUrl(config),
       };
     }
     if (isAdminConfig(config)) {
@@ -62,7 +62,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
 
       const runningApps = getRunningApps(firebase.apps);
       const credential = firebase.credential.cert(config.serviceAccount);
-      this._app = runningApps.includes(config.name)
+      this.app = runningApps.includes(config.name)
         ? getRunningFirebaseApp<IAdminApp>(
             config.name,
             (firebase.apps as unknown) as IAdminApp[]
@@ -70,7 +70,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
         : firebase.initializeApp(
             {
               credential,
-              databaseURL: config.databaseURL
+              databaseURL: config.databaseURL,
             },
             config.name
           );
@@ -87,6 +87,19 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
         'invalid-configuration'
       );
     }
+  }
+
+  protected get app() {
+    if (this._app) {
+      return this._app;
+    }
+    throw new FireError(
+      'Attempt to access Firebase App without having instantiated it'
+    );
+  }
+
+  protected set app(value: IAdminApp) {
+    this._app = value;
   }
 
   /**
@@ -151,7 +164,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   protected async _connectMockDb(config: IMockConfig) {
     await this.getFireMock({
       db: config.mockData || {},
-      auth: { providers: [], ...config.mockAuth }
+      auth: { providers: [], ...config.mockAuth },
     });
     this._isConnected = true;
     return this;

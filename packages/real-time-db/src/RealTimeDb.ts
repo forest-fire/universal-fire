@@ -451,27 +451,6 @@ export abstract class RealTimeDb extends AbstractedDatabase
   }
 
   /**
-   * **getSortedList**
-   *
-   * getSortedList() will return the sorting order that was defined in the Firebase
-   * Query. This _can_ be useful but often the sort orders
-   * really intended for the server only (so that filteration
-   * is done on the right set of data before sending to client).
-   *
-   * @param query Firebase "query ref"
-   * @param idProp what property name should the Firebase key be converted to (default is "id")
-   */
-  public async getSortedList<T = any>(query: any, idProp = 'id'): Promise<T[]> {
-    try {
-      return this.getSnapshot(query).then((snap) => {
-        return convert.snapshotToArray<T>(snap, idProp);
-      });
-    } catch (e) {
-      throw new AbstractedProxyError(e);
-    }
-  }
-
-  /**
    * **push**
    *
    * Pushes a value (typically a hash) under a given path in the

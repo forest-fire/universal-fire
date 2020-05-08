@@ -22,9 +22,12 @@
     "watch:esnext": "tsc -P tsconfig.es.json ",
     "watch:cjs": "tsc -P tsconfig.es.json "
   },
-  "devDependencies": {
+  "dependencies": {
     "@firebase/app-types": "^0.6.0",
-    "firebase-admin": "^8.11.0"
+    "@firebase/auth-types": "^0.10.0",
+    "@firebase/database-types": "^0.5.0",
+    "@firebase/firestore-types": "^1.10.1",
+    "firebase-admin": "^8.12.1"
   },
   "license": "UNLICENSED"
 }

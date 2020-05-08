@@ -10,8 +10,8 @@ import { FireError } from '@forest-fire/utility';
 import type { SerializedFirestoreQuery } from '@forest-fire/serialized-query';
 
 export abstract class FirestoreDb extends AbstractedDatabase {
-  protected _database: IFirestoreDatabase | undefined;
-  protected _app: IClientApp | IAdminApp | undefined;
+  protected _database?: IFirestoreDatabase;
+  protected _app?: IClientApp | IAdminApp;
 
   protected get database() {
     if (this._database) {
