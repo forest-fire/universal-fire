@@ -24,7 +24,7 @@
     "test:e2e": "mocha --require ts-node/register test/*-e2e.ts"
   },
   "dependencies": {
-    "@forest-fire/firestore-db": "^0.42.0",
+    "@forest-fire/firestore-db": "^0.42.1",
     "@forest-fire/types": "^0.42.0",
     "@forest-fire/utility": "^0.42.0",
     "firebase-admin": "^8.12.1"

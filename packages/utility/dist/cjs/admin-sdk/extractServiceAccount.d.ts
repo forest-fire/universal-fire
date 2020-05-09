@@ -1,4 +1,4 @@
-import { IServiceAccount, IAdminConfig } from '@forest-fire/types';
+import { IServiceAccount, IAdminConfig, IMockConfig } from '@forest-fire/types';
 /**
  * Takes as input a variety of possible formats and converts it into
  * a Firebase service account (`IServiceAccount`). The input formats
@@ -11,4 +11,4 @@ import { IServiceAccount, IAdminConfig } from '@forest-fire/types';
  * - a base64 encoded GZIP of a `IServiceAccount` object (_this is ideal for ENV vars
  * which have limited length and must be string_)
  */
-export declare function extractServiceAccount(config?: IAdminConfig): IServiceAccount;
+export declare function extractServiceAccount(config?: IAdminConfig | IMockConfig): IServiceAccount;

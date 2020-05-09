@@ -7,10 +7,10 @@ import type {
   IRealQueryOrderType,
   IRealTimeQuery,
   ISerializedIdentity,
-  ISimplifiedDatabase
+  ISimplifiedDatabase,
 } from './index';
 
-export abstract class SerializedQuery<T = IDictionary> {
+export abstract class SerializedQuery<T = any> {
   protected _endAtKey?: keyof T & string;
   protected _endAt?: string;
   protected _equalToKey?: keyof T & string;
@@ -51,7 +51,7 @@ export abstract class SerializedQuery<T = IDictionary> {
       orderBy: this._orderBy,
       path: this._path,
       startAtKey: this._startAtKey,
-      startAt: this._startAt
+      startAt: this._startAt,
     };
   }
 

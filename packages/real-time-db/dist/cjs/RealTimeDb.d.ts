@@ -168,19 +168,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase implements I
      * @param path the path in the database to
      * @param idProp
      */
-    getList<T = any>(path: string | SerializedRealTimeQuery, idProp?: string): Promise<T[]>;
-    /**
-     * **getSortedList**
-     *
-     * getSortedList() will return the sorting order that was defined in the Firebase
-     * Query. This _can_ be useful but often the sort orders
-     * really intended for the server only (so that filteration
-     * is done on the right set of data before sending to client).
-     *
-     * @param query Firebase "query ref"
-     * @param idProp what property name should the Firebase key be converted to (default is "id")
-     */
-    getSortedList<T = any>(query: any, idProp?: string): Promise<T[]>;
+    getList<T = any>(path: string | SerializedRealTimeQuery<T>, idProp?: string): Promise<T[]>;
     /**
      * **push**
      *

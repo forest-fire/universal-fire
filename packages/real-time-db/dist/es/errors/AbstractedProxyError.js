@@ -10,7 +10,7 @@ export class AbstractedProxyError extends Error {
         this.stack = e.stack;
         try {
             this.stackFrames = parseStack(this.stack, {
-                ignorePatterns: ['timers.js', 'mocha/lib', 'runners/node']
+                ignorePatterns: ['timers.js', 'mocha/lib', 'runners/node'],
             });
         }
         catch (e) {
@@ -19,7 +19,7 @@ export class AbstractedProxyError extends Error {
         const shortStack = this.stackFrames
             ? this.stackFrames
                 .slice(0, Math.min(3, this.stackFrames.length - 1))
-                .map(i => `${i.shortPath}/${i.fn}::${i.line}`)
+                .map((i) => `${i.shortPath}/${i.fn}::${i.line}`)
             : '';
         this.message = context
             ? `${e.name ? `[Proxy of ${e.name}]` : ''}` +

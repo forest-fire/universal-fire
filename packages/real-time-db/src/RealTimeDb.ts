@@ -439,7 +439,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * @param idProp
    */
   public async getList<T = any>(
-    path: string | SerializedRealTimeQuery,
+    path: string | SerializedRealTimeQuery<T>,
     idProp = 'id'
   ): Promise<T[]> {
     try {

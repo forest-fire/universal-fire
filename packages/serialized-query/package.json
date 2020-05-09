@@ -44,7 +44,7 @@
     "@types/stack-trace": "^0.0.29",
     "abstracted-admin": "^0.38.1",
     "chalk": "^3.0.0",
-    "firemock": "^0.40.1",
+    "firemock": "^0.42.0",
     "firemodel": "^0.38.0",
     "js-yaml": "^3.13.1",
     "lodash.first": "^3.0.0",

@@ -15,7 +15,7 @@ export class SerializedRealTimeQuery extends SerializedQuery {
     startAt(value, key) {
         this.validateKey('startAt', key, [
             RealQueryOrderType.orderByChild,
-            RealQueryOrderType.orderByValue
+            RealQueryOrderType.orderByValue,
         ]);
         super.startAt(value, key);
         return this;
@@ -23,7 +23,7 @@ export class SerializedRealTimeQuery extends SerializedQuery {
     endAt(value, key) {
         this.validateKey('endAt', key, [
             RealQueryOrderType.orderByChild,
-            RealQueryOrderType.orderByValue
+            RealQueryOrderType.orderByValue,
         ]);
         super.endAt(value, key);
         return this;
@@ -32,7 +32,7 @@ export class SerializedRealTimeQuery extends SerializedQuery {
         super.equalTo(value, key);
         this.validateKey('equalTo', key, [
             RealQueryOrderType.orderByChild,
-            RealQueryOrderType.orderByValue
+            RealQueryOrderType.orderByValue,
         ]);
         return this;
     }

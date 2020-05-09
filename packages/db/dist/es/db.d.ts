@@ -9,5 +9,5 @@ export declare class DB {
      * @param constructor The DB/SDK class which you wish to use
      * @param config The database configuration
      */
-    static connect<T extends IRealTimeDb | IFirestoreDb>(constructor: new (config: IDatabaseConfig) => T, config: IDatabaseConfig): Promise<T>;
+    static connect<T extends IRealTimeDb | IFirestoreDb>(constructor: new (config?: IDatabaseConfig) => T, config?: IDatabaseConfig): Promise<T>;
 }

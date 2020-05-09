@@ -9,7 +9,7 @@ export declare abstract class FirestoreDb extends AbstractedDatabase {
     protected _isCollection(path: string | SerializedFirestoreQuery): boolean;
     protected _isDocument(path: string | SerializedFirestoreQuery): boolean;
     get mock(): MockDb;
-    getList<T = any>(path: string | SerializedFirestoreQuery, idProp: string): Promise<T[]>;
+    getList<T = any>(path: string | SerializedFirestoreQuery<T>, idProp: string): Promise<T[]>;
     getPushKey(path: string): Promise<string>;
     getRecord<T = any>(path: string, idProp?: string): Promise<T>;
     getValue<T = any>(path: string): Promise<void>;

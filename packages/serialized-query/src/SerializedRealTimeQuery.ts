@@ -6,7 +6,7 @@ import type {
   IComparisonOperator,
   IRealQueryOrderType,
   IRealTimeQuery,
-  ISimplifiedDatabase
+  ISimplifiedDatabase,
 } from './index';
 
 /**
@@ -25,7 +25,7 @@ export class SerializedRealTimeQuery<T = IDictionary> extends SerializedQuery<
   public startAt(value: any, key?: keyof T & string) {
     this.validateKey('startAt', key, [
       RealQueryOrderType.orderByChild,
-      RealQueryOrderType.orderByValue
+      RealQueryOrderType.orderByValue,
     ]);
     super.startAt(value, key);
     return this;
@@ -34,7 +34,7 @@ export class SerializedRealTimeQuery<T = IDictionary> extends SerializedQuery<
   public endAt(value: any, key?: keyof T & string) {
     this.validateKey('endAt', key, [
       RealQueryOrderType.orderByChild,
-      RealQueryOrderType.orderByValue
+      RealQueryOrderType.orderByValue,
     ]);
     super.endAt(value, key);
     return this;
@@ -44,7 +44,7 @@ export class SerializedRealTimeQuery<T = IDictionary> extends SerializedQuery<
     super.equalTo(value, key);
     this.validateKey('equalTo', key, [
       RealQueryOrderType.orderByChild,
-      RealQueryOrderType.orderByValue
+      RealQueryOrderType.orderByValue,
     ]);
     return this;
   }

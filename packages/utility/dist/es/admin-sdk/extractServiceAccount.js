@@ -12,7 +12,7 @@ import { looksLikeJson, FireError } from '../index';
  * which have limited length and must be string_)
  */
 export function extractServiceAccount(config) {
-    const serviceAccount = config && config.serviceAccount
+    const serviceAccount = config && config.mocking !== true && config.serviceAccount
         ? config.serviceAccount
         : process.env['FIREBASE_SERVICE_ACCOUNT'];
     if (!serviceAccount) {
@@ -51,9 +51,7 @@ export function extractServiceAccount(config) {
                 throw new FireError(`Failed to convert a string based service account to IServiceAccount! The error was: ${e.message}`, 'invalid-configuration');
             }
         default:
-            throw new FireError(`Couldn't extract the serviceAccount from ENV variables! The configuration was:\n${(JSON.stringify,
-                null,
-                2)}`, 'invalid-configuration');
+            throw new FireError(`Couldn't extract the serviceAccount from ENV variables! The configuration was:\n${(JSON.stringify, null, 2)}`, 'invalid-configuration');
     }
 }
 //# sourceMappingURL=extractServiceAccount.js.map

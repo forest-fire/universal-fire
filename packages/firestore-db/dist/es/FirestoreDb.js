@@ -23,6 +23,7 @@ export class FirestoreDb extends AbstractedDatabase {
     async getList(path, idProp) {
         path = typeof path !== 'string' ? path.path : path;
         const querySnapshot = await this.database.collection(path).get();
+        // @ts-ignore
         return querySnapshot.docs.map((doc) => {
             return {
                 [idProp]: doc.id,
@@ -72,7 +73,9 @@ export class FirestoreDb extends AbstractedDatabase {
     }
     async _removeCollection(path) {
         const batch = this.database.batch();
+        // @ts-ignore
         this.database.collection(path).onSnapshot((snapshot) => {
+            // @ts-ignore
             snapshot.docs.forEach((doc) => {
                 batch.delete(doc.ref);
             });

@@ -4,7 +4,7 @@ import { FireError } from '../index';
  * configuration or via the FIREBASE_DATABASE_URL environment variable.
  */
 export function extractDataUrl(config) {
-    const dataUrl = config && config.databaseURL
+    const dataUrl = config && config.mocking !== true && config.databaseURL
         ? config.databaseURL
         : process.env['FIREBASE_DATABASE_URL'];
     if (!dataUrl) {

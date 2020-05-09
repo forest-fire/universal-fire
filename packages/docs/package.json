@@ -55,7 +55,7 @@
     "async-shelljs": "^0.1.4",
     "chai": "^4.2.0",
     "chalk": "3.0.0",
-    "firemock": "^0.40.1",
+    "firemock": "^0.42.0",
     "js-yaml": "^3.13.1",
     "mocha": "^6.2.2",
     "rimraf": "^3.0.0",

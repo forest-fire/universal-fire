@@ -4,7 +4,7 @@ import type {
   IComparisonOperator,
   IFirestoreQuery,
   IFirestoreQueryOrderType,
-  ISimplifiedDatabase
+  ISimplifiedDatabase,
 } from './index';
 import { SerializedQuery } from './index';
 

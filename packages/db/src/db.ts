@@ -11,8 +11,8 @@ export class DB {
    * @param config The database configuration
    */
   static async connect<T extends IRealTimeDb | IFirestoreDb>(
-    constructor: new (config: IDatabaseConfig) => T,
-    config: IDatabaseConfig
+    constructor: new (config?: IDatabaseConfig) => T,
+    config?: IDatabaseConfig
   ) {
     const db = new constructor(config);
     await db.connect();

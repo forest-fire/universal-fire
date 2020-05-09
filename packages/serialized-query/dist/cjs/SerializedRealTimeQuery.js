@@ -17,7 +17,7 @@ class SerializedRealTimeQuery extends index_2.SerializedQuery {
     startAt(value, key) {
         this.validateKey('startAt', key, [
             index_1.RealQueryOrderType.orderByChild,
-            index_1.RealQueryOrderType.orderByValue
+            index_1.RealQueryOrderType.orderByValue,
         ]);
         super.startAt(value, key);
         return this;
@@ -25,7 +25,7 @@ class SerializedRealTimeQuery extends index_2.SerializedQuery {
     endAt(value, key) {
         this.validateKey('endAt', key, [
             index_1.RealQueryOrderType.orderByChild,
-            index_1.RealQueryOrderType.orderByValue
+            index_1.RealQueryOrderType.orderByValue,
         ]);
         super.endAt(value, key);
         return this;
@@ -34,7 +34,7 @@ class SerializedRealTimeQuery extends index_2.SerializedQuery {
         super.equalTo(value, key);
         this.validateKey('equalTo', key, [
             index_1.RealQueryOrderType.orderByChild,
-            index_1.RealQueryOrderType.orderByValue
+            index_1.RealQueryOrderType.orderByValue,
         ]);
         return this;
     }

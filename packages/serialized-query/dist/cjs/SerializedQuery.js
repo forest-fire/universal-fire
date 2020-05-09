@@ -25,7 +25,7 @@ class SerializedQuery {
             orderBy: this._orderBy,
             path: this._path,
             startAtKey: this._startAtKey,
-            startAt: this._startAt
+            startAt: this._startAt,
         };
     }
     /**

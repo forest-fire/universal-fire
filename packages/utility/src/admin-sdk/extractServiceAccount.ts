@@ -1,4 +1,4 @@
-import { IServiceAccount, IAdminConfig } from '@forest-fire/types';
+import { IServiceAccount, IAdminConfig, IMockConfig } from '@forest-fire/types';
 import { looksLikeJson, FireError } from '../index';
 
 /**
@@ -13,9 +13,11 @@ import { looksLikeJson, FireError } from '../index';
  * - a base64 encoded GZIP of a `IServiceAccount` object (_this is ideal for ENV vars
  * which have limited length and must be string_)
  */
-export function extractServiceAccount(config?: IAdminConfig): IServiceAccount {
+export function extractServiceAccount(
+  config?: IAdminConfig | IMockConfig
+): IServiceAccount {
   const serviceAccount: string | IServiceAccount | undefined =
-    config && config.serviceAccount
+    config && config.mocking !== true && config.serviceAccount
       ? config.serviceAccount
       : process.env['FIREBASE_SERVICE_ACCOUNT'];
   if (!serviceAccount) {
@@ -68,9 +70,9 @@ export function extractServiceAccount(config?: IAdminConfig): IServiceAccount {
 
     default:
       throw new FireError(
-        `Couldn't extract the serviceAccount from ENV variables! The configuration was:\n${(JSON.stringify,
-        null,
-        2)}`,
+        `Couldn't extract the serviceAccount from ENV variables! The configuration was:\n${
+          (JSON.stringify, null, 2)
+        }`,
         'invalid-configuration'
       );
   }

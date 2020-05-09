@@ -10,7 +10,7 @@
   "scripts": {
     "build": "run-s build:types build:shared build:base build:db build:sdk build:closure",
     "build:types": "lerna exec --scope @forest-fire/types yarn build",
-    "build:shared": "run-p build:shared:utility build:shared:serialized-query",
+    "build:shared": "run-s build:shared:utility build:shared:serialized-query",
     "build:shared:utility": "lerna exec --scope @forest-fire/utility yarn build",
     "build:shared:serialized-query": "lerna exec --scope @forest-fire/serialized-query yarn build",
     "build:base": "lerna exec --scope @forest-fire/abstracted-database yarn build",

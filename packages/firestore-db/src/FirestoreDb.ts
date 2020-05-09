@@ -41,11 +41,12 @@ export abstract class FirestoreDb extends AbstractedDatabase {
   }
 
   public async getList<T = any>(
-    path: string | SerializedFirestoreQuery,
+    path: string | SerializedFirestoreQuery<T>,
     idProp: string
   ): Promise<T[]> {
     path = typeof path !== 'string' ? path.path : path;
     const querySnapshot = await this.database.collection(path).get();
+    // @ts-ignore
     return querySnapshot.docs.map((doc) => {
       return {
         [idProp]: doc.id,
@@ -109,7 +110,9 @@ export abstract class FirestoreDb extends AbstractedDatabase {
 
   private async _removeCollection(path: string) {
     const batch = this.database.batch();
+    // @ts-ignore
     this.database.collection(path).onSnapshot((snapshot) => {
+      // @ts-ignore
       snapshot.docs.forEach((doc) => {
         batch.delete(doc.ref);
       });

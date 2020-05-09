@@ -123,8 +123,8 @@ export abstract class AbstractedDatabase {
    * `idProp` parameter.
    */
   public abstract async getList<T = any>(
-    path: string | SerializedQuery,
-    idProp: string
+    path: string | SerializedQuery<T>,
+    idProp?: string
   ): Promise<T[]>;
   /**
    * Get's a push-key from the server at a given path. This ensures that
@@ -140,7 +140,7 @@ export abstract class AbstractedDatabase {
    */
   public abstract async getRecord<T = any>(
     path: string,
-    idProp: string
+    idProp?: string
   ): Promise<T>;
   /**
    * Returns the value at a given path in the database. This method is a
@@ -166,12 +166,15 @@ export abstract class AbstractedDatabase {
   /**
    * Removes a path from the database.
    */
-  public abstract async remove(path: string): Promise<any>;
+  public abstract async remove(
+    path: string,
+    ignoreMissing?: boolean
+  ): Promise<any>;
   /**
    * Watch for Firebase events based on a DB path.
    */
   public abstract watch(
-    target: string | SerializedQuery,
+    target: string | SerializedQuery<any>,
     events:
       | IFirestoreDbEvent
       | IFirestoreDbEvent[]
