@@ -5,6 +5,7 @@
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
   "author": "Ken Snyder <ken@ken.net>",
+  "private": true,
   "keywords": [
     "firebase",
     "typescript",
