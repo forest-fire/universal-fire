@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.42.0",
+  "version": "0.43.0",
   "description": "",
   "main": "dist/cjs",
   "module": "dist/es",
@@ -24,13 +24,13 @@
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
   "dependencies": {
-    "@forest-fire/firestore-admin": "^0.42.0",
-    "@forest-fire/firestore-client": "^0.42.0",
-    "@forest-fire/firestore-db": "^0.42.0",
-    "@forest-fire/real-time-admin": "^0.42.0",
-    "@forest-fire/real-time-client": "^0.42.0",
-    "@forest-fire/real-time-db": "^0.42.0",
-    "@forest-fire/types": "^0.42.0"
+    "@forest-fire/firestore-admin": "^0.43.0",
+    "@forest-fire/firestore-client": "^0.43.0",
+    "@forest-fire/firestore-db": "^0.43.0",
+    "@forest-fire/real-time-admin": "^0.43.0",
+    "@forest-fire/real-time-client": "^0.43.0",
+    "@forest-fire/real-time-db": "^0.43.0",
+    "@forest-fire/types": "^0.43.0"
   },
   "license": "MIT"
 }
