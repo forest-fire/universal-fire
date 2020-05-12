@@ -123,6 +123,10 @@ export class RealTimeAdmin extends RealTimeDb {
         return this;
     }
     async _connectRealDb(config) {
+        if (this._isConnected) {
+            console.info(`Database ${config.name} already connected`);
+            return;
+        }
         this._database = this._app.database();
         this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
         this.goOnline();

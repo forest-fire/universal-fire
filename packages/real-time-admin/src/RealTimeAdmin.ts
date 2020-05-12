@@ -64,16 +64,16 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
       const credential = firebase.credential.cert(config.serviceAccount);
       this.app = runningApps.includes(config.name)
         ? getRunningFirebaseApp<IAdminApp>(
-            config.name,
-            (firebase.apps as unknown) as IAdminApp[]
-          )
+          config.name,
+          (firebase.apps as unknown) as IAdminApp[]
+        )
         : firebase.initializeApp(
-            {
-              credential,
-              databaseURL: config.databaseURL,
-            },
-            config.name
-          );
+          {
+            credential,
+            databaseURL: config.databaseURL,
+          },
+          config.name
+        );
     } else if (isMockConfig(config)) {
       config.name = determineDefaultAppName(config);
       this._config = config;
@@ -171,6 +171,10 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   }
 
   protected async _connectRealDb(config: IAdminConfig) {
+    if (this._isConnected) {
+      console.info(`Database ${config.name} already connected`);
+      return;
+    }
     this._database = this._app.database() as IAdminRtdbDatabase;
     this.enableDatabaseLogging = firebase.database.enableLogging.bind(
       firebase.database

@@ -132,6 +132,10 @@ class RealTimeAdmin extends real_time_db_1.RealTimeDb {
         return this;
     }
     async _connectRealDb(config) {
+        if (this._isConnected) {
+            console.info(`Database ${config.name} already connected`);
+            return;
+        }
         this._database = this._app.database();
         this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
         this.goOnline();
