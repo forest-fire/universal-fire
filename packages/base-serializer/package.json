@@ -9,5 +9,8 @@
     "build:all": "run-p build:esnext build:cjs",
     "build:esnext": "tsc -P tsconfig.es.json",
     "build:cjs": "tsc -P tsconfig.cjs.json"
+  },
+  "dependencies": {
+    "@forest-fire/serialized-query": "^0.43.0"
   }
 }
