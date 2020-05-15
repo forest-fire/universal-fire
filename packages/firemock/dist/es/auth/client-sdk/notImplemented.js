@@ -1,4 +1,4 @@
-import { createError } from 'common-types';
+import { createError } from "common-types";
 export const notImplemented = {
     async applyActionCode(code) {
         return;
@@ -6,7 +6,7 @@ export const notImplemented = {
     async checkActionCode(code) {
         return {
             data: {},
-            operation: '',
+            operation: "",
         };
     },
     // async createUserAndRetrieveDataWithEmailAndPassword(
@@ -28,46 +28,46 @@ export const notImplemented = {
     //   return completeUserCredential({});
     // },
     async fetchSignInMethodsForEmail() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async getRedirectResult() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     isSignInWithEmailLink() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     onIdTokenChanged() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async sendSignInLinkToEmail() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async signInAndRetrieveDataWithCredential() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async signInWithCredential() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async signInWithCustomToken() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async signInWithEmailLink() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async signInWithPhoneNumber() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async signInWithPopup() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async signInWithRedirect() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async useDeviceLanguage() {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
     async verifyPasswordResetCode(code) {
-        throw createError('auth/not-implemented', 'This feature is not implemented yet in FireMock auth module');
+        throw createError("auth/not-implemented", "This feature is not implemented yet in FireMock auth module");
     },
 };
 //# sourceMappingURL=notImplemented.js.map

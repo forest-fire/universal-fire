@@ -1,11 +1,6 @@
-import { User } from '@firebase/auth-types';
-import { validate } from 'email-validator';
-import {
-  allUsers,
-  authProviders,
-  getRandomMockUid,
-  getAuthObservers,
-} from '../state-mgmt';
+import { User } from "@forest-fire/types";
+import { validate } from "email-validator";
+import { allUsers, authProviders, getRandomMockUid, getAuthObservers } from "../state-mgmt";
 
 export function emailExistsAsUserInAuth(email: string) {
   const emails = allUsers().map((i) => i.email);
@@ -35,7 +30,7 @@ export function userUid(email: string) {
 }
 
 export function emailValidationAllowed() {
-  return authProviders().includes('emailPassword');
+  return authProviders().includes("emailPassword");
 }
 
 export function loggedIn(user: User) {

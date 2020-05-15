@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.atRandom = void 0;
 function atRandom(things, excluding = []) {
     things = things.filter((i) => !excluding.includes(i));
     const random = Math.floor(Math.random() * things.length);

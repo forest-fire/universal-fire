@@ -1,2 +1,2 @@
-import { Auth } from '../../@types/auth-types';
+import { Auth } from "@forest-fire/types";
 export declare const implemented: Partial<Auth>;

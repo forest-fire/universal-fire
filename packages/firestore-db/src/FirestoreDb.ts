@@ -4,7 +4,6 @@ import type {
   IClientApp,
   IFirestoreDatabase,
   IFirestoreDbEvent,
-  MockDb,
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
 import type { SerializedFirestoreQuery } from '@forest-fire/serialized-query';
@@ -36,7 +35,7 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     return this._isCollection(path) === false;
   }
 
-  public get mock(): MockDb {
+  public get mock(): any {
     throw new Error('Not implemented');
   }
 

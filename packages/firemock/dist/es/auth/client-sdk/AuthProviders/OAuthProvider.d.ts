@@ -1,4 +1,4 @@
-import { OAuthProvider as GoogleOAuthProvider, AuthProvider, OAuthCredential } from '@firebase/auth-types';
+import { OAuthProvider as GoogleOAuthProvider, AuthProvider, OAuthCredential } from "@forest-fire/types";
 export declare class OAuthProvider implements GoogleOAuthProvider {
     providerId: string;
     constructor(providerId: string);

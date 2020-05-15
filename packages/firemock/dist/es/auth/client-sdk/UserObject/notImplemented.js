@@ -1,8 +1,8 @@
-import { fakeApplicationVerifier } from '../completeUserCredential';
+import { fakeApplicationVerifier } from "../completeUserCredential";
 export const notImplemented = {
     /** Deletes and signs out the user. */
     async delete() {
-        throw new Error('the Mock Auth feature for delete() is not yet implemented');
+        throw new Error("the Mock Auth feature for delete() is not yet implemented");
     },
     async linkAndRetrieveDataWithCredential(credential) {
         throw new Error(`linkAndRetrieveDataWithCredential() is not implemented yet in the client-sdk's mock auth`);

@@ -6,5 +6,5 @@
     "module": "commonjs",
     "outDir": "dist/cjs"
   },
-  "exclude": ["test"]
+  "exclude": ["dist", "node_modules", "test"]
 }

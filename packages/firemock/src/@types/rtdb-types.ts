@@ -1,13 +1,7 @@
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { ISchemaHelper } from './mocking-types';
-
-export type RtdbQuery = import('@firebase/database-types').Query;
-export type RtdbReference = import('@firebase/database-types').Reference;
-export type RtdbDataSnapshot = import('@firebase/database-types').DataSnapshot;
-export type RtdbThenableReference = import('@firebase/database-types').ThenableReference;
-export type RtdbEventType = import('@firebase/database-types').EventType;
-export type FirebaseDatabase = import('@firebase/database-types').FirebaseDatabase;
+import type { IRtdbEventType, IRtdbDataSnapshot } from '@forest-fire/types'
 
 export interface ISchema {
   id: string;
@@ -63,7 +57,7 @@ export interface IMockWatcherGroupEvent {
   /** the path that the listener is listening at */
   listenerPath: string;
   /** the event which is being listened to */
-  listenerEvent: import(/* webpackChunkName: "firebase-db-types" */ '@firebase/database-types').EventType;
+  listenerEvent: IRtdbEventType;
   /** the dispatch function for this listener */
   callback: IFirebaseEventHandler;
   /** the path where the event took place */
@@ -90,7 +84,7 @@ export interface IMockWatcherGroupEvent {
  * name of the key which directly _preceeds_ the event key in Firebase's stored order
  */
 export interface IFirebaseEventHandler {
-  (snap: RtdbDataSnapshot, prevChildKey?: string): void;
+  (snap: IRtdbDataSnapshot, prevChildKey?: string): void;
 }
 
 export type EventHandler =
@@ -98,21 +92,21 @@ export type EventHandler =
   | HandleNewEvent
   | HandleRemoveEvent;
 export type GenericEventHandler = (
-  snap: RtdbDataSnapshot,
+  snap: IRtdbDataSnapshot,
   key?: string
 ) => void;
-export type HandleValueEvent = (dataSnapShot: RtdbDataSnapshot) => void;
+export type HandleValueEvent = (dataSnapShot: IRtdbDataSnapshot) => void;
 export type HandleNewEvent = (
-  childSnapshot: RtdbDataSnapshot,
+  childSnapshot: IRtdbDataSnapshot,
   prevChildKey: string
 ) => void;
-export type HandleRemoveEvent = (oldChildSnapshot: RtdbDataSnapshot) => void;
+export type HandleRemoveEvent = (oldChildSnapshot: IRtdbDataSnapshot) => void;
 export type HandleMoveEvent = (
-  childSnapshot: RtdbDataSnapshot,
+  childSnapshot: IRtdbDataSnapshot,
   prevChildKey: string
 ) => void;
 export type HandleChangeEvent = (
-  childSnapshot: RtdbDataSnapshot,
+  childSnapshot: IRtdbDataSnapshot,
   prevChildKey: string
 ) => void;
 
@@ -124,8 +118,8 @@ export interface IListener {
   /** the _query_ the listener is based off of */
   query: SerializedRealTimeQuery;
 
-  eventType: RtdbEventType;
-  callback: (a: RtdbDataSnapshot | null, b?: string) => any;
+  eventType: IRtdbEventType;
+  callback: (a: IRtdbDataSnapshot | null, b?: string) => any;
   cancelCallbackOrContext?: object | null;
   context?: object | null;
 }

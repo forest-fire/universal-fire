@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isOrderByChild = exports.orderByValue = exports.orderByKey = exports.orderByChild = void 0;
 const serialized_query_1 = require("@forest-fire/serialized-query");
 exports.orderByChild = (child) => {
     return (a, b) => {

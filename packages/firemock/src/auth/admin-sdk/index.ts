@@ -1,8 +1,8 @@
-import { implemented } from './implemented';
-import { notImplemented } from './not-implemented';
-import { Auth } from '../../@types/auth-types';
+import { implemented } from "./implemented";
+import { notImplemented } from "./not-implemented";
+import { Auth } from "@forest-fire/types";
 
-export const adminAuthSdk = {
+export const adminAuthSdk: Auth = {
   ...implemented,
   ...notImplemented,
 } as Auth;

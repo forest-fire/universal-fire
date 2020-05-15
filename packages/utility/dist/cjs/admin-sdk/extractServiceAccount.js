@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.extractServiceAccount = void 0;
 const index_1 = require("../index");
 /**
  * Takes as input a variety of possible formats and converts it into

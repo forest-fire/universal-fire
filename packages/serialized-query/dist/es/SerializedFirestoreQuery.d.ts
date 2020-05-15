@@ -1,11 +1,12 @@
-import type { IDictionary } from 'common-types';
-import type { IComparisonOperator, IFirestoreQuery, IFirestoreQueryOrderType, ISimplifiedDatabase } from './index';
-import { SerializedQuery } from './index';
+import type { IDictionary } from "common-types";
+import type { IComparisonOperator, IFirestoreQuery, IFirestoreQueryOrderType, ISimplifiedDatabase } from "./index";
+import { BaseSerializer } from "./index";
+import { IFirestoreQuerySnapshot } from "@forest-fire/types";
 /**
  * Provides a way to serialize the full characteristics of a Firebase Firestore
  * Database query.
  */
-export declare class SerializedFirestoreQuery<T = IDictionary> extends SerializedQuery<T> {
+export declare class SerializedFirestoreQuery<T = IDictionary> extends BaseSerializer<T> {
     static path<T extends object = IDictionary>(path?: string): SerializedFirestoreQuery<T>;
     protected _orderBy: IFirestoreQueryOrderType;
     protected _db?: ISimplifiedDatabase;
@@ -13,6 +14,6 @@ export declare class SerializedFirestoreQuery<T = IDictionary> extends Serialize
     orderBy(child: keyof T & string): this;
     set db(value: ISimplifiedDatabase);
     deserialize(db?: ISimplifiedDatabase): IFirestoreQuery;
-    execute(db?: ISimplifiedDatabase): Promise<import("@firebase/firestore-types").QuerySnapshot<import("@firebase/firestore-types").DocumentData>>;
+    execute(db?: ISimplifiedDatabase): Promise<IFirestoreQuerySnapshot>;
     where<V>(operation: IComparisonOperator, value: V, key?: keyof T & string): this;
 }

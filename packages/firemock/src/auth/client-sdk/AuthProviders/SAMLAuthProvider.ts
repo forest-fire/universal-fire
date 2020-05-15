@@ -1,4 +1,4 @@
-import { SAMLAuthProvider as GoogleSAMLAuthProvider } from '@firebase/auth-types';
+import { SAMLAuthProvider as GoogleSAMLAuthProvider } from "@forest-fire/types";
 
 export class SAMLAuthProvider implements GoogleSAMLAuthProvider {
   public providerId: string;

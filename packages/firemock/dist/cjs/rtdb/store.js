@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.reset = exports.pushDB = exports.removeDB = exports.groupEventsByWatcher = exports.multiPathUpdateDB = exports.updateDB = exports.setDB = exports.getDb = exports.auth = exports.updateDatabase = exports.clearDatabase = exports.shouldSendEvents = exports.restoreEvents = exports.silenceEvents = void 0;
 // tslint:disable:no-implicit-dependencies
 const common_types_1 = require("common-types");
 const lodash_set_1 = __importDefault(require("lodash.set"));

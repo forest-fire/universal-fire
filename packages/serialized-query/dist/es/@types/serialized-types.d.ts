@@ -1,13 +1,12 @@
-import type { IDictionary } from 'common-types';
-import type { Query as IFirestoreQuery } from '@firebase/firestore-types';
-import type { Query as IRealTimeQuery } from '@firebase/database-types';
+import type { IDictionary } from "common-types";
+import type { IFirestoreQuery, IRealTimeQuery } from "@forest-fire/types";
 export declare enum RealQueryOrderType {
     orderByChild = "orderByChild",
     orderByKey = "orderByKey",
     orderByValue = "orderByValue"
 }
 export declare type IRealQueryOrderType = keyof typeof RealQueryOrderType;
-export declare type IFirestoreQueryOrderType = IRealQueryOrderType | 'orderBy';
+export declare type IFirestoreQueryOrderType = IRealQueryOrderType | "orderBy";
 export interface ISerializedRealTimeIdentity<T = IDictionary> {
     orderBy: IRealQueryOrderType;
     orderByKey?: keyof T;
@@ -21,10 +20,10 @@ export interface ISerializedRealTimeIdentity<T = IDictionary> {
     equalToKey?: string;
     path: string;
 }
-export interface ISerializedIdentity<T> extends Omit<ISerializedRealTimeIdentity<T>, 'orderBy'> {
+export interface ISerializedIdentity<T> extends Omit<ISerializedRealTimeIdentity<T>, "orderBy"> {
     orderBy: IRealQueryOrderType | IFirestoreQueryOrderType;
 }
-export declare type IComparisonOperator = '=' | '>' | '<';
+export declare type IComparisonOperator = "=" | ">" | "<";
 export interface ISimplifiedDatabase {
     ref: (path: string) => any | IRealTimeQuery | IFirestoreQuery;
 }

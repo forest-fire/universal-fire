@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isAdminConfig = exports.isClientConfig = exports.isRealDbConfig = exports.isMockConfig = void 0;
 function isMockConfig(config) {
     return config && config.mocking === true;
 }

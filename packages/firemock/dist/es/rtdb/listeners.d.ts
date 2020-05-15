@@ -1,6 +1,7 @@
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { RtdbEventType, IFirebaseEventHandler, RtdbDataSnapshot, IListener } from '../@types/rtdb-types';
-import { IDictionary } from 'common-types';
+import { SerializedRealTimeQuery } from "@forest-fire/serialized-query";
+import { IFirebaseEventHandler, IListener } from "../@types/rtdb-types";
+import { IRtdbEventType, IRtdbDataSnapshot } from "@forest-fire/types";
+import { IDictionary } from "common-types";
 /**
  * **addListener**
  *
@@ -13,7 +14,7 @@ import { IDictionary } from 'common-types';
  * interested in the _paths_ which are being watched
  * you can call `listenerPaths()`.
  */
-export declare function addListener(pathOrQuery: string | SerializedRealTimeQuery<any>, eventType: RtdbEventType, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<RtdbDataSnapshot>;
+export declare function addListener(pathOrQuery: string | SerializedRealTimeQuery<any>, eventType: IRtdbEventType, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<IRtdbDataSnapshot>;
 /**
  * **removeListener**
  *
@@ -24,7 +25,7 @@ export declare function addListener(pathOrQuery: string | SerializedRealTimeQuer
  * the listener, if not then it will use `eventType` (if available) as
  * well as `callback` (if available) to identify the callback(s)
  */
-export declare function removeListener(eventType?: RtdbEventType, callback?: (snap: RtdbDataSnapshot, key?: string) => void, context?: IDictionary): number;
+export declare function removeListener(eventType?: IRtdbEventType, callback?: (snap: IRtdbDataSnapshot, key?: string) => void, context?: IDictionary): number;
 export declare function removeAllListeners(): number;
 /**
  * **listenerCount**
@@ -33,8 +34,8 @@ export declare function removeAllListeners(): number;
  * Optionally you can state the `EventType` and get a count
  * of only this type of event.
  */
-export declare function listenerCount(type?: RtdbEventType): number;
-export declare type EventTypePlusChild = RtdbEventType | 'child';
+export declare function listenerCount(type?: IRtdbEventType): number;
+export declare type EventTypePlusChild = IRtdbEventType | "child";
 /**
  * **listenerPaths**
  *
@@ -76,7 +77,7 @@ export declare type IListenerPlus = IListener & {
  * @param changePath the _parent path_ that children are detected off of
  * @param eventTypes <optional> the specific child event (or events) to filter down to; if you have more than one then you should be aware that this property is destructured so the calling function should pass in an array of parameters rather than an array as the second parameter
  */
-export declare function findChildListeners(changePath: string, ...eventTypes: RtdbEventType[]): IListenerPlus[];
+export declare function findChildListeners(changePath: string, ...eventTypes: IRtdbEventType[]): IListenerPlus[];
 /**
  * Finds all value listeners on a given path or below.
  * Unlike child listeners, Value listeners listen to changes at

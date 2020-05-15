@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.singularize = exports.addException = exports.pluralize = void 0;
 const exceptions = {
     child: 'children',
     man: 'men',

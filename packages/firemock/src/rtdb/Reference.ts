@@ -1,10 +1,12 @@
 import { IDictionary } from 'common-types';
-import get from 'lodash.get';
 import {
-  RtdbReference,
-  RtdbDataSnapshot,
-  RtdbThenableReference,
-  RtdbEventType,
+  IRtdbReference,
+  IRtdbDataSnapshot,
+  IRtdbThenableReference,
+  IRtdbEventType,
+} from '@forest-fire/types';
+
+import {
   IFirebaseEventHandler,
 } from '../@types/rtdb-types';
 
@@ -43,7 +45,7 @@ function isMultiPath(data: IDictionary) {
   return indexesAreStrings && indexesLookLikeAPath ? true : false;
 }
 
-export class Reference<T = any> extends Query<T> implements RtdbReference {
+export class Reference<T = any> extends Query<T> implements IRtdbReference {
   public static createQuery(
     query: string | SerializedRealTimeQuery,
     delay: DelayType = 5
@@ -67,7 +69,7 @@ export class Reference<T = any> extends Query<T> implements RtdbReference {
     return this.path.split('.').pop();
   }
 
-  public get parent(): RtdbReference | null {
+  public get parent(): IRtdbReference | null {
     const r = parts(this.path).slice(-1).join('.');
     return new Reference(r, getDb(r));
   }
@@ -84,7 +86,7 @@ export class Reference<T = any> extends Query<T> implements RtdbReference {
   public push(
     value?: any,
     onComplete?: (a: Error | null) => any
-  ): RtdbThenableReference {
+  ): IRtdbThenableReference {
     const id = pushDB(this.path, value);
     this.path = join(this.path, id);
     if (onComplete) {
@@ -146,7 +148,7 @@ export class Reference<T = any> extends Query<T> implements RtdbReference {
     onComplete?: (
       a: Error | null,
       b: boolean,
-      c: RtdbDataSnapshot | null
+      c: IRtdbDataSnapshot | null
     ) => any,
     applyLocally?: boolean
   ) {
@@ -169,17 +171,17 @@ export class Reference<T = any> extends Query<T> implements RtdbReference {
       : 'FireMock::Reference@uninitialized (aka, no path) mock Reference object';
   }
 
-  protected getSnapshot<T extends RtdbDataSnapshot>(key: string, value: any) {
+  protected getSnapshot<T extends IRtdbDataSnapshot>(key: string, value: any) {
     return new SnapShot<T>(key, value);
   }
 
   protected addListener(
     pathOrQuery: string | SerializedRealTimeQuery<any>,
-    eventType: RtdbEventType,
+    eventType: IRtdbEventType,
     callback: IFirebaseEventHandler,
     cancelCallbackOrContext?: (err?: Error) => void,
     context?: IDictionary
-  ): Promise<RtdbDataSnapshot> {
+  ): Promise<IRtdbDataSnapshot> {
     return addListener(
       pathOrQuery,
       eventType,

@@ -13,55 +13,10 @@ import {
   listenerCount,
   reset,
 } from '../src/rtdb';
-import { wait, IDictionary } from 'common-types';
-import { SerializedQuery } from 'serialized-query';
+import { IDictionary } from 'common-types';
 import { IRtdbDataSnapshot } from '@forest-fire/types';
 
 describe('Listener events ->', () => {
-  it('listening on a "value" event detects changes', async () => {
-    const ref = () => new Reference('userProfile/1234');
-    const queryRef = SerializedQuery.path('userProfile/1234').deserialize({
-      ref,
-    });
-    let events: IDictionary[] = [];
-    let ready = false;
-
-    const cb = (snap: IRtdbDataSnapshot, prevKey: any) => {
-      if (ready) {
-        events.push({ key: snap.key, snap: snap.val(), prevKey });
-      }
-    };
-
-    queryRef.on('value', cb);
-    await wait(150);
-    ready = true;
-    updateDB('userProfile/1234/name', 'Bob Marley');
-    expect(listenerCount('value')).to.equal(1);
-    expect(events).to.have.lengthOf(1);
-    expect(events[0].snap).to.haveOwnProperty('name');
-    expect(events[0].snap.name).to.equal('Bob Marley');
-    events = [];
-
-    updateDB('userProfile/1234/age', 13);
-    expect(events[0].snap).to.haveOwnProperty('age');
-    expect(events[0].snap.age).to.equal(13);
-    expect(events[0].snap.name).to.equal('Bob Marley');
-    events = [];
-    updateDB('userProfile/1234/ssn', '044-123-4545');
-    events = [];
-
-    // remove an attribute
-    removeDB('userProfile/1234/age');
-    expect(events[0].snap.name).to.equal('Bob Marley');
-    expect(events[0].snap.ssn).to.equal('044-123-4545');
-    expect(events[0].snap.age).to.equal(undefined);
-    events = [];
-
-    // remove the object
-    removeDB('userProfile/1234');
-    expect(events[0].snap).to.equal(undefined);
-  });
-
   it('listening on "on_child" events', async () => {
     reset();
     const queryRef = Reference.createQuery('userProfile', 10);

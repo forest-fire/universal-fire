@@ -1,2 +1,2 @@
-import { FirebaseAuth } from '../../@types/auth-types';
+import { FirebaseAuth } from "@forest-fire/types";
 export declare const notImplemented: Partial<FirebaseAuth>;

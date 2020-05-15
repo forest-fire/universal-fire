@@ -1,4 +1,3 @@
-/// <reference types="faker" />
 import { MockHelper } from './index';
 /**
  * **importFakerLibrary**

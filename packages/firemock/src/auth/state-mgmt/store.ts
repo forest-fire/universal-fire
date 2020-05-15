@@ -4,11 +4,12 @@ import {
   IAuthProviderName,
   ISimplifiedMockUser,
   UpdateRequest,
-} from '../../@types';
-import { pk } from 'common-types';
-import { FireMockError } from '../../errors/FireMockError';
-import { UserCredential, User } from '@firebase/auth-types';
-import { clientApiUser } from '../client-sdk/UserObject';
+  UserCredential,
+  User,
+} from "@forest-fire/types";
+import { pk } from "common-types";
+import { FireMockError } from "../../errors/FireMockError";
+import { clientApiUser } from "../client-sdk/UserObject";
 
 /**
  * The recognized users in the mock Auth system
@@ -52,9 +53,7 @@ export function initializeAuth(config: IMockAuthConfig) {
     uid: getRandomMockUid(),
     providerData: [],
   });
-  _users =
-    (config.users || []).map((u) => ({ ...baseUser(), ...u } as IMockUser)) ||
-    [];
+  _users = (config.users || []).map((u) => ({ ...baseUser(), ...u } as IMockUser)) || [];
   _providers = config.providers || [];
 }
 
@@ -71,12 +70,12 @@ export function setCurrentUser(user: User | UserCredential) {
       additionalUserInfo: {
         isNewUser: false,
         profile: {},
-        providerId: 'mock',
+        providerId: "mock",
         username: user.email,
       },
       credential: {
-        signInMethod: 'mock',
-        providerId: 'mock',
+        signInMethod: "mock",
+        providerId: "mock",
         toJSON: () => user,
       },
     };
@@ -99,7 +98,7 @@ export function currentUser() {
  * Returns the full `UserCredential` object for the logged in user;
  * this is only relevant for client sdk.
  */
-export function currentUserCredential() {
+export function currentUserCredential(): UserCredential {
   return _currentUserCredential;
 }
 
@@ -175,19 +174,14 @@ export function convertToFirebaseUser(user: IMockUser): User {
   } as User;
 }
 
-export function updateUser(
-  uid: string,
-  update: Partial<IMockUser> | UpdateRequest
-) {
+export function updateUser(uid: string, update: Partial<IMockUser> | UpdateRequest) {
   const existing = _users.find((u) => u.uid === uid);
   if (!existing) {
     throw new FireMockError(
       `Attempt to update the user with UID of "${uid}" failed because this user is not defined in the mock Auth instance!`
     );
   }
-  _users = _users.map((u) =>
-    u.uid === uid ? ({ ...u, ...update } as IMockUser) : u
-  );
+  _users = _users.map((u) => (u.uid === uid ? ({ ...u, ...update } as IMockUser) : u));
 }
 
 export function allUsers() {

@@ -1,12 +1,7 @@
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { ISchemaHelper } from './mocking-types';
-export declare type RtdbQuery = import('@firebase/database-types').Query;
-export declare type RtdbReference = import('@firebase/database-types').Reference;
-export declare type RtdbDataSnapshot = import('@firebase/database-types').DataSnapshot;
-export declare type RtdbThenableReference = import('@firebase/database-types').ThenableReference;
-export declare type RtdbEventType = import('@firebase/database-types').EventType;
-export declare type FirebaseDatabase = import('@firebase/database-types').FirebaseDatabase;
+import type { IRtdbEventType, IRtdbDataSnapshot } from '@forest-fire/types';
 export interface ISchema {
     id: string;
     /** path to the database which is the root for given schema list */
@@ -57,7 +52,7 @@ export interface IMockWatcherGroupEvent {
     /** the path that the listener is listening at */
     listenerPath: string;
     /** the event which is being listened to */
-    listenerEvent: import('@firebase/database-types').EventType;
+    listenerEvent: IRtdbEventType;
     /** the dispatch function for this listener */
     callback: IFirebaseEventHandler;
     /** the path where the event took place */
@@ -83,23 +78,23 @@ export interface IMockWatcherGroupEvent {
  * name of the key which directly _preceeds_ the event key in Firebase's stored order
  */
 export interface IFirebaseEventHandler {
-    (snap: RtdbDataSnapshot, prevChildKey?: string): void;
+    (snap: IRtdbDataSnapshot, prevChildKey?: string): void;
 }
 export declare type EventHandler = HandleValueEvent | HandleNewEvent | HandleRemoveEvent;
-export declare type GenericEventHandler = (snap: RtdbDataSnapshot, key?: string) => void;
-export declare type HandleValueEvent = (dataSnapShot: RtdbDataSnapshot) => void;
-export declare type HandleNewEvent = (childSnapshot: RtdbDataSnapshot, prevChildKey: string) => void;
-export declare type HandleRemoveEvent = (oldChildSnapshot: RtdbDataSnapshot) => void;
-export declare type HandleMoveEvent = (childSnapshot: RtdbDataSnapshot, prevChildKey: string) => void;
-export declare type HandleChangeEvent = (childSnapshot: RtdbDataSnapshot, prevChildKey: string) => void;
+export declare type GenericEventHandler = (snap: IRtdbDataSnapshot, key?: string) => void;
+export declare type HandleValueEvent = (dataSnapShot: IRtdbDataSnapshot) => void;
+export declare type HandleNewEvent = (childSnapshot: IRtdbDataSnapshot, prevChildKey: string) => void;
+export declare type HandleRemoveEvent = (oldChildSnapshot: IRtdbDataSnapshot) => void;
+export declare type HandleMoveEvent = (childSnapshot: IRtdbDataSnapshot, prevChildKey: string) => void;
+export declare type HandleChangeEvent = (childSnapshot: IRtdbDataSnapshot, prevChildKey: string) => void;
 export declare type QueryValue = number | string | boolean | null;
 export interface IListener {
     /** random string */
     id: string;
     /** the _query_ the listener is based off of */
     query: SerializedRealTimeQuery;
-    eventType: RtdbEventType;
-    callback: (a: RtdbDataSnapshot | null, b?: string) => any;
+    eventType: IRtdbEventType;
+    callback: (a: IRtdbDataSnapshot | null, b?: string) => any;
     cancelCallbackOrContext?: object | null;
     context?: object | null;
 }

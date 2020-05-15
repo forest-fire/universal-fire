@@ -1,13 +1,13 @@
 import { IDictionary, SortingFunction } from 'common-types';
+import { IRtdbDataSnapshot } from '@forest-fire/types';
 import { Reference } from '../rtdb/index';
-import { RtdbDataSnapshot } from '../@types/rtdb-types';
 /**
  * Each record in the forEach iteration will be passed
  * a snapshot synchronously; if you wish to exit early
  * return a TRUE value
  */
 export declare type Action = (record: SnapShot) => boolean | void;
-export declare class SnapShot<T = any> implements RtdbDataSnapshot {
+export declare class SnapShot<T = any> implements IRtdbDataSnapshot {
     private _key;
     private _value;
     private _sortingFunction;

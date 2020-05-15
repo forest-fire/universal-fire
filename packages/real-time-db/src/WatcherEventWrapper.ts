@@ -3,12 +3,12 @@ import {
   IFirebaseWatchHandler,
   IFirebaseWatchContext
 } from "./types";
-import { DataSnapshot } from "@firebase/database-types";
+import { IRtdbDataSnapshot } from "@forest-fire/types";
 
 export const WatcherEventWrapper = (context: IFirebaseWatchContext) => (
   handler: IFirebaseWatchHandler
 ) => {
-  return (snapshot: DataSnapshot, previousChildKey?: string) => {
+  return (snapshot: IRtdbDataSnapshot, previousChildKey?: string) => {
     const value = snapshot.val();
     const key = snapshot.key;
     const kind = "server-event";

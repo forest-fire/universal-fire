@@ -1,4 +1,4 @@
-import { Persistence } from '@firebase/auth-types';
+import { Persistence } from "@forest-fire/types";
 export declare class Auth {
     static Persistence: {
         LOCAL: Persistence;

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getRunningApps = void 0;
 /**
  * Returns an array of named apps that are running under
  * Firebase's control (admin API)

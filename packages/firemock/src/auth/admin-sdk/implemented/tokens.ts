@@ -1,4 +1,4 @@
-import { DecodedIdToken, Auth } from '../../../@types/auth-types';
+import { DecodedIdToken, Auth } from "@forest-fire/types";
 
 export const tokens: Partial<Auth> = {
   /**

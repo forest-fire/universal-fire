@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Query = void 0;
 const index_1 = require("../rtdb/index");
 const serialized_query_1 = require("@forest-fire/serialized-query");
 const index_2 = require("../shared/index");

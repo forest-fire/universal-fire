@@ -1,9 +1,9 @@
-import { notImplemented } from './notImplemented';
-import { implemented } from './implemented';
-import { FirebaseAuth } from '@firebase/auth-types';
+import { notImplemented } from "./notImplemented";
+import { implemented } from "./implemented";
+import { FirebaseAuth } from "@forest-fire/types";
 
 // tslint:disable-next-line:no-object-literal-type-assertion
-export const authMockApi = {
+export const authMockApi: FirebaseAuth = {
   ...notImplemented,
   ...implemented,
 } as FirebaseAuth;

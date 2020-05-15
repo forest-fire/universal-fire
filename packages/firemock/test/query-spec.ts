@@ -1,7 +1,6 @@
 // tslint:disable:no-implicit-dependencies
 import { expect } from 'chai';
 import { Mock } from '../src/mocking';
-import { SerializedQuery } from 'serialized-query';
 
 const ages = () => ({
   asdfasdfas1: 13,
@@ -93,40 +92,5 @@ describe('Query →', () => {
     });
     const snap = await m.ref(`/foo`).once('value');
     expect(snap.val()).to.equal(5);
-  });
-
-  it.skip('getList() with limit query on orderByKey of scalar values', async () => {
-    const m = await Mock.prepare();
-    m.updateDB({
-      ages: {
-        asdfasdfas: 13,
-        dfddffdfd: 5,
-        adsffdffdfd: 26,
-        ddfdfdfd: 1,
-        werqerqer: 2,
-        erwrewrw: 100,
-      },
-    });
-    const query = SerializedQuery.path('ages').orderByKey().limitToFirst(3);
-    const ages = await query.execute();
-
-    expect(ages).to.have.lengthOf(3);
-  });
-
-  it.skip('getList() with limit query on orderByValue', async () => {
-    const m = await Mock.prepare();
-    m.updateDB({
-      ages: {
-        asdfasdfas: 13,
-        dfddffdfd: 5,
-        adsffdffdfd: 26,
-        ddfdfdfd: 1,
-        werqerqer: 2,
-        erwrewrw: 100,
-      },
-    });
-    const query = SerializedQuery.path('ages').orderByValue().limitToFirst(3);
-    const ages = await m.db.getList(query);
-    expect(ages).to.have.lengthOf(3);
   });
 });

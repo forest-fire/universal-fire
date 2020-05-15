@@ -1,5 +1,4 @@
-import { IDictionary } from 'common-types';
-// import * as firebase from 'firebase-admin';
+import { IDictionary } from "common-types";
 export default class Disconnected /** implements firebase.database.OnDisconnect */ {
   public cancel(onComplete?: (a: Error) => any): Promise<void> {
     return Promise.resolve();
@@ -21,10 +20,7 @@ export default class Disconnected /** implements firebase.database.OnDisconnect 
     return Promise.resolve();
   }
 
-  public update(
-    values: IDictionary,
-    onComplete?: (a: Error | null) => any
-  ): Promise<void> {
+  public update(values: IDictionary, onComplete?: (a: Error | null) => any): Promise<void> {
     return Promise.resolve();
   }
 }

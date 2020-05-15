@@ -8,10 +8,10 @@ import type {
   IFirestoreDbEvent,
   IRtdbDatabase,
   IRtdbEventType,
-  MockDb,
-} from '@forest-fire/types';
-import type { SerializedQuery } from '@forest-fire/serialized-query';
-import { FireError } from '@forest-fire/utility';
+} from "@forest-fire/types";
+// import type { Mock as any } from "firemock";
+import { BaseSerializer, SerializedQuery } from "@forest-fire/serialized-query";
+import { FireError } from "@forest-fire/utility";
 
 export abstract class AbstractedDatabase {
   /**
@@ -25,7 +25,7 @@ export abstract class AbstractedDatabase {
   /**
    * The mock API provided by **firemock**
    */
-  protected _mock?: MockDb;
+  protected _mock?: any;
   /**
    * The Firebase App API.
    */
@@ -80,7 +80,7 @@ export abstract class AbstractedDatabase {
   /**
    * Indicates if the database is a mock database or not
    */
-  public get isMockDb() {
+  public get isany() {
     return this._config.mocking;
   }
   /**
@@ -97,11 +97,11 @@ export abstract class AbstractedDatabase {
    * This is only available if the database has been configured as a mocking database; if it is _not_
    * a mocked database a `AbstractedDatabase/not-allowed` error will be thrown.
    */
-  public get mock(): MockDb {
-    if (!this.isMockDb) {
+  public get mock(): any {
+    if (!this.isany) {
       throw new FireError(
         `Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`,
-        'AbstractedDatabase/not-allowed'
+        "AbstractedDatabase/not-allowed"
       );
     }
     if (!this._mock) {
@@ -123,7 +123,7 @@ export abstract class AbstractedDatabase {
    * `idProp` parameter.
    */
   public abstract async getList<T = any>(
-    path: string | SerializedQuery<T>,
+    path: string | BaseSerializer<T>,
     idProp?: string
   ): Promise<T[]>;
   /**
@@ -138,10 +138,7 @@ export abstract class AbstractedDatabase {
    * Gets a record from a given path in the Firebase DB and converts it to an
    * object where the record's key is included as part of the record.
    */
-  public abstract async getRecord<T = any>(
-    path: string,
-    idProp?: string
-  ): Promise<T>;
+  public abstract async getRecord<T = any>(path: string, idProp?: string): Promise<T>;
   /**
    * Returns the value at a given path in the database. This method is a
    * typescript _generic_ which defaults to `any` but you can set the type to
@@ -155,10 +152,7 @@ export abstract class AbstractedDatabase {
    * that exist in the DB, but not in the value passed in then these properties
    * will _not_ be changed.
    */
-  public abstract async update<T = any>(
-    path: string,
-    value: Partial<T>
-  ): Promise<void>;
+  public abstract async update<T = any>(path: string, value: Partial<T>): Promise<void>;
   /**
    * Sets a value in the database at a given path.
    */
@@ -166,31 +160,20 @@ export abstract class AbstractedDatabase {
   /**
    * Removes a path from the database.
    */
-  public abstract async remove(
-    path: string,
-    ignoreMissing?: boolean
-  ): Promise<any>;
+  public abstract async remove(path: string, ignoreMissing?: boolean): Promise<any>;
   /**
    * Watch for Firebase events based on a DB path.
    */
   public abstract watch(
-    target: string | SerializedQuery<any>,
-    events:
-      | IFirestoreDbEvent
-      | IFirestoreDbEvent[]
-      | IRtdbEventType
-      | IRtdbEventType[],
+    target: string | BaseSerializer<any>,
+    events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[],
     cb: any
   ): void;
   /**
    * Unwatches existing Firebase events.
    */
   public abstract unWatch(
-    events?:
-      | IFirestoreDbEvent
-      | IFirestoreDbEvent[]
-      | IRtdbEventType
-      | IRtdbEventType[],
+    events?: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[],
     cb?: any
   ): void;
   /**

@@ -1,9 +1,10 @@
 import { IDictionary, SortingFunction } from 'common-types';
+import { IRtdbDataSnapshot } from '@forest-fire/types';
+
 import get from 'lodash.get';
 import { Reference } from '../rtdb/index';
 import { arrayToHash } from 'typed-conversions';
 import { getKey, join } from '../shared/index';
-import { RtdbDataSnapshot } from '../@types/rtdb-types';
 
 /**
  * Each record in the forEach iteration will be passed
@@ -12,9 +13,9 @@ import { RtdbDataSnapshot } from '../@types/rtdb-types';
  */
 export type Action = (record: SnapShot) => boolean | void;
 
-export class SnapShot<T = any> implements RtdbDataSnapshot {
+export class SnapShot<T = any> implements IRtdbDataSnapshot {
   private _sortingFunction: SortingFunction;
-  constructor(private _key: string, private _value: T[] | T) {}
+  constructor(private _key: string, private _value: T[] | T) { }
 
   public get key() {
     return getKey(join(this._key));

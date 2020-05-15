@@ -1,5 +1,5 @@
-import { IDictionary } from 'common-types';
-import { Queue, Schema, Deployment, MockHelper } from '../mocking/index';
+import { IDictionary } from "common-types";
+import { Queue, Schema, Deployment, MockHelper } from "../mocking/index";
 import {
   Reference,
   clearDatabase,
@@ -7,25 +7,28 @@ import {
   restoreEvents,
   silenceEvents,
   getDb,
-} from '../rtdb/index';
-import { DelayType, setNetworkDelay } from '../shared';
-import { auth as fireAuth } from '../auth';
-import { clearAuthUsers, initializeAuth } from '../auth/state-mgmt';
-import { FireMockError } from '../errors/FireMockError';
+} from "../rtdb/index";
+import { DelayType, setNetworkDelay } from "../shared";
+import { auth as fireAuth } from "../auth";
+import { clearAuthUsers, initializeAuth } from "../auth/state-mgmt";
+import { FireMockError } from "../errors/FireMockError";
 import {
   IRelationship,
   ISchema,
   IQueue,
   SchemaCallback,
-  IMockConfigOptions,
-  IMockAuthConfig,
-  AsyncMockData,
   IMockSetup,
-} from '../@types';
-import authProviders from '../auth/client-sdk/AuthProviders';
-import { FirebaseNamespace } from '@firebase/app-types';
-import { getFakerLibrary, importFakerLibrary } from './fakerInitialiation';
-import { adminAuthSdk } from '../auth/admin-sdk';
+} from "../@types";
+import authProviders from "../auth/client-sdk/AuthProviders";
+import {
+  FirebaseNamespace,
+  IMockAuthConfig,
+  IAdminAuth,
+  IMockConfigOptions,
+  AsyncMockData,
+} from "@forest-fire/types";
+import { getFakerLibrary, importFakerLibrary } from "./fakerInitialiation";
+import { adminAuthSdk } from "../auth/admin-sdk";
 
 /* tslint:disable:max-classes-per-file */
 export class Mock {
@@ -46,13 +49,13 @@ export class Mock {
     await importFakerLibrary();
     const obj = new Mock(
       options.db
-        ? typeof options.db === 'function'
+        ? typeof options.db === "function"
           ? {}
           : options.db || defaultDbConfig
         : defaultDbConfig,
       options.auth
     );
-    if (typeof options.db === 'function') {
+    if (typeof options.db === "function") {
       obj.updateDB(await (options.db as AsyncMockData)(obj));
     }
     return obj;
@@ -67,9 +70,9 @@ export class Mock {
   }
 
   // TODO: should these attributes be removed?
-  private _schemas = new Queue<ISchema>('schemas').clear();
-  private _relationships = new Queue<IRelationship>('relationships').clear();
-  private _queues = new Queue<IQueue>('queues').clear();
+  private _schemas = new Queue<ISchema>("schemas").clear();
+  private _relationships = new Queue<IRelationship>("relationships").clear();
+  private _queues = new Queue<IQueue>("queues").clear();
   private _mockInitializer: IMockSetup;
   private _fakerLoaded: Promise<any>;
 
@@ -82,17 +85,17 @@ export class Mock {
      */
     dataOrMock?: IDictionary | IMockSetup,
     authConfig: IMockAuthConfig = {
-      providers: ['anonymous'],
+      providers: ["anonymous"],
       users: [],
     }
   ) {
     Queue.clearAll();
     clearDatabase();
     clearAuthUsers();
-    if (dataOrMock && typeof dataOrMock === 'object') {
+    if (dataOrMock && typeof dataOrMock === "object") {
       this.updateDB(dataOrMock);
     }
-    if (dataOrMock && typeof dataOrMock === 'function') {
+    if (dataOrMock && typeof dataOrMock === "function") {
       this._mockInitializer = dataOrMock(this) as IMockSetup;
     }
 
@@ -135,11 +138,11 @@ export class Mock {
     return fireAuth();
   }
 
-  public async adminSdk() {
+  public async adminSdk(): Promise<IAdminAuth> {
     return adminAuthSdk;
   }
 
-  public get authProviders(): FirebaseNamespace['auth'] {
+  public get authProviders(): FirebaseNamespace["auth"] {
     return authProviders;
   }
 
@@ -176,11 +179,7 @@ export class Mock {
     setNetworkDelay(d);
   }
 
-  public queueSchema<T = any>(
-    schemaId: string,
-    quantity: number = 1,
-    overrides: IDictionary = {}
-  ) {
+  public queueSchema<T = any>(schemaId: string, quantity: number = 1, overrides: IDictionary = {}) {
     const d = new Deployment();
     d.queueSchema(schemaId, quantity, overrides);
     return d;
@@ -191,7 +190,7 @@ export class Mock {
     if (!faker && !faker.address) {
       throw new FireMockError(
         `The Faker library must be loaded before you can generate mocked data can be returned`,
-        'firemock/faker-not-ready'
+        "firemock/faker-not-ready"
       );
     }
 

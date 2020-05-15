@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.FireMockError = void 0;
 class FireMockError extends Error {
     constructor(message, classification = 'firemock/error') {
         super(message);

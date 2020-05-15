@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.RealQueryOrderType = void 0;
 var RealQueryOrderType;
 (function (RealQueryOrderType) {
     RealQueryOrderType["orderByChild"] = "orderByChild";

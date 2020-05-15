@@ -1,4 +1,4 @@
-import { IDatabaseConfig, IMockConfig, IAdminConfig, IClientConfig } from './@types/fire-types';
+import { IAdminConfig, IClientConfig, IDatabaseConfig, IMockConfig } from './index';
 export declare function isMockConfig(config: IDatabaseConfig): config is IMockConfig;
 export declare function isRealDbConfig(config: IDatabaseConfig): config is IAdminConfig | IClientConfig;
 /**

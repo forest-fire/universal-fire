@@ -1,10 +1,9 @@
-import { IPartialUserCredential, UserCredential } from '../../@types/auth-types';
+import { UserCredential, ConfirmationResult } from "@forest-fire/types";
+import { IPartialUserCredential } from "../../index";
+export { UserCredential };
 /**
  * takes a partial user auth and adds enough to make it officially
  * a full UserCrediental
  */
 export declare function completeUserCredential(partial: IPartialUserCredential): UserCredential;
-export declare const fakeApplicationVerifier: {
-    confirm(verificationCode: string): Promise<import("@firebase/auth-types").UserCredential>;
-    verificationId: string;
-};
+export declare const fakeApplicationVerifier: ConfirmationResult;

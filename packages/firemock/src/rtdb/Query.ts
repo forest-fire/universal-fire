@@ -1,8 +1,12 @@
+import { IDictionary } from 'common-types';
 import {
-  RtdbQuery,
-  RtdbReference,
-  RtdbDataSnapshot,
-  RtdbEventType,
+  IRtdbQuery,
+  IRtdbReference,
+  IRtdbDataSnapshot,
+  IRtdbEventType,
+} from '@forest-fire/types'
+
+import {
   QueryValue,
   IFirebaseEventHandler,
 } from '../@types/rtdb-types';
@@ -10,10 +14,9 @@ import { getDb, SnapShot } from '../rtdb/index';
 import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
 import { leafNode, DelayType, networkDelay } from '../shared/index';
 import { runQuery } from '../shared/index';
-import { IDictionary } from 'common-types';
 
 /** tslint:ignore:member-ordering */
-export abstract class Query<T = any> implements RtdbQuery {
+export abstract class Query<T = any> implements IRtdbQuery {
   public path: string;
   protected _query: SerializedRealTimeQuery;
   protected _delay: DelayType;
@@ -27,8 +30,8 @@ export abstract class Query<T = any> implements RtdbQuery {
       typeof path === 'string' ? SerializedRealTimeQuery.path(path) : path;
   }
 
-  public get ref(): RtdbReference {
-    return (this as unknown) as RtdbReference;
+  public get ref(): IRtdbReference {
+    return (this as unknown) as IRtdbReference;
   }
 
   public limitToLast(num: number): Query<T> {
@@ -70,11 +73,11 @@ export abstract class Query<T = any> implements RtdbQuery {
    * Setup an event listener for a given eventType
    */
   public on(
-    eventType: RtdbEventType,
-    callback: (a: RtdbDataSnapshot, b?: null | string) => any,
+    eventType: IRtdbEventType,
+    callback: (a: IRtdbDataSnapshot, b?: null | string) => any,
     cancelCallbackOrContext?: (err?: Error) => void | null,
     context?: object | null
-  ): (a: RtdbDataSnapshot, b?: null | string) => Promise<null> {
+  ): (a: IRtdbDataSnapshot, b?: null | string) => Promise<null> {
     this.addListener(
       this._query,
       eventType,
@@ -86,7 +89,7 @@ export abstract class Query<T = any> implements RtdbQuery {
     return null;
   }
 
-  public async once(eventType: 'value'): Promise<RtdbDataSnapshot> {
+  public async once(eventType: 'value'): Promise<IRtdbDataSnapshot> {
     await networkDelay();
     return this.getQuerySnapShot();
   }
@@ -164,24 +167,24 @@ export abstract class Query<T = any> implements RtdbQuery {
    * This is an undocumented API endpoint that is within the
    * typing provided by Google
    */
-  protected getParent(): RtdbReference | null {
+  protected getParent(): IRtdbReference | null {
     return null;
   }
   /**
    * This is an undocumented API endpoint that is within the
    * typing provided by Google
    */
-  protected getRoot(): RtdbReference {
+  protected getRoot(): IRtdbReference {
     return null;
   }
 
   protected abstract addListener(
     pathOrQuery: string | SerializedRealTimeQuery<any>,
-    eventType: RtdbEventType,
+    eventType: IRtdbEventType,
     callback: IFirebaseEventHandler,
     cancelCallbackOrContext?: (err?: Error) => void,
     context?: IDictionary
-  ): Promise<RtdbDataSnapshot>;
+  ): Promise<IRtdbDataSnapshot>;
 
   /**
    * Reduce the dataset using _filters_ (after sorts) but do not apply sort

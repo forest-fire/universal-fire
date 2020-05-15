@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.equalTo = exports.endAt = exports.startAt = void 0;
 function startAt(query) {
     const key = query.identity.startAtKey || query.identity.orderByKey;
     const value = query.identity.startAt;

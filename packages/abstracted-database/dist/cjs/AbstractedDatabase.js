@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AbstractedDatabase = void 0;
 const utility_1 = require("@forest-fire/utility");
 class AbstractedDatabase {
     constructor() {
@@ -21,7 +22,7 @@ class AbstractedDatabase {
     /**
      * Indicates if the database is a mock database or not
      */
-    get isMockDb() {
+    get isany() {
         return this._config.mocking;
     }
     /**
@@ -39,8 +40,8 @@ class AbstractedDatabase {
      * a mocked database a `AbstractedDatabase/not-allowed` error will be thrown.
      */
     get mock() {
-        if (!this.isMockDb) {
-            throw new utility_1.FireError(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, 'AbstractedDatabase/not-allowed');
+        if (!this.isany) {
+            throw new utility_1.FireError(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, "AbstractedDatabase/not-allowed");
         }
         if (!this._mock) {
             throw new utility_1.FireError(`Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`);

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.FirestoreDb = void 0;
 const abstracted_database_1 = require("@forest-fire/abstracted-database");
 const utility_1 = require("@forest-fire/utility");
 class FirestoreDb extends abstracted_database_1.AbstractedDatabase {

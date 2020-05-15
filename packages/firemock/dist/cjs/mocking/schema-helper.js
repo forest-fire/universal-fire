@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SchemaHelper = void 0;
 class SchemaHelper {
     constructor(context, faker) {
         this.context = context;

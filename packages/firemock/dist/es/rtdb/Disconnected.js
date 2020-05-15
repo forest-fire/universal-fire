@@ -1,4 +1,3 @@
-// import * as firebase from 'firebase-admin';
 export default class Disconnected /** implements firebase.database.OnDisconnect */ {
     cancel(onComplete) {
         return Promise.resolve();

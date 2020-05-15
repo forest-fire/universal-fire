@@ -1,8 +1,8 @@
-import { expect } from 'chai';
-import { SerializedQuery } from '../src/index';
+import { expect } from "chai";
+import { BaseSerializer } from "../src/index";
 
-describe('SerializedQuery', () => {
-  it('should be defined', () => {
-    expect(SerializedQuery).to.exist;
+describe("SerializedQuery", () => {
+  it("should be defined", () => {
+    expect(BaseSerializer).to.exist;
   });
 });

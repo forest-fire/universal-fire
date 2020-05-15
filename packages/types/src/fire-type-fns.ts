@@ -1,9 +1,9 @@
 import {
+  IAdminConfig,
+  IClientConfig,
   IDatabaseConfig,
   IMockConfig,
-  IAdminConfig,
-  IClientConfig
-} from './@types/fire-types';
+} from './index';
 
 export function isMockConfig(config: IDatabaseConfig): config is IMockConfig {
   return config && (config as IMockConfig).mocking === true;

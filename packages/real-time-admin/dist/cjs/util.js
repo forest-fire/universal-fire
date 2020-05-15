@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.debug = exports.slashNotation = void 0;
 function slashNotation(path) {
     return path.replace(/\./g, "/");
 }

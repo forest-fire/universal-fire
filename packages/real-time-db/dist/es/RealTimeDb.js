@@ -1,8 +1,8 @@
-import * as convert from 'typed-conversions';
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { AbstractedDatabase } from '@forest-fire/abstracted-database';
-import { PermissionDenied, UndefinedAssignment, AbstractedProxyError, WatcherEventWrapper, FileDepthExceeded, RealTimeDbError, } from './index';
-import { slashNotation } from '@forest-fire/utility';
+import { AbstractedDatabase } from "@forest-fire/abstracted-database";
+import * as convert from "typed-conversions";
+import { SerializedRealTimeQuery } from "@forest-fire/serialized-query";
+import { slashNotation } from "@forest-fire/utility";
+import { PermissionDenied, UndefinedAssignment, AbstractedProxyError, WatcherEventWrapper, FileDepthExceeded, RealTimeDbError, } from "./index";
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 export class RealTimeDb extends AbstractedDatabase {
@@ -12,7 +12,7 @@ export class RealTimeDb extends AbstractedDatabase {
         /** how many miliseconds before the attempt to connect to DB is timed out */
         this.CONNECTION_TIMEOUT = 5000;
         this._isConnected = false;
-        this._mockLoadingState = 'not-applicable';
+        this._mockLoadingState = "not-applicable";
         this._waitingForConnection = [];
         this._debugging = false;
         this._mocking = false;
@@ -68,9 +68,9 @@ export class RealTimeDb extends AbstractedDatabase {
             events.map((evt) => {
                 const dispatch = WatcherEventWrapper({
                     eventType: evt,
-                    targetType: 'path',
+                    targetType: "path",
                 })(cb);
-                if (typeof target === 'string') {
+                if (typeof target === "string") {
                     this.ref(slashNotation(target)).on(evt, dispatch);
                 }
                 else {
@@ -102,8 +102,8 @@ export class RealTimeDb extends AbstractedDatabase {
             });
         }
         catch (e) {
-            e.name = e.code.includes('RealTimeDb') ? 'AbstractedFirebase' : e.code;
-            e.code = 'RealTimeDb/unWatch';
+            e.name = e.code.includes("RealTimeDb") ? "AbstractedFirebase" : e.code;
+            e.code = "RealTimeDb/unWatch";
             throw e;
         }
     }
@@ -116,7 +116,7 @@ export class RealTimeDb extends AbstractedDatabase {
         return SerializedRealTimeQuery.path(path);
     }
     /** Get a DB reference for a given path in Firebase */
-    ref(path = '/') {
+    ref(path = "/") {
         return this.isMockDb ? this.mock.ref(path) : this._database.ref(path);
     }
     /**
@@ -161,18 +161,17 @@ export class RealTimeDb extends AbstractedDatabase {
             return results;
         }
         catch (e) {
-            if (e.code === 'PERMISSION_DENIED') {
+            if (e.code === "PERMISSION_DENIED") {
                 throw new PermissionDenied(e, `The attempt to set a value at path "${path}" failed due to incorrect permissions.`);
             }
-            if (e.message.indexOf('path specified exceeds the maximum depth that can be written') !== -1) {
+            if (e.message.indexOf("path specified exceeds the maximum depth that can be written") !== -1) {
                 throw new FileDepthExceeded(e);
             }
-            if (e.message.indexOf('First argument includes undefined in property') !==
-                -1) {
-                e.name = 'FirebaseUndefinedValueAssignment';
+            if (e.message.indexOf("First argument includes undefined in property") !== -1) {
+                e.name = "FirebaseUndefinedValueAssignment";
                 throw new UndefinedAssignment(e);
             }
-            throw new AbstractedProxyError(e, 'unknown', JSON.stringify({ path, value }));
+            throw new AbstractedProxyError(e, "unknown", JSON.stringify({ path, value }));
         }
     }
     /**
@@ -207,13 +206,13 @@ export class RealTimeDb extends AbstractedDatabase {
      */
     async multiPathSet(updates) {
         const fixed = Object.keys(updates).reduce((acc, path) => {
-            const slashPath = path.replace(/\./g, '/').slice(0, 1) === '/'
-                ? path.replace(/\./g, '/')
-                : '/' + path.replace(/\./g, '/');
+            const slashPath = path.replace(/\./g, "/").slice(0, 1) === "/"
+                ? path.replace(/\./g, "/")
+                : "/" + path.replace(/\./g, "/");
             acc[slashPath] = updates[path];
             return acc;
         }, {});
-        await this.ref('/').update(fixed);
+        await this.ref("/").update(fixed);
     }
     /**
      * **update**
@@ -231,7 +230,7 @@ export class RealTimeDb extends AbstractedDatabase {
             await this.ref(path).update(value);
         }
         catch (e) {
-            if (e.code === 'PERMISSION_DENIED') {
+            if (e.code === "PERMISSION_DENIED") {
                 throw new PermissionDenied(e, `The attempt to update a value at path "${path}" failed due to incorrect permissions.`);
             }
             else {
@@ -257,7 +256,7 @@ export class RealTimeDb extends AbstractedDatabase {
             return result;
         }
         catch (e) {
-            if (e.code === 'PERMISSION_DENIED') {
+            if (e.code === "PERMISSION_DENIED") {
                 throw new PermissionDenied(e, `The attempt to remove a value at path "${path}" failed due to incorrect permissions.`);
             }
             else {
@@ -272,8 +271,8 @@ export class RealTimeDb extends AbstractedDatabase {
      */
     async getSnapshot(path) {
         try {
-            const response = await (typeof path === 'string'
-                ? this.ref(slashNotation(path)).once('value')
+            const response = await (typeof path === "string"
+                ? this.ref(slashNotation(path)).once("value")
                 : path.setDB(this).execute());
             return response;
         }
@@ -305,11 +304,11 @@ export class RealTimeDb extends AbstractedDatabase {
      * and converts it to a JS object where the snapshot's key
      * is included as part of the record (as `id` by default)
      */
-    async getRecord(path, idProp = 'id') {
+    async getRecord(path, idProp = "id") {
         try {
             const snap = await this.getSnapshot(path);
             let object = snap.val();
-            if (typeof object !== 'object') {
+            if (typeof object !== "object") {
                 object = { value: snap.val() };
             }
             return Object.assign(Object.assign({}, object), { [idProp]: snap.key });
@@ -328,7 +327,7 @@ export class RealTimeDb extends AbstractedDatabase {
      * @param path the path in the database to
      * @param idProp
      */
-    async getList(path, idProp = 'id') {
+    async getList(path, idProp = "id") {
         try {
             const snap = await this.getSnapshot(path);
             return snap.val() ? convert.snapshotToArray(snap, idProp) : [];
@@ -355,7 +354,7 @@ export class RealTimeDb extends AbstractedDatabase {
             this.ref(path).push(value);
         }
         catch (e) {
-            if (e.code === 'PERMISSION_DENIED') {
+            if (e.code === "PERMISSION_DENIED") {
                 throw new PermissionDenied(e, `The attempt to push a value to path "${path}" failed due to incorrect permissions.`);
             }
             else {
@@ -377,7 +376,7 @@ export class RealTimeDb extends AbstractedDatabase {
      * the Mock DB as well.
      */
     _setupConnectionListener() {
-        this._eventManager.on('connection', (isConnected) => {
+        this._eventManager.on("connection", (isConnected) => {
             if (isConnected) {
                 this._onConnected.forEach((listener) => listener.cb(this, listener.ctx || {}));
             }
@@ -402,7 +401,7 @@ export class RealTimeDb extends AbstractedDatabase {
      * that can be useful and this has links to various providers.
      */
     get authProviders() {
-        throw new RealTimeDbError(`The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`, 'missing-auth-providers');
+        throw new RealTimeDbError(`The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`, "missing-auth-providers");
     }
     /**
      * **getFireMock**
@@ -411,8 +410,7 @@ export class RealTimeDb extends AbstractedDatabase {
      * then sets `isConnected` to **true**
      */
     async getFireMock(config = {}) {
-        const FireMock = await import(
-        /* webpackChunkName: "firemock" */ 'firemock');
+        const FireMock = await import(/* webpackChunkName: "firemock" */ "firemock");
         this._mock = await FireMock.Mock.prepare(config);
     }
 }

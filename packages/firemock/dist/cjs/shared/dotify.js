@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeDotsAtExtremes = exports.dotifyKeys = exports.dotify = void 0;
 exports.dotify = (path) => {
     const dotPath = path.replace(/[\\\/]/g, '.');
     return removeDotsAtExtremes(dotPath.slice(0, 1) === '.' ? dotPath.slice(1) : dotPath);

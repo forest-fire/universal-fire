@@ -1,12 +1,12 @@
-import { getIdToken } from './getIdToken';
+import { getIdToken } from "./getIdToken";
 export async function getIdTokenResult(forceRefresh) {
     return {
-        authTime: '',
+        authTime: "",
         claims: {},
-        expirationTime: '',
-        issuedAtTime: '',
-        signInProvider: '',
-        signInSecondFactor: '',
+        expirationTime: "",
+        issuedAtTime: "",
+        signInProvider: "",
+        signInSecondFactor: "",
         token: await getIdToken(),
     };
 }

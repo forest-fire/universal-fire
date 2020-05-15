@@ -1,7 +1,19 @@
-import { IDictionary } from 'common-types';
-import * as convert from 'typed-conversions';
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import { AbstractedDatabase } from "@forest-fire/abstracted-database";
+import * as convert from "typed-conversions";
+import {
+  IAdminApp,
+  IClientApp,
+  IDatabaseConfig,
+  IRtdbDatabase,
+  IRtdbDataSnapshot,
+  IRtdbEventType,
+  IRtdbReference,
+  IMockConfigOptions,
+} from "@forest-fire/types";
+import { IDictionary } from "common-types";
+import { SerializedRealTimeQuery } from "@forest-fire/serialized-query";
+import { slashNotation } from "@forest-fire/utility";
+
 import {
   IFirebaseListener,
   IMockLoadingState,
@@ -16,24 +28,12 @@ import {
   IRealTimeDb,
   IFirebaseWatchHandler,
   IFirebaseConnectionCallback,
-} from './index';
-import {
-  IRtdbDatabase,
-  IDatabaseConfig,
-  IClientApp,
-  IAdminApp,
-  IRtdbEventType,
-  IRtdbReference,
-  IRtdbDataSnapshot,
-  IMockConfigOptions,
-} from '@forest-fire/types';
-import { slashNotation } from '@forest-fire/utility';
+} from "./index";
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
-export abstract class RealTimeDb extends AbstractedDatabase
-  implements IRealTimeDb {
+export abstract class RealTimeDb extends AbstractedDatabase implements IRealTimeDb {
   protected _isAdminApi: boolean = false;
 
   constructor() {
@@ -76,7 +76,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
 
   protected abstract _eventManager: IClientEmitter | IAdminEmitter;
   protected _isConnected: boolean = false;
-  protected _mockLoadingState: IMockLoadingState = 'not-applicable';
+  protected _mockLoadingState: IMockLoadingState = "not-applicable";
   // tslint:disable-next-line:whitespace
 
   protected _resetMockDb: () => void;
@@ -126,19 +126,17 @@ export abstract class RealTimeDb extends AbstractedDatabase
       events.map((evt) => {
         const dispatch = WatcherEventWrapper({
           eventType: evt,
-          targetType: 'path',
+          targetType: "path",
         })(cb);
 
-        if (typeof target === 'string') {
+        if (typeof target === "string") {
           this.ref(slashNotation(target)).on(evt, dispatch);
         } else {
           target.setDB(this).deserialize(this).on(evt, dispatch);
         }
       });
     } catch (e) {
-      console.warn(
-        `RealTimeDb: failure trying to watch event ${JSON.stringify(events)}`
-      );
+      console.warn(`RealTimeDb: failure trying to watch event ${JSON.stringify(events)}`);
       throw new AbstractedProxyError(e);
     }
   }
@@ -160,8 +158,8 @@ export abstract class RealTimeDb extends AbstractedDatabase
         }
       });
     } catch (e) {
-      e.name = e.code.includes('RealTimeDb') ? 'AbstractedFirebase' : e.code;
-      e.code = 'RealTimeDb/unWatch';
+      e.name = e.code.includes("RealTimeDb") ? "AbstractedFirebase" : e.code;
+      e.code = "RealTimeDb/unWatch";
       throw e;
     }
   }
@@ -176,7 +174,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
   }
 
   /** Get a DB reference for a given path in Firebase */
-  public ref(path: string = '/'): IRtdbReference {
+  public ref(path: string = "/"): IRtdbReference {
     return this.isMockDb ? this.mock.ref(path) : this._database.ref(path);
   }
 
@@ -230,33 +228,24 @@ export abstract class RealTimeDb extends AbstractedDatabase
       const results = await this.ref(path).set(value);
       return results;
     } catch (e) {
-      if (e.code === 'PERMISSION_DENIED') {
+      if (e.code === "PERMISSION_DENIED") {
         throw new PermissionDenied(
           e,
           `The attempt to set a value at path "${path}" failed due to incorrect permissions.`
         );
       }
       if (
-        e.message.indexOf(
-          'path specified exceeds the maximum depth that can be written'
-        ) !== -1
+        e.message.indexOf("path specified exceeds the maximum depth that can be written") !== -1
       ) {
         throw new FileDepthExceeded(e);
       }
 
-      if (
-        e.message.indexOf('First argument includes undefined in property') !==
-        -1
-      ) {
-        e.name = 'FirebaseUndefinedValueAssignment';
+      if (e.message.indexOf("First argument includes undefined in property") !== -1) {
+        e.name = "FirebaseUndefinedValueAssignment";
         throw new UndefinedAssignment(e);
       }
 
-      throw new AbstractedProxyError(
-        e,
-        'unknown',
-        JSON.stringify({ path, value })
-      );
+      throw new AbstractedProxyError(e, "unknown", JSON.stringify({ path, value }));
     }
   }
 
@@ -293,14 +282,14 @@ export abstract class RealTimeDb extends AbstractedDatabase
   public async multiPathSet(updates: IDictionary) {
     const fixed: IDictionary = Object.keys(updates).reduce((acc, path) => {
       const slashPath =
-        path.replace(/\./g, '/').slice(0, 1) === '/'
-          ? path.replace(/\./g, '/')
-          : '/' + path.replace(/\./g, '/');
+        path.replace(/\./g, "/").slice(0, 1) === "/"
+          ? path.replace(/\./g, "/")
+          : "/" + path.replace(/\./g, "/");
       acc[slashPath] = updates[path];
 
       return acc;
     }, {} as IDictionary);
-    await this.ref('/').update(fixed);
+    await this.ref("/").update(fixed);
   }
 
   /**
@@ -318,7 +307,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
     try {
       await this.ref(path).update(value);
     } catch (e) {
-      if (e.code === 'PERMISSION_DENIED') {
+      if (e.code === "PERMISSION_DENIED") {
         throw new PermissionDenied(
           e,
           `The attempt to update a value at path "${path}" failed due to incorrect permissions.`
@@ -350,7 +339,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
       const result = await ref.remove();
       return result;
     } catch (e) {
-      if (e.code === 'PERMISSION_DENIED') {
+      if (e.code === "PERMISSION_DENIED") {
         throw new PermissionDenied(
           e,
           `The attempt to remove a value at path "${path}" failed due to incorrect permissions.`
@@ -374,8 +363,8 @@ export abstract class RealTimeDb extends AbstractedDatabase
     path: string | SerializedRealTimeQuery<T>
   ): Promise<IRtdbDataSnapshot> {
     try {
-      const response = await (typeof path === 'string'
-        ? this.ref(slashNotation(path as string)).once('value')
+      const response = await (typeof path === "string"
+        ? this.ref(slashNotation(path as string)).once("value")
         : (path as SerializedRealTimeQuery<T>).setDB(this).execute());
       return response;
     } catch (e) {
@@ -413,12 +402,12 @@ export abstract class RealTimeDb extends AbstractedDatabase
    */
   public async getRecord<T = any>(
     path: string | SerializedRealTimeQuery<T>,
-    idProp = 'id'
+    idProp = "id"
   ): Promise<T> {
     try {
       const snap = await this.getSnapshot<T>(path);
       let object = snap.val();
-      if (typeof object !== 'object') {
+      if (typeof object !== "object") {
         object = { value: snap.val() };
       }
 
@@ -440,7 +429,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    */
   public async getList<T = any>(
     path: string | SerializedRealTimeQuery<T>,
-    idProp = 'id'
+    idProp = "id"
   ): Promise<T[]> {
     try {
       const snap = await this.getSnapshot<T>(path);
@@ -467,7 +456,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
     try {
       this.ref(path).push(value);
     } catch (e) {
-      if (e.code === 'PERMISSION_DENIED') {
+      if (e.code === "PERMISSION_DENIED") {
         throw new PermissionDenied(
           e,
           `The attempt to push a value to path "${path}" failed due to incorrect permissions.`
@@ -497,11 +486,9 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * the Mock DB as well.
    */
   protected _setupConnectionListener() {
-    this._eventManager.on('connection', (isConnected: boolean) => {
+    this._eventManager.on("connection", (isConnected: boolean) => {
       if (isConnected) {
-        this._onConnected.forEach((listener) =>
-          listener.cb(this, listener.ctx || {})
-        );
+        this._onConnected.forEach((listener) => listener.cb(this, listener.ctx || {}));
       } else {
         this._onDisconnected.forEach((listener) => {
           listener.cb(this, listener.ctx || {});
@@ -536,7 +523,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
   public get authProviders(): any {
     throw new RealTimeDbError(
       `The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`,
-      'missing-auth-providers'
+      "missing-auth-providers"
     );
   }
 
@@ -547,9 +534,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * then sets `isConnected` to **true**
    */
   protected async getFireMock(config: IMockConfigOptions = {}) {
-    const FireMock = await import(
-      /* webpackChunkName: "firemock" */ 'firemock'
-    );
+    const FireMock = await import(/* webpackChunkName: "firemock" */ "firemock");
     this._mock = await FireMock.Mock.prepare(config);
   }
 }

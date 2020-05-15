@@ -1,12 +1,12 @@
-import { networkDelay } from '../../shared';
-import { completeUserCredential } from './completeUserCredential';
-import { FireMockError } from '../../errors/FireMockError';
-import { emailExistsAsUserInAuth, emailHasCorrectPassword, userUid, emailValidationAllowed, emailIsValidFormat, } from './authMockHelpers';
-import { addUser, allUsers, authProviders, setCurrentUser, clearCurrentUser, addAuthObserver, getAnonymousUid, } from '../state-mgmt';
-import { clientApiUser } from './UserObject';
+import { networkDelay } from "../../shared";
+import { completeUserCredential } from "./completeUserCredential";
+import { FireMockError } from "../../errors/FireMockError";
+import { emailExistsAsUserInAuth, emailHasCorrectPassword, userUid, emailValidationAllowed, emailIsValidFormat, } from "./authMockHelpers";
+import { addUser, allUsers, authProviders, setCurrentUser, clearCurrentUser, addAuthObserver, getAnonymousUid, } from "../state-mgmt";
+import { clientApiUser } from "./UserObject";
 export const implemented = {
     app: {
-        name: 'mocked-app',
+        name: "mocked-app",
         options: {},
         async delete() {
             return;
@@ -21,16 +21,16 @@ export const implemented = {
     },
     signInAnonymously: async () => {
         await networkDelay();
-        if (authProviders().includes('anonymous')) {
+        if (authProviders().includes("anonymous")) {
             const user = {
                 ...clientApiUser,
                 isAnonymous: true,
                 uid: getAnonymousUid(),
             };
             const credential = {
-                signInMethod: 'anonymous',
-                providerId: 'anonymous',
-                toJSON: () => '',
+                signInMethod: "anonymous",
+                providerId: "anonymous",
+                toJSON: () => "",
             };
             const credentials = {
                 user,
@@ -42,23 +42,23 @@ export const implemented = {
             return userCredential;
         }
         else {
-            throw new FireMockError('you must enable anonymous auth in the Firebase Console', 'auth/operation-not-allowed');
+            throw new FireMockError("you must enable anonymous auth in the Firebase Console", "auth/operation-not-allowed");
         }
     },
     async signInWithEmailAndPassword(email, password) {
         await networkDelay();
         if (!emailValidationAllowed()) {
-            throw new FireMockError('email authentication not allowed', 'auth/operation-not-allowed');
+            throw new FireMockError("email authentication not allowed", "auth/operation-not-allowed");
         }
         if (!emailIsValidFormat(email)) {
-            throw new FireMockError(`invalid email: ${email}`, 'auth/invalid-email');
+            throw new FireMockError(`invalid email: ${email}`, "auth/invalid-email");
         }
         const found = allUsers().find((i) => i.email === email);
         if (!found) {
             throw new FireMockError(`The email "${email}" was not found`, `auth/user-not-found`);
         }
         if (!emailHasCorrectPassword(email, password)) {
-            throw new FireMockError(`Invalid password for ${email}`, 'auth/wrong-password');
+            throw new FireMockError(`Invalid password for ${email}`, "auth/wrong-password");
         }
         const partial = {
             user: {
@@ -69,8 +69,8 @@ export const implemented = {
                 displayName: found.displayName,
             },
             credential: {
-                signInMethod: 'signInWithEmailAndPassword',
-                providerId: '',
+                signInMethod: "signInWithEmailAndPassword",
+                providerId: "",
             },
             additionalUserInfo: {
                 username: email,
@@ -86,13 +86,13 @@ export const implemented = {
     async createUserWithEmailAndPassword(email, password) {
         await networkDelay();
         if (!emailValidationAllowed()) {
-            throw new FireMockError('email authentication not allowed', 'auth/operation-not-allowed');
+            throw new FireMockError("email authentication not allowed", "auth/operation-not-allowed");
         }
         if (emailExistsAsUserInAuth(email)) {
-            throw new FireMockError(`"${email}" user already exists`, 'auth/email-already-in-use');
+            throw new FireMockError(`"${email}" user already exists`, "auth/email-already-in-use");
         }
         if (!emailIsValidFormat(email)) {
-            throw new FireMockError(`"${email}" is not a valid email format`, 'auth/invalid-email');
+            throw new FireMockError(`"${email}" is not a valid email format`, "auth/invalid-email");
         }
         const partial = {
             user: {
@@ -102,8 +102,8 @@ export const implemented = {
                 uid: userUid(email),
             },
             credential: {
-                signInMethod: 'signInWithEmailAndPassword',
-                providerId: '',
+                signInMethod: "signInWithEmailAndPassword",
+                providerId: "",
             },
             additionalUserInfo: {
                 username: email,
@@ -126,7 +126,7 @@ export const implemented = {
     get currentUser() {
         return completeUserCredential({}).user;
     },
-    languageCode: '',
+    languageCode: "",
     async updateCurrentUser() {
         return;
     },

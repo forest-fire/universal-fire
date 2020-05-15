@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SnapShot = void 0;
 const lodash_get_1 = __importDefault(require("lodash.get"));
 const index_1 = require("../rtdb/index");
 const typed_conversions_1 = require("typed-conversions");

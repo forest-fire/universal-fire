@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.limitToLast = exports.limitToFirst = void 0;
 /** an filter function for queries with a `limitToFirst` value */
 function limitToFirst(query) {
     const value = query.identity.limitToFirst;

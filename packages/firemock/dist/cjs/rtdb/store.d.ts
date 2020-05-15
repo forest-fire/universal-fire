@@ -19,7 +19,7 @@ export declare function clearDatabase(): void;
  * non-descructive update.
  */
 export declare function updateDatabase(updatedState: IDictionary): void;
-export declare function auth(): Promise<import("..").IMockAuth>;
+export declare function auth(): Promise<import("@forest-fire/types").IMockAuth>;
 export declare function getDb<T = any>(path?: string): any;
 /**
  * **setDB**

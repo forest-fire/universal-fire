@@ -1,22 +1,108 @@
-import type { IDictionary } from 'common-types';
-import type { IServiceAccount } from '../index';
-import type { IMockAuthConfig, AsyncMockData } from 'firemock';
+import type { IDictionary } from "common-types";
+import type { IServiceAccount, UserRecord, IEmailAuthProvider, IClientAuth } from "../index";
+export declare type FakerStatic = typeof import("faker");
+export declare const enum AuthProviderName {
+    emailPassword = "emailPassword",
+    phone = "phone",
+    google = "google",
+    playGames = "playGames",
+    gameCenter = "gameCenter",
+    facebook = "facebook",
+    twitter = "twitter",
+    github = "github",
+    yahoo = "yahoo",
+    microsoft = "microsoft",
+    apple = "apple",
+    anonymous = "anonymous"
+}
+export declare type IAuthProviderName = keyof typeof AuthProviderName;
+export interface IAuthProviders {
+    EmailAuthProvider: IEmailAuthProvider;
+}
+/**
+ * A simplification of the full Mock API. Used as a proxy to the full API to
+ * avoid the circular dependency.
+ */
+export interface ISimplifiedMockApi extends IDictionary {
+    faker: FakerStatic;
+    generate: () => void;
+}
+/**
+ * The configuration of the **Auth** mocking service.
+ */
+export interface IMockAuthConfig {
+    /** The auth providers which have been enabled for this app */
+    providers: IAuthProviderName[];
+    /** Arrya of known users who should be in the mock Auth system to start. */
+    users?: ISimplifiedMockUser[];
+}
+export interface IMockConfigOptions {
+    auth?: IMockAuthConfig;
+    /**
+     * Sets the initial state of the mock database, or optionally you can
+     * pass in an async function which will resolve into the state of the
+     * database.
+     */
+    db?: IDictionary | AsyncMockData;
+}
+export interface IMockUser extends UserRecord {
+    /** Optionally sets a fixed UID for this user. */
+    uid: string;
+    isAnonymous?: boolean;
+    /** Optionally gives the user a set of claims. */
+    claims?: IDictionary;
+    /**
+     * Optionally state token Ids which should be returned when calling
+     * the `getTokenId()` method. This is useful if you have an associated
+     * set of "valid (or invalid) tokens" in your testing environment.
+     */
+    tokenIds?: string[];
+    displayName?: string;
+    disabled: boolean;
+    phoneNumber?: string;
+    photoURL?: string;
+    email?: string;
+    password?: string;
+    /**
+     * Indicates whether the user has _verified_ their email ownership by clicking
+     * on the verification link.
+     */
+    emailVerified: boolean;
+}
+/**
+ * Provides a full FirebaseAuth implementation (although many
+ * parts are un-implementated currently) as well as extending
+ * to add an "administrative" API for mocking.
+ */
+export interface IMockAuth extends IClientAuth, IAuthProviders {
+}
+/**
+ * A basic configuration for a user that allows default values to fill in some of
+ * the non-essential properties which Firebase requires
+ */
+export declare type ISimplifiedMockUser = Omit<IMockUser, "emailVerified" | "disabled" | "uid" | "toJSON" | "providerData" | "metadata"> & {
+    emailVerified?: boolean;
+    disabled?: boolean;
+    uid?: string;
+    isAnonymous?: boolean;
+};
 export declare type DebuggingCallback = (message: string) => void;
+/** an _async_ mock function which returns a dictionary data structure */
+export declare type AsyncMockData = (db: ISimplifiedMockApi) => Promise<IDictionary>;
 export interface IFirebaseBaseConfig {
-    /** set debugging override from logging config */
+    /** Flag to set debugging override from logging configuration. */
     debugging?: boolean | DebuggingCallback;
-    /** whether to load and use a mocking database */
+    /** Flag to whether to load and use a mocking database. */
     mocking?: boolean;
-    /** set a name for the database; useful when there's more than one */
+    /** Flag to set a name for the database; useful when there's more than one. */
     name?: string;
     /**
      * The URL of the database from which to read and write data.
      */
     databaseURL?: string;
     apiKey?: string;
-    /** TBD  */
     logging?: any;
-    /** override the default timeout of 5 seconds */
+    /** Override the default timeout of 5 seconds. */
     timeout?: number;
     /**
      * Allows users to state whether the Firebase auth module is going to

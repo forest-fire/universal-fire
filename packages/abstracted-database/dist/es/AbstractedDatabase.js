@@ -1,4 +1,4 @@
-import { FireError } from '@forest-fire/utility';
+import { FireError } from "@forest-fire/utility";
 export class AbstractedDatabase {
     constructor() {
         /**
@@ -19,7 +19,7 @@ export class AbstractedDatabase {
     /**
      * Indicates if the database is a mock database or not
      */
-    get isMockDb() {
+    get isany() {
         return this._config.mocking;
     }
     /**
@@ -37,8 +37,8 @@ export class AbstractedDatabase {
      * a mocked database a `AbstractedDatabase/not-allowed` error will be thrown.
      */
     get mock() {
-        if (!this.isMockDb) {
-            throw new FireError(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, 'AbstractedDatabase/not-allowed');
+        if (!this.isany) {
+            throw new FireError(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, "AbstractedDatabase/not-allowed");
         }
         if (!this._mock) {
             throw new FireError(`Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`);

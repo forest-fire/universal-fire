@@ -1,53 +1,51 @@
-import {
-  IPartialUserCredential,
-  UserCredential,
-} from '../../@types/auth-types';
+import { UserCredential, ConfirmationResult } from "@forest-fire/types";
+import merge from "deepmerge";
 
-import merge from 'deepmerge';
-import { clientApiUser } from './UserObject';
-import { allUsers, getRandomMockUid } from '../state-mgmt';
+import { clientApiUser } from "./UserObject";
+import { getRandomMockUid } from "../state-mgmt";
+import { IPartialUserCredential } from "../../index";
+
+export { UserCredential };
 
 /**
  * takes a partial user auth and adds enough to make it officially
  * a full UserCrediental
  */
-export function completeUserCredential(
-  partial: IPartialUserCredential
-): UserCredential {
+export function completeUserCredential(partial: IPartialUserCredential): UserCredential {
   const fakeUserCredential: UserCredential = {
     user: {
       ...clientApiUser,
-      displayName: '',
-      email: '',
+      displayName: "",
+      email: "",
       isAnonymous: true,
       metadata: {},
-      phoneNumber: '',
-      photoURL: '',
+      phoneNumber: "",
+      photoURL: "",
       providerData: [],
-      providerId: '',
-      refreshToken: '',
+      providerId: "",
+      refreshToken: "",
       uid: getRandomMockUid(),
     },
     additionalUserInfo: {
       isNewUser: false,
-      profile: '',
-      providerId: '',
-      username: 'fake',
+      profile: "",
+      providerId: "",
+      username: "fake",
     },
-    operationType: '',
+    operationType: "",
     credential: {
-      signInMethod: 'fake',
-      providerId: 'fake',
-      toJSON: () => '', // added recently
+      signInMethod: "fake",
+      providerId: "fake",
+      toJSON: () => "", // added recently
     },
   };
 
   return merge(fakeUserCredential, partial) as UserCredential;
 }
 
-export const fakeApplicationVerifier = {
+export const fakeApplicationVerifier: ConfirmationResult = {
   async confirm(verificationCode: string) {
     return completeUserCredential({});
   },
-  verificationId: 'verification',
+  verificationId: "verification",
 };

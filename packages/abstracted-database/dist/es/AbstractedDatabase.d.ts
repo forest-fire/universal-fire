@@ -1,5 +1,5 @@
-import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbEventType, MockDb } from '@forest-fire/types';
-import type { SerializedQuery } from '@forest-fire/serialized-query';
+import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbEventType } from "@forest-fire/types";
+import { BaseSerializer } from "@forest-fire/serialized-query";
 export declare abstract class AbstractedDatabase {
     /**
      * Indicates if the database is using the admin SDK.
@@ -12,7 +12,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * The mock API provided by **firemock**
      */
-    protected _mock?: MockDb;
+    protected _mock?: any;
     /**
      * The Firebase App API.
      */
@@ -65,7 +65,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * Indicates if the database is a mock database or not
      */
-    get isMockDb(): boolean;
+    get isany(): boolean;
     /**
      * The configuration used to setup/configure the database.
      */
@@ -78,7 +78,7 @@ export declare abstract class AbstractedDatabase {
      * This is only available if the database has been configured as a mocking database; if it is _not_
      * a mocked database a `AbstractedDatabase/not-allowed` error will be thrown.
      */
-    get mock(): MockDb;
+    get mock(): any;
     /**
      * Returns true if the database is connected, false otherwis.
      */
@@ -88,7 +88,7 @@ export declare abstract class AbstractedDatabase {
      * the record is the `id` property but that can be changed with the optional
      * `idProp` parameter.
      */
-    abstract getList<T = any>(path: string | SerializedQuery<T>, idProp?: string): Promise<T[]>;
+    abstract getList<T = any>(path: string | BaseSerializer<T>, idProp?: string): Promise<T[]>;
     /**
      * Get's a push-key from the server at a given path. This ensures that
      * multiple client's who are writing to the database will use the server's
@@ -127,7 +127,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * Watch for Firebase events based on a DB path.
      */
-    abstract watch(target: string | SerializedQuery<any>, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[], cb: any): void;
+    abstract watch(target: string | BaseSerializer<any>, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[], cb: any): void;
     /**
      * Unwatches existing Firebase events.
      */

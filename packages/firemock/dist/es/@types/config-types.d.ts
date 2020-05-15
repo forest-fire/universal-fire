@@ -1,17 +1,4 @@
-import { IDictionary } from 'common-types';
-import { IMockAuthConfig } from './auth-types';
-import { Mock } from '..';
-/** an _async_ mock function which returns a dictionary data structure */
-export declare type AsyncMockData = (db: Mock) => Promise<IDictionary>;
-export interface IMockConfigOptions {
-    auth?: IMockAuthConfig;
-    /**
-     * Sets the initial state of the mock database, or optionally you can
-     * pass in an async function which will resolve into the state of the
-     * database.
-     */
-    db?: IDictionary | AsyncMockData;
-}
+import type { IDictionary } from "common-types";
 export interface IMockFirebaseUidOnlyPath<T extends object = IDictionary> extends IMockFirebasePathPermission {
     /**
      * the _property_ on the list of records which holds

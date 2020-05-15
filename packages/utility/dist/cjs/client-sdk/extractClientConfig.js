@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.extractClientConfig = void 0;
 const shared_1 = require("../shared");
 /**
  * Extracts the client configuration from ENV variables and processes it
