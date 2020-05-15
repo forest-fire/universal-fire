@@ -9,8 +9,8 @@ import type {
   IRtdbDatabase,
   IRtdbEventType,
 } from "@forest-fire/types";
-// import type { Mock as any } from "firemock";
-import { BaseSerializer } from "@forest-fire/base-serializer";
+import type { Mock as MockDb } from "firemock";
+import { BaseSerializer } from "@forest-fire/serialized-query";
 import { FireError } from "@forest-fire/utility";
 
 export abstract class AbstractedDatabase {
@@ -25,7 +25,7 @@ export abstract class AbstractedDatabase {
   /**
    * The mock API provided by **firemock**
    */
-  protected _mock?: any;
+  protected _mock?: MockDb;
   /**
    * The Firebase App API.
    */
@@ -97,7 +97,7 @@ export abstract class AbstractedDatabase {
    * This is only available if the database has been configured as a mocking database; if it is _not_
    * a mocked database a `AbstractedDatabase/not-allowed` error will be thrown.
    */
-  public get mock(): any {
+  public get mock(): MockDb {
     if (!this.isany) {
       throw new FireError(
         `Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`,

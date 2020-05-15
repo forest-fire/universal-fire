@@ -1,1 +1,1 @@
-export * from './BaseSerializer';
+export * from './SerializedQuery';

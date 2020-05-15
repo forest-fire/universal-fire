@@ -14,5 +14,4 @@ __exportStar(require("./@types"), exports);
 __exportStar(require("./BaseSerializer"), exports);
 __exportStar(require("./SerializedFirestoreQuery"), exports);
 __exportStar(require("./SerializedRealTimeQuery"), exports);
-// export * from "./SerializedQuery";
 //# sourceMappingURL=index.js.map

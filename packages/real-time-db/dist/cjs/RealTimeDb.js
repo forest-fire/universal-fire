@@ -413,7 +413,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
      * then sets `isConnected` to **true**
      */
     async getFireMock(config = {}) {
-        const FireMock = await Promise.resolve().then(() => require(/* webpackChunkName: "firemock" */ "firemock"));
+        const FireMock = await Promise.resolve().then(() => require(/* webpackChunkName: "firemock" */ 'firemock'));
         this._mock = await FireMock.Mock.prepare(config);
     }
 }

@@ -534,7 +534,7 @@ export abstract class RealTimeDb extends AbstractedDatabase implements IRealTime
    * then sets `isConnected` to **true**
    */
   protected async getFireMock(config: IMockConfigOptions = {}) {
-    const FireMock = await import(/* webpackChunkName: "firemock" */ "firemock");
+    const FireMock = await import(/* webpackChunkName: "firemock" */ 'firemock');
     this._mock = await FireMock.Mock.prepare(config);
   }
 }

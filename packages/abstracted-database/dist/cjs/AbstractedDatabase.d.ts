@@ -1,4 +1,5 @@
 import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbEventType } from "@forest-fire/types";
+import type { Mock as MockDb } from "firemock";
 import { BaseSerializer } from "@forest-fire/serialized-query";
 export declare abstract class AbstractedDatabase {
     /**
@@ -12,7 +13,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * The mock API provided by **firemock**
      */
-    protected _mock?: any;
+    protected _mock?: MockDb;
     /**
      * The Firebase App API.
      */
@@ -78,7 +79,7 @@ export declare abstract class AbstractedDatabase {
      * This is only available if the database has been configured as a mocking database; if it is _not_
      * a mocked database a `AbstractedDatabase/not-allowed` error will be thrown.
      */
-    get mock(): any;
+    get mock(): MockDb;
     /**
      * Returns true if the database is connected, false otherwis.
      */
