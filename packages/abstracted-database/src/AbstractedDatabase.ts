@@ -10,7 +10,7 @@ import type {
   IRtdbEventType,
 } from "@forest-fire/types";
 // import type { Mock as any } from "firemock";
-import { BaseSerializer, SerializedQuery } from "@forest-fire/serialized-query";
+import { BaseSerializer } from "@forest-fire/base-serializer";
 import { FireError } from "@forest-fire/utility";
 
 export abstract class AbstractedDatabase {

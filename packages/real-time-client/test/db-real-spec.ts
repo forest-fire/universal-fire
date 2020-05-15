@@ -1,12 +1,7 @@
-// tslint:disable:no-implicit-dependencies
-import { RealTimeClient } from '../src';
 import { expect } from 'chai';
 import * as helpers from './testing/helpers';
-import { IDictionary, wait } from 'common-types';
-import {
-  IFirebaseClientConfig,
-  IFirebaseClientConfigProps
-} from 'abstracted-firebase';
+import { IDictionary } from 'common-types';
+import { RealTimeClient } from '../src/private';
 
 const config = {
   apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',
@@ -47,9 +42,7 @@ describe('Connecting to Database', () => {
         'boolean',
         'the database objects reports that it is connected'
       );
-      expect((database.config as IFirebaseClientConfigProps).apiKey).to.equal(
-        config.apiKey
-      );
+      expect((database.config as any).apiKey).to.equal(config.apiKey);
 
       itHappened.status = true;
     });

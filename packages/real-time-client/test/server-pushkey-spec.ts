@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { RealTimeClient } from '../src';
+import { RealTimeClient } from '../src/private';
 import { expect } from 'chai';
 
 const config = {

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ClientError = void 0;
 const utility_1 = require("@forest-fire/utility");
 const common_types_1 = require("common-types");
 class ClientError extends utility_1.FireError {

@@ -1,8 +1,7 @@
-import { RealTimeClient } from '../src';
 import { expect } from 'chai';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import * as helpers from './testing/helpers';
-import { wait } from 'common-types';
+import { RealTimeClient } from '../src/private';
 
 interface IPerson {
   name: string;

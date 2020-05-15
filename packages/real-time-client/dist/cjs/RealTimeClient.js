@@ -1,14 +1,25 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const EventManager_1 = require("./EventManager");
-const ClientError_1 = require("./ClientError");
+exports.RealTimeClient = exports.MOCK_LOADING_TIMEOUT = exports.FirebaseBoolean = void 0;
 const real_time_db_1 = require("@forest-fire/real-time-db");
 const types_1 = require("@forest-fire/types");
 const utility_1 = require("@forest-fire/utility");
@@ -19,6 +30,7 @@ var FirebaseBoolean;
 })(FirebaseBoolean = exports.FirebaseBoolean || (exports.FirebaseBoolean = {}));
 const app_1 = require("@firebase/app");
 const common_types_1 = require("common-types");
+const private_1 = require("./private");
 exports.MOCK_LOADING_TIMEOUT = 200;
 class RealTimeClient extends real_time_db_1.RealTimeDb {
     /**
@@ -28,7 +40,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
     constructor(config) {
         super();
         this._isAdminApi = false;
-        this._eventManager = new EventManager_1.EventManager();
+        this._eventManager = new private_1.EventManager();
         this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
         if (!config) {
             config = utility_1.extractClientConfig();
@@ -73,7 +85,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
         /* webpackChunkName: 'firebase-auth' */ '@firebase/app')));
         await Promise.resolve().then(() => __importStar(require(
         /* webpackChunkName: 'firebase-database' */ '@firebase/database')));
-        return Array.from(new Set(fb.firebase.apps.map((i) => i.name)));
+        return Array.from(new Set(fb.firebase.apps.map(i => i.name)));
     }
     get app() {
         if (this._app) {
@@ -101,11 +113,11 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
      */
     get authProviders() {
         if (!this._fbClass) {
-            throw new ClientError_1.ClientError(`There was a problem getting the Firebase default export/class!`, 'missing-firebase');
+            throw new private_1.ClientError(`There was a problem getting the Firebase default export/class!`, 'missing-firebase');
         }
         if (!this._authProviders) {
             if (!this._fbClass.auth) {
-                throw new ClientError_1.ClientError(`Attempt to get the authProviders getter before connecting to the database!`, 'missing-auth');
+                throw new private_1.ClientError(`Attempt to get the authProviders getter before connecting to the database!`, 'missing-auth');
             }
             this._authProviders = this._fbClass.auth;
         }
@@ -136,7 +148,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
     async _connectMockDb(config) {
         await this.getFireMock({
             db: config.mockData || {},
-            auth: { providers: [], ...config.mockAuth },
+            auth: { providers: [], ...config.mockAuth }
         });
         this._authProviders = this._mock.authProviders;
         await this._listenForConnectionStatus();
@@ -198,7 +210,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
                             resolve();
                         }
                         else {
-                            reject(new ClientError_1.ClientError(`While waiting for a connection received a disconnect message instead`, `no-connection`));
+                            reject(new private_1.ClientError(`While waiting for a connection received a disconnect message instead`, `no-connection`));
                         }
                     });
                 });
@@ -209,7 +221,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
         };
         const timeout = async () => {
             await common_types_1.wait(this.CONNECTION_TIMEOUT);
-            throw new ClientError_1.ClientError(`The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`, 'connection-timeout');
+            throw new private_1.ClientError(`The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`, 'connection-timeout');
         };
         await Promise.race([connectionEvent(), timeout()]);
     }

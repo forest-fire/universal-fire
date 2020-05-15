@@ -1,5 +1,3 @@
-import { EventManager } from './EventManager';
-import { ClientError } from './ClientError';
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
 import {
   isMockConfig,
@@ -9,21 +7,22 @@ import {
   IMockConfig,
   IRtdbDatabase,
   IClientApp,
-  IRtdbDataSnapshot,
+  IRtdbDataSnapshot
 } from '@forest-fire/types';
 import {
   extractClientConfig,
   FireError,
   getRunningApps,
   getRunningFirebaseApp,
-  determineDefaultAppName,
+  determineDefaultAppName
 } from '@forest-fire/utility';
 export enum FirebaseBoolean {
   true = 1,
-  false = 0,
+  false = 0
 }
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
+import { EventManager, ClientError } from './private';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 
@@ -46,7 +45,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
     await import(
       /* webpackChunkName: 'firebase-database' */ '@firebase/database'
     );
-    return Array.from(new Set(fb.firebase.apps.map((i) => i.name)));
+    return Array.from(new Set(fb.firebase.apps.map(i => i.name)));
   }
 
   protected _isAdminApi = false;
@@ -180,7 +179,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
   protected async _connectMockDb(config: IMockConfig) {
     await this.getFireMock({
       db: config.mockData || {},
-      auth: { providers: [], ...config.mockAuth },
+      auth: { providers: [], ...config.mockAuth }
     });
     this._authProviders = this._mock.authProviders as IClientApp['auth'];
     await this._listenForConnectionStatus();

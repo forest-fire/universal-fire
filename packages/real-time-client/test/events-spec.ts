@@ -1,6 +1,4 @@
-import { RealTimeClient } from '../src'; // tslint:disable-next-line:no-implicit-dependencies
-import { expect } from 'chai';
-import * as helpers from './testing/helpers';
+import { RealTimeClient } from '../src/private'; // tslint:disable-next-line:no-implicit-dependencies
 
 describe('Events', () => {
   it.skip(

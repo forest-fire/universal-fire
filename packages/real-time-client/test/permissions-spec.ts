@@ -1,6 +1,6 @@
 // tslint:disable:no-implicit-dependencies
-import { RealTimeClient } from '../src';
 import { expect } from 'chai';
+import { RealTimeClient } from '../src/private';
 
 const config = {
   apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',

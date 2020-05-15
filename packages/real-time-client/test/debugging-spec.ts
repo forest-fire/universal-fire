@@ -1,8 +1,7 @@
-// tslint:disable:no-implicit-dependencies
-import { RealTimeClient } from '../src';
 import { expect } from 'chai';
 import * as helpers from './testing/helpers';
 import config from './testing/fb-config';
+import { RealTimeClient } from '../src/private';
 
 helpers.setupEnv();
 

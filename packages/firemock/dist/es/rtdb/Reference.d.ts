@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import { IRtdbReference, IRtdbDataSnapshot, RtdbThenableReference, IRtdbEventType } from '@forest-fire/types';
+import { IRtdbReference, IRtdbDataSnapshot, IRtdbThenableReference, IRtdbEventType } from '@forest-fire/types';
 import { IFirebaseEventHandler } from '../@types/rtdb-types';
 import { SnapShot, Query } from '../rtdb/index';
 import { DelayType } from '../shared/index';
@@ -12,7 +12,7 @@ export declare class Reference<T = any> extends Query<T> implements IRtdbReferen
     get parent(): IRtdbReference | null;
     child<C = any>(path: string): Reference;
     get root(): Reference;
-    push(value?: any, onComplete?: (a: Error | null) => any): RtdbThenableReference;
+    push(value?: any, onComplete?: (a: Error | null) => any): IRtdbThenableReference;
     remove(onComplete?: (a: Error | null) => any): Promise<void>;
     set(value: any, onComplete?: (a: Error | null) => any): Promise<void>;
     update(values: IDictionary, onComplete?: (a: Error | null) => any): Promise<void>;
