@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.44.1",
+  "version": "0.44.2",
   "description": "",
   "main": "dist/cjs",
   "module": "dist/es",
@@ -38,7 +38,7 @@
     "@forest-fire/firestore-admin": "^0.44.1",
     "@forest-fire/firestore-client": "^0.44.1",
     "@forest-fire/firestore-db": "^0.44.1",
-    "@forest-fire/real-time-admin": "^0.44.1",
+    "@forest-fire/real-time-admin": "^0.44.2",
     "@forest-fire/real-time-client": "^0.44.1",
     "@forest-fire/real-time-db": "^0.44.1",
     "@forest-fire/types": "^0.44.1"
