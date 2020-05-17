@@ -6,5 +6,5 @@ export interface ISimplifiedDb extends IDictionary {
     };
 }
 export declare class SerializedQuery {
-    static create(db: ISimplifiedDb, path?: string): SerializedRealTimeQuery<IDictionary<any>> | SerializedFirestoreQuery<IDictionary<any>>;
+    static create<T = IDictionary>(db: ISimplifiedDb, path?: string): SerializedRealTimeQuery<T> | SerializedFirestoreQuery<T>;
 }

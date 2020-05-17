@@ -40,7 +40,7 @@
     "@forest-fire/abstracted-database": "^0.44.0",
     "@forest-fire/serialized-query": "^0.44.0",
     "@types/chai": "^4.2.11",
-    "@types/faker": "^4.1.7",
+    "@types/faker": "^4.1.12",
     "@types/js-yaml": "^3.12.1",
     "@types/lodash.first": "^3.0.6",
     "@types/lodash.last": "^3.0.6",

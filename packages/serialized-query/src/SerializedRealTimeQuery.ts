@@ -15,7 +15,7 @@ import { IRtdbDataSnapshot } from "@forest-fire/types";
  * Database query.
  */
 export class SerializedRealTimeQuery<T = IDictionary> extends BaseSerializer<T> {
-  public static path<T extends object = IDictionary>(path: string = "/") {
+  public static path<T = IDictionary>(path: string = "/") {
     return new SerializedRealTimeQuery<T>(path);
   }
 
@@ -117,7 +117,7 @@ export class SerializedRealTimeQuery<T = IDictionary> extends BaseSerializer<T> 
     if (key && isNotAllowed) {
       throw new Error(
         `You can not use the "key" parameter with ${caller}() when using a "${
-          this._orderBy
+        this._orderBy
         }" sort. Valid ordering strategies are: ${allowed.join(", ")}`
       );
     }

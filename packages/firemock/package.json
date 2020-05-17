@@ -68,7 +68,7 @@
   "dependencies": {
     "@forest-fire/serialized-query": "^0.44.0",
     "@forest-fire/types": "^0.44.0",
-    "@types/faker": "^4.1.9",
+    "@types/faker": "^4.1.12",
     "common-types": "^1.14.3",
     "deepmerge": "^4.2.2",
     "email-validator": "^2.0.4",

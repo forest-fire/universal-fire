@@ -7,7 +7,7 @@ import { IRtdbDataSnapshot } from "@forest-fire/types";
  * Database query.
  */
 export declare class SerializedRealTimeQuery<T = IDictionary> extends BaseSerializer<T> {
-    static path<T extends object = IDictionary>(path?: string): SerializedRealTimeQuery<T>;
+    static path<T = IDictionary>(path?: string): SerializedRealTimeQuery<T>;
     protected _orderBy: IRealQueryOrderType;
     startAt(value: any, key?: keyof T & string): this;
     endAt(value: any, key?: keyof T & string): this;

@@ -14,7 +14,7 @@ import { IFirestoreQuerySnapshot } from "@forest-fire/types";
  * Database query.
  */
 export class SerializedFirestoreQuery<T = IDictionary> extends BaseSerializer<T> {
-  public static path<T extends object = IDictionary>(path: string = "/") {
+  public static path<T = IDictionary>(path: string = "/") {
     return new SerializedFirestoreQuery<T>(path);
   }
 

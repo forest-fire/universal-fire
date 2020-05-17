@@ -11,12 +11,12 @@ export interface ISimplifiedDb extends IDictionary {
 }
 
 export class SerializedQuery {
-  static create(db: ISimplifiedDb, path: string = '/') {
+  static create<T = IDictionary>(db: ISimplifiedDb, path: string = '/') {
     const name = db.constructor.name;
     if (['RealTimeClient', 'RealTimeAdmin'].includes(name)) {
-      return SerializedRealTimeQuery.path(path);
+      return SerializedRealTimeQuery.path<T>(path);
     } else {
-      return SerializedFirestoreQuery.path(path);
+      return SerializedFirestoreQuery.path<T>(path);
     }
   }
 }

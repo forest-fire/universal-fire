@@ -80,7 +80,7 @@ export abstract class AbstractedDatabase {
   /**
    * Indicates if the database is a mock database or not
    */
-  public get isany() {
+  public get isMockDb() {
     return this._config.mocking;
   }
   /**
@@ -98,7 +98,7 @@ export abstract class AbstractedDatabase {
    * a mocked database a `AbstractedDatabase/not-allowed` error will be thrown.
    */
   public get mock(): MockDb {
-    if (!this.isany) {
+    if (!this.isMockDb) {
       throw new FireError(
         `Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`,
         "AbstractedDatabase/not-allowed"

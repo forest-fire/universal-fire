@@ -39,7 +39,7 @@
     "@forest-fire/serialized-query": "^0.44.0",
     "@types/chai": "^4.2.11",
     "@types/events": "^3.0.0",
-    "@types/faker": "^4.1.7",
+    "@types/faker": "^4.1.12",
     "@types/js-yaml": "^3.12.1",
     "@types/lodash.first": "^3.0.3",
     "@types/lodash.last": "^3.0.3",

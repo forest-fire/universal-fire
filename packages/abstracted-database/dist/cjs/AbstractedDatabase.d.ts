@@ -66,7 +66,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * Indicates if the database is a mock database or not
      */
-    get isany(): boolean;
+    get isMockDb(): boolean;
     /**
      * The configuration used to setup/configure the database.
      */

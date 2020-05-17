@@ -7,7 +7,7 @@ import { IFirestoreQuerySnapshot } from "@forest-fire/types";
  * Database query.
  */
 export declare class SerializedFirestoreQuery<T = IDictionary> extends BaseSerializer<T> {
-    static path<T extends object = IDictionary>(path?: string): SerializedFirestoreQuery<T>;
+    static path<T = IDictionary>(path?: string): SerializedFirestoreQuery<T>;
     protected _orderBy: IFirestoreQueryOrderType;
     protected _db?: ISimplifiedDatabase;
     get db(): ISimplifiedDatabase;

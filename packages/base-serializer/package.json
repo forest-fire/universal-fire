@@ -25,7 +25,8 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.44.0"
+    "@forest-fire/serialized-query": "^0.44.0",
+    "common-types": "^1.14.3"
   },
   "license": "MIT"
 }
