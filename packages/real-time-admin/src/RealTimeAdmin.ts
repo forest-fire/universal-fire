@@ -171,17 +171,17 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   }
 
   protected async _connectRealDb(config: IAdminConfig) {
-    if (this._isConnected) {
+    if (!this._isConnected) {
+      this._database = this._app.database() as IAdminRtdbDatabase;
+      this.enableDatabaseLogging = firebase.database.enableLogging.bind(
+        firebase.database
+      );
+      this.goOnline();
+      this._eventManager.connection(true);
+      await this._listenForConnectionStatus();
+    } else {
       console.info(`Database ${config.name} already connected`);
-      return;
     }
-    this._database = this._app.database() as IAdminRtdbDatabase;
-    this.enableDatabaseLogging = firebase.database.enableLogging.bind(
-      firebase.database
-    );
-    this.goOnline();
-    this._eventManager.connection(true);
-    await this._listenForConnectionStatus();
   }
 
   /**
