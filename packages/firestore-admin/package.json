@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/cjs",
   "module": "dist/es",
-  "typings": "dist/es",
+  "types": "dist/es/index.d.ts",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/forest-fire/universal-fire.git"

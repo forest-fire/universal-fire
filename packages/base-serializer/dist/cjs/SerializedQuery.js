@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SerializedQuery = void 0;
 const serialized_query_1 = require("@forest-fire/serialized-query");
 class SerializedQuery {
     static create(db, path = '/') {
