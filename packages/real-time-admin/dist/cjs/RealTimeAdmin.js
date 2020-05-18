@@ -164,7 +164,10 @@ let RealTimeAdmin = /** @class */ (() => {
             return this;
         }
         async _connectRealDb(config) {
-            this._database = this._app.database();
+            const found = firebase.apps.find((i) => i.name === this.config.name);
+            this._database = (found
+                ? found.database
+                : this._app.database());
             this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
             this.goOnline();
             this._eventManager.connection(true);
