@@ -1,13 +1,17 @@
-import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
-import { EventManager } from './EventManager';
-import { IAdminConfig, IMockConfig, IAdminAuth, IAdminApp, IAdminRtdbDatabase } from '@forest-fire/types';
+import * as firebase from "firebase-admin";
+import { RealTimeDb, IRealTimeDb } from "@forest-fire/real-time-db";
+import { EventManager } from "./EventManager";
+import { IAdminConfig, IMockConfig, IAdminAuth, IAdminApp, IAdminRtdbDatabase } from "@forest-fire/types";
+import { IDictionary } from "@forest-fire/types/node_modules/common-types";
 export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
-    protected _isAdminApi: boolean;
     /**
      * Instantiates a DB and then waits for the connection
      * to finish before resolving the promise.
      */
     static connect(config?: IAdminConfig | IMockConfig): Promise<RealTimeAdmin>;
+    private static _connections;
+    static get connections(): IDictionary<firebase.app.App>;
+    static addConnection(app: IAdminApp): void;
     protected _eventManager: EventManager;
     protected _clientType: string;
     protected _isAuthorized: boolean;
@@ -15,6 +19,7 @@ export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     protected _config: IAdminConfig | IMockConfig;
     protected _app: IAdminApp;
     protected _database?: IAdminRtdbDatabase;
+    protected _isAdminApi: boolean;
     constructor(config?: IAdminConfig | IMockConfig);
     protected get app(): IAdminApp;
     protected set app(value: IAdminApp);
@@ -34,6 +39,7 @@ export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     auth(): Promise<IAdminAuth>;
     goOnline(): void;
     goOffline(): void;
+    get isConnected(): boolean;
     connect(): Promise<RealTimeAdmin>;
     protected _connectMockDb(config: IMockConfig): Promise<this>;
     protected _connectRealDb(config: IAdminConfig): Promise<void>;
