@@ -57,11 +57,13 @@
     "test-console": "^1.1.0",
     "ts-node": "^8.9.1",
     "typed-conversions": "^0.10.2",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.2",
+    "universal-fire": "^0.44.3"
   },
   "dependencies": {
     "@forest-fire/types": "^0.44.3",
-    "common-types": "^1.14.3"
+    "common-types": "^1.14.3",
+    "universal-fire": "^0.44.3"
   },
   "license": "MIT"
 }
