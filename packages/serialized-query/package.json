@@ -23,10 +23,10 @@
     "watch": "run-p watch:esnext watch:cjs",
     "watch:esnext": "tsc -P tsconfig.es.json -w",
     "watch:cjs": "tsc -P tsconfig.es.json -w",
-    "test": "TS_NODE_PROJECT='tsconfig.test.json' mocha --require ts-node/register test/**/*.spec.ts",
-    "test:watch": "TS_NODE_PROJECT='tsconfig.test.json' mocha --require ts-node/register --extensions ts --watch --watch-files test test/**/*.spec.ts",
-    "test:coverage": "TS_NODE_PROJECT='tsconfig.test.json' nyc --reporter=text mocha -require ts-node/register test/**/*.spec.ts",
-    "test:e2e": "TS_NODE_PROJECT='tsconfig.test.json' mocha --require ts-node/register test/*.e2e.ts"
+    "test": "yarn do test",
+    "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files test test/**/*.spec.ts",
+    "test:coverage": "nyc --reporter=text mocha -require ts-node/register test/**/*.spec.ts",
+    "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
   "devDependencies": {
     "@firebase/database-types": "^0.5.0",
@@ -41,10 +41,10 @@
     "@types/rimraf": "^3.0.0",
     "@types/shelljs": "^0.8.7",
     "@types/stack-trace": "^0.0.29",
-    "abstracted-admin": "^0.38.1",
     "chai": "^4.2.0",
     "chalk": "^3.0.0",
-    "firemodel": "^0.38.0",
+    "do-devops": "^0.3.6",
+    "firemodel": "^0.44.1",
     "js-yaml": "^3.13.1",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
@@ -57,7 +57,7 @@
     "test-console": "^1.1.0",
     "ts-node": "^8.9.1",
     "typed-conversions": "^0.10.2",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.2"
   },
   "dependencies": {
     "@forest-fire/types": "^0.44.2",

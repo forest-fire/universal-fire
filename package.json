@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/universal-fire",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Forest Fire monorepo for Firebase",
   "private": true,
   "repository": {
@@ -8,6 +8,8 @@
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
   "scripts": {
+    "changed": "yarn lerna changed",
+    "release": "yarn leran publish",
     "bootstrap": "yarn lerna bootstrap",
     "build": "run-s build:types build:shared build:base build:db build:sdk build:closure",
     "build:types": "lerna exec --scope @forest-fire/types yarn build",
@@ -27,12 +29,21 @@
     "build:sdk:firestore:client": "lerna exec --scope @forest-fire/firestore-client yarn build",
     "build:closure": "lerna exec --scope universal-fire yarn build",
     "build:docs": "yarn docs:build",
+    "test": "run-s test:shared test:db test:sdk test:closure",
+    "test:shared": "run-p test:shared:base-serializer",
+    "test:shared:base-serializer": "lerna exec --scope @forest-fire/base-serializer yarn test",
+    "test:shared:serialized-query": "lerna exec --scope @forest-fire/serialized-query yarn test",
+    "test:sdk": "run-p test:sdk:firestore test:sdk:rtdb",
+    "test:sdk:firestore": "run-p test:sdk:firestore:client",
     "test:sdk:firestore:client": "lerna exec --scope @forest-fire/firestore-client yarn test",
-    "test:sdk:rtdb": "run-s test:sdk:rtdb:client test:sdk:rtdb:admin",
+    "test:db": "run-p test:db:firemock test:db:rtdb",
+    "test:db:firemock": "run-s test:db:firemock:rtdb",
+    "test:db:rtdb": "lerna exec --scope @forest-fire/real-time-db yarn test",
+    "test:db:firestore": "lerna exec --scope @forest-fire/firestore-db yarn test",
+    "test:db:firemock:rtdb": "lerna exec --scope firemock yarn test",
+    "test:sdk:rtdb": "run-p test:sdk:rtdb:client test:sdk:rtdb:admin",
     "test:sdk:rtdb:client": "lerna exec --scope @forest-fire/real-time-client yarn test",
     "test:sdk:rtdb:admin": "lerna exec --scope @forest-fire/real-time-admin yarn test",
-    "test:firemock": "run-s test:firemock:rtdb",
-    "test:firemock:rtdb": "lerna exec --scope firemock yarn test",
     "test:closure": "lerna exec --scope universal-fire yarn test",
     "deploy:firemock": "learna exec --scope universal-fire yarn deploy",
     "watch": "run-s watch:rtdb watch:firestore",
@@ -43,11 +54,9 @@
   },
   "devDependencies": {
     "do-devops": "^0.3.6",
-    "lerna": "^3.20.2",
+    "lerna": "^3.21.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5"
   },
-  "license": "MIT",
-  "dependencies": {
-    "firemock": "^0.43.0"
-  }
+  "license": "MIT"
 }

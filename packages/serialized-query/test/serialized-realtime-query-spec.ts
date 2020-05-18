@@ -4,12 +4,12 @@ import { FireModel, List } from 'firemodel';
 import { hashToArray } from 'typed-conversions';
 import { RealTimeAdmin } from '@forest-fire/real-time-admin';
 
-import * as helpers from './testing/helpers';
+import { setupEnv } from './testing/helpers';
 import { peopleDataset } from './data/people';
 import { Person } from './testing/Person';
 import { SerializedRealTimeQuery } from '../src/SerializedRealTimeQuery';
 
-helpers.setupEnv();
+setupEnv();
 
 describe('SerializedRealTimeQuery', () => {
   let mockDb: RealTimeAdmin;
@@ -128,7 +128,7 @@ describe('SerializedRealTimeQuery with REAL database', () => {
 
     expect(manualJSON.length).to.equal(deserializedJSON.length);
     expect(deserializedJSON.length).to.be.greaterThan(0);
-    deserializedJSON.forEach(i => expect(i.favoriteColor).to.equal('green'));
+    deserializedJSON.forEach((i) => expect(i.favoriteColor).to.equal('green'));
   });
 
   it('limit query reduces result set', async () => {

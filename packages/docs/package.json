@@ -63,7 +63,7 @@
     "test-console": "^1.1.0",
     "ts-node": "^8.9.0",
     "tslint": "^6.1.1",
-    "typescript": "^3.8.3",
+    "typescript": "^3.9.2",
     "vuepress": "^1.4.1",
     "vuepress-plugin-autometa": "^0.1.13"
   },

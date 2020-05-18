@@ -1,9 +1,8 @@
 import { expect } from 'chai';
-
-import * as helpers from './testing/helpers';
+import { setupEnv } from './testing/helpers';
 import { SerializedFirestoreQuery } from '../src/SerializedFirestoreQuery';
 
-helpers.setupEnv();
+setupEnv();
 
 describe('SerializedFirestoreQuery', () => {
   it('should be defined', () => {
