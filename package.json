@@ -9,7 +9,7 @@
   },
   "scripts": {
     "changed": "yarn lerna changed",
-    "release": "yarn leran publish",
+    "release": "yarn lerna publish",
     "bootstrap": "yarn lerna bootstrap",
     "build": "run-s build:types build:shared build:base build:db build:sdk build:closure",
     "build:types": "lerna exec --scope @forest-fire/types yarn build",
