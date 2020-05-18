@@ -85,7 +85,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
         /* webpackChunkName: 'firebase-auth' */ '@firebase/app')));
         await Promise.resolve().then(() => __importStar(require(
         /* webpackChunkName: 'firebase-database' */ '@firebase/database')));
-        return Array.from(new Set(fb.firebase.apps.map(i => i.name)));
+        return Array.from(new Set(fb.firebase.apps.map((i) => i.name)));
     }
     get app() {
         if (this._app) {
@@ -119,8 +119,8 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
             if (!this._fbClass.auth) {
                 throw new private_1.ClientError(`Attempt to get the authProviders getter before connecting to the database!`, 'missing-auth');
             }
-            this._authProviders = this._fbClass.auth;
         }
+        this._authProviders = this._fbClass.auth;
         return this._authProviders;
     }
     async auth() {
@@ -148,7 +148,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
     async _connectMockDb(config) {
         await this.getFireMock({
             db: config.mockData || {},
-            auth: { providers: [], ...config.mockAuth }
+            auth: { providers: [], ...config.mockAuth },
         });
         this._authProviders = this._mock.authProviders;
         await this._listenForConnectionStatus();
