@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { setupEnv } from './testing/helpers';
-import { SerializedFirestoreQuery } from '../src/SerializedFirestoreQuery';
+import { SerializedFirestoreQuery } from '../src/index';
 
 setupEnv();
 

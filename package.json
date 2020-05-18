@@ -30,7 +30,7 @@
     "build:closure": "lerna exec --scope universal-fire yarn build",
     "build:docs": "yarn docs:build",
     "test": "run-s test:shared test:db test:sdk test:closure",
-    "test:shared": "run-p test:shared:base-serializer",
+    "test:shared": "run-p test:shared:serialized-query test:shared:base-serializer",
     "test:shared:base-serializer": "lerna exec --scope @forest-fire/base-serializer yarn test",
     "test:shared:serialized-query": "lerna exec --scope @forest-fire/serialized-query yarn test",
     "test:sdk": "run-p test:sdk:firestore test:sdk:rtdb",

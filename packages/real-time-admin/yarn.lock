@@ -177,7 +177,7 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@firebase/app-types@0.6.0", "@firebase/app-types@^0.6.0":
+"@firebase/app-types@0.6.0":
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/@firebase/app-types/-/app-types-0.6.0.tgz#8dcc3e793c6983e9d54f7eb623a7618c05f2d94c"
   integrity sha512-ld6rzjXk/SUauHiQZJkeuSJpxIZ5wdnWuF5fWBFQNPaxsaJ9kyYg9GqEvwZ1z2e6JP5cU9gwRBlfW1WkGtGDYA==
@@ -199,11 +199,6 @@
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/@firebase/auth-interop-types/-/auth-interop-types-0.1.4.tgz#e81589f58508630a5bffa604d7c949a0d01ea97b"
   integrity sha512-CLKNS84KGAv5lRnHTQZFWoR11Ti7gIPFirDDXWek/fSU+TdYdnxJFR5XSD4OuGyzUYQ3Dq7aVj5teiRdyBl9hA==
-
-"@firebase/auth-types@^0.10.0":
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/@firebase/auth-types/-/auth-types-0.10.0.tgz#9403633e723336055fad4bbf5e4c9fe3c55f8d3f"
-  integrity sha512-VuW7c+RAk3AYPU0Hxmun3RzXn7fbJDdjQbxvvpRMnQ9zrhk8mH42cY466M0n4e/UGQ+0smlx5BqZII8aYQ5XPg==
 
 "@firebase/component@0.1.11":
   version "0.1.11"
@@ -233,11 +228,6 @@
     faye-websocket "0.11.3"
     tslib "1.11.1"
 
-"@firebase/firestore-types@^1.10.1":
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/@firebase/firestore-types/-/firestore-types-1.10.1.tgz#bf018f9c495f470592de745389474dc1c2960d3f"
-  integrity sha512-vyKdm+AYUFT8XeUX62IOqaqPFCs/mAMoSEsqIz9HnSVsqCw/IocNjtjSa+3M80kRw4V8fI7JI+Xz6Wg5VJXLqA==
-
 "@firebase/logger@0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@firebase/logger/-/logger-0.2.3.tgz#6a0eea0c2ce0a609f2965c82ce793ce5b7b32572"
@@ -249,60 +239,6 @@
   integrity sha512-rKzQRc7YAbve+MECliis5ac6lRB1AZgOyZdoAbXaEtmGWUwnlM99uNhCekA963CaBkzlHwQG2inLf3WGW7nLFA==
   dependencies:
     tslib "1.11.1"
-
-"@forest-fire/abstracted-database@^0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@forest-fire/abstracted-database/-/abstracted-database-0.44.2.tgz#6f82888b863d942c1722db00e0713a98faf0e060"
-  integrity sha512-62BpzmVXvLaB0zXxJbfO3D64CCzkNjQHLLEMly0Hs373kzoSQFbN08dLAzGX5QgNeF5kTbfpO5bUtG9afHEpBQ==
-  dependencies:
-    "@forest-fire/serialized-query" "^0.44.2"
-    "@forest-fire/types" "^0.44.2"
-    "@forest-fire/utility" "^0.44.2"
-    firemock "^0.44.2"
-
-"@forest-fire/real-time-db@^0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@forest-fire/real-time-db/-/real-time-db-0.44.2.tgz#233bc53020de4558d08039724b73ab04ca19f4a3"
-  integrity sha512-zZxByfLBwOoBvcPuoSTQxH6YitVAi0V399AOeS9L1HkQssGGNlAe31N+tU9ldAFakmgQjtkDARDKGMqLSe2TVA==
-  dependencies:
-    "@forest-fire/abstracted-database" "^0.44.2"
-    "@forest-fire/serialized-query" "^0.44.2"
-    "@forest-fire/types" "^0.44.2"
-    "@forest-fire/utility" "^0.44.2"
-    common-types "^1.14.2"
-    firemock "^0.44.2"
-    typed-conversions "^0.10.2"
-
-"@forest-fire/serialized-query@^0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@forest-fire/serialized-query/-/serialized-query-0.44.2.tgz#38f57bfd151bde79180fbc0c156add555242e604"
-  integrity sha512-dBqQwYYh9xNvAfeLNUL7nKIMKYFbX+RxxBQsDOPEqiPH6d5/RbES0kJeKo7Z7nu7iw71hBy559WjfyeapjKC4g==
-  dependencies:
-    "@forest-fire/types" "^0.44.2"
-    common-types "^1.14.3"
-
-"@forest-fire/types@^0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@forest-fire/types/-/types-0.44.2.tgz#9bfa8bc205972bb5bd73e37fbc210bae9a03b55b"
-  integrity sha512-yKUk7fwnxKh8CbiDSDt0jcnxySZ1gaTOYq4BZ3Ni6zAvlN+UZ4nTz7TvXOkrQ6r1/l/PB9fM/ehqFifKjTHkkQ==
-  dependencies:
-    "@firebase/app-types" "^0.6.0"
-    "@firebase/auth-types" "^0.10.0"
-    "@firebase/database-types" "^0.5.0"
-    "@firebase/firestore-types" "^1.10.1"
-    "@types/faker" "^4.1.12"
-    common-types "^1.14.3"
-    faker "^4.1.0"
-    firebase-admin "^8.12.1"
-
-"@forest-fire/utility@^0.44.2":
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/@forest-fire/utility/-/utility-0.44.2.tgz#827cff30e8a6f08dbd9bbee47a80c04913104d9c"
-  integrity sha512-J2rdPPDW1DE7RoAqNBQksZ7RI5GMkfJgKhJ5LSSfZPIAcVOYAn8zZNdN0qbwbtc6CKDMMhH89POjTQISdP+TcA==
-  dependencies:
-    "@forest-fire/types" "^0.44.2"
-    common-types "^1.14.3"
-    is-gzip "^2.0.0"
 
 "@google-cloud/common@^2.1.1":
   version "2.4.0"
@@ -1912,11 +1848,6 @@ deep-is@~0.1.3:
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
   integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
 
-deepmerge@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
-  integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
-
 default-require-extensions@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/default-require-extensions/-/default-require-extensions-3.0.0.tgz#e03f93aac9b2b6443fc52e5e4a37b3ad9ad8df96"
@@ -2176,11 +2107,6 @@ elliptic@^6.0.0, elliptic@^6.5.2:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.0"
 
-email-validator@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/email-validator/-/email-validator-2.0.4.tgz#b8dfaa5d0dae28f1b03c95881d904d4e40bfe7ed"
-  integrity sha512-gYCwo7kh5S3IDyZPLZf6hSS0MnZT8QmJFqYvbqlDZSbwdZlY6QZWxJ4i/6UhITOJ4XzyI647Bm2MXKCLqnJ4nQ==
-
 emoji-regex@^7.0.1:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-7.0.3.tgz#933a04052860c85e83c122479c4748a8e4c72156"
@@ -2411,25 +2337,10 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-faker@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/faker/-/faker-4.1.0.tgz#1e45bbbecc6774b3c195fad2835109c6d748cc3f"
-  integrity sha1-HkW7vsxndLPBlfrSg1EJxtdIzD8=
-
-fast-copy@^2.0.4:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/fast-copy/-/fast-copy-2.0.5.tgz#ddf558bc3c1dd15782da69327adbf4f79499dc50"
-  integrity sha512-KVLihIS41LzwuXJFdUm5NstoBfAmhCPCzhn362CX2IklaPrzQRtCedzrpPa7Ff/OVbNMUSJJFqx5+4yp07NmbQ==
-
 fast-deep-equal@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.1.tgz#545145077c501491e33b15ec408c294376e94ae4"
   integrity sha512-8UEa58QDLauDNfpbrX55Q9jrGHThw2ZMdOky5Gl1CDtVeJDPVrG4Jxx1N8jw2gkWaff5UUuX1KJd+9zGe2B+ZA==
-
-fast-equals@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/fast-equals/-/fast-equals-2.0.0.tgz#bef2c423af3939f2c54310df54c57e64cd2adefc"
-  integrity sha512-u6RBd8cSiLLxAiC04wVsLV6GBFDOXcTCgWkd3wEoFXgidPSoAJENqC9m7Jb2vewSvjBIfXV6icKeh3GTKfIaXA==
 
 fast-glob@^3.1.1, fast-glob@^3.2.2:
   version "3.2.2"
@@ -2595,32 +2506,6 @@ firebase-admin@^8.12.1:
   optionalDependencies:
     "@google-cloud/firestore" "^3.0.0"
     "@google-cloud/storage" "^4.1.2"
-
-firebase-key@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/firebase-key/-/firebase-key-2.0.2.tgz#44ffdc460faeb774ef95e04a43027042974cfe5c"
-  integrity sha512-gH0u6apANQsqHUqcf+Yd49VaUQyKNCLxofwYx0gqUGcymeLs5HWg/3tXroGheYYH8+ynxbrnP/Z4F/FEqNy9Ow==
-
-firemock@^0.44.2:
-  version "0.44.2"
-  resolved "https://registry.yarnpkg.com/firemock/-/firemock-0.44.2.tgz#148e7117afc9ac7e6110fe02ca688a1d96aef647"
-  integrity sha512-4lvgFC0cpkxLPdovr54Ey0oKADzRJ26k3fEzKfRvBaOzWONt2EPnVHCU9y+s1YpxCvQRs6w7SL19ZmQc9tbDfQ==
-  dependencies:
-    "@forest-fire/serialized-query" "^0.44.2"
-    "@forest-fire/types" "^0.44.2"
-    "@types/faker" "^4.1.12"
-    common-types "^1.14.3"
-    deepmerge "^4.2.2"
-    email-validator "^2.0.4"
-    faker "^4.1.0"
-    fast-copy "^2.0.4"
-    fast-equals "^2.0.0"
-    firebase-key "^2.0.2"
-    lodash.first "^3.0.0"
-    lodash.get "^4.4.2"
-    lodash.last "^3.0.0"
-    lodash.set "^4.3.2"
-    typed-conversions "^0.10.2"
 
 flat@^4.1.0:
   version "4.1.0"
@@ -3796,11 +3681,6 @@ lodash.once@^4.0.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
   integrity sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=
-
-lodash.set@^4.3.2:
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/lodash.set/-/lodash.set-4.3.2.tgz#d8757b1da807dde24816b0d6a84bea1a76230b23"
-  integrity sha1-2HV7HagH3eJIFrDWqEvqGnYjCyM=
 
 lodash.union@^4.6.0:
   version "4.6.0"
