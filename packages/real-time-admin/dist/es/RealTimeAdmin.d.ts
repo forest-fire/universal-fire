@@ -1,8 +1,8 @@
-import * as firebase from "firebase-admin";
-import { RealTimeDb, IRealTimeDb } from "@forest-fire/real-time-db";
-import { EventManager } from "./EventManager";
-import { IAdminConfig, IMockConfig, IAdminAuth, IAdminApp, IAdminRtdbDatabase } from "@forest-fire/types";
-import { IDictionary } from "@forest-fire/types/node_modules/common-types";
+import * as firebase from 'firebase-admin';
+import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
+import { EventManager } from './EventManager';
+import { IAdminConfig, IMockConfig, IAdminAuth, IAdminApp, IAdminRtdbDatabase } from '@forest-fire/types';
+import { IDictionary } from '@forest-fire/types/node_modules/common-types';
 export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     /**
      * Instantiates a DB and then waits for the connection

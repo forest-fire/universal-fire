@@ -1,8 +1,8 @@
 // TODO: reduce this to just named symbols which we need!
-import * as firebase from "firebase-admin";
-import { RealTimeDb, IRealTimeDb } from "@forest-fire/real-time-db";
-import { EventManager } from "./EventManager";
-import { debug } from "./util";
+import * as firebase from 'firebase-admin';
+import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
+import { EventManager } from './EventManager';
+import { debug } from './util';
 import {
   IAdminConfig,
   IMockConfig,
@@ -11,7 +11,7 @@ import {
   IAdminAuth,
   IAdminApp,
   IAdminRtdbDatabase,
-} from "@forest-fire/types";
+} from '@forest-fire/types';
 import {
   extractServiceAccount,
   FireError,
@@ -19,10 +19,10 @@ import {
   extractDataUrl,
   getRunningFirebaseApp,
   determineDefaultAppName,
-} from "@forest-fire/utility";
-import { RealTimeAdminError } from "./errors/RealTimeAdminError";
-import { adminAuthSdk } from "firemock";
-import { IDictionary } from "@forest-fire/types/node_modules/common-types";
+} from '@forest-fire/utility';
+import { RealTimeAdminError } from './errors/RealTimeAdminError';
+import { adminAuthSdk } from 'firemock';
+import { IDictionary } from '@forest-fire/types/node_modules/common-types';
 
 export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   /**
@@ -45,14 +45,14 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     if (RealTimeAdmin._connections[app.name]) {
       throw new RealTimeAdminError(
         `Attempt to add app with name that already exists! [${app.name}]`,
-        "not-allowed"
+        'not-allowed'
       );
     }
     RealTimeAdmin._connections[app.name] = app;
   }
 
   protected _eventManager: EventManager;
-  protected _clientType = "admin";
+  protected _clientType = 'admin';
   protected _isAuthorized: boolean = true;
   protected _auth?: IAdminAuth;
   protected _config: IAdminConfig | IMockConfig;
@@ -71,7 +71,8 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
       };
     }
     if (isAdminConfig(config)) {
-      config.serviceAccount = config.serviceAccount || extractServiceAccount(config);
+      config.serviceAccount =
+        config.serviceAccount || extractServiceAccount(config);
       config.databaseURL = config.databaseURL || extractDataUrl(config);
       config.name = determineDefaultAppName(config);
       this._config = config;
@@ -79,7 +80,10 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
       const runningApps = getRunningApps(firebase.apps);
       const credential = firebase.credential.cert(config.serviceAccount);
       this.app = runningApps.includes(config.name)
-        ? getRunningFirebaseApp<IAdminApp>(config.name, (firebase.apps as unknown) as IAdminApp[])
+        ? getRunningFirebaseApp<IAdminApp>(
+            config.name,
+            (firebase.apps as unknown) as IAdminApp[]
+          )
         : firebase.initializeApp(
             {
               credential,
@@ -97,7 +101,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
           null,
           2
         )}`,
-        "invalid-configuration"
+        'invalid-configuration'
       );
     }
   }
@@ -106,7 +110,9 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     if (this._app) {
       return this._app;
     }
-    throw new FireError("Attempt to access Firebase App without having instantiated it");
+    throw new FireError(
+      'Attempt to access Firebase App without having instantiated it'
+    );
   }
 
   protected set app(value: IAdminApp) {
@@ -138,10 +144,12 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
       try {
         this._database.goOnline();
       } catch (e) {
-        debug("There was an error going online:" + e);
+        debug('There was an error going online:' + e);
       }
     } else {
-      console.warn("Attempt to use goOnline() prior to having a database connection!");
+      console.warn(
+        'Attempt to use goOnline() prior to having a database connection!'
+      );
     }
   }
 
@@ -149,13 +157,22 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     if (this._database) {
       this._database.goOffline();
     } else {
-      console.warn("Attempt to use goOffline() prior to having a database connection!");
+      console.warn(
+        'Attempt to use goOffline() prior to having a database connection!'
+      );
     }
   }
 
   public get isConnected() {
+    if (this.isMockDb) {
+      return this._isConnected;
+    }
+
     return (
-      this.app && this.config?.name && getRunningApps(firebase.apps).includes(this.config.name)
+      this.app &&
+      this.config &&
+      this.config.name &&
+      getRunningApps(firebase.apps).includes(this.config.name)
     );
   }
 
@@ -166,8 +183,8 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
       await this._connectRealDb(this._config);
     } else {
       throw new RealTimeAdminError(
-        "The configuation passed is not valid for an admin SDK!",
-        "invalid-configuration"
+        'The configuation passed is not valid for an admin SDK!',
+        'invalid-configuration'
       );
     }
 
@@ -179,17 +196,22 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
       db: config.mockData || {},
       auth: { providers: [], ...config.mockAuth },
     });
+    this._isConnected = true;
     return this;
   }
 
   protected async _connectRealDb(config: IAdminConfig) {
     this._database = this._app.database() as IAdminRtdbDatabase;
-    this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
+    this.enableDatabaseLogging = firebase.database.enableLogging.bind(
+      firebase.database
+    );
     this.goOnline();
     this._eventManager.connection(true);
     await this._listenForConnectionStatus();
     if (this.isConnected) {
-      console.info(`Database ${this.app.name} was already connected. Reusing connection.`);
+      console.info(
+        `Database ${this.app.name} was already connected. Reusing connection.`
+      );
     }
   }
 

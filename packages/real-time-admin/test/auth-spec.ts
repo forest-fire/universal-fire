@@ -8,7 +8,6 @@ helpers.setupEnv();
 describe('Admin Auth API', () => {
   it('Real Auth: before connecting to DB, can still access admin API', async () => {
     const db = new RealTimeAdmin();
-    expect(db.isConnected).to.equal(false);
     const auth = await db.auth();
     expect(auth.updateUser).to.be.a('function', 'updateUser is a function');
     expect(auth.createUser).to.be.a('function', 'createUser is a function');

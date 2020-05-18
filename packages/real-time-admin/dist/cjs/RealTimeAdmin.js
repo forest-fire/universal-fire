@@ -33,7 +33,7 @@ let RealTimeAdmin = /** @class */ (() => {
     class RealTimeAdmin extends real_time_db_1.RealTimeDb {
         constructor(config) {
             super();
-            this._clientType = "admin";
+            this._clientType = 'admin';
             this._isAuthorized = true;
             this._isAdminApi = true;
             this._eventManager = new EventManager_1.EventManager();
@@ -45,7 +45,8 @@ let RealTimeAdmin = /** @class */ (() => {
                 };
             }
             if (types_1.isAdminConfig(config)) {
-                config.serviceAccount = config.serviceAccount || utility_1.extractServiceAccount(config);
+                config.serviceAccount =
+                    config.serviceAccount || utility_1.extractServiceAccount(config);
                 config.databaseURL = config.databaseURL || utility_1.extractDataUrl(config);
                 config.name = utility_1.determineDefaultAppName(config);
                 this._config = config;
@@ -63,7 +64,7 @@ let RealTimeAdmin = /** @class */ (() => {
                 this._config = config;
             }
             else {
-                throw new utility_1.FireError(`The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(config, null, 2)}`, "invalid-configuration");
+                throw new utility_1.FireError(`The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(config, null, 2)}`, 'invalid-configuration');
             }
         }
         /**
@@ -80,7 +81,7 @@ let RealTimeAdmin = /** @class */ (() => {
         }
         static addConnection(app) {
             if (RealTimeAdmin._connections[app.name]) {
-                throw new RealTimeAdminError_1.RealTimeAdminError(`Attempt to add app with name that already exists! [${app.name}]`, "not-allowed");
+                throw new RealTimeAdminError_1.RealTimeAdminError(`Attempt to add app with name that already exists! [${app.name}]`, 'not-allowed');
             }
             RealTimeAdmin._connections[app.name] = app;
         }
@@ -88,7 +89,7 @@ let RealTimeAdmin = /** @class */ (() => {
             if (this._app) {
                 return this._app;
             }
-            throw new utility_1.FireError("Attempt to access Firebase App without having instantiated it");
+            throw new utility_1.FireError('Attempt to access Firebase App without having instantiated it');
         }
         set app(value) {
             this._app = value;
@@ -118,11 +119,11 @@ let RealTimeAdmin = /** @class */ (() => {
                     this._database.goOnline();
                 }
                 catch (e) {
-                    util_1.debug("There was an error going online:" + e);
+                    util_1.debug('There was an error going online:' + e);
                 }
             }
             else {
-                console.warn("Attempt to use goOnline() prior to having a database connection!");
+                console.warn('Attempt to use goOnline() prior to having a database connection!');
             }
         }
         goOffline() {
@@ -130,11 +131,17 @@ let RealTimeAdmin = /** @class */ (() => {
                 this._database.goOffline();
             }
             else {
-                console.warn("Attempt to use goOffline() prior to having a database connection!");
+                console.warn('Attempt to use goOffline() prior to having a database connection!');
             }
         }
         get isConnected() {
-            return (this.app && this.config?.name && utility_1.getRunningApps(firebase.apps).includes(this.config.name));
+            if (this.isMockDb) {
+                return this._isConnected;
+            }
+            return (this.app &&
+                this.config &&
+                this.config.name &&
+                utility_1.getRunningApps(firebase.apps).includes(this.config.name));
         }
         async connect() {
             if (types_1.isMockConfig(this._config)) {
@@ -144,7 +151,7 @@ let RealTimeAdmin = /** @class */ (() => {
                 await this._connectRealDb(this._config);
             }
             else {
-                throw new RealTimeAdminError_1.RealTimeAdminError("The configuation passed is not valid for an admin SDK!", "invalid-configuration");
+                throw new RealTimeAdminError_1.RealTimeAdminError('The configuation passed is not valid for an admin SDK!', 'invalid-configuration');
             }
             return this;
         }
@@ -153,6 +160,7 @@ let RealTimeAdmin = /** @class */ (() => {
                 db: config.mockData || {},
                 auth: { providers: [], ...config.mockAuth },
             });
+            this._isConnected = true;
             return this;
         }
         async _connectRealDb(config) {

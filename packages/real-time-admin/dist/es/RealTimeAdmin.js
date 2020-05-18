@@ -1,17 +1,17 @@
 // TODO: reduce this to just named symbols which we need!
-import * as firebase from "firebase-admin";
-import { RealTimeDb } from "@forest-fire/real-time-db";
-import { EventManager } from "./EventManager";
-import { debug } from "./util";
-import { isMockConfig, isAdminConfig, } from "@forest-fire/types";
-import { extractServiceAccount, FireError, getRunningApps, extractDataUrl, getRunningFirebaseApp, determineDefaultAppName, } from "@forest-fire/utility";
-import { RealTimeAdminError } from "./errors/RealTimeAdminError";
-import { adminAuthSdk } from "firemock";
+import * as firebase from 'firebase-admin';
+import { RealTimeDb } from '@forest-fire/real-time-db';
+import { EventManager } from './EventManager';
+import { debug } from './util';
+import { isMockConfig, isAdminConfig, } from '@forest-fire/types';
+import { extractServiceAccount, FireError, getRunningApps, extractDataUrl, getRunningFirebaseApp, determineDefaultAppName, } from '@forest-fire/utility';
+import { RealTimeAdminError } from './errors/RealTimeAdminError';
+import { adminAuthSdk } from 'firemock';
 let RealTimeAdmin = /** @class */ (() => {
     class RealTimeAdmin extends RealTimeDb {
         constructor(config) {
             super();
-            this._clientType = "admin";
+            this._clientType = 'admin';
             this._isAuthorized = true;
             this._isAdminApi = true;
             this._eventManager = new EventManager();
@@ -23,7 +23,8 @@ let RealTimeAdmin = /** @class */ (() => {
                 };
             }
             if (isAdminConfig(config)) {
-                config.serviceAccount = config.serviceAccount || extractServiceAccount(config);
+                config.serviceAccount =
+                    config.serviceAccount || extractServiceAccount(config);
                 config.databaseURL = config.databaseURL || extractDataUrl(config);
                 config.name = determineDefaultAppName(config);
                 this._config = config;
@@ -41,7 +42,7 @@ let RealTimeAdmin = /** @class */ (() => {
                 this._config = config;
             }
             else {
-                throw new FireError(`The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(config, null, 2)}`, "invalid-configuration");
+                throw new FireError(`The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(config, null, 2)}`, 'invalid-configuration');
             }
         }
         /**
@@ -58,7 +59,7 @@ let RealTimeAdmin = /** @class */ (() => {
         }
         static addConnection(app) {
             if (RealTimeAdmin._connections[app.name]) {
-                throw new RealTimeAdminError(`Attempt to add app with name that already exists! [${app.name}]`, "not-allowed");
+                throw new RealTimeAdminError(`Attempt to add app with name that already exists! [${app.name}]`, 'not-allowed');
             }
             RealTimeAdmin._connections[app.name] = app;
         }
@@ -66,7 +67,7 @@ let RealTimeAdmin = /** @class */ (() => {
             if (this._app) {
                 return this._app;
             }
-            throw new FireError("Attempt to access Firebase App without having instantiated it");
+            throw new FireError('Attempt to access Firebase App without having instantiated it');
         }
         set app(value) {
             this._app = value;
@@ -96,11 +97,11 @@ let RealTimeAdmin = /** @class */ (() => {
                     this._database.goOnline();
                 }
                 catch (e) {
-                    debug("There was an error going online:" + e);
+                    debug('There was an error going online:' + e);
                 }
             }
             else {
-                console.warn("Attempt to use goOnline() prior to having a database connection!");
+                console.warn('Attempt to use goOnline() prior to having a database connection!');
             }
         }
         goOffline() {
@@ -108,11 +109,17 @@ let RealTimeAdmin = /** @class */ (() => {
                 this._database.goOffline();
             }
             else {
-                console.warn("Attempt to use goOffline() prior to having a database connection!");
+                console.warn('Attempt to use goOffline() prior to having a database connection!');
             }
         }
         get isConnected() {
-            return (this.app && this.config?.name && getRunningApps(firebase.apps).includes(this.config.name));
+            if (this.isMockDb) {
+                return this._isConnected;
+            }
+            return (this.app &&
+                this.config &&
+                this.config.name &&
+                getRunningApps(firebase.apps).includes(this.config.name));
         }
         async connect() {
             if (isMockConfig(this._config)) {
@@ -122,7 +129,7 @@ let RealTimeAdmin = /** @class */ (() => {
                 await this._connectRealDb(this._config);
             }
             else {
-                throw new RealTimeAdminError("The configuation passed is not valid for an admin SDK!", "invalid-configuration");
+                throw new RealTimeAdminError('The configuation passed is not valid for an admin SDK!', 'invalid-configuration');
             }
             return this;
         }
@@ -131,6 +138,7 @@ let RealTimeAdmin = /** @class */ (() => {
                 db: config.mockData || {},
                 auth: { providers: [], ...config.mockAuth },
             });
+            this._isConnected = true;
             return this;
         }
         async _connectRealDb(config) {
