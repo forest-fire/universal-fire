@@ -165,7 +165,9 @@ let RealTimeAdmin = /** @class */ (() => {
         }
         async _connectRealDb(config) {
             const found = firebase.apps.find((i) => i.name === this.config.name);
-            this._database = (found
+            this._database = (found &&
+                found.database &&
+                typeof found.database !== 'function'
                 ? found.database
                 : this._app.database());
             this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);

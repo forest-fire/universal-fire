@@ -202,7 +202,9 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
 
   protected async _connectRealDb(config: IAdminConfig) {
     const found = firebase.apps.find((i) => i.name === this.config.name);
-    this._database = (found
+    this._database = (found &&
+    found.database &&
+    typeof found.database !== 'function'
       ? found.database
       : this._app.database()) as IAdminRtdbDatabase;
     this.enableDatabaseLogging = firebase.database.enableLogging.bind(

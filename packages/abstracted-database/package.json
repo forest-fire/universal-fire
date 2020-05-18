@@ -38,7 +38,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.44.6",
+    "@forest-fire/serialized-query": "^0.44.7",
     "@forest-fire/types": "^0.44.6",
     "@forest-fire/utility": "^0.44.6",
     "firemock": "^0.44.6"
