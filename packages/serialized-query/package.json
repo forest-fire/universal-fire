@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/serialized-query",
-  "version": "0.44.7",
+  "version": "0.44.8",
   "description": "",
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
@@ -63,7 +63,7 @@
   "dependencies": {
     "@forest-fire/types": "^0.44.6",
     "common-types": "^1.14.3",
-    "universal-fire": "^0.44.7"
+    "universal-fire": "^0.44.8"
   },
   "license": "MIT"
 }
