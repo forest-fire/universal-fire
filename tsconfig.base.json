@@ -7,7 +7,7 @@
     "module": "commonjs",
     "noImplicitAny": true,
     "sourceMap": true,
-    "target": "ESNext"
-  },
-  "exclude": ["test"]
+    "target": "ESNext",
+    "noEmit": true
+  }
 }

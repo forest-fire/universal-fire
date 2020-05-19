@@ -25,7 +25,7 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
 
   protected _isAdminApi = false;
   protected _auth?: IClientAuth;
-  protected _app?: IClientApp;
+  protected _app!: IClientApp;
   protected _config: IClientConfig | IMockConfig;
 
   constructor(config?: IClientConfig | IMockConfig) {
@@ -71,19 +71,6 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
     this._config = config;
   }
 
-  protected get app() {
-    if (this._app) {
-      return this._app;
-    }
-    throw new FireError(
-      'Attempt to access Firebase App without having instantiated it'
-    );
-  }
-
-  protected set app(value: IClientApp) {
-    this._app = value;
-  }
-
   public async connect(): Promise<FirestoreClient> {
     if (this._isConnected) {
       console.info(`Firestore ${this.config.name} already connected`);
@@ -93,7 +80,7 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
     if (this.config.useAuth) {
       await this.loadAuthApi();
     }
-    this.database = this.app.firestore();
+    this.database = this._app.firestore();
     return this;
   }
 
@@ -105,10 +92,10 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
       this._config.useAuth = true;
       await this.connect();
     }
-    if (!this.app.auth) {
+    if (!this._app.auth) {
       await this.loadAuthApi();
     }
-    this._auth = this.app.auth!() as IClientAuth;
+    this._auth = this._app.auth!() as IClientAuth;
     return this._auth;
   }
 

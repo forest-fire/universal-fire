@@ -22,7 +22,6 @@ import {
 } from '@forest-fire/utility';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { adminAuthSdk } from 'firemock';
-import { IDictionary } from '@forest-fire/types/node_modules/common-types';
 
 export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   /**
@@ -35,20 +34,10 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     return obj;
   }
 
-  private static _connections: IDictionary<IAdminApp> = {};
+  private static _connections: IAdminApp[] = [];
 
   public static get connections() {
-    return RealTimeAdmin._connections;
-  }
-
-  public static addConnection(app: IAdminApp) {
-    if (RealTimeAdmin._connections[app.name]) {
-      throw new RealTimeAdminError(
-        `Attempt to add app with name that already exists! [${app.name}]`,
-        'not-allowed'
-      );
-    }
-    RealTimeAdmin._connections[app.name] = app;
+    return RealTimeAdmin._connections.map((i) => i.name);
   }
 
   protected _eventManager: EventManager;
@@ -78,8 +67,9 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
       this._config = config;
 
       const runningApps = getRunningApps(firebase.apps);
+      RealTimeAdmin._connections = firebase.apps;
       const credential = firebase.credential.cert(config.serviceAccount);
-      this.app = runningApps.includes(config.name)
+      this._app = runningApps.includes(config.name)
         ? getRunningFirebaseApp<IAdminApp>(
             config.name,
             (firebase.apps as unknown) as IAdminApp[]
@@ -106,17 +96,20 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     }
   }
 
-  protected get app() {
-    if (this._app) {
-      return this._app;
+  public get database(): IAdminRtdbDatabase {
+    if (this.config.mocking) {
+      throw new RealTimeAdminError(
+        `The "database" provides direct access to the Firebase database API when using a real database but not when using a Mock DB!`,
+        'not-allowed'
+      );
     }
-    throw new FireError(
-      'Attempt to access Firebase App without having instantiated it'
-    );
-  }
-
-  protected set app(value: IAdminApp) {
-    this._app = value;
+    if (!this._database) {
+      throw new RealTimeAdminError(
+        `The "database" object was accessed before it was established as part of the "connect()" process!`,
+        'not-allowed'
+      );
+    }
+    return this._database;
   }
 
   /**
@@ -169,7 +162,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     }
 
     return (
-      this.app &&
+      this._app &&
       this.config &&
       this.config.name &&
       getRunningApps(firebase.apps).includes(this.config.name)

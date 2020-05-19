@@ -29,8 +29,9 @@ let RealTimeAdmin = /** @class */ (() => {
                 config.name = determineDefaultAppName(config);
                 this._config = config;
                 const runningApps = getRunningApps(firebase.apps);
+                RealTimeAdmin._connections = firebase.apps;
                 const credential = firebase.credential.cert(config.serviceAccount);
-                this.app = runningApps.includes(config.name)
+                this._app = runningApps.includes(config.name)
                     ? getRunningFirebaseApp(config.name, firebase.apps)
                     : firebase.initializeApp({
                         credential,
@@ -55,22 +56,16 @@ let RealTimeAdmin = /** @class */ (() => {
             return obj;
         }
         static get connections() {
-            return RealTimeAdmin._connections;
+            return RealTimeAdmin._connections.map((i) => i.name);
         }
-        static addConnection(app) {
-            if (RealTimeAdmin._connections[app.name]) {
-                throw new RealTimeAdminError(`Attempt to add app with name that already exists! [${app.name}]`, 'not-allowed');
+        get database() {
+            if (this.config.mocking) {
+                throw new RealTimeAdminError(`The "database" provides direct access to the Firebase database API when using a real database but not when using a Mock DB!`, 'not-allowed');
             }
-            RealTimeAdmin._connections[app.name] = app;
-        }
-        get app() {
-            if (this._app) {
-                return this._app;
+            if (!this._database) {
+                throw new RealTimeAdminError(`The "database" object was accessed before it was established as part of the "connect()" process!`, 'not-allowed');
             }
-            throw new FireError('Attempt to access Firebase App without having instantiated it');
-        }
-        set app(value) {
-            this._app = value;
+            return this._database;
         }
         /**
          * Provides access to the Firebase Admin Auth API.
@@ -116,7 +111,7 @@ let RealTimeAdmin = /** @class */ (() => {
             if (this.isMockDb) {
                 return this._isConnected;
             }
-            return (this.app &&
+            return (this._app &&
                 this.config &&
                 this.config.name &&
                 getRunningApps(firebase.apps).includes(this.config.name));
@@ -168,7 +163,7 @@ let RealTimeAdmin = /** @class */ (() => {
             this._eventManager.connection(true);
         }
     }
-    RealTimeAdmin._connections = {};
+    RealTimeAdmin._connections = [];
     return RealTimeAdmin;
 })();
 export { RealTimeAdmin };

@@ -14,6 +14,29 @@ class AbstractedDatabase {
         this._isConnected = false;
     }
     /**
+     * Returns key characteristics about the Firebase app being managed.
+     */
+    get app() {
+        if (this.config.mocking) {
+            throw new utility_1.FireError(`The "app" object is provided as direct access to the Firebase API when using a real database but not when using a Mock DB!`, 'not-allowed');
+        }
+        if (this._app) {
+            return {
+                name: this._app.name,
+                databaseURL: this._app.options.databaseURL
+                    ? this._app.options.databaseURL
+                    : '',
+                projectId: this._app.options.projectId
+                    ? this._app.options.projectId
+                    : '',
+                storageBucket: this._app.options.storageBucket
+                    ? this._app.options.storageBucket
+                    : '',
+            };
+        }
+        throw new utility_1.FireError('Attempt to access Firebase App without having instantiated it');
+    }
+    /**
      * Indicates if the database is using the admin SDK.
      */
     get isAdminApi() {
@@ -41,7 +64,7 @@ class AbstractedDatabase {
      */
     get mock() {
         if (!this.isMockDb) {
-            throw new utility_1.FireError(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, "AbstractedDatabase/not-allowed");
+            throw new utility_1.FireError(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, 'AbstractedDatabase/not-allowed');
         }
         if (!this._mock) {
             throw new utility_1.FireError(`Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`);

@@ -1,6 +1,6 @@
-import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbEventType } from "@forest-fire/types";
-import type { Mock as MockDb } from "firemock";
-import { BaseSerializer } from "@forest-fire/serialized-query";
+import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbEventType } from '@forest-fire/types';
+import type { Mock as MockDb } from 'firemock';
+import { BaseSerializer } from '@forest-fire/serialized-query';
 export declare abstract class AbstractedDatabase {
     /**
      * Indicates if the database is using the admin SDK.
@@ -34,13 +34,14 @@ export declare abstract class AbstractedDatabase {
      */
     protected abstract _auth?: IAdminAuth | IClientAuth;
     /**
-     * Returns the `_app`.
+     * Returns key characteristics about the Firebase app being managed.
      */
-    protected abstract get app(): IAdminApp | IClientApp;
-    /**
-     * Sets the `_app`.
-     */
-    protected abstract set app(value: IAdminApp | IClientApp);
+    get app(): {
+        name: string;
+        databaseURL: string;
+        projectId: string;
+        storageBucket: string;
+    };
     /**
      * Returns a type safe accessor to the database; when the database has not been set yet
      * it will throw a `not-ready` error.

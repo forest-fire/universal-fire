@@ -3,7 +3,7 @@ import type { IAdminApp, IClientApp, IFirestoreDatabase, IFirestoreDbEvent } fro
 import type { SerializedFirestoreQuery } from '@forest-fire/serialized-query';
 export declare abstract class FirestoreDb extends AbstractedDatabase {
     protected _database?: IFirestoreDatabase;
-    protected _app?: IClientApp | IAdminApp;
+    protected _app: IClientApp | IAdminApp;
     protected get database(): IFirestoreDatabase;
     protected set database(value: IFirestoreDatabase);
     protected _isCollection(path: string | SerializedFirestoreQuery): boolean;

@@ -25,7 +25,7 @@ export class FirestoreAdmin extends FirestoreDb implements IAdminSdk {
 
   protected _isAdminApi = true;
   protected _auth?: IAdminAuth;
-  protected _app?: IAdminApp;
+  protected _app!: IAdminApp;
   protected _config: IAdminConfig | IMockConfig;
 
   constructor(config?: IAdminConfig | IMockConfig) {
@@ -51,7 +51,7 @@ export class FirestoreAdmin extends FirestoreDb implements IAdminSdk {
 
       const runningApps = getRunningApps(firebase.apps);
       const credential = firebase.credential.cert(config.serviceAccount);
-      this.app = runningApps.includes(config.name)
+      this._app = runningApps.includes(config.name)
         ? getRunningFirebaseApp<IAdminApp>(
             config.name,
             (firebase.apps as unknown) as IAdminApp[]
@@ -76,30 +76,17 @@ export class FirestoreAdmin extends FirestoreDb implements IAdminSdk {
     this._config = config;
   }
 
-  protected get app() {
-    if (this._app) {
-      return this._app;
-    }
-    throw new FireError(
-      'Attempt to access Firebase App without having instantiated it'
-    );
-  }
-
-  protected set app(value: IAdminApp) {
-    this._app = value;
-  }
-
   public async connect(): Promise<FirestoreAdmin> {
     if (this._isConnected) {
       console.info(`Firestore ${this.config.name} already connected`);
       return this;
     }
     await this.loadFirestoreApi();
-    this.database = this.app.firestore();
+    this.database = this._app.firestore();
   }
 
   public async auth(): Promise<IAdminAuth> {
-    return firebase.auth(this.app);
+    return firebase.auth(this._app);
   }
 
   protected async loadFirestoreApi() {

@@ -1,4 +1,4 @@
-import { FireError } from "@forest-fire/utility";
+import { FireError } from '@forest-fire/utility';
 export class AbstractedDatabase {
     constructor() {
         /**
@@ -9,6 +9,29 @@ export class AbstractedDatabase {
          * Indicates if the database is connected.
          */
         this._isConnected = false;
+    }
+    /**
+     * Returns key characteristics about the Firebase app being managed.
+     */
+    get app() {
+        if (this.config.mocking) {
+            throw new FireError(`The "app" object is provided as direct access to the Firebase API when using a real database but not when using a Mock DB!`, 'not-allowed');
+        }
+        if (this._app) {
+            return {
+                name: this._app.name,
+                databaseURL: this._app.options.databaseURL
+                    ? this._app.options.databaseURL
+                    : '',
+                projectId: this._app.options.projectId
+                    ? this._app.options.projectId
+                    : '',
+                storageBucket: this._app.options.storageBucket
+                    ? this._app.options.storageBucket
+                    : '',
+            };
+        }
+        throw new FireError('Attempt to access Firebase App without having instantiated it');
     }
     /**
      * Indicates if the database is using the admin SDK.
@@ -38,7 +61,7 @@ export class AbstractedDatabase {
      */
     get mock() {
         if (!this.isMockDb) {
-            throw new FireError(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, "AbstractedDatabase/not-allowed");
+            throw new FireError(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, 'AbstractedDatabase/not-allowed');
         }
         if (!this._mock) {
             throw new FireError(`Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`);

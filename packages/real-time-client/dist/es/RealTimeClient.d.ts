@@ -29,8 +29,6 @@ export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb {
      * start the connection process.
      */
     constructor(config?: IClientConfig | IMockConfig);
-    protected get app(): IClientApp;
-    protected set app(value: IClientApp);
     connect(): Promise<RealTimeClient>;
     /**
      * access to provider specific providers
