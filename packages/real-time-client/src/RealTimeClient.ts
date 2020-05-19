@@ -118,7 +118,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
   /**
    * access to provider specific providers
    */
-  get authProviders(): IClientApp['auth'] {
+  get authProviders() {
     if (!this._fbClass) {
       throw new ClientError(
         `There was a problem getting the Firebase default export/class!`,
