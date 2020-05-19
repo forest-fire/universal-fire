@@ -23,6 +23,7 @@ export enum FirebaseBoolean {
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
 import { EventManager, ClientError } from './private';
+import { FirebaseNamespace } from '@firebase/app-types';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 
@@ -53,10 +54,8 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
   protected _database?: IRtdbDatabase;
   protected _auth?: IClientAuth;
   protected _config: IClientConfig | IMockConfig;
-  protected _fbClass:
-    | IClientApp
-    | (IClientApp & { auth: () => IClientApp['auth'] });
-  protected _authProviders: IClientApp['auth'];
+  protected _fbClass: IClientApp;
+  protected _authProviders: FirebaseNamespace['auth'];
   protected _app: IClientApp;
 
   /**
@@ -134,7 +133,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
           'missing-auth'
         );
       }
-      this._authProviders = this._fbClass.auth;
+      this._authProviders = firebase.auth;
     }
 
     return this._authProviders;
@@ -168,7 +167,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
       db: config.mockData || {},
       auth: { providers: [], ...config.mockAuth },
     });
-    this._authProviders = this._mock.authProviders as IClientApp['auth'];
+    this._authProviders = this._mock.authProviders;
     await this._listenForConnectionStatus();
   }
 

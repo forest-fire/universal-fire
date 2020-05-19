@@ -110,7 +110,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
             if (!this._fbClass.auth) {
                 throw new private_1.ClientError(`Attempt to get the authProviders getter before connecting to the database!`, 'missing-auth');
             }
-            this._authProviders = this._fbClass.auth;
+            this._authProviders = app_1.firebase.auth;
         }
         return this._authProviders;
     }

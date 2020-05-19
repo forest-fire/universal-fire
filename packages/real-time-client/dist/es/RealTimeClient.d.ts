@@ -5,6 +5,7 @@ export declare enum FirebaseBoolean {
     false = 0
 }
 import { EventManager } from './private';
+import { FirebaseNamespace } from '@firebase/app-types';
 export declare let MOCK_LOADING_TIMEOUT: number;
 export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb {
     /**
@@ -19,10 +20,8 @@ export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb {
     protected _database?: IRtdbDatabase;
     protected _auth?: IClientAuth;
     protected _config: IClientConfig | IMockConfig;
-    protected _fbClass: IClientApp | (IClientApp & {
-        auth: () => IClientApp['auth'];
-    });
-    protected _authProviders: IClientApp['auth'];
+    protected _fbClass: IClientApp;
+    protected _authProviders: FirebaseNamespace['auth'];
     protected _app: IClientApp;
     /**
      * Builds the client and then waits for all to `connect()` to

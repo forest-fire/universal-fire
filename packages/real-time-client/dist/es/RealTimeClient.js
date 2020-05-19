@@ -88,7 +88,7 @@ export class RealTimeClient extends RealTimeDb {
             if (!this._fbClass.auth) {
                 throw new ClientError(`Attempt to get the authProviders getter before connecting to the database!`, 'missing-auth');
             }
-            this._authProviders = this._fbClass.auth;
+            this._authProviders = firebase.auth;
         }
         return this._authProviders;
     }
