@@ -23,7 +23,7 @@ export class FirestoreAdmin extends FirestoreDb {
             this._config = config;
             const runningApps = getRunningApps(firebase.apps);
             const credential = firebase.credential.cert(config.serviceAccount);
-            this.app = runningApps.includes(config.name)
+            this._app = runningApps.includes(config.name)
                 ? getRunningFirebaseApp(config.name, firebase.apps)
                 : firebase.initializeApp({
                     credential,
@@ -40,25 +40,16 @@ export class FirestoreAdmin extends FirestoreDb {
         await obj.connect();
         return obj;
     }
-    get app() {
-        if (this._app) {
-            return this._app;
-        }
-        throw new FireError('Attempt to access Firebase App without having instantiated it');
-    }
-    set app(value) {
-        this._app = value;
-    }
     async connect() {
         if (this._isConnected) {
             console.info(`Firestore ${this.config.name} already connected`);
             return this;
         }
         await this.loadFirestoreApi();
-        this.database = this.app.firestore();
+        this.database = this._app.firestore();
     }
     async auth() {
-        return firebase.auth(this.app);
+        return firebase.auth(this._app);
     }
     async loadFirestoreApi() {
         await import(/* webpackChunkName: "firebase-admin" */ 'firebase-admin');
