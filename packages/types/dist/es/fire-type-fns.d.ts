@@ -1,4 +1,4 @@
-import { IAdminConfig, IClientConfig, IDatabaseConfig, IMockConfig } from './index';
+import type { IAdminConfig, IClientConfig, IDatabaseConfig, IMockConfig } from './index';
 export declare function isMockConfig(config: IDatabaseConfig): config is IMockConfig;
 export declare function isRealDbConfig(config: IDatabaseConfig): config is IAdminConfig | IClientConfig;
 /**
