@@ -1,6 +1,6 @@
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
-import type { IAdminConfig, IMockConfig, IAdminAuth, IAdminApp, IAdminRtdbDatabase } from '@forest-fire/types';
+import { IAdminConfig, IMockConfig, IAdminAuth, IAdminApp, IAdminRtdbDatabase } from '@forest-fire/types';
 export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     /**
      * Instantiates a DB and then waits for the connection

@@ -1,2 +1,2 @@
-import { User } from "@forest-fire/types";
+import type { User } from '@forest-fire/types';
 export declare const notImplemented: Partial<User>;

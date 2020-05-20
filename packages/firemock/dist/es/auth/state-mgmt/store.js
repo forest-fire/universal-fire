@@ -1,5 +1,5 @@
-import { FireMockError } from "../../errors/FireMockError";
-import { clientApiUser } from "../client-sdk/UserObject";
+import { FireMockError } from '../../errors/FireMockError';
+import { clientApiUser } from '../client-sdk/UserObject';
 /**
  * The recognized users in the mock Auth system
  */
@@ -34,7 +34,9 @@ export function initializeAuth(config) {
         uid: getRandomMockUid(),
         providerData: [],
     });
-    _users = (config.users || []).map((u) => ({ ...baseUser(), ...u })) || [];
+    _users =
+        (config.users || []).map((u) => ({ ...baseUser(), ...u })) ||
+            [];
     _providers = config.providers || [];
 }
 function isUser(user) {
@@ -49,12 +51,12 @@ export function setCurrentUser(user) {
             additionalUserInfo: {
                 isNewUser: false,
                 profile: {},
-                providerId: "mock",
+                providerId: 'mock',
                 username: user.email,
             },
             credential: {
-                signInMethod: "mock",
-                providerId: "mock",
+                signInMethod: 'mock',
+                providerId: 'mock',
                 toJSON: () => user,
             },
         };
@@ -144,7 +146,7 @@ export function updateUser(uid, update) {
     if (!existing) {
         throw new FireMockError(`Attempt to update the user with UID of "${uid}" failed because this user is not defined in the mock Auth instance!`);
     }
-    _users = _users.map((u) => (u.uid === uid ? { ...u, ...update } : u));
+    _users = _users.map((u) => u.uid === uid ? { ...u, ...update } : u);
 }
 export function allUsers() {
     return _users;

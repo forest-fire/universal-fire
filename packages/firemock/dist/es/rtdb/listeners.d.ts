@@ -1,7 +1,7 @@
-import { SerializedRealTimeQuery } from "@forest-fire/serialized-query";
-import { IFirebaseEventHandler, IListener } from "../@types/rtdb-types";
-import { IRtdbEventType, IRtdbDataSnapshot } from "@forest-fire/types";
-import { IDictionary } from "common-types";
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { IFirebaseEventHandler, IListener } from '../@types/rtdb-types';
+import type { IRtdbEventType, IRtdbDataSnapshot } from '@forest-fire/types';
+import { IDictionary } from 'common-types';
 /**
  * **addListener**
  *
@@ -35,7 +35,7 @@ export declare function removeAllListeners(): number;
  * of only this type of event.
  */
 export declare function listenerCount(type?: IRtdbEventType): number;
-export declare type EventTypePlusChild = IRtdbEventType | "child";
+export declare type EventTypePlusChild = IRtdbEventType | 'child';
 /**
  * **listenerPaths**
  *

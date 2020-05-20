@@ -1,5 +1,5 @@
 import { getDb, SnapShot } from '../rtdb/index';
-import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
+import { SerializedRealTimeQuery, RealQueryOrderType, } from '@forest-fire/serialized-query';
 import { leafNode, networkDelay } from '../shared/index';
 import { runQuery } from '../shared/index';
 /** tslint:ignore:member-ordering */

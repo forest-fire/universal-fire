@@ -6,10 +6,10 @@ class RecaptchaVerifier {
         //
     }
     async render() {
-        throw new Error("not-implemented");
+        throw new Error('not-implemented');
     }
     async verify() {
-        throw new Error("not-implemented");
+        throw new Error('not-implemented');
     }
 }
 exports.RecaptchaVerifier = RecaptchaVerifier;

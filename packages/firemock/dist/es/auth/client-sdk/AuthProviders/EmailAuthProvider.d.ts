@@ -1,4 +1,4 @@
-import { AuthCredential, EmailAuthProvider_Instance, GoogleEmailAuthProvider } from "@forest-fire/types";
+import type { AuthCredential, EmailAuthProvider_Instance, GoogleEmailAuthProvider } from '@forest-fire/types';
 /**
  * **EmailAuthProvider** API mocking. Details on the API can be found
  * here: https://firebase.google.com/docs/reference/js/firebase.auth.EmailAuthProvider

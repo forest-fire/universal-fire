@@ -4,12 +4,12 @@ exports.getIdTokenResult = void 0;
 const getIdToken_1 = require("./getIdToken");
 async function getIdTokenResult(forceRefresh) {
     return {
-        authTime: "",
+        authTime: '',
         claims: {},
-        expirationTime: "",
-        issuedAtTime: "",
-        signInProvider: "",
-        signInSecondFactor: "",
+        expirationTime: '',
+        issuedAtTime: '',
+        signInProvider: '',
+        signInSecondFactor: '',
         token: await getIdToken_1.getIdToken(),
     };
 }

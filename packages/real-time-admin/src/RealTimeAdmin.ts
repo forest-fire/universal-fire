@@ -3,7 +3,7 @@ import * as firebase from 'firebase-admin';
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
 import { debug } from './util';
-import type {
+import {
   IAdminConfig,
   IMockConfig,
   isMockConfig,

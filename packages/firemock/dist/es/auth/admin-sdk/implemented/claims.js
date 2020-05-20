@@ -1,4 +1,4 @@
-import { updateUser } from "../../state-mgmt";
+import { updateUser } from '../../state-mgmt';
 export const claims = {
     /**
      * Sets additional developer claims on an existing user identified by the provided uid,

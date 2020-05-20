@@ -23,20 +23,20 @@ class Mock {
      * DB to be setup via mocking.
      */
     dataOrMock, authConfig = {
-        providers: ["anonymous"],
+        providers: ['anonymous'],
         users: [],
     }) {
         // TODO: should these attributes be removed?
-        this._schemas = new index_1.Queue("schemas").clear();
-        this._relationships = new index_1.Queue("relationships").clear();
-        this._queues = new index_1.Queue("queues").clear();
+        this._schemas = new index_1.Queue('schemas').clear();
+        this._relationships = new index_1.Queue('relationships').clear();
+        this._queues = new index_1.Queue('queues').clear();
         index_1.Queue.clearAll();
         index_2.clearDatabase();
         state_mgmt_1.clearAuthUsers();
-        if (dataOrMock && typeof dataOrMock === "object") {
+        if (dataOrMock && typeof dataOrMock === 'object') {
             this.updateDB(dataOrMock);
         }
-        if (dataOrMock && typeof dataOrMock === "function") {
+        if (dataOrMock && typeof dataOrMock === 'function') {
             this._mockInitializer = dataOrMock(this);
         }
         state_mgmt_1.initializeAuth(authConfig);
@@ -56,11 +56,11 @@ class Mock {
         const defaultDbConfig = {};
         await fakerInitialiation_1.importFakerLibrary();
         const obj = new Mock(options.db
-            ? typeof options.db === "function"
+            ? typeof options.db === 'function'
                 ? {}
                 : options.db || defaultDbConfig
             : defaultDbConfig, options.auth);
-        if (typeof options.db === "function") {
+        if (typeof options.db === 'function') {
             obj.updateDB(await options.db(obj));
         }
         return obj;
@@ -145,7 +145,7 @@ class Mock {
     generate() {
         const faker = fakerInitialiation_1.getFakerLibrary();
         if (!faker && !faker.address) {
-            throw new FireMockError_1.FireMockError(`The Faker library must be loaded before you can generate mocked data can be returned`, "firemock/faker-not-ready");
+            throw new FireMockError_1.FireMockError(`The Faker library must be loaded before you can generate mocked data can be returned`, 'firemock/faker-not-ready');
         }
         return new index_1.Deployment().generate();
     }

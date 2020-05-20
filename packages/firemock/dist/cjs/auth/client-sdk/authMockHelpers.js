@@ -28,7 +28,7 @@ function userUid(email) {
 }
 exports.userUid = userUid;
 function emailValidationAllowed() {
-    return state_mgmt_1.authProviders().includes("emailPassword");
+    return state_mgmt_1.authProviders().includes('emailPassword');
 }
 exports.emailValidationAllowed = emailValidationAllowed;
 function loggedIn(user) {

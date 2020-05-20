@@ -8,7 +8,7 @@ import {
   getRunningApps,
   getRunningFirebaseApp,
 } from '@forest-fire/utility';
-import type {
+import {
   IMockConfig,
   isAdminConfig,
   isMockConfig,

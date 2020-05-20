@@ -24,7 +24,7 @@ const api = {
     RecaptchaVerifier: RecaptchaVerifier_1.RecaptchaVerifier,
 };
 const fn = () => {
-    throw new Error("not allowed");
+    throw new Error('not allowed');
 };
 exports.default = (api || fn);
 //# sourceMappingURL=index.js.map

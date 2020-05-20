@@ -6,7 +6,7 @@ exports.getRunningApps = void 0;
  * Firebase's control (admin API)
  */
 function getRunningApps(apps) {
-    return apps.filter(i => i !== null).map(i => i.name);
+    return apps.filter((i) => i !== null).map((i) => i.name);
 }
 exports.getRunningApps = getRunningApps;
 //# sourceMappingURL=getRunningApps.js.map

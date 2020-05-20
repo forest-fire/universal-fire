@@ -1,5 +1,5 @@
-import { GoogleFacebookAuthProvider, AuthCredential, AuthProvider, FacebookAuthProvider_Instance } from "@forest-fire/types";
-import { IDictionary } from "common-types";
+import type { GoogleFacebookAuthProvider, AuthCredential, AuthProvider, FacebookAuthProvider_Instance } from '@forest-fire/types';
+import { IDictionary } from 'common-types';
 export declare class FacebookAuthProvider implements FacebookAuthProvider_Instance, GoogleFacebookAuthProvider {
     static PROVIDER_ID: string;
     static FACEBOOK_SIGN_IN_METHOD: string;

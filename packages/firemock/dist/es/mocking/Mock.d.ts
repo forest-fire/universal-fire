@@ -1,9 +1,9 @@
-import { IDictionary } from "common-types";
-import { Schema, Deployment } from "../mocking/index";
-import { Reference } from "../rtdb/index";
-import { DelayType } from "../shared";
-import { SchemaCallback, IMockSetup } from "../@types";
-import { FirebaseNamespace, IMockAuthConfig, IAdminAuth, IMockConfigOptions } from "@forest-fire/types";
+import { IDictionary } from 'common-types';
+import { Schema, Deployment } from '../mocking/index';
+import { Reference } from '../rtdb/index';
+import { DelayType } from '../shared';
+import { SchemaCallback, IMockSetup } from '../@types';
+import type { FirebaseNamespace, IMockAuthConfig, IAdminAuth, IMockConfigOptions } from '@forest-fire/types';
 export declare class Mock {
     /**
      * returns a Mock object while also ensuring that the
@@ -53,7 +53,7 @@ export declare class Mock {
     restoreEvents(): void;
     auth(): Promise<import("@forest-fire/types").IMockAuth>;
     adminSdk(): Promise<IAdminAuth>;
-    get authProviders(): FirebaseNamespace["auth"];
+    get authProviders(): FirebaseNamespace['auth'];
     /**
      * returns an instance static FakerJS libraray
      */

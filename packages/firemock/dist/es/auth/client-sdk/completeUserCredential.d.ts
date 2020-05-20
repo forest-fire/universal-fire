@@ -1,5 +1,5 @@
-import { UserCredential, ConfirmationResult } from "@forest-fire/types";
-import { IPartialUserCredential } from "../../index";
+import type { UserCredential, ConfirmationResult } from '@forest-fire/types';
+import { IPartialUserCredential } from '../../index';
 export { UserCredential };
 /**
  * takes a partial user auth and adds enough to make it officially

@@ -1,6 +1,6 @@
 import { firebase } from '@firebase/app';
 import { FirestoreDb } from '@forest-fire/firestore-db';
-import type {
+import {
   IClientApp,
   IClientAuth,
   IClientConfig,

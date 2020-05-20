@@ -1,6 +1,6 @@
-import merge from "deepmerge";
-import { clientApiUser } from "./UserObject";
-import { getRandomMockUid } from "../state-mgmt";
+import merge from 'deepmerge';
+import { clientApiUser } from './UserObject';
+import { getRandomMockUid } from '../state-mgmt';
 /**
  * takes a partial user auth and adds enough to make it officially
  * a full UserCrediental
@@ -9,28 +9,28 @@ export function completeUserCredential(partial) {
     const fakeUserCredential = {
         user: {
             ...clientApiUser,
-            displayName: "",
-            email: "",
+            displayName: '',
+            email: '',
             isAnonymous: true,
             metadata: {},
-            phoneNumber: "",
-            photoURL: "",
+            phoneNumber: '',
+            photoURL: '',
             providerData: [],
-            providerId: "",
-            refreshToken: "",
+            providerId: '',
+            refreshToken: '',
             uid: getRandomMockUid(),
         },
         additionalUserInfo: {
             isNewUser: false,
-            profile: "",
-            providerId: "",
-            username: "fake",
+            profile: '',
+            providerId: '',
+            username: 'fake',
         },
-        operationType: "",
+        operationType: '',
         credential: {
-            signInMethod: "fake",
-            providerId: "fake",
-            toJSON: () => "",
+            signInMethod: 'fake',
+            providerId: 'fake',
+            toJSON: () => '',
         },
     };
     return merge(fakeUserCredential, partial);
@@ -39,6 +39,6 @@ export const fakeApplicationVerifier = {
     async confirm(verificationCode) {
         return completeUserCredential({});
     },
-    verificationId: "verification",
+    verificationId: 'verification',
 };
 //# sourceMappingURL=completeUserCredential.js.map

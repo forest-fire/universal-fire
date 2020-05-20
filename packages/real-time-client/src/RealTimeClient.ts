@@ -1,13 +1,13 @@
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
-import type {
+import {
   isMockConfig,
-  isClientConfig,
   IClientConfig,
   IClientAuth,
   IMockConfig,
   IRtdbDatabase,
   IClientApp,
   IRtdbDataSnapshot,
+  isClientConfig,
 } from '@forest-fire/types';
 import {
   extractClientConfig,

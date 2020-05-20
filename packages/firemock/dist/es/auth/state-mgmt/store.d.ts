@@ -1,4 +1,4 @@
-import { IMockUser, IMockAuthConfig, ISimplifiedMockUser, UpdateRequest, UserCredential, User } from "@forest-fire/types";
+import type { IMockUser, IMockAuthConfig, ISimplifiedMockUser, UpdateRequest, UserCredential, User } from '@forest-fire/types';
 export declare type IAuthObserver = (user: User | null) => any;
 export declare function getAuthObservers(): IAuthObserver[];
 export declare function addAuthObserver(ob: IAuthObserver): void;

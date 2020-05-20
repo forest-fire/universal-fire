@@ -1,6 +1,6 @@
 const data = {
-    providerId: "mock-provider-id-for-EmailAuthProvider",
-    signInMethod: "email-and-password",
+    providerId: 'mock-provider-id-for-EmailAuthProvider',
+    signInMethod: 'email-and-password',
 };
 /**
  * **EmailAuthProvider** API mocking. Details on the API can be found

@@ -1,7 +1,7 @@
 import * as firebase from 'firebase-admin';
 import { FirestoreDb } from '@forest-fire/firestore-db';
 import { determineDefaultAppName, extractDataUrl, extractServiceAccount, FireError, getRunningApps, getRunningFirebaseApp, } from '@forest-fire/utility';
-import { isAdminConfig, isMockConfig } from '@forest-fire/types';
+import { isAdminConfig, isMockConfig, } from '@forest-fire/types';
 export class FirestoreAdmin extends FirestoreDb {
     constructor(config) {
         super();

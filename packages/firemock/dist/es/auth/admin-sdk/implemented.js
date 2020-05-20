@@ -1,4 +1,4 @@
-import { users, claims, tokens } from "./implemented/index";
+import { users, claims, tokens } from './implemented/index';
 export const implemented = {
     ...users,
     ...claims,
