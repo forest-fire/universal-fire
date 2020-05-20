@@ -1,17 +1,17 @@
 import { IDictionary } from 'common-types';
-import {
+import type {
   IRtdbQuery,
   IRtdbReference,
   IRtdbDataSnapshot,
   IRtdbEventType,
-} from '@forest-fire/types'
+} from '@forest-fire/types';
 
-import {
-  QueryValue,
-  IFirebaseEventHandler,
-} from '../@types/rtdb-types';
+import { QueryValue, IFirebaseEventHandler } from '../@types/rtdb-types';
 import { getDb, SnapShot } from '../rtdb/index';
-import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
+import {
+  SerializedRealTimeQuery,
+  RealQueryOrderType,
+} from '@forest-fire/serialized-query';
 import { leafNode, DelayType, networkDelay } from '../shared/index';
 import { runQuery } from '../shared/index';
 

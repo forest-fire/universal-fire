@@ -1,5 +1,5 @@
 import { IDictionary, SortingFunction } from 'common-types';
-import { IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IRtdbDataSnapshot } from '@forest-fire/types';
 import { Reference } from '../rtdb/index';
 /**
  * Each record in the forEach iteration will be passed

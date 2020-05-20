@@ -1,5 +1,5 @@
 import { extractEncodedString } from '../shared';
-import { IClientConfig } from '@forest-fire/types';
+import type { IClientConfig } from '@forest-fire/types';
 
 /**
  * Extracts the client configuration from ENV variables and processes it

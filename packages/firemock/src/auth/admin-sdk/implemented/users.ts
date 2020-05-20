@@ -1,10 +1,10 @@
-import {
+import type {
   Auth,
   CreateRequest,
   UserRecord,
   UpdateRequest,
   ListUsersResult,
-} from "@forest-fire/types";
+} from '@forest-fire/types';
 import {
   addUser,
   updateUser,
@@ -12,8 +12,8 @@ import {
   removeUser,
   getUserByEmail,
   allUsers,
-} from "../../state-mgmt";
-import { networkDelay } from "../../../shared";
+} from '../../state-mgmt';
+import { networkDelay } from '../../../shared';
 
 export const users: Partial<Auth> = {
   // https://firebase.google.com/docs/auth/admin/manage-users#create_a_user
@@ -38,7 +38,10 @@ export const users: Partial<Auth> = {
     };
   },
   /** Updates an existing user. */
-  async updateUser(uid: string, properties: UpdateRequest): Promise<UserRecord> {
+  async updateUser(
+    uid: string,
+    properties: UpdateRequest
+  ): Promise<UserRecord> {
     updateUser(uid, properties);
     return getUserById(uid);
   },

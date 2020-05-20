@@ -1,18 +1,18 @@
 import { RealTimeAdmin } from '../src/index';
 import { expect } from 'chai';
 import * as helpers from './testing/helpers';
-import { IMockConfig } from '@forest-fire/types';
+import type { IMockConfig } from '@forest-fire/types';
 helpers.setupEnv();
 type SchemaCallback = import('firemock').SchemaCallback;
 
-const animalMocker: SchemaCallback = h => () => ({
+const animalMocker: SchemaCallback = (h) => () => ({
   type: h.faker.random.arrayElement(['cat', 'dog', 'parrot']),
   name: h.faker.name.firstName(),
-  age: h.faker.random.number({ min: 1, max: 15 })
+  age: h.faker.random.number({ min: 1, max: 15 }),
 });
 
 const config: IMockConfig = {
-  mocking: true
+  mocking: true,
 };
 
 describe('Mocking', async () => {
@@ -99,7 +99,7 @@ describe('Mocking', async () => {
     await db.connect();
     db.set('/people/abcd', {
       name: 'Frank Black',
-      age: 45
+      age: 45,
     });
     const people = await db.getRecord('/people/abcd');
     expect(people).to.have.property('id');
@@ -114,9 +114,9 @@ describe('Mocking', async () => {
       people: {
         abcd: {
           name: 'Frank Black',
-          age: 45
-        }
-      }
+          age: 45,
+        },
+      },
     });
     db.update('/people/abcd', { age: 14 });
     const people = await db.getRecord('/people/abcd');
@@ -133,7 +133,7 @@ describe('Mocking', async () => {
     await db.connect();
     db.push('/people', {
       name: 'Frank Black',
-      age: 45
+      age: 45,
     });
     const people = await db.getList('/people');
     expect(people).to.be.an('array');
@@ -148,9 +148,9 @@ describe('Mocking', async () => {
     const db = new RealTimeAdmin({ mocking: true });
     await db.connect();
     db.mock
-      .addSchema('meal', h => () => ({
+      .addSchema('meal', (h) => () => ({
         name: h.faker.random.arrayElement(['breakfast', 'lunch', 'dinner']),
-        datetime: h.faker.date.recent()
+        datetime: h.faker.date.recent(),
       }))
       .pathPrefix('authenticated');
     db.mock.queueSchema('meal', 10);

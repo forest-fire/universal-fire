@@ -1,5 +1,5 @@
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
-import { IClientConfig, IClientAuth, IMockConfig, IRtdbDatabase, IClientApp } from '@forest-fire/types';
+import type { IClientConfig, IClientAuth, IMockConfig, IRtdbDatabase, IClientApp } from '@forest-fire/types';
 export declare enum FirebaseBoolean {
     true = 1,
     false = 0

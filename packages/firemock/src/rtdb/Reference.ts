@@ -1,14 +1,12 @@
 import { IDictionary } from 'common-types';
-import {
+import type {
   IRtdbReference,
   IRtdbDataSnapshot,
   IRtdbThenableReference,
   IRtdbEventType,
 } from '@forest-fire/types';
 
-import {
-  IFirebaseEventHandler,
-} from '../@types/rtdb-types';
+import { IFirebaseEventHandler } from '../@types/rtdb-types';
 
 import {
   setDB,

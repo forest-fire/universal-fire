@@ -8,8 +8,10 @@ import {
   getRunningApps,
   getRunningFirebaseApp,
 } from '@forest-fire/utility';
-import { IMockConfig, isAdminConfig, isMockConfig } from '@forest-fire/types';
 import type {
+  IMockConfig,
+  isAdminConfig,
+  isMockConfig,
   IAdminApp,
   IAdminAuth,
   IAdminConfig,

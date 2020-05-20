@@ -1,4 +1,4 @@
-import { IDatabaseConfig } from '@forest-fire/types';
+import type { IDatabaseConfig } from '@forest-fire/types';
 import { IRealTimeDb } from '@forest-fire/real-time-db';
 import { IFirestoreDb } from '@forest-fire/firestore-db';
 export declare class DB {

@@ -1,19 +1,20 @@
-import {
+import type {
   AuthCredential,
   EmailAuthProvider_Instance,
   GoogleEmailAuthProvider,
-} from "@forest-fire/types";
+} from '@forest-fire/types';
 
 const data = {
-  providerId: "mock-provider-id-for-EmailAuthProvider",
-  signInMethod: "email-and-password",
+  providerId: 'mock-provider-id-for-EmailAuthProvider',
+  signInMethod: 'email-and-password',
 };
 
 /**
  * **EmailAuthProvider** API mocking. Details on the API can be found
  * here: https://firebase.google.com/docs/reference/js/firebase.auth.EmailAuthProvider
  */
-export class EmailAuthProvider implements EmailAuthProvider_Instance, GoogleEmailAuthProvider {
+export class EmailAuthProvider
+  implements EmailAuthProvider_Instance, GoogleEmailAuthProvider {
   public static PROVIDER_ID: string;
   public static EMAIL_PASSWORD_SIGN_IN_METHOD: string;
   public static EMAIL_LINK_SIGN_IN_METHOD: string;
@@ -35,7 +36,10 @@ export class EmailAuthProvider implements EmailAuthProvider_Instance, GoogleEmai
    * Initialize an EmailAuthProvider credential using an email and an email link after
    * a sign in with email link operation.
    */
-  public static credentialWithLink(email: string, emailLink: string): AuthCredential {
+  public static credentialWithLink(
+    email: string,
+    emailLink: string
+  ): AuthCredential {
     return {
       ...data,
       toJSON() {

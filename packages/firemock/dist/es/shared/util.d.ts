@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import { IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IRtdbDataSnapshot } from '@forest-fire/types';
 export declare function normalizeRef(r: string): string;
 export declare function parts(r: string): string[];
 /**

@@ -14,7 +14,7 @@ import {
   reset,
 } from '../src/rtdb';
 import { IDictionary } from 'common-types';
-import { IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IRtdbDataSnapshot } from '@forest-fire/types';
 
 describe('Listener events ->', () => {
   it('listening on "on_child" events', async () => {

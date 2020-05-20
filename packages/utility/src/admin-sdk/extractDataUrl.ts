@@ -1,4 +1,4 @@
-import { IAdminConfig, IMockConfig } from '@forest-fire/types';
+import type { IAdminConfig, IMockConfig } from '@forest-fire/types';
 import { FireError } from '../index';
 
 /**

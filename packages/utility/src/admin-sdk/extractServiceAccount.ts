@@ -1,4 +1,8 @@
-import { IServiceAccount, IAdminConfig, IMockConfig } from '@forest-fire/types';
+import type {
+  IServiceAccount,
+  IAdminConfig,
+  IMockConfig,
+} from '@forest-fire/types';
 import { looksLikeJson, FireError } from '../index';
 
 /**

@@ -1,7 +1,7 @@
 import first from 'lodash.first';
 import last from 'lodash.last';
 import { IDictionary, wait } from 'common-types';
-import { IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IRtdbDataSnapshot } from '@forest-fire/types';
 
 export function normalizeRef(r: string): string {
   r = r.replace('/', '.');

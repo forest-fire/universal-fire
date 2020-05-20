@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import { IRtdbQuery, IRtdbReference, IRtdbDataSnapshot, IRtdbEventType } from '@forest-fire/types';
+import type { IRtdbQuery, IRtdbReference, IRtdbDataSnapshot, IRtdbEventType } from '@forest-fire/types';
 import { QueryValue, IFirebaseEventHandler } from '../@types/rtdb-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { DelayType } from '../shared/index';

@@ -1,4 +1,4 @@
-import { IServiceAccount, IAdminConfig, IMockConfig } from '@forest-fire/types';
+import type { IServiceAccount, IAdminConfig, IMockConfig } from '@forest-fire/types';
 /**
  * Takes as input a variety of possible formats and converts it into
  * a Firebase service account (`IServiceAccount`). The input formats

@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import { IRtdbReference, IRtdbDataSnapshot, IRtdbThenableReference, IRtdbEventType } from '@forest-fire/types';
+import type { IRtdbReference, IRtdbDataSnapshot, IRtdbThenableReference, IRtdbEventType } from '@forest-fire/types';
 import { IFirebaseEventHandler } from '../@types/rtdb-types';
 import { SnapShot, Query } from '../rtdb/index';
 import { DelayType } from '../shared/index';

@@ -1,5 +1,5 @@
 import { FirestoreDb } from '@forest-fire/firestore-db';
-import { IMockConfig } from '@forest-fire/types';
+import type { IMockConfig } from '@forest-fire/types';
 import type { IAdminApp, IAdminAuth, IAdminConfig, IAdminSdk } from '@forest-fire/types';
 export declare class FirestoreAdmin extends FirestoreDb implements IAdminSdk {
     static connect(config: IAdminConfig | IMockConfig): Promise<FirestoreAdmin>;

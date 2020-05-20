@@ -1,5 +1,5 @@
 import { IDictionary, SortingFunction } from 'common-types';
-import { IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IRtdbDataSnapshot } from '@forest-fire/types';
 
 import get from 'lodash.get';
 import { Reference } from '../rtdb/index';
@@ -15,7 +15,7 @@ export type Action = (record: SnapShot) => boolean | void;
 
 export class SnapShot<T = any> implements IRtdbDataSnapshot {
   private _sortingFunction: SortingFunction;
-  constructor(private _key: string, private _value: T[] | T) { }
+  constructor(private _key: string, private _value: T[] | T) {}
 
   public get key() {
     return getKey(join(this._key));

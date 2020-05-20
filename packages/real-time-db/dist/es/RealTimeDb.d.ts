@@ -1,5 +1,5 @@
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
-import { IAdminApp, IClientApp, IDatabaseConfig, IRtdbDatabase, IRtdbDataSnapshot, IRtdbEventType, IRtdbReference, IMockConfigOptions } from '@forest-fire/types';
+import type { IAdminApp, IClientApp, IDatabaseConfig, IRtdbDatabase, IRtdbDataSnapshot, IRtdbEventType, IRtdbReference, IMockConfigOptions } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { IFirebaseListener, IMockLoadingState, IClientEmitter, IAdminEmitter, IRealTimeDb, IFirebaseWatchHandler, IFirebaseConnectionCallback } from './index';
