@@ -5,7 +5,7 @@ import type { FirestoreClient } from '@forest-fire/firestore-client';
 import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
 
 /**
- * Provides a typing that includes all known supported SDK types
+ * Provides an interface for the class `AbstractedDatabase`
  */
 export type IAbstractedDatabase = AbstractedDatabase;
 
