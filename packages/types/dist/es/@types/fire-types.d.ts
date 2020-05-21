@@ -1,6 +1,6 @@
-import type { IDictionary } from "common-types";
-import type { IServiceAccount, UserRecord, IEmailAuthProvider, IClientAuth } from "../index";
-export declare type FakerStatic = typeof import("faker");
+import type { IDictionary } from 'common-types';
+import type { IServiceAccount, UserRecord, IEmailAuthProvider, IClientAuth } from '../index';
+export declare type FakerStatic = typeof import('faker');
 export declare const enum AuthProviderName {
     emailPassword = "emailPassword",
     phone = "phone",
@@ -80,7 +80,7 @@ export interface IMockAuth extends IClientAuth, IAuthProviders {
  * A basic configuration for a user that allows default values to fill in some of
  * the non-essential properties which Firebase requires
  */
-export declare type ISimplifiedMockUser = Omit<IMockUser, "emailVerified" | "disabled" | "uid" | "toJSON" | "providerData" | "metadata"> & {
+export declare type ISimplifiedMockUser = Omit<IMockUser, 'emailVerified' | 'disabled' | 'uid' | 'toJSON' | 'providerData' | 'metadata'> & {
     emailVerified?: boolean;
     disabled?: boolean;
     uid?: string;

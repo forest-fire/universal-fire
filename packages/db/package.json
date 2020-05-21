@@ -38,6 +38,7 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
+    "@forest-fire/abstracted-database": "^0.45.0",
     "@forest-fire/firestore-admin": "^0.45.0",
     "@forest-fire/firestore-client": "^0.45.0",
     "@forest-fire/firestore-db": "^0.45.0",

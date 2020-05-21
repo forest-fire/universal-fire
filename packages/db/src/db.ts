@@ -3,13 +3,22 @@ import type { RealTimeClient } from '@forest-fire/real-time-client';
 import type { RealTimeAdmin } from '@forest-fire/real-time-admin';
 import type { FirestoreClient } from '@forest-fire/firestore-client';
 import type { FirestoreAdmin } from '@forest-fire/firestore-admin';
-import { SDK } from '.';
+import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
 
-export type ISdkClient =
+export const enum SDK {
+  FirestoreAdmin = 'firestore-admin',
+  FirestoreClient = 'firestore-client',
+  RealTimeAdmin = 'real-time-admin',
+  RealTimeClient = 'real-time-client',
+}
+
+export type ISdkClient = (
   | RealTimeAdmin
   | RealTimeClient
   | FirestoreAdmin
-  | FirestoreClient;
+  | FirestoreClient
+) &
+  AbstractedDatabase;
 
 export class DB {
   /**
