@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.48.8",
+  "version": "0.48.9",
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "main": "dist/cjs",
   "module": "dist/es",
@@ -39,10 +39,10 @@
   },
   "dependencies": {
     "@forest-fire/base-serializer": "^0.48.8",
-    "@forest-fire/firestore-admin": "^0.48.8",
-    "@forest-fire/firestore-client": "^0.48.8",
-    "@forest-fire/real-time-admin": "^0.48.8",
-    "@forest-fire/real-time-client": "^0.48.8",
+    "@forest-fire/firestore-admin": "^0.48.9",
+    "@forest-fire/firestore-client": "^0.48.9",
+    "@forest-fire/real-time-admin": "^0.48.9",
+    "@forest-fire/real-time-client": "^0.48.9",
     "@forest-fire/types": "^0.48.7"
   },
   "license": "MIT"

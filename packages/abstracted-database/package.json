@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/abstracted-database",
-  "version": "0.48.8",
+  "version": "0.48.9",
   "description": "",
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
@@ -38,7 +38,7 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.48.8",
+    "@forest-fire/serialized-query": "^0.48.9",
     "@forest-fire/types": "^0.48.7",
     "@forest-fire/utility": "^0.48.7",
     "firemock": "^0.48.8"
