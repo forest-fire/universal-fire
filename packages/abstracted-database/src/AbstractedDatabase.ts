@@ -11,7 +11,11 @@ import type {
   SDK,
 } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
-import { BaseSerializer } from '@forest-fire/serialized-query';
+import {
+  BaseSerializer,
+  SerializedRealTimeQuery,
+  SerializedFirestoreQuery,
+} from '@forest-fire/serialized-query';
 import { FireError } from '@forest-fire/utility';
 
 export abstract class AbstractedDatabase {
@@ -193,11 +197,13 @@ export abstract class AbstractedDatabase {
     path: string,
     ignoreMissing?: boolean
   ): Promise<any>;
+
+  // TODO: improve the signature for a callback in watch/unWatch
   /**
    * Watch for Firebase events based on a DB path.
    */
   public abstract watch(
-    target: string | BaseSerializer<any>,
+    target: string | SerializedRealTimeQuery | SerializedFirestoreQuery,
     events:
       | IFirestoreDbEvent
       | IFirestoreDbEvent[]
