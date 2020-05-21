@@ -1,6 +1,6 @@
 import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbDbEvent, SDK } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
-import { BaseSerializer, SerializedRealTimeQuery, SerializedFirestoreQuery } from '@forest-fire/serialized-query';
+import { BaseSerializer } from '@forest-fire/serialized-query';
 export declare abstract class AbstractedDatabase {
     readonly sdk: SDK;
     /**
@@ -104,7 +104,7 @@ export declare abstract class AbstractedDatabase {
      * Gets a record from a given path in the Firebase DB and converts it to an
      * object where the record's key is included as part of the record.
      */
-    abstract getRecord<T = any>(path: string, idProp?: string): Promise<T>;
+    abstract getRecord<T = any>(path: string | BaseSerializer<T>, idProp?: string): Promise<T>;
     /**
      * Returns the value at a given path in the database. This method is a
      * typescript _generic_ which defaults to `any` but you can set the type to
@@ -130,7 +130,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * Watch for Firebase events based on a DB path.
      */
-    abstract watch(target: string | SerializedRealTimeQuery | SerializedFirestoreQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbDbEvent | IRtdbDbEvent[], cb: any): void;
+    abstract watch(target: string | BaseSerializer, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbDbEvent | IRtdbDbEvent[], cb: any): void;
     /**
      * Unwatches existing Firebase events.
      */

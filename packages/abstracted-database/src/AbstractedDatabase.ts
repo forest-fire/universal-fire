@@ -166,7 +166,7 @@ export abstract class AbstractedDatabase {
    * object where the record's key is included as part of the record.
    */
   public abstract async getRecord<T = any>(
-    path: string,
+    path: string | BaseSerializer<T>,
     idProp?: string
   ): Promise<T>;
   /**
@@ -204,7 +204,7 @@ export abstract class AbstractedDatabase {
    * Watch for Firebase events based on a DB path.
    */
   public abstract watch(
-    target: string | SerializedRealTimeQuery | SerializedFirestoreQuery,
+    target: string | BaseSerializer,
     events:
       | IFirestoreDbEvent
       | IFirestoreDbEvent[]
