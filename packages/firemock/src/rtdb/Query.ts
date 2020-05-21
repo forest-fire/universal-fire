@@ -3,7 +3,7 @@ import type {
   IRtdbQuery,
   IRtdbReference,
   IRtdbDataSnapshot,
-  IRtdbEventType,
+  IRtdbDbEvent,
 } from '@forest-fire/types';
 
 import { QueryValue, IFirebaseEventHandler } from '../@types/rtdb-types';
@@ -73,7 +73,7 @@ export abstract class Query<T = any> implements IRtdbQuery {
    * Setup an event listener for a given eventType
    */
   public on(
-    eventType: IRtdbEventType,
+    eventType: IRtdbDbEvent,
     callback: (a: IRtdbDataSnapshot, b?: null | string) => any,
     cancelCallbackOrContext?: (err?: Error) => void | null,
     context?: object | null
@@ -180,7 +180,7 @@ export abstract class Query<T = any> implements IRtdbQuery {
 
   protected abstract addListener(
     pathOrQuery: string | SerializedRealTimeQuery<any>,
-    eventType: IRtdbEventType,
+    eventType: IRtdbDbEvent,
     callback: IFirebaseEventHandler,
     cancelCallbackOrContext?: (err?: Error) => void,
     context?: IDictionary

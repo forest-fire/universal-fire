@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import type { IRtdbQuery, IRtdbReference, IRtdbDataSnapshot, IRtdbEventType } from '@forest-fire/types';
+import type { IRtdbQuery, IRtdbReference, IRtdbDataSnapshot, IRtdbDbEvent } from '@forest-fire/types';
 import { QueryValue, IFirebaseEventHandler } from '../@types/rtdb-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { DelayType } from '../shared/index';
@@ -19,7 +19,7 @@ export declare abstract class Query<T = any> implements IRtdbQuery {
     /**
      * Setup an event listener for a given eventType
      */
-    on(eventType: IRtdbEventType, callback: (a: IRtdbDataSnapshot, b?: null | string) => any, cancelCallbackOrContext?: (err?: Error) => void | null, context?: object | null): (a: IRtdbDataSnapshot, b?: null | string) => Promise<null>;
+    on(eventType: IRtdbDbEvent, callback: (a: IRtdbDataSnapshot, b?: null | string) => any, cancelCallbackOrContext?: (err?: Error) => void | null, context?: object | null): (a: IRtdbDataSnapshot, b?: null | string) => Promise<null>;
     once(eventType: 'value'): Promise<IRtdbDataSnapshot>;
     off(): void;
     /**
@@ -68,7 +68,7 @@ export declare abstract class Query<T = any> implements IRtdbQuery {
      * typing provided by Google
      */
     protected getRoot(): IRtdbReference;
-    protected abstract addListener(pathOrQuery: string | SerializedRealTimeQuery<any>, eventType: IRtdbEventType, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<IRtdbDataSnapshot>;
+    protected abstract addListener(pathOrQuery: string | SerializedRealTimeQuery<any>, eventType: IRtdbDbEvent, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<IRtdbDataSnapshot>;
     /**
      * Reduce the dataset using _filters_ (after sorts) but do not apply sort
      * order to new SnapShot (so natural order is preserved)

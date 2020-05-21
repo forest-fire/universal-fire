@@ -1,3 +1,3 @@
 export * from './FirestoreDb';
-export * from './types';
+export * from './firestore-types';
 //# sourceMappingURL=index.js.map

@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import type { IRtdbReference, IRtdbDataSnapshot, IRtdbThenableReference, IRtdbEventType } from '@forest-fire/types';
+import type { IRtdbReference, IRtdbDataSnapshot, IRtdbThenableReference, IRtdbDbEvent } from '@forest-fire/types';
 import { IFirebaseEventHandler } from '../@types/rtdb-types';
 import { SnapShot, Query } from '../rtdb/index';
 import { DelayType } from '../shared/index';
@@ -26,5 +26,5 @@ export declare class Reference<T = any> extends Query<T> implements IRtdbReferen
     onDisconnect(): any;
     toString(): string;
     protected getSnapshot<T extends IRtdbDataSnapshot>(key: string, value: any): SnapShot<T>;
-    protected addListener(pathOrQuery: string | SerializedRealTimeQuery<any>, eventType: IRtdbEventType, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<IRtdbDataSnapshot>;
+    protected addListener(pathOrQuery: string | SerializedRealTimeQuery<any>, eventType: IRtdbDbEvent, callback: IFirebaseEventHandler, cancelCallbackOrContext?: (err?: Error) => void, context?: IDictionary): Promise<IRtdbDataSnapshot>;
 }

@@ -1,7 +1,7 @@
 import type { IDictionary } from 'common-types';
 import type { RealTimeDb } from './index';
 import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
-import type { IRtdbEventType, IRtdbReference, IRtdbDataSnapshot, IRtdbOnDisconnect, IRtdbThenableReference } from '@forest-fire/types';
+import type { IRtdbDbEvent, IRtdbReference, IRtdbDataSnapshot, IRtdbOnDisconnect, IRtdbThenableReference } from '@forest-fire/types';
 export declare type IMockLoadingState = 'not-applicable' | 'loaded' | 'loading' | 'timed-out';
 export declare type DebuggingCallback = (message: string) => void;
 export interface IFirebaseListener {
@@ -27,7 +27,7 @@ export interface IPathSetter<T = any> {
 }
 export declare type IFirebaseWatchEvent = IValueBasedWatchEvent | IPathBasedWatchEvent;
 export interface IFirebaseWatchContext {
-    eventType: IRtdbEventType;
+    eventType: IRtdbDbEvent;
     targetType: any;
     /**
      * this tagging has been added as optional to not break prior API but all

@@ -6,7 +6,7 @@ import {
   IDatabaseConfig,
   IRtdbDatabase,
   IRtdbDataSnapshot,
-  IRtdbEventType,
+  IRtdbDbEvent,
   IRtdbReference,
   IMockConfigOptions,
 } from '@forest-fire/types';
@@ -116,7 +116,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    */
   public watch(
     target: string | SerializedRealTimeQuery,
-    events: IRtdbEventType | IRtdbEventType[],
+    events: IRtdbDbEvent | IRtdbDbEvent[],
     cb: IFirebaseWatchHandler
   ) {
     if (!Array.isArray(events)) {
@@ -144,7 +144,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
     }
   }
 
-  public unWatch(events?: IRtdbEventType | IRtdbEventType[], cb?: any) {
+  public unWatch(events?: IRtdbDbEvent | IRtdbDbEvent[], cb?: any) {
     try {
       if (!Array.isArray(events)) {
         events = [events];

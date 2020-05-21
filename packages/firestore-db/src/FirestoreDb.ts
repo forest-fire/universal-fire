@@ -95,7 +95,7 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     throw new Error('Not implemented');
   }
 
-  public unWatch(events: IFirestoreDbEvent[], cb?: any) {
+  public unWatch(events?: IFirestoreDbEvent[], cb?: any) {
     throw new Error('Not implemented');
   }
 

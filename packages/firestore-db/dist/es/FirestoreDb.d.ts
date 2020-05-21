@@ -17,7 +17,7 @@ export declare abstract class FirestoreDb extends AbstractedDatabase {
     set<T = any>(path: string, value: T): Promise<void>;
     remove(path: string): Promise<void>;
     watch(target: string | SerializedFirestoreQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[], cb: any): void;
-    unWatch(events: IFirestoreDbEvent[], cb?: any): void;
+    unWatch(events?: IFirestoreDbEvent[], cb?: any): void;
     ref(path?: string): void;
     private _removeDocument;
     private _removeCollection;

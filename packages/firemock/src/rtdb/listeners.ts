@@ -4,7 +4,7 @@ import {
   IListener,
   IMockWatcherGroupEvent,
 } from '../@types/rtdb-types';
-import type { IRtdbEventType, IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IRtdbDbEvent, IRtdbDataSnapshot } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 import { join, stripLeadingDot, removeDots, dotify } from '../shared/index';
 import get from 'lodash.get';
@@ -33,7 +33,7 @@ let _listeners: IListener[] = [];
  */
 export async function addListener(
   pathOrQuery: string | SerializedRealTimeQuery<any>,
-  eventType: IRtdbEventType,
+  eventType: IRtdbDbEvent,
   callback: IFirebaseEventHandler,
   cancelCallbackOrContext?: (err?: Error) => void,
   context?: IDictionary
@@ -86,7 +86,7 @@ export async function addListener(
  * well as `callback` (if available) to identify the callback(s)
  */
 export function removeListener(
-  eventType?: IRtdbEventType,
+  eventType?: IRtdbDbEvent,
   callback?: (snap: IRtdbDataSnapshot, key?: string) => void,
   context?: IDictionary
 ): number {
@@ -157,13 +157,13 @@ export function removeAllListeners(): number {
  * Optionally you can state the `EventType` and get a count
  * of only this type of event.
  */
-export function listenerCount(type?: IRtdbEventType) {
+export function listenerCount(type?: IRtdbDbEvent) {
   return type
     ? _listeners.filter((l) => l.eventType === type).length
     : _listeners.length;
 }
 
-export type EventTypePlusChild = IRtdbEventType | 'child';
+export type EventTypePlusChild = IRtdbDbEvent | 'child';
 
 /**
  * **listenerPaths**
@@ -314,7 +314,7 @@ export type IListenerPlus = IListener & { id: string; changeIsAtRoot: boolean };
  */
 export function findChildListeners(
   changePath: string,
-  ...eventTypes: IRtdbEventType[]
+  ...eventTypes: IRtdbDbEvent[]
 ) {
   changePath = stripLeadingDot(changePath.replace(/\//g, '.'));
   eventTypes =

@@ -1,5 +1,5 @@
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
-import { IAdminApp, IClientApp, IDatabaseConfig, IRtdbDatabase, IRtdbDataSnapshot, IRtdbEventType, IRtdbReference, IMockConfigOptions } from '@forest-fire/types';
+import { IAdminApp, IClientApp, IDatabaseConfig, IRtdbDatabase, IRtdbDataSnapshot, IRtdbDbEvent, IRtdbReference, IMockConfigOptions } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { IFirebaseListener, IMockLoadingState, IClientEmitter, IAdminEmitter, IRealTimeDb, IFirebaseWatchHandler, IFirebaseConnectionCallback } from './index';
@@ -49,8 +49,8 @@ export declare abstract class RealTimeDb extends AbstractedDatabase implements I
      * @param events an event type or an array of event types (e.g., "value", "child_added")
      * @param cb the callback function to call when event triggered
      */
-    watch(target: string | SerializedRealTimeQuery, events: IRtdbEventType | IRtdbEventType[], cb: IFirebaseWatchHandler): void;
-    unWatch(events?: IRtdbEventType | IRtdbEventType[], cb?: any): void;
+    watch(target: string | SerializedRealTimeQuery, events: IRtdbDbEvent | IRtdbDbEvent[], cb: IFirebaseWatchHandler): void;
+    unWatch(events?: IRtdbDbEvent | IRtdbDbEvent[], cb?: any): void;
     /**
      * Get a Firebase SerializedQuery reference
      *

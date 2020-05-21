@@ -1,4 +1,4 @@
-import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbEventType, SDK } from '@forest-fire/types';
+import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbDbEvent, SDK } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 import { BaseSerializer, SerializedRealTimeQuery, SerializedFirestoreQuery } from '@forest-fire/serialized-query';
 export declare abstract class AbstractedDatabase {
@@ -130,11 +130,11 @@ export declare abstract class AbstractedDatabase {
     /**
      * Watch for Firebase events based on a DB path.
      */
-    abstract watch(target: string | SerializedRealTimeQuery | SerializedFirestoreQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[], cb: any): void;
+    abstract watch(target: string | SerializedRealTimeQuery | SerializedFirestoreQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbDbEvent | IRtdbDbEvent[], cb: any): void;
     /**
      * Unwatches existing Firebase events.
      */
-    abstract unWatch(events?: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[], cb?: any): void;
+    abstract unWatch(events?: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbDbEvent | IRtdbDbEvent[], cb?: any): void;
     /**
      * Returns a reference for a given path in Firebase
      */

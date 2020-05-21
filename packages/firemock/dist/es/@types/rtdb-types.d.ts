@@ -1,7 +1,7 @@
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { ISchemaHelper } from './mocking-types';
-import type { IRtdbEventType, IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IRtdbDbEvent, IRtdbDataSnapshot } from '@forest-fire/types';
 export interface ISchema {
     id: string;
     /** path to the database which is the root for given schema list */
@@ -52,7 +52,7 @@ export interface IMockWatcherGroupEvent {
     /** the path that the listener is listening at */
     listenerPath: string;
     /** the event which is being listened to */
-    listenerEvent: IRtdbEventType;
+    listenerEvent: IRtdbDbEvent;
     /** the dispatch function for this listener */
     callback: IFirebaseEventHandler;
     /** the path where the event took place */
@@ -93,7 +93,7 @@ export interface IListener {
     id: string;
     /** the _query_ the listener is based off of */
     query: SerializedRealTimeQuery;
-    eventType: IRtdbEventType;
+    eventType: IRtdbDbEvent;
     callback: (a: IRtdbDataSnapshot | null, b?: string) => any;
     cancelCallbackOrContext?: object | null;
     context?: object | null;

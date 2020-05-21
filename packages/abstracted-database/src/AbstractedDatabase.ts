@@ -7,7 +7,7 @@ import type {
   IFirestoreDatabase,
   IFirestoreDbEvent,
   IRtdbDatabase,
-  IRtdbEventType,
+  IRtdbDbEvent,
   SDK,
 } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
@@ -199,6 +199,7 @@ export abstract class AbstractedDatabase {
   ): Promise<any>;
 
   // TODO: improve the signature for a callback in watch/unWatch
+
   /**
    * Watch for Firebase events based on a DB path.
    */
@@ -207,8 +208,8 @@ export abstract class AbstractedDatabase {
     events:
       | IFirestoreDbEvent
       | IFirestoreDbEvent[]
-      | IRtdbEventType
-      | IRtdbEventType[],
+      | IRtdbDbEvent
+      | IRtdbDbEvent[],
     cb: any
   ): void;
   /**
@@ -218,8 +219,8 @@ export abstract class AbstractedDatabase {
     events?:
       | IFirestoreDbEvent
       | IFirestoreDbEvent[]
-      | IRtdbEventType
-      | IRtdbEventType[],
+      | IRtdbDbEvent
+      | IRtdbDbEvent[],
     cb?: any
   ): void;
   /**
