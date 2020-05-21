@@ -27,6 +27,7 @@ class DB {
      *
      * @param sdk The Firebase SDK which will be used to connect
      * @param config The database configuration
+     *
      */
     static async connect(sdk, config) {
         const constructor = extractConstructor(await Promise.resolve().then(() => __importStar(require(`@forest-fire/${sdk}`))));

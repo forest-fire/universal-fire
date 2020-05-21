@@ -23,6 +23,7 @@ export declare class DB {
      *
      * @param sdk The Firebase SDK which will be used to connect
      * @param config The database configuration
+     *
      */
     static connect(sdk: SDK, config?: IDatabaseConfig): Promise<IAbstractedDatabase>;
 }
