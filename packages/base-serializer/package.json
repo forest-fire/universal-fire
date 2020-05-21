@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/base-serializer",
-  "version": "0.48.2",
+  "version": "0.48.3",
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
   "types": "dist/es/index.d.ts",
@@ -30,7 +30,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.48.2",
+    "@forest-fire/serialized-query": "^0.48.3",
     "common-types": "^1.14.3"
   },
   "license": "MIT"
