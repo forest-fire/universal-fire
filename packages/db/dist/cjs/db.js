@@ -32,8 +32,8 @@ class DB {
     static async connect(sdk, config) {
         const constructor = extractConstructor(await Promise.resolve().then(() => __importStar(require(`@forest-fire/${sdk}`))));
         const db = new constructor(config);
-        await db.connect();
-        return db;
+        const obj = await db.connect();
+        return obj;
     }
 }
 exports.DB = DB;

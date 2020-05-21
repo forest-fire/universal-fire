@@ -1,11 +1,10 @@
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
-import { IClientConfig, IClientAuth, IMockConfig, IRtdbDatabase, IClientApp } from '@forest-fire/types';
+import { IClientConfig, IClientAuth, IMockConfig, IRtdbDatabase, IClientApp, FirebaseNamespace } from '@forest-fire/types';
 export declare enum FirebaseBoolean {
     true = 1,
     false = 0
 }
 import { EventManager } from './private';
-import { FirebaseNamespace } from '@firebase/app-types';
 export declare let MOCK_LOADING_TIMEOUT: number;
 export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb {
     /**

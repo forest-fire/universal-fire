@@ -25,5 +25,5 @@ export declare class DB {
      * @param config The database configuration
      *
      */
-    static connect(sdk: SDK, config?: IDatabaseConfig): Promise<IAbstractedDatabase>;
+    static connect(sdk: SDK, config?: IDatabaseConfig): Promise<RealTimeClient | RealTimeAdmin | FirestoreClient | FirestoreAdmin>;
 }

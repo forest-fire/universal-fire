@@ -8,6 +8,7 @@ import {
   IClientApp,
   IRtdbDataSnapshot,
   isClientConfig,
+  FirebaseNamespace,
 } from '@forest-fire/types';
 import {
   extractClientConfig,
@@ -23,7 +24,6 @@ export enum FirebaseBoolean {
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
 import { EventManager, ClientError } from './private';
-import { FirebaseNamespace } from '@firebase/app-types';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 

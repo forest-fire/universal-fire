@@ -42,8 +42,8 @@ export class DB {
     );
 
     const db: IAbstractedDatabase = new constructor(config);
-    await db.connect();
-    return db;
+    const obj = await db.connect();
+    return obj;
   }
 }
 
