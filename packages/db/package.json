@@ -38,15 +38,12 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.48.0",
     "@forest-fire/firestore-admin": "^0.48.0",
     "@forest-fire/firestore-client": "^0.48.0",
-    "@forest-fire/firestore-db": "^0.48.0",
     "@forest-fire/real-time-admin": "^0.48.0",
     "@forest-fire/real-time-client": "^0.48.0",
-    "@forest-fire/real-time-db": "^0.48.0",
-    "@forest-fire/types": "^0.48.0",
-    "@forest-fire/utility": "^0.48.0"
+    "@forest-fire/base-serializer": "0.48.0",
+    "@forest-fire/types": "^0.48.0"
   },
   "license": "MIT"
 }
