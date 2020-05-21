@@ -14,4 +14,5 @@ __exportStar(require("./client-sdks"), exports);
 __exportStar(require("./proxy-symbols"), exports);
 __exportStar(require("./RealTimeAdmin"), exports);
 __exportStar(require("./FirestoreAdmin"), exports);
+__exportStar(require("./types"), exports);
 //# sourceMappingURL=index.js.map
