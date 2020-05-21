@@ -45,6 +45,7 @@
     "@forest-fire/real-time-admin": "^0.47.1",
     "@forest-fire/real-time-client": "^0.47.1",
     "@forest-fire/real-time-db": "^0.47.1",
+    "@forest-fire/utility": "^0.47.0",
     "@forest-fire/types": "^0.47.0"
   },
   "license": "MIT"

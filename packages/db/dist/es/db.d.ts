@@ -1,16 +1,10 @@
-import type { IDatabaseConfig } from '@forest-fire/types';
+import { IDatabaseConfig, SDK } from '@forest-fire/types';
 import type { RealTimeClient } from '@forest-fire/real-time-client';
 import type { RealTimeAdmin } from '@forest-fire/real-time-admin';
 import type { FirestoreClient } from '@forest-fire/firestore-client';
 import type { FirestoreAdmin } from '@forest-fire/firestore-admin';
 import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
-export { AbstractedDatabase };
-export declare const enum SDK {
-    FirestoreAdmin = "firestore-admin",
-    FirestoreClient = "firestore-client",
-    RealTimeAdmin = "real-time-admin",
-    RealTimeClient = "real-time-client"
-}
+export { SDK };
 /**
  * A class object which is one of the supported SDK types provided
  * by `universal-fire`.
@@ -25,5 +19,5 @@ export declare class DB {
      * @param config The database configuration
      *
      */
-    static connect(sdk: SDK, config?: IDatabaseConfig): Promise<RealTimeClient | RealTimeAdmin | FirestoreClient | FirestoreAdmin>;
+    static connect(sdk: SDK, config?: IDatabaseConfig): Promise<RealTimeAdmin | RealTimeClient | FirestoreClient | FirestoreAdmin>;
 }

@@ -1,3 +1,4 @@
+import { FireError } from '@forest-fire/utility';
 export class DB {
     /**
      * A static initializer which can hand back any of the supported SDK's for either
@@ -9,9 +10,18 @@ export class DB {
      */
     static async connect(sdk, config) {
         const constructor = extractConstructor(await import(`@forest-fire/${sdk}`));
-        const db = new constructor(config);
-        const obj = await db.connect();
-        return obj;
+        switch (sdk) {
+            case "RealTimeAdmin" /* RealTimeAdmin */:
+                return new constructor(config).connect();
+            case "RealTimeClient" /* RealTimeClient */:
+                return new constructor(config).connect();
+            case "FirestoreAdmin" /* FirestoreAdmin */:
+                return new constructor(config).connect();
+            case "FirestoreClient" /* FirestoreClient */:
+                return new constructor(config).connect();
+            default:
+                throw new FireError(`The SDK requested "${sdk}", is an unknown type!`, 'invalid-sdk');
+        }
     }
 }
 function extractConstructor(imported) {

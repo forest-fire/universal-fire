@@ -1,7 +1,8 @@
-import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbEventType } from '@forest-fire/types';
+import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbEventType, SDK } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 import { BaseSerializer } from '@forest-fire/serialized-query';
 export declare abstract class AbstractedDatabase {
+    readonly sdk: SDK;
     /**
      * Indicates if the database is using the admin SDK.
      */

@@ -20,6 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DB = void 0;
+const utility_1 = require("@forest-fire/utility");
 class DB {
     /**
      * A static initializer which can hand back any of the supported SDK's for either
@@ -31,9 +32,18 @@ class DB {
      */
     static async connect(sdk, config) {
         const constructor = extractConstructor(await Promise.resolve().then(() => __importStar(require(`@forest-fire/${sdk}`))));
-        const db = new constructor(config);
-        const obj = await db.connect();
-        return obj;
+        switch (sdk) {
+            case "RealTimeAdmin" /* RealTimeAdmin */:
+                return new constructor(config).connect();
+            case "RealTimeClient" /* RealTimeClient */:
+                return new constructor(config).connect();
+            case "FirestoreAdmin" /* FirestoreAdmin */:
+                return new constructor(config).connect();
+            case "FirestoreClient" /* FirestoreClient */:
+                return new constructor(config).connect();
+            default:
+                throw new utility_1.FireError(`The SDK requested "${sdk}", is an unknown type!`, 'invalid-sdk');
+        }
     }
 }
 exports.DB = DB;

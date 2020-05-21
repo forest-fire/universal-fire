@@ -5,6 +5,7 @@ import { extractClientConfig, FireError, getRunningApps, getRunningFirebaseApp, 
 export class FirestoreClient extends FirestoreDb {
     constructor(config) {
         super();
+        this.sdk = "FirestoreClient" /* FirestoreClient */;
         this._isAdminApi = false;
         if (!config) {
             config = extractClientConfig();

@@ -8,6 +8,7 @@ import {
   IMockConfig,
   isClientConfig,
   isMockConfig,
+  SDK,
 } from '@forest-fire/types';
 import {
   extractClientConfig,
@@ -17,6 +18,7 @@ import {
 } from '@forest-fire/utility';
 
 export class FirestoreClient extends FirestoreDb implements IClientSdk {
+  sdk = SDK.FirestoreClient;
   static async connect(config: IClientConfig | IMockConfig) {
     const obj = new FirestoreClient(config);
     await obj.connect();

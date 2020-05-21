@@ -17,6 +17,7 @@ export class RealTimeClient extends RealTimeDb {
      */
     constructor(config) {
         super();
+        this.sdk = "RealTimeClient" /* RealTimeClient */;
         this._isAdminApi = false;
         this._eventManager = new EventManager();
         this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;

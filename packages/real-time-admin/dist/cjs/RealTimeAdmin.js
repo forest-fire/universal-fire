@@ -33,6 +33,7 @@ let RealTimeAdmin = /** @class */ (() => {
     class RealTimeAdmin extends real_time_db_1.RealTimeDb {
         constructor(config) {
             super();
+            this.sdk = "RealTimeAdmin" /* RealTimeAdmin */;
             this._clientType = 'admin';
             this._isAuthorized = true;
             this._isAdminApi = true;

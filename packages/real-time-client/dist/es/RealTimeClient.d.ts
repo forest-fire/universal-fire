@@ -1,5 +1,5 @@
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
-import { IClientConfig, IClientAuth, IMockConfig, IRtdbDatabase, IClientApp, FirebaseNamespace } from '@forest-fire/types';
+import { IClientConfig, IClientAuth, IMockConfig, IRtdbDatabase, IClientApp, FirebaseNamespace, SDK } from '@forest-fire/types';
 export declare enum FirebaseBoolean {
     true = 1,
     false = 0
@@ -7,6 +7,7 @@ export declare enum FirebaseBoolean {
 import { EventManager } from './private';
 export declare let MOCK_LOADING_TIMEOUT: number;
 export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb {
+    sdk: SDK;
     /**
      * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
      * and then returns a promise which is resolved once the _connection_ is established.

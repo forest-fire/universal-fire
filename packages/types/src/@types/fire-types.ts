@@ -190,3 +190,14 @@ export interface IEmitter {
   on: (event: string, value: any) => any;
   once: (event: string, value: any) => any;
 }
+
+/**
+ * An SDK that Firemodel supports connecting to Firebase by the
+ * equivalently named SDK.
+ */
+export const enum SDK {
+  FirestoreAdmin = 'FirestoreAdmin',
+  FirestoreClient = 'FirestoreClient',
+  RealTimeAdmin = 'RealTimeAdmin',
+  RealTimeClient = 'RealTimeClient',
+}

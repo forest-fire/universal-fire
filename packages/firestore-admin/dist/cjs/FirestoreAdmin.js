@@ -27,6 +27,7 @@ const types_1 = require("@forest-fire/types");
 class FirestoreAdmin extends firestore_db_1.FirestoreDb {
     constructor(config) {
         super();
+        this.sdk = "FirestoreAdmin" /* FirestoreAdmin */;
         this._isAdminApi = true;
         if (types_1.isMockConfig(config)) {
             throw new utility_1.FireError(`Mock is not supported by Firestore`, `invalid-configuration`);

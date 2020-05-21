@@ -1,18 +1,13 @@
-import type { IDatabaseConfig } from '@forest-fire/types';
+import { IDatabaseConfig, SDK } from '@forest-fire/types';
 import type { RealTimeClient } from '@forest-fire/real-time-client';
 import type { RealTimeAdmin } from '@forest-fire/real-time-admin';
 import type { FirestoreClient } from '@forest-fire/firestore-client';
 import type { FirestoreAdmin } from '@forest-fire/firestore-admin';
 import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import { FireError } from '@forest-fire/utility';
 
-export { AbstractedDatabase };
+export { SDK };
 
-export const enum SDK {
-  FirestoreAdmin = 'firestore-admin',
-  FirestoreClient = 'firestore-client',
-  RealTimeAdmin = 'real-time-admin',
-  RealTimeClient = 'real-time-client',
-}
 /**
  * A class object which is one of the supported SDK types provided
  * by `universal-fire`.
@@ -34,16 +29,32 @@ export class DB {
    * @param config The database configuration
    *
    */
-  static async connect(sdk: SDK, config?: IDatabaseConfig) {
+  static async connect(
+    sdk: SDK,
+    config?: IDatabaseConfig
+  ): Promise<
+    RealTimeAdmin | RealTimeClient | FirestoreClient | FirestoreAdmin
+  > {
     const constructor: new (
       config?: IDatabaseConfig
     ) => IAbstractedDatabase = extractConstructor(
       await import(`@forest-fire/${sdk}`)
     );
-
-    const db: IAbstractedDatabase = new constructor(config);
-    const obj = await db.connect();
-    return obj;
+    switch (sdk) {
+      case SDK.RealTimeAdmin:
+        return (new constructor(config) as RealTimeAdmin).connect();
+      case SDK.RealTimeClient:
+        return (new constructor(config) as RealTimeClient).connect();
+      case SDK.FirestoreAdmin:
+        return (new constructor(config) as FirestoreAdmin).connect();
+      case SDK.FirestoreClient:
+        return (new constructor(config) as FirestoreClient).connect();
+      default:
+        throw new FireError(
+          `The SDK requested "${sdk}", is an unknown type!`,
+          'invalid-sdk'
+        );
+    }
   }
 }
 

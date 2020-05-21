@@ -8,12 +8,14 @@ import type {
   IFirestoreDbEvent,
   IRtdbDatabase,
   IRtdbEventType,
+  SDK,
 } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 import { BaseSerializer } from '@forest-fire/serialized-query';
 import { FireError } from '@forest-fire/utility';
 
 export abstract class AbstractedDatabase {
+  public readonly sdk: SDK;
   /**
    * Indicates if the database is using the admin SDK.
    */

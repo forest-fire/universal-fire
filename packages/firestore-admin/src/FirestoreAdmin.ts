@@ -16,9 +16,11 @@ import {
   IAdminAuth,
   IAdminConfig,
   IAdminSdk,
+  SDK,
 } from '@forest-fire/types';
 
 export class FirestoreAdmin extends FirestoreDb implements IAdminSdk {
+  sdk = SDK.FirestoreAdmin;
   static async connect(config: IAdminConfig | IMockConfig) {
     const obj = new FirestoreAdmin(config);
     await obj.connect();

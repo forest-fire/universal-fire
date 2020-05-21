@@ -27,6 +27,7 @@ const utility_1 = require("@forest-fire/utility");
 class FirestoreClient extends firestore_db_1.FirestoreDb {
     constructor(config) {
         super();
+        this.sdk = "FirestoreClient" /* FirestoreClient */;
         this._isAdminApi = false;
         if (!config) {
             config = utility_1.extractClientConfig();

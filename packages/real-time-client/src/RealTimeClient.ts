@@ -9,6 +9,7 @@ import {
   IRtdbDataSnapshot,
   isClientConfig,
   FirebaseNamespace,
+  SDK,
 } from '@forest-fire/types';
 import {
   extractClientConfig,
@@ -28,6 +29,7 @@ import { EventManager, ClientError } from './private';
 export let MOCK_LOADING_TIMEOUT = 200;
 
 export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
+  sdk = SDK.RealTimeClient;
   /**
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
    * and then returns a promise which is resolved once the _connection_ is established.

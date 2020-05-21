@@ -11,6 +11,7 @@ import {
   IAdminAuth,
   IAdminApp,
   IAdminRtdbDatabase,
+  SDK,
 } from '@forest-fire/types';
 import {
   extractServiceAccount,
@@ -24,6 +25,7 @@ import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { adminAuthSdk } from 'firemock';
 
 export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
+  sdk = SDK.RealTimeAdmin;
   /**
    * Instantiates a DB and then waits for the connection
    * to finish before resolving the promise.
