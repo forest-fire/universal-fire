@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-client",
-  "version": "0.48.10",
+  "version": "0.48.11",
   "description": "Helpful abstraction on the Firebase client API",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
@@ -37,7 +37,7 @@
     "watch:test": "npm run test -- --watch"
   },
   "devDependencies": {
-    "@forest-fire/serialized-query": "^0.48.10",
+    "@forest-fire/serialized-query": "^0.48.11",
     "@types/chai": "^4.2.11",
     "@types/events": "^3.0.0",
     "@types/faker": "^4.1.12",
@@ -68,12 +68,12 @@
     "@firebase/auth-types": "^0.10.0",
     "@firebase/database": "^0.6.1",
     "@firebase/database-types": "^0.5.0",
-    "@forest-fire/real-time-db": "^0.48.10",
+    "@forest-fire/real-time-db": "^0.48.11",
     "@forest-fire/types": "^0.48.7",
     "@forest-fire/utility": "^0.48.7",
     "common-types": "^1.14.3",
     "events": "^3.1.0",
-    "firemock": "^0.48.10",
+    "firemock": "^0.48.11",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
     "typed-conversions": "^0.10.2"
