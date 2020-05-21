@@ -5,14 +5,19 @@ import type { FirestoreClient } from '@forest-fire/firestore-client';
 import type { FirestoreAdmin } from '@forest-fire/firestore-admin';
 import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
 
+export { AbstractedDatabase };
+
 export const enum SDK {
   FirestoreAdmin = 'firestore-admin',
   FirestoreClient = 'firestore-client',
   RealTimeAdmin = 'real-time-admin',
   RealTimeClient = 'real-time-client',
 }
-
-export type ISdkClient = (
+/**
+ * A class object which is one of the supported SDK types provided
+ * by `universal-fire` (and underlying that ... **Firebase**)
+ */
+export type ISdkApi = (
   | RealTimeAdmin
   | RealTimeClient
   | FirestoreAdmin
@@ -31,9 +36,9 @@ export class DB {
   static async connect(sdk: SDK, config?: IDatabaseConfig) {
     const constructor: new (
       config?: IDatabaseConfig
-    ) => ISdkClient = extractConstructor(await import(`@forest-fire/${sdk}`));
+    ) => ISdkApi = extractConstructor(await import(`@forest-fire/${sdk}`));
 
-    const db: ISdkClient = new constructor(config);
+    const db: ISdkApi = new constructor(config);
     await db.connect();
     return db;
   }
