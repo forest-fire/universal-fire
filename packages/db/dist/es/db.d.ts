@@ -13,9 +13,9 @@ export declare const enum SDK {
 }
 /**
  * A class object which is one of the supported SDK types provided
- * by `universal-fire` (and underlying that ... **Firebase**)
+ * by `universal-fire`.
  */
-export declare type ISdkApi = (RealTimeAdmin | RealTimeClient | FirestoreAdmin | FirestoreClient) & AbstractedDatabase;
+export declare type IAbstractedDatabase = (RealTimeAdmin | RealTimeClient | FirestoreAdmin | FirestoreClient) & AbstractedDatabase;
 export declare class DB {
     /**
      * A static initializer which can hand back any of the supported SDK's for either
@@ -24,5 +24,5 @@ export declare class DB {
      * @param sdk The Firebase SDK which will be used to connect
      * @param config The database configuration
      */
-    static connect(sdk: SDK, config?: IDatabaseConfig): Promise<ISdkApi>;
+    static connect(sdk: SDK, config?: IDatabaseConfig): Promise<IAbstractedDatabase>;
 }

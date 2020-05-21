@@ -15,9 +15,9 @@ export const enum SDK {
 }
 /**
  * A class object which is one of the supported SDK types provided
- * by `universal-fire` (and underlying that ... **Firebase**)
+ * by `universal-fire`.
  */
-export type ISdkApi = (
+export type IAbstractedDatabase = (
   | RealTimeAdmin
   | RealTimeClient
   | FirestoreAdmin
@@ -32,13 +32,16 @@ export class DB {
    *
    * @param sdk The Firebase SDK which will be used to connect
    * @param config The database configuration
+   *
    */
   static async connect(sdk: SDK, config?: IDatabaseConfig) {
     const constructor: new (
       config?: IDatabaseConfig
-    ) => ISdkApi = extractConstructor(await import(`@forest-fire/${sdk}`));
+    ) => IAbstractedDatabase = extractConstructor(
+      await import(`@forest-fire/${sdk}`)
+    );
 
-    const db: ISdkApi = new constructor(config);
+    const db: IAbstractedDatabase = new constructor(config);
     await db.connect();
     return db;
   }
