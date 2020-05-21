@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/firestore-admin",
-  "version": "0.46.0",
+  "version": "0.47.0",
   "description": "",
   "main": "dist/cjs",
   "module": "dist/es",
@@ -37,9 +37,9 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@forest-fire/firestore-db": "^0.46.0",
-    "@forest-fire/types": "^0.46.0",
-    "@forest-fire/utility": "^0.46.0",
+    "@forest-fire/firestore-db": "^0.47.0",
+    "@forest-fire/types": "^0.47.0",
+    "@forest-fire/utility": "^0.47.0",
     "firebase-admin": "^8.12.1"
   },
   "license": "MIT"

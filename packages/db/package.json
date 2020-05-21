@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.46.0",
+  "version": "0.47.0",
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "main": "dist/cjs",
   "module": "dist/es",
@@ -38,14 +38,14 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.46.0",
-    "@forest-fire/firestore-admin": "^0.46.0",
-    "@forest-fire/firestore-client": "^0.46.0",
-    "@forest-fire/firestore-db": "^0.46.0",
-    "@forest-fire/real-time-admin": "^0.46.0",
-    "@forest-fire/real-time-client": "^0.46.0",
-    "@forest-fire/real-time-db": "^0.46.0",
-    "@forest-fire/types": "^0.46.0"
+    "@forest-fire/abstracted-database": "^0.47.0",
+    "@forest-fire/firestore-admin": "^0.47.0",
+    "@forest-fire/firestore-client": "^0.47.0",
+    "@forest-fire/firestore-db": "^0.47.0",
+    "@forest-fire/real-time-admin": "^0.47.0",
+    "@forest-fire/real-time-client": "^0.47.0",
+    "@forest-fire/real-time-db": "^0.47.0",
+    "@forest-fire/types": "^0.47.0"
   },
   "license": "MIT"
 }
