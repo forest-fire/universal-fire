@@ -20,17 +20,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RealTimeClient = exports.MOCK_LOADING_TIMEOUT = exports.FirebaseBoolean = void 0;
-const real_time_db_1 = require("@forest-fire/real-time-db");
-const types_1 = require("@forest-fire/types");
+const private_1 = require("./private");
 const utility_1 = require("@forest-fire/utility");
+const types_1 = require("@forest-fire/types");
+const real_time_db_1 = require("@forest-fire/real-time-db");
+const app_1 = require("@firebase/app");
+const common_types_1 = require("common-types");
 var FirebaseBoolean;
 (function (FirebaseBoolean) {
     FirebaseBoolean[FirebaseBoolean["true"] = 1] = "true";
     FirebaseBoolean[FirebaseBoolean["false"] = 0] = "false";
 })(FirebaseBoolean = exports.FirebaseBoolean || (exports.FirebaseBoolean = {}));
-const app_1 = require("@firebase/app");
-const common_types_1 = require("common-types");
-const private_1 = require("./private");
 exports.MOCK_LOADING_TIMEOUT = 200;
 class RealTimeClient extends real_time_db_1.RealTimeDb {
     /**

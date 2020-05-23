@@ -1,14 +1,14 @@
+import { ClientError, EventManager } from './private';
+import { FireError, determineDefaultAppName, extractClientConfig, getRunningApps, getRunningFirebaseApp, } from '@forest-fire/utility';
+import { isClientConfig, isMockConfig, } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
-import { isMockConfig, isClientConfig, } from '@forest-fire/types';
-import { extractClientConfig, FireError, getRunningApps, getRunningFirebaseApp, determineDefaultAppName, } from '@forest-fire/utility';
+import { firebase } from '@firebase/app';
+import { wait } from 'common-types';
 export var FirebaseBoolean;
 (function (FirebaseBoolean) {
     FirebaseBoolean[FirebaseBoolean["true"] = 1] = "true";
     FirebaseBoolean[FirebaseBoolean["false"] = 0] = "false";
 })(FirebaseBoolean || (FirebaseBoolean = {}));
-import { firebase } from '@firebase/app';
-import { wait } from 'common-types';
-import { EventManager, ClientError } from './private';
 export let MOCK_LOADING_TIMEOUT = 200;
 export class RealTimeClient extends RealTimeDb {
     /**

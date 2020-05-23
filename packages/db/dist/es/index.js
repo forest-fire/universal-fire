@@ -1,4 +1,4 @@
-export * from './proxy-symbols';
+// #autoindex:named
 export * from './RealTimeAdmin';
 export * from './RealTimeClient';
 export * from './FirestoreAdmin';

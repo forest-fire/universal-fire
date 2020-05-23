@@ -1,30 +1,31 @@
-import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
+import { ClientError, EventManager } from './private';
 import {
-  isMockConfig,
-  IClientConfig,
-  IClientAuth,
-  IMockConfig,
-  IRtdbDatabase,
-  IClientApp,
-  IRtdbDataSnapshot,
-  isClientConfig,
-  FirebaseNamespace,
-  SDK,
-} from '@forest-fire/types';
-import {
-  extractClientConfig,
   FireError,
+  determineDefaultAppName,
+  extractClientConfig,
   getRunningApps,
   getRunningFirebaseApp,
-  determineDefaultAppName,
 } from '@forest-fire/utility';
+import {
+  FirebaseNamespace,
+  IClientApp,
+  IClientAuth,
+  IClientConfig,
+  IMockConfig,
+  IRtdbDataSnapshot,
+  IRtdbDatabase,
+  SDK,
+  isClientConfig,
+  isMockConfig,
+} from '@forest-fire/types';
+import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
+
+import { firebase } from '@firebase/app';
+import { wait } from 'common-types';
 export enum FirebaseBoolean {
   true = 1,
   false = 0,
 }
-import { firebase } from '@firebase/app';
-import { wait } from 'common-types';
-import { EventManager, ClientError } from './private';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 
@@ -34,7 +35,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
    * and then returns a promise which is resolved once the _connection_ is established.
    */
-  public static async connect(config: IClientConfig | IMockConfig) {
+  public static async connect(config?: IClientConfig | IMockConfig) {
     const obj = new RealTimeClient(config);
     await obj.connect();
     return obj;
