@@ -34,6 +34,13 @@ export class AbstractedDatabase {
         throw new FireError('Attempt to access Firebase App without having instantiated it');
     }
     /**
+     * Provides a set of API's that are exposed by the various "providers". Examples
+     * include "emailPassword", "github", etc.
+     */
+    get authProviders() {
+        throw new FireError(`Only the client SDK's have a authProviders property`);
+    }
+    /**
      * Indicates if the database is using the admin SDK.
      */
     get isAdminApi() {

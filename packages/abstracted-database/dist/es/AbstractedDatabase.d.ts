@@ -1,4 +1,4 @@
-import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbDbEvent, SDK } from '@forest-fire/types';
+import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbDbEvent, SDK, IClientAuthProviders } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 import { BaseSerializer } from '@forest-fire/serialized-query';
 export declare abstract class AbstractedDatabase {
@@ -43,6 +43,11 @@ export declare abstract class AbstractedDatabase {
         projectId: string;
         storageBucket: string;
     };
+    /**
+     * Provides a set of API's that are exposed by the various "providers". Examples
+     * include "emailPassword", "github", etc.
+     */
+    get authProviders(): IClientAuthProviders;
     /**
      * Returns a type safe accessor to the database; when the database has not been set yet
      * it will throw a `not-ready` error.

@@ -9,6 +9,7 @@ import type {
   IRtdbDatabase,
   IRtdbDbEvent,
   SDK,
+  IClientAuthProviders,
 } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 import {
@@ -78,6 +79,14 @@ export abstract class AbstractedDatabase {
     throw new FireError(
       'Attempt to access Firebase App without having instantiated it'
     );
+  }
+
+  /**
+   * Provides a set of API's that are exposed by the various "providers". Examples
+   * include "emailPassword", "github", etc.
+   */
+  public get authProviders(): IClientAuthProviders {
+    throw new FireError(`Only the client SDK's have a authProviders property`);
   }
 
   /**
