@@ -1,3 +1,5 @@
+import '@firebase/auth';
+import '@firebase/database';
 import { ClientError, EventManager } from './private';
 import { FireError, determineDefaultAppName, extractClientConfig, getRunningApps, getRunningFirebaseApp, } from '@forest-fire/utility';
 import { isClientConfig, isMockConfig, } from '@forest-fire/types';
@@ -144,10 +146,10 @@ export class RealTimeClient extends RealTimeDb {
         }
     }
     async loadAuthApi() {
-        await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
+        // await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
     }
     async loadDatabaseApi() {
-        await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
+        // await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
     }
     /**
      * Sets up the listening process for connection status.

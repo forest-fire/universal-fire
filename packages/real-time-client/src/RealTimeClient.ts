@@ -1,3 +1,6 @@
+import '@firebase/auth';
+import '@firebase/database';
+
 import { ClientError, EventManager } from './private';
 import {
   FireError,
@@ -22,6 +25,7 @@ import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
 
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
+
 export enum FirebaseBoolean {
   true = 1,
   false = 0,
@@ -197,11 +201,11 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
   }
 
   protected async loadAuthApi() {
-    await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
+    // await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
   }
 
   protected async loadDatabaseApi() {
-    await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
+    // await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
   }
 
   /**

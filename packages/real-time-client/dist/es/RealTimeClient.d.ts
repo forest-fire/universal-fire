@@ -1,3 +1,5 @@
+import '@firebase/auth';
+import '@firebase/database';
 import { EventManager } from './private';
 import { FirebaseNamespace, IClientApp, IClientAuth, IClientConfig, IMockConfig, IRtdbDatabase, SDK } from '@forest-fire/types';
 import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
