@@ -13,7 +13,7 @@
     "admin"
   ],
   "module": "dist/esm/index.js",
-  "types": "dist/es/index.d.ts",
+  "types": "dist/esm/src/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist"
@@ -60,6 +60,7 @@
     "rollup-plugin-terser": "^6.0.1",
     "test-console": "^1.1.0",
     "ts-node": "^8.9.1",
+    "tslib": "^2.0.0",
     "tslint": "^6.1.2",
     "typescript": "^3.9.3"
   },

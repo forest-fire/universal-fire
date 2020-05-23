@@ -1,14 +1,16 @@
 import typescript from '@rollup/plugin-typescript';
 
 export default {
-  input: 'dist/es/index.js',
+  input: './src/index.ts',
   output: {
-    dir: 'dist/esm',
+    dir: './dist/esm',
     format: 'es',
+    sourcemap: 'hidden'
   },
-  // plugins: [
-  //   typescript({
-  //     tsconfig: 'tsconfig.es.json',
-  //   }),
-  // ],
+  plugins: [
+    typescript({
+      rootDir: './',
+      tsconfig: 'tsconfig.es.json',
+    }),
+  ],
 };
