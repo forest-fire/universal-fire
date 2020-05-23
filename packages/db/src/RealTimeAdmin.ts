@@ -1,6 +1,8 @@
 import { RealTimeAdmin as RTA } from '@forest-fire/real-time-admin';
 import { IAdminConfig, IMockConfig } from '@forest-fire/types';
-import { IRealTimeAdmin } from './index';
+
+/** The interface that the `RealTimeAdmin` class exposes */
+export type IRealTimeAdmin = RTA;
 
 export async function RealTimeAdmin(
   config?: IAdminConfig | IMockConfig

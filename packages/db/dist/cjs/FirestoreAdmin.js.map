@@ -1,1 +1,1 @@
-{"version":3,"file":"FirestoreAdmin.js","sourceRoot":"","sources":["../../src/FirestoreAdmin.ts"],"names":[],"mappings":";;;AAAA,kEAAoE;AAI7D,KAAK,UAAU,cAAc,CAClC,MAAmC;IAEnC,OAAO,gCAAE,CAAC,OAAO,CAAC,MAAM,CAAC,CAAC;AAC5B,CAAC;AAJD,wCAIC"}
+{"version":3,"file":"FirestoreAdmin.js","sourceRoot":"","sources":["../../src/FirestoreAdmin.ts"],"names":[],"mappings":";;;AAAA,kEAAqE;AAM9D,KAAK,UAAU,cAAc,CAClC,MAAmC;IAEnC,OAAO,gCAAG,CAAC,OAAO,CAAC,MAAM,CAAC,CAAC;AAC7B,CAAC;AAJD,wCAIC"}

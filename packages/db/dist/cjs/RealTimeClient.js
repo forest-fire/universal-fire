@@ -19,17 +19,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FirestoreClient = exports.RealTimeClient = void 0;
+exports.RealTimeClient = void 0;
 async function RealTimeClient(config) {
     const constructor = (await Promise.resolve().then(() => __importStar(require(
     /* webpackChunkName: "real-time-client" */ '@forest-fire/real-time-client')))).RealTimeClient;
     return constructor.connect(config);
 }
 exports.RealTimeClient = RealTimeClient;
-async function FirestoreClient(config) {
-    const constructor = (await Promise.resolve().then(() => __importStar(require(
-    /* webpackChunkName: "firestore-client" */ '@forest-fire/firestore-client')))).FirestoreClient;
-    return constructor.connect(config);
-}
-exports.FirestoreClient = FirestoreClient;
-//# sourceMappingURL=client-sdks.js.map
+//# sourceMappingURL=RealTimeClient.js.map
