@@ -312,7 +312,7 @@ export class RealTimeDb extends AbstractedDatabase {
             if (typeof object !== 'object') {
                 object = { value: snap.val() };
             }
-            return Object.assign(Object.assign({}, object), { [idProp]: snap.key });
+            return { ...object, ...{ [idProp]: snap.key } };
         }
         catch (e) {
             throw new AbstractedProxyError(e);

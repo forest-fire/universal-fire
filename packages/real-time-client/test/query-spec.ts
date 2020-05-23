@@ -1,7 +1,8 @@
-import { expect } from 'chai';
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import * as helpers from './testing/helpers';
-import { RealTimeClient } from '../src/private';
+
+import { RealTimeClient } from '../src';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { expect } from 'chai';
 
 interface IPerson {
   name: string;
@@ -13,7 +14,7 @@ describe('Query based Read ops:', () => {
   let db: RealTimeClient;
   const personMockGenerator = (h: any) => () => ({
     name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
-    age: h.faker.random.number({ min: 10, max: 99 })
+    age: h.faker.random.number({ min: 10, max: 99 }),
   });
   beforeEach(async () => {
     db = await RealTimeClient.connect({ mocking: true });
@@ -61,21 +62,21 @@ describe('Query based Read ops:', () => {
       .limitToFirst(5);
     data = await db.getList<IPerson>(q);
     expect(data.length).to.equal(5);
-    data.map(d => d.age).map(age => expect(age).to.equal(100));
+    data.map((d) => d.age).map((age) => expect(age).to.equal(100));
 
     const q2 = SerializedRealTimeQuery.path('people')
       .orderByChild('age')
       .limitToLast(5);
     data = await db.getList<IPerson>(q2);
     expect(data.length).to.equal(5);
-    data.map(d => d.age).map(age => expect(age).to.equal(1));
+    data.map((d) => d.age).map((age) => expect(age).to.equal(1));
 
     const q3 = SerializedRealTimeQuery.path('people')
       .orderByChild('age')
       .equalTo(3);
     data = await db.getList<IPerson>(q3);
     expect(data.length).to.equal(3);
-    data.map(d => d.age).map(age => expect(age).to.equal(3));
+    data.map((d) => d.age).map((age) => expect(age).to.equal(3));
   });
 
   it('getList() with limit query on orderByKey of scalar values', async () => {
@@ -86,8 +87,8 @@ describe('Query based Read ops:', () => {
         adsffdffdfd: 26,
         ddfdfdfd: 1,
         werqerqer: 2,
-        erwrewrw: 100
-      }
+        erwrewrw: 100,
+      },
     });
     const query = SerializedRealTimeQuery.path('ages')
       .orderByKey()
@@ -105,8 +106,8 @@ describe('Query based Read ops:', () => {
         adsffdffdfd: 26,
         ddfdfdfd: 1,
         werqerqer: 2,
-        erwrewrw: 100
-      }
+        erwrewrw: 100,
+      },
     });
     const query = SerializedRealTimeQuery.path('ages')
       .orderByValue()

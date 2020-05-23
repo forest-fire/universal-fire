@@ -1,7 +1,8 @@
-import { expect } from 'chai';
 import * as helpers from './testing/helpers';
+
+import { RealTimeClient } from '../src/';
 import config from './testing/fb-config';
-import { RealTimeClient } from '../src/private';
+import { expect } from 'chai';
 
 helpers.setupEnv();
 
@@ -14,7 +15,7 @@ describe.skip('Debugging: ', () => {
     expect(output).to.be.an('array');
 
     expect(
-      output.some(el => el.indexOf('[FIREBASE]') !== -1),
+      output.some((el) => el.indexOf('[FIREBASE]') !== -1),
       'expected FIREBASE to be in stdout'
     ).to.equal(true);
   });
@@ -29,7 +30,9 @@ describe.skip('Debugging: ', () => {
     const db = new RealTimeClient({ ...{ debugging: callback }, ...config });
     await db.connect();
     const output: string[] = restore();
-    expect(output.some(el => el.indexOf('[FIREBASE]') !== -1)).to.equal(false);
+    expect(output.some((el) => el.indexOf('[FIREBASE]') !== -1)).to.equal(
+      false
+    );
     expect(count).to.greaterThan(0);
   });
 });

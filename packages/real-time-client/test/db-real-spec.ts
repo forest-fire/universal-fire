@@ -1,7 +1,8 @@
-import { expect } from 'chai';
 import * as helpers from './testing/helpers';
+
 import { IDictionary } from 'common-types';
-import { RealTimeClient } from '../src/private';
+import { RealTimeClient } from '../src/';
+import { expect } from 'chai';
 
 const config = {
   apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',
@@ -9,7 +10,7 @@ const config = {
   databaseURL: 'https://abstracted-admin.firebaseio.com',
   projectId: 'abstracted-admin',
   storageBucket: 'abstracted-admin.appspot.com',
-  messagingSenderId: '547394508788'
+  messagingSenderId: '547394508788',
 };
 
 helpers.setupEnv();
@@ -36,7 +37,7 @@ describe('Connecting to Database', () => {
     const db = new RealTimeClient(config);
     const itHappened: IDictionary<boolean> = { status: false };
 
-    const notificationId: string = db.notifyWhenConnected(database => {
+    const notificationId: string = db.notifyWhenConnected((database) => {
       expect(database).to.be.an('object', 'database object passed back');
       expect(database.isConnected).to.be.a(
         'boolean',
@@ -60,24 +61,24 @@ describe('Read operations: ', () => {
   let dbMock: RealTimeClient;
   const personMockGenerator = (h: any) => () => ({
     name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
-    age: h.faker.random.number({ min: 10, max: 99 })
+    age: h.faker.random.number({ min: 10, max: 99 }),
   });
   before(async () => {
     db = await RealTimeClient.connect(config);
     await db.set('client-test-data', {
       one: 'foo',
       two: 'bar',
-      three: 'baz'
+      three: 'baz',
     });
     await db.set('client-test-records', {
       123456: {
         name: 'Chris',
-        age: 50
+        age: 50,
       },
       654321: {
         name: 'Bob',
-        age: 68
-      }
+        age: 68,
+      },
     });
   });
 
@@ -129,15 +130,15 @@ describe('Write Operations', () => {
   it('push() variables into database', async () => {
     await db.push<INameAndAge>('client-test-data/pushed', {
       name: 'Charlie',
-      age: 25
+      age: 25,
     });
     await db.push('client-test-data/pushed', {
       name: 'Sandy',
-      age: 32
+      age: 32,
     });
     const users = await db
       .getValue('client-test-data/pushed')
-      .catch(e => new Error(e.message));
+      .catch((e) => new Error(e.message));
     expect(Object.keys(users).length).to.equal(2);
     expect(helpers.valuesOf(users, 'name')).to.include('Charlie');
     expect(helpers.valuesOf(users, 'name')).to.include('Sandy');
@@ -146,7 +147,7 @@ describe('Write Operations', () => {
   it('set() sets data at a given path in DB', async () => {
     await db.set<INameAndAge>('client-test-data/set/user', {
       name: 'Charlie',
-      age: 25
+      age: 25,
     });
     const user = await db.getValue<INameAndAge>('client-test-data/set/user');
     expect(user.name).to.equal('Charlie');
@@ -156,14 +157,14 @@ describe('Write Operations', () => {
   it('update() can "set" and then "update" contents', async () => {
     await db.update('client-test-data/update/user', {
       name: 'Charlie',
-      age: 25
+      age: 25,
     });
     let user = await db.getValue<INameAndAge>('client-test-data/update/user');
     expect(user.name).to.equal('Charlie');
     expect(user.age).to.equal(25);
     await db.update('client-test-data/update/user', {
       name: 'Charles',
-      age: 34
+      age: 34,
     });
     user = await db.getValue<INameAndAge>('client-test-data/update/user');
     expect(user.name).to.equal('Charles');
@@ -173,13 +174,13 @@ describe('Write Operations', () => {
   it('update() leaves unchanged attributes as they were', async () => {
     await db.update('client-test-data/update/user', {
       name: 'Rodney',
-      age: 25
+      age: 25,
     });
     let user = await db.getValue<INameAndAge>('client-test-data/update/user');
     expect(user.name).to.equal('Rodney');
     expect(user.age).to.equal(25);
     await db.update('client-test-data/update/user', {
-      age: 34
+      age: 34,
     });
     user = await db.getValue<INameAndAge>('client-test-data/update/user');
     expect(user.name).to.equal('Rodney');
@@ -189,7 +190,7 @@ describe('Write Operations', () => {
   it('remove() eliminates a path -- and all children -- in DB', async () => {
     await db.set('client-test-data/removal/user', {
       name: 'Rodney',
-      age: 25
+      age: 25,
     });
     let user = await db.getValue<INameAndAge>('client-test-data/removal/user');
     expect(user.name).to.equal('Rodney');

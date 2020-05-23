@@ -1,25 +1,6 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RealTimeClient = exports.MOCK_LOADING_TIMEOUT = exports.FirebaseBoolean = void 0;
+exports.RealTimeClient = exports.MOCK_LOADING_TIMEOUT = void 0;
 require("@firebase/auth");
 require("@firebase/database");
 const private_1 = require("./private");
@@ -28,11 +9,6 @@ const types_1 = require("@forest-fire/types");
 const real_time_db_1 = require("@forest-fire/real-time-db");
 const app_1 = require("@firebase/app");
 const common_types_1 = require("common-types");
-var FirebaseBoolean;
-(function (FirebaseBoolean) {
-    FirebaseBoolean[FirebaseBoolean["true"] = 1] = "true";
-    FirebaseBoolean[FirebaseBoolean["false"] = 0] = "false";
-})(FirebaseBoolean = exports.FirebaseBoolean || (exports.FirebaseBoolean = {}));
 exports.MOCK_LOADING_TIMEOUT = 200;
 class RealTimeClient extends real_time_db_1.RealTimeDb {
     /**
@@ -84,11 +60,7 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
     }
     /** lists the database names which are currently connected */
     static async connectedTo() {
-        const fb = await Promise.resolve().then(() => __importStar(require(
-        /* webpackChunkName: 'firebase-auth' */ '@firebase/app')));
-        await Promise.resolve().then(() => __importStar(require(
-        /* webpackChunkName: 'firebase-database' */ '@firebase/database')));
-        return Array.from(new Set(fb.firebase.apps.map((i) => i.name)));
+        return Array.from(new Set(app_1.firebase.apps.map((i) => i.name)));
     }
     async connect() {
         if (types_1.isMockConfig(this._config)) {
@@ -129,9 +101,6 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
             this._auth = await this.mock.auth();
             return this._auth;
         }
-        if (!this._app.auth) {
-            await this.loadAuthApi();
-        }
         this._auth = this._app.auth();
         return this._auth;
     }
@@ -149,10 +118,10 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
     }
     async _connectRealDb(config) {
         if (!this._isConnected) {
-            await this.loadDatabaseApi();
-            this._database = this._app.database();
+            // await this.loadDatabaseApi();
+            this._database = app_1.firebase.database(this._app);
             if (config.useAuth) {
-                await this.loadAuthApi();
+                // await this.loadAuthApi();
                 this._auth = this._app.auth();
             }
             await this._listenForConnectionStatus();
@@ -166,12 +135,6 @@ class RealTimeClient extends real_time_db_1.RealTimeDb {
                 ? (message) => config.debugging(message)
                 : (message) => console.log('[FIREBASE]', message));
         }
-    }
-    async loadAuthApi() {
-        // await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
-    }
-    async loadDatabaseApi() {
-        // await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
     }
     /**
      * Sets up the listening process for connection status.

@@ -1,16 +1,7 @@
-import { IClientConfig, IMockConfig } from '@forest-fire/types';
-import type { RealTimeClient as RTC } from '@forest-fire/real-time-client';
+import type { IMockConfig, IClientConfig } from '@forest-fire/types';
+import { RealTimeClient as RTC } from '@forest-fire/real-time-client';
 
-/** The interface that the `RealTimeClient` class exposes */
-export type IRealTimeClient = RTC;
-
-export async function RealTimeClient(
-  config?: IClientConfig | IMockConfig
-): Promise<IRealTimeClient> {
-  const constructor = (
-    await import(
-      /* webpackChunkName: "real-time-client" */ '@forest-fire/real-time-client'
-    )
-  ).RealTimeClient;
-  return constructor.connect(config);
+export function RealTimeClient(config?: IClientConfig | IMockConfig) {
+  const obj = new RTC(config);
+  return obj;
 }

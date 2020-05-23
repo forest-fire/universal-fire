@@ -1,16 +1,7 @@
 import type { IClientConfig, IMockConfig } from '@forest-fire/types';
-import type { FirestoreClient as FSC } from '@forest-fire/firestore-client';
+import { FirestoreClient as FC } from '@forest-fire/firestore-client';
 
-/** The interface that the `FirestoreClient` class exposes */
-export type IFirestoreClient = FSC;
-
-export async function FirestoreClient(
-  config?: IClientConfig | IMockConfig
-): Promise<IFirestoreClient> {
-  const constructor = (
-    await import(
-      /* webpackChunkName: "firestore-client" */ '@forest-fire/firestore-client'
-    )
-  ).FirestoreClient;
-  return constructor.connect(config);
+export function FirestoreClient(config?: IClientConfig | IMockConfig): FC {
+  const obj = new FC(config);
+  return obj;
 }

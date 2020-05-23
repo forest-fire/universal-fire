@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { RealTimeClient } from '../src/private';
+import { RealTimeClient } from '../src';
 import { expect } from 'chai';
 
 const config = {
@@ -8,7 +8,7 @@ const config = {
   databaseURL: 'https://abstracted-admin.firebaseio.com',
   projectId: 'abstracted-admin',
   storageBucket: 'abstracted-admin.appspot.com',
-  messagingSenderId: '547394508788'
+  messagingSenderId: '547394508788',
 };
 
 describe('getPushKey() => ', () => {
@@ -35,8 +35,6 @@ describe('getPushKey() => ', () => {
     }
 
     const list = await db.getList('/pushKey/test');
-    expect(list)
-      .to.be.an('array')
-      .and.have.lengthOf(3);
+    expect(list).to.be.an('array').and.have.lengthOf(3);
   });
 });

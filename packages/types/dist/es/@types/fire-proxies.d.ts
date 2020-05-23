@@ -1,4 +1,6 @@
 import type { auth as adminAuth, app as adminApp, database as adminDatabase, firestore as adminFirestore } from 'firebase-admin';
+export declare type IClientAuth = import('@firebase/auth-types').FirebaseAuth;
+export declare type IClientAuthProviders = FirebaseNamespace['auth'];
 export declare type ActionCodeInfo = import('@firebase/auth-types').ActionCodeInfo;
 export declare type ActionCodeSettings = import('@firebase/auth-types').ActionCodeSettings;
 export declare type AdditionalUserInfo = import('@firebase/auth-types').AdditionalUserInfo;
@@ -17,7 +19,6 @@ export declare type GoogleFacebookAuthProvider = import('@firebase/auth-types').
 export declare type GoogleGithubAuthProvider = import('@firebase/auth-types').GithubAuthProvider;
 export declare type GooglePhoneAuthProvider = import('@firebase/auth-types').PhoneAuthProvider;
 export declare type GoogleRecaptchaVerifier = import('@firebase/auth-types').RecaptchaVerifier;
-export declare type IClientAuth = import('@firebase/auth-types').FirebaseAuth;
 export declare type IdTokenResult = import('@firebase/auth-types').IdTokenResult;
 export declare type IEmailAuthProvider = import('@firebase/auth-types').EmailAuthProvider;
 export declare type OAuthCredential = import('@firebase/auth-types').OAuthCredential;
@@ -30,8 +31,12 @@ export declare type TwitterAuthProvider = import('@firebase/auth-types').Twitter
 export declare type TwitterAuthProvider_Instance = import('@firebase/auth-types').TwitterAuthProvider_Instance;
 export declare type UserCredential = import('@firebase/auth-types').UserCredential;
 export declare type User = import('@firebase/auth-types').User;
-export declare type FirebaseApp = import('@firebase/app-types').FirebaseApp;
 export declare type FirebaseNamespace = import('@firebase/app-types').FirebaseNamespace;
+/**
+ * The root Firebase App API surface where you can engage services such as `database()`,
+ * `firestore()`, `storage()`, etc.
+ */
+export declare type IFirebaseApp = FirebaseNamespace['app'];
 export declare type IClientApp = import('@firebase/app-types').FirebaseApp;
 export declare type IClientRtdbDatabase = import('@firebase/database-types').FirebaseDatabase;
 export declare type IRealTimeQuery = import('@firebase/database-types').Query;

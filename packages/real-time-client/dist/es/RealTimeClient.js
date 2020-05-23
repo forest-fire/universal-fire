@@ -6,11 +6,6 @@ import { isClientConfig, isMockConfig, } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
-export var FirebaseBoolean;
-(function (FirebaseBoolean) {
-    FirebaseBoolean[FirebaseBoolean["true"] = 1] = "true";
-    FirebaseBoolean[FirebaseBoolean["false"] = 0] = "false";
-})(FirebaseBoolean || (FirebaseBoolean = {}));
 export let MOCK_LOADING_TIMEOUT = 200;
 export class RealTimeClient extends RealTimeDb {
     /**
@@ -62,11 +57,7 @@ export class RealTimeClient extends RealTimeDb {
     }
     /** lists the database names which are currently connected */
     static async connectedTo() {
-        const fb = await import(
-        /* webpackChunkName: 'firebase-auth' */ '@firebase/app');
-        await import(
-        /* webpackChunkName: 'firebase-database' */ '@firebase/database');
-        return Array.from(new Set(fb.firebase.apps.map((i) => i.name)));
+        return Array.from(new Set(firebase.apps.map((i) => i.name)));
     }
     async connect() {
         if (isMockConfig(this._config)) {
@@ -107,9 +98,6 @@ export class RealTimeClient extends RealTimeDb {
             this._auth = await this.mock.auth();
             return this._auth;
         }
-        if (!this._app.auth) {
-            await this.loadAuthApi();
-        }
         this._auth = this._app.auth();
         return this._auth;
     }
@@ -127,10 +115,10 @@ export class RealTimeClient extends RealTimeDb {
     }
     async _connectRealDb(config) {
         if (!this._isConnected) {
-            await this.loadDatabaseApi();
-            this._database = this._app.database();
+            // await this.loadDatabaseApi();
+            this._database = firebase.database(this._app);
             if (config.useAuth) {
-                await this.loadAuthApi();
+                // await this.loadAuthApi();
                 this._auth = this._app.auth();
             }
             await this._listenForConnectionStatus();
@@ -144,12 +132,6 @@ export class RealTimeClient extends RealTimeDb {
                 ? (message) => config.debugging(message)
                 : (message) => console.log('[FIREBASE]', message));
         }
-    }
-    async loadAuthApi() {
-        // await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
-    }
-    async loadDatabaseApi() {
-        // await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
     }
     /**
      * Sets up the listening process for connection status.

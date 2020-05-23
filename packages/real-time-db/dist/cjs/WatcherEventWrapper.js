@@ -6,10 +6,13 @@ exports.WatcherEventWrapper = (context) => (handler) => {
         const value = snapshot.val();
         const key = snapshot.key;
         const kind = 'server-event';
-        const fullEvent = Object.assign(Object.assign({}, context), { value,
+        const fullEvent = {
+            ...context,
+            value,
             key,
             kind,
-            previousChildKey });
+            previousChildKey,
+        };
         return handler(fullEvent);
     };
 };

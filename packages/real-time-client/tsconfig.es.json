@@ -3,9 +3,9 @@
   "compilerOptions": {
     "noEmit": false,
     "module": "ESNext",
-    "outDir": "dist/es",
-    "strictNullChecks": false,
-    "strict": false
+    "outDir": "./dist/es",
+    "allowJs": false
   },
-  "exclude": ["test"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["test", "dist"]
 }

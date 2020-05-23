@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "@forest-fire/abstracted-database": "^0.48.15",
-    "@forest-fire/serialized-query": "^0.48.15",
+    "@forest-fire/serialized-query": "^0.48.16",
     "@forest-fire/types": "^0.48.7",
     "@forest-fire/utility": "^0.48.7",
     "common-types": "^1.14.2",

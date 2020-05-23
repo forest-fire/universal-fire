@@ -3,7 +3,7 @@
     "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es2017",
+    "target": "esnext",
     "noImplicitAny": true,
     "outDir": "./lib",
     "noEmit": true,

@@ -1,6 +1,6 @@
+import { RealTimeClient } from '../src';
 // tslint:disable:no-implicit-dependencies
 import { expect } from 'chai';
-import { RealTimeClient } from '../src/private';
 
 const config = {
   apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',
@@ -8,7 +8,7 @@ const config = {
   databaseURL: 'https://abstracted-admin.firebaseio.com',
   projectId: 'abstracted-admin',
   storageBucket: 'abstracted-admin.appspot.com',
-  messagingSenderId: '547394508788'
+  messagingSenderId: '547394508788',
 };
 
 describe('Permissions', () => {
@@ -32,7 +32,7 @@ describe('Permissions', () => {
 
     try {
       const result = await db.update('/no-write/foobar', {
-        message: "this shouldn't work"
+        message: "this shouldn't work",
       });
       throw new Error(
         'should not have reached this point due to permissions error'

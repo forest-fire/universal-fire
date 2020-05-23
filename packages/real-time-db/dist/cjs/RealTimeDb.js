@@ -315,7 +315,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
             if (typeof object !== 'object') {
                 object = { value: snap.val() };
             }
-            return Object.assign(Object.assign({}, object), { [idProp]: snap.key });
+            return { ...object, ...{ [idProp]: snap.key } };
         }
         catch (e) {
             throw new index_1.AbstractedProxyError(e);

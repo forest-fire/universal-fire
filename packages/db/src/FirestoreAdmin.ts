@@ -1,11 +1,7 @@
-import { FirestoreAdmin as FSA } from '@forest-fire/firestore-admin';
-import type { IAdminConfig, IMockConfig } from '@forest-fire/types';
+import type { IMockConfig, IAdminConfig } from '@forest-fire/types';
+import { FirestoreAdmin as FA } from '@forest-fire/firestore-admin';
 
-/** The interface that the `FirestoreAdmin` class exposes */
-export type IFirestoreAdmin = FSA;
-
-export async function FirestoreAdmin(
-  config?: IAdminConfig | IMockConfig
-): Promise<IFirestoreAdmin> {
-  return FSA.connect(config);
+export function FirestoreAdmin(config?: IAdminConfig | IMockConfig) {
+  const obj = new FA(config);
+  return obj;
 }

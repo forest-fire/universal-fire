@@ -1,5 +1,6 @@
-import { FirestoreAdmin as FSA } from '@forest-fire/firestore-admin';
-export async function FirestoreAdmin(config) {
-    return FSA.connect(config);
+import { FirestoreAdmin as FA } from '@forest-fire/firestore-admin';
+export function FirestoreAdmin(config) {
+    const obj = new FA(config);
+    return obj;
 }
 //# sourceMappingURL=FirestoreAdmin.js.map

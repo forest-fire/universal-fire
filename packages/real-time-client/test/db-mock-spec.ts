@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { IDictionary } from 'common-types';
 import type { IMockConfig } from '@forest-fire/types';
 
-import { RealTimeClient } from '../src/private';
+import { RealTimeClient } from '../src/';
 import * as helpers from './testing/helpers';
 
 const config: IMockConfig = {

@@ -1,21 +1,14 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "module": "esnext",
+    "module": "ES2020",
     "moduleResolution": "node",
-    "target": "es2017",
+    "target": "ES2020",
     "noImplicitAny": true,
     "outDir": "./dist/es",
     "preserveConstEnums": true,
-    "removeComments": false,
-    "typeRoots": ["./node_modules/@types"]
+    "removeComments": false
   },
-  "include": ["src/**/*"],
-  "exclude": [
-    "node_modules",
-    "**/*-spec.ts",
-    "node_modules/firebase-admin/lib/index.d.ts",
-    "node_modules/@google-cloud/firestore/types/firestore.d.ts",
-    "typings"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": []
 }

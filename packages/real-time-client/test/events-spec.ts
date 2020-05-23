@@ -1,5 +1,3 @@
-import { RealTimeClient } from '../src/private'; // tslint:disable-next-line:no-implicit-dependencies
-
 describe('Events', () => {
   it.skip(
     'waitForConnection calls back on connect and cleans up after connection established'

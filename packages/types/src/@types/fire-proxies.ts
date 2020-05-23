@@ -8,6 +8,8 @@ import type {
 // TODO: we should prefix the types with "I".
 
 //#region Client Auth API
+export type IClientAuth = import('@firebase/auth-types').FirebaseAuth;
+export type IClientAuthProviders = FirebaseNamespace['auth'];
 export type ActionCodeInfo = import('@firebase/auth-types').ActionCodeInfo;
 export type ActionCodeSettings = import('@firebase/auth-types').ActionCodeSettings;
 export type AdditionalUserInfo = import('@firebase/auth-types').AdditionalUserInfo;
@@ -26,7 +28,6 @@ export type GoogleFacebookAuthProvider = import('@firebase/auth-types').Facebook
 export type GoogleGithubAuthProvider = import('@firebase/auth-types').GithubAuthProvider;
 export type GooglePhoneAuthProvider = import('@firebase/auth-types').PhoneAuthProvider;
 export type GoogleRecaptchaVerifier = import('@firebase/auth-types').RecaptchaVerifier;
-export type IClientAuth = import('@firebase/auth-types').FirebaseAuth;
 export type IdTokenResult = import('@firebase/auth-types').IdTokenResult;
 export type IEmailAuthProvider = import('@firebase/auth-types').EmailAuthProvider;
 export type OAuthCredential = import('@firebase/auth-types').OAuthCredential;
@@ -42,8 +43,12 @@ export type User = import('@firebase/auth-types').User;
 //#endregion Client Auth API
 
 //#region Client App API
-export type FirebaseApp = import('@firebase/app-types').FirebaseApp;
 export type FirebaseNamespace = import('@firebase/app-types').FirebaseNamespace;
+/**
+ * The root Firebase App API surface where you can engage services such as `database()`,
+ * `firestore()`, `storage()`, etc.
+ */
+export type IFirebaseApp = FirebaseNamespace['app'];
 export type IClientApp = import('@firebase/app-types').FirebaseApp;
 //#endregion Client App API
 

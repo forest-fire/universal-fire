@@ -58,7 +58,7 @@
     "ts-node": "^8.9.1",
     "typed-conversions": "^0.10.2",
     "typescript": "^3.9.2",
-    "universal-fire": "^0.44.5"
+    "universal-fire": "^0.48.16"
   },
   "dependencies": {
     "@forest-fire/types": "^0.48.7",
