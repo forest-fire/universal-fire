@@ -39,6 +39,8 @@ class AbstractedDatabase {
     /**
      * Provides a set of API's that are exposed by the various "providers". Examples
      * include "emailPassword", "github", etc.
+     *
+     * > **Note:** this is only really available on the Client SDK's
      */
     get authProviders() {
         throw new utility_1.FireError(`Only the client SDK's have a authProviders property`);
