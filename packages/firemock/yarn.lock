@@ -2715,7 +2715,7 @@ common-tags@^1.8.0:
   resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
   integrity sha512-6P6g0uetGpW/sdyUy/iQQCbFF0kWVMSIVSyYz7Zgjcgh8mgw8PQzDNZeyZ5DQ2gM7LBoZPHmnjz8rUthkBG5tw==
 
-common-types@^1.12.12, common-types@^1.12.18, common-types@^1.14.2, common-types@^1.14.3:
+common-types@^1.12.12, common-types@^1.14.2, common-types@^1.14.3:
   version "1.14.3"
   resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.14.3.tgz#b8cdfaea9fc71723642b8c0b66a1a3d81a84c83e"
   integrity sha512-PcBLbCLOak1PGXpbV1D1xYHeGrbuAQ9Hze2UpsyioWqcx1ZJIi2c/K2aW7gQvXqsw4UDcLjX9Q2nJBEvg7xLIw==
@@ -4446,13 +4446,6 @@ get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
   integrity sha1-3BXKHGcjh8p2vTesCjlbogQqLCg=
-
-get-value@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/get-value/-/get-value-3.0.1.tgz#5efd2a157f1d6a516d7524e124ac52d0a39ef5a8"
-  integrity sha512-mKZj9JLQrwMBtj5wxi6MH8Z5eSKaERpAwjg43dPtlGI1ZVEgH/qC7T8/6R2OBSUA+zzHBZgICsVJaEIV2tKTDA==
-  dependencies:
-    isobject "^3.0.1"
 
 getpass@^0.1.1:
   version "0.1.7"
@@ -9186,13 +9179,13 @@ type-is@~1.6.17, type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typed-conversions@^0.10.2:
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.10.2.tgz#bb596943da2e880b7e33b6b41e37e56eb8f898ad"
-  integrity sha512-5tYLQmwfLaeHfIQauuks8RtbMEhqU9kwZzTK3GN8ZYkX1M/ShAy+c0U1dk2oCwetjEIjM8Eqf1xXP05fqWy47g==
+typed-conversions@^0.10.3:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.10.3.tgz#4c0224e6b34d4a80ab564b43ee4afbc7ebf5ada0"
+  integrity sha512-QEwE4QAuoS6I5crRYWnIyVea5s1YHau6VElZhw2AevmBg9z2q6FUPh++PqhOQayKypnlVO4UcG12lBRCX4W9WQ==
   dependencies:
-    common-types "^1.12.18"
-    get-value "^3.0.1"
+    common-types "^1.14.3"
+    lodash.get "^4.4.2"
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"

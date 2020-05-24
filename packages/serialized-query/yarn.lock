@@ -5986,6 +5986,14 @@ typed-conversions@^0.10.2:
     common-types "^1.12.18"
     get-value "^3.0.1"
 
+typed-conversions@^0.10.3:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.10.3.tgz#4c0224e6b34d4a80ab564b43ee4afbc7ebf5ada0"
+  integrity sha512-QEwE4QAuoS6I5crRYWnIyVea5s1YHau6VElZhw2AevmBg9z2q6FUPh++PqhOQayKypnlVO4UcG12lBRCX4W9WQ==
+  dependencies:
+    common-types "^1.14.3"
+    lodash.get "^4.4.2"
+
 typed-conversions@^0.9.6:
   version "0.9.7"
   resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.9.7.tgz#4e8d095a9bcdf0dfcda73774bc167e52352e4070"
