@@ -1,1 +1,1 @@
-{"version":3,"file":"RealTimeClient.js","sourceRoot":"","sources":["../../src/RealTimeClient.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,cAAc,IAAI,GAAG,EAAE,MAAM,+BAA+B,CAAC;AAEtE,MAAM,UAAU,cAAc,CAAC,MAAoC;IACjE,MAAM,GAAG,GAAG,IAAI,GAAG,CAAC,MAAM,CAAC,CAAC;IAC5B,OAAO,GAAG,CAAC;AACb,CAAC"}
+{"version":3,"file":"RealTimeClient.js","sourceRoot":"","sources":["../../src/RealTimeClient.ts"],"names":[],"mappings":"AAAA,wEAAwE;AACxE,yEAAyE;AAEzE,yEAAyE;AACzE,iCAAiC;AACjC,gBAAgB;AAChB,IAAI"}

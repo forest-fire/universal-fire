@@ -1,1 +1,1 @@
-{"version":3,"file":"FirestoreClient.js","sourceRoot":"","sources":["../../src/FirestoreClient.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,eAAe,IAAI,EAAE,EAAE,MAAM,+BAA+B,CAAC;AAEtE,MAAM,UAAU,eAAe,CAAC,MAAoC;IAClE,MAAM,GAAG,GAAG,IAAI,EAAE,CAAC,MAAM,CAAC,CAAC;IAC3B,OAAO,GAAG,CAAC;AACb,CAAC"}
+{"version":3,"file":"FirestoreClient.js","sourceRoot":"","sources":["../../src/FirestoreClient.ts"],"names":[],"mappings":"AAAA,wEAAwE;AACxE,yEAAyE;AAEzE,8EAA8E;AAC9E,gCAAgC;AAChC,gBAAgB;AAChB,IAAI"}
