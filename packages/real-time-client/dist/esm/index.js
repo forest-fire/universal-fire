@@ -1,8 +1,8 @@
-import '@firebase/auth';
-import '@firebase/database';
 import { FireError, extractClientConfig, determineDefaultAppName, getRunningApps, getRunningFirebaseApp } from '@forest-fire/utility';
 import { HttpStatusCodes, wait } from 'common-types';
 import { EventEmitter } from 'events';
+import '@firebase/auth';
+import '@firebase/database';
 import { isClientConfig, isMockConfig } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 import { firebase } from '@firebase/app';
@@ -32,7 +32,6 @@ class EventManager extends EventEmitter {
     }
 }
 
-let MOCK_LOADING_TIMEOUT = 200;
 class RealTimeClient extends RealTimeDb {
     /**
      * Builds the client and then waits for all to `connect()` to
@@ -207,4 +206,4 @@ class RealTimeClient extends RealTimeDb {
     }
 }
 
-export { MOCK_LOADING_TIMEOUT, RealTimeClient };
+export { RealTimeClient };

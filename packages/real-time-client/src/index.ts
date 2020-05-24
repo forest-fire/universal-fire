@@ -1,1 +1,1 @@
-export * from './RealTimeClient';
+export { RealTimeClient, EventEmitter } from './private';
