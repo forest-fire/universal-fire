@@ -1,5 +1,5 @@
-import { IDictionary } from 'common-types';
 import { SerializedFirestoreQuery, SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { IDictionary } from 'common-types';
 export interface ISimplifiedDb extends IDictionary {
     constructor: {
         name: string;

@@ -1,8 +1,9 @@
-import { IDictionary } from 'common-types';
 import {
   SerializedFirestoreQuery,
-  SerializedRealTimeQuery
+  SerializedRealTimeQuery,
 } from '@forest-fire/serialized-query';
+
+import { IDictionary } from 'common-types';
 
 export interface ISimplifiedDb extends IDictionary {
   constructor: {
@@ -13,7 +14,7 @@ export interface ISimplifiedDb extends IDictionary {
 export class SerializedQuery {
   static create<T = IDictionary>(db: ISimplifiedDb, path: string = '/') {
     const name = db.constructor.name;
-    if (['RealTimeClient', 'RealTimeAdmin'].includes(name)) {
+    if (['RealTimeClient', 'RealTimeAdmin', 'RealTimeDb'].includes(name)) {
       return SerializedRealTimeQuery.path<T>(path);
     } else {
       return SerializedFirestoreQuery.path<T>(path);
