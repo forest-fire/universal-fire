@@ -9,12 +9,13 @@ export default {
   },
   external: [
     'common-types',
-    '@firebase/database',
+    'firebase-admin',
     '@firebase/auth',
     '@firebase/app',
     '@forest-fire/real-time-db',
     '@forest-fire/types',
     '@forest-fire/utility',
+    'firemock',
     'events',
   ],
   plugins: [

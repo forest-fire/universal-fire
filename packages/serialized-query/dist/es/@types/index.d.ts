@@ -1,1 +1,1 @@
-export * from './serialized-types';
+export * from "./serialized-types";

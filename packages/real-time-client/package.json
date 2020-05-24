@@ -12,11 +12,11 @@
     "utility",
     "admin"
   ],
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/src/index.d.ts",
+  "module": "dist/es/index.js",
+  "types": "dist/es/src/index.d.ts",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist/es"
   ],
   "scripts": {
     "clean": "rimraf dist/**/*",
