@@ -23,7 +23,7 @@
     "clean:nuclear": "rimraf dist node_modules yarn.lock && yarn cache clean && yarn && yarn upgrade",
     "build": "run-s clean build:all",
     "build:all": "run-p build:esnext build:cjs",
-    "build:esnext": "tsc -P tsconfig.es.json",
+    "build:esnext": "rollup -c",
     "build:cjs": "tsc -P tsconfig.cjs.json",
     "build:db": "cd ../.. && yarn build:db && cd -",
     "build:monorepo": "cd ../.. && yarn build && cd -",
