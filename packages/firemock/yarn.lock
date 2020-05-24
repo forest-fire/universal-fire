@@ -9179,10 +9179,10 @@ type-is@~1.6.17, type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typed-conversions@^0.10.3:
-  version "0.10.3"
-  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.10.3.tgz#4c0224e6b34d4a80ab564b43ee4afbc7ebf5ada0"
-  integrity sha512-QEwE4QAuoS6I5crRYWnIyVea5s1YHau6VElZhw2AevmBg9z2q6FUPh++PqhOQayKypnlVO4UcG12lBRCX4W9WQ==
+typed-conversions@^0.10.4:
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.10.4.tgz#621c30845328e6429bf61afe1cfe769ce7fff59c"
+  integrity sha512-Qj3Swhl0C5W01jpfB2j6x7FNV9rYU1Sx03ToEHIQbn6FlUZdkJ9D2465ZLyUvqq+CDdk94BOp3y9Xh+gztN9yg==
   dependencies:
     common-types "^1.14.3"
     lodash.get "^4.4.2"
