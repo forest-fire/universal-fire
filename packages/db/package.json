@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.49.0",
+  "version": "0.49.2",
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "module": "dist/es",
   "types": "dist/es/index.d.ts",
@@ -39,8 +39,8 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.49.0",
-    "@forest-fire/base-serializer": "^0.49.0",
+    "@forest-fire/abstracted-database": "^0.49.2",
+    "@forest-fire/base-serializer": "^0.49.2",
     "@forest-fire/types": "^0.49.0"
   },
   "license": "MIT"
