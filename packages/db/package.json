@@ -41,7 +41,8 @@
   },
   "dependencies": {
     "@forest-fire/base-serializer": "^0.48.18",
-    "@forest-fire/types": "^0.48.17"
+    "@forest-fire/types": "^0.48.17",
+    "@forest-fire/abstracted-database": "^0.48.18"
   },
   "license": "MIT"
 }
