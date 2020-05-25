@@ -1,21 +1,24 @@
-import { firebase } from '@firebase/app';
-import { FirestoreDb } from '@forest-fire/firestore-db';
+import {
+  FireError,
+  extractClientConfig,
+  getRunningApps,
+  getRunningFirebaseApp,
+} from '@forest-fire/utility';
 import {
   IClientApp,
   IClientAuth,
   IClientConfig,
   IClientSdk,
   IMockConfig,
+  SDK,
   isClientConfig,
   isMockConfig,
-  SDK,
 } from '@forest-fire/types';
-import {
-  extractClientConfig,
-  FireError,
-  getRunningApps,
-  getRunningFirebaseApp,
-} from '@forest-fire/utility';
+
+import { FirestoreDb } from '@forest-fire/firestore-db';
+import { firebase } from '@firebase/app';
+
+import('@firebase/firestore');
 
 export class FirestoreClient extends FirestoreDb implements IClientSdk {
   sdk = SDK.FirestoreClient;
@@ -78,11 +81,11 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
       console.info(`Firestore ${this.config.name} already connected`);
       return this;
     }
-    await this.loadFirestoreApi();
+    // await this.loadFirestoreApi();
     if (this.config.useAuth) {
       await this.loadAuthApi();
     }
-    this.database = this._app.firestore();
+    // this.database = firebase.app.firestore();
     return this;
   }
 
@@ -102,12 +105,10 @@ export class FirestoreClient extends FirestoreDb implements IClientSdk {
   }
 
   protected async loadAuthApi() {
-    await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
+    await import('@firebase/auth');
   }
 
   protected async loadFirestoreApi() {
-    await import(
-      /* webpackChunkName: "firebase-firestore" */ '@firebase/firestore'
-    );
+    await import('@firebase/firestore');
   }
 }

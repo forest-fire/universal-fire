@@ -4,8 +4,7 @@ exports.SerializedQuery = void 0;
 const serialized_query_1 = require("@forest-fire/serialized-query");
 class SerializedQuery {
     static create(db, path = '/') {
-        const name = db.constructor.name;
-        if (['RealTimeClient', 'RealTimeAdmin', 'RealTimeDb'].includes(name)) {
+        if (['RealTimeClient', 'RealTimeAdmin', 'RealTimeDb'].includes(db.sdk)) {
             return serialized_query_1.SerializedRealTimeQuery.path(path);
         }
         else {

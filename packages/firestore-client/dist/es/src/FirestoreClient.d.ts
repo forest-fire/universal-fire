@@ -1,5 +1,5 @@
-import { FirestoreDb } from '@forest-fire/firestore-db';
 import { IClientApp, IClientAuth, IClientConfig, IClientSdk, IMockConfig, SDK } from '@forest-fire/types';
+import { FirestoreDb } from '@forest-fire/firestore-db';
 export declare class FirestoreClient extends FirestoreDb implements IClientSdk {
     sdk: SDK;
     static connect(config: IClientConfig | IMockConfig): Promise<FirestoreClient>;

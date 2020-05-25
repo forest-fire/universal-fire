@@ -1,8 +1,9 @@
-import { firebase } from '@firebase/app';
-import { FirestoreDb } from '@forest-fire/firestore-db';
-import { isMockConfig, isClientConfig } from '@forest-fire/types';
 import { extractClientConfig, FireError, getRunningApps, getRunningFirebaseApp } from '@forest-fire/utility';
+import { isMockConfig, isClientConfig } from '@forest-fire/types';
+import { FirestoreDb } from '@forest-fire/firestore-db';
+import { firebase } from '@firebase/app';
 
+import('@firebase/firestore');
 class FirestoreClient extends FirestoreDb {
     constructor(config) {
         super();
@@ -52,11 +53,11 @@ class FirestoreClient extends FirestoreDb {
             console.info(`Firestore ${this.config.name} already connected`);
             return this;
         }
-        await this.loadFirestoreApi();
+        // await this.loadFirestoreApi();
         if (this.config.useAuth) {
             await this.loadAuthApi();
         }
-        this.database = this._app.firestore();
+        // this.database = firebase.app.firestore();
         return this;
     }
     async auth() {
@@ -74,11 +75,10 @@ class FirestoreClient extends FirestoreDb {
         return this._auth;
     }
     async loadAuthApi() {
-        await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
+        await import('@firebase/auth');
     }
     async loadFirestoreApi() {
-        await import(
-        /* webpackChunkName: "firebase-firestore" */ '@firebase/firestore');
+        await import('@firebase/firestore');
     }
 }
 

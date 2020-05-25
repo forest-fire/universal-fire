@@ -1,6 +1,5 @@
 import pkg from './package.json';
-import { terser } from 'rollup-plugin-terser';
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript2';
 export default {
   input: 'src/index.ts', // our source file
   output: [
@@ -14,6 +13,5 @@ export default {
     typescript({
       typescript: require('typescript'),
     }),
-    terser(), // minifies generated bundles
   ],
 };

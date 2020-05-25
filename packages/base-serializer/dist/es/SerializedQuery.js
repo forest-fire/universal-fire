@@ -1,8 +1,7 @@
 import { SerializedFirestoreQuery, SerializedRealTimeQuery, } from '@forest-fire/serialized-query';
 export class SerializedQuery {
     static create(db, path = '/') {
-        const name = db.constructor.name;
-        if (['RealTimeClient', 'RealTimeAdmin', 'RealTimeDb'].includes(name)) {
+        if (['RealTimeClient', 'RealTimeAdmin', 'RealTimeDb'].includes(db.sdk)) {
             return SerializedRealTimeQuery.path(path);
         }
         else {
