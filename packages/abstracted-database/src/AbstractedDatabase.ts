@@ -19,6 +19,8 @@ import {
 } from '@forest-fire/serialized-query';
 import { FireError } from '@forest-fire/utility';
 
+export type IAbstractedDatabase = AbstractedDatabase;
+
 export abstract class AbstractedDatabase {
   public readonly sdk: SDK;
   /**

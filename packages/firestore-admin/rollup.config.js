@@ -10,12 +10,12 @@ export default {
   external: [
     'common-types',
     'firebase-admin',
+    '@firebase/firestore',
     '@firebase/auth',
     '@firebase/app',
     '@forest-fire/firestore-db',
     '@forest-fire/types',
     '@forest-fire/utility',
-    'firemock',
     'events',
   ],
   plugins: [

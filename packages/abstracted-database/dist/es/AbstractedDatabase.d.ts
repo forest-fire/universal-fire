@@ -1,6 +1,7 @@
 import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbDbEvent, SDK, IClientAuthProviders } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 import { BaseSerializer } from '@forest-fire/serialized-query';
+export declare type IAbstractedDatabase = AbstractedDatabase;
 export declare abstract class AbstractedDatabase {
     readonly sdk: SDK;
     /**

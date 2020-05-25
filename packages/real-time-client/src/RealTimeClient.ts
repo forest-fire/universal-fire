@@ -27,10 +27,12 @@ import { FirebaseApp } from '@firebase/app-types';
 import { FirebaseDatabase } from '@firebase/database-types';
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
+import type { IAbstractedDatabase } from '@forest-fire/abstracted-database';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 
-export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
+export class RealTimeClient extends RealTimeDb
+  implements IRealTimeDb, IAbstractedDatabase {
   sdk = SDK.RealTimeClient;
   /**
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
