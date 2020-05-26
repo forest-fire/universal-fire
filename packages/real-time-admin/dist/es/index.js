@@ -39,10 +39,10 @@ let RealTimeAdmin = /** @class */ (() => {
             this._eventManager = new EventManager();
             this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
             config = {
+                ...config,
                 serviceAccount: extractServiceAccount(config),
                 databaseURL: extractDataUrl(config),
                 name: determineDefaultAppName(config),
-                ...config
             };
             if (isAdminConfig(config)) {
                 this._config = config;
