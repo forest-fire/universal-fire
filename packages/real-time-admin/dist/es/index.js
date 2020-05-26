@@ -38,22 +38,18 @@ let RealTimeAdmin = /** @class */ (() => {
             this._isAdminApi = true;
             this._eventManager = new EventManager();
             this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
-            if (!config) {
-                config = {
-                    serviceAccount: extractServiceAccount(config),
-                    databaseURL: extractDataUrl(config),
-                };
-            }
+            config = {
+                serviceAccount: extractServiceAccount(config),
+                databaseURL: extractDataUrl(config),
+                name: determineDefaultAppName(config),
+                ...config
+            };
             if (isAdminConfig(config)) {
-                config.serviceAccount =
-                    config.serviceAccount || extractServiceAccount(config);
-                config.databaseURL = config.databaseURL || extractDataUrl(config);
-                config.name = determineDefaultAppName(config);
                 this._config = config;
                 const runningApps = getRunningApps(apps);
                 RealTimeAdmin._connections = apps;
                 const credential$1 = credential.cert(config.serviceAccount);
-                this._app = runningApps.includes(config.name)
+                this._app = runningApps.includes(this._config.name)
                     ? getRunningFirebaseApp(config.name, apps)
                     : initializeApp({
                         credential: credential$1,
@@ -61,7 +57,6 @@ let RealTimeAdmin = /** @class */ (() => {
                     }, config.name);
             }
             else if (isMockConfig(config)) {
-                config.name = determineDefaultAppName(config);
                 this._config = config;
             }
             else {

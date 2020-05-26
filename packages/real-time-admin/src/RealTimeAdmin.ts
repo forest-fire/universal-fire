@@ -55,37 +55,32 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
     super();
     this._eventManager = new EventManager();
     this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
-    if (!config) {
-      config = {
-        serviceAccount: extractServiceAccount(config),
-        databaseURL: extractDataUrl(config),
-      };
-    }
-    if (isAdminConfig(config)) {
-      config.serviceAccount =
-        config.serviceAccount || extractServiceAccount(config);
-      config.databaseURL = config.databaseURL || extractDataUrl(config);
-      config.name = determineDefaultAppName(config);
-      this._config = config;
+    config = {
+      serviceAccount: extractServiceAccount(config),
+      databaseURL: extractDataUrl(config),
+      name: determineDefaultAppName(config),
+      ...config
+    } as IAdminConfig | IMockConfig;
 
+    if (isAdminConfig(config)) {
+      this._config = config
       const runningApps = getRunningApps(firebase.apps);
       RealTimeAdmin._connections = firebase.apps;
       const credential = firebase.credential.cert(config.serviceAccount);
-      this._app = runningApps.includes(config.name)
+      this._app = runningApps.includes(this._config.name)
         ? getRunningFirebaseApp<IAdminApp>(
-            config.name,
-            (firebase.apps as unknown) as IAdminApp[]
-          )
+          config.name,
+          (firebase.apps as unknown) as IAdminApp[]
+        )
         : firebase.initializeApp(
-            {
-              credential,
-              databaseURL: config.databaseURL,
-            },
-            config.name
-          );
+          {
+            credential,
+            databaseURL: config.databaseURL,
+          },
+          config.name
+        );
     } else if (isMockConfig(config)) {
-      config.name = determineDefaultAppName(config);
-      this._config = config;
+      this._config = config
     } else {
       throw new FireError(
         `The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(
@@ -198,8 +193,8 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   protected async _connectRealDb(config: IAdminConfig) {
     const found = firebase.apps.find((i) => i.name === this.config.name);
     this._database = (found &&
-    found.database &&
-    typeof found.database !== 'function'
+      found.database &&
+      typeof found.database !== 'function'
       ? found.database
       : this._app.database()) as IAdminRtdbDatabase;
     this.enableDatabaseLogging = firebase.database.enableLogging.bind(

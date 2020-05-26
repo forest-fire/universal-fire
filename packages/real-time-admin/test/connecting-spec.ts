@@ -28,7 +28,7 @@ describe(`Connect to the database but don't re-connect`, () => {
       expect(db).to.be.an.instanceof(RealTimeAdmin);
       expect(db.isConnected).to.be.true;
       expect(db.app).is.not.undefined;
-      expect(db.app.name).to.equal('abstracted-admin');
+      expect(db.app.name).to.equal('[DEFAULT]');
       expect(db.database).is.not.undefined;
     });
 
