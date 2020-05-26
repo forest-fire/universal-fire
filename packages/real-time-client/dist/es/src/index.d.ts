@@ -1,2 +1,2 @@
 export { RealTimeClient } from './RealTimeClient';
-export { EventEmitter } from './private';
+export { IEmitter } from './private';
