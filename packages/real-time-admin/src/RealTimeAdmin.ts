@@ -1,5 +1,5 @@
 // TODO: reduce this to just named symbols which we need!
-import * as firebase from 'firebase-admin';
+import firebase from 'firebase-admin';
 import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
 import { debug } from './util';

@@ -1,4 +1,4 @@
-import { apps, credential, initializeApp, auth, database } from 'firebase-admin';
+import firebase from 'firebase-admin';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 import { EventEmitter } from 'events';
 import { isAdminConfig, isMockConfig } from '@forest-fire/types';
@@ -46,13 +46,13 @@ let RealTimeAdmin = /** @class */ (() => {
             };
             if (isAdminConfig(config)) {
                 this._config = config;
-                const runningApps = getRunningApps(apps);
-                RealTimeAdmin._connections = apps;
-                const credential$1 = credential.cert(config.serviceAccount);
+                const runningApps = getRunningApps(firebase.apps);
+                RealTimeAdmin._connections = firebase.apps;
+                const credential = firebase.credential.cert(config.serviceAccount);
                 this._app = runningApps.includes(this._config.name)
-                    ? getRunningFirebaseApp(config.name, apps)
-                    : initializeApp({
-                        credential: credential$1,
+                    ? getRunningFirebaseApp(config.name, firebase.apps)
+                    : firebase.initializeApp({
+                        credential,
                         databaseURL: config.databaseURL,
                     }, config.name);
             }
@@ -101,7 +101,7 @@ let RealTimeAdmin = /** @class */ (() => {
             if (this._config.mocking) {
                 return adminAuthSdk;
             }
-            return auth(this._app);
+            return firebase.auth(this._app);
         }
         goOnline() {
             if (this._database) {
@@ -131,7 +131,7 @@ let RealTimeAdmin = /** @class */ (() => {
             return (this._app &&
                 this.config &&
                 this.config.name &&
-                getRunningApps(apps).includes(this.config.name));
+                getRunningApps(firebase.apps).includes(this.config.name));
         }
         async connect() {
             if (isMockConfig(this._config)) {
@@ -154,13 +154,13 @@ let RealTimeAdmin = /** @class */ (() => {
             return this;
         }
         async _connectRealDb(config) {
-            const found = apps.find((i) => i.name === this.config.name);
+            const found = firebase.apps.find((i) => i.name === this.config.name);
             this._database = (found &&
                 found.database &&
                 typeof found.database !== 'function'
                 ? found.database
                 : this._app.database());
-            this.enableDatabaseLogging = database.enableLogging.bind(database);
+            this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
             this.goOnline();
             this._eventManager.connection(true);
             await this._listenForConnectionStatus();
