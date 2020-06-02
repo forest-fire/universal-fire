@@ -4,6 +4,7 @@
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "module": "dist/es",
   "types": "dist/es/index.d.ts",
+  "type": "module",
   "sideEffects": false,
   "repository": {
     "type": "git",
