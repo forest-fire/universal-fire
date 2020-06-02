@@ -9,7 +9,6 @@ export default {
   },
   external: [
     'common-types',
-    'firebase-admin',
     '@firebase/auth',
     '@firebase/app',
     '@forest-fire/types',
