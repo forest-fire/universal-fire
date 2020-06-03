@@ -40,13 +40,13 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.50.0",
-    "@forest-fire/base-serializer": "^0.50.0",
-    "@forest-fire/firestore-client": "^0.50.0",
-    "@forest-fire/real-time-client": "^0.50.0",
-    "@forest-fire/real-time-db": "^0.50.0",
-    "@forest-fire/firestore-db": "^0.50.0",
-    "@forest-fire/types": "^0.50.0",
+    "@forest-fire/abstracted-database": "^0.50.1",
+    "@forest-fire/base-serializer": "^0.50.1",
+    "@forest-fire/firestore-client": "^0.50.1",
+    "@forest-fire/firestore-db": "^0.50.1",
+    "@forest-fire/real-time-client": "^0.50.1",
+    "@forest-fire/real-time-db": "^0.50.1",
+    "@forest-fire/types": "^0.50.1",
     "common-types": "^1.14.7"
   },
   "license": "MIT"
