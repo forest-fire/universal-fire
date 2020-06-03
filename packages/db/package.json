@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.50.1",
+  "version": "0.50.2",
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "module": "dist/es",
   "types": "dist/es/index.d.ts",
@@ -42,11 +42,11 @@
   "dependencies": {
     "@forest-fire/abstracted-database": "^0.50.1",
     "@forest-fire/base-serializer": "^0.50.1",
-    "@forest-fire/serialized-query": "^0.50.1",
     "@forest-fire/firestore-client": "^0.50.1",
     "@forest-fire/firestore-db": "^0.50.1",
     "@forest-fire/real-time-client": "^0.50.1",
     "@forest-fire/real-time-db": "^0.50.1",
+    "@forest-fire/serialized-query": "^0.50.2",
     "@forest-fire/types": "^0.50.1",
     "common-types": "^1.14.7"
   },
