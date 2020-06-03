@@ -1,6 +1,6 @@
 import { extractClientConfig, FireError, getRunningApps, getRunningFirebaseApp } from '@forest-fire/utility';
-import { isMockConfig, isClientConfig } from '@forest-fire/types';
 import { FirestoreDb } from '@forest-fire/firestore-db';
+import { isMockConfig, isClientConfig } from '@forest-fire/types';
 import { firebase } from '@firebase/app';
 
 import('@firebase/firestore');

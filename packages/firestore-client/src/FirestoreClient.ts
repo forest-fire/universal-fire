@@ -4,6 +4,7 @@ import {
   getRunningApps,
   getRunningFirebaseApp,
 } from '@forest-fire/utility';
+import { FirestoreDb, IFirestoreDb } from '@forest-fire/firestore-db';
 import {
   IClientApp,
   IClientAuth,
@@ -15,12 +16,11 @@ import {
   isMockConfig,
 } from '@forest-fire/types';
 
-import { FirestoreDb } from '@forest-fire/firestore-db';
 import { firebase } from '@firebase/app';
 
 import('@firebase/firestore');
 
-export class FirestoreClient extends FirestoreDb implements IClientSdk {
+export class FirestoreClient extends FirestoreDb implements IFirestoreDb {
   sdk = SDK.FirestoreClient;
   static async connect(config: IClientConfig | IMockConfig) {
     const obj = new FirestoreClient(config);
