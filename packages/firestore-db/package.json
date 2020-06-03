@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/firestore-db",
-  "version": "0.50.5",
+  "version": "0.50.6",
   "description": "",
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
@@ -40,10 +40,10 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.50.5",
-    "@forest-fire/serialized-query": "^0.50.5",
+    "@forest-fire/abstracted-database": "^0.50.6",
+    "@forest-fire/serialized-query": "^0.50.6",
     "@forest-fire/types": "^0.50.1",
-    "@forest-fire/utility": "^0.50.5"
+    "@forest-fire/utility": "^0.50.6"
   },
   "license": "MIT"
 }
