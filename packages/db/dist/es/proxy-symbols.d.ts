@@ -10,3 +10,6 @@ import { IFirestoreDb } from '@forest-fire/firestore-db';
  * DB's and their SDK's
  */
 export declare type IAbstractedDatabase = IRealTimeDb | IFirestoreDb;
+import { IPathBasedWatchEvent, IValueBasedWatchEvent } from '@forest-fire/real-time-db';
+export { IPathBasedWatchEvent, IValueBasedWatchEvent };
+export declare type IWatchEvent = IPathBasedWatchEvent | IValueBasedWatchEvent;
