@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.extractServiceAccount = void 0;
 const index_1 = require("../index");
+const types_1 = require("@forest-fire/types");
 /**
  * Takes as input a variety of possible formats and converts it into
  * a Firebase service account (`IServiceAccount`). The input formats
@@ -15,6 +16,9 @@ const index_1 = require("../index");
  * which have limited length and must be string_)
  */
 function extractServiceAccount(config) {
+    if (types_1.isMockConfig(config)) {
+        return {};
+    }
     const serviceAccount = config && config.mocking !== true && config.serviceAccount
         ? config.serviceAccount
         : process.env['FIREBASE_SERVICE_ACCOUNT'];

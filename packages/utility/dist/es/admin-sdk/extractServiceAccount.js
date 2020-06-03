@@ -1,4 +1,5 @@
-import { looksLikeJson, FireError } from '../index';
+import { FireError, looksLikeJson } from '../index';
+import { isMockConfig, } from '@forest-fire/types';
 /**
  * Takes as input a variety of possible formats and converts it into
  * a Firebase service account (`IServiceAccount`). The input formats
@@ -12,6 +13,9 @@ import { looksLikeJson, FireError } from '../index';
  * which have limited length and must be string_)
  */
 export function extractServiceAccount(config) {
+    if (isMockConfig(config)) {
+        return {};
+    }
     const serviceAccount = config && config.mocking !== true && config.serviceAccount
         ? config.serviceAccount
         : process.env['FIREBASE_SERVICE_ACCOUNT'];

@@ -1,9 +1,10 @@
-import type {
-  IServiceAccount,
+import { FireError, looksLikeJson } from '../index';
+import {
   IAdminConfig,
   IMockConfig,
+  IServiceAccount,
+  isMockConfig,
 } from '@forest-fire/types';
-import { looksLikeJson, FireError } from '../index';
 
 /**
  * Takes as input a variety of possible formats and converts it into
@@ -20,6 +21,9 @@ import { looksLikeJson, FireError } from '../index';
 export function extractServiceAccount(
   config?: IAdminConfig | IMockConfig
 ): IServiceAccount {
+  if (isMockConfig(config)) {
+    return {};
+  }
   const serviceAccount: string | IServiceAccount | undefined =
     config && config.mocking !== true && config.serviceAccount
       ? config.serviceAccount
