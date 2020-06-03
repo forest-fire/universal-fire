@@ -8,7 +8,7 @@ export default {
       format: 'es',
     },
   ],
-  external: [...Object.keys(pkg.dependencies || {})],
+  external: [],
   plugins: [
     typescript({
       typescript: require('typescript'),
