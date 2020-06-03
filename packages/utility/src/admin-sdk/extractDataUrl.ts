@@ -1,4 +1,5 @@
-import type { IAdminConfig, IMockConfig } from '@forest-fire/types';
+import { IAdminConfig, IMockConfig, isMockConfig } from '@forest-fire/types';
+
 import { FireError } from '../index';
 
 /**
@@ -6,9 +7,10 @@ import { FireError } from '../index';
  * configuration or via the FIREBASE_DATABASE_URL environment variable.
  */
 export function extractDataUrl(config?: IAdminConfig | IMockConfig) {
-  const dataUrl = config?.mocking
-    ? 'https://mocking.com'
-    : config.databaseURL
+  if (isMockConfig(config)) {
+    return 'https://mocking.com';
+  }
+  const dataUrl = config.databaseURL
     ? config.databaseURL
     : process.env['FIREBASE_DATABASE_URL'];
   if (!dataUrl) {
