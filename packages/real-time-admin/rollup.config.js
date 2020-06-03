@@ -9,14 +9,13 @@ export default {
   },
   external: [
     'common-types',
-    'firebase-admin',
     '@firebase/auth',
     '@firebase/app',
-    '@forest-fire/firestore-db',
     '@forest-fire/types',
     '@forest-fire/utility',
     'firemock',
     'events',
+    'firebase-admin',
   ],
   plugins: [
     typescript({
