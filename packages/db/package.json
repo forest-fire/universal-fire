@@ -42,6 +42,7 @@
   "dependencies": {
     "@forest-fire/abstracted-database": "^0.50.1",
     "@forest-fire/base-serializer": "^0.50.1",
+    "@forest-fire/serialized-query": "^0.50.1",
     "@forest-fire/firestore-client": "^0.50.1",
     "@forest-fire/firestore-db": "^0.50.1",
     "@forest-fire/real-time-client": "^0.50.1",

@@ -1,5 +1,3 @@
-import type { RealTimeClient, FirestoreClient } from './index';
-
 export type {
   IAdminConfig,
   IMockConfig,
@@ -10,6 +8,10 @@ export type {
   IAdminAuth,
 } from '@forest-fire/types';
 export { SerializedQuery } from '@forest-fire/base-serializer';
+export {
+  IComparisonOperator,
+  BaseSerializer as ISerializedQuery,
+} from '@forest-fire/serialized-query';
 export type { RealTimeClient as IRealTimeClient } from '@forest-fire/real-time-client';
 export type { FirestoreClient as IFirestoreClient } from '@forest-fire/firestore-client';
 
