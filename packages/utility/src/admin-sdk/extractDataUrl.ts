@@ -13,11 +13,13 @@ export function extractDataUrl(config?: IAdminConfig | IMockConfig) {
   const dataUrl = config.databaseURL
     ? config.databaseURL
     : process.env['FIREBASE_DATABASE_URL'];
+
   if (!dataUrl) {
     throw new FireError(
       `There was no DATABASE URL provided! This needs to be passed in as part of the configuration or as the FIREBASE_DATABASE_URL environment variable.`,
       'invalid-configuration'
     );
   }
+
   return dataUrl;
 }
