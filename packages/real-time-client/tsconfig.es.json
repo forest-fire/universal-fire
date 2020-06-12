@@ -1,11 +1,8 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": false,
-    "module": "ESNext",
-    "outDir": "./dist/es",
-    "allowJs": false
+    "module": "es2015",
+    "outDir": "./dist/es"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["test", "dist"]
+  "include": ["src/**/*.ts"]
 }

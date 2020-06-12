@@ -1,13 +1,17 @@
-import '@firebase/auth';
-import '@firebase/database';
-import { FireError, extractClientConfig, determineDefaultAppName, getRunningApps, getRunningFirebaseApp } from '@forest-fire/utility';
-import { HttpStatusCodes, wait } from 'common-types';
-import { EventEmitter } from 'events';
-import { isClientConfig, isMockConfig } from '@forest-fire/types';
-import { RealTimeDb } from '@forest-fire/real-time-db';
-import { firebase } from '@firebase/app';
+'use strict';
 
-class ClientError extends FireError {
+Object.defineProperty(exports, '__esModule', { value: true });
+
+require('@firebase/auth');
+require('@firebase/database');
+var utility = require('@forest-fire/utility');
+var commonTypes = require('common-types');
+var events = require('events');
+var types = require('@forest-fire/types');
+var realTimeDb = require('@forest-fire/real-time-db');
+var app = require('@firebase/app');
+
+class ClientError extends utility.FireError {
     constructor(
     /** a human friendly error message */
     message, 
@@ -19,20 +23,20 @@ class ClientError extends FireError {
     /**
      * A numeric HTTP status code; defaults to 400 if not stated
      */
-    httpStatusCode = HttpStatusCodes.BadRequest) {
+    httpStatusCode = commonTypes.HttpStatusCodes.BadRequest) {
         super(message, classification.includes('/')
             ? classification
             : `RealTimeClient/${classification}`, httpStatusCode);
     }
 }
 
-class EventManager extends EventEmitter {
+class EventManager extends events.EventEmitter {
     connection(state) {
         this.emit('connection', state);
     }
 }
 
-class RealTimeClient extends RealTimeDb {
+class RealTimeClient extends realTimeDb.RealTimeDb {
     /**
      * Builds the client and then waits for all to `connect()` to
      * start the connection process.
@@ -44,18 +48,18 @@ class RealTimeClient extends RealTimeDb {
         this._eventManager = new EventManager();
         this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
         if (!config) {
-            config = extractClientConfig();
+            config = utility.extractClientConfig();
             if (!config) {
-                throw new FireError(`The client configuration was not set. Either set in the code or use the environment variables!`, `invalid-configuration`);
+                throw new utility.FireError(`The client configuration was not set. Either set in the code or use the environment variables!`, `invalid-configuration`);
             }
         }
-        config.name = determineDefaultAppName(config);
-        if (isClientConfig(config)) {
+        config.name = utility.determineDefaultAppName(config);
+        if (types.isClientConfig(config)) {
             try {
-                const runningApps = getRunningApps(firebase.apps);
+                const runningApps = utility.getRunningApps(app.firebase.apps);
                 this._app = runningApps.includes(config.name)
-                    ? getRunningFirebaseApp(config.name, firebase.apps)
-                    : firebase.initializeApp(config, config.name);
+                    ? utility.getRunningFirebaseApp(config.name, app.firebase.apps)
+                    : app.firebase.initializeApp(config, config.name);
             }
             catch (e) {
                 if (e.message && e.message.indexOf('app/duplicate-app') !== -1) {
@@ -66,8 +70,8 @@ class RealTimeClient extends RealTimeDb {
                 }
             }
         }
-        else if (!isMockConfig(config)) {
-            throw new FireError(`The configuration passed to RealTimeClient was invalid!`, `invalid-configuration`);
+        else if (!types.isMockConfig(config)) {
+            throw new utility.FireError(`The configuration passed to RealTimeClient was invalid!`, `invalid-configuration`);
         }
         this._config = config;
     }
@@ -82,13 +86,13 @@ class RealTimeClient extends RealTimeDb {
     }
     /** lists the database names which are currently connected */
     static async connectedTo() {
-        return Array.from(new Set(firebase.apps.map((i) => i.name)));
+        return Array.from(new Set(app.firebase.apps.map((i) => i.name)));
     }
     async connect() {
-        if (isMockConfig(this._config)) {
+        if (types.isMockConfig(this._config)) {
             await this._connectMockDb(this._config);
         }
-        else if (isClientConfig(this._config)) {
+        else if (types.isClientConfig(this._config)) {
             await this._connectRealDb(this._config);
         }
         else {
@@ -107,7 +111,7 @@ class RealTimeClient extends RealTimeDb {
             if (!this._fbClass.auth) {
                 throw new ClientError(`Attempt to get the authProviders getter before connecting to the database!`, 'missing-auth');
             }
-            this._authProviders = firebase.auth;
+            this._authProviders = app.firebase.auth;
         }
         return this._authProviders;
     }
@@ -141,7 +145,7 @@ class RealTimeClient extends RealTimeDb {
     async _connectRealDb(config) {
         if (!this._isConnected) {
             // await this.loadDatabaseApi();
-            this._database = firebase.database(this._app);
+            this._database = app.firebase.database(this._app);
             if (config.useAuth) {
                 // await this.loadAuthApi();
                 this._auth = this._app.auth();
@@ -199,12 +203,12 @@ class RealTimeClient extends RealTimeDb {
             }
         };
         const timeout = async () => {
-            await wait(this.CONNECTION_TIMEOUT);
+            await commonTypes.wait(this.CONNECTION_TIMEOUT);
             throw new ClientError(`The database didn't connect after the allocated period of ${this.CONNECTION_TIMEOUT}ms`, 'connection-timeout');
         };
         await Promise.race([connectionEvent(), timeout()]);
     }
 }
 
-export { RealTimeClient };
+exports.RealTimeClient = RealTimeClient;
 //# sourceMappingURL=index.js.map

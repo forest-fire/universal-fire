@@ -2,10 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "noEmit": false,
-    "module": "commonjs",
+    "module": "es2015",
     "outDir": "dist/cjs",
-    "strictNullChecks": false,
-    "strict": false,
     "declaration": false
   },
   "exclude": ["test"]

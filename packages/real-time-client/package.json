@@ -12,11 +12,12 @@
     "utility",
     "admin"
   ],
+  "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
-  "types": "dist/es/src/index.d.ts",
+  "types": "dist/es/index.d.ts",
   "sideEffects": false,
   "files": [
-    "dist/es"
+    "dist"
   ],
   "scripts": {
     "clean": "rimraf dist/**/*",
