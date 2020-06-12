@@ -51,9 +51,9 @@
     "nyc": "^15.0.0",
     "rimraf": "^3.0.2",
     "test-console": "^1.1.0",
-    "ts-node": "^8.9.1",
-    "tslint": "^6.1.1",
-    "typescript": "^3.8.3"
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5"
   },
   "dependencies": {
     "@forest-fire/abstracted-database": "^0.50.7",

@@ -25,7 +25,6 @@
     "build": "run-s clean build:all",
     "build:all": "run-p build:esnext build:cjs",
     "build:esnext": "rollup -c",
-    "build:cjs": "echo CJS build for real time client is turned off",
     "build:db": "cd ../.. && yarn build:db && cd -",
     "build:monorepo": "cd ../.. && yarn build && cd -",
     "bootstrap": "cd ../.. && yarn bootstrap && cd -",

@@ -5,7 +5,7 @@
     "esModuleInterop": true,
     "module": "commonjs",
     "noEmit": false,
-    "outDir": "dist/es"
+    "outDir": "dist/cjs"
   },
   "exclude": ["test"]
 }
