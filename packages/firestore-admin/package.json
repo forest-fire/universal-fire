@@ -2,8 +2,9 @@
   "name": "@forest-fire/firestore-admin",
   "version": "0.50.7",
   "description": "",
+  "main": "dist/cjs",
   "module": "dist/es",
-  "types": "dist/es/index.d.ts",
+  "types": "dist/es/src/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist"
@@ -15,9 +16,7 @@
   "scripts": {
     "clean": "rimraf dist/**/*",
     "build": "run-s clean build:all",
-    "build:all": "run-p build:es build:cjs",
-    "build:es": "rollup -c",
-    "build:cjs": "echo firestore-admin CJS build turned off",
+    "build:all": "rollup -c",
     "watch": "run-p 'watch:esnext' 'watch:cjs'",
     "watch:esnext": "tsc -P tsconfig.es.json -w",
     "watch:cjs": "tsc -P tsconfig.es.json -w",

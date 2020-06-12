@@ -59,3 +59,4 @@ class FirestoreAdmin extends FirestoreDb {
 }
 
 export { FirestoreAdmin };
+//# sourceMappingURL=index.js.map
