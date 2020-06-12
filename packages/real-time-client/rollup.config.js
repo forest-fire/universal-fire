@@ -6,7 +6,7 @@ function moduleExport(choice) {
     output: {
       dir: `./dist/${choice}`,
       format: choice,
-      sourcemap: true,
+      sourcemap: 'hidden',
     },
     external: [
       'common-types',

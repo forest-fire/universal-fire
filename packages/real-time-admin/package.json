@@ -12,6 +12,7 @@
     "utility",
     "admin"
   ],
+  "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "types": "dist/es/src/index.d.ts",
   "sideEffects": false,

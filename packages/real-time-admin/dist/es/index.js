@@ -185,4 +185,3 @@ let RealTimeAdmin = /** @class */ (() => {
 })();
 
 export { RealTimeAdmin };
-//# sourceMappingURL=index.js.map

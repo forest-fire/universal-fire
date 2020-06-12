@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-client",
-  "version": "0.50.7",
+  "version": "0.50.8",
   "description": "Helpful abstraction on the Firebase client API",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
@@ -14,7 +14,7 @@
   ],
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
-  "types": "dist/es/index.d.ts",
+  "types": "dist/es/src/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist"

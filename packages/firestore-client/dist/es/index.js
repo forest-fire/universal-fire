@@ -83,3 +83,4 @@ class FirestoreClient extends FirestoreDb {
 }
 
 export { FirestoreClient };
+//# sourceMappingURL=index.js.map
