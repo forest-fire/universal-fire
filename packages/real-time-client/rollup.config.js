@@ -10,7 +10,7 @@ function moduleExport(choice) {
     },
     external: [
       'common-types',
-      '@firebase/database',
+      '@firebase/firestore',
       '@firebase/auth',
       '@firebase/app',
       '@forest-fire/real-time-db',
