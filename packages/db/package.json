@@ -2,9 +2,9 @@
   "name": "universal-fire",
   "version": "0.50.8",
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
-  "module": "dist/es",
-  "types": "dist/es/index.d.ts",
-  "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "types": "dist/es/src/index.d.ts",
   "sideEffects": false,
   "repository": {
     "type": "git",
@@ -13,9 +13,7 @@
   "scripts": {
     "clean": "rimraf dist/**/*",
     "build": "run-s clean build:all",
-    "build:all": "run-p build:esnext build:cjs",
-    "build:esnext": "tsc -P tsconfig.es.json",
-    "build:cjs": "echo no CJS for static initializer",
+    "build:all": "rollup -c",
     "build:monorepo": "cd ../../ && yarn build && cd -",
     "watch": "run-p watch:esnext watch:cjs",
     "watch:esnext": "echo not implemented",
@@ -26,6 +24,7 @@
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^4.1.2",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
