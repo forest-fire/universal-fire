@@ -10,9 +10,10 @@ export function extractDataUrl(config?: IAdminConfig | IMockConfig) {
   if (isMockConfig(config)) {
     return 'https://mocking.com';
   }
-  const dataUrl = config.databaseURL
-    ? config.databaseURL
-    : process.env['FIREBASE_DATABASE_URL'];
+  const dataUrl =
+    config && config.databaseURL
+      ? config.databaseURL
+      : process.env['FIREBASE_DATABASE_URL'];
 
   if (!dataUrl) {
     throw new FireError(

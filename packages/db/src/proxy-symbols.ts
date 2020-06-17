@@ -6,6 +6,11 @@ export type {
   IFirestoreDbEvent,
   IClientAuth,
   IAdminAuth,
+  AuthCredential,
+  User,
+  UserCredential,
+  IdTokenResult,
+  ActionCodeSettings,
 } from '@forest-fire/types';
 export { SerializedQuery } from '@forest-fire/base-serializer';
 export {

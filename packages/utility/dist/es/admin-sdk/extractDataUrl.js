@@ -8,7 +8,7 @@ export function extractDataUrl(config) {
     if (isMockConfig(config)) {
         return 'https://mocking.com';
     }
-    const dataUrl = config.databaseURL
+    const dataUrl = config && config.databaseURL
         ? config.databaseURL
         : process.env['FIREBASE_DATABASE_URL'];
     if (!dataUrl) {
