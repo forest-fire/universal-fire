@@ -6,7 +6,8 @@
     "outDir": "dist/cjs",
     "strictNullChecks": false,
     "strict": false,
-    "declaration": false
+    "declaration": false,
+    "esModuleInterop": false
   },
   "exclude": ["test"]
 }
