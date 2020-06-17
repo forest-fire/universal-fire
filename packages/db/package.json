@@ -49,7 +49,7 @@
     "@forest-fire/real-time-db": "^0.52.1",
     "@forest-fire/serialized-query": "^0.52.1",
     "@forest-fire/types": "^0.52.0",
-    "common-types": "^1.14.7"
+    "common-types": "^1.15.6"
   },
   "license": "MIT"
 }
