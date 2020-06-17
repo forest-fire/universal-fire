@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/firestore-admin",
-  "version": "0.52.3",
+  "version": "0.52.4",
   "description": "",
   "main": "dist/cjs/FirestoreAdmin.js",
   "module": "dist/es/FirestoreAdmin.js",
@@ -40,7 +40,7 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@forest-fire/firestore-db": "^0.52.3",
+    "@forest-fire/firestore-db": "^0.52.4",
     "@forest-fire/types": "^0.52.0",
     "@forest-fire/utility": "^0.52.1",
     "firebase-admin": "^8.12.1"

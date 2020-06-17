@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/abstracted-database",
-  "version": "0.52.3",
+  "version": "0.52.4",
   "description": "",
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
@@ -38,10 +38,10 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.52.3",
+    "@forest-fire/serialized-query": "^0.52.4",
     "@forest-fire/types": "^0.52.0",
     "@forest-fire/utility": "^0.52.1",
-    "firemock": "^0.52.3"
+    "firemock": "^0.52.4"
   },
   "license": "MIT"
 }
