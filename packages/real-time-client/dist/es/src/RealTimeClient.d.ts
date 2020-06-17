@@ -6,6 +6,7 @@ import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
 import { FirebaseDatabase } from '@firebase/database-types';
 import type { IAbstractedDatabase } from '@forest-fire/abstracted-database';
 export declare let MOCK_LOADING_TIMEOUT: number;
+export { IEmitter } from './private';
 export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb, IAbstractedDatabase {
     sdk: SDK;
     /**

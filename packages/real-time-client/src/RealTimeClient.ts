@@ -30,6 +30,7 @@ import { wait } from 'common-types';
 import type { IAbstractedDatabase } from '@forest-fire/abstracted-database';
 
 export let MOCK_LOADING_TIMEOUT = 200;
+export { IEmitter } from './private';
 
 export class RealTimeClient extends RealTimeDb
   implements IRealTimeDb, IAbstractedDatabase {

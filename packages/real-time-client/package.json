@@ -12,9 +12,9 @@
     "utility",
     "admin"
   ],
-  "main": "dist/cjs/index.js",
-  "module": "dist/es/index.js",
-  "types": "dist/es/src/index.d.ts",
+  "main": "dist/cjs/RealTimeClient.js",
+  "module": "dist/es/RealTimeClient.js",
+  "types": "dist/es/src/RealTimeClient.d.ts",
   "sideEffects": false,
   "files": [
     "dist"
@@ -48,7 +48,7 @@
     "@types/rimraf": "^2.0.2",
     "async-shelljs": "^0.1.4",
     "chai": "^4.2.0",
-    "do-devops": "^0.3.7",
+    "do-devops": "^0.3.18",
     "faker": "^4.1.0",
     "js-yaml": "^3.13.1",
     "mocha": "^8.0.1",
@@ -61,7 +61,7 @@
     "ts-node": "^8.9.1",
     "tslib": "^2.0.0",
     "tslint": "^6.1.2",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.5"
   },
   "dependencies": {
     "@firebase/app": "^0.6.2",
@@ -83,5 +83,6 @@
   },
   "engines": {
     "node": ">=8.13.0"
-  }
+  },
+  "gitHead": "78e25fc502a7e229b11be3586f656ab315553a7d"
 }

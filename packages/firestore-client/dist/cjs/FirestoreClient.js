@@ -1,33 +1,36 @@
-import { extractClientConfig, FireError, getRunningApps, getRunningFirebaseApp } from '@forest-fire/utility';
-import { FirestoreDb } from '@forest-fire/firestore-db';
-import { isMockConfig, isClientConfig } from '@forest-fire/types';
-import { firebase } from '@firebase/app';
+'use strict';
 
-import('@firebase/firestore');
-class FirestoreClient extends FirestoreDb {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FirestoreClient = void 0;
+const utility_1 = require("@forest-fire/utility");
+const firestore_db_1 = require("@forest-fire/firestore-db");
+const types_1 = require("@forest-fire/types");
+const app_1 = require("@firebase/app");
+Promise.resolve().then(() => require('@firebase/firestore'));
+class FirestoreClient extends firestore_db_1.FirestoreDb {
     constructor(config) {
         super();
         this.sdk = "FirestoreClient" /* FirestoreClient */;
         this._isAdminApi = false;
         if (!config) {
-            config = extractClientConfig();
+            config = utility_1.extractClientConfig();
             if (!config) {
-                throw new FireError(`The client configuration was not set. Either set in the code or use the environment variables!`, `invalid-configuration`);
+                throw new utility_1.FireError(`The client configuration was not set. Either set in the code or use the environment variables!`, `invalid-configuration`);
             }
         }
-        if (isMockConfig(config)) {
-            throw new FireError(`Mock is not supported by Firestore`, `invalid-configuration`);
+        if (types_1.isMockConfig(config)) {
+            throw new utility_1.FireError(`Mock is not supported by Firestore`, `invalid-configuration`);
         }
-        if (isClientConfig(config)) {
+        if (types_1.isClientConfig(config)) {
             config.name =
                 config.name || config.databaseURL
                     ? config.databaseURL.replace(/.*https:\W*([\w-]*)\.((.|\n)*)/g, '$1')
                     : '[DEFAULT]';
             try {
-                const runningApps = getRunningApps(firebase.apps);
+                const runningApps = utility_1.getRunningApps(app_1.firebase.apps);
                 this._app = runningApps.includes(config.name)
-                    ? getRunningFirebaseApp(config.name, firebase.apps)
-                    : firebase.initializeApp(config, config.name);
+                    ? utility_1.getRunningFirebaseApp(config.name, app_1.firebase.apps)
+                    : app_1.firebase.initializeApp(config, config.name);
             }
             catch (e) {
                 if (e.message && e.message.indexOf('app/duplicate-app') !== -1) {
@@ -39,7 +42,7 @@ class FirestoreClient extends FirestoreDb {
             }
         }
         else {
-            throw new FireError(`The configuration passed to FiresotreClient was invalid`, `invalid-configuration`);
+            throw new utility_1.FireError(`The configuration passed to FiresotreClient was invalid`, `invalid-configuration`);
         }
         this._config = config;
     }
@@ -75,12 +78,11 @@ class FirestoreClient extends FirestoreDb {
         return this._auth;
     }
     async loadAuthApi() {
-        await import('@firebase/auth');
+        await Promise.resolve().then(() => require('@firebase/auth'));
     }
     async loadFirestoreApi() {
-        await import('@firebase/firestore');
+        await Promise.resolve().then(() => require('@firebase/firestore'));
     }
 }
-
-export { FirestoreClient };
-//# sourceMappingURL=index.js.map
+exports.FirestoreClient = FirestoreClient;
+//# sourceMappingURL=FirestoreClient.js.map

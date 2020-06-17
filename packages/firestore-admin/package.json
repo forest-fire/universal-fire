@@ -2,9 +2,9 @@
   "name": "@forest-fire/firestore-admin",
   "version": "0.52.3",
   "description": "",
-  "main": "dist/cjs",
-  "module": "dist/es",
-  "types": "dist/es/src/index.d.ts",
+  "main": "dist/cjs/FirestoreAdmin.js",
+  "module": "dist/es/FirestoreAdmin.js",
+  "types": "dist/es/src/FirestoreAdmin.d.ts",
   "sideEffects": false,
   "files": [
     "dist"

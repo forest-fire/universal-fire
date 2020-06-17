@@ -2,7 +2,7 @@ const typescript = require('@rollup/plugin-typescript');
 
 function moduleExport(choice) {
   return {
-    input: './src/index.ts',
+    input: './src/FirestoreAdmin.ts',
     output: {
       dir: `./dist/${choice}`,
       format: choice,

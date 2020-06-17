@@ -2,7 +2,7 @@ const typescript = require('@rollup/plugin-typescript');
 
 function moduleExport(choice) {
   return {
-    input: './src/index.ts',
+    input: './src/FirestoreClient.ts',
     output: {
       dir: `./dist/${choice}`,
       format: choice,
@@ -22,6 +22,7 @@ function moduleExport(choice) {
       typescript({
         rootDir: './',
         tsconfig: `tsconfig.${choice}.json`,
+        esModuleInterop: false,
         declaration: choice === 'es' ? true : false,
       }),
     ],

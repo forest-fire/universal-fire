@@ -12,12 +12,12 @@
     "utility",
     "admin"
   ],
-  "main": "dist/cjs/index.js",
-  "module": "dist/es/index.js",
-  "types": "dist/es/src/index.d.ts",
+  "main": "dist/cjs/RealTimeAdmin.js",
+  "module": "dist/es/RealTimeAdmin.js",
+  "types": "dist/es/src/RealTimeAdmin.d.ts",
   "sideEffects": false,
   "files": [
-    "dist/es"
+    "dist"
   ],
   "scripts": {
     "clean": "rimraf dist/**/*",

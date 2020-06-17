@@ -1,1 +1,0 @@
-export { FirestoreAdmin } from './FirestoreAdmin';
