@@ -21,7 +21,7 @@ export type {
 export { SerializedQuery } from '@forest-fire/serializer-factory';
 export type {
   IComparisonOperator,
-  BaseSerializer as ISerializedQuery,
+  ISerializedQuery,
 } from '@forest-fire/serialized-query';
 export type { RealTimeClient as IRealTimeClient } from '@forest-fire/real-time-client';
 export type { FirestoreClient as IFirestoreClient } from '@forest-fire/firestore-client';

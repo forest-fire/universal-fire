@@ -2,17 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseSerializer = void 0;
 class BaseSerializer {
-    constructor(path = "/") {
+    constructor(path = '/') {
         this._path = slashNotation(path);
     }
-    static async create(constructor, path = "/") {
+    static async create(constructor, path = '/') {
         return new constructor(path);
     }
     get db() {
         if (this._db) {
             return this._db;
         }
-        throw new Error("Attempt to use SerializedQuery without setting database");
+        throw new Error('Attempt to use SerializedQuery without setting database');
     }
     get path() {
         return this._path;
@@ -70,16 +70,16 @@ class BaseSerializer {
         return this;
     }
     orderByChild(child) {
-        this._orderBy = "orderByChild";
+        this._orderBy = 'orderByChild';
         this._orderKey = child;
         return this;
     }
     orderByValue() {
-        this._orderBy = "orderByValue";
+        this._orderBy = 'orderByValue';
         return this;
     }
     orderByKey() {
-        this._orderBy = "orderByKey";
+        this._orderBy = 'orderByKey';
         return this;
     }
     startAt(value, key) {
@@ -106,6 +106,6 @@ class BaseSerializer {
 }
 exports.BaseSerializer = BaseSerializer;
 function slashNotation(path) {
-    return path.replace(/\./g, "/");
+    return path.replace(/\./g, '/');
 }
 //# sourceMappingURL=BaseSerializer.js.map

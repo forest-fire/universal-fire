@@ -1,5 +1,5 @@
-import type { IComparisonOperator, IFirestoreQuery, IFirestoreQueryOrderType, IRealQueryOrderType, IRealTimeQuery, ISerializedIdentity, ISimplifiedDatabase } from "./index";
-export declare abstract class BaseSerializer<T = any> {
+import type { IComparisonOperator, IFirestoreQuery, IFirestoreQueryOrderType, IRealQueryOrderType, IRealTimeQuery, ISerializedIdentity, ISimplifiedDatabase, ISerializedQuery } from './index';
+export declare abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
     protected _endAtKey?: keyof T & string;
     protected _endAt?: string;
     protected _equalToKey?: keyof T & string;

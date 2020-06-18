@@ -1,15 +1,15 @@
 export class BaseSerializer {
-    constructor(path = "/") {
+    constructor(path = '/') {
         this._path = slashNotation(path);
     }
-    static async create(constructor, path = "/") {
+    static async create(constructor, path = '/') {
         return new constructor(path);
     }
     get db() {
         if (this._db) {
             return this._db;
         }
-        throw new Error("Attempt to use SerializedQuery without setting database");
+        throw new Error('Attempt to use SerializedQuery without setting database');
     }
     get path() {
         return this._path;
@@ -67,16 +67,16 @@ export class BaseSerializer {
         return this;
     }
     orderByChild(child) {
-        this._orderBy = "orderByChild";
+        this._orderBy = 'orderByChild';
         this._orderKey = child;
         return this;
     }
     orderByValue() {
-        this._orderBy = "orderByValue";
+        this._orderBy = 'orderByValue';
         return this;
     }
     orderByKey() {
-        this._orderBy = "orderByKey";
+        this._orderBy = 'orderByKey';
         return this;
     }
     startAt(value, key) {
@@ -102,6 +102,6 @@ export class BaseSerializer {
     }
 }
 function slashNotation(path) {
-    return path.replace(/\./g, "/");
+    return path.replace(/\./g, '/');
 }
 //# sourceMappingURL=BaseSerializer.js.map

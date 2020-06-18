@@ -6,9 +6,10 @@ import type {
   IRealTimeQuery,
   ISerializedIdentity,
   ISimplifiedDatabase,
-} from "./index";
+  ISerializedQuery,
+} from './index';
 
-export abstract class BaseSerializer<T = any> {
+export abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
   protected _endAtKey?: keyof T & string;
   protected _endAt?: string;
   protected _equalToKey?: keyof T & string;
@@ -24,12 +25,12 @@ export abstract class BaseSerializer<T = any> {
 
   static async create<T extends BaseSerializer>(
     constructor: new (path: string) => T,
-    path: string = "/"
+    path: string = '/'
   ) {
     return new constructor(path);
   }
 
-  constructor(path: string = "/") {
+  constructor(path: string = '/') {
     this._path = slashNotation(path);
   }
 
@@ -37,7 +38,7 @@ export abstract class BaseSerializer<T = any> {
     if (this._db) {
       return this._db;
     }
-    throw new Error("Attempt to use SerializedQuery without setting database");
+    throw new Error('Attempt to use SerializedQuery without setting database');
   }
 
   public get path() {
@@ -103,18 +104,18 @@ export abstract class BaseSerializer<T = any> {
   }
 
   public orderByChild(child: keyof T & string) {
-    this._orderBy = "orderByChild";
+    this._orderBy = 'orderByChild';
     this._orderKey = child;
     return this;
   }
 
   public orderByValue() {
-    this._orderBy = "orderByValue";
+    this._orderBy = 'orderByValue';
     return this;
   }
 
   public orderByKey() {
-    this._orderBy = "orderByKey";
+    this._orderBy = 'orderByKey';
     return this;
   }
 
@@ -147,7 +148,9 @@ export abstract class BaseSerializer<T = any> {
   /**
    * Generates a `Query` from the _state_ in this serialized query.
    */
-  public abstract deserialize(db?: ISimplifiedDatabase): IFirestoreQuery | IRealTimeQuery;
+  public abstract deserialize(
+    db?: ISimplifiedDatabase
+  ): IFirestoreQuery | IRealTimeQuery;
 
   /**
    * Execute the query as a one time fetch.
@@ -165,5 +168,5 @@ export abstract class BaseSerializer<T = any> {
 }
 
 function slashNotation(path: string) {
-  return path.replace(/\./g, "/");
+  return path.replace(/\./g, '/');
 }
