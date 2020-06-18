@@ -1,4 +1,5 @@
-const typescript = require('@rollup/plugin-typescript');
+// const typescript = require('@rollup/plugin-typescript');
+const typescript = require('rollup-plugin-typescript2');
 
 function moduleExport(choice) {
   return {
@@ -22,6 +23,7 @@ function moduleExport(choice) {
       typescript({
         rootDir: './',
         tsconfig: `tsconfig.${choice}.json`,
+        module: 'es2015',
         declaration: choice === 'es' ? true : false,
       }),
     ],

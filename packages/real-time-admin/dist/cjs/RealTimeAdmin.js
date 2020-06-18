@@ -1,49 +1,72 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RealTimeAdmin = void 0;
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var firebase = _interopDefault(require('firebase-admin'));
+var realTimeDb = require('@forest-fire/real-time-db');
+var events = require('events');
+var types = require('@forest-fire/types');
+var utility = require('@forest-fire/utility');
+var firemock = require('firemock');
+
+class EventManager extends events.EventEmitter {
+    connection(state) {
+        this.emit('connection', state);
+    }
+}
+
+function debug(msg, stack) {
+    if (process.env.DEBUG) {
+        console.log(msg);
+        if (stack) {
+            console.log(JSON.stringify(stack));
+        }
+    }
+}
+
+class RealTimeAdminError extends utility.FireError {
+    constructor(message, classification = 'RealTimeAdmin/error', statusCode = 400) {
+        super(message, classification, statusCode);
+        this.kind = 'RealTimeAdminError';
+    }
+}
+
 // TODO: reduce this to just named symbols which we need!
-const firebase_admin_1 = require("firebase-admin");
-const real_time_db_1 = require("@forest-fire/real-time-db");
-const EventManager_1 = require("./EventManager");
-const util_1 = require("./util");
-const types_1 = require("@forest-fire/types");
-const utility_1 = require("@forest-fire/utility");
-const RealTimeAdminError_1 = require("./errors/RealTimeAdminError");
-const firemock_1 = require("firemock");
 let RealTimeAdmin = /** @class */ (() => {
-    class RealTimeAdmin extends real_time_db_1.RealTimeDb {
+    class RealTimeAdmin extends realTimeDb.RealTimeDb {
         constructor(config) {
             super();
             this.sdk = "RealTimeAdmin" /* RealTimeAdmin */;
             this._clientType = 'admin';
             this._isAuthorized = true;
             this._isAdminApi = true;
-            this._eventManager = new EventManager_1.EventManager();
+            this._eventManager = new EventManager();
             this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
             config = {
                 ...config,
-                serviceAccount: utility_1.extractServiceAccount(config),
-                databaseURL: utility_1.extractDataUrl(config),
-                name: utility_1.determineDefaultAppName(config),
+                serviceAccount: utility.extractServiceAccount(config),
+                databaseURL: utility.extractDataUrl(config),
+                name: utility.determineDefaultAppName(config),
             };
-            if (types_1.isAdminConfig(config)) {
+            if (types.isAdminConfig(config)) {
                 this._config = config;
-                const runningApps = utility_1.getRunningApps(firebase_admin_1.default.apps);
-                RealTimeAdmin._connections = firebase_admin_1.default.apps;
-                const credential = firebase_admin_1.default.credential.cert(config.serviceAccount);
+                const runningApps = utility.getRunningApps(firebase.apps);
+                RealTimeAdmin._connections = firebase.apps;
+                const credential = firebase.credential.cert(config.serviceAccount);
                 this._app = runningApps.includes(this._config.name)
-                    ? utility_1.getRunningFirebaseApp(config.name, firebase_admin_1.default.apps)
-                    : firebase_admin_1.default.initializeApp({
+                    ? utility.getRunningFirebaseApp(config.name, firebase.apps)
+                    : firebase.initializeApp({
                         credential,
                         databaseURL: config.databaseURL,
                     }, config.name);
             }
-            else if (types_1.isMockConfig(config)) {
+            else if (types.isMockConfig(config)) {
                 this._config = config;
             }
             else {
-                throw new utility_1.FireError(`The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(config, null, 2)}`, 'invalid-configuration');
+                throw new utility.FireError(`The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(config, null, 2)}`, 'invalid-configuration');
             }
         }
         /**
@@ -60,10 +83,10 @@ let RealTimeAdmin = /** @class */ (() => {
         }
         get database() {
             if (this.config.mocking) {
-                throw new RealTimeAdminError_1.RealTimeAdminError(`The "database" provides direct access to the Firebase database API when using a real database but not when using a Mock DB!`, 'not-allowed');
+                throw new RealTimeAdminError(`The "database" provides direct access to the Firebase database API when using a real database but not when using a Mock DB!`, 'not-allowed');
             }
             if (!this._database) {
-                throw new RealTimeAdminError_1.RealTimeAdminError(`The "database" object was accessed before it was established as part of the "connect()" process!`, 'not-allowed');
+                throw new RealTimeAdminError(`The "database" object was accessed before it was established as part of the "connect()" process!`, 'not-allowed');
             }
             return this._database;
         }
@@ -82,9 +105,9 @@ let RealTimeAdmin = /** @class */ (() => {
          */
         async auth() {
             if (this._config.mocking) {
-                return firemock_1.adminAuthSdk;
+                return firemock.adminAuthSdk;
             }
-            return firebase_admin_1.default.auth(this._app);
+            return firebase.auth(this._app);
         }
         goOnline() {
             if (this._database) {
@@ -92,7 +115,7 @@ let RealTimeAdmin = /** @class */ (() => {
                     this._database.goOnline();
                 }
                 catch (e) {
-                    util_1.debug('There was an error going online:' + e);
+                    debug('There was an error going online:' + e);
                 }
             }
             else {
@@ -114,17 +137,17 @@ let RealTimeAdmin = /** @class */ (() => {
             return (this._app &&
                 this.config &&
                 this.config.name &&
-                utility_1.getRunningApps(firebase_admin_1.default.apps).includes(this.config.name));
+                utility.getRunningApps(firebase.apps).includes(this.config.name));
         }
         async connect() {
-            if (types_1.isMockConfig(this._config)) {
+            if (types.isMockConfig(this._config)) {
                 await this._connectMockDb(this._config);
             }
-            else if (types_1.isAdminConfig(this._config)) {
+            else if (types.isAdminConfig(this._config)) {
                 await this._connectRealDb(this._config);
             }
             else {
-                throw new RealTimeAdminError_1.RealTimeAdminError('The configuation passed is not valid for an admin SDK!', 'invalid-configuration');
+                throw new RealTimeAdminError('The configuation passed is not valid for an admin SDK!', 'invalid-configuration');
             }
             return this;
         }
@@ -137,13 +160,13 @@ let RealTimeAdmin = /** @class */ (() => {
             return this;
         }
         async _connectRealDb(config) {
-            const found = firebase_admin_1.default.apps.find((i) => i.name === this.config.name);
+            const found = firebase.apps.find((i) => i.name === this.config.name);
             this._database = (found &&
                 found.database &&
                 typeof found.database !== 'function'
                 ? found.database
                 : this._app.database());
-            this.enableDatabaseLogging = firebase_admin_1.default.database.enableLogging.bind(firebase_admin_1.default.database);
+            this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
             this.goOnline();
             this._eventManager.connection(true);
             await this._listenForConnectionStatus();
@@ -166,4 +189,5 @@ let RealTimeAdmin = /** @class */ (() => {
     RealTimeAdmin._connections = [];
     return RealTimeAdmin;
 })();
+
 exports.RealTimeAdmin = RealTimeAdmin;

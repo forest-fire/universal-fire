@@ -3,7 +3,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": false,
-    "module": "commonjs",
+    "module": "es2015",
     "noEmit": false,
     "outDir": "dist/cjs"
   },
