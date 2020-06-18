@@ -19,7 +19,7 @@ export type {
   ActionCodeSettings,
 } from '@forest-fire/types';
 export { SerializedQuery } from '@forest-fire/serializer-factory';
-export {
+export type {
   IComparisonOperator,
   BaseSerializer as ISerializedQuery,
 } from '@forest-fire/serialized-query';

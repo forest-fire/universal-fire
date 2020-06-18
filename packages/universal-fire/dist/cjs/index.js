@@ -12,5 +12,3 @@ var firestore_admin_1 = require("@forest-fire/firestore-admin");
 Object.defineProperty(exports, "FirestoreAdmin", { enumerable: true, get: function () { return firestore_admin_1.FirestoreAdmin; } });
 var serializer_factory_1 = require("@forest-fire/serializer-factory");
 Object.defineProperty(exports, "SerializedQuery", { enumerable: true, get: function () { return serializer_factory_1.SerializedQuery; } });
-var serialized_query_1 = require("@forest-fire/serialized-query");
-Object.defineProperty(exports, "ISerializedQuery", { enumerable: true, get: function () { return serialized_query_1.BaseSerializer; } });
