@@ -14,7 +14,7 @@
   ],
   "main": "dist/cjs/RealTimeAdmin.js",
   "module": "dist/es/RealTimeAdmin.js",
-  "types": "dist/es/src/RealTimeAdmin.d.ts",
+  "types": "dist/es/RealTimeAdmin.d.ts",
   "sideEffects": false,
   "files": [
     "dist"
