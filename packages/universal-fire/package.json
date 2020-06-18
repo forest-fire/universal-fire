@@ -40,7 +40,6 @@
   },
   "dependencies": {
     "@forest-fire/abstracted-database": "^0.52.4",
-    "@forest-fire/base-serializer": "^0.52.4",
     "@forest-fire/firestore-admin": "^0.52.4",
     "@forest-fire/firestore-client": "^0.52.4",
     "@forest-fire/firestore-db": "^0.52.4",
@@ -48,6 +47,8 @@
     "@forest-fire/real-time-client": "^0.52.4",
     "@forest-fire/real-time-db": "^0.52.4",
     "@forest-fire/serialized-query": "^0.52.5",
+    "@forest-fire/serializer-factory": "^0.52.4",
+    "@forest-fire/serilizer-factory": "^0.52.4",
     "@forest-fire/types": "^0.52.0",
     "common-types": "^1.15.6"
   },

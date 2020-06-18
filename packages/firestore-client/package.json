@@ -28,6 +28,8 @@
     "test:e2e": "mocha --require ts-node/register test/*-e2e.ts"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^4.1.2",
+    "rollup-plugin-typescript2": "^0.27.1",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
