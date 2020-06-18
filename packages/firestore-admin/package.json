@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/firestore-admin",
-  "version": "0.52.4",
+  "version": "0.52.6",
   "description": "",
   "main": "dist/cjs/FirestoreAdmin.js",
   "module": "dist/es/FirestoreAdmin.js",
@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^4.1.2",
-    "rollup-plugin-typescript2": "^0.27.1",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
@@ -37,11 +36,12 @@
     "nyc": "^15.0.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.10.9",
+    "rollup-plugin-typescript2": "^0.27.1",
     "ts-node": "^8.10.1",
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@forest-fire/firestore-db": "^0.52.4",
+    "@forest-fire/firestore-db": "^0.52.6",
     "@forest-fire/types": "^0.52.0",
     "@forest-fire/utility": "^0.52.1",
     "firebase-admin": "^8.12.1"
