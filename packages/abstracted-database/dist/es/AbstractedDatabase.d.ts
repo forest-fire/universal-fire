@@ -1,6 +1,6 @@
 import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbDbEvent, SDK, IClientAuthProviders } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
-import { BaseSerializer } from '@forest-fire/serialized-query';
+import { ISerializedQuery } from '@forest-fire/serialized-query';
 export declare type IAbstractedDatabase = AbstractedDatabase;
 export declare abstract class AbstractedDatabase {
     readonly sdk: SDK;
@@ -99,7 +99,7 @@ export declare abstract class AbstractedDatabase {
      * the record is the `id` property but that can be changed with the optional
      * `idProp` parameter.
      */
-    abstract getList<T = any>(path: string | BaseSerializer<T>, idProp?: string): Promise<T[]>;
+    abstract getList<T = any>(path: string | ISerializedQuery<T>, idProp?: string): Promise<T[]>;
     /**
      * Get's a push-key from the server at a given path. This ensures that
      * multiple client's who are writing to the database will use the server's
@@ -112,7 +112,7 @@ export declare abstract class AbstractedDatabase {
      * Gets a record from a given path in the Firebase DB and converts it to an
      * object where the record's key is included as part of the record.
      */
-    abstract getRecord<T = any>(path: string | BaseSerializer<T>, idProp?: string): Promise<T>;
+    abstract getRecord<T = any>(path: string | ISerializedQuery<T>, idProp?: string): Promise<T>;
     /**
      * Returns the value at a given path in the database. This method is a
      * typescript _generic_ which defaults to `any` but you can set the type to
@@ -138,7 +138,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * Watch for Firebase events based on a DB path.
      */
-    abstract watch(target: string | BaseSerializer, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbDbEvent | IRtdbDbEvent[], cb: any): void;
+    abstract watch(target: string | ISerializedQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbDbEvent | IRtdbDbEvent[], cb: any): void;
     /**
      * Unwatches existing Firebase events.
      */

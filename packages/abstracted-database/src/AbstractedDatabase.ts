@@ -12,11 +12,7 @@ import type {
   IClientAuthProviders,
 } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
-import {
-  BaseSerializer,
-  SerializedRealTimeQuery,
-  SerializedFirestoreQuery,
-} from '@forest-fire/serialized-query';
+import { ISerializedQuery } from '@forest-fire/serialized-query';
 import { FireError } from '@forest-fire/utility';
 
 export type IAbstractedDatabase = AbstractedDatabase;
@@ -163,7 +159,7 @@ export abstract class AbstractedDatabase {
    * `idProp` parameter.
    */
   public abstract async getList<T = any>(
-    path: string | BaseSerializer<T>,
+    path: string | ISerializedQuery<T>,
     idProp?: string
   ): Promise<T[]>;
   /**
@@ -179,7 +175,7 @@ export abstract class AbstractedDatabase {
    * object where the record's key is included as part of the record.
    */
   public abstract async getRecord<T = any>(
-    path: string | BaseSerializer<T>,
+    path: string | ISerializedQuery<T>,
     idProp?: string
   ): Promise<T>;
   /**
@@ -217,7 +213,7 @@ export abstract class AbstractedDatabase {
    * Watch for Firebase events based on a DB path.
    */
   public abstract watch(
-    target: string | BaseSerializer,
+    target: string | ISerializedQuery,
     events:
       | IFirestoreDbEvent
       | IFirestoreDbEvent[]
