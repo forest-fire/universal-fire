@@ -1,4 +1,3 @@
-// tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src/index';
 import { expect } from 'chai';
 
@@ -8,7 +7,7 @@ const config = {
   databaseURL: 'https://abstracted-admin.firebaseio.com',
   projectId: 'abstracted-admin',
   storageBucket: 'abstracted-admin.appspot.com',
-  messagingSenderId: '547394508788'
+  messagingSenderId: '547394508788',
 };
 
 describe('Authentication', () => {

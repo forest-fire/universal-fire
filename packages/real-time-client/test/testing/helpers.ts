@@ -1,12 +1,14 @@
+import './test-console'; // TS declaration
+
+import * as fs from 'fs';
+import * as process from 'process';
+import * as yaml from 'js-yaml';
+
+import { first, last } from 'lodash';
+import { stderr, stdout } from 'test-console';
+
 // tslint:disable:no-implicit-dependencies
 import { IDictionary } from 'common-types';
-import first from 'lodash.first';
-import last from 'lodash.last';
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import * as process from 'process';
-import './test-console'; // TS declaration
-import { stdout, stderr } from 'test-console';
 
 // tslint:disable-next-line
 interface Console {
@@ -33,7 +35,7 @@ export function restoreStdoutAndStderr() {
 }
 
 export async function timeout(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function setupEnv() {
@@ -49,10 +51,10 @@ export function setupEnv() {
   const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
-    ...process.env
+    ...process.env,
   };
 
-  Object.keys(combined).forEach(key => (process.env[key] = combined[key]));
+  Object.keys(combined).forEach((key) => (process.env[key] = combined[key]));
   return combined;
 }
 
