@@ -1,8 +1,8 @@
 import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbDbEvent, SDK, IClientAuthProviders } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 import { ISerializedQuery } from '@forest-fire/serialized-query';
-export declare type IAbstractedDatabase = AbstractedDatabase;
-export declare abstract class AbstractedDatabase {
+import { IAppInfo, IAbstractedDatabase } from './IAbstractedDatabase';
+export declare abstract class AbstractedDatabase implements IAbstractedDatabase {
     readonly sdk: SDK;
     /**
      * Indicates if the database is using the admin SDK.
@@ -38,12 +38,7 @@ export declare abstract class AbstractedDatabase {
     /**
      * Returns key characteristics about the Firebase app being managed.
      */
-    get app(): {
-        name: string;
-        databaseURL: string;
-        projectId: string;
-        storageBucket: string;
-    };
+    get app(): IAppInfo;
     /**
      * Provides a set of API's that are exposed by the various "providers". Examples
      * include "emailPassword", "github", etc.

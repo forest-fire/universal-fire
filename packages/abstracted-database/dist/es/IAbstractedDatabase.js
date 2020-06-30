@@ -1,0 +1,1 @@
+//# sourceMappingURL=IAbstractedDatabase.js.map

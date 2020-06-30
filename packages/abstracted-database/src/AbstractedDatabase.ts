@@ -14,10 +14,9 @@ import type {
 import type { Mock as MockDb } from 'firemock';
 import { ISerializedQuery } from '@forest-fire/serialized-query';
 import { FireError } from '@forest-fire/utility';
+import { IAppInfo, IAbstractedDatabase } from './IAbstractedDatabase';
 
-export type IAbstractedDatabase = AbstractedDatabase;
-
-export abstract class AbstractedDatabase {
+export abstract class AbstractedDatabase implements IAbstractedDatabase {
   public readonly sdk: SDK;
   /**
    * Indicates if the database is using the admin SDK.
@@ -72,7 +71,7 @@ export abstract class AbstractedDatabase {
         storageBucket: this._app.options.storageBucket
           ? this._app.options.storageBucket
           : '',
-      };
+      } as IAppInfo;
     }
     throw new FireError(
       'Attempt to access Firebase App without having instantiated it'
