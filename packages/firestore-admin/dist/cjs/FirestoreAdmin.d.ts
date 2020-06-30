@@ -1,7 +1,7 @@
-import { IAdminApp, IAdminAuth, IAdminConfig, IAdminSdk, IMockConfig, SDK } from '@forest-fire/types';
+import { IAbstractedDatabase, IAdminApp, IAdminAuth, IAdminConfig, IAdminSdk, IMockConfig, SDK } from '@forest-fire/types';
 import { FirestoreDb } from '@forest-fire/firestore-db';
-import { IAbstractedDatabase } from '@forest-fire/abstracted-database';
-export declare class FirestoreAdmin extends FirestoreDb implements IAdminSdk, IAbstractedDatabase {
+import type { Mock as IMockApi } from 'firemock';
+export declare class FirestoreAdmin extends FirestoreDb implements IAdminSdk, IAbstractedDatabase<IMockApi> {
     sdk: SDK;
     static connect(config: IAdminConfig | IMockConfig): Promise<FirestoreAdmin>;
     protected _isAdminApi: boolean;

@@ -4,4 +4,4 @@ export var RealQueryOrderType;
     RealQueryOrderType["orderByKey"] = "orderByKey";
     RealQueryOrderType["orderByValue"] = "orderByValue";
 })(RealQueryOrderType || (RealQueryOrderType = {}));
-//# sourceMappingURL=serialized-types.js.map
+//# sourceMappingURL=serialized-query.js.map

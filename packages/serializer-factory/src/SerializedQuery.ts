@@ -4,7 +4,7 @@ import {
 } from '@forest-fire/serialized-query';
 
 import { IDictionary } from 'common-types';
-import type { IAbstractedDatabase } from '@forest-fire/abstracted-database';
+import type { IAbstractedDatabase } from '@forest-fire/types';
 
 export interface ISimplifiedDb extends IDictionary {
   constructor: {

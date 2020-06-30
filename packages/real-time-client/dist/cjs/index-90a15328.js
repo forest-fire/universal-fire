@@ -1,228 +1,19 @@
+'use strict';
+
 /** named network delays */
-var Delays;
+
 (function (Delays) {
     Delays["random"] = "random";
     Delays["weak"] = "weak-mobile";
     Delays["mobile"] = "mobile";
     Delays["WiFi"] = "WIFI";
-})(Delays || (Delays = {}));
+})(exports.Delays || (exports.Delays = {}));
 
-var SortOrder;
+
 (function (SortOrder) {
     SortOrder[SortOrder["asc"] = 0] = "asc";
     SortOrder[SortOrder["desc"] = 1] = "desc";
-})(SortOrder || (SortOrder = {}));
-
-class BaseSerializer {
-    constructor(path = '/') {
-        this._path = slashNotation(path);
-    }
-    static async create(constructor, path = '/') {
-        return new constructor(path);
-    }
-    get db() {
-        if (this._db) {
-            return this._db;
-        }
-        throw new Error('Attempt to use SerializedQuery without setting database');
-    }
-    get path() {
-        return this._path;
-    }
-    get identity() {
-        return {
-            endAtKey: this._endAtKey,
-            endAt: this._endAt,
-            equalToKey: this._equalToKey,
-            equalTo: this._equalTo,
-            limitToFirst: this._limitToFirst,
-            limitToLast: this._limitToLast,
-            orderByKey: this._orderKey,
-            orderBy: this._orderBy,
-            path: this._path,
-            startAtKey: this._startAtKey,
-            startAt: this._startAt,
-        };
-    }
-    /**
-     * Allows the DB interface to be setup early, allowing clients
-     * to call execute without any params.
-     */
-    setDB(db) {
-        this._db = db;
-        return this;
-    }
-    setPath(path) {
-        this._path = slashNotation(path);
-        return this;
-    }
-    /**
-     * Returns a unique numeric hashcode for this query
-     */
-    hashCode() {
-        const identity = JSON.stringify(this.identity);
-        let hash = 0;
-        if (identity.length === 0) {
-            return hash;
-        }
-        for (let i = 0; i < identity.length; i++) {
-            const char = identity.charCodeAt(i);
-            hash = (hash << 5) - hash + char;
-            // Convert to 32bit integer.
-            hash = hash & hash;
-        }
-        return hash;
-    }
-    limitToFirst(value) {
-        this._limitToFirst = value;
-        return this;
-    }
-    limitToLast(value) {
-        this._limitToLast = value;
-        return this;
-    }
-    orderByChild(child) {
-        this._orderBy = 'orderByChild';
-        this._orderKey = child;
-        return this;
-    }
-    orderByValue() {
-        this._orderBy = 'orderByValue';
-        return this;
-    }
-    orderByKey() {
-        this._orderBy = 'orderByKey';
-        return this;
-    }
-    startAt(value, key) {
-        this._startAt = value;
-        this._startAtKey = key;
-        return this;
-    }
-    endAt(value, key) {
-        this._endAt = value;
-        this._endAtKey = key;
-        return this;
-    }
-    equalTo(value, key) {
-        this._equalTo = value;
-        this._equalToKey = key;
-        return this;
-    }
-    toJSON() {
-        return this.identity;
-    }
-    toString() {
-        return JSON.stringify(this.identity, null, 2);
-    }
-}
-function slashNotation(path) {
-    return path.replace(/\./g, '/');
-}
-
-/**
- * Provides a way to serialize the full characteristics of a Firebase Realtime
- * Database query.
- */
-class SerializedRealTimeQuery extends BaseSerializer {
-    constructor() {
-        super(...arguments);
-        this._orderBy = "orderByKey";
-    }
-    static path(path = "/") {
-        return new SerializedRealTimeQuery(path);
-    }
-    startAt(value, key) {
-        this.validateKey("startAt", key, [
-            RealQueryOrderType.orderByChild,
-            RealQueryOrderType.orderByValue,
-        ]);
-        super.startAt(value, key);
-        return this;
-    }
-    endAt(value, key) {
-        this.validateKey("endAt", key, [
-            RealQueryOrderType.orderByChild,
-            RealQueryOrderType.orderByValue,
-        ]);
-        super.endAt(value, key);
-        return this;
-    }
-    equalTo(value, key) {
-        super.equalTo(value, key);
-        this.validateKey("equalTo", key, [
-            RealQueryOrderType.orderByChild,
-            RealQueryOrderType.orderByValue,
-        ]);
-        return this;
-    }
-    deserialize(db) {
-        const database = db || this.db;
-        let q = database.ref(this.path);
-        switch (this._orderBy) {
-            case "orderByKey":
-                q = q.orderByKey();
-                break;
-            case "orderByValue":
-                q = q.orderByValue();
-                break;
-            case "orderByChild":
-                q = q.orderByChild(this.identity.orderByKey);
-                break;
-        }
-        if (this.identity.limitToFirst) {
-            q = q.limitToFirst(this.identity.limitToFirst);
-        }
-        if (this.identity.limitToLast) {
-            q = q.limitToLast(this.identity.limitToLast);
-        }
-        if (this.identity.startAt) {
-            q = q.startAt(this.identity.startAt, this.identity.startAtKey);
-        }
-        if (this.identity.endAt) {
-            q = q.endAt(this.identity.endAt, this.identity.endAtKey);
-        }
-        if (this.identity.equalTo) {
-            q = this.identity.equalToKey
-                ? q.equalTo(this.identity.equalTo, this.identity.equalToKey)
-                : q.equalTo(this.identity.equalTo);
-        }
-        return q;
-    }
-    async execute(db) {
-        const database = db || this.db;
-        const snapshot = await this.deserialize(database).once("value");
-        return snapshot;
-    }
-    where(operation, value, key) {
-        switch (operation) {
-            case "=":
-                return this.equalTo(value, key);
-            case ">":
-                return this.startAt(value, key);
-            case "<":
-                return this.endAt(value, key);
-            default:
-                const err = new Error(`Unknown comparison operator: ${operation}`);
-                err.code = "invalid-operator";
-                throw err;
-        }
-    }
-    /**
-     * Ensures that when a `key` is passed in as part of the query modifiers --
-     * such as "startAt", "endAt", etc. -- that the sorting strategy is valid.
-     *
-     * @param caller gives a simple string name for the method
-     * which is currently being called to modify the search filters
-     * @param key the key value that _might_ have been erroneously passed in
-     */
-    validateKey(caller, key, allowed) {
-        const isNotAllowed = allowed.includes(this._orderBy) === false;
-        if (key && isNotAllowed) {
-            throw new Error(`You can not use the "key" parameter with ${caller}() when using a "${this._orderBy}" sort. Valid ordering strategies are: ${allowed.join(", ")}`);
-        }
-    }
-}
+})(exports.SortOrder || (exports.SortOrder = {}));
 
 var RealQueryOrderType;
 (function (RealQueryOrderType) {
@@ -647,7 +438,7 @@ function dotNotation(path) {
     path = path.slice(0, 1) === '/' ? path.slice(1) : path;
     return path ? path.replace(/\//g, '.') : undefined;
 }
-function slashNotation$1(path) {
+function slashNotation(path) {
     return path.replace(/\./g, '/');
 }
 /** Get the parent DB path */
@@ -759,6 +550,29 @@ function equalTo(query) {
         return key ? record[key] === value : record === value;
     };
 }
+
+const orderByChild = (child) => {
+    return (a, b) => {
+        return a[child] > b[child] ? -1 : a[child] === b[child] ? 0 : 1;
+    };
+};
+const orderByKey = (a, b) => {
+    return a.id > b.id ? -1 : a.id === b.id ? 0 : 1;
+};
+const orderByValue = (a, b) => {
+    return a.value > b.value ? -1 : a.value === b.value ? 0 : 1;
+};
+function isOrderByChild(query, fn) {
+    return query.identity.orderBy === RealQueryOrderType.orderByChild;
+}
+
+var sortFns = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  orderByChild: orderByChild,
+  orderByKey: orderByKey,
+  orderByValue: orderByValue,
+  isOrderByChild: isOrderByChild
+});
 
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
@@ -1680,29 +1494,6 @@ function arrayToHash(arr, keyProperty, removeIdProperty = false) {
     return removeIdProperty ? removeIdPropertyFromHash(output) : output;
 }
 
-const orderByChild = (child) => {
-    return (a, b) => {
-        return a[child] > b[child] ? -1 : a[child] === b[child] ? 0 : 1;
-    };
-};
-const orderByKey = (a, b) => {
-    return a.id > b.id ? -1 : a.id === b.id ? 0 : 1;
-};
-const orderByValue = (a, b) => {
-    return a.value > b.value ? -1 : a.value === b.value ? 0 : 1;
-};
-function isOrderByChild(query, fn) {
-    return query.identity.orderBy === RealQueryOrderType.orderByChild;
-}
-
-var sortFns = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  orderByChild: orderByChild,
-  orderByKey: orderByKey,
-  orderByValue: orderByValue,
-  isOrderByChild: isOrderByChild
-});
-
 const orderByKey$1 = (list) => {
     const keys = Object.keys(list).sort();
     let hash = {};
@@ -1711,8 +1502,8 @@ const orderByKey$1 = (list) => {
     });
     return hash;
 };
-const orderByValue$1 = (list, direction = SortOrder.asc) => {
-    const A = direction === SortOrder.asc ? 1 : -1;
+const orderByValue$1 = (list, direction = exports.SortOrder.asc) => {
+    const A = direction === exports.SortOrder.asc ? 1 : -1;
     const values = hashToArray(list).sort((a, b) => (a.value > b.value ? 1 : -1));
     return values.reduce((agg, curr) => {
         agg[curr.id] = curr.value;
@@ -1888,6 +1679,217 @@ function set(obj, dotPath, value, createIfNonExistant = true) {
         ref = ref[p];
     });
     ref[key] = value;
+}
+
+class BaseSerializer {
+    constructor(path = '/') {
+        this._path = slashNotation$1(path);
+    }
+    static async create(constructor, path = '/') {
+        return new constructor(path);
+    }
+    get db() {
+        if (this._db) {
+            return this._db;
+        }
+        throw new Error('Attempt to use SerializedQuery without setting database');
+    }
+    get path() {
+        return this._path;
+    }
+    get identity() {
+        return {
+            endAtKey: this._endAtKey,
+            endAt: this._endAt,
+            equalToKey: this._equalToKey,
+            equalTo: this._equalTo,
+            limitToFirst: this._limitToFirst,
+            limitToLast: this._limitToLast,
+            orderByKey: this._orderKey,
+            orderBy: this._orderBy,
+            path: this._path,
+            startAtKey: this._startAtKey,
+            startAt: this._startAt,
+        };
+    }
+    /**
+     * Allows the DB interface to be setup early, allowing clients
+     * to call execute without any params.
+     */
+    setDB(db) {
+        this._db = db;
+        return this;
+    }
+    setPath(path) {
+        this._path = slashNotation$1(path);
+        return this;
+    }
+    /**
+     * Returns a unique numeric hashcode for this query
+     */
+    hashCode() {
+        const identity = JSON.stringify(this.identity);
+        let hash = 0;
+        if (identity.length === 0) {
+            return hash;
+        }
+        for (let i = 0; i < identity.length; i++) {
+            const char = identity.charCodeAt(i);
+            hash = (hash << 5) - hash + char;
+            // Convert to 32bit integer.
+            hash = hash & hash;
+        }
+        return hash;
+    }
+    limitToFirst(value) {
+        this._limitToFirst = value;
+        return this;
+    }
+    limitToLast(value) {
+        this._limitToLast = value;
+        return this;
+    }
+    orderByChild(child) {
+        this._orderBy = 'orderByChild';
+        this._orderKey = child;
+        return this;
+    }
+    orderByValue() {
+        this._orderBy = 'orderByValue';
+        return this;
+    }
+    orderByKey() {
+        this._orderBy = 'orderByKey';
+        return this;
+    }
+    startAt(value, key) {
+        this._startAt = value;
+        this._startAtKey = key;
+        return this;
+    }
+    endAt(value, key) {
+        this._endAt = value;
+        this._endAtKey = key;
+        return this;
+    }
+    equalTo(value, key) {
+        this._equalTo = value;
+        this._equalToKey = key;
+        return this;
+    }
+    toJSON() {
+        return this.identity;
+    }
+    toString() {
+        return JSON.stringify(this.identity, null, 2);
+    }
+}
+function slashNotation$1(path) {
+    return path.replace(/\./g, '/');
+}
+
+/**
+ * Provides a way to serialize the full characteristics of a Firebase Realtime
+ * Database query.
+ */
+class SerializedRealTimeQuery extends BaseSerializer {
+    constructor() {
+        super(...arguments);
+        this._orderBy = 'orderByKey';
+    }
+    static path(path = '/') {
+        return new SerializedRealTimeQuery(path);
+    }
+    startAt(value, key) {
+        this.validateKey('startAt', key, [
+            RealQueryOrderType.orderByChild,
+            RealQueryOrderType.orderByValue,
+        ]);
+        super.startAt(value, key);
+        return this;
+    }
+    endAt(value, key) {
+        this.validateKey('endAt', key, [
+            RealQueryOrderType.orderByChild,
+            RealQueryOrderType.orderByValue,
+        ]);
+        super.endAt(value, key);
+        return this;
+    }
+    equalTo(value, key) {
+        super.equalTo(value, key);
+        this.validateKey('equalTo', key, [
+            RealQueryOrderType.orderByChild,
+            RealQueryOrderType.orderByValue,
+        ]);
+        return this;
+    }
+    deserialize(db) {
+        const database = db || this.db;
+        let q = database.ref(this.path);
+        switch (this._orderBy) {
+            case 'orderByKey':
+                q = q.orderByKey();
+                break;
+            case 'orderByValue':
+                q = q.orderByValue();
+                break;
+            case 'orderByChild':
+                q = q.orderByChild(this.identity.orderByKey);
+                break;
+        }
+        if (this.identity.limitToFirst) {
+            q = q.limitToFirst(this.identity.limitToFirst);
+        }
+        if (this.identity.limitToLast) {
+            q = q.limitToLast(this.identity.limitToLast);
+        }
+        if (this.identity.startAt) {
+            q = q.startAt(this.identity.startAt, this.identity.startAtKey);
+        }
+        if (this.identity.endAt) {
+            q = q.endAt(this.identity.endAt, this.identity.endAtKey);
+        }
+        if (this.identity.equalTo) {
+            q = this.identity.equalToKey
+                ? q.equalTo(this.identity.equalTo, this.identity.equalToKey)
+                : q.equalTo(this.identity.equalTo);
+        }
+        return q;
+    }
+    async execute(db) {
+        const database = db || this.db;
+        const snapshot = await this.deserialize(database).once('value');
+        return snapshot;
+    }
+    where(operation, value, key) {
+        switch (operation) {
+            case '=':
+                return this.equalTo(value, key);
+            case '>':
+                return this.startAt(value, key);
+            case '<':
+                return this.endAt(value, key);
+            default:
+                const err = new Error(`Unknown comparison operator: ${operation}`);
+                err.code = 'invalid-operator';
+                throw err;
+        }
+    }
+    /**
+     * Ensures that when a `key` is passed in as part of the query modifiers --
+     * such as "startAt", "endAt", etc. -- that the sorting strategy is valid.
+     *
+     * @param caller gives a simple string name for the method
+     * which is currently being called to modify the search filters
+     * @param key the key value that _might_ have been erroneously passed in
+     */
+    validateKey(caller, key, allowed) {
+        const isNotAllowed = allowed.includes(this._orderBy) === false;
+        if (key && isNotAllowed) {
+            throw new Error(`You can not use the "key" parameter with ${caller}() when using a "${this._orderBy}" sort. Valid ordering strategies are: ${allowed.join(', ')}`);
+        }
+    }
 }
 
 /** tslint:ignore:member-ordering */
@@ -2116,7 +2118,7 @@ class Reference extends Query {
     }
     toString() {
         return this.path
-            ? slashNotation$1(join('FireMock::Reference@', this.path, this.key))
+            ? slashNotation(join('FireMock::Reference@', this.path, this.key))
             : 'FireMock::Reference@uninitialized (aka, no path) mock Reference object';
     }
     getSnapshot(key, value) {
@@ -4455,6 +4457,9 @@ class Mock {
     restoreEvents() {
         restoreEvents();
     }
+    /**
+     * Gives access to a mocked version of the Client Auth SDK
+     */
     async auth() {
         return auth();
     }
@@ -4700,7 +4705,7 @@ let faker;
  */
 async function importFakerLibrary() {
     if (!faker) {
-        faker = await import(/* webpackChunkName: "faker-lib" */ './index-62be410f-d727bee0.js').then(function (n) { return n.i; });
+        faker = await Promise.resolve().then(function () { return require(/* webpackChunkName: "faker-lib" */ './index-62be410f-33575af1.js'); }).then(function (n) { return n.i; });
     }
     return faker;
 }
@@ -5052,4 +5057,40 @@ const notImplemented$2 = {
 // tslint:disable-next-line:no-object-literal-type-assertion
 const authMockApi = Object.assign(Object.assign({}, notImplemented$2), implemented);
 
-export { Delays, Deployment, Mock, MockHelper, Query, Queue, Reference, Schema, SchemaHelper, SnapShot, SortOrder, addListener, adminAuthSdk, auth$1 as auth, authMockApi, clearDatabase, findChildListeners, findValueListeners, getDb, getFakerLibrary, getListeners, getMockHelper, groupEventsByWatcher, importFakerLibrary, listenerCount, listenerPaths, multiPathUpdateDB, notify, pushDB, removeAllListeners, removeDB, removeListener, reset, restoreEvents, setDB, shouldSendEvents, silenceEvents, updateDB, updateDatabase };
+exports.Deployment = Deployment;
+exports.Mock = Mock;
+exports.MockHelper = MockHelper;
+exports.Query = Query;
+exports.Queue = Queue;
+exports.Reference = Reference;
+exports.Schema = Schema;
+exports.SchemaHelper = SchemaHelper;
+exports.SnapShot = SnapShot;
+exports.addListener = addListener;
+exports.adminAuthSdk = adminAuthSdk;
+exports.auth = auth$1;
+exports.authMockApi = authMockApi;
+exports.clearDatabase = clearDatabase;
+exports.findChildListeners = findChildListeners;
+exports.findValueListeners = findValueListeners;
+exports.getDb = getDb;
+exports.getFakerLibrary = getFakerLibrary;
+exports.getListeners = getListeners;
+exports.getMockHelper = getMockHelper;
+exports.groupEventsByWatcher = groupEventsByWatcher;
+exports.importFakerLibrary = importFakerLibrary;
+exports.listenerCount = listenerCount;
+exports.listenerPaths = listenerPaths;
+exports.multiPathUpdateDB = multiPathUpdateDB;
+exports.notify = notify;
+exports.pushDB = pushDB;
+exports.removeAllListeners = removeAllListeners;
+exports.removeDB = removeDB;
+exports.removeListener = removeListener;
+exports.reset = reset;
+exports.restoreEvents = restoreEvents;
+exports.setDB = setDB;
+exports.shouldSendEvents = shouldSendEvents;
+exports.silenceEvents = silenceEvents;
+exports.updateDB = updateDB;
+exports.updateDatabase = updateDatabase;

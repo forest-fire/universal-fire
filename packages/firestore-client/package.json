@@ -46,6 +46,7 @@
     "@firebase/auth": "^0.14.2",
     "@firebase/firestore": "^1.14.0",
     "@forest-fire/firestore-db": "^0.53.6",
+    "firemock": "^0.53.6",
     "@forest-fire/types": "^0.53.6",
     "@forest-fire/utility": "^0.53.6"
   },

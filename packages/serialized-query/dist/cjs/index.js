@@ -16,6 +16,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./BaseSerializer"), exports);
 __exportStar(require("./SerializedFirestoreQuery"), exports);
 __exportStar(require("./SerializedRealTimeQuery"), exports);
-__exportStar(require("./@types/index"), exports);
 //#endregion
 //# sourceMappingURL=index.js.map

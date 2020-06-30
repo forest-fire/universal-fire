@@ -99,5 +99,5 @@ export type IRtdbDatabase = IClientRtdbDatabase | IAdminRtdbDatabase;
 
 //#region Merged Types
 /** watcher events from either Firestore or RealTime database*/
-export type IAbstractedEvents = IRtdbDbEvent | IFirestoreDbEvent;
+export type IAbstractedEvent = IRtdbDbEvent | IFirestoreDbEvent;
 //#endregion Merged Types

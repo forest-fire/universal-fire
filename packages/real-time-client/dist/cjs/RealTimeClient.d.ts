@@ -1,13 +1,13 @@
 import '@firebase/auth';
 import '@firebase/database';
 import { EventManager } from './private';
-import { FirebaseNamespace, IClientApp, IClientAuth, IClientAuthProviders, IClientConfig, IMockConfig, SDK } from '@forest-fire/types';
+import { FirebaseNamespace, IAbstractedDatabase, IClientApp, IClientAuth, IClientAuthProviders, IClientConfig, IMockConfig, SDK } from '@forest-fire/types';
 import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
 import { FirebaseDatabase } from '@firebase/database-types';
-import type { IAbstractedDatabase } from '@forest-fire/abstracted-database';
 export declare let MOCK_LOADING_TIMEOUT: number;
 export { IEmitter } from './private';
-export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb, IAbstractedDatabase {
+import type { Mock as IMockApi } from 'firemock';
+export declare class RealTimeClient extends RealTimeDb implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
     sdk: SDK;
     /**
      * Uses configuration to connect to the `RealTimeDb` database using the Client SDK

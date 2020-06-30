@@ -1,6 +1,7 @@
 import { FirestoreDb, IFirestoreDb } from '@forest-fire/firestore-db';
-import { IClientApp, IClientAuth, IClientConfig, IMockConfig, SDK } from '@forest-fire/types';
-export declare class FirestoreClient extends FirestoreDb implements IFirestoreDb {
+import { IAbstractedDatabase, IClientApp, IClientAuth, IClientConfig, IMockConfig, SDK } from '@forest-fire/types';
+import type { Mock as IMockApi } from 'firemock';
+export declare class FirestoreClient extends FirestoreDb implements IFirestoreDb, IAbstractedDatabase<IMockApi> {
     sdk: SDK;
     static connect(config: IClientConfig | IMockConfig): Promise<FirestoreClient>;
     protected _isAdminApi: boolean;

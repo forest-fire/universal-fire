@@ -1,3 +1,3 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=IAbstractedDatabase.js.map
+//# sourceMappingURL=abstracted-database.js.map

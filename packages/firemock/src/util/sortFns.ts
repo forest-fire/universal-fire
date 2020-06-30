@@ -1,5 +1,6 @@
 import { IDictionary } from 'common-types';
-import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
+import { RealQueryOrderType } from '@forest-fire/types';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 
 export type ISortFns = (a: any, b: any) => number;
 

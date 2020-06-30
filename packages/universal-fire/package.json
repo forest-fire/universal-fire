@@ -47,6 +47,7 @@
     "@forest-fire/serialized-query": "^0.53.7",
     "@forest-fire/serializer-factory": "^0.53.6",
     "@forest-fire/types": "^0.53.6",
+    "firemock": "^0.53.6",
     "common-types": "^1.15.7"
   },
   "license": "MIT"

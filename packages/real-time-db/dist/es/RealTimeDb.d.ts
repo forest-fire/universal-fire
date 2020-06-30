@@ -1,7 +1,6 @@
-import { AbstractedDatabase, IAbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IAdminEmitter, IClientEmitter, IFirebaseConnectionCallback, IFirebaseListener, IFirebaseWatchHandler, IMockLoadingState, IRealTimeDb } from './index';
-import { IAdminApp, IClientApp, IDatabaseConfig, IMockConfigOptions, IRtdbDataSnapshot, IRtdbDatabase, IRtdbDbEvent, IRtdbReference } from '@forest-fire/types';
-import { ISerializedQuery } from '@forest-fire/serialized-query';
+import { IAbstractedDatabase, IAdminApp, IClientApp, IDatabaseConfig, IMockConfigOptions, IRtdbDataSnapshot, IRtdbDatabase, IRtdbDbEvent, IRtdbReference, ISerializedQuery } from '@forest-fire/types';
+import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IDictionary } from 'common-types';
 /** time by which the dynamically loaded mock library should be loaded */
 export declare const MOCK_LOADING_TIMEOUT = 2000;

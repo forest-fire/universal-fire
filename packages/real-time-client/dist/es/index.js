@@ -18772,6 +18772,13 @@ function isClientConfig(config) {
         : false;
 }
 
+var RealQueryOrderType;
+(function (RealQueryOrderType) {
+    RealQueryOrderType["orderByChild"] = "orderByChild";
+    RealQueryOrderType["orderByKey"] = "orderByKey";
+    RealQueryOrderType["orderByValue"] = "orderByValue";
+})(RealQueryOrderType || (RealQueryOrderType = {}));
+
 /**
  * Returns an array of named apps that are running under
  * Firebase's control (admin API)
@@ -20141,13 +20148,13 @@ function slashNotation$1(path) {
 class SerializedRealTimeQuery extends BaseSerializer {
     constructor() {
         super(...arguments);
-        this._orderBy = "orderByKey";
+        this._orderBy = 'orderByKey';
     }
-    static path(path = "/") {
+    static path(path = '/') {
         return new SerializedRealTimeQuery(path);
     }
     startAt(value, key) {
-        this.validateKey("startAt", key, [
+        this.validateKey('startAt', key, [
             RealQueryOrderType.orderByChild,
             RealQueryOrderType.orderByValue,
         ]);
@@ -20155,7 +20162,7 @@ class SerializedRealTimeQuery extends BaseSerializer {
         return this;
     }
     endAt(value, key) {
-        this.validateKey("endAt", key, [
+        this.validateKey('endAt', key, [
             RealQueryOrderType.orderByChild,
             RealQueryOrderType.orderByValue,
         ]);
@@ -20164,7 +20171,7 @@ class SerializedRealTimeQuery extends BaseSerializer {
     }
     equalTo(value, key) {
         super.equalTo(value, key);
-        this.validateKey("equalTo", key, [
+        this.validateKey('equalTo', key, [
             RealQueryOrderType.orderByChild,
             RealQueryOrderType.orderByValue,
         ]);
@@ -20174,13 +20181,13 @@ class SerializedRealTimeQuery extends BaseSerializer {
         const database = db || this.db;
         let q = database.ref(this.path);
         switch (this._orderBy) {
-            case "orderByKey":
+            case 'orderByKey':
                 q = q.orderByKey();
                 break;
-            case "orderByValue":
+            case 'orderByValue':
                 q = q.orderByValue();
                 break;
-            case "orderByChild":
+            case 'orderByChild':
                 q = q.orderByChild(this.identity.orderByKey);
                 break;
         }
@@ -20205,20 +20212,20 @@ class SerializedRealTimeQuery extends BaseSerializer {
     }
     async execute(db) {
         const database = db || this.db;
-        const snapshot = await this.deserialize(database).once("value");
+        const snapshot = await this.deserialize(database).once('value');
         return snapshot;
     }
     where(operation, value, key) {
         switch (operation) {
-            case "=":
+            case '=':
                 return this.equalTo(value, key);
-            case ">":
+            case '>':
                 return this.startAt(value, key);
-            case "<":
+            case '<':
                 return this.endAt(value, key);
             default:
                 const err = new Error(`Unknown comparison operator: ${operation}`);
-                err.code = "invalid-operator";
+                err.code = 'invalid-operator';
                 throw err;
         }
     }
@@ -20233,17 +20240,10 @@ class SerializedRealTimeQuery extends BaseSerializer {
     validateKey(caller, key, allowed) {
         const isNotAllowed = allowed.includes(this._orderBy) === false;
         if (key && isNotAllowed) {
-            throw new Error(`You can not use the "key" parameter with ${caller}() when using a "${this._orderBy}" sort. Valid ordering strategies are: ${allowed.join(", ")}`);
+            throw new Error(`You can not use the "key" parameter with ${caller}() when using a "${this._orderBy}" sort. Valid ordering strategies are: ${allowed.join(', ')}`);
         }
     }
 }
-
-var RealQueryOrderType;
-(function (RealQueryOrderType) {
-    RealQueryOrderType["orderByChild"] = "orderByChild";
-    RealQueryOrderType["orderByKey"] = "orderByKey";
-    RealQueryOrderType["orderByValue"] = "orderByValue";
-})(RealQueryOrderType || (RealQueryOrderType = {}));
 
 class RealTimeDb extends AbstractedDatabase {
     constructor() {
@@ -20655,7 +20655,7 @@ class RealTimeDb extends AbstractedDatabase {
      */
     async getFireMock(config = {}) {
         const FireMock = await import(
-        /* webpackChunkName: "firemock" */ './index-92dbcd27.js');
+        /* webpackChunkName: "firemock" */ './index-32df3add.js');
         this._mock = await FireMock.Mock.prepare(config);
     }
 }

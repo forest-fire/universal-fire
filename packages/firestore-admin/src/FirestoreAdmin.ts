@@ -9,6 +9,7 @@ import {
   getRunningFirebaseApp,
 } from '@forest-fire/utility';
 import {
+  IAbstractedDatabase,
   IAdminApp,
   IAdminAuth,
   IAdminConfig,
@@ -20,10 +21,10 @@ import {
 } from '@forest-fire/types';
 
 import { FirestoreDb } from '@forest-fire/firestore-db';
-import { IAbstractedDatabase } from '@forest-fire/abstracted-database';
+import type { Mock as IMockApi } from 'firemock';
 
 export class FirestoreAdmin extends FirestoreDb
-  implements IAdminSdk, IAbstractedDatabase {
+  implements IAdminSdk, IAbstractedDatabase<IMockApi> {
   sdk = SDK.FirestoreAdmin;
   static async connect(config: IAdminConfig | IMockConfig) {
     const obj = new FirestoreAdmin(config);

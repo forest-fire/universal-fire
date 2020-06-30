@@ -5,9 +5,9 @@ import type {
   IFirestoreQuery,
   IFirestoreQueryOrderType,
   ISimplifiedDatabase,
-} from './index';
+  IFirestoreQuerySnapshot,
+} from '@forest-fire/types';
 import { BaseSerializer } from './index';
-import type { IFirestoreQuerySnapshot } from '@forest-fire/types';
 
 /**
  * Provides a way to serialize the full characteristics of a Firebase Firestore

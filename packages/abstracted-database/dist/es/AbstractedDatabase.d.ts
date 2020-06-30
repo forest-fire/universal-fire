@@ -1,7 +1,5 @@
-import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbDbEvent, SDK, IClientAuthProviders } from '@forest-fire/types';
+import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbDbEvent, SDK, IClientAuthProviders, IAppInfo, IAbstractedDatabase, ISerializedQuery } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
-import { ISerializedQuery } from '@forest-fire/serialized-query';
-import { IAppInfo, IAbstractedDatabase } from './IAbstractedDatabase';
 export declare abstract class AbstractedDatabase implements IAbstractedDatabase {
     readonly sdk: SDK;
     /**

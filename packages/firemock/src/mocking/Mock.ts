@@ -140,6 +140,9 @@ export class Mock {
     restoreEvents();
   }
 
+  /**
+   * Gives access to a mocked version of the Client Auth SDK
+   */
   public async auth() {
     return fireAuth();
   }

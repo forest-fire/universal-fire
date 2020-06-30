@@ -2,40 +2,40 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SerializedRealTimeQuery = void 0;
 const index_1 = require("./index");
-const index_2 = require("./index");
+const types_1 = require("@forest-fire/types");
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime
  * Database query.
  */
-class SerializedRealTimeQuery extends index_2.BaseSerializer {
+class SerializedRealTimeQuery extends index_1.BaseSerializer {
     constructor() {
         super(...arguments);
-        this._orderBy = "orderByKey";
+        this._orderBy = 'orderByKey';
     }
-    static path(path = "/") {
+    static path(path = '/') {
         return new SerializedRealTimeQuery(path);
     }
     startAt(value, key) {
-        this.validateKey("startAt", key, [
-            index_1.RealQueryOrderType.orderByChild,
-            index_1.RealQueryOrderType.orderByValue,
+        this.validateKey('startAt', key, [
+            types_1.RealQueryOrderType.orderByChild,
+            types_1.RealQueryOrderType.orderByValue,
         ]);
         super.startAt(value, key);
         return this;
     }
     endAt(value, key) {
-        this.validateKey("endAt", key, [
-            index_1.RealQueryOrderType.orderByChild,
-            index_1.RealQueryOrderType.orderByValue,
+        this.validateKey('endAt', key, [
+            types_1.RealQueryOrderType.orderByChild,
+            types_1.RealQueryOrderType.orderByValue,
         ]);
         super.endAt(value, key);
         return this;
     }
     equalTo(value, key) {
         super.equalTo(value, key);
-        this.validateKey("equalTo", key, [
-            index_1.RealQueryOrderType.orderByChild,
-            index_1.RealQueryOrderType.orderByValue,
+        this.validateKey('equalTo', key, [
+            types_1.RealQueryOrderType.orderByChild,
+            types_1.RealQueryOrderType.orderByValue,
         ]);
         return this;
     }
@@ -43,13 +43,13 @@ class SerializedRealTimeQuery extends index_2.BaseSerializer {
         const database = db || this.db;
         let q = database.ref(this.path);
         switch (this._orderBy) {
-            case "orderByKey":
+            case 'orderByKey':
                 q = q.orderByKey();
                 break;
-            case "orderByValue":
+            case 'orderByValue':
                 q = q.orderByValue();
                 break;
-            case "orderByChild":
+            case 'orderByChild':
                 q = q.orderByChild(this.identity.orderByKey);
                 break;
         }
@@ -74,20 +74,20 @@ class SerializedRealTimeQuery extends index_2.BaseSerializer {
     }
     async execute(db) {
         const database = db || this.db;
-        const snapshot = await this.deserialize(database).once("value");
+        const snapshot = await this.deserialize(database).once('value');
         return snapshot;
     }
     where(operation, value, key) {
         switch (operation) {
-            case "=":
+            case '=':
                 return this.equalTo(value, key);
-            case ">":
+            case '>':
                 return this.startAt(value, key);
-            case "<":
+            case '<':
                 return this.endAt(value, key);
             default:
                 const err = new Error(`Unknown comparison operator: ${operation}`);
-                err.code = "invalid-operator";
+                err.code = 'invalid-operator';
                 throw err;
         }
     }
@@ -102,7 +102,7 @@ class SerializedRealTimeQuery extends index_2.BaseSerializer {
     validateKey(caller, key, allowed) {
         const isNotAllowed = allowed.includes(this._orderBy) === false;
         if (key && isNotAllowed) {
-            throw new Error(`You can not use the "key" parameter with ${caller}() when using a "${this._orderBy}" sort. Valid ordering strategies are: ${allowed.join(", ")}`);
+            throw new Error(`You can not use the "key" parameter with ${caller}() when using a "${this._orderBy}" sort. Valid ordering strategies are: ${allowed.join(', ')}`);
         }
     }
 }

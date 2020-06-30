@@ -8,6 +8,7 @@
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
   "scripts": {
+    "autoindex": "yarn do autoindex",
     "changed": "yarn lerna changed",
     "release": "yarn lerna publish",
     "clean": "yarn lerna clean --yes",

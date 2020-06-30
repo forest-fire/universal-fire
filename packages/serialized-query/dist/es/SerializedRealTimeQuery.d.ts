@@ -1,7 +1,6 @@
-import type { IDictionary } from "common-types";
-import { BaseSerializer } from "./index";
-import type { IComparisonOperator, IRealQueryOrderType, IRealTimeQuery, ISimplifiedDatabase } from "./index";
-import { IRtdbDataSnapshot } from "@forest-fire/types";
+import type { IDictionary } from 'common-types';
+import { BaseSerializer } from './index';
+import { IComparisonOperator, IRealQueryOrderType, IRealTimeQuery, ISimplifiedDatabase, IRtdbDataSnapshot } from '@forest-fire/types';
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime
  * Database query.

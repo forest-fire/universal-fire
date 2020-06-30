@@ -1,10 +1,6 @@
 import * as convert from 'typed-conversions';
 
 import {
-  AbstractedDatabase,
-  IAbstractedDatabase,
-} from '@forest-fire/abstracted-database';
-import {
   AbstractedProxyError,
   FileDepthExceeded,
   IAdminEmitter,
@@ -20,6 +16,7 @@ import {
   WatcherEventWrapper,
 } from './index';
 import {
+  IAbstractedDatabase,
   IAdminApp,
   IClientApp,
   IDatabaseConfig,
@@ -28,13 +25,12 @@ import {
   IRtdbDatabase,
   IRtdbDbEvent,
   IRtdbReference,
-} from '@forest-fire/types';
-import {
   ISerializedQuery,
-  SerializedRealTimeQuery,
-} from '@forest-fire/serialized-query';
+} from '@forest-fire/types';
 
+import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IDictionary } from 'common-types';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { slashNotation } from '@forest-fire/utility';
 
 /** time by which the dynamically loaded mock library should be loaded */

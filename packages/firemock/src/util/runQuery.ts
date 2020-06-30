@@ -1,11 +1,13 @@
-import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
-import { hashToArray, arrayToHash } from 'typed-conversions';
-import { IDictionary } from 'common-types';
-import { SortOrder } from '../@types/query-types';
-
-import * as sortFns from './sortFns';
-import * as queryFilters from './queryFilters';
 import * as limitFilters from './limitFilters';
+import * as queryFilters from './queryFilters';
+import * as sortFns from './sortFns';
+
+import { arrayToHash, hashToArray } from 'typed-conversions';
+
+import { IDictionary } from 'common-types';
+import { RealQueryOrderType } from '@forest-fire/types';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { SortOrder } from '../@types/query-types';
 
 const orderByKey = (list: IDictionary) => {
   const keys = Object.keys(list).sort();

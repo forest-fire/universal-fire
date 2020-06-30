@@ -16,5 +16,7 @@ __exportStar(require("./@types/fire-types"), exports);
 __exportStar(require("./@types/fire-proxies"), exports);
 __exportStar(require("./@types/fire-apis"), exports);
 __exportStar(require("./@types/events"), exports);
+__exportStar(require("./@types/serialized-query"), exports);
+__exportStar(require("./@types/abstracted-database"), exports);
 //#endregion export
 //# sourceMappingURL=index.js.map

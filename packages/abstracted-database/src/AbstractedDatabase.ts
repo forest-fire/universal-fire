@@ -10,11 +10,12 @@ import type {
   IRtdbDbEvent,
   SDK,
   IClientAuthProviders,
+  IAppInfo,
+  IAbstractedDatabase,
+  ISerializedQuery,
 } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
-import { ISerializedQuery } from '@forest-fire/serialized-query';
 import { FireError } from '@forest-fire/utility';
-import { IAppInfo, IAbstractedDatabase } from './IAbstractedDatabase';
 
 export abstract class AbstractedDatabase implements IAbstractedDatabase {
   public readonly sdk: SDK;

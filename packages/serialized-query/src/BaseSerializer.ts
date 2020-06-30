@@ -7,7 +7,7 @@ import type {
   ISerializedIdentity,
   ISimplifiedDatabase,
   ISerializedQuery,
-} from './index';
+} from '@forest-fire/types';
 
 export abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
   protected _endAtKey?: keyof T & string;

@@ -6,6 +6,7 @@ import {
 } from '@forest-fire/utility';
 import { FirestoreDb, IFirestoreDb } from '@forest-fire/firestore-db';
 import {
+  IAbstractedDatabase,
   IClientApp,
   IClientAuth,
   IClientConfig,
@@ -17,10 +18,12 @@ import {
 } from '@forest-fire/types';
 
 import { firebase } from '@firebase/app';
+import type { Mock as IMockApi } from 'firemock';
 
 import('@firebase/firestore');
 
-export class FirestoreClient extends FirestoreDb implements IFirestoreDb {
+export class FirestoreClient extends FirestoreDb
+  implements IFirestoreDb, IAbstractedDatabase<IMockApi> {
   sdk = SDK.FirestoreClient;
   static async connect(config: IClientConfig | IMockConfig) {
     const obj = new FirestoreClient(config);

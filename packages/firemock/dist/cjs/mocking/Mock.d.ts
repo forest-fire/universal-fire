@@ -51,6 +51,9 @@ export declare class Mock {
      * events out.
      */
     restoreEvents(): void;
+    /**
+     * Gives access to a mocked version of the Client Auth SDK
+     */
     auth(): Promise<import("@forest-fire/types").IMockAuth>;
     adminSdk(): Promise<IAdminAuth>;
     get authProviders(): FirebaseNamespace['auth'];

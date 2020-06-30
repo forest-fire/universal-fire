@@ -30,7 +30,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.53.6",
+    "@forest-fire/types": "^0.53.6",
     "@forest-fire/serialized-query": "^0.53.6",
     "common-types": "^1.14.3"
   },

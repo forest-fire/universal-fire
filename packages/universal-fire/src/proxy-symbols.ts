@@ -13,13 +13,18 @@ export type {
   ActionCodeSettings,
   IPathBasedWatchEvent,
   IValueBasedWatchEvent,
-  IAbstractedEvents,
+  IAbstractedEvent,
 } from '@forest-fire/types';
+import type { Mock as IMockApi } from 'firemock';
 
 export { SerializedQuery } from '@forest-fire/serializer-factory';
-export type {
+import type {
   IComparisonOperator,
-  ISerializedQuery,
-} from '@forest-fire/serialized-query';
+  ISerializedQuery as ISQ,
+} from '@forest-fire/types';
+export type ISerializedQuery = ISQ<IMockApi>;
 
-export { IAbstractedDatabase } from '@forest-fire/abstracted-database';
+export { IComparisonOperator, IMockApi };
+
+import { IAbstractedDatabase as IAD } from '@forest-fire/types';
+export type IAbstractedDatabase = IAD<IMockApi>;

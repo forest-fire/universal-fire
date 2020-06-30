@@ -11,5 +11,4 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./AbstractedDatabase"), exports);
-__exportStar(require("./IAbstractedDatabase"), exports);
 //# sourceMappingURL=index.js.map

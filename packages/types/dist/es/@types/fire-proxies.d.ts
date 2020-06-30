@@ -64,4 +64,4 @@ export declare type IFirestoreDatabase = IClientFirestoreDatabase | IAdminFirest
 export declare type IAdminRtdbDatabase = adminDatabase.Database;
 export declare type IRtdbDatabase = IClientRtdbDatabase | IAdminRtdbDatabase;
 /** watcher events from either Firestore or RealTime database*/
-export declare type IAbstractedEvents = IRtdbDbEvent | IFirestoreDbEvent;
+export declare type IAbstractedEvent = IRtdbDbEvent | IFirestoreDbEvent;

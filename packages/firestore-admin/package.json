@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "@forest-fire/abstracted-database": "^0.53.6",
+    "firemock": "^0.53.6",
     "@forest-fire/firestore-db": "^0.53.6",
     "@forest-fire/types": "^0.53.6",
     "@forest-fire/utility": "^0.53.6",

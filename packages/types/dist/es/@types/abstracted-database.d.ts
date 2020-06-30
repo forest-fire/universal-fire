@@ -1,11 +1,10 @@
-import { IClientAuthProviders, SDK, IClientAuth, IAdminAuth, IDatabaseConfig, IFirestoreDbEvent, IRtdbDbEvent } from '@forest-fire/types';
-import type { Mock as MockDb } from 'firemock';
-import { ISerializedQuery } from '@forest-fire/serialized-query';
+import { IAbstractedEvent, IAdminAuth, IClientAuth, IClientAuthProviders, IDatabaseConfig, ISerializedQuery, SDK } from '../index';
+import { IDictionary } from 'common-types';
 /**
  * The public contract that any SDK client must meet to behave
  * like an _abstracted database_.
  */
-export interface IAbstractedDatabase {
+export interface IAbstractedDatabase<TMock = IDictionary> {
     /** the Firebase SDK which is being used as an abstracted database */
     sdk: SDK;
     /** the Firebase App instance for this DB connection */
@@ -34,7 +33,7 @@ export interface IAbstractedDatabase {
     isMockDb: boolean;
     isConnected: boolean;
     config: IDatabaseConfig;
-    mock: MockDb;
+    mock: TMock;
     ref: (path?: string) => any;
     getList: <T = any>(path: string | ISerializedQuery<T>, idProp?: string) => Promise<T[]>;
     getPushKey: (path: string) => Promise<string>;
@@ -43,8 +42,8 @@ export interface IAbstractedDatabase {
     update: <T = any>(path: string, value: Partial<T>) => Promise<void>;
     set: <T = any>(path: string, value: T) => Promise<void>;
     remove: (path: string, ignoreMissing?: boolean) => Promise<any>;
-    watch: (target: string | ISerializedQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbDbEvent | IRtdbDbEvent[], cb: any) => void;
-    unWatch: (events?: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbDbEvent | IRtdbDbEvent[], cb?: any) => void;
+    watch: (target: string | ISerializedQuery, events: IAbstractedEvent | IAbstractedEvent[], cb: any) => void;
+    unWatch: (events?: IAbstractedEvent | IAbstractedEvent[], cb?: any) => void;
 }
 export interface IAppInfo {
     name: string;

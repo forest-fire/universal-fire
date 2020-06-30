@@ -1,7 +1,7 @@
 import * as convert from 'typed-conversions';
-import { AbstractedDatabase, } from '@forest-fire/abstracted-database';
 import { AbstractedProxyError, FileDepthExceeded, PermissionDenied, RealTimeDbError, UndefinedAssignment, WatcherEventWrapper, } from './index';
-import { SerializedRealTimeQuery, } from '@forest-fire/serialized-query';
+import { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { slashNotation } from '@forest-fire/utility';
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;

@@ -7,6 +7,7 @@ import {
   getRunningFirebaseApp,
 } from '@forest-fire/utility';
 import {
+  IAbstractedDatabase,
   IAdminApp,
   IAdminAuth,
   IAdminConfig,
@@ -19,15 +20,16 @@ import {
 import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
 
 import { EventManager } from './EventManager';
-import { IAbstractedDatabase } from '@forest-fire/abstracted-database';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { adminAuthSdk } from 'firemock';
 import { debug } from './util';
 // TODO: reduce this to just named symbols which we need!
 import firebase from 'firebase-admin';
 
+import type { Mock as IMockApi } from 'firemock';
+
 export class RealTimeAdmin extends RealTimeDb
-  implements IRealTimeDb, IAbstractedDatabase {
+  implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
   sdk = SDK.RealTimeAdmin;
   /**
    * Instantiates a DB and then waits for the connection
