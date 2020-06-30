@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/firestore-admin",
-  "version": "0.53.4",
+  "version": "0.53.6",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -45,10 +45,10 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@forest-fire/firestore-db": "^0.53.4",
-    "@forest-fire/types": "^0.53.0",
-    "@forest-fire/utility": "^0.53.0",
-    "@forest-fire/abstracted-database": "^0.53.0",
+    "@forest-fire/abstracted-database": "^0.53.6",
+    "@forest-fire/firestore-db": "^0.53.6",
+    "@forest-fire/types": "^0.53.6",
+    "@forest-fire/utility": "^0.53.6",
     "firebase-admin": "^8.13.0"
   },
   "license": "MIT"
