@@ -1,5 +1,4 @@
-import resolve from '@rollup/plugin-node-resolve';
-import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 
 function moduleExport(choice) {
   return {
@@ -7,14 +6,13 @@ function moduleExport(choice) {
     output: {
       dir: `./dist/${choice}`,
       format: choice,
-      sourcemap: 'hidden',
+      sourcemap: true,
     },
     external: ['firemock', 'firebase-admin'],
     plugins: [
-      // resolve(),
       typescript({
         rootDir: './',
-        tsconfig: `tsconfig.${choice}.json`,
+        tsconfig: `tsconfig.bundle.json`,
         declaration: choice === 'es' ? true : false,
       }),
     ],

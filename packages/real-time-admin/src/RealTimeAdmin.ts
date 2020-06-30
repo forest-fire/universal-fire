@@ -1,30 +1,33 @@
-// TODO: reduce this to just named symbols which we need!
-import firebase from 'firebase-admin';
-import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
-import { EventManager } from './EventManager';
-import { debug } from './util';
 import {
-  IAdminConfig,
-  IMockConfig,
-  isMockConfig,
-  isAdminConfig,
-  IAdminAuth,
-  IAdminApp,
-  IAdminRtdbDatabase,
-  SDK,
-} from '@forest-fire/types';
-import {
-  extractServiceAccount,
   FireError,
-  getRunningApps,
-  extractDataUrl,
-  getRunningFirebaseApp,
   determineDefaultAppName,
+  extractDataUrl,
+  extractServiceAccount,
+  getRunningApps,
+  getRunningFirebaseApp,
 } from '@forest-fire/utility';
+import {
+  IAdminApp,
+  IAdminAuth,
+  IAdminConfig,
+  IAdminRtdbDatabase,
+  IMockConfig,
+  SDK,
+  isAdminConfig,
+  isMockConfig,
+} from '@forest-fire/types';
+import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
+
+import { EventManager } from './EventManager';
+import { IAbstractedDatabase } from '@forest-fire/abstracted-database';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { adminAuthSdk } from 'firemock';
+import { debug } from './util';
+// TODO: reduce this to just named symbols which we need!
+import firebase from 'firebase-admin';
 
-export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
+export class RealTimeAdmin extends RealTimeDb
+  implements IRealTimeDb, IAbstractedDatabase {
   sdk = SDK.RealTimeAdmin;
   /**
    * Instantiates a DB and then waits for the connection
@@ -62,24 +65,24 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
       name: determineDefaultAppName(config),
     } as IAdminConfig | IMockConfig;
     if (isAdminConfig(config)) {
-      this._config = config
+      this._config = config;
       const runningApps = getRunningApps(firebase.apps);
       RealTimeAdmin._connections = firebase.apps;
       const credential = firebase.credential.cert(config.serviceAccount);
       this._app = runningApps.includes(this._config.name)
         ? getRunningFirebaseApp<IAdminApp>(
-          config.name,
-          (firebase.apps as unknown) as IAdminApp[]
-        )
+            config.name,
+            (firebase.apps as unknown) as IAdminApp[]
+          )
         : firebase.initializeApp(
-          {
-            credential,
-            databaseURL: config.databaseURL,
-          },
-          config.name
-        );
+            {
+              credential,
+              databaseURL: config.databaseURL,
+            },
+            config.name
+          );
     } else if (isMockConfig(config)) {
-      this._config = config
+      this._config = config;
     } else {
       throw new FireError(
         `The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(
@@ -192,8 +195,8 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeDb {
   protected async _connectRealDb(config: IAdminConfig) {
     const found = firebase.apps.find((i) => i.name === this.config.name);
     this._database = (found &&
-      found.database &&
-      typeof found.database !== 'function'
+    found.database &&
+    typeof found.database !== 'function'
       ? found.database
       : this._app.database()) as IAdminRtdbDatabase;
     this.enableDatabaseLogging = firebase.database.enableLogging.bind(

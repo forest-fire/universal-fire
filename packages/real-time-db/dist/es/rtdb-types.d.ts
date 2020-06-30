@@ -1,7 +1,7 @@
 import type { IDictionary } from 'common-types';
 import type { RealTimeDb } from './index';
 import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
-import type { IRtdbDbEvent, IRtdbReference, IRtdbDataSnapshot, IRtdbOnDisconnect, IRtdbThenableReference } from '@forest-fire/types';
+import type { IRtdbReference, IRtdbDataSnapshot, IRtdbOnDisconnect, IRtdbThenableReference, IFirebaseWatchContext, IPathSetter } from '@forest-fire/types';
 export declare type IMockLoadingState = 'not-applicable' | 'loaded' | 'loading' | 'timed-out';
 export declare type DebuggingCallback = (message: string) => void;
 export interface IFirebaseListener {
@@ -21,21 +21,7 @@ export interface IClientEmitter extends IEmitter {
 export interface IAdminEmitter extends IEmitter {
     connection: undefined;
 }
-export interface IPathSetter<T = any> {
-    path: string;
-    value: T;
-}
 export declare type IFirebaseWatchEvent = IValueBasedWatchEvent | IPathBasedWatchEvent;
-export interface IFirebaseWatchContext {
-    eventType: IRtdbDbEvent;
-    targetType: any;
-    /**
-     * this tagging has been added as optional to not break prior API but all
-     * server events will set this variable so that when it is received by **Firemodel**
-     * it can distiguish local versus server triggered events.
-     */
-    kind?: 'server-event';
-}
 /** A standard watch event coming from the Firebase DB */
 export interface IValueBasedWatchEvent extends IFirebaseWatchContext {
     targetType: 'query';

@@ -15,5 +15,6 @@ __exportStar(require("./fire-type-fns"), exports);
 __exportStar(require("./@types/fire-types"), exports);
 __exportStar(require("./@types/fire-proxies"), exports);
 __exportStar(require("./@types/fire-apis"), exports);
+__exportStar(require("./@types/events"), exports);
 //#endregion export
 //# sourceMappingURL=index.js.map

@@ -1,0 +1,399 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopNamespace(e) {
+    if (e && e.__esModule) { return e; } else {
+        var n = {};
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                var d = Object.getOwnPropertyDescriptor(e, k);
+                Object.defineProperty(n, k, d.get ? d : {
+                    enumerable: true,
+                    get: function () {
+                        return e[k];
+                    }
+                });
+            });
+        }
+        n['default'] = e;
+        return n;
+    }
+}
+
+var firebase = require('firebase-admin');
+
+class FireError extends Error {
+    constructor(message, 
+    /**
+     * a type/subtype of the error or you can just state the "subtype"
+     * and it will
+     */
+    classification = 'UniversalFire/error', statusCode = 400) {
+        super(message);
+        this.universalFire = true;
+        this.kind = 'FireError';
+        const parts = classification.split('/');
+        const klass = this.constructor.name;
+        this.name = parts.length === 2 ? classification : `${klass}/${parts[0]}`;
+        this.code = parts.length === 2 ? parts[1] : parts[0];
+        this.kind = parts[0];
+        this.statusCode = statusCode;
+    }
+}
+
+function isMockConfig(config) {
+    return config && config.mocking === true;
+}
+function isAdminConfig(config) {
+    return config &&
+        config.mocking !== true &&
+        config.apiKey === undefined &&
+        config.databaseURL !== undefined
+        ? true
+        : false;
+}
+
+/**
+ * Takes as input a variety of possible formats and converts it into
+ * a Firebase service account (`IServiceAccount`). The input formats
+ * which it accepts are:
+ *
+ * - an `IServiceAccount` object (_in which case nothing to be done_)
+ * - a JSON encoded string of the `IServiceAccount` object
+ * - a base64 encoded string of a `IServiceAccount` object (_possible but not recommended
+ * as an ENV variable may run out of room to encode_)
+ * - a base64 encoded GZIP of a `IServiceAccount` object (_this is ideal for ENV vars
+ * which have limited length and must be string_)
+ */
+function extractServiceAccount(config) {
+    if (isMockConfig(config)) {
+        return {};
+    }
+    const serviceAccount = config && config.mocking !== true && config.serviceAccount
+        ? config.serviceAccount
+        : process.env['FIREBASE_SERVICE_ACCOUNT'];
+    if (!serviceAccount) {
+        throw new FireError(`There was no service account defined (either passed in or in the FIREBASE_SERVICE_ACCOUNT ENV variable)!`, 'invalid-configuration');
+    }
+    switch (typeof serviceAccount) {
+        case 'object':
+            if (serviceAccount.privateKey && serviceAccount.projectId) {
+                return serviceAccount;
+            }
+            else {
+                throw new FireError(`An attempt to use the Admin SDK failed because a service account object was passed in but it did NOT have the required properties of "privateKey" and "projectId".`, 'invalid-configuration');
+            }
+        case 'string':
+            // JSON
+            if (looksLikeJson(serviceAccount)) {
+                try {
+                    const data = JSON.parse(serviceAccount);
+                    if (data.private_key && data.type === 'service_account') {
+                        return data;
+                    }
+                    else {
+                        throw new FireError(`The configuration appeared to contain a JSON encoded representation of the service account but after decoding it the private_key and/or the type property were not correctly set.`, 'invalid-configuration');
+                    }
+                }
+                catch (e) {
+                    throw new FireError(`The configuration appeared to contain a JSOn encoded representation but was unable to be parsed: ${e.message}`, 'invalid-configuration');
+                }
+            }
+            // BASE 64
+            try {
+                const buffer = Buffer.from(serviceAccount, 'base64');
+                return JSON.parse(buffer.toString());
+            }
+            catch (e) {
+                throw new FireError(`Failed to convert a string based service account to IServiceAccount! The error was: ${e.message}`, 'invalid-configuration');
+            }
+        default:
+            throw new FireError(`Couldn't extract the serviceAccount from ENV variables! The configuration was:\n${(2)}`, 'invalid-configuration');
+    }
+}
+
+/**
+ * extracts the Firebase **databaseURL** property either from the passed in
+ * configuration or via the FIREBASE_DATABASE_URL environment variable.
+ */
+function extractDataUrl(config) {
+    if (isMockConfig(config)) {
+        return 'https://mocking.com';
+    }
+    const dataUrl = config && config.databaseURL
+        ? config.databaseURL
+        : process.env['FIREBASE_DATABASE_URL'];
+    if (!dataUrl) {
+        throw new FireError(`There was no DATABASE URL provided! This needs to be passed in as part of the configuration or as the FIREBASE_DATABASE_URL environment variable.`, 'invalid-configuration');
+    }
+    return dataUrl;
+}
+
+/**
+ * Returns an array of named apps that are running under
+ * Firebase's control (admin API)
+ */
+function getRunningApps(apps) {
+    return apps.filter((i) => i !== null).map((i) => i.name);
+}
+
+/** Gets the  */
+function getRunningFirebaseApp(name, apps) {
+    const result = name
+        ? apps.find((i) => i && i.name === name)
+        : undefined;
+    if (!result) {
+        throw new FireError(`Attempt to get the Firebase app named "${name}" failed`, 'invalid-app-name');
+    }
+    return result;
+}
+
+function looksLikeJson(data) {
+    return data.trim().slice(0, 1) === '{' && data.trim().slice(-1) === '}'
+        ? true
+        : false;
+}
+
+function determineDefaultAppName(config) {
+    if (!config) {
+        return '[DEFAULT]';
+    }
+    return config.name
+        ? config.name
+        : config.databaseURL
+            ? config.databaseURL.replace(/.*https:\W*([\w-]*)\.((.|\n)*)/g, '$1')
+            : '[DEFAULT]';
+}
+
+class AbstractedDatabase {
+    constructor() {
+        /**
+         * Indicates if the database is using the admin SDK.
+         */
+        this._isAdminApi = false;
+        /**
+         * Indicates if the database is connected.
+         */
+        this._isConnected = false;
+    }
+    /**
+     * Returns key characteristics about the Firebase app being managed.
+     */
+    get app() {
+        if (this.config.mocking) {
+            throw new FireError(`The "app" object is provided as direct access to the Firebase API when using a real database but not when using a Mock DB!`, 'not-allowed');
+        }
+        if (this._app) {
+            return {
+                name: this._app.name,
+                databaseURL: this._app.options.databaseURL
+                    ? this._app.options.databaseURL
+                    : '',
+                projectId: this._app.options.projectId
+                    ? this._app.options.projectId
+                    : '',
+                storageBucket: this._app.options.storageBucket
+                    ? this._app.options.storageBucket
+                    : '',
+            };
+        }
+        throw new FireError('Attempt to access Firebase App without having instantiated it');
+    }
+    /**
+     * Provides a set of API's that are exposed by the various "providers". Examples
+     * include "emailPassword", "github", etc.
+     *
+     * > **Note:** this is only really available on the Client SDK's
+     */
+    get authProviders() {
+        throw new FireError(`Only the client SDK's have a authProviders property`);
+    }
+    /**
+     * Indicates if the database is using the admin SDK.
+     */
+    get isAdminApi() {
+        return this._isAdminApi;
+    }
+    /**
+     * Indicates if the database is a mock database or not
+     */
+    get isMockDb() {
+        return this._config.mocking;
+    }
+    /**
+     * The configuration used to setup/configure the database.
+     */
+    get config() {
+        return this._config;
+    }
+    /**
+     * Returns the mock API provided by **firemock**
+     * which in turn gives access to the actual database _state_ off of the
+     * `db` property.
+     *
+     * This is only available if the database has been configured as a mocking database; if it is _not_
+     * a mocked database a `AbstractedDatabase/not-allowed` error will be thrown.
+     */
+    get mock() {
+        if (!this.isMockDb) {
+            throw new FireError(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, 'AbstractedDatabase/not-allowed');
+        }
+        if (!this._mock) {
+            throw new FireError(`Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`);
+        }
+        return this._mock;
+    }
+    /**
+     * Returns true if the database is connected, false otherwis.
+     */
+    get isConnected() {
+        return this._isConnected;
+    }
+}
+
+class FirestoreDb extends AbstractedDatabase {
+    get database() {
+        if (this._database) {
+            return this._database;
+        }
+        throw new FireError('Attempt to use Firestore without having instantiated it', 'not-ready');
+    }
+    set database(value) {
+        this._database = value;
+    }
+    _isCollection(path) {
+        path = typeof path !== 'string' ? path.path : path;
+        return path.split('/').length % 2 === 0;
+    }
+    _isDocument(path) {
+        return this._isCollection(path) === false;
+    }
+    get mock() {
+        throw new Error('Not implemented');
+    }
+    async getList(path, idProp) {
+        path = typeof path !== 'string' ? path.path : path;
+        const querySnapshot = await this.database.collection(path).get();
+        // @ts-ignore
+        return querySnapshot.docs.map((doc) => {
+            return {
+                [idProp]: doc.id,
+                ...doc.data(),
+            };
+        });
+    }
+    async getPushKey(path) {
+        return this.database.collection(path).doc().id;
+    }
+    async getRecord(path, idProp = 'idProp') {
+        const documentSnapshot = await this.database.doc(path).get();
+        return {
+            ...documentSnapshot.data(),
+            [idProp]: documentSnapshot.id,
+        };
+    }
+    async getValue(path) {
+        throw new Error('Not implemented');
+    }
+    async update(path, value) {
+        await this.database.doc(path).update(value);
+    }
+    async set(path, value) {
+        await this.database.doc(path).set({ ...value });
+    }
+    async remove(path) {
+        const pathIsCollection = this._isCollection(path);
+        if (pathIsCollection) {
+            this._removeCollection(path);
+        }
+        else {
+            this._removeDocument(path);
+        }
+    }
+    watch(target, events, cb) {
+        throw new Error('Not implemented');
+    }
+    unWatch(events, cb) {
+        throw new Error('Not implemented');
+    }
+    ref(path = '/') {
+        throw new Error('Not implemented');
+    }
+    async _removeDocument(path) {
+        await this.database.doc(path).delete();
+    }
+    async _removeCollection(path) {
+        const batch = this.database.batch();
+        // @ts-ignore
+        this.database.collection(path).onSnapshot((snapshot) => {
+            // @ts-ignore
+            snapshot.docs.forEach((doc) => {
+                batch.delete(doc.ref);
+            });
+        });
+        // All or nothing.
+        await batch.commit();
+    }
+}
+
+class FirestoreAdmin extends FirestoreDb {
+    constructor(config) {
+        super();
+        this.sdk = "FirestoreAdmin" /* FirestoreAdmin */;
+        this._isAdminApi = true;
+        if (isMockConfig(config)) {
+            throw new FireError(`Mock is not supported by Firestore`, `invalid-configuration`);
+        }
+        if (!config) {
+            config = {
+                serviceAccount: extractServiceAccount(config),
+                databaseURL: extractDataUrl(config),
+            };
+        }
+        if (isAdminConfig(config)) {
+            config.serviceAccount =
+                config.serviceAccount || extractServiceAccount(config);
+            config.databaseURL = config.databaseURL || extractDataUrl(config);
+            config.name = determineDefaultAppName(config);
+            this._config = config;
+            const runningApps = getRunningApps(firebase.apps);
+            const credential = firebase.credential.cert(config.serviceAccount);
+            this._app = runningApps.includes(config.name)
+                ? getRunningFirebaseApp(config.name, firebase.apps)
+                : firebase.initializeApp({
+                    credential,
+                    databaseURL: config.databaseURL,
+                }, config.name);
+        }
+        else {
+            throw new FireError(`The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(config, null, 2)}`, 'invalid-configuration');
+        }
+        this._config = config;
+    }
+    static async connect(config) {
+        const obj = new FirestoreAdmin(config);
+        await obj.connect();
+        return obj;
+    }
+    async connect() {
+        if (this._isConnected) {
+            console.info(`Firestore ${this.config.name} already connected`);
+            return this;
+        }
+        await this.loadFirestoreApi();
+        this.database = this._app.firestore();
+    }
+    async auth() {
+        if (this._config.mocking) {
+            throw new FireError(`The auth API for MOCK databases is not yet implemented for Firestore`);
+        }
+        return firebase.auth(this._app);
+    }
+    async loadFirestoreApi() {
+        await Promise.resolve().then(function () { return _interopNamespace(require(/* webpackChunkName: "firebase-admin" */ 'firebase-admin')); });
+    }
+}
+
+exports.FirestoreAdmin = FirestoreAdmin;
+//# sourceMappingURL=index.js.map

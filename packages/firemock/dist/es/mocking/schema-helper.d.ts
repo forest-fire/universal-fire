@@ -1,4 +1,3 @@
-/// <reference types="faker" />
 import { ISchemaHelper } from "../@types";
 import type { FakerStatic } from '@forest-fire/types';
 export declare class SchemaHelper<T = any> implements ISchemaHelper<T> {

@@ -1,29 +1,22 @@
-// const typescript = require('@rollup/plugin-typescript');
-const typescript = require('rollup-plugin-typescript2');
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import typescript from 'rollup-plugin-typescript2';
 
 function moduleExport(choice) {
   return {
-    input: './src/RealTimeAdmin.ts',
+    input: './src/index.ts',
     output: {
       dir: `./dist/${choice}`,
       format: choice,
-      sourcemap: 'hidden',
+      sourcemap: true,
     },
-    external: [
-      'common-types',
-      '@firebase/auth',
-      '@firebase/app',
-      '@forest-fire/types',
-      '@forest-fire/utility',
-      'firemock',
-      'events',
-      'firebase-admin',
-    ],
+    external: ['@firebase/firestore', 'events', 'firebase-admin'],
     plugins: [
+      commonjs(),
+      resolve(),
       typescript({
         rootDir: './',
-        tsconfig: `tsconfig.${choice}.json`,
-        module: 'es2015',
+        tsconfig: `tsconfig.bundle.json`,
         declaration: choice === 'es' ? true : false,
       }),
     ],

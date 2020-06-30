@@ -1,2 +1,2 @@
-//#endregion Admin Rtdb API
+//#endregion Merged Types
 //# sourceMappingURL=fire-proxies.js.map

@@ -1,7 +1,5 @@
 import {
   IClientAuthProviders,
-  IFirestoreDatabase,
-  IRtdbDatabase,
   SDK,
   IClientAuth,
   IAdminAuth,

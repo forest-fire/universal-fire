@@ -1,4 +1,4 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-//#endregion Admin Rtdb API
+//#endregion Merged Types
 //# sourceMappingURL=fire-proxies.js.map

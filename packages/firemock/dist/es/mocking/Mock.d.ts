@@ -1,4 +1,3 @@
-/// <reference types="faker" />
 import { IDictionary } from 'common-types';
 import { Schema, Deployment } from "./";
 import { Reference } from "../rtdb";

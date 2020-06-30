@@ -10,8 +10,10 @@
   "scripts": {
     "changed": "yarn lerna changed",
     "release": "yarn lerna publish",
+    "clean": "yarn lerna clean --yes",
     "bootstrap": "yarn lerna bootstrap",
     "build": "run-s build:types build:shared build:base build:db build:sdk build:closure",
+    "build:full": "run-s clean bootstrap build",
     "build:types": "lerna exec --scope @forest-fire/types yarn build",
     "build:shared": "run-s build:shared:utility build:shared:serialized-query build:shared:serializer-factory",
     "build:shared:utility": "lerna exec --scope @forest-fire/utility yarn build",

@@ -1,9 +1,5 @@
-import {
-  IFirebaseWatchEvent,
-  IFirebaseWatchHandler,
-  IFirebaseWatchContext,
-} from './rtdb-types';
-import { IRtdbDataSnapshot } from '@forest-fire/types';
+import { IFirebaseWatchContext, IRtdbDataSnapshot } from '@forest-fire/types';
+import { IFirebaseWatchEvent, IFirebaseWatchHandler } from './rtdb-types';
 
 export const WatcherEventWrapper = (context: IFirebaseWatchContext) => (
   handler: IFirebaseWatchHandler

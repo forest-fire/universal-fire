@@ -1,25 +1,29 @@
 import * as firebase from 'firebase-admin';
-import { FirestoreDb } from '@forest-fire/firestore-db';
+
 import {
+  FireError,
   determineDefaultAppName,
   extractDataUrl,
   extractServiceAccount,
-  FireError,
   getRunningApps,
   getRunningFirebaseApp,
 } from '@forest-fire/utility';
 import {
-  IMockConfig,
-  isAdminConfig,
-  isMockConfig,
   IAdminApp,
   IAdminAuth,
   IAdminConfig,
   IAdminSdk,
+  IMockConfig,
   SDK,
+  isAdminConfig,
+  isMockConfig,
 } from '@forest-fire/types';
 
-export class FirestoreAdmin extends FirestoreDb implements IAdminSdk {
+import { FirestoreDb } from '@forest-fire/firestore-db';
+import { IAbstractedDatabase } from '@forest-fire/abstracted-database';
+
+export class FirestoreAdmin extends FirestoreDb
+  implements IAdminSdk, IAbstractedDatabase {
   sdk = SDK.FirestoreAdmin;
   static async connect(config: IAdminConfig | IMockConfig) {
     const obj = new FirestoreAdmin(config);
@@ -90,7 +94,13 @@ export class FirestoreAdmin extends FirestoreDb implements IAdminSdk {
   }
 
   public async auth(): Promise<IAdminAuth> {
-    return firebase.auth(this._app);
+    if (this._config.mocking) {
+      throw new FireError(
+        `The auth API for MOCK databases is not yet implemented for Firestore`
+      );
+    }
+
+    return firebase.auth(this._app as firebase.app.App);
   }
 
   protected async loadFirestoreApi() {

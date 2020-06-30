@@ -96,3 +96,8 @@ export type IFirestoreDatabase =
 export type IAdminRtdbDatabase = adminDatabase.Database;
 export type IRtdbDatabase = IClientRtdbDatabase | IAdminRtdbDatabase;
 //#endregion Admin Rtdb API
+
+//#region Merged Types
+/** watcher events from either Firestore or RealTime database*/
+export type IAbstractedEvents = IRtdbDbEvent | IFirestoreDbEvent;
+//#endregion Merged Types

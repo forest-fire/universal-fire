@@ -7,12 +7,17 @@ import type {
   IClientApp,
   IFirestoreDatabase,
   IFirestoreDbEvent,
+  SDK,
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
-import type { SerializedFirestoreQuery } from '@forest-fire/serialized-query';
+import type {
+  SerializedFirestoreQuery,
+  ISerializedQuery,
+} from '@forest-fire/serialized-query';
+import { IFirestoreDb } from './firestore-types';
 
 export abstract class FirestoreDb extends AbstractedDatabase
-  implements IAbstractedDatabase {
+  implements IFirestoreDb, IAbstractedDatabase {
   protected _database?: IFirestoreDatabase;
   protected _app!: IClientApp | IAdminApp;
 
@@ -30,12 +35,12 @@ export abstract class FirestoreDb extends AbstractedDatabase
     this._database = value;
   }
 
-  protected _isCollection(path: string | SerializedFirestoreQuery) {
+  protected _isCollection(path: string | ISerializedQuery) {
     path = typeof path !== 'string' ? path.path : path;
     return path.split('/').length % 2 === 0;
   }
 
-  protected _isDocument(path: string | SerializedFirestoreQuery) {
+  protected _isDocument(path: string | ISerializedQuery) {
     return this._isCollection(path) === false;
   }
 
@@ -44,7 +49,7 @@ export abstract class FirestoreDb extends AbstractedDatabase
   }
 
   public async getList<T = any>(
-    path: string | SerializedFirestoreQuery<T>,
+    path: string | ISerializedQuery<T>,
     idProp: string
   ): Promise<T[]> {
     path = typeof path !== 'string' ? path.path : path;
@@ -92,7 +97,7 @@ export abstract class FirestoreDb extends AbstractedDatabase
   }
 
   public watch(
-    target: string | SerializedFirestoreQuery,
+    target: string | ISerializedQuery,
     events: IFirestoreDbEvent | IFirestoreDbEvent[],
     cb: any
   ): void {
