@@ -1,8 +1,5 @@
 import { Mock, SchemaCallback } from '../src';
 
-// tslint:disable:no-implicit-dependencies
-import { expect } from 'chai';
-
 const animalMock: SchemaCallback = (h) => () => ({
   name: h.faker.name.firstName(),
   age: h.faker.helpers.randomize([1, 2, 4]),
@@ -19,9 +16,9 @@ describe('Setting null to db path →', () => {
     m.generate();
     const results = await m.ref('/animals').once('value');
 
-    expect(results.numChildren()).to.equal(5);
+    expect(results.numChildren()).toBe(5);
     await m.ref('/animals/1234').set(null);
     const results2 = await m.ref('/animals').once('value');
-    expect(results2.numChildren()).to.equal(4);
+    expect(results2.numChildren()).toBe(4);
   });
 });

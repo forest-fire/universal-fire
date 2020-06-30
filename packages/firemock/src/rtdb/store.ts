@@ -1,16 +1,14 @@
 // tslint:disable:no-implicit-dependencies
 import { IDictionary, pathJoin } from 'common-types';
-import { dotify, dotifyKeys, getKey, getParent, join } from '../util/index';
-import { getListeners, notify, removeAllListeners } from '../rtdb/index';
+import { dotify, dotifyKeys, get, getKey, getParent, join, set } from '@/util';
+import { getListeners, notify, removeAllListeners } from '@/rtdb';
 
-import { IMockWatcherGroupEvent } from '../@types/rtdb-types';
+import { IMockWatcherGroupEvent } from '@/@types';
 import copy from 'fast-copy';
 import { deepEqual } from 'fast-equals';
 import deepmerge from 'deepmerge';
 import { key as fbKey } from 'firebase-key';
-import get from 'lodash.get';
-import { auth as mockedAuth } from '../auth';
-import set from 'lodash.set';
+import { auth as mockedAuth } from '@/auth';
 
 /**
  * The in-memory dictionary/hash mantained by the mock RTDB to represent

@@ -1,12 +1,10 @@
 import { Mock } from '../src';
-// tslint:disable:no-implicit-dependencies
-import { expect } from 'chai';
 
 describe('EmailAuthProvider =>', () => {
   it('EmailAuthProvider exists and has appropriate props', async () => {
     const m = new Mock();
-    expect(m.authProviders).to.be.an('object');
-    expect(m.authProviders.EmailAuthProvider.credential).to.be.a('function');
+    expect(m.authProviders).toBeInstanceOf(Object);
+    expect(m.authProviders.EmailAuthProvider.credential).toBeFunction();
   });
 
   it('calling credential() gives back a valid AuthCredential', () => {
@@ -16,9 +14,9 @@ describe('EmailAuthProvider =>', () => {
       'me@somewhere.com',
       "i'm a little teacup"
     );
-    expect(response).to.be.a('object');
-    expect(response.providerId).to.be.a('string');
-    expect(response.signInMethod).to.equal('email-and-password');
-    expect(response.toJSON).to.be.a('function');
+    expect(response).toBeInstanceOf(Object);
+    expect(response.providerId).toBeString();
+    expect(response.signInMethod).toBe('email-and-password');
+    expect(response.toJSON).toBeFunction();
   });
 });

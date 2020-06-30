@@ -1,5 +1,3 @@
-// tslint:disable:no-implicit-dependencies
-import { expect } from 'chai';
 import * as helpers from './testing/helpers';
 import { SchemaHelper, Mock, Reference } from '../src';
 import {
@@ -32,53 +30,93 @@ describe('Listener events ->', () => {
     queryRef.on('child_removed', cb('child_removed'));
 
     updateDB('userProfile/abcd/name', 'Bob Marley');
-    events.map((e) => expect(e.key).to.equal('abcd'));
-    expect(events.map((e) => e.eventType)).includes('child_added');
-    expect(events.map((e) => e.eventType)).includes('child_changed');
-    expect(events.map((e) => e.eventType)).not.includes('child_updated');
-    expect(events.map((e) => e.eventType)).includes('child_moved');
+    events.map((e) => expect(e.key).toBe('abcd'));
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_added'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_changed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_updated'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_moved'])
+    );
     events = [];
 
     pushDB('userProfile', { name: 'Jane Doe' });
     events.map((e) => {
-      expect(e.key).to.be.a('string');
-      expect(e.key.slice(0, 1)).to.equal('-');
+      expect(e.key).toBeString();
+      expect(e.key.slice(0, 1)).toBe('-');
     });
-    expect(events.map((e) => e.eventType)).includes('child_added');
-    expect(events.map((e) => e.eventType)).includes('child_changed');
-    expect(events.map((e) => e.eventType)).not.includes('child_removed');
-    expect(events.map((e) => e.eventType)).includes('child_moved');
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_added'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_changed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_removed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_moved'])
+    );
     events = [];
 
     setDB('userProfile/jjohnson', { name: 'Jack Johnson', age: 45 });
-    events.map((e) => expect(e.key).to.equal('jjohnson'));
-    expect(events.map((e) => e.eventType)).includes('child_added');
-    expect(events.map((e) => e.eventType)).includes('child_changed');
-    expect(events.map((e) => e.eventType)).not.includes('child_removed');
-    expect(events.map((e) => e.eventType)).includes('child_moved');
+    events.map((e) => expect(e.key).toBe('jjohnson'));
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_added'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_changed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_removed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_moved'])
+    );
     events = [];
 
     updateDB('userProfile/jjohnson/age', 99);
-    events.map((e) => expect(e.key).to.equal('jjohnson'));
-    expect(events.map((e) => e.eventType)).not.includes('child_added');
-    expect(events.map((e) => e.eventType)).includes('child_changed');
-    expect(events.map((e) => e.eventType)).not.includes('child_removed');
-    expect(events.map((e) => e.eventType)).not.includes('child_moved');
+    events.map((e) => expect(e.key).toBe('jjohnson'));
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_added'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_changed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_removed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_moved'])
+    );
     events = [];
 
     pushDB('userProfile', { name: 'Chris Christy' });
     events.map((e) => {
-      expect(e.key).to.be.a('string');
-      expect(e.key.slice(0, 1)).to.equal('-');
+      expect(e.key).toBeString();
+      expect(e.key.slice(0, 1)).toBe('-');
     });
-    expect(events.map((e) => e.eventType)).includes('child_changed');
-    expect(events.map((e) => e.eventType)).includes('child_added');
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_changed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_added'])
+    );
     events = [];
 
     setDB('userProfile/jjohnson/age', { name: 'Jack Johnson', age: 88 });
-    events.map((e) => expect(e.key).to.equal('jjohnson'));
-    expect(events.map((e) => e.eventType)).includes('child_changed');
-    expect(events.map((e) => e.eventType)).not.includes('child_added');
+    events.map((e) => expect(e.key).toBe('jjohnson'));
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_changed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_added'])
+    );
   });
 
   it('removing a record that exists sends child_removed event', async () => {
@@ -97,17 +135,31 @@ describe('Listener events ->', () => {
     queryRef.on('child_removed', cb('child_removed'));
 
     updateDB('userProfile/p-tosh', { name: 'Peter Tosh' });
-    events.map((e) => expect(e.key).to.equal('p-tosh'));
-    expect(events.map((e) => e.eventType)).includes('child_added');
-    expect(events.map((e) => e.eventType)).includes('child_changed');
-    expect(events.map((e) => e.eventType)).not.includes('child_removed');
-    expect(events.map((e) => e.eventType)).includes('child_moved');
+    events.map((e) => expect(e.key).toBe('p-tosh'));
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_added'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_changed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_removed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_moved'])
+    );
     events = [];
     removeDB('userProfile/p-tosh');
-    events.map((e) => expect(e.key).to.equal('p-tosh'));
-    expect(events.map((e) => e.eventType)).includes('child_removed');
-    expect(events.map((e) => e.eventType)).not.includes('child_changed');
-    expect(events.map((e) => e.eventType)).not.includes('child_added');
+    events.map((e) => expect(e.key).toBe('p-tosh'));
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_removed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_changed'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_added'])
+    );
     events = [];
   });
 
@@ -126,7 +178,7 @@ describe('Listener events ->', () => {
     queryRef.on('child_changed', cb('child_changed'));
     queryRef.on('child_removed', cb('child_removed'));
     removeDB('userProfile/p-tosh');
-    expect(events).to.have.lengthOf(0);
+    expect(events).toHaveLength(0);
   });
 
   it('updating DB in a watcher path does not return child_added, does return child_changed', async () => {
@@ -143,15 +195,23 @@ describe('Listener events ->', () => {
     queryRef.on('child_changed', cb('child_changed'));
     setDB('userProfile/jjohnson', { name: 'Jack Johnson', age: 45 });
 
-    events.map((e) => expect(e.key).to.equal('jjohnson'));
-    expect(events.map((e) => e.eventType)).includes('child_added');
-    expect(events.map((e) => e.eventType)).includes('child_changed');
+    events.map((e) => expect(e.key).toBe('jjohnson'));
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_added'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_changed'])
+    );
     events = [];
 
     updateDB('userProfile/jjohnson/age', 99);
-    events.map((e) => expect(e.key).to.equal('jjohnson'));
-    expect(events.map((e) => e.eventType)).not.includes('child_added');
-    expect(events.map((e) => e.eventType)).includes('child_changed');
+    events.map((e) => expect(e.key).toBe('jjohnson'));
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.not.arrayContaining(['child_added'])
+    );
+    expect(events.map((e) => e.eventType)).toEqual(
+      expect.arrayContaining(['child_changed'])
+    );
     events = [];
   });
 
@@ -177,8 +237,8 @@ describe('Listener events ->', () => {
 
     const firstEmployee = helpers.firstKey(m.db.employees);
     const firstCompany = helpers.firstKey(m.db.companies);
-    expect(m.db.employees[firstEmployee]).to.be.an('object');
-    expect(m.db.companies[firstCompany]).to.be.an('object');
+    expect(m.db.employees[firstEmployee]).toBeInstanceOf(Object);
+    expect(m.db.companies[firstCompany]).toBeInstanceOf(Object);
 
     const qEmployee = Reference.createQuery('employees', 10);
     const qCompany = Reference.createQuery('companies', 10);
@@ -200,8 +260,12 @@ describe('Listener events ->', () => {
     };
     multiPathUpdateDB(mps);
 
-    expect(events).to.have.lengthOf(2);
-    expect(events.map((i) => i.eventType)).to.include('employee');
-    expect(events.map((i) => i.eventType)).to.include('company');
+    expect(events).toHaveLength(2);
+    expect(events.map((i) => i.eventType)).toEqual(
+      expect.arrayContaining(['employee'])
+    );
+    expect(events.map((i) => i.eventType)).toEqual(
+      expect.arrayContaining(['company'])
+    );
   });
 });

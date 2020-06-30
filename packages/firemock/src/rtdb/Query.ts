@@ -6,14 +6,13 @@ import type {
   IRtdbDbEvent,
 } from '@forest-fire/types';
 
-import { QueryValue, IFirebaseEventHandler } from '../@types/rtdb-types';
-import { getDb, SnapShot } from '../rtdb/index';
+import { QueryValue, IFirebaseEventHandler, DelayType } from '@/@types';
+import { getDb, SnapShot } from '@/rtdb';
 import {
   SerializedRealTimeQuery,
   RealQueryOrderType,
 } from '@forest-fire/serialized-query';
-import { leafNode, DelayType, networkDelay } from '../util/index';
-import { runQuery } from '../util/index';
+import { leafNode, networkDelay, runQuery } from '@/util';
 
 /** tslint:ignore:member-ordering */
 export abstract class Query<T = any> implements IRtdbQuery {

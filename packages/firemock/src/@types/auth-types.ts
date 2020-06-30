@@ -1,7 +1,12 @@
-import type { IClientAuth, AdditionalUserInfo, AuthCredential, User } from "@forest-fire/types";
-import type { IDictionary } from "common-types";
+import type {
+  IClientAuth,
+  AdditionalUserInfo,
+  AuthCredential,
+  User,
+} from '@forest-fire/types';
+import type { IDictionary } from 'common-types';
 
-export type MockKlass = import("../mocking/Mock").Mock;
+export type MockKlass = import('../mocking/Mock').Mock;
 
 /**
  * Create a user in the Auth system which can be logged in via the
@@ -39,3 +44,5 @@ export interface IPartialUserCredential {
  * to add an "administrative" API for mocking
  */
 export interface IMockAuth extends IClientAuth {}
+
+export type IAuthObserver = (user: User | null) => any;

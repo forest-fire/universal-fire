@@ -1,10 +1,9 @@
 import { IDictionary, SortingFunction } from 'common-types';
 import type { IRtdbDataSnapshot } from '@forest-fire/types';
 
-import get from 'lodash.get';
-import { Reference } from '../rtdb/index';
+import { Reference } from '@/rtdb';
 import { arrayToHash } from 'typed-conversions';
-import { getKey, join } from '../util/index';
+import { getKey, join, get } from '@/util';
 
 /**
  * Each record in the forEach iteration will be passed

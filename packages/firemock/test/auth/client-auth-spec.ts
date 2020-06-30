@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import {
   addAuthObserver,
   authProviders,
@@ -9,27 +7,25 @@ import {
 
 import { Mock } from '../../src/mocking';
 
-const expect = chai.expect;
-
 describe('Firebase Auth →', () => {
   it('Calling auth() gives you API', async () => {
     const m = await Mock.prepare();
     const auth = await m.auth();
-    expect(auth).to.haveOwnProperty('signInAnonymously');
-    expect(auth).to.haveOwnProperty('signInWithEmailAndPassword');
-    expect(auth).to.haveOwnProperty('createUserWithEmailAndPassword');
+    expect(auth).toHaveProperty('signInAnonymously');
+    expect(auth).toHaveProperty('signInWithEmailAndPassword');
+    expect(auth).toHaveProperty('createUserWithEmailAndPassword');
   });
 
   it('Signing in anonymously is defaulted to true', async () => {
     const m = await Mock.prepare();
     const auth = await m.auth();
-    expect(authProviders().includes('anonymous')).to.equal(true);
+    expect(authProviders().includes('anonymous')).toEqual(true);
   });
 
   it('Signing in with email is defaulted to false', async () => {
     const m = await Mock.prepare();
     const auth = await m.auth();
-    expect(authProviders().includes('emailPassword')).to.equal(false);
+    expect(authProviders().includes('emailPassword')).toEqual(false);
   });
 
   it('signInAnonymously returns uid of default anonymous user (when set)', async () => {
@@ -38,7 +34,7 @@ describe('Firebase Auth →', () => {
     setDefaultAnonymousUid('1234');
     const user = await auth.signInAnonymously();
 
-    expect(user.user.uid).to.equal('1234');
+    expect(user.user.uid).toEqual('1234');
   });
 
   it('signInWithEmail with valid email returns a valid user', async () => {
@@ -55,8 +51,9 @@ describe('Firebase Auth →', () => {
       'test@test.com',
       'foobar'
     );
-    expect(user.user.email).to.be.a('string').and.to.equal('test@test.com');
-    expect(user.user.emailVerified).to.equal(true);
+    expect(user.user.email).toBeString();
+    expect(user.user.email).toEqual('test@test.com');
+    expect(user.user.emailVerified).toEqual(true);
   });
 
   it('signInWithEmail with valid email but invalid password fails', async () => {
@@ -76,8 +73,8 @@ describe('Firebase Auth →', () => {
       );
       throw new Error('Login attempt should have failed with error!');
     } catch (e) {
-      expect(e.name).is.equal('auth/wrong-password');
-      expect(e.code).is.equal('wrong-password');
+      expect(e.name).toEqual('auth/wrong-password');
+      expect(e.code).toEqual('wrong-password');
     }
   });
 
@@ -89,8 +86,8 @@ describe('Firebase Auth →', () => {
       },
     });
     const { userCredential } = await createUser(m, 'test@test.com', 'password');
-    expect(userCredential.user.email).to.equal('test@test.com');
-    expect(userCredential.user.emailVerified).to.equal(false);
+    expect(userCredential.user.email).toEqual('test@test.com');
+    expect(userCredential.user.emailVerified).toEqual(false);
   });
 
   it('once user is created, it can be used to login with', async () => {
@@ -105,7 +102,7 @@ describe('Firebase Auth →', () => {
       'test@test.com',
       'password'
     );
-    expect(userCredentials.user.email).to.equal('test@test.com');
+    expect(userCredentials.user.email).toEqual('test@test.com');
   });
 
   it('userCredential passed back from creation allows password reset', async () => {
@@ -121,7 +118,7 @@ describe('Firebase Auth →', () => {
       'password'
     );
     setCurrentUser(userCredential);
-    expect(userCredential.user.updatePassword).to.be.a('function');
+    expect(userCredential.user.updatePassword).toBeFunction();
 
     await userCredential.user.updatePassword('foobar');
     await auth.signInWithEmailAndPassword('test@test.com', 'foobar');
@@ -149,7 +146,7 @@ describe('Firebase Auth →', () => {
     );
     const token = await user.user.getIdToken();
 
-    expect(token).to.equal(expectedToken);
+    expect(token).toEqual(expectedToken);
   });
 
   it('signInWithEmailAndPassword should notify authObservers', async () => {
@@ -167,7 +164,7 @@ describe('Firebase Auth →', () => {
     addAuthObserver(() => (hasBeenNotified = true));
     await auth.signInWithEmailAndPassword(user.email, user.password);
 
-    expect(hasBeenNotified).is.equal(true);
+    expect(hasBeenNotified).toEqual(true);
   });
 
   it('signOut should notify authObservers', async () => {
@@ -185,7 +182,7 @@ describe('Firebase Auth →', () => {
     addAuthObserver(() => (hasBeenNotified = true));
     await auth.signOut();
 
-    expect(hasBeenNotified).is.equal(true);
+    expect(hasBeenNotified).toEqual(true);
   });
 });
 

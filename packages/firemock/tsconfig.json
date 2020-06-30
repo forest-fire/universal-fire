@@ -12,8 +12,16 @@
     "typeRoots": ["./node_modules/@types"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "plugins": [
+      { "transform": "typescript-transform-paths" },
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*-spec.ts"]
+  "files": ["global.d.ts"],
+  "include": ["src/**/*", "global.d.ts", "test/**/*"]
 }

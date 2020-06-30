@@ -1,14 +1,12 @@
 import * as fbKey from 'firebase-key';
 
-import { IQueue, IRelationship, ISchema } from '../@types';
-import { dotNotation, getRandomInt, pluralize } from '../util';
-import { getDb, setDB } from '../rtdb';
+import { IQueue, IRelationship, ISchema } from '@/@types';
+import { dotNotation, getRandomInt, pluralize } from '@/util';
+import { first, get, set } from '@/util';
+import { getDb, setDB } from '@/rtdb';
 
 import { IDictionary } from 'common-types';
-import { Queue } from '../mocking/index';
-import first from 'lodash.first';
-import get from 'lodash.get';
-import set from 'lodash.set';
+import { Queue } from '@/mocking/index';
 
 export class Deployment {
   private schemaId: string;

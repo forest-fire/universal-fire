@@ -1,5 +1,11 @@
 import { IDictionary } from 'common-types';
-import { Queue, Schema, Deployment, MockHelper } from '../mocking/index';
+import {
+  Queue,
+  Schema,
+  Deployment,
+  getFakerLibrary,
+  importFakerLibrary,
+} from '@/mocking';
 import {
   Reference,
   clearDatabase,
@@ -7,19 +13,20 @@ import {
   restoreEvents,
   silenceEvents,
   getDb,
-} from '../rtdb/index';
-import { DelayType, setNetworkDelay } from '../util';
-import { auth as fireAuth } from '../auth';
-import { clearAuthUsers, initializeAuth } from '../auth/state-mgmt';
-import { FireMockError } from '../errors/FireMockError';
+} from '@/rtdb';
+import { setNetworkDelay } from '@/util';
+import { DelayType } from '@/@types';
+import { auth as fireAuth } from '@/auth';
+import { clearAuthUsers, initializeAuth } from '@/auth/state-mgmt';
+import { FireMockError } from '@/errors';
 import {
   IRelationship,
   ISchema,
   IQueue,
   SchemaCallback,
   IMockSetup,
-} from '../@types';
-import authProviders from '../auth/client-sdk/AuthProviders';
+} from '@/@types';
+import authProviders from '@/auth/client-sdk/AuthProviders';
 import type {
   FirebaseNamespace,
   IMockAuthConfig,
@@ -27,8 +34,7 @@ import type {
   IMockConfigOptions,
   AsyncMockData,
 } from '@forest-fire/types';
-import { getFakerLibrary, importFakerLibrary } from './fakerInitialiation';
-import { adminAuthSdk } from '../auth/admin-sdk';
+import { adminAuthSdk } from '@/auth/admin-sdk';
 
 /* tslint:disable:max-classes-per-file */
 export class Mock {

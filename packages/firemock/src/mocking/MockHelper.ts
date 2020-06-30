@@ -1,5 +1,6 @@
 import { IDictionary, createError } from 'common-types';
-import { getFakerLibrary } from './fakerInitialiation';
+
+import { getFakerLibrary } from '@/mocking';
 
 export class MockHelper {
   constructor(public context?: IDictionary) {}

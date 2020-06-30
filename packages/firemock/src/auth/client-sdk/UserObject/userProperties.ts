@@ -1,5 +1,6 @@
 import type { User } from '@forest-fire/types';
-import { getRandomMockUid, getAnonymousUid } from '../../state-mgmt/index';
+import { getAnonymousUid } from '@/auth/state-mgmt/index';
+console.log(getAnonymousUid);
 
 export const userProperties: () => Partial<User> = () => ({
   displayName: '',

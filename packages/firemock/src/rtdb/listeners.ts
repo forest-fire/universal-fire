@@ -3,11 +3,11 @@ import {
   IFirebaseEventHandler,
   IListener,
   IMockWatcherGroupEvent,
-} from '../@types/rtdb-types';
+} from '@/@types';
 import type { IRtdbDbEvent, IRtdbDataSnapshot } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
-import { join, stripLeadingDot, removeDots, dotify } from '../util/index';
-import get from 'lodash.get';
+import { join, stripLeadingDot, removeDots, dotify, get } from '@/util';
+
 import { hashToArray } from 'typed-conversions';
 import {
   getDb,
@@ -15,7 +15,7 @@ import {
   Reference,
   shouldSendEvents,
   groupEventsByWatcher,
-} from '../rtdb/index';
+} from '@/rtdb';
 
 let _listeners: IListener[] = [];
 

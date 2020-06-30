@@ -6,7 +6,7 @@ import type {
   IRtdbDbEvent,
 } from '@forest-fire/types';
 
-import { IFirebaseEventHandler } from '../@types/rtdb-types';
+import { IFirebaseEventHandler, DelayType } from '@/@types';
 
 import {
   setDB,
@@ -17,16 +17,10 @@ import {
   SnapShot,
   addListener,
   Query,
-} from '../rtdb/index';
-import {
-  parts,
-  join,
-  slashNotation,
-  networkDelay,
-  DelayType,
-} from '../util/index';
+  getDb,
+} from '@/rtdb';
+import { parts, join, slashNotation, networkDelay } from '@/util';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { getDb } from './store';
 
 function isMultiPath(data: IDictionary) {
   Object.keys(data).map((d: any) => {

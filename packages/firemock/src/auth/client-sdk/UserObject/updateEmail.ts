@@ -1,7 +1,7 @@
 import { currentUser, updateUser } from '../../state-mgmt';
 
-import { FireMockError } from '../../../errors/FireMockError';
-import { networkDelay } from '../../../util/util';
+import { FireMockError } from '@/errors/FireMockError';
+import { networkDelay } from '@/util/other';
 
 /**
  * **updateEmail**

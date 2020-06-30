@@ -2,8 +2,8 @@ import type { UserCredential, ConfirmationResult } from '@forest-fire/types';
 import merge from 'deepmerge';
 
 import { clientApiUser } from './UserObject';
-import { getRandomMockUid } from '../state-mgmt';
-import { IPartialUserCredential } from '../../index';
+import { getRandomMockUid } from '@/auth/state-mgmt';
+import { IPartialUserCredential } from '@/@types';
 
 export { UserCredential };
 

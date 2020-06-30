@@ -1,5 +1,5 @@
 import { IPartialUserCredential } from '../../index';
-import { networkDelay } from '../../util';
+import { networkDelay } from '@/util';
 import { completeUserCredential } from './completeUserCredential';
 import { Omit } from 'common-types';
 import { notImplemented } from './notImplemented';
@@ -10,7 +10,8 @@ import type {
   AuthCredential,
   User,
 } from '@forest-fire/types';
-import { FireMockError } from '../../errors/FireMockError';
+import { IAuthObserver } from '@/@types';
+import { FireMockError } from '@/errors';
 import {
   emailExistsAsUserInAuth,
   emailHasCorrectPassword,
@@ -24,10 +25,9 @@ import {
   authProviders,
   setCurrentUser,
   clearCurrentUser,
-  IAuthObserver,
   addAuthObserver,
   getAnonymousUid,
-} from '../state-mgmt';
+} from '@/auth/state-mgmt';
 import { clientApiUser } from './UserObject';
 
 export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {

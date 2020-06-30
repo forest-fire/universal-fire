@@ -8,8 +8,9 @@ import type {
   User,
 } from '@forest-fire/types';
 import { pk } from 'common-types';
-import { FireMockError } from '../../errors/FireMockError';
-import { clientApiUser } from '../client-sdk/UserObject';
+import { FireMockError } from '@/errors/FireMockError';
+import { clientApiUser } from '@/auth/client-sdk/UserObject';
+import { IAuthObserver } from '@/@types';
 
 /**
  * The recognized users in the mock Auth system
@@ -26,7 +27,6 @@ let _currentUser: pk;
 /** the full `UserCredential` object for the current user */
 let _currentUserCredential: UserCredential;
 
-export type IAuthObserver = (user: User | null) => any;
 /**
  * callbacks sent in for callback when the
  * _auth_ state changes.
