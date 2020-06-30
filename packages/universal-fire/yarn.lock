@@ -1225,7 +1225,7 @@ commander@^2.20.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
-common-types@^1.12.12, common-types@^1.15.6, common-types@^1.8.16:
+common-types@^1.12.12, common-types@^1.8.16:
   version "1.15.6"
   resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.15.6.tgz#822e88ae178a35dbf3adf71330c247ab4d4bd165"
   integrity sha512-+NSTvWuAMgLmJitu5yfhUQf0pLfpUtIQ5PHzxty/hMSoRZnl0N0TU+PFvDzmKWijEJfuUN5bTtN3Lg65vTOm2A==
@@ -1524,10 +1524,10 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-do-devops@^0.3.18:
-  version "0.3.18"
-  resolved "https://registry.yarnpkg.com/do-devops/-/do-devops-0.3.18.tgz#10d2163c312a2d7a76ca76f33693547100ede7f6"
-  integrity sha512-C0/idUADH3gPxWp5g+z2c2ehIMHv+GiWCrX/XXur2qsPdcGJ9I/t5KyXHpHIB0h/FThmU5Jron3n0vRlybVZOw==
+do-devops@^0.3.20:
+  version "0.3.20"
+  resolved "https://registry.yarnpkg.com/do-devops/-/do-devops-0.3.20.tgz#90cbea7996eadffc31f2469238bfe7ad056ad372"
+  integrity sha512-N0PAtU+aR+2JfoIEm9OD07SG2KimwGOXox66nELaXy15u5svQzGUB2UMlz9+CwmLcozMAV3LtHCZCO3YR/62OA==
   dependencies:
     "@types/command-line-args" "^5.0.0"
     "@types/command-line-usage" "^5.0.1"
@@ -1541,7 +1541,7 @@ do-devops@^0.3.18:
     chokidar "^3.4.0"
     command-line-args "^5.1.1"
     command-line-usage "^6.0.2"
-    common-types "^1.15.6"
+    common-types "^1.15.7"
     date-fns "^2.14.0"
     fast-glob "^3.2.2"
     globby "^11.0.0"
@@ -3697,10 +3697,10 @@ rollup-plugin-typescript2@^0.27.1:
     resolve "1.15.1"
     tslib "1.11.2"
 
-rollup@^2.11.2:
-  version "2.16.1"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.16.1.tgz#97805e88071e2c6727bd0b64904976d14495c873"
-  integrity sha512-UYupMcbFtoWLB6ZtL4hPZNUTlkXjJfGT33Mmhz3hYLNmRj/cOvX2B26ZxDQuEpwtLdcyyyraBGQ7EfzmMJnXXg==
+rollup@^2.18.1:
+  version "2.18.1"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.18.1.tgz#1662c679da5dfc89ec6fda75951a2bcca1a4f77d"
+  integrity sha512-w4X77ADA+WTGlapC8Z6yggdJtODw3SBl6R2LSkA7ZW5MtdkgcB7sfaSD1UWyx8diXbMcGIb0eI9gCx/dyqOgNQ==
   optionalDependencies:
     fsevents "~2.1.2"
 

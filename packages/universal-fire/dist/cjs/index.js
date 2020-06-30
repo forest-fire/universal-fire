@@ -11,33 +11,33 @@ var firestoreAdmin = require('@forest-fire/firestore-admin');
 
 
 Object.defineProperty(exports, 'SerializedQuery', {
-  enumerable: true,
-  get: function () {
-    return serializerFactory.SerializedQuery;
-  }
+	enumerable: true,
+	get: function () {
+		return serializerFactory.SerializedQuery;
+	}
 });
 Object.defineProperty(exports, 'RealTimeClient', {
-  enumerable: true,
-  get: function () {
-    return realTimeClient.RealTimeClient;
-  }
+	enumerable: true,
+	get: function () {
+		return realTimeClient.RealTimeClient;
+	}
 });
 Object.defineProperty(exports, 'FirestoreClient', {
-  enumerable: true,
-  get: function () {
-    return firestoreClient.FirestoreClient;
-  }
+	enumerable: true,
+	get: function () {
+		return firestoreClient.FirestoreClient;
+	}
 });
 Object.defineProperty(exports, 'RealTimeAdmin', {
-  enumerable: true,
-  get: function () {
-    return realTimeAdmin.RealTimeAdmin;
-  }
+	enumerable: true,
+	get: function () {
+		return realTimeAdmin.RealTimeAdmin;
+	}
 });
 Object.defineProperty(exports, 'FirestoreAdmin', {
-  enumerable: true,
-  get: function () {
-    return firestoreAdmin.FirestoreAdmin;
-  }
+	enumerable: true,
+	get: function () {
+		return firestoreAdmin.FirestoreAdmin;
+	}
 });
 //# sourceMappingURL=index.js.map
