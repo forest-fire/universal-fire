@@ -1,4 +1,4 @@
-import { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import { AbstractedDatabase, } from '@forest-fire/abstracted-database';
 import { FireError } from '@forest-fire/utility';
 export class FirestoreDb extends AbstractedDatabase {
     get database() {

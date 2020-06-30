@@ -1,4 +1,7 @@
-import { AbstractedDatabase } from '@forest-fire/abstracted-database';
+import {
+  AbstractedDatabase,
+  IAbstractedDatabase,
+} from '@forest-fire/abstracted-database';
 import type {
   IAdminApp,
   IClientApp,
@@ -8,7 +11,8 @@ import type {
 import { FireError } from '@forest-fire/utility';
 import type { SerializedFirestoreQuery } from '@forest-fire/serialized-query';
 
-export abstract class FirestoreDb extends AbstractedDatabase {
+export abstract class FirestoreDb extends AbstractedDatabase
+  implements IAbstractedDatabase {
   protected _database?: IFirestoreDatabase;
   protected _app!: IClientApp | IAdminApp;
 

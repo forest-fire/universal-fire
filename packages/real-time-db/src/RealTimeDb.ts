@@ -1,40 +1,44 @@
-import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import * as convert from 'typed-conversions';
+
+import {
+  AbstractedDatabase,
+  IAbstractedDatabase,
+} from '@forest-fire/abstracted-database';
+import {
+  AbstractedProxyError,
+  FileDepthExceeded,
+  IAdminEmitter,
+  IClientEmitter,
+  IFirebaseConnectionCallback,
+  IFirebaseListener,
+  IFirebaseWatchHandler,
+  IMockLoadingState,
+  IRealTimeDb,
+  PermissionDenied,
+  RealTimeDbError,
+  UndefinedAssignment,
+  WatcherEventWrapper,
+} from './index';
 import {
   IAdminApp,
   IClientApp,
   IDatabaseConfig,
-  IRtdbDatabase,
+  IMockConfigOptions,
   IRtdbDataSnapshot,
+  IRtdbDatabase,
   IRtdbDbEvent,
   IRtdbReference,
-  IMockConfigOptions,
 } from '@forest-fire/types';
+
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { slashNotation } from '@forest-fire/utility';
-
-import {
-  IFirebaseListener,
-  IMockLoadingState,
-  IClientEmitter,
-  IAdminEmitter,
-  PermissionDenied,
-  UndefinedAssignment,
-  AbstractedProxyError,
-  WatcherEventWrapper,
-  FileDepthExceeded,
-  RealTimeDbError,
-  IRealTimeDb,
-  IFirebaseWatchHandler,
-  IFirebaseConnectionCallback,
-} from './index';
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
 export abstract class RealTimeDb extends AbstractedDatabase
-  implements IRealTimeDb {
+  implements IRealTimeDb, IAbstractedDatabase {
   protected _isAdminApi: boolean = false;
 
   constructor() {

@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RealTimeDb = exports.MOCK_LOADING_TIMEOUT = void 0;
-const abstracted_database_1 = require("@forest-fire/abstracted-database");
 const convert = require("typed-conversions");
+const abstracted_database_1 = require("@forest-fire/abstracted-database");
+const index_1 = require("./index");
 const serialized_query_1 = require("@forest-fire/serialized-query");
 const utility_1 = require("@forest-fire/utility");
-const index_1 = require("./index");
 /** time by which the dynamically loaded mock library should be loaded */
 exports.MOCK_LOADING_TIMEOUT = 2000;
 class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
