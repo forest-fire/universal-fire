@@ -1,4 +1,5 @@
 // export * from './proxy-symbols';
+import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
 export { RealTimeClient } from '@forest-fire/real-time-client';
 export { FirestoreClient } from '@forest-fire/firestore-client';
 export { RealTimeAdmin } from '@forest-fire/real-time-admin';
@@ -28,14 +29,11 @@ export type { FirestoreClient as IFirestoreClient } from '@forest-fire/firestore
 export type { RealTimeAdmin as IRealTimeAdmin } from '@forest-fire/real-time-admin';
 export type { FirestoreAdmin as IFirestoreAdmin } from '@forest-fire/firestore-admin';
 
-import { IRealTimeDb } from '@forest-fire/real-time-db';
-import { IFirestoreDb } from '@forest-fire/firestore-db';
-
 /**
  * Provides an abstracted interface which conforms to either the RTDB or Firestore
  * DB's and their SDK's
  */
-export type IAbstractedDatabase = IRealTimeDb | IFirestoreDb;
+export type IAbstractedDatabase = AbstractedDatabase;
 
 import {
   IPathBasedWatchEvent,

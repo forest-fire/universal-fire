@@ -1,7 +1,6 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", { value: true });
-// export * from './proxy-symbols';
 var real_time_client_1 = require("@forest-fire/real-time-client");
 Object.defineProperty(exports, "RealTimeClient", { enumerable: true, get: function () { return real_time_client_1.RealTimeClient; } });
 var firestore_client_1 = require("@forest-fire/firestore-client");
