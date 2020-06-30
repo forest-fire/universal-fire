@@ -29,9 +29,12 @@ import {
   IRtdbDbEvent,
   IRtdbReference,
 } from '@forest-fire/types';
+import {
+  ISerializedQuery,
+  SerializedRealTimeQuery,
+} from '@forest-fire/serialized-query';
 
 import { IDictionary } from 'common-types';
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { slashNotation } from '@forest-fire/utility';
 
 /** time by which the dynamically loaded mock library should be loaded */
@@ -119,7 +122,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * @param cb the callback function to call when event triggered
    */
   public watch(
-    target: string | SerializedRealTimeQuery,
+    target: string | ISerializedQuery,
     events: IRtdbDbEvent | IRtdbDbEvent[],
     cb: IFirebaseWatchHandler
   ) {
@@ -137,7 +140,10 @@ export abstract class RealTimeDb extends AbstractedDatabase
         if (typeof target === 'string') {
           this.ref(slashNotation(target)).on(evt, dispatch);
         } else {
-          target.setDB(this).deserialize(this).on(evt, dispatch);
+          (target as SerializedRealTimeQuery)
+            .setDB(this)
+            .deserialize(this)
+            .on(evt, dispatch);
         }
       });
     } catch (e) {
@@ -177,7 +183,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * @param path path for query
    */
   public query<T extends object = any>(path: string) {
-    return SerializedRealTimeQuery.path<T>(path);
+    return SerializedRealTimeQuery.path<T>(path) as ISerializedQuery<T>;
   }
 
   /** Get a DB reference for a given path in Firebase */
@@ -376,12 +382,12 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * returns the Firebase snapshot at a given path in the database
    */
   public async getSnapshot<T = any>(
-    path: string | SerializedRealTimeQuery<T>
+    path: string | ISerializedQuery<T>
   ): Promise<IRtdbDataSnapshot> {
     try {
       const response = await (typeof path === 'string'
         ? this.ref(slashNotation(path as string)).once('value')
-        : (path as SerializedRealTimeQuery<T>).setDB(this).execute());
+        : (path as ISerializedQuery<T>).setDB(this).execute());
       return response;
     } catch (e) {
       console.warn(
@@ -417,7 +423,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * is included as part of the record (as `id` by default)
    */
   public async getRecord<T = any>(
-    path: string | SerializedRealTimeQuery<T>,
+    path: string | ISerializedQuery<T>,
     idProp = 'id'
   ): Promise<T> {
     try {
@@ -444,7 +450,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * @param idProp
    */
   public async getList<T = any>(
-    path: string | SerializedRealTimeQuery<T>,
+    path: string | ISerializedQuery<T>,
     idProp = 'id'
   ): Promise<T[]> {
     try {

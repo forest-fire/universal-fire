@@ -20314,7 +20314,10 @@ class RealTimeDb extends AbstractedDatabase {
                     this.ref(slashNotation(target)).on(evt, dispatch);
                 }
                 else {
-                    target.setDB(this).deserialize(this).on(evt, dispatch);
+                    target
+                        .setDB(this)
+                        .deserialize(this)
+                        .on(evt, dispatch);
                 }
             });
         }
