@@ -1,5 +1,18 @@
-import { b as createCommonjsModule } from './RealTimeClient-876df8ac.js';
-import 'events';
+'use strict';
+
+function createCommonjsModule(fn, basedir, module) {
+	return module = {
+	  path: basedir,
+	  exports: {},
+	  require: function (path, base) {
+      return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
+    }
+	}, fn(module, module.exports), module.exports;
+}
+
+function commonjsRequire () {
+	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+}
 
 var fake = createCommonjsModule(function (module) {
 /*
@@ -86055,5 +86068,9 @@ var faker = new lib({ locales: locales });
 module['exports'] = faker;
 });
 
-export default faker_1;
-export { faker_1 as __moduleExports };
+var index = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.assign(/*#__PURE__*/Object.create(null), faker_1, {
+	'default': faker_1,
+	__moduleExports: faker_1
+}));
+
+exports.i = index;

@@ -1,9 +1,18 @@
-'use strict';
+function createCommonjsModule(fn, basedir, module) {
+	return module = {
+	  path: basedir,
+	  exports: {},
+	  require: function (path, base) {
+      return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
+    }
+	}, fn(module, module.exports), module.exports;
+}
 
-var RealTimeClient = require('./RealTimeClient-8e9f3e77.js');
-require('events');
+function commonjsRequire () {
+	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+}
 
-var fake = RealTimeClient.createCommonjsModule(function (module) {
+var fake = createCommonjsModule(function (module) {
 /*
   fake.js - generator method for combining faker methods based on string input
 
@@ -408,7 +417,7 @@ var mersenne = {
 	seed_array: seed_array
 };
 
-var random = RealTimeClient.createCommonjsModule(function (module) {
+var random = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.random
@@ -624,7 +633,7 @@ function Random (faker, seed) {
 module['exports'] = Random;
 });
 
-var helpers = RealTimeClient.createCommonjsModule(function (module) {
+var helpers = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.helpers
@@ -888,7 +897,7 @@ String.prototype.capitalize = function () { //v1.0
 module['exports'] = Helpers;
 });
 
-var name = RealTimeClient.createCommonjsModule(function (module) {
+var name = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.name
@@ -1295,7 +1304,7 @@ function Address (faker) {
 
 var address = Address;
 
-var company = RealTimeClient.createCommonjsModule(function (module) {
+var company = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.company
@@ -1420,7 +1429,7 @@ var Company = function (faker) {
 module['exports'] = Company;
 });
 
-var iban = RealTimeClient.createCommonjsModule(function (module) {
+var iban = createCommonjsModule(function (module) {
 module["exports"] = {
   alpha: [
     'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
@@ -2559,7 +2568,7 @@ module["exports"] = {
 };
 });
 
-var finance = RealTimeClient.createCommonjsModule(function (module) {
+var finance = createCommonjsModule(function (module) {
 /**
  * @namespace faker.finance
  */
@@ -2781,7 +2790,7 @@ var Finance = function (faker) {
 module['exports'] = Finance;
 });
 
-var image = RealTimeClient.createCommonjsModule(function (module) {
+var image = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.image
@@ -2997,7 +3006,7 @@ var Image = function (faker) {
 module["exports"] = Image;
 });
 
-var lorem = RealTimeClient.createCommonjsModule(function (module) {
+var lorem = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.lorem
@@ -3137,7 +3146,7 @@ var Lorem = function (faker) {
 module["exports"] = Lorem;
 });
 
-var hacker = RealTimeClient.createCommonjsModule(function (module) {
+var hacker = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.hacker
@@ -3439,7 +3448,7 @@ var userAgent = {
 	generate: generate
 };
 
-var internet = RealTimeClient.createCommonjsModule(function (module) {
+var internet = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.internet
@@ -3857,7 +3866,7 @@ var Internet = function (faker) {
 module["exports"] = Internet;
 });
 
-var database = RealTimeClient.createCommonjsModule(function (module) {
+var database = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.database
@@ -3924,7 +3933,7 @@ var Database = function (faker) {
 module["exports"] = Database;
 });
 
-var phone_number = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.phone
@@ -3971,7 +3980,7 @@ var Phone = function (faker) {
 module['exports'] = Phone;
 });
 
-var date = RealTimeClient.createCommonjsModule(function (module) {
+var date = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.date
@@ -4107,7 +4116,7 @@ var _Date = function (faker) {
 module['exports'] = _Date;
 });
 
-var commerce = RealTimeClient.createCommonjsModule(function (module) {
+var commerce = createCommonjsModule(function (module) {
 /**
  *
  * @namespace faker.commerce
@@ -4229,7 +4238,7 @@ var Commerce = function (faker) {
 module['exports'] = Commerce;
 });
 
-var system = RealTimeClient.createCommonjsModule(function (module) {
+var system = createCommonjsModule(function (module) {
 // generates fake data for many computer systems properties
 
 /**
@@ -4392,7 +4401,7 @@ function System (faker) {
 module['exports'] = System;
 });
 
-var lib = RealTimeClient.createCommonjsModule(function (module) {
+var lib = createCommonjsModule(function (module) {
 /*
 
    this index.js file is used for including the faker library as a CommonJS module, instead of a bundle
@@ -4544,7 +4553,7 @@ Faker.prototype.seed = function(value) {
 module['exports'] = Faker;
 });
 
-var country = RealTimeClient.createCommonjsModule(function (module) {
+var country = createCommonjsModule(function (module) {
 module["exports"] = [
   "Akrotiri və Dekeliya",
   "Aland adaları",
@@ -4788,13 +4797,13 @@ module["exports"] = [
 ];
 });
 
-var building_number = RealTimeClient.createCommonjsModule(function (module) {
+var building_number = createCommonjsModule(function (module) {
 module["exports"] = [
   "###"
 ];
 });
 
-var street_suffix = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix = createCommonjsModule(function (module) {
 module["exports"] = [
   "küç.",
   "küçəsi",
@@ -4805,25 +4814,25 @@ module["exports"] = [
 ];
 });
 
-var secondary_address = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address = createCommonjsModule(function (module) {
 module["exports"] = [
   "m. ###"
 ];
 });
 
-var postcode = RealTimeClient.createCommonjsModule(function (module) {
+var postcode = createCommonjsModule(function (module) {
 module["exports"] = [
   "AZ####"
 ];
 });
 
-var state = RealTimeClient.createCommonjsModule(function (module) {
+var state = createCommonjsModule(function (module) {
 module["exports"] = [
 
 ];
 });
 
-var street_title = RealTimeClient.createCommonjsModule(function (module) {
+var street_title = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abbas Fətullayev",
   "Abbas Mirzə Şərifzadə",
@@ -5063,7 +5072,7 @@ module["exports"] = [
 ];
 });
 
-var city_name = RealTimeClient.createCommonjsModule(function (module) {
+var city_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ağcabədi",
   "Ağdam",
@@ -5146,32 +5155,32 @@ module["exports"] = [
 ];
 });
 
-var city = RealTimeClient.createCommonjsModule(function (module) {
+var city = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Address.city_name}"
 ];
 });
 
-var street_name = RealTimeClient.createCommonjsModule(function (module) {
+var street_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_suffix} #{Address.street_title}",
   "#{Address.street_title} #{street_suffix}"
 ];
 });
 
-var street_address = RealTimeClient.createCommonjsModule(function (module) {
+var street_address = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name}, #{building_number}"
 ];
 });
 
-var default_country = RealTimeClient.createCommonjsModule(function (module) {
+var default_country = createCommonjsModule(function (module) {
 module["exports"] = [
   "Azərbaycan"
 ];
 });
 
-var address_1 = RealTimeClient.createCommonjsModule(function (module) {
+var address_1 = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.country = country;
@@ -5188,7 +5197,7 @@ address.street_address = street_address;
 address.default_country = default_country;
 });
 
-var free_email = RealTimeClient.createCommonjsModule(function (module) {
+var free_email = createCommonjsModule(function (module) {
 module["exports"] = [
   "box.az",
   "mail.az",
@@ -5198,7 +5207,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "az",
@@ -5209,14 +5218,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1 = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1 = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email;
 internet.domain_suffix = domain_suffix;
 });
 
-var male_first_name = RealTimeClient.createCommonjsModule(function (module) {
+var male_first_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Anar",
   "Amid",
@@ -5256,7 +5265,7 @@ module["exports"] = [
 ];
 });
 
-var male_last_name = RealTimeClient.createCommonjsModule(function (module) {
+var male_last_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Əhmədov",
   "Ələkbərov",
@@ -5271,7 +5280,7 @@ module["exports"] = [
 ];
 });
 
-var female_first_name = RealTimeClient.createCommonjsModule(function (module) {
+var female_first_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Anna",
   "Adeliya",
@@ -5349,7 +5358,7 @@ module["exports"] = [
 ];
 });
 
-var female_last_name = RealTimeClient.createCommonjsModule(function (module) {
+var female_last_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Qasımova",
   "Əfəndiyeva",
@@ -5364,15 +5373,15 @@ module["exports"] = [
 ];
 });
 
-var prefix = RealTimeClient.createCommonjsModule(function (module) {
+var prefix = createCommonjsModule(function (module) {
 module["exports"] = [];
 });
 
-var suffix = RealTimeClient.createCommonjsModule(function (module) {
+var suffix = createCommonjsModule(function (module) {
 module["exports"] = [];
 });
 
-var name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{male_first_name}",
   "#{male_last_name} #{male_first_name}",
@@ -5383,7 +5392,7 @@ module["exports"] = [
 ];
 });
 
-var name_1 = RealTimeClient.createCommonjsModule(function (module) {
+var name_1 = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.male_first_name = male_first_name;
@@ -5395,19 +5404,19 @@ name.suffix = suffix;
 name.name = name$1;
 });
 
-var formats = RealTimeClient.createCommonjsModule(function (module) {
+var formats = createCommonjsModule(function (module) {
 module["exports"] = [
   "(9##)###-##-##"
 ];
 });
 
-var phone_number_1 = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1 = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats;
 });
 
-var color = RealTimeClient.createCommonjsModule(function (module) {
+var color = createCommonjsModule(function (module) {
 module["exports"] = [
   "ala",
   "açıq bənövşəyi",
@@ -5430,7 +5439,7 @@ module["exports"] = [
 ];
 });
 
-var department = RealTimeClient.createCommonjsModule(function (module) {
+var department = createCommonjsModule(function (module) {
 module["exports"] = [
   "Kitablar",
   "Filmlər",
@@ -5453,7 +5462,7 @@ module["exports"] = [
 ];
 });
 
-var product_name = RealTimeClient.createCommonjsModule(function (module) {
+var product_name = createCommonjsModule(function (module) {
 module["exports"] = {
   "adjective": [
     "Balaca",
@@ -5489,7 +5498,7 @@ module["exports"] = {
 };
 });
 
-var commerce_1 = RealTimeClient.createCommonjsModule(function (module) {
+var commerce_1 = createCommonjsModule(function (module) {
 var commerce = {};
 module['exports'] = commerce;
 commerce.color = color;
@@ -5497,7 +5506,7 @@ commerce.department = department;
 commerce.product_name = product_name;
 });
 
-var prefix$1 = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "ASC",
   "MMC",
@@ -5505,13 +5514,13 @@ module["exports"] = [
 ];
 });
 
-var suffix$1 = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$1 = createCommonjsModule(function (module) {
 module["exports"] = [
 
 ];
 });
 
-var name$2 = RealTimeClient.createCommonjsModule(function (module) {
+var name$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{Name.female_first_name}",
   "#{prefix} #{Name.male_first_name}",
@@ -5524,7 +5533,7 @@ module["exports"] = [
 ];
 });
 
-var company_1 = RealTimeClient.createCommonjsModule(function (module) {
+var company_1 = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.prefix = prefix$1;
@@ -5532,7 +5541,7 @@ company.suffix = suffix$1;
 company.name = name$2;
 });
 
-var month = RealTimeClient.createCommonjsModule(function (module) {
+var month = createCommonjsModule(function (module) {
 // source: http://unicode.org/cldr/trac/browser/tags/release-27/common/main/ru.xml#L1734
 module["exports"] = {
   wide: [
@@ -5594,7 +5603,7 @@ module["exports"] = {
 };
 });
 
-var weekday = RealTimeClient.createCommonjsModule(function (module) {
+var weekday = createCommonjsModule(function (module) {
 // source: http://unicode.org/cldr/trac/browser/tags/release-27/common/main/ru.xml#L1825
 module["exports"] = {
   wide: [
@@ -5636,14 +5645,14 @@ module["exports"] = {
 };
 });
 
-var date_1 = RealTimeClient.createCommonjsModule(function (module) {
+var date_1 = createCommonjsModule(function (module) {
 var date = {};
 module["exports"] = date;
 date.month = month;
 date.weekday = weekday;
 });
 
-var az_1 = RealTimeClient.createCommonjsModule(function (module) {
+var az_1 = createCommonjsModule(function (module) {
 var az = {};
 module['exports'] = az;
 az.title = "Azerbaijani";
@@ -5657,7 +5666,7 @@ az.company = company_1;
 az.date = date_1;
 });
 
-var country$1 = RealTimeClient.createCommonjsModule(function (module) {
+var country$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Afghánistán",
   "Albánie",
@@ -5857,7 +5866,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$1 = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#",
   "##",
@@ -5865,14 +5874,14 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$1 = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Apt. ###",
   "Suite ###"
 ];
 });
 
-var postcode$1 = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####",
   "### ##",
@@ -5880,15 +5889,15 @@ module["exports"] = [
 ];
 });
 
-var state$1 = RealTimeClient.createCommonjsModule(function (module) {
+var state$1 = createCommonjsModule(function (module) {
 module["exports"] = [];
 });
 
-var state_abbr = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr = createCommonjsModule(function (module) {
 module["exports"] = [];
 });
 
-var time_zone = RealTimeClient.createCommonjsModule(function (module) {
+var time_zone = createCommonjsModule(function (module) {
 module["exports"] = [
   "Pacific/Midway",
   "Pacific/Pago_Pago",
@@ -6036,7 +6045,7 @@ module["exports"] = [
 ];
 });
 
-var city_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var city_name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abertamy",
   "Adamov",
@@ -6643,13 +6652,13 @@ module["exports"] = [
 ];
 });
 
-var city$1 = RealTimeClient.createCommonjsModule(function (module) {
+var city$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_name}"
 ];
 });
 
-var street = RealTimeClient.createCommonjsModule(function (module) {
+var street = createCommonjsModule(function (module) {
 module["exports"] = [
   "17. Listopadu",
   "17. Listopadu",
@@ -14965,25 +14974,25 @@ module["exports"] = [
 ];
 });
 
-var street_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street}"
 ];
 });
 
-var street_address$1 = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}"
 ];
 });
 
-var default_country$1 = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Česká republika"
 ];
 });
 
-var address_1$1 = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$1 = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.country = country$1;
@@ -15001,7 +15010,7 @@ address.street_address = street_address$1;
 address.default_country = default_country$1;
 });
 
-var suffix$2 = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "s.r.o.",
   "a.s.",
@@ -15009,7 +15018,7 @@ module["exports"] = [
 ];
 });
 
-var adjective = RealTimeClient.createCommonjsModule(function (module) {
+var adjective = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adaptive",
   "Advanced",
@@ -15114,7 +15123,7 @@ module["exports"] = [
 ];
 });
 
-var descriptor = RealTimeClient.createCommonjsModule(function (module) {
+var descriptor = createCommonjsModule(function (module) {
 module["exports"] = [
   "24 hour",
   "24/7",
@@ -15220,7 +15229,7 @@ module["exports"] = [
 ];
 });
 
-var noun = RealTimeClient.createCommonjsModule(function (module) {
+var noun = createCommonjsModule(function (module) {
 module["exports"] = [
   "ability",
   "access",
@@ -15329,7 +15338,7 @@ module["exports"] = [
 ];
 });
 
-var bs_verb = RealTimeClient.createCommonjsModule(function (module) {
+var bs_verb = createCommonjsModule(function (module) {
 module["exports"] = [
   "implement",
   "utilize",
@@ -15394,7 +15403,7 @@ module["exports"] = [
 ];
 });
 
-var bs_noun = RealTimeClient.createCommonjsModule(function (module) {
+var bs_noun = createCommonjsModule(function (module) {
 module["exports"] = [
   "clicks-and-mortar",
   "value-added",
@@ -15508,7 +15517,7 @@ module["exports"] = [
 ];
 });
 
-var name$3 = RealTimeClient.createCommonjsModule(function (module) {
+var name$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name} #{suffix}",
@@ -15516,7 +15525,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$1 = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$1 = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$2;
@@ -15528,7 +15537,7 @@ company.bs_noun = bs_noun;
 company.name = name$3;
 });
 
-var free_email$1 = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "seznam.cz",
@@ -15538,7 +15547,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$1 = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "cz",
   "com",
@@ -15548,14 +15557,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$1 = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$1 = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$1;
 internet.domain_suffix = domain_suffix$1;
 });
 
-var words = RealTimeClient.createCommonjsModule(function (module) {
+var words = createCommonjsModule(function (module) {
 module["exports"] = [
   "alias",
   "consequatur",
@@ -15809,7 +15818,7 @@ module["exports"] = [
 ];
 });
 
-var supplemental = RealTimeClient.createCommonjsModule(function (module) {
+var supplemental = createCommonjsModule(function (module) {
 module["exports"] = [
   "abbas",
   "abduco",
@@ -16654,14 +16663,14 @@ module["exports"] = [
 ];
 });
 
-var lorem_1 = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1 = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words;
 lorem.supplemental = supplemental;
 });
 
-var male_first_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var male_first_name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abadon",
   "Abdon",
@@ -17462,7 +17471,7 @@ module["exports"] = [
 ];
 });
 
-var female_first_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var female_first_name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abigail",
   "Ada",
@@ -18253,7 +18262,7 @@ module["exports"] = [
 ];
 });
 
-var male_last_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var male_last_name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adam",
   "Adamec",
@@ -19257,7 +19266,7 @@ module["exports"] = [
 ];
 });
 
-var female_last_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var female_last_name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adamová",
   "Adamcová",
@@ -20261,7 +20270,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$2 = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ing.",
   "Mgr.",
@@ -20270,13 +20279,13 @@ module["exports"] = [
 ];
 });
 
-var suffix$3 = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Phd."
 ];
 });
 
-var title = RealTimeClient.createCommonjsModule(function (module) {
+var title = createCommonjsModule(function (module) {
 module["exports"] = {
   "descriptor": [
     "Lead",
@@ -20371,7 +20380,7 @@ module["exports"] = {
 };
 });
 
-var name$4 = RealTimeClient.createCommonjsModule(function (module) {
+var name$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{man_first_name} #{man_last_name}",
   "#{prefix} #{woman_first_name} #{woman_last_name}",
@@ -20386,7 +20395,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$1 = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$1 = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.male_first_name = male_first_name$1;
@@ -20399,7 +20408,7 @@ name.title = title;
 name.name = name$4;
 });
 
-var formats$1 = RealTimeClient.createCommonjsModule(function (module) {
+var formats$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "601 ### ###",
   "737 ### ###",
@@ -20410,13 +20419,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$1 = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$1 = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$1;
 });
 
-var month$1 = RealTimeClient.createCommonjsModule(function (module) {
+var month$1 = createCommonjsModule(function (module) {
 // Source: http://unicode.org/cldr/trac/browser/tags/release-27/common/main/en.xml#L1799
 module["exports"] = {
   wide: [
@@ -20482,7 +20491,7 @@ module["exports"] = {
 };
 });
 
-var weekday$1 = RealTimeClient.createCommonjsModule(function (module) {
+var weekday$1 = createCommonjsModule(function (module) {
 // Source: http://unicode.org/cldr/trac/browser/tags/release-27/common/main/en.xml#L1847
 module["exports"] = {
   wide: [
@@ -20528,14 +20537,14 @@ module["exports"] = {
 };
 });
 
-var date_1$1 = RealTimeClient.createCommonjsModule(function (module) {
+var date_1$1 = createCommonjsModule(function (module) {
 var date = {};
 module["exports"] = date;
 date.month = month$1;
 date.weekday = weekday$1;
 });
 
-var cz_1 = RealTimeClient.createCommonjsModule(function (module) {
+var cz_1 = createCommonjsModule(function (module) {
 var cz = {};
 module['exports'] = cz;
 cz.title = "Czech";
@@ -20548,7 +20557,7 @@ cz.phone_number = phone_number_1$1;
 cz.date = date_1$1;
 });
 
-var city_prefix = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix = createCommonjsModule(function (module) {
 module["exports"] = [
   "Nord",
   "Ost",
@@ -20560,7 +20569,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix = createCommonjsModule(function (module) {
 module["exports"] = [
   "stadt",
   "dorf",
@@ -20570,7 +20579,7 @@ module["exports"] = [
 ];
 });
 
-var country$2 = RealTimeClient.createCommonjsModule(function (module) {
+var country$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ägypten",
   "Äquatorialguinea",
@@ -20812,7 +20821,7 @@ module["exports"] = [
 ];
 });
 
-var street_root = RealTimeClient.createCommonjsModule(function (module) {
+var street_root = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ackerweg",
   "Adalbert-Stifter-Str.",
@@ -21848,7 +21857,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$2 = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "###",
   "##",
@@ -21859,7 +21868,7 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$2 = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Apt. ###",
   "Zimmer ###",
@@ -21867,14 +21876,14 @@ module["exports"] = [
 ];
 });
 
-var postcode$2 = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####",
   "#####"
 ];
 });
 
-var state$2 = RealTimeClient.createCommonjsModule(function (module) {
+var state$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Baden-Württemberg",
   "Bayern",
@@ -21895,7 +21904,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$1 = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "BW",
   "BY",
@@ -21916,7 +21925,7 @@ module["exports"] = [
 ];
 });
 
-var city$2 = RealTimeClient.createCommonjsModule(function (module) {
+var city$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix} #{Name.first_name}#{city_suffix}",
   "#{city_prefix} #{Name.first_name}",
@@ -21925,25 +21934,25 @@ module["exports"] = [
 ];
 });
 
-var street_name$2 = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_root}"
 ];
 });
 
-var street_address$2 = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}"
 ];
 });
 
-var default_country$2 = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Deutschland"
 ];
 });
 
-var address_1$2 = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$2 = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix;
@@ -21961,7 +21970,7 @@ address.street_address = street_address$2;
 address.default_country = default_country$2;
 });
 
-var suffix$4 = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "GmbH",
   "AG",
@@ -21973,7 +21982,7 @@ module["exports"] = [
 ];
 });
 
-var legal_form = RealTimeClient.createCommonjsModule(function (module) {
+var legal_form = createCommonjsModule(function (module) {
 module["exports"] = [
   "GmbH",
   "AG",
@@ -21985,7 +21994,7 @@ module["exports"] = [
 ];
 });
 
-var name$5 = RealTimeClient.createCommonjsModule(function (module) {
+var name$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name}-#{Name.last_name}",
@@ -21993,7 +22002,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$2 = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$2 = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$4;
@@ -22001,7 +22010,7 @@ company.legal_form = legal_form;
 company.name = name$5;
 });
 
-var free_email$2 = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.com",
@@ -22009,7 +22018,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$2 = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "info",
@@ -22021,14 +22030,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$2 = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$2 = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$2;
 internet.domain_suffix = domain_suffix$2;
 });
 
-var words$1 = RealTimeClient.createCommonjsModule(function (module) {
+var words$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "alias",
   "consequatur",
@@ -22282,13 +22291,13 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$1 = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$1 = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$1;
 });
 
-var first_name = RealTimeClient.createCommonjsModule(function (module) {
+var first_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aaron",
   "Abdul",
@@ -23448,7 +23457,7 @@ module["exports"] = [
 ];
 });
 
-var last_name = RealTimeClient.createCommonjsModule(function (module) {
+var last_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abel",
   "Abicht",
@@ -25142,7 +25151,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$3 = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Hr.",
   "Fr.",
@@ -25151,7 +25160,7 @@ module["exports"] = [
 ];
 });
 
-var nobility_title_prefix = RealTimeClient.createCommonjsModule(function (module) {
+var nobility_title_prefix = createCommonjsModule(function (module) {
 module["exports"] = [
   "zu",
   "von",
@@ -25160,7 +25169,7 @@ module["exports"] = [
 ];
 });
 
-var name$6 = RealTimeClient.createCommonjsModule(function (module) {
+var name$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name}",
   "#{first_name} #{nobility_title_prefix} #{last_name}",
@@ -25171,7 +25180,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$2 = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$2 = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name;
@@ -25181,7 +25190,7 @@ name.nobility_title_prefix = nobility_title_prefix;
 name.name = name$6;
 });
 
-var formats$2 = RealTimeClient.createCommonjsModule(function (module) {
+var formats$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "(0###) #########",
   "(0####) #######",
@@ -25190,26 +25199,26 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$2 = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$2 = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$2;
 });
 
-var formats$3 = RealTimeClient.createCommonjsModule(function (module) {
+var formats$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "+49-1##-#######",
   "+49-1###-########"
 ];
 });
 
-var cell_phone_1 = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1 = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$3;
 });
 
-var de_1 = RealTimeClient.createCommonjsModule(function (module) {
+var de_1 = createCommonjsModule(function (module) {
 var de = {};
 module['exports'] = de;
 de.title = "German";
@@ -25222,7 +25231,7 @@ de.phone_number = phone_number_1$2;
 de.cell_phone = cell_phone_1;
 });
 
-var country$3 = RealTimeClient.createCommonjsModule(function (module) {
+var country$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ägypten",
   "Äquatorialguinea",
@@ -25464,7 +25473,7 @@ module["exports"] = [
 ];
 });
 
-var street_root$1 = RealTimeClient.createCommonjsModule(function (module) {
+var street_root$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ahorn",
   "Ahorngasse (St. Andrä)",
@@ -25667,7 +25676,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$3 = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "###",
   "##",
@@ -25678,7 +25687,7 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$3 = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Apt. ###",
   "Zimmer ###",
@@ -25686,13 +25695,13 @@ module["exports"] = [
 ];
 });
 
-var postcode$3 = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "####"
 ];
 });
 
-var state$3 = RealTimeClient.createCommonjsModule(function (module) {
+var state$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Burgenland",
   "Kärnten",
@@ -25706,7 +25715,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$2 = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Bgld.",
   "Ktn.",
@@ -25720,7 +25729,7 @@ module["exports"] = [
 ];
 });
 
-var city_name$2 = RealTimeClient.createCommonjsModule(function (module) {
+var city_name$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aigen im Mühlkreis",
   "Allerheiligen bei Wildon",
@@ -25843,31 +25852,31 @@ module["exports"] = [
 ];
 });
 
-var city$3 = RealTimeClient.createCommonjsModule(function (module) {
+var city$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_name}"
 ];
 });
 
-var street_name$3 = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_root}"
 ];
 });
 
-var street_address$3 = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}"
 ];
 });
 
-var default_country$3 = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Österreich"
 ];
 });
 
-var address_1$3 = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$3 = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.country = country$3;
@@ -25884,7 +25893,7 @@ address.street_address = street_address$3;
 address.default_country = default_country$3;
 });
 
-var suffix$5 = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "GmbH",
   "AG",
@@ -25896,7 +25905,7 @@ module["exports"] = [
 ];
 });
 
-var legal_form$1 = RealTimeClient.createCommonjsModule(function (module) {
+var legal_form$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "GmbH",
   "AG",
@@ -25908,7 +25917,7 @@ module["exports"] = [
 ];
 });
 
-var name$7 = RealTimeClient.createCommonjsModule(function (module) {
+var name$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name}-#{Name.last_name}",
@@ -25916,7 +25925,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$3 = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$3 = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$5;
@@ -25924,7 +25933,7 @@ company.legal_form = legal_form$1;
 company.name = name$7;
 });
 
-var free_email$3 = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.com",
@@ -25932,7 +25941,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$3 = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "info",
@@ -25945,14 +25954,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$3 = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$3 = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$3;
 internet.domain_suffix = domain_suffix$3;
 });
 
-var first_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aaron",
   "Abdul",
@@ -27112,7 +27121,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abel",
   "Abicht",
@@ -28806,14 +28815,14 @@ module["exports"] = [
 ];
 });
 
-var prefix$4 = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Dr.",
   "Prof. Dr."
 ];
 });
 
-var nobility_title_prefix$1 = RealTimeClient.createCommonjsModule(function (module) {
+var nobility_title_prefix$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "zu",
   "von",
@@ -28822,7 +28831,7 @@ module["exports"] = [
 ];
 });
 
-var name$8 = RealTimeClient.createCommonjsModule(function (module) {
+var name$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name}",
   "#{first_name} #{nobility_title_prefix} #{last_name}",
@@ -28833,7 +28842,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$3 = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$3 = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$1;
@@ -28843,7 +28852,7 @@ name.nobility_title_prefix = nobility_title_prefix$1;
 name.name = name$8;
 });
 
-var formats$4 = RealTimeClient.createCommonjsModule(function (module) {
+var formats$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "01 #######",
   "01#######",
@@ -28856,13 +28865,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$3 = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$3 = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$4;
 });
 
-var formats$5 = RealTimeClient.createCommonjsModule(function (module) {
+var formats$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "+43-6##-#######",
   "06##-########",
@@ -28871,13 +28880,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$1 = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$1 = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$5;
 });
 
-var de_AT_1 = RealTimeClient.createCommonjsModule(function (module) {
+var de_AT_1 = createCommonjsModule(function (module) {
 var de_AT = {};
 module['exports'] = de_AT;
 de_AT.title = "German (Austria)";
@@ -28889,7 +28898,7 @@ de_AT.phone_number = phone_number_1$3;
 de_AT.cell_phone = cell_phone_1$1;
 });
 
-var country_code = RealTimeClient.createCommonjsModule(function (module) {
+var country_code = createCommonjsModule(function (module) {
 module["exports"] = [
   "CH",
   "CH",
@@ -28904,7 +28913,7 @@ module["exports"] = [
 ];
 });
 
-var postcode$4 = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "1###",
   "2###",
@@ -28918,13 +28927,13 @@ module["exports"] = [
 ];
 });
 
-var default_country$4 = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Schweiz"
 ];
 });
 
-var address_1$4 = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$4 = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.country_code = country_code;
@@ -28932,7 +28941,7 @@ address.postcode = postcode$4;
 address.default_country = default_country$4;
 });
 
-var suffix$6 = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "AG",
   "GmbH",
@@ -28945,7 +28954,7 @@ module["exports"] = [
 ];
 });
 
-var name$9 = RealTimeClient.createCommonjsModule(function (module) {
+var name$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name}-#{Name.last_name}",
@@ -28953,14 +28962,14 @@ module["exports"] = [
 ];
 });
 
-var company_1$4 = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$4 = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$6;
 company.name = name$9;
 });
 
-var domain_suffix$4 = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "net",
@@ -28974,13 +28983,13 @@ module["exports"] = [
 ];
 });
 
-var internet_1$4 = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$4 = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.domain_suffix = domain_suffix$4;
 });
 
-var first_name$2 = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$2 = createCommonjsModule(function (module) {
 module["exports"] = [
     "Adolf",
     "Adrian",
@@ -29322,7 +29331,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$2 = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$2 = createCommonjsModule(function (module) {
 module["exports"] = [
     "Ackermann",
     "Aebi",
@@ -29536,7 +29545,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$5 = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Hr.",
   "Fr.",
@@ -29544,7 +29553,7 @@ module["exports"] = [
 ];
 });
 
-var name$a = RealTimeClient.createCommonjsModule(function (module) {
+var name$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{first_name} #{last_name}",
   "#{first_name} #{last_name}",
@@ -29555,7 +29564,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$4 = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$4 = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$2;
@@ -29564,7 +29573,7 @@ name.prefix = prefix$5;
 name.name = name$a;
 });
 
-var formats$6 = RealTimeClient.createCommonjsModule(function (module) {
+var formats$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "0800 ### ###",
   "0800 ## ## ##",
@@ -29578,13 +29587,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$4 = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$4 = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$6;
 });
 
-var de_CH_1 = RealTimeClient.createCommonjsModule(function (module) {
+var de_CH_1 = createCommonjsModule(function (module) {
 var de_CH = {};
 module['exports'] = de_CH;
 de_CH.title = "German (Switzerland)";
@@ -29595,7 +29604,7 @@ de_CH.name = name_1$4;
 de_CH.phone_number = phone_number_1$4;
 });
 
-var city_prefix$1 = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "North",
   "East",
@@ -29607,7 +29616,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$1 = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "town",
   "ton",
@@ -29631,7 +29640,7 @@ module["exports"] = [
 ];
 });
 
-var county = RealTimeClient.createCommonjsModule(function (module) {
+var county = createCommonjsModule(function (module) {
 module["exports"] = [
   "Avon",
   "Bedfordshire",
@@ -29642,7 +29651,7 @@ module["exports"] = [
 ];
 });
 
-var country$4 = RealTimeClient.createCommonjsModule(function (module) {
+var country$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Afghanistan",
   "Albania",
@@ -29891,7 +29900,7 @@ module["exports"] = [
 ];
 });
 
-var country_code$1 = RealTimeClient.createCommonjsModule(function (module) {
+var country_code$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "AD",
   "AE",
@@ -30146,7 +30155,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$4 = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####",
   "####",
@@ -30154,7 +30163,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$1 = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Alley",
   "Avenue",
@@ -30384,28 +30393,28 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$4 = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Apt. ###",
   "Suite ###"
 ];
 });
 
-var postcode$5 = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####",
   "#####-####"
 ];
 });
 
-var postcode_by_state = RealTimeClient.createCommonjsModule(function (module) {
+var postcode_by_state = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####",
   "#####-####"
 ];
 });
 
-var state$4 = RealTimeClient.createCommonjsModule(function (module) {
+var state$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Alabama",
   "Alaska",
@@ -30460,7 +30469,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$3 = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "AL",
   "AK",
@@ -30515,7 +30524,7 @@ module["exports"] = [
 ];
 });
 
-var time_zone$1 = RealTimeClient.createCommonjsModule(function (module) {
+var time_zone$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Pacific/Midway",
   "Pacific/Pago_Pago",
@@ -30663,7 +30672,7 @@ module["exports"] = [
 ];
 });
 
-var city$4 = RealTimeClient.createCommonjsModule(function (module) {
+var city$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix} #{Name.first_name}#{city_suffix}",
   "#{city_prefix} #{Name.first_name}",
@@ -30672,26 +30681,26 @@ module["exports"] = [
 ];
 });
 
-var street_name$4 = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.first_name} #{street_suffix}",
   "#{Name.last_name} #{street_suffix}"
 ];
 });
 
-var street_address$4 = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{building_number} #{street_name}"
 ];
 });
 
-var default_country$5 = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "United States of America"
 ];
 });
 
-var address_1$5 = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$5 = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$1;
@@ -30713,21 +30722,21 @@ address.street_address = street_address$4;
 address.default_country = default_country$5;
 });
 
-var visa = RealTimeClient.createCommonjsModule(function (module) {
+var visa = createCommonjsModule(function (module) {
 module["exports"] = [
   "/4###########L/",
   "/4###-####-####-###L/"
 ];
 });
 
-var mastercard = RealTimeClient.createCommonjsModule(function (module) {
+var mastercard = createCommonjsModule(function (module) {
 module["exports"] = [
   "/5[1-5]##-####-####-###L/",
   "/6771-89##-####-###L/"
 ];
 });
 
-var discover = RealTimeClient.createCommonjsModule(function (module) {
+var discover = createCommonjsModule(function (module) {
 module["exports"] = [
   "/6011-####-####-###L/",
   "/65##-####-####-###L/",
@@ -30738,21 +30747,21 @@ module["exports"] = [
 ];
 });
 
-var american_express = RealTimeClient.createCommonjsModule(function (module) {
+var american_express = createCommonjsModule(function (module) {
 module["exports"] = [
   "/34##-######-####L/",
   "/37##-######-####L/"
 ];
 });
 
-var diners_club = RealTimeClient.createCommonjsModule(function (module) {
+var diners_club = createCommonjsModule(function (module) {
 module["exports"] = [
   "/30[0-5]#-######-###L/",
   "/368#-######-###L/"
 ];
 });
 
-var jcb = RealTimeClient.createCommonjsModule(function (module) {
+var jcb = createCommonjsModule(function (module) {
 module["exports"] = [
   "/3528-####-####-###L/",
   "/3529-####-####-###L/",
@@ -30760,7 +30769,7 @@ module["exports"] = [
 ];
 });
 
-var _switch = RealTimeClient.createCommonjsModule(function (module) {
+var _switch = createCommonjsModule(function (module) {
 module["exports"] = [
   "/6759-####-####-###L/",
   "/6759-####-####-####-#L/",
@@ -30768,7 +30777,7 @@ module["exports"] = [
 ];
 });
 
-var solo = RealTimeClient.createCommonjsModule(function (module) {
+var solo = createCommonjsModule(function (module) {
 module["exports"] = [
   "/6767-####-####-###L/",
   "/6767-####-####-####-#L/",
@@ -30776,7 +30785,7 @@ module["exports"] = [
 ];
 });
 
-var maestro = RealTimeClient.createCommonjsModule(function (module) {
+var maestro = createCommonjsModule(function (module) {
 module["exports"] = [
   "/50#{9,16}L/",
   "/5[6-8]#{9,16}L/",
@@ -30784,7 +30793,7 @@ module["exports"] = [
 ];
 });
 
-var laser = RealTimeClient.createCommonjsModule(function (module) {
+var laser = createCommonjsModule(function (module) {
 module["exports"] = [
   "/6304###########L/",
   "/6706###########L/",
@@ -30797,7 +30806,7 @@ module["exports"] = [
 ];
 });
 
-var credit_card_1 = RealTimeClient.createCommonjsModule(function (module) {
+var credit_card_1 = createCommonjsModule(function (module) {
 var credit_card = {};
 module['exports'] = credit_card;
 credit_card.visa = visa;
@@ -30812,7 +30821,7 @@ credit_card.maestro = maestro;
 credit_card.laser = laser;
 });
 
-var suffix$7 = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Inc",
   "and Sons",
@@ -30821,7 +30830,7 @@ module["exports"] = [
 ];
 });
 
-var adjective$1 = RealTimeClient.createCommonjsModule(function (module) {
+var adjective$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adaptive",
   "Advanced",
@@ -30926,7 +30935,7 @@ module["exports"] = [
 ];
 });
 
-var descriptor$1 = RealTimeClient.createCommonjsModule(function (module) {
+var descriptor$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "24 hour",
   "24/7",
@@ -31032,7 +31041,7 @@ module["exports"] = [
 ];
 });
 
-var noun$1 = RealTimeClient.createCommonjsModule(function (module) {
+var noun$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "ability",
   "access",
@@ -31141,7 +31150,7 @@ module["exports"] = [
 ];
 });
 
-var bs_verb$1 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_verb$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "implement",
   "utilize",
@@ -31206,7 +31215,7 @@ module["exports"] = [
 ];
 });
 
-var bs_adjective = RealTimeClient.createCommonjsModule(function (module) {
+var bs_adjective = createCommonjsModule(function (module) {
 module["exports"] = [
   "clicks-and-mortar",
   "value-added",
@@ -31276,7 +31285,7 @@ module["exports"] = [
 ];
 });
 
-var bs_noun$1 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_noun$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "synergies",
   "web-readiness",
@@ -31325,7 +31334,7 @@ module["exports"] = [
 ];
 });
 
-var name$b = RealTimeClient.createCommonjsModule(function (module) {
+var name$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name}-#{Name.last_name}",
@@ -31333,7 +31342,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$5 = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$5 = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$7;
@@ -31346,7 +31355,7 @@ company.bs_noun = bs_noun$1;
 company.name = name$b;
 });
 
-var free_email$4 = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.com",
@@ -31354,7 +31363,7 @@ module["exports"] = [
 ];
 });
 
-var example_email = RealTimeClient.createCommonjsModule(function (module) {
+var example_email = createCommonjsModule(function (module) {
 module["exports"] = [
   "example.org",
   "example.com",
@@ -31362,7 +31371,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$5 = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "biz",
@@ -31373,7 +31382,7 @@ module["exports"] = [
 ];
 });
 
-var avatar_uri = RealTimeClient.createCommonjsModule(function (module) {
+var avatar_uri = createCommonjsModule(function (module) {
 module["exports"] = [
   "https://s3.amazonaws.com/uifaces/faces/twitter/jarjan/128.jpg",
   "https://s3.amazonaws.com/uifaces/faces/twitter/mahdif/128.jpg",
@@ -32635,7 +32644,7 @@ module["exports"] = [
 ];
 });
 
-var internet_1$5 = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$5 = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$4;
@@ -32644,7 +32653,7 @@ internet.domain_suffix = domain_suffix$5;
 internet.avatar_uri = avatar_uri;
 });
 
-var collation = RealTimeClient.createCommonjsModule(function (module) {
+var collation = createCommonjsModule(function (module) {
 module["exports"] = [
   "utf8_unicode_ci",
   "utf8_general_ci",
@@ -32656,7 +32665,7 @@ module["exports"] = [
 ];
 });
 
-var column = RealTimeClient.createCommonjsModule(function (module) {
+var column = createCommonjsModule(function (module) {
 module["exports"] = [
   "id",
   "title",
@@ -32675,7 +32684,7 @@ module["exports"] = [
 ];
 });
 
-var engine = RealTimeClient.createCommonjsModule(function (module) {
+var engine = createCommonjsModule(function (module) {
 module["exports"] = [
   "InnoDB",
   "MyISAM",
@@ -32686,7 +32695,7 @@ module["exports"] = [
 ];
 });
 
-var type = RealTimeClient.createCommonjsModule(function (module) {
+var type = createCommonjsModule(function (module) {
 module["exports"] = [
   "int",
   "varchar",
@@ -32715,7 +32724,7 @@ module["exports"] = [
 ];
 });
 
-var database_1 = RealTimeClient.createCommonjsModule(function (module) {
+var database_1 = createCommonjsModule(function (module) {
 var database = {};
 module['exports'] = database;
 database.collation = collation;
@@ -32724,7 +32733,7 @@ database.engine = engine;
 database.type = type;
 });
 
-var words$2 = RealTimeClient.createCommonjsModule(function (module) {
+var words$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "alias",
   "consequatur",
@@ -32978,7 +32987,7 @@ module["exports"] = [
 ];
 });
 
-var supplemental$1 = RealTimeClient.createCommonjsModule(function (module) {
+var supplemental$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "abbas",
   "abduco",
@@ -33823,14 +33832,14 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$2 = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$2 = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$2;
 lorem.supplemental = supplemental$1;
 });
 
-var first_name$3 = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aaliyah",
   "Aaron",
@@ -36842,7 +36851,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$3 = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abbott",
   "Abernathy",
@@ -37321,7 +37330,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$6 = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Mr.",
   "Mrs.",
@@ -37331,7 +37340,7 @@ module["exports"] = [
 ];
 });
 
-var suffix$8 = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Jr.",
   "Sr.",
@@ -37347,7 +37356,7 @@ module["exports"] = [
 ];
 });
 
-var title$1 = RealTimeClient.createCommonjsModule(function (module) {
+var title$1 = createCommonjsModule(function (module) {
 module["exports"] = {
   "descriptor": [
     "Lead",
@@ -37442,7 +37451,7 @@ module["exports"] = {
 };
 });
 
-var name$c = RealTimeClient.createCommonjsModule(function (module) {
+var name$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name}",
   "#{first_name} #{last_name} #{suffix}",
@@ -37453,7 +37462,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$5 = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$5 = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$3;
@@ -37464,7 +37473,7 @@ name.title = title$1;
 name.name = name$c;
 });
 
-var formats$7 = RealTimeClient.createCommonjsModule(function (module) {
+var formats$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "###-###-####",
   "(###) ###-####",
@@ -37489,13 +37498,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$5 = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$5 = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$7;
 });
 
-var formats$8 = RealTimeClient.createCommonjsModule(function (module) {
+var formats$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "###-###-####",
   "(###) ###-####",
@@ -37504,13 +37513,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$2 = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$2 = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$8;
 });
 
-var credit_card_numbers = RealTimeClient.createCommonjsModule(function (module) {
+var credit_card_numbers = createCommonjsModule(function (module) {
 module["exports"] = [
   "1234-2121-1221-1211",
   "1212-1221-1121-1234",
@@ -37519,7 +37528,7 @@ module["exports"] = [
 ];
 });
 
-var credit_card_expiry_dates = RealTimeClient.createCommonjsModule(function (module) {
+var credit_card_expiry_dates = createCommonjsModule(function (module) {
 module["exports"] = [
   "2011-10-12",
   "2012-11-12",
@@ -37528,7 +37537,7 @@ module["exports"] = [
 ];
 });
 
-var credit_card_types = RealTimeClient.createCommonjsModule(function (module) {
+var credit_card_types = createCommonjsModule(function (module) {
 module["exports"] = [
   "visa",
   "mastercard",
@@ -37537,7 +37546,7 @@ module["exports"] = [
 ];
 });
 
-var business_1 = RealTimeClient.createCommonjsModule(function (module) {
+var business_1 = createCommonjsModule(function (module) {
 var business = {};
 module['exports'] = business;
 business.credit_card_numbers = credit_card_numbers;
@@ -37545,7 +37554,7 @@ business.credit_card_expiry_dates = credit_card_expiry_dates;
 business.credit_card_types = credit_card_types;
 });
 
-var color$1 = RealTimeClient.createCommonjsModule(function (module) {
+var color$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "red",
   "green",
@@ -37581,7 +37590,7 @@ module["exports"] = [
 ];
 });
 
-var department$1 = RealTimeClient.createCommonjsModule(function (module) {
+var department$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Books",
   "Movies",
@@ -37608,7 +37617,7 @@ module["exports"] = [
 ];
 });
 
-var product_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var product_name$1 = createCommonjsModule(function (module) {
 module["exports"] = {
   "adjective": [
     "Small",
@@ -37671,7 +37680,7 @@ module["exports"] = {
 };
 });
 
-var commerce_1$1 = RealTimeClient.createCommonjsModule(function (module) {
+var commerce_1$1 = createCommonjsModule(function (module) {
 var commerce = {};
 module['exports'] = commerce;
 commerce.color = color$1;
@@ -37679,7 +37688,7 @@ commerce.department = department$1;
 commerce.product_name = product_name$1;
 });
 
-var creature = RealTimeClient.createCommonjsModule(function (module) {
+var creature = createCommonjsModule(function (module) {
 module["exports"] = [
   "ants",
   "bats",
@@ -37751,20 +37760,20 @@ module["exports"] = [
 ];
 });
 
-var name$d = RealTimeClient.createCommonjsModule(function (module) {
+var name$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Address.state} #{creature}"
 ];
 });
 
-var team_1 = RealTimeClient.createCommonjsModule(function (module) {
+var team_1 = createCommonjsModule(function (module) {
 var team = {};
 module['exports'] = team;
 team.creature = creature;
 team.name = name$d;
 });
 
-var abbreviation = RealTimeClient.createCommonjsModule(function (module) {
+var abbreviation = createCommonjsModule(function (module) {
 module["exports"] = [
   "TCP",
   "HTTP",
@@ -37798,7 +37807,7 @@ module["exports"] = [
 ];
 });
 
-var adjective$2 = RealTimeClient.createCommonjsModule(function (module) {
+var adjective$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "auxiliary",
   "primary",
@@ -37821,7 +37830,7 @@ module["exports"] = [
 ];
 });
 
-var noun$2 = RealTimeClient.createCommonjsModule(function (module) {
+var noun$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "driver",
   "protocol",
@@ -37850,7 +37859,7 @@ module["exports"] = [
 ];
 });
 
-var verb = RealTimeClient.createCommonjsModule(function (module) {
+var verb = createCommonjsModule(function (module) {
 module["exports"] = [
   "back up",
   "bypass",
@@ -37873,7 +37882,7 @@ module["exports"] = [
 ];
 });
 
-var ingverb = RealTimeClient.createCommonjsModule(function (module) {
+var ingverb = createCommonjsModule(function (module) {
 module["exports"] = [
   "backing up",
   "bypassing",
@@ -37894,7 +37903,7 @@ module["exports"] = [
 ];
 });
 
-var hacker_1 = RealTimeClient.createCommonjsModule(function (module) {
+var hacker_1 = createCommonjsModule(function (module) {
 var hacker = {};
 module['exports'] = hacker;
 hacker.abbreviation = abbreviation;
@@ -37904,7 +37913,7 @@ hacker.verb = verb;
 hacker.ingverb = ingverb;
 });
 
-var name$e = RealTimeClient.createCommonjsModule(function (module) {
+var name$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "Redhold",
   "Treeflex",
@@ -37971,7 +37980,7 @@ module["exports"] = [
 ];
 });
 
-var version = RealTimeClient.createCommonjsModule(function (module) {
+var version = createCommonjsModule(function (module) {
 module["exports"] = [
   "0.#.#",
   "0.##",
@@ -37981,14 +37990,14 @@ module["exports"] = [
 ];
 });
 
-var author = RealTimeClient.createCommonjsModule(function (module) {
+var author = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.name}",
   "#{Company.name}"
 ];
 });
 
-var app_1 = RealTimeClient.createCommonjsModule(function (module) {
+var app_1 = createCommonjsModule(function (module) {
 var app = {};
 module['exports'] = app;
 app.name = name$e;
@@ -37996,7 +38005,7 @@ app.version = version;
 app.author = author;
 });
 
-var account_type = RealTimeClient.createCommonjsModule(function (module) {
+var account_type = createCommonjsModule(function (module) {
 module["exports"] = [
   "Checking",
   "Savings",
@@ -38009,7 +38018,7 @@ module["exports"] = [
 ];
 });
 
-var transaction_type = RealTimeClient.createCommonjsModule(function (module) {
+var transaction_type = createCommonjsModule(function (module) {
 module["exports"] = [
   "deposit",
   "withdrawal",
@@ -38018,7 +38027,7 @@ module["exports"] = [
 ];
 });
 
-var currency = RealTimeClient.createCommonjsModule(function (module) {
+var currency = createCommonjsModule(function (module) {
 module["exports"] = {
   "UAE Dirham": {
     "code": "AED",
@@ -38699,7 +38708,7 @@ module["exports"] = {
 };
 });
 
-var finance_1 = RealTimeClient.createCommonjsModule(function (module) {
+var finance_1 = createCommonjsModule(function (module) {
 var finance = {};
 module['exports'] = finance;
 finance.account_type = account_type;
@@ -38707,7 +38716,7 @@ finance.transaction_type = transaction_type;
 finance.currency = currency;
 });
 
-var month$2 = RealTimeClient.createCommonjsModule(function (module) {
+var month$2 = createCommonjsModule(function (module) {
 // Source: http://unicode.org/cldr/trac/browser/tags/release-27/common/main/en.xml#L1799
 module["exports"] = {
   wide: [
@@ -38773,7 +38782,7 @@ module["exports"] = {
 };
 });
 
-var weekday$2 = RealTimeClient.createCommonjsModule(function (module) {
+var weekday$2 = createCommonjsModule(function (module) {
 // Source: http://unicode.org/cldr/trac/browser/tags/release-27/common/main/en.xml#L1847
 module["exports"] = {
   wide: [
@@ -38819,14 +38828,14 @@ module["exports"] = {
 };
 });
 
-var date_1$2 = RealTimeClient.createCommonjsModule(function (module) {
+var date_1$2 = createCommonjsModule(function (module) {
 var date = {};
 module["exports"] = date;
 date.month = month$2;
 date.weekday = weekday$2;
 });
 
-var mimeTypes = RealTimeClient.createCommonjsModule(function (module) {
+var mimeTypes = createCommonjsModule(function (module) {
 /*
 
 The MIT License (MIT)
@@ -45410,13 +45419,13 @@ module['exports'] = {
 };
 });
 
-var system_1 = RealTimeClient.createCommonjsModule(function (module) {
+var system_1 = createCommonjsModule(function (module) {
 var system = {};
 module['exports'] = system;
 system.mimeTypes = mimeTypes;
 });
 
-var en_1 = RealTimeClient.createCommonjsModule(function (module) {
+var en_1 = createCommonjsModule(function (module) {
 var en = {};
 module['exports'] = en;
 en.title = "English";
@@ -45440,7 +45449,7 @@ en.date = date_1$2;
 en.system = system_1;
 });
 
-var first_name$4 = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "William",
   "Jack",
@@ -45645,7 +45654,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$4 = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Smith",
   "Jones",
@@ -45936,14 +45945,14 @@ module["exports"] = [
 ];
 });
 
-var name_1$6 = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$6 = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$4;
 name.last_name = last_name$4;
 });
 
-var suffix$9 = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Pty Ltd",
   "and Sons",
@@ -45954,13 +45963,13 @@ module["exports"] = [
 ];
 });
 
-var company_1$6 = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$6 = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$9;
 });
 
-var domain_suffix$6 = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "com.au",
   "com",
@@ -45971,13 +45980,13 @@ module["exports"] = [
 ];
 });
 
-var internet_1$6 = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$6 = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.domain_suffix = domain_suffix$6;
 });
 
-var state_abbr$4 = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "NSW",
   "QLD",
@@ -45990,7 +45999,7 @@ module["exports"] = [
 ];
 });
 
-var state$5 = RealTimeClient.createCommonjsModule(function (module) {
+var state$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "New South Wales",
   "Queensland",
@@ -46003,7 +46012,7 @@ module["exports"] = [
 ];
 });
 
-var postcode$6 = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "0###",
   "2###",
@@ -46015,7 +46024,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$5 = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "####",
   "###",
@@ -46023,7 +46032,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$2 = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Avenue",
   "Boulevard",
@@ -46065,13 +46074,13 @@ module["exports"] = [
 ];
 });
 
-var default_country$6 = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Australia"
 ];
 });
 
-var address_1$6 = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$6 = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.state_abbr = state_abbr$4;
@@ -46082,7 +46091,7 @@ address.street_suffix = street_suffix$2;
 address.default_country = default_country$6;
 });
 
-var formats$9 = RealTimeClient.createCommonjsModule(function (module) {
+var formats$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "0# #### ####",
   "+61 # #### ####",
@@ -46091,13 +46100,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$6 = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$6 = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$9;
 });
 
-var en_AU_1 = RealTimeClient.createCommonjsModule(function (module) {
+var en_AU_1 = createCommonjsModule(function (module) {
 var en_AU = {};
 module['exports'] = en_AU;
 en_AU.title = "Australia (English)";
@@ -46108,7 +46117,7 @@ en_AU.address = address_1$6;
 en_AU.phone_number = phone_number_1$6;
 });
 
-var words$3 = RealTimeClient.createCommonjsModule(function (module) {
+var words$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Boot",
   "I",
@@ -46216,20 +46225,20 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$3 = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$3 = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$3;
 });
 
-var en_BORK_1 = RealTimeClient.createCommonjsModule(function (module) {
+var en_BORK_1 = createCommonjsModule(function (module) {
 var en_BORK = {};
 module['exports'] = en_BORK;
 en_BORK.title = "Bork (English)";
 en_BORK.lorem = lorem_1$3;
 });
 
-var state$6 = RealTimeClient.createCommonjsModule(function (module) {
+var state$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Alberta",
   "British Columbia",
@@ -46247,7 +46256,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$5 = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "AB",
   "BC",
@@ -46265,19 +46274,19 @@ module["exports"] = [
 ];
 });
 
-var default_country$7 = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Canada"
 ];
 });
 
-var postcode$7 = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "?#? #?#"
 ];
 });
 
-var address_1$7 = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$7 = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.state = state$6;
@@ -46286,7 +46295,7 @@ address.default_country = default_country$7;
 address.postcode = postcode$7;
 });
 
-var free_email$5 = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.ca",
@@ -46294,7 +46303,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$7 = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "ca",
   "com",
@@ -46306,14 +46315,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$7 = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$7 = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$5;
 internet.domain_suffix = domain_suffix$7;
 });
 
-var formats$a = RealTimeClient.createCommonjsModule(function (module) {
+var formats$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "###-###-####",
   "(###)###-####",
@@ -46334,13 +46343,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$7 = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$7 = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$a;
 });
 
-var en_CA_1 = RealTimeClient.createCommonjsModule(function (module) {
+var en_CA_1 = createCommonjsModule(function (module) {
 var en_CA = {};
 module['exports'] = en_CA;
 en_CA.title = "Canada (English)";
@@ -46349,7 +46358,7 @@ en_CA.internet = internet_1$7;
 en_CA.phone_number = phone_number_1$7;
 });
 
-var county$1 = RealTimeClient.createCommonjsModule(function (module) {
+var county$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Avon",
   "Bedfordshire",
@@ -46424,7 +46433,7 @@ module["exports"] = [
 ];
 });
 
-var uk_country = RealTimeClient.createCommonjsModule(function (module) {
+var uk_country = createCommonjsModule(function (module) {
 module["exports"] = [
   "England",
   "Scotland",
@@ -46433,7 +46442,7 @@ module["exports"] = [
 ];
 });
 
-var default_country$8 = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "England",
   "Scotland",
@@ -46442,14 +46451,14 @@ module["exports"] = [
 ];
 });
 
-var postcode$8 = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "??# #??",
   "??## #??",
 ];
 });
 
-var address_1$8 = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$8 = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.county = county$1;
@@ -46458,7 +46467,7 @@ address.default_country = default_country$8;
 address.postcode = postcode$8;
 });
 
-var domain_suffix$8 = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "co.uk",
   "com",
@@ -46468,13 +46477,13 @@ module["exports"] = [
 ];
 });
 
-var internet_1$8 = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$8 = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.domain_suffix = domain_suffix$8;
 });
 
-var formats$b = RealTimeClient.createCommonjsModule(function (module) {
+var formats$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "01#### #####",
   "01### ######",
@@ -46494,13 +46503,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$8 = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$8 = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$b;
 });
 
-var formats$c = RealTimeClient.createCommonjsModule(function (module) {
+var formats$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "074## ######",
   "075## ######",
@@ -46511,13 +46520,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$3 = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$3 = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$c;
 });
 
-var en_GB_1 = RealTimeClient.createCommonjsModule(function (module) {
+var en_GB_1 = createCommonjsModule(function (module) {
 var en_GB = {};
 module['exports'] = en_GB;
 en_GB.title = "Great Britain (English)";
@@ -46527,7 +46536,7 @@ en_GB.phone_number = phone_number_1$8;
 en_GB.cell_phone = cell_phone_1$3;
 });
 
-var county$2 = RealTimeClient.createCommonjsModule(function (module) {
+var county$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Carlow",
   "Cavan",
@@ -46558,20 +46567,20 @@ module["exports"] = [
 ];
 });
 
-var default_country$9 = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ireland"
 ];
 });
 
-var address_1$9 = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$9 = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.county = county$2;
 address.default_country = default_country$9;
 });
 
-var domain_suffix$9 = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "ie",
   "com",
@@ -46581,13 +46590,13 @@ module["exports"] = [
 ];
 });
 
-var internet_1$9 = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$9 = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.domain_suffix = domain_suffix$9;
 });
 
-var formats$d = RealTimeClient.createCommonjsModule(function (module) {
+var formats$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "01 #######",
   "021 #######",
@@ -46641,13 +46650,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$9 = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$9 = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$d;
 });
 
-var formats$e = RealTimeClient.createCommonjsModule(function (module) {
+var formats$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "082 ### ####",
   "083 ### ####",
@@ -46658,13 +46667,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$4 = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$4 = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$e;
 });
 
-var en_IE_1 = RealTimeClient.createCommonjsModule(function (module) {
+var en_IE_1 = createCommonjsModule(function (module) {
 var en_IE = {};
 module['exports'] = en_IE;
 en_IE.title = "Ireland (English)";
@@ -46674,7 +46683,7 @@ en_IE.phone_number = phone_number_1$9;
 en_IE.cell_phone = cell_phone_1$4;
 });
 
-var first_name$5 = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aadrika",
   "Aanandinii",
@@ -47441,7 +47450,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$5 = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abbott",
   "Achari",
@@ -47535,20 +47544,20 @@ module["exports"] = [
 ];
 });
 
-var name_1$7 = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$7 = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$5;
 name.last_name = last_name$5;
 });
 
-var postcode$9 = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "?#? #?#"
 ];
 });
 
-var state$7 = RealTimeClient.createCommonjsModule(function (module) {
+var state$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Andra Pradesh",
   "Arunachal Pradesh",
@@ -47588,7 +47597,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$6 = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "AP",
   "AR",
@@ -47628,7 +47637,7 @@ module["exports"] = [
 ];
 });
 
-var default_country$a = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "India",
   "Indian Republic",
@@ -47637,7 +47646,7 @@ module["exports"] = [
 ];
 });
 
-var address_1$a = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$a = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.postcode = postcode$9;
@@ -47646,7 +47655,7 @@ address.state_abbr = state_abbr$6;
 address.default_country = default_country$a;
 });
 
-var free_email$6 = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.co.in",
@@ -47654,7 +47663,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$a = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "in",
   "com",
@@ -47667,14 +47676,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$a = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$a = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$6;
 internet.domain_suffix = domain_suffix$a;
 });
 
-var suffix$a = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "Pvt Ltd",
   "Limited",
@@ -47686,13 +47695,13 @@ module["exports"] = [
 ];
 });
 
-var company_1$7 = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$7 = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$a;
 });
 
-var formats$f = RealTimeClient.createCommonjsModule(function (module) {
+var formats$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "+91###-###-####",
   "+91##########",
@@ -47700,13 +47709,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$a = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$a = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$f;
 });
 
-var en_IND_1 = RealTimeClient.createCommonjsModule(function (module) {
+var en_IND_1 = createCommonjsModule(function (module) {
 var en_IND = {};
 module['exports'] = en_IND;
 en_IND.title = "India (English)";
@@ -47717,7 +47726,7 @@ en_IND.company = company_1$7;
 en_IND.phone_number = phone_number_1$a;
 });
 
-var domain_suffix$b = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "us",
@@ -47729,13 +47738,13 @@ module["exports"] = [
 ];
 });
 
-var internet_1$b = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$b = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.domain_suffix = domain_suffix$b;
 });
 
-var default_country$b = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "United States",
   "United States of America",
@@ -47743,7 +47752,7 @@ module["exports"] = [
 ];
 });
 
-var postcode_by_state$1 = RealTimeClient.createCommonjsModule(function (module) {
+var postcode_by_state$1 = createCommonjsModule(function (module) {
 module["exports"] = {
   "AL": "350##",
   "AK": "995##",
@@ -47800,14 +47809,14 @@ module["exports"] = {
 };
 });
 
-var address_1$b = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$b = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.default_country = default_country$b;
 address.postcode_by_state = postcode_by_state$1;
 });
 
-var area_code = RealTimeClient.createCommonjsModule(function (module) {
+var area_code = createCommonjsModule(function (module) {
 module["exports"] = [
   "201",
   "202",
@@ -48095,7 +48104,7 @@ module["exports"] = [
 ];
 });
 
-var exchange_code = RealTimeClient.createCommonjsModule(function (module) {
+var exchange_code = createCommonjsModule(function (module) {
 module["exports"] = [
   "201",
   "202",
@@ -48383,14 +48392,14 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$b = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$b = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.area_code = area_code;
 phone_number.exchange_code = exchange_code;
 });
 
-var en_US_1 = RealTimeClient.createCommonjsModule(function (module) {
+var en_US_1 = createCommonjsModule(function (module) {
 var en_US = {};
 module['exports'] = en_US;
 en_US.title = "United States (English)";
@@ -48399,7 +48408,7 @@ en_US.address = address_1$b;
 en_US.phone_number = phone_number_1$b;
 });
 
-var first_name$6 = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Charlotte",
   "Ava",
@@ -48508,7 +48517,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$6 = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Smith",
   "Jones",
@@ -48537,7 +48546,7 @@ module["exports"] = [
 ];
 });
 
-var ocker_first_name = RealTimeClient.createCommonjsModule(function (module) {
+var ocker_first_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Bazza",
   "Bluey",
@@ -48548,7 +48557,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$8 = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$8 = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$6;
@@ -48556,7 +48565,7 @@ name.last_name = last_name$6;
 name.ocker_first_name = ocker_first_name;
 });
 
-var suffix$b = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "Pty Ltd",
   "and Sons",
@@ -48567,13 +48576,13 @@ module["exports"] = [
 ];
 });
 
-var company_1$8 = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$8 = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$b;
 });
 
-var domain_suffix$c = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "com.au",
   "com",
@@ -48584,13 +48593,13 @@ module["exports"] = [
 ];
 });
 
-var internet_1$c = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$c = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.domain_suffix = domain_suffix$c;
 });
 
-var street_root$2 = RealTimeClient.createCommonjsModule(function (module) {
+var street_root$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ramsay Street",
   "Bonnie Doon",
@@ -48599,13 +48608,13 @@ module["exports"] = [
 ];
 });
 
-var street_name$5 = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_root}"
 ];
 });
 
-var city_prefix$2 = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Bondi",
   "Burleigh Heads",
@@ -48622,13 +48631,13 @@ module["exports"] = [
 ];
 });
 
-var city$5 = RealTimeClient.createCommonjsModule(function (module) {
+var city$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix}"
 ];
 });
 
-var state_abbr$7 = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "NSW",
   "QLD",
@@ -48641,7 +48650,7 @@ module["exports"] = [
 ];
 });
 
-var region = RealTimeClient.createCommonjsModule(function (module) {
+var region = createCommonjsModule(function (module) {
 module["exports"] = [
   "South East Queensland",
   "Wide Bay Burnett",
@@ -48653,7 +48662,7 @@ module["exports"] = [
 ];
 });
 
-var state$8 = RealTimeClient.createCommonjsModule(function (module) {
+var state$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "New South Wales",
   "Queensland",
@@ -48666,7 +48675,7 @@ module["exports"] = [
 ];
 });
 
-var postcode$a = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "0###",
   "2###",
@@ -48678,7 +48687,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$6 = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "####",
   "###",
@@ -48686,7 +48695,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$3 = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Avenue",
   "Boulevard",
@@ -48728,13 +48737,13 @@ module["exports"] = [
 ];
 });
 
-var default_country$c = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "Australia"
 ];
 });
 
-var address_1$c = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$c = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.street_root = street_root$2;
@@ -48750,7 +48759,7 @@ address.street_suffix = street_suffix$3;
 address.default_country = default_country$c;
 });
 
-var formats$g = RealTimeClient.createCommonjsModule(function (module) {
+var formats$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "0# #### ####",
   "+61 # #### ####",
@@ -48759,13 +48768,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$c = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$c = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$g;
 });
 
-var en_au_ocker_1 = RealTimeClient.createCommonjsModule(function (module) {
+var en_au_ocker_1 = createCommonjsModule(function (module) {
 var en_au_ocker = {};
 module['exports'] = en_au_ocker;
 en_au_ocker.title = "Australia Ocker (English)";
@@ -48776,7 +48785,7 @@ en_au_ocker.address = address_1$c;
 en_au_ocker.phone_number = phone_number_1$c;
 });
 
-var city_prefix$3 = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Parla",
   "Telde",
@@ -48910,7 +48919,7 @@ module["exports"] = [
 ];
 });
 
-var country$5 = RealTimeClient.createCommonjsModule(function (module) {
+var country$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Afganistán",
   "Albania",
@@ -49095,7 +49104,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$7 = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   " s/n.",
   ", #",
@@ -49105,7 +49114,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$4 = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aldea",
   "Apartamento",
@@ -49180,20 +49189,20 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$5 = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Esc. ###",
   "Puerta ###"
 ];
 });
 
-var postcode$b = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####"
 ];
 });
 
-var province = RealTimeClient.createCommonjsModule(function (module) {
+var province = createCommonjsModule(function (module) {
 module["exports"] = [
   "Álava",
   "Albacete",
@@ -49248,7 +49257,7 @@ module["exports"] = [
 ];
 });
 
-var state$9 = RealTimeClient.createCommonjsModule(function (module) {
+var state$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Andalucía",
   "Aragón",
@@ -49270,7 +49279,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$8 = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "And",
   "Ara",
@@ -49292,7 +49301,7 @@ module["exports"] = [
 ];
 });
 
-var time_zone$2 = RealTimeClient.createCommonjsModule(function (module) {
+var time_zone$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Pacífico/Midway",
   "Pacífico/Pago_Pago",
@@ -49440,33 +49449,33 @@ module["exports"] = [
 ];
 });
 
-var city$6 = RealTimeClient.createCommonjsModule(function (module) {
+var city$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix}"
 ];
 });
 
-var street_name$6 = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_suffix} #{Name.first_name}",
   "#{street_suffix} #{Name.first_name} #{Name.last_name}"
 ];
 });
 
-var street_address$5 = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name}#{building_number}",
   "#{street_name}#{building_number} #{secondary_address}"
 ];
 });
 
-var default_country$d = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "España"
 ];
 });
 
-var address_1$d = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$d = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$3;
@@ -49485,7 +49494,7 @@ address.street_address = street_address$5;
 address.default_country = default_country$d;
 });
 
-var suffix$c = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "S.L.",
   "e Hijos",
@@ -49494,7 +49503,7 @@ module["exports"] = [
 ];
 });
 
-var noun$3 = RealTimeClient.createCommonjsModule(function (module) {
+var noun$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "habilidad",
   "acceso",
@@ -49592,7 +49601,7 @@ module["exports"] = [
 ];
 });
 
-var descriptor$2 = RealTimeClient.createCommonjsModule(function (module) {
+var descriptor$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "24 horas",
   "24/7",
@@ -49678,7 +49687,7 @@ module["exports"] = [
 ];
 });
 
-var adjective$3 = RealTimeClient.createCommonjsModule(function (module) {
+var adjective$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adaptativo",
   "Avanzado",
@@ -49768,7 +49777,7 @@ module["exports"] = [
 ];
 });
 
-var name$f = RealTimeClient.createCommonjsModule(function (module) {
+var name$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name} y #{Name.last_name}",
@@ -49777,7 +49786,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$9 = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$9 = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$c;
@@ -49787,7 +49796,7 @@ company.adjective = adjective$3;
 company.name = name$f;
 });
 
-var free_email$7 = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.com",
@@ -49795,7 +49804,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$d = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "es",
@@ -49805,14 +49814,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$d = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$d = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$7;
 internet.domain_suffix = domain_suffix$d;
 });
 
-var first_name$7 = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adán",
   "Agustín",
@@ -50029,7 +50038,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$7 = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abeyta",
   "Abrego",
@@ -50672,7 +50681,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$7 = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Sr.",
   "Sra.",
@@ -50680,7 +50689,7 @@ module["exports"] = [
 ];
 });
 
-var suffix$d = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "Jr.",
   "Sr.",
@@ -50696,7 +50705,7 @@ module["exports"] = [
 ];
 });
 
-var title$2 = RealTimeClient.createCommonjsModule(function (module) {
+var title$2 = createCommonjsModule(function (module) {
 module["exports"] = {
   "descriptor": [
     "Jefe",
@@ -50789,7 +50798,7 @@ module["exports"] = {
 };
 });
 
-var name$g = RealTimeClient.createCommonjsModule(function (module) {
+var name$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name} #{last_name}",
   "#{first_name} #{last_name} #{last_name}",
@@ -50799,7 +50808,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$9 = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$9 = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$7;
@@ -50810,7 +50819,7 @@ name.title = title$2;
 name.name = name$g;
 });
 
-var formats$h = RealTimeClient.createCommonjsModule(function (module) {
+var formats$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "9##-###-###",
   "9##.###.###",
@@ -50819,13 +50828,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$d = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$d = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$h;
 });
 
-var formats$i = RealTimeClient.createCommonjsModule(function (module) {
+var formats$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "6##-###-###",
   "6##.###.###",
@@ -50834,13 +50843,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$5 = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$5 = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$i;
 });
 
-var es_1 = RealTimeClient.createCommonjsModule(function (module) {
+var es_1 = createCommonjsModule(function (module) {
 var es = {};
 module['exports'] = es;
 es.title = "Spanish";
@@ -50852,7 +50861,7 @@ es.phone_number = phone_number_1$d;
 es.cell_phone = cell_phone_1$5;
 });
 
-var first_name$8 = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$8 = createCommonjsModule(function (module) {
 module["exports"] = [
 "Aarón",
 "Abraham",
@@ -51161,7 +51170,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$8 = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abeyta",
 "Abrego",
@@ -51853,7 +51862,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$8 = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Sr.",
   "Sra.",
@@ -51861,7 +51870,7 @@ module["exports"] = [
 ];
 });
 
-var suffix$e = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "Jr.",
   "Sr.",
@@ -51881,7 +51890,7 @@ module["exports"] = [
 ];
 });
 
-var title$3 = RealTimeClient.createCommonjsModule(function (module) {
+var title$3 = createCommonjsModule(function (module) {
 module["exports"] = {
   "descriptor": [
     "Jefe",
@@ -51979,7 +51988,7 @@ module["exports"] = {
 };
 });
 
-var name$h = RealTimeClient.createCommonjsModule(function (module) {
+var name$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name} #{last_name}",
   "#{first_name} #{last_name} de #{last_name}",
@@ -51989,7 +51998,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$a = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$a = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$8;
@@ -52000,7 +52009,7 @@ name.title = title$3;
 name.name = name$h;
 });
 
-var city_prefix$4 = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aguascalientes",
   "Apodaca",
@@ -52135,7 +52144,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$2 = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "town",
   "ton",
@@ -52159,7 +52168,7 @@ module["exports"] = [
 ];
 });
 
-var country$6 = RealTimeClient.createCommonjsModule(function (module) {
+var country$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Afganistán",
   "Albania",
@@ -52344,7 +52353,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$8 = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   " s/n.",
   ", #",
@@ -52356,7 +52365,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$5 = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aldea",
   "Apartamento",
@@ -52431,7 +52440,7 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$6 = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Esc. ###",
   "Puerta ###",
@@ -52439,13 +52448,13 @@ module["exports"] = [
 ];
 });
 
-var postcode$c = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####"
 ];
 });
 
-var state$a = RealTimeClient.createCommonjsModule(function (module) {
+var state$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aguascalientes",
   "Baja California Norte",
@@ -52481,7 +52490,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$9 = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "AS",
   "BC",
@@ -52518,7 +52527,7 @@ module["exports"] = [
 ];
 });
 
-var time_zone$3 = RealTimeClient.createCommonjsModule(function (module) {
+var time_zone$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Pacífico/Midway",
   "Pacífico/Pago_Pago",
@@ -52665,13 +52674,13 @@ module["exports"] = [
 ];
 });
 
-var city$7 = RealTimeClient.createCommonjsModule(function (module) {
+var city$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix}"
 ];
 });
 
-var street$1 = RealTimeClient.createCommonjsModule(function (module) {
+var street$1 = createCommonjsModule(function (module) {
 module["exports"] = [
 	"20 de Noviembre",
 	"Cinco de Mayo",
@@ -52715,7 +52724,7 @@ module["exports"] = [
 ];
 });
 
-var street_name$7 = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_suffix} #{Name.first_name}",
   "#{street_suffix} #{Name.first_name} #{Name.last_name}",
@@ -52727,20 +52736,20 @@ module["exports"] = [
 ];
 });
 
-var street_address$6 = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name}#{building_number}",
   "#{street_name}#{building_number} #{secondary_address}"
 ];
 });
 
-var default_country$e = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "México"
 ];
 });
 
-var address_1$e = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$e = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$4;
@@ -52760,7 +52769,7 @@ address.street_address = street_address$6;
 address.default_country = default_country$e;
 });
 
-var suffix$f = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "S.L.",
   "e Hijos",
@@ -52769,7 +52778,7 @@ module["exports"] = [
 ];
 });
 
-var adjective$4 = RealTimeClient.createCommonjsModule(function (module) {
+var adjective$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adaptativo",
   "Avanzado",
@@ -52859,7 +52868,7 @@ module["exports"] = [
 ];
 });
 
-var descriptor$3 = RealTimeClient.createCommonjsModule(function (module) {
+var descriptor$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "24 horas",
   "24/7",
@@ -52945,7 +52954,7 @@ module["exports"] = [
 ];
 });
 
-var noun$4 = RealTimeClient.createCommonjsModule(function (module) {
+var noun$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "habilidad",
   "acceso",
@@ -53043,7 +53052,7 @@ module["exports"] = [
 ];
 });
 
-var bs_verb$2 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_verb$2 = createCommonjsModule(function (module) {
 module["exports"] = [
    "poner en práctica",
    "utilizar",
@@ -53108,7 +53117,7 @@ module["exports"] = [
 ];
 });
 
-var name$i = RealTimeClient.createCommonjsModule(function (module) {
+var name$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name} y #{Name.last_name}",
@@ -53117,7 +53126,7 @@ module["exports"] = [
 ];
 });
 
-var bs_adjective$1 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_adjective$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Clics y mortero",
   "Valor añadido",
@@ -53187,7 +53196,7 @@ module["exports"] = [
 ];
 });
 
-var bs_noun$2 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_noun$2 = createCommonjsModule(function (module) {
 module["exports"] = [
    "sinergias",
    "web-readiness",
@@ -53236,7 +53245,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$a = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$a = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$f;
@@ -53249,7 +53258,7 @@ company.bs_adjective = bs_adjective$1;
 company.bs_noun = bs_noun$2;
 });
 
-var free_email$8 = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.com",
@@ -53259,7 +53268,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$e = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "mx",
@@ -53270,14 +53279,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$e = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$e = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$8;
 internet.domain_suffix = domain_suffix$e;
 });
 
-var formats$j = RealTimeClient.createCommonjsModule(function (module) {
+var formats$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "5###-###-###",
   "5##.###.###",
@@ -53286,13 +53295,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$e = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$e = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$j;
 });
 
-var formats$k = RealTimeClient.createCommonjsModule(function (module) {
+var formats$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "5##-###-###",
   "5##.###.###",
@@ -53301,13 +53310,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$6 = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$6 = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$k;
 });
 
-var words$4 = RealTimeClient.createCommonjsModule(function (module) {
+var words$4 = createCommonjsModule(function (module) {
 module["exports"] = [
 "Abacalero",
 "Abacería",
@@ -53580,7 +53589,7 @@ module["exports"] = [
 ];
 });
 
-var supplemental$2 = RealTimeClient.createCommonjsModule(function (module) {
+var supplemental$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "abbas",
   "abduco",
@@ -54425,14 +54434,14 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$4 = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$4 = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$4;
 lorem.supplemental = supplemental$2;
 });
 
-var color$2 = RealTimeClient.createCommonjsModule(function (module) {
+var color$2 = createCommonjsModule(function (module) {
 module["exports"] = [
    "rojo",
    "verde",
@@ -54468,7 +54477,7 @@ module["exports"] = [
 ];
 });
 
-var department$2 = RealTimeClient.createCommonjsModule(function (module) {
+var department$2 = createCommonjsModule(function (module) {
 module["exports"] = [
    "Libros",
    "Películas",
@@ -54495,7 +54504,7 @@ module["exports"] = [
 ];
 });
 
-var product_name$2 = RealTimeClient.createCommonjsModule(function (module) {
+var product_name$2 = createCommonjsModule(function (module) {
 module["exports"] = {
 "adjective": [
      "Pequeño",
@@ -54557,7 +54566,7 @@ module["exports"] = {
 };
 });
 
-var commerce_1$2 = RealTimeClient.createCommonjsModule(function (module) {
+var commerce_1$2 = createCommonjsModule(function (module) {
 var commerce = {};
 module['exports'] = commerce;
 commerce.color = color$2;
@@ -54565,7 +54574,7 @@ commerce.department = department$2;
 commerce.product_name = product_name$2;
 });
 
-var creature$1 = RealTimeClient.createCommonjsModule(function (module) {
+var creature$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "hormigas",
    "murciélagos",
@@ -54637,20 +54646,20 @@ module["exports"] = [
 ];
 });
 
-var name$j = RealTimeClient.createCommonjsModule(function (module) {
+var name$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Address.state} #{creature}"
 ];
 });
 
-var team_1$1 = RealTimeClient.createCommonjsModule(function (module) {
+var team_1$1 = createCommonjsModule(function (module) {
 var team = {};
 module['exports'] = team;
 team.creature = creature$1;
 team.name = name$j;
 });
 
-var es_MX_1 = RealTimeClient.createCommonjsModule(function (module) {
+var es_MX_1 = createCommonjsModule(function (module) {
 var es_MX = {};
 module['exports'] = es_MX;
 es_MX.title = "Spanish Mexico";
@@ -54666,7 +54675,7 @@ es_MX.commerce = commerce_1$2;
 es_MX.team = team_1$1;
 });
 
-var first_name$9 = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "آبان دخت",
   "آبتین",
@@ -55393,7 +55402,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$9 = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "عارف",
   "عاشوری",
@@ -55542,7 +55551,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$9 = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "آقای",
   "خانم",
@@ -55550,7 +55559,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$b = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$b = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$9;
@@ -55558,14 +55567,14 @@ name.last_name = last_name$9;
 name.prefix = prefix$9;
 });
 
-var fa_1 = RealTimeClient.createCommonjsModule(function (module) {
+var fa_1 = createCommonjsModule(function (module) {
 var fa = {};
 module['exports'] = fa;
 fa.title = "Farsi";
 fa.name = name_1$b;
 });
 
-var building_number$9 = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "####",
   "###",
@@ -55574,7 +55583,7 @@ module["exports"] = [
 ];
 });
 
-var street_prefix = RealTimeClient.createCommonjsModule(function (module) {
+var street_prefix = createCommonjsModule(function (module) {
 module["exports"] = [
   "Allée, Voie",
   "Rue",
@@ -55587,20 +55596,20 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$7 = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Apt. ###",
   "# étage"
 ];
 });
 
-var postcode$d = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####"
 ];
 });
 
-var state$b = RealTimeClient.createCommonjsModule(function (module) {
+var state$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "Alsace",
   "Aquitaine",
@@ -55627,7 +55636,7 @@ module["exports"] = [
 ];
 });
 
-var city_name$3 = RealTimeClient.createCommonjsModule(function (module) {
+var city_name$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Paris",
   "Marseille",
@@ -55732,13 +55741,13 @@ module["exports"] = [
 ];
 });
 
-var city$8 = RealTimeClient.createCommonjsModule(function (module) {
+var city$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_name}"
 ];
 });
 
-var street_suffix$6 = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "de l'Abbaye",
   "Adolphe Mille",
@@ -55809,25 +55818,25 @@ module["exports"] = [
 ];
 });
 
-var street_name$8 = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_prefix} #{street_suffix}"
 ];
 });
 
-var street_address$7 = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{building_number} #{street_name}"
 ];
 });
 
-var default_country$f = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "France"
 ];
 });
 
-var address_1$f = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$f = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.building_number = building_number$9;
@@ -55843,7 +55852,7 @@ address.street_address = street_address$7;
 address.default_country = default_country$f;
 });
 
-var suffix$g = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "SARL",
   "SA",
@@ -55856,7 +55865,7 @@ module["exports"] = [
 ];
 });
 
-var adjective$5 = RealTimeClient.createCommonjsModule(function (module) {
+var adjective$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adaptive",
   "Advanced",
@@ -55961,7 +55970,7 @@ module["exports"] = [
 ];
 });
 
-var descriptor$4 = RealTimeClient.createCommonjsModule(function (module) {
+var descriptor$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "24 hour",
   "24/7",
@@ -56067,7 +56076,7 @@ module["exports"] = [
 ];
 });
 
-var noun$5 = RealTimeClient.createCommonjsModule(function (module) {
+var noun$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "ability",
   "access",
@@ -56176,7 +56185,7 @@ module["exports"] = [
 ];
 });
 
-var bs_verb$3 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_verb$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "implement",
   "utilize",
@@ -56241,7 +56250,7 @@ module["exports"] = [
 ];
 });
 
-var bs_adjective$2 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_adjective$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "clicks-and-mortar",
   "value-added",
@@ -56311,7 +56320,7 @@ module["exports"] = [
 ];
 });
 
-var bs_noun$3 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_noun$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "synergies",
   "web-readiness",
@@ -56360,14 +56369,14 @@ module["exports"] = [
 ];
 });
 
-var name$k = RealTimeClient.createCommonjsModule(function (module) {
+var name$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name} et #{Name.last_name}"
 ];
 });
 
-var company_1$b = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$b = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$g;
@@ -56380,7 +56389,7 @@ company.bs_noun = bs_noun$3;
 company.name = name$k;
 });
 
-var free_email$9 = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.fr",
@@ -56388,7 +56397,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$f = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "fr",
@@ -56400,14 +56409,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$f = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$f = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$9;
 internet.domain_suffix = domain_suffix$f;
 });
 
-var words$5 = RealTimeClient.createCommonjsModule(function (module) {
+var words$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "alias",
   "consequatur",
@@ -56661,7 +56670,7 @@ module["exports"] = [
 ];
 });
 
-var supplemental$3 = RealTimeClient.createCommonjsModule(function (module) {
+var supplemental$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "abbas",
   "abduco",
@@ -57506,14 +57515,14 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$5 = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$5 = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$5;
 lorem.supplemental = supplemental$3;
 });
 
-var first_name$a = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "Enzo",
   "Lucas",
@@ -57607,7 +57616,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$a = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "Martin",
   "Bernard",
@@ -57762,7 +57771,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$a = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "M",
   "Mme",
@@ -57772,7 +57781,7 @@ module["exports"] = [
 ];
 });
 
-var title$4 = RealTimeClient.createCommonjsModule(function (module) {
+var title$4 = createCommonjsModule(function (module) {
 module["exports"] = {
   "job": [
     "Superviseur",
@@ -57797,7 +57806,7 @@ module["exports"] = {
 };
 });
 
-var name$l = RealTimeClient.createCommonjsModule(function (module) {
+var name$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name}",
   "#{first_name} #{last_name}",
@@ -57805,7 +57814,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$c = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$c = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$a;
@@ -57815,7 +57824,7 @@ name.title = title$4;
 name.name = name$l;
 });
 
-var formats$l = RealTimeClient.createCommonjsModule(function (module) {
+var formats$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "01########",
   "02########",
@@ -57834,13 +57843,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$f = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$f = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$l;
 });
 
-var fr_1 = RealTimeClient.createCommonjsModule(function (module) {
+var fr_1 = createCommonjsModule(function (module) {
 var fr = {};
 module['exports'] = fr;
 fr.title = "French";
@@ -57852,13 +57861,13 @@ fr.name = name_1$c;
 fr.phone_number = phone_number_1$f;
 });
 
-var postcode$e = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "?#? #?#"
 ];
 });
 
-var state$c = RealTimeClient.createCommonjsModule(function (module) {
+var state$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "Alberta",
   "Colombie-Britannique",
@@ -57876,7 +57885,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$a = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "AB",
   "BC",
@@ -57894,13 +57903,13 @@ module["exports"] = [
 ];
 });
 
-var default_country$g = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "Canada"
 ];
 });
 
-var address_1$g = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$g = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.postcode = postcode$e;
@@ -57909,7 +57918,7 @@ address.state_abbr = state_abbr$a;
 address.default_country = default_country$g;
 });
 
-var free_email$a = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.ca",
@@ -57917,7 +57926,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$g = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "qc.ca",
   "ca",
@@ -57930,14 +57939,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$g = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$g = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$a;
 internet.domain_suffix = domain_suffix$g;
 });
 
-var formats$m = RealTimeClient.createCommonjsModule(function (module) {
+var formats$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "### ###-####",
   "1 ### ###-####",
@@ -57945,13 +57954,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$g = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$g = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$m;
 });
 
-var fr_CA_1 = RealTimeClient.createCommonjsModule(function (module) {
+var fr_CA_1 = createCommonjsModule(function (module) {
 var fr_CA = {};
 module['exports'] = fr_CA;
 fr_CA.title = "Canada (French)";
@@ -57960,7 +57969,7 @@ fr_CA.internet = internet_1$g;
 fr_CA.phone_number = phone_number_1$g;
 });
 
-var first_name$b = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "აგული",
   "აგუნა",
@@ -58464,7 +58473,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$b = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "აბაზაძე",
   "აბაშიძე",
@@ -58638,7 +58647,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$b = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "ბ-ნი",
   "ბატონი",
@@ -58647,7 +58656,7 @@ module["exports"] = [
 ];
 });
 
-var title$5 = RealTimeClient.createCommonjsModule(function (module) {
+var title$5 = createCommonjsModule(function (module) {
 module["exports"] = {
   "descriptor": [
     "გენერალური",
@@ -58726,7 +58735,7 @@ module["exports"] = {
 };
 });
 
-var name$m = RealTimeClient.createCommonjsModule(function (module) {
+var name$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name}",
   "#{first_name} #{last_name}",
@@ -58737,7 +58746,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$d = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$d = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$b;
@@ -58747,7 +58756,7 @@ name.title = title$5;
 name.name = name$m;
 });
 
-var city_prefix$5 = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "ახალი",
   "ძველი",
@@ -58756,7 +58765,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$3 = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "სოფელი",
   "ძირი",
@@ -58765,7 +58774,7 @@ module["exports"] = [
 ];
 });
 
-var city$9 = RealTimeClient.createCommonjsModule(function (module) {
+var city$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix} #{Name.first_name}#{city_suffix}",
   "#{city_prefix} #{Name.first_name}",
@@ -58776,7 +58785,7 @@ module["exports"] = [
 ];
 });
 
-var country$7 = RealTimeClient.createCommonjsModule(function (module) {
+var country$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "ავსტრალია",
   "ავსტრია",
@@ -59094,7 +59103,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$a = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "###",
   "##",
@@ -59102,7 +59111,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$7 = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "გამზ.",
   "გამზირი",
@@ -59113,20 +59122,20 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$8 = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "კორპ. ##",
   "შენობა ###"
 ];
 });
 
-var postcode$f = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "01##"
 ];
 });
 
-var city_name$4 = RealTimeClient.createCommonjsModule(function (module) {
+var city_name$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "აბასთუმანი",
   "აბაშა",
@@ -59219,7 +59228,7 @@ module["exports"] = [
 ];
 });
 
-var street_title$1 = RealTimeClient.createCommonjsModule(function (module) {
+var street_title$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "აბაშიძის",
   "აბესაძის",
@@ -59640,25 +59649,25 @@ module["exports"] = [
 ];
 });
 
-var street_name$9 = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_title} #{street_suffix}"
 ];
 });
 
-var street_address$8 = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}"
 ];
 });
 
-var default_country$h = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "საქართველო"
 ];
 });
 
-var address_1$h = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$h = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$5;
@@ -59676,7 +59685,7 @@ address.street_address = street_address$8;
 address.default_country = default_country$h;
 });
 
-var free_email$b = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.com",
@@ -59684,7 +59693,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$h = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "ge",
   "com",
@@ -59695,14 +59704,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$h = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$h = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$b;
 internet.domain_suffix = domain_suffix$h;
 });
 
-var prefix$c = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "შპს",
   "სს",
@@ -59711,7 +59720,7 @@ module["exports"] = [
 ];
 });
 
-var suffix$h = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "ჯგუფი",
   "და კომპანია",
@@ -59720,7 +59729,7 @@ module["exports"] = [
 ];
 });
 
-var name$n = RealTimeClient.createCommonjsModule(function (module) {
+var name$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{Name.first_name}",
   "#{prefix} #{Name.last_name}",
@@ -59730,7 +59739,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$c = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$c = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.prefix = prefix$c;
@@ -59738,7 +59747,7 @@ company.suffix = suffix$h;
 company.name = name$n;
 });
 
-var formats$n = RealTimeClient.createCommonjsModule(function (module) {
+var formats$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "5##-###-###",
   "5########",
@@ -59763,13 +59772,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$h = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$h = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$n;
 });
 
-var formats$o = RealTimeClient.createCommonjsModule(function (module) {
+var formats$o = createCommonjsModule(function (module) {
 module["exports"] = [
   "(+995 32) 2-##-##-##",
   "032-2-##-##-##",
@@ -59783,13 +59792,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$7 = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$7 = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$o;
 });
 
-var ge_1 = RealTimeClient.createCommonjsModule(function (module) {
+var ge_1 = createCommonjsModule(function (module) {
 var ge = {};
 module['exports'] = ge;
 ge.title = "Georgian";
@@ -59802,20 +59811,20 @@ ge.phone_number = phone_number_1$h;
 ge.cell_phone = cell_phone_1$7;
 });
 
-var building_number$b = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$b = createCommonjsModule(function (module) {
 module["exports"] = [  
   "##",
   "#"
 ];
 });
 
-var postcode$g = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####"
 ];
 });
 
-var state$d = RealTimeClient.createCommonjsModule(function (module) {
+var state$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aceh",
   "Sumatera Utara",
@@ -59854,7 +59863,7 @@ module["exports"] = [
 ];
 });
 
-var city_name$5 = RealTimeClient.createCommonjsModule(function (module) {
+var city_name$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Airmadidi",
   "Ampana",
@@ -60086,13 +60095,13 @@ module["exports"] = [
 ];
 });
 
-var city$a = RealTimeClient.createCommonjsModule(function (module) {
+var city$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_name}"
 ];
 });
 
-var street_prefix$1 = RealTimeClient.createCommonjsModule(function (module) {
+var street_prefix$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ds.",
   "Dk.",
@@ -60105,26 +60114,26 @@ module["exports"] = [
 ];
 });
 
-var street_name$a = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_prefix} #{Name.first_name}",
   "#{street_prefix} #{Name.last_name}"
 ];
 });
 
-var street_address$9 = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} no #{building_number}"
 ];
 });
 
-var default_country$i = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "Indonesia"
 ];
 });
 
-var address_1$i = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$i = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.building_number = building_number$b;
@@ -60138,7 +60147,7 @@ address.street_address = street_address$9;
 address.default_country = default_country$i;
 });
 
-var prefix$d = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "PT",
   "CV",
@@ -60148,14 +60157,14 @@ module["exports"] = [
 ];
 });
 
-var suffix$i = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "(Persero) Tbk",
   "Tbk"
 ];
 });
 
-var name$o = RealTimeClient.createCommonjsModule(function (module) {
+var name$o = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{Name.last_name}",
   "#{Name.last_name} #{suffix}",
@@ -60163,7 +60172,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$d = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$d = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.prefix = prefix$d;
@@ -60171,7 +60180,7 @@ company.suffix = suffix$i;
 company.name = name$o;
 });
 
-var free_email$c = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$c = createCommonjsModule(function (module) {
 module["exports"] = [
   'gmail.com',
   'yahoo.com',
@@ -60180,7 +60189,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$i = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "net",
@@ -60205,14 +60214,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$i = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$i = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$c;
 internet.domain_suffix = domain_suffix$i;
 });
 
-var month$3 = RealTimeClient.createCommonjsModule(function (module) {
+var month$3 = createCommonjsModule(function (module) {
 module["exports"] = {
   wide: [
     "Januari",
@@ -60273,7 +60282,7 @@ module["exports"] = {
 };
 });
 
-var weekday$3 = RealTimeClient.createCommonjsModule(function (module) {
+var weekday$3 = createCommonjsModule(function (module) {
 module["exports"] = {
   wide: [
     "Minggu",
@@ -60314,14 +60323,14 @@ module["exports"] = {
 };
 });
 
-var date_1$3 = RealTimeClient.createCommonjsModule(function (module) {
+var date_1$3 = createCommonjsModule(function (module) {
 var date = {};
 module["exports"] = date;
 date.month = month$3;
 date.weekday = weekday$3;
 });
 
-var male_first_name$2 = RealTimeClient.createCommonjsModule(function (module) {
+var male_first_name$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abyasa",
   "Ade",
@@ -60820,7 +60829,7 @@ module["exports"] = [
 ];
 });
 
-var male_last_name$2 = RealTimeClient.createCommonjsModule(function (module) {
+var male_last_name$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adriansyah",
   "Ardianto",
@@ -60931,7 +60940,7 @@ module["exports"] = [
 ];
 });
 
-var female_first_name$2 = RealTimeClient.createCommonjsModule(function (module) {
+var female_first_name$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ade",
   "Agnes",
@@ -61157,7 +61166,7 @@ module["exports"] = [
 ];
 });
 
-var female_last_name$2 = RealTimeClient.createCommonjsModule(function (module) {
+var female_last_name$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Agustina",
   "Andriani",
@@ -61231,11 +61240,11 @@ module["exports"] = [
 ];
 });
 
-var prefix$e = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$e = createCommonjsModule(function (module) {
 module["exports"] = [];
 });
 
-var suffix$j = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "S.Ked",
   "S.Gz",
@@ -61260,7 +61269,7 @@ module["exports"] = [
 ];
 });
 
-var name$p = RealTimeClient.createCommonjsModule(function (module) {
+var name$p = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{male_first_name} #{male_last_name}",
   "#{male_last_name} #{male_first_name}",
@@ -61272,7 +61281,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$e = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$e = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.male_first_name = male_first_name$2;
@@ -61284,7 +61293,7 @@ name.suffix = suffix$j;
 name.name = name$p;
 });
 
-var formats$p = RealTimeClient.createCommonjsModule(function (module) {
+var formats$p = createCommonjsModule(function (module) {
 module["exports"] = [
   "02# #### ###",
   "02## #### ###",
@@ -61327,13 +61336,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$i = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$i = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$p;
 });
 
-var id_ID = RealTimeClient.createCommonjsModule(function (module) {
+var id_ID = createCommonjsModule(function (module) {
 var id = {};
 module['exports'] = id;
 id.title = "Indonesia";
@@ -61345,7 +61354,7 @@ id.name = name_1$e;
 id.phone_number = phone_number_1$i;
 });
 
-var city_prefix$6 = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "San",
   "Borgo",
@@ -61355,7 +61364,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$4 = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "a mare",
   "lido",
@@ -61372,7 +61381,7 @@ module["exports"] = [
 ];
 });
 
-var country$8 = RealTimeClient.createCommonjsModule(function (module) {
+var country$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Afghanistan",
   "Albania",
@@ -61618,7 +61627,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$c = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "###",
   "##",
@@ -61626,7 +61635,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$8 = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Piazza",
   "Strada",
@@ -61638,20 +61647,20 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$9 = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Appartamento ##",
   "Piano #"
 ];
 });
 
-var postcode$h = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####"
 ];
 });
 
-var state$e = RealTimeClient.createCommonjsModule(function (module) {
+var state$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "Agrigento",
   "Alessandria",
@@ -61766,7 +61775,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$b = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "AG",
   "AL",
@@ -61881,7 +61890,7 @@ module["exports"] = [
 ];
 });
 
-var city$b = RealTimeClient.createCommonjsModule(function (module) {
+var city$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix} #{Name.first_name} #{city_suffix}",
   "#{city_prefix} #{Name.first_name}",
@@ -61890,27 +61899,27 @@ module["exports"] = [
 ];
 });
 
-var street_name$b = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_suffix} #{Name.first_name}",
   "#{street_suffix} #{Name.last_name}"
 ];
 });
 
-var street_address$a = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}",
   "#{street_name} #{building_number}, #{secondary_address}"
 ];
 });
 
-var default_country$j = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "Italia"
 ];
 });
 
-var address_1$j = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$j = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$6;
@@ -61928,7 +61937,7 @@ address.street_address = street_address$a;
 address.default_country = default_country$j;
 });
 
-var suffix$k = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "SPA",
   "e figli",
@@ -61937,7 +61946,7 @@ module["exports"] = [
 ];
 });
 
-var noun$6 = RealTimeClient.createCommonjsModule(function (module) {
+var noun$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abilità",
   "Access",
@@ -62031,7 +62040,7 @@ module["exports"] = [
 ];
 });
 
-var descriptor$5 = RealTimeClient.createCommonjsModule(function (module) {
+var descriptor$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "adattiva",
   "avanzata",
@@ -62093,7 +62102,7 @@ module["exports"] = [
 ];
 });
 
-var adjective$6 = RealTimeClient.createCommonjsModule(function (module) {
+var adjective$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "24 ore",
   "24/7",
@@ -62168,7 +62177,7 @@ module["exports"] = [
 ];
 });
 
-var bs_noun$4 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_noun$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "partnerships",
   "comunità",
@@ -62199,7 +62208,7 @@ module["exports"] = [
 ];
 });
 
-var bs_verb$4 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_verb$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "implementate",
   "utilizzo",
@@ -62232,7 +62241,7 @@ module["exports"] = [
 ];
 });
 
-var bs_adjective$3 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_adjective$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "valore aggiunto",
   "verticalizzate",
@@ -62283,7 +62292,7 @@ module["exports"] = [
 ];
 });
 
-var name$q = RealTimeClient.createCommonjsModule(function (module) {
+var name$q = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name}-#{Name.last_name} #{suffix}",
@@ -62291,7 +62300,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$e = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$e = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$k;
@@ -62304,7 +62313,7 @@ company.bs_adjective = bs_adjective$3;
 company.name = name$q;
 });
 
-var free_email$d = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.com",
@@ -62315,7 +62324,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$j = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "com",
@@ -62328,14 +62337,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$j = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$j = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$d;
 internet.domain_suffix = domain_suffix$j;
 });
 
-var first_name$c = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aaron",
   "Akira",
@@ -62702,7 +62711,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$c = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "Amato",
   "Barbieri",
@@ -62807,7 +62816,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$f = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "Sig.",
   "Dott.",
@@ -62816,11 +62825,11 @@ module["exports"] = [
 ];
 });
 
-var suffix$l = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$l = createCommonjsModule(function (module) {
 module["exports"] = [];
 });
 
-var name$r = RealTimeClient.createCommonjsModule(function (module) {
+var name$r = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name}",
   "#{first_name} #{last_name}",
@@ -62831,7 +62840,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$f = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$f = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$c;
@@ -62841,7 +62850,7 @@ name.suffix = suffix$l;
 name.name = name$r;
 });
 
-var formats$q = RealTimeClient.createCommonjsModule(function (module) {
+var formats$q = createCommonjsModule(function (module) {
 module["exports"] = [
   "+## ### ## ## ####",
   "+## ## #######",
@@ -62857,13 +62866,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$j = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$j = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$q;
 });
 
-var it_1 = RealTimeClient.createCommonjsModule(function (module) {
+var it_1 = createCommonjsModule(function (module) {
 var it = {};
 module['exports'] = it;
 it.title = "Italian";
@@ -62874,13 +62883,13 @@ it.name = name_1$f;
 it.phone_number = phone_number_1$j;
 });
 
-var postcode$i = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "###-####"
 ];
 });
 
-var state$f = RealTimeClient.createCommonjsModule(function (module) {
+var state$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "北海道",
   "青森県",
@@ -62932,7 +62941,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$c = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "1",
   "2",
@@ -62984,7 +62993,7 @@ module["exports"] = [
 ];
 });
 
-var city_prefix$7 = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "北",
   "東",
@@ -62996,7 +63005,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$5 = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "市",
   "区",
@@ -63005,7 +63014,7 @@ module["exports"] = [
 ];
 });
 
-var city$c = RealTimeClient.createCommonjsModule(function (module) {
+var city$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix}#{Name.first_name}#{city_suffix}",
   "#{Name.first_name}#{city_suffix}",
@@ -63014,14 +63023,14 @@ module["exports"] = [
 ];
 });
 
-var street_name$c = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.first_name}#{street_suffix}",
   "#{Name.last_name}#{street_suffix}"
 ];
 });
 
-var address_1$k = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$k = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.postcode = postcode$i;
@@ -63033,7 +63042,7 @@ address.city = city$c;
 address.street_name = street_name$c;
 });
 
-var formats$r = RealTimeClient.createCommonjsModule(function (module) {
+var formats$r = createCommonjsModule(function (module) {
 module["exports"] = [
   "0####-#-####",
   "0###-##-####",
@@ -63042,13 +63051,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$k = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$k = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$r;
 });
 
-var formats$s = RealTimeClient.createCommonjsModule(function (module) {
+var formats$s = createCommonjsModule(function (module) {
 module["exports"] = [
   "090-####-####",
   "080-####-####",
@@ -63056,13 +63065,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$8 = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$8 = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$s;
 });
 
-var last_name$d = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "佐藤",
   "鈴木",
@@ -63087,7 +63096,7 @@ module["exports"] = [
 ];
 });
 
-var first_name$d = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "大翔",
   "蓮",
@@ -63113,13 +63122,13 @@ module["exports"] = [
 ];
 });
 
-var name$s = RealTimeClient.createCommonjsModule(function (module) {
+var name$s = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{last_name} #{first_name}"
 ];
 });
 
-var name_1$g = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$g = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.last_name = last_name$d;
@@ -63127,7 +63136,7 @@ name.first_name = first_name$d;
 name.name = name$s;
 });
 
-var ja_1 = RealTimeClient.createCommonjsModule(function (module) {
+var ja_1 = createCommonjsModule(function (module) {
 var ja = {};
 module['exports'] = ja;
 ja.title = "Japanese";
@@ -63137,13 +63146,13 @@ ja.cell_phone = cell_phone_1$8;
 ja.name = name_1$g;
 });
 
-var postcode$j = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "###-###"
 ];
 });
 
-var state$g = RealTimeClient.createCommonjsModule(function (module) {
+var state$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "강원",
   "경기",
@@ -63165,7 +63174,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$d = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "강원",
   "경기",
@@ -63187,7 +63196,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$6 = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "구",
   "시",
@@ -63195,7 +63204,7 @@ module["exports"] = [
 ];
 });
 
-var city_name$6 = RealTimeClient.createCommonjsModule(function (module) {
+var city_name$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "강릉",
   "양양",
@@ -63228,13 +63237,13 @@ module["exports"] = [
 ];
 });
 
-var city$d = RealTimeClient.createCommonjsModule(function (module) {
+var city$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_name}#{city_suffix}"
 ];
 });
 
-var street_root$3 = RealTimeClient.createCommonjsModule(function (module) {
+var street_root$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "상계",
   "화곡",
@@ -63267,7 +63276,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$9 = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "읍",
   "면",
@@ -63275,13 +63284,13 @@ module["exports"] = [
 ];
 });
 
-var street_name$d = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_root}#{street_suffix}"
 ];
 });
 
-var address_1$l = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$l = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.postcode = postcode$j;
@@ -63295,7 +63304,7 @@ address.street_suffix = street_suffix$9;
 address.street_name = street_name$d;
 });
 
-var formats$t = RealTimeClient.createCommonjsModule(function (module) {
+var formats$t = createCommonjsModule(function (module) {
 module["exports"] = [
   "0#-#####-####",
   "0##-###-####",
@@ -63303,13 +63312,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$l = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$l = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$t;
 });
 
-var suffix$m = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "연구소",
   "게임즈",
@@ -63320,21 +63329,21 @@ module["exports"] = [
 ];
 });
 
-var prefix$g = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "주식회사",
   "한국"
 ];
 });
 
-var name$t = RealTimeClient.createCommonjsModule(function (module) {
+var name$t = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{Name.first_name}",
   "#{Name.first_name} #{suffix}"
 ];
 });
 
-var company_1$f = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$f = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$m;
@@ -63342,7 +63351,7 @@ company.prefix = prefix$g;
 company.name = name$t;
 });
 
-var free_email$e = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.co.kr",
@@ -63351,7 +63360,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$k = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "co.kr",
   "com",
@@ -63364,14 +63373,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$k = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$k = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$e;
 internet.domain_suffix = domain_suffix$k;
 });
 
-var words$6 = RealTimeClient.createCommonjsModule(function (module) {
+var words$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "국가는",
   "법률이",
@@ -63504,13 +63513,13 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$6 = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$6 = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$6;
 });
 
-var last_name$e = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "김",
   "이",
@@ -63535,7 +63544,7 @@ module["exports"] = [
 ];
 });
 
-var first_name$e = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "서연",
   "민서",
@@ -63561,13 +63570,13 @@ module["exports"] = [
 ];
 });
 
-var name$u = RealTimeClient.createCommonjsModule(function (module) {
+var name$u = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{last_name} #{first_name}"
 ];
 });
 
-var name_1$h = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$h = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.last_name = last_name$e;
@@ -63575,7 +63584,7 @@ name.first_name = first_name$e;
 name.name = name$u;
 });
 
-var ko_1 = RealTimeClient.createCommonjsModule(function (module) {
+var ko_1 = createCommonjsModule(function (module) {
 var ko = {};
 module['exports'] = ko;
 ko.title = "Korean";
@@ -63587,7 +63596,7 @@ ko.lorem = lorem_1$6;
 ko.name = name_1$h;
 });
 
-var city_root = RealTimeClient.createCommonjsModule(function (module) {
+var city_root = createCommonjsModule(function (module) {
 module["exports"] = [
   "Fet",
   "Gjes",
@@ -63609,7 +63618,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$7 = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "berg",
   "borg",
@@ -63642,7 +63651,7 @@ module["exports"] = [
 ];
 });
 
-var street_prefix$2 = RealTimeClient.createCommonjsModule(function (module) {
+var street_prefix$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Øvre",
   "Nedre",
@@ -63653,7 +63662,7 @@ module["exports"] = [
 ];
 });
 
-var street_root$4 = RealTimeClient.createCommonjsModule(function (module) {
+var street_root$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Eike",
   "Bjørke",
@@ -63691,7 +63700,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$a = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "alléen",
   "bakken",
@@ -63742,7 +63751,7 @@ module["exports"] = [
 ];
 });
 
-var common_street_suffix = RealTimeClient.createCommonjsModule(function (module) {
+var common_street_suffix = createCommonjsModule(function (module) {
 module["exports"] = [
   "sgate",
   "svei",
@@ -63753,14 +63762,14 @@ module["exports"] = [
 ];
 });
 
-var building_number$d = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "#",
   "##"
 ];
 });
 
-var secondary_address$a = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "Leil. ###",
   "Oppgang A",
@@ -63768,7 +63777,7 @@ module["exports"] = [
 ];
 });
 
-var postcode$k = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "####",
   "####",
@@ -63777,19 +63786,19 @@ module["exports"] = [
 ];
 });
 
-var state$h = RealTimeClient.createCommonjsModule(function (module) {
+var state$h = createCommonjsModule(function (module) {
 module["exports"] = [
   ""
 ];
 });
 
-var city$e = RealTimeClient.createCommonjsModule(function (module) {
+var city$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_root}#{city_suffix}"
 ];
 });
 
-var street_name$e = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_root}#{street_suffix}",
   "#{street_prefix} #{street_root}#{street_suffix}",
@@ -63798,19 +63807,19 @@ module["exports"] = [
 ];
 });
 
-var street_address$b = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}"
 ];
 });
 
-var default_country$k = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "Norge"
 ];
 });
 
-var address_1$m = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$m = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_root = city_root;
@@ -63829,7 +63838,7 @@ address.street_address = street_address$b;
 address.default_country = default_country$k;
 });
 
-var suffix$n = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "Gruppen",
   "AS",
@@ -63840,7 +63849,7 @@ module["exports"] = [
 ];
 });
 
-var name$v = RealTimeClient.createCommonjsModule(function (module) {
+var name$v = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name}-#{Name.last_name}",
@@ -63848,14 +63857,14 @@ module["exports"] = [
 ];
 });
 
-var company_1$g = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$g = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$n;
 company.name = name$v;
 });
 
-var domain_suffix$l = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "no",
   "com",
@@ -63864,13 +63873,13 @@ module["exports"] = [
 ];
 });
 
-var internet_1$l = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$l = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.domain_suffix = domain_suffix$l;
 });
 
-var first_name$f = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "Emma",
   "Sara",
@@ -63975,7 +63984,7 @@ module["exports"] = [
 ];
 });
 
-var feminine_name = RealTimeClient.createCommonjsModule(function (module) {
+var feminine_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Emma",
   "Sara",
@@ -64030,7 +64039,7 @@ module["exports"] = [
 ];
 });
 
-var masculine_name = RealTimeClient.createCommonjsModule(function (module) {
+var masculine_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Markus",
   "Mathias",
@@ -64085,7 +64094,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$f = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "Johansen",
   "Hansen",
@@ -64190,14 +64199,14 @@ module["exports"] = [
 ];
 });
 
-var prefix$h = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "Dr.",
   "Prof."
 ];
 });
 
-var suffix$o = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$o = createCommonjsModule(function (module) {
 module["exports"] = [
   "Jr.",
   "Sr.",
@@ -64209,7 +64218,7 @@ module["exports"] = [
 ];
 });
 
-var name$w = RealTimeClient.createCommonjsModule(function (module) {
+var name$w = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name}",
   "#{first_name} #{last_name} #{suffix}",
@@ -64220,7 +64229,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$i = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$i = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$f;
@@ -64232,7 +64241,7 @@ name.suffix = suffix$o;
 name.name = name$w;
 });
 
-var formats$u = RealTimeClient.createCommonjsModule(function (module) {
+var formats$u = createCommonjsModule(function (module) {
 module["exports"] = [
   "########",
   "## ## ## ##",
@@ -64241,13 +64250,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$m = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$m = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$u;
 });
 
-var nb_NO_1 = RealTimeClient.createCommonjsModule(function (module) {
+var nb_NO_1 = createCommonjsModule(function (module) {
 var nb_NO = {};
 module['exports'] = nb_NO;
 nb_NO.title = "Norwegian";
@@ -64258,7 +64267,7 @@ nb_NO.name = name_1$i;
 nb_NO.phone_number = phone_number_1$m;
 });
 
-var first_name$g = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aarav",
   "Ajita",
@@ -64318,7 +64327,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$g = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adhikari",
   "Aryal",
@@ -64362,20 +64371,20 @@ module["exports"] = [
 ];
 });
 
-var name_1$j = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$j = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$g;
 name.last_name = last_name$g;
 });
 
-var postcode$l = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$l = createCommonjsModule(function (module) {
 module["exports"] = [
   0
 ];
 });
 
-var state$i = RealTimeClient.createCommonjsModule(function (module) {
+var state$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "Baglung",
   "Banke",
@@ -64433,7 +64442,7 @@ module["exports"] = [
 ];
 });
 
-var city$f = RealTimeClient.createCommonjsModule(function (module) {
+var city$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "Bhaktapur",
   "Biratnagar",
@@ -64454,13 +64463,13 @@ module["exports"] = [
 ];
 });
 
-var default_country$l = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "Nepal"
 ];
 });
 
-var address_1$n = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$n = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.postcode = postcode$l;
@@ -64469,7 +64478,7 @@ address.city = city$f;
 address.default_country = default_country$l;
 });
 
-var free_email$f = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "worldlink.com.np",
   "gmail.com",
@@ -64478,7 +64487,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$m = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "np",
   "com",
@@ -64488,14 +64497,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$m = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$m = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$f;
 internet.domain_suffix = domain_suffix$m;
 });
 
-var suffix$p = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$p = createCommonjsModule(function (module) {
 module["exports"] = [
   "Pvt Ltd",
   "Group",
@@ -64504,13 +64513,13 @@ module["exports"] = [
 ];
 });
 
-var company_1$h = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$h = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$p;
 });
 
-var formats$v = RealTimeClient.createCommonjsModule(function (module) {
+var formats$v = createCommonjsModule(function (module) {
 module["exports"] = [
   "##-#######",
   "+977-#-#######",
@@ -64518,13 +64527,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$n = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$n = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$v;
 });
 
-var nep_1 = RealTimeClient.createCommonjsModule(function (module) {
+var nep_1 = createCommonjsModule(function (module) {
 var nep = {};
 module['exports'] = nep;
 nep.title = "Nepalese";
@@ -64535,7 +64544,7 @@ nep.company = company_1$h;
 nep.phone_number = phone_number_1$n;
 });
 
-var city_prefix$8 = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aagte",
   "Aal",
@@ -67041,7 +67050,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$8 = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   " aan de IJssel",
   " aan de Rijn",
@@ -67093,14 +67102,14 @@ module["exports"] = [
 ];
 });
 
-var city$g = RealTimeClient.createCommonjsModule(function (module) {
+var city$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix}#{city_suffix}",
   "#{city_prefix}"
 ];
 });
 
-var country$9 = RealTimeClient.createCommonjsModule(function (module) {
+var country$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Afghanistan",
   "Akrotiri",
@@ -67361,7 +67370,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$e = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "#",
   "##",
@@ -67375,7 +67384,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$b = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "straat",
   "laan",
@@ -67385,7 +67394,7 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$b = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "1 hoog",
   "2 hoog",
@@ -67393,26 +67402,26 @@ module["exports"] = [
 ];
 });
 
-var street_name$f = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.first_name}#{street_suffix}",
   "#{Name.last_name}#{street_suffix}"
 ];
 });
 
-var street_address$c = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}"
 ];
 });
 
-var postcode$m = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "#### ??"
 ];
 });
 
-var state$j = RealTimeClient.createCommonjsModule(function (module) {
+var state$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "Noord-Holland",
   "Zuid-Holland",
@@ -67429,13 +67438,13 @@ module["exports"] = [
 ];
 });
 
-var default_country$m = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "Nederland"
 ];
 });
 
-var address_1$o = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$o = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$8;
@@ -67452,7 +67461,7 @@ address.state = state$j;
 address.default_country = default_country$m;
 });
 
-var suffix$q = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$q = createCommonjsModule(function (module) {
 module["exports"] = [
   "BV",
   "V.O.F.",
@@ -67461,13 +67470,13 @@ module["exports"] = [
 ];
 });
 
-var company_1$i = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$i = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$q;
 });
 
-var free_email$g = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.com",
@@ -67475,7 +67484,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$n = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "nl",
   "com",
@@ -67484,14 +67493,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$n = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$n = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$g;
 internet.domain_suffix = domain_suffix$n;
 });
 
-var words$7 = RealTimeClient.createCommonjsModule(function (module) {
+var words$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "alias",
   "consequatur",
@@ -67745,7 +67754,7 @@ module["exports"] = [
 ];
 });
 
-var supplemental$4 = RealTimeClient.createCommonjsModule(function (module) {
+var supplemental$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "abbas",
   "abduco",
@@ -68590,14 +68599,14 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$7 = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$7 = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$7;
 lorem.supplemental = supplemental$4;
 });
 
-var first_name$h = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "Amber",
   "Anna",
@@ -68652,7 +68661,7 @@ module["exports"] = [
 ];
 });
 
-var tussenvoegsel = RealTimeClient.createCommonjsModule(function (module) {
+var tussenvoegsel = createCommonjsModule(function (module) {
 module["exports"] = [
   "van",
   "van de",
@@ -68664,7 +68673,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$h = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "Bakker",
   "Beek",
@@ -68719,7 +68728,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$i = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "Dhr.",
   "Mevr. Dr.",
@@ -68729,7 +68738,7 @@ module["exports"] = [
 ];
 });
 
-var suffix$r = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$r = createCommonjsModule(function (module) {
 module["exports"] = [
   "Jr.",
   "Sr.",
@@ -68741,7 +68750,7 @@ module["exports"] = [
 ];
 });
 
-var name$x = RealTimeClient.createCommonjsModule(function (module) {
+var name$x = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name}",
   "#{first_name} #{last_name} #{suffix}",
@@ -68752,7 +68761,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$k = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$k = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$h;
@@ -68763,7 +68772,7 @@ name.suffix = suffix$r;
 name.name = name$x;
 });
 
-var formats$w = RealTimeClient.createCommonjsModule(function (module) {
+var formats$w = createCommonjsModule(function (module) {
 module["exports"] = [
   "(####) ######",
   "##########",
@@ -68772,13 +68781,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$o = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$o = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$w;
 });
 
-var nl_1 = RealTimeClient.createCommonjsModule(function (module) {
+var nl_1 = createCommonjsModule(function (module) {
 var nl = {};
 module['exports'] = nl;
 nl.title = "Dutch";
@@ -68790,7 +68799,7 @@ nl.name = name_1$k;
 nl.phone_number = phone_number_1$o;
 });
 
-var first_name$i = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aaron",
   "Abraham",
@@ -69204,7 +69213,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$i = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adamczak",
   "Adamczyk",
@@ -69913,14 +69922,14 @@ module["exports"] = [
 ];
 });
 
-var prefix$j = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "Pan",
   "Pani"
 ];
 });
 
-var title$6 = RealTimeClient.createCommonjsModule(function (module) {
+var title$6 = createCommonjsModule(function (module) {
 module["exports"] = {
   "descriptor": [
     "Lead",
@@ -70015,7 +70024,7 @@ module["exports"] = {
 };
 });
 
-var name$y = RealTimeClient.createCommonjsModule(function (module) {
+var name$y = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name}",
   "#{first_name} #{last_name}",
@@ -70026,7 +70035,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$l = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$l = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$i;
@@ -70036,7 +70045,7 @@ name.title = title$6;
 name.name = name$y;
 });
 
-var country$a = RealTimeClient.createCommonjsModule(function (module) {
+var country$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "Afganistan",
   "Albania",
@@ -70240,7 +70249,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$f = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####",
   "####",
@@ -70248,27 +70257,27 @@ module["exports"] = [
 ];
 });
 
-var street_prefix$3 = RealTimeClient.createCommonjsModule(function (module) {
+var street_prefix$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "ul.",
   "al."
 ];
 });
 
-var secondary_address$c = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "Apt. ###",
   "Suite ###"
 ];
 });
 
-var postcode$n = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "##-###"
 ];
 });
 
-var state$k = RealTimeClient.createCommonjsModule(function (module) {
+var state$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "Dolnośląskie",
   "Kujawsko-pomorskie",
@@ -70289,7 +70298,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$e = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "DŚ",
   "KP",
@@ -70310,7 +70319,7 @@ module["exports"] = [
 ];
 });
 
-var city_name$7 = RealTimeClient.createCommonjsModule(function (module) {
+var city_name$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aleksandrów Kujawski",
   "Aleksandrów Łódzki",
@@ -71223,31 +71232,31 @@ module["exports"] = [
 ];
 });
 
-var city$h = RealTimeClient.createCommonjsModule(function (module) {
+var city$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_name}"
 ];
 });
 
-var street_name$g = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_prefix} #{Name.last_name}"
 ];
 });
 
-var street_address$d = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}"
 ];
 });
 
-var default_country$n = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "Polska"
 ];
 });
 
-var address_1$p = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$p = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.country = country$a;
@@ -71264,7 +71273,7 @@ address.street_address = street_address$d;
 address.default_country = default_country$n;
 });
 
-var suffix$s = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$s = createCommonjsModule(function (module) {
 module["exports"] = [
   "Inc",
   "and Sons",
@@ -71273,7 +71282,7 @@ module["exports"] = [
 ];
 });
 
-var adjetive = RealTimeClient.createCommonjsModule(function (module) {
+var adjetive = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adaptive",
   "Advanced",
@@ -71378,7 +71387,7 @@ module["exports"] = [
 ];
 });
 
-var descriptor$6 = RealTimeClient.createCommonjsModule(function (module) {
+var descriptor$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "24 hour",
   "24/7",
@@ -71484,7 +71493,7 @@ module["exports"] = [
 ];
 });
 
-var noun$7 = RealTimeClient.createCommonjsModule(function (module) {
+var noun$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "ability",
   "access",
@@ -71593,7 +71602,7 @@ module["exports"] = [
 ];
 });
 
-var bs_verb$5 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_verb$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "implement",
   "utilize",
@@ -71658,7 +71667,7 @@ module["exports"] = [
 ];
 });
 
-var bs_adjective$4 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_adjective$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "clicks-and-mortar",
   "value-added",
@@ -71728,7 +71737,7 @@ module["exports"] = [
 ];
 });
 
-var bs_noun$5 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_noun$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "synergies",
   "web-readiness",
@@ -71777,7 +71786,7 @@ module["exports"] = [
 ];
 });
 
-var name$z = RealTimeClient.createCommonjsModule(function (module) {
+var name$z = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name}-#{Name.last_name}",
@@ -71785,7 +71794,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$j = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$j = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$s;
@@ -71798,7 +71807,7 @@ company.bs_noun = bs_noun$5;
 company.name = name$z;
 });
 
-var free_email$h = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.com",
@@ -71806,7 +71815,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$o = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$o = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "pl",
@@ -71816,14 +71825,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$o = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$o = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$h;
 internet.domain_suffix = domain_suffix$o;
 });
 
-var words$8 = RealTimeClient.createCommonjsModule(function (module) {
+var words$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "alias",
   "consequatur",
@@ -72077,7 +72086,7 @@ module["exports"] = [
 ];
 });
 
-var supplemental$5 = RealTimeClient.createCommonjsModule(function (module) {
+var supplemental$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "abbas",
   "abduco",
@@ -72922,14 +72931,14 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$8 = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$8 = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$8;
 lorem.supplemental = supplemental$5;
 });
 
-var formats$x = RealTimeClient.createCommonjsModule(function (module) {
+var formats$x = createCommonjsModule(function (module) {
 module["exports"] = [
   "12-###-##-##",
   "13-###-##-##",
@@ -72983,13 +72992,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$p = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$p = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$x;
 });
 
-var formats$y = RealTimeClient.createCommonjsModule(function (module) {
+var formats$y = createCommonjsModule(function (module) {
 module["exports"] = [
   "50-###-##-##",
   "51-###-##-##",
@@ -73006,13 +73015,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$9 = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$9 = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$y;
 });
 
-var pl_1 = RealTimeClient.createCommonjsModule(function (module) {
+var pl_1 = createCommonjsModule(function (module) {
 var pl = {};
 module['exports'] = pl;
 pl.title = "Polish";
@@ -73025,7 +73034,7 @@ pl.phone_number = phone_number_1$p;
 pl.cell_phone = cell_phone_1$9;
 });
 
-var city_prefix$9 = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Nova",
   "Velha",
@@ -73035,7 +73044,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$9 = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "do Descoberto",
   "de Nossa Senhora",
@@ -73044,7 +73053,7 @@ module["exports"] = [
 ];
 });
 
-var country$b = RealTimeClient.createCommonjsModule(function (module) {
+var country$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "Afeganistão",
   "Albânia",
@@ -73286,7 +73295,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$g = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####",
   "####",
@@ -73294,7 +73303,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$c = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "Rua",
   "Avenida",
@@ -73307,7 +73316,7 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$d = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "Apto. ###",
   "Sobrado ##",
@@ -73317,14 +73326,14 @@ module["exports"] = [
 ];
 });
 
-var postcode$o = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$o = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####",
   "#####-###"
 ];
 });
 
-var state$l = RealTimeClient.createCommonjsModule(function (module) {
+var state$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "Acre",
   "Alagoas",
@@ -73356,7 +73365,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$f = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "AC",
   "AL",
@@ -73385,13 +73394,13 @@ module["exports"] = [
 ];
 });
 
-var default_country$o = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$o = createCommonjsModule(function (module) {
 module["exports"] = [
   "Brasil"
 ];
 });
 
-var address_1$q = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$q = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$9;
@@ -73406,7 +73415,7 @@ address.state_abbr = state_abbr$f;
 address.default_country = default_country$o;
 });
 
-var suffix$t = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$t = createCommonjsModule(function (module) {
 module["exports"] = [
   "S.A.",
   "LTDA",
@@ -73415,7 +73424,7 @@ module["exports"] = [
 ];
 });
 
-var name$A = RealTimeClient.createCommonjsModule(function (module) {
+var name$A = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name}-#{Name.last_name}",
@@ -73423,14 +73432,14 @@ module["exports"] = [
 ];
 });
 
-var company_1$k = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$k = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$t;
 company.name = name$A;
 });
 
-var free_email$i = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "yahoo.com",
@@ -73440,7 +73449,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$p = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$p = createCommonjsModule(function (module) {
 module["exports"] = [
   "br",
   "com",
@@ -73452,14 +73461,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$p = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$p = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$i;
 internet.domain_suffix = domain_suffix$p;
 });
 
-var words$9 = RealTimeClient.createCommonjsModule(function (module) {
+var words$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "alias",
   "consequatur",
@@ -73713,13 +73722,13 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$9 = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$9 = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$9;
 });
 
-var first_name$j = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "Alessandro",
   "Alessandra",
@@ -73815,7 +73824,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$j = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "Silva",
   "Souza",
@@ -73842,7 +73851,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$k = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "Sr.",
   "Sra.",
@@ -73851,7 +73860,7 @@ module["exports"] = [
 ];
 });
 
-var suffix$u = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$u = createCommonjsModule(function (module) {
 module["exports"] = [
   "Jr.",
   "Neto",
@@ -73859,7 +73868,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$m = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$m = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$j;
@@ -73868,7 +73877,7 @@ name.prefix = prefix$k;
 name.suffix = suffix$u;
 });
 
-var formats$z = RealTimeClient.createCommonjsModule(function (module) {
+var formats$z = createCommonjsModule(function (module) {
 module["exports"] = [
   "(##) ####-####",
   "+55 (##) ####-####",
@@ -73876,13 +73885,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$q = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$q = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$z;
 });
 
-var pt_BR_1 = RealTimeClient.createCommonjsModule(function (module) {
+var pt_BR_1 = createCommonjsModule(function (module) {
 var pt_BR = {};
 module['exports'] = pt_BR;
 pt_BR.title = "Portuguese (Brazil)";
@@ -73894,7 +73903,7 @@ pt_BR.name = name_1$m;
 pt_BR.phone_number = phone_number_1$q;
 });
 
-var country$c = RealTimeClient.createCommonjsModule(function (module) {
+var country$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "Австралия",
   "Австрия",
@@ -74109,13 +74118,13 @@ module["exports"] = [
 ];
 });
 
-var building_number$h = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "###"
 ];
 });
 
-var street_suffix$d = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "ул.",
   "улица",
@@ -74126,19 +74135,19 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$e = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "кв. ###"
 ];
 });
 
-var postcode$p = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$p = createCommonjsModule(function (module) {
 module["exports"] = [
   "######"
 ];
 });
 
-var state$m = RealTimeClient.createCommonjsModule(function (module) {
+var state$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "Республика Адыгея",
   "Республика Башкортостан",
@@ -74229,7 +74238,7 @@ module["exports"] = [
 ];
 });
 
-var street_title$2 = RealTimeClient.createCommonjsModule(function (module) {
+var street_title$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Советская",
   "Молодежная",
@@ -74335,7 +74344,7 @@ module["exports"] = [
 ];
 });
 
-var city_name$8 = RealTimeClient.createCommonjsModule(function (module) {
+var city_name$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Москва",
   "Владимир",
@@ -74386,32 +74395,32 @@ module["exports"] = [
 ];
 });
 
-var city$i = RealTimeClient.createCommonjsModule(function (module) {
+var city$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Address.city_name}"
 ];
 });
 
-var street_name$h = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_suffix} #{Address.street_title}",
   "#{Address.street_title} #{street_suffix}"
 ];
 });
 
-var street_address$e = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name}, #{building_number}"
 ];
 });
 
-var default_country$p = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$p = createCommonjsModule(function (module) {
 module["exports"] = [
   "Россия"
 ];
 });
 
-var address_1$r = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$r = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.country = country$c;
@@ -74428,7 +74437,7 @@ address.street_address = street_address$e;
 address.default_country = default_country$p;
 });
 
-var free_email$j = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "yandex.ru",
   "ya.ru",
@@ -74439,7 +74448,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$q = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$q = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "ru",
@@ -74450,14 +74459,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$q = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$q = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$j;
 internet.domain_suffix = domain_suffix$q;
 });
 
-var male_first_name$3 = RealTimeClient.createCommonjsModule(function (module) {
+var male_first_name$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Александр",
   "Алексей",
@@ -74514,7 +74523,7 @@ module["exports"] = [
 ];
 });
 
-var male_middle_name = RealTimeClient.createCommonjsModule(function (module) {
+var male_middle_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Александрович",
   "Алексеевич",
@@ -74571,7 +74580,7 @@ module["exports"] = [
 ];
 });
 
-var male_last_name$3 = RealTimeClient.createCommonjsModule(function (module) {
+var male_last_name$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Смирнов",
   "Иванов",
@@ -74826,7 +74835,7 @@ module["exports"] = [
 ];
 });
 
-var female_first_name$3 = RealTimeClient.createCommonjsModule(function (module) {
+var female_first_name$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Анна",
   "Алёна",
@@ -74887,7 +74896,7 @@ module["exports"] = [
 ];
 });
 
-var female_middle_name = RealTimeClient.createCommonjsModule(function (module) {
+var female_middle_name = createCommonjsModule(function (module) {
 module["exports"] = [
   "Александровна",
   "Алексеевна",
@@ -74943,7 +74952,7 @@ module["exports"] = [
 ];
 });
 
-var female_last_name$3 = RealTimeClient.createCommonjsModule(function (module) {
+var female_last_name$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Смирнова",
   "Иванова",
@@ -75198,15 +75207,15 @@ module["exports"] = [
 ];
 });
 
-var prefix$l = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$l = createCommonjsModule(function (module) {
 module["exports"] = [];
 });
 
-var suffix$v = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$v = createCommonjsModule(function (module) {
 module["exports"] = [];
 });
 
-var name$B = RealTimeClient.createCommonjsModule(function (module) {
+var name$B = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{male_first_name} #{male_last_name}",
   "#{male_last_name} #{male_first_name}",
@@ -75219,7 +75228,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$n = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$n = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.male_first_name = male_first_name$3;
@@ -75233,19 +75242,19 @@ name.suffix = suffix$v;
 name.name = name$B;
 });
 
-var formats$A = RealTimeClient.createCommonjsModule(function (module) {
+var formats$A = createCommonjsModule(function (module) {
 module["exports"] = [
   "(9##)###-##-##"
 ];
 });
 
-var phone_number_1$r = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$r = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$A;
 });
 
-var color$3 = RealTimeClient.createCommonjsModule(function (module) {
+var color$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "красный",
   "зеленый",
@@ -75281,7 +75290,7 @@ module["exports"] = [
 ];
 });
 
-var department$3 = RealTimeClient.createCommonjsModule(function (module) {
+var department$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Книги",
   "Фильмы",
@@ -75307,7 +75316,7 @@ module["exports"] = [
 ];
 });
 
-var product_name$3 = RealTimeClient.createCommonjsModule(function (module) {
+var product_name$3 = createCommonjsModule(function (module) {
 module["exports"] = {
   "adjective": [
     "Маленький",
@@ -75344,7 +75353,7 @@ module["exports"] = {
 };
 });
 
-var commerce_1$3 = RealTimeClient.createCommonjsModule(function (module) {
+var commerce_1$3 = createCommonjsModule(function (module) {
 var commerce = {};
 module['exports'] = commerce;
 commerce.color = color$3;
@@ -75352,7 +75361,7 @@ commerce.department = department$3;
 commerce.product_name = product_name$3;
 });
 
-var prefix$m = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "ИП",
   "ООО",
@@ -75364,7 +75373,7 @@ module["exports"] = [
 ];
 });
 
-var suffix$w = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$w = createCommonjsModule(function (module) {
 module["exports"] = [
   "Снаб",
   "Торг",
@@ -75374,7 +75383,7 @@ module["exports"] = [
 ];
 });
 
-var name$C = RealTimeClient.createCommonjsModule(function (module) {
+var name$C = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{Name.female_first_name}",
   "#{prefix} #{Name.male_first_name}",
@@ -75387,7 +75396,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$l = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$l = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.prefix = prefix$m;
@@ -75395,7 +75404,7 @@ company.suffix = suffix$w;
 company.name = name$C;
 });
 
-var month$4 = RealTimeClient.createCommonjsModule(function (module) {
+var month$4 = createCommonjsModule(function (module) {
 // source: http://unicode.org/cldr/trac/browser/tags/release-27/common/main/ru.xml#L1734
 module["exports"] = {
   wide: [
@@ -75457,7 +75466,7 @@ module["exports"] = {
 };
 });
 
-var weekday$4 = RealTimeClient.createCommonjsModule(function (module) {
+var weekday$4 = createCommonjsModule(function (module) {
 // source: http://unicode.org/cldr/trac/browser/tags/release-27/common/main/ru.xml#L1825
 module["exports"] = {
   wide: [
@@ -75499,14 +75508,14 @@ module["exports"] = {
 };
 });
 
-var date_1$4 = RealTimeClient.createCommonjsModule(function (module) {
+var date_1$4 = createCommonjsModule(function (module) {
 var date = {};
 module["exports"] = date;
 date.month = month$4;
 date.weekday = weekday$4;
 });
 
-var ru_1 = RealTimeClient.createCommonjsModule(function (module) {
+var ru_1 = createCommonjsModule(function (module) {
 var ru = {};
 module['exports'] = ru;
 ru.title = "Russian";
@@ -75520,7 +75529,7 @@ ru.company = company_1$l;
 ru.date = date_1$4;
 });
 
-var city_prefix$a = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "North",
   "East",
@@ -75532,7 +75541,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$a = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "town",
   "ton",
@@ -75556,7 +75565,7 @@ module["exports"] = [
 ];
 });
 
-var country$d = RealTimeClient.createCommonjsModule(function (module) {
+var country$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "Afganistan",
   "Afgánsky islamský štát",
@@ -75943,7 +75952,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$i = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "#",
   "##",
@@ -75951,14 +75960,14 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$f = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "Apt. ###",
   "Suite ###"
 ];
 });
 
-var postcode$q = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$q = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####",
   "### ##",
@@ -75966,15 +75975,15 @@ module["exports"] = [
 ];
 });
 
-var state$n = RealTimeClient.createCommonjsModule(function (module) {
+var state$n = createCommonjsModule(function (module) {
 module["exports"] = [];
 });
 
-var state_abbr$g = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$g = createCommonjsModule(function (module) {
 module["exports"] = [];
 });
 
-var time_zone$4 = RealTimeClient.createCommonjsModule(function (module) {
+var time_zone$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Pacific/Midway",
   "Pacific/Pago_Pago",
@@ -76122,7 +76131,7 @@ module["exports"] = [
 ];
 });
 
-var city_name$9 = RealTimeClient.createCommonjsModule(function (module) {
+var city_name$9 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Bánovce nad Bebravou",
   "Banská Bystrica",
@@ -76206,13 +76215,13 @@ module["exports"] = [
 ];
 });
 
-var city$j = RealTimeClient.createCommonjsModule(function (module) {
+var city$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_name}"
 ];
 });
 
-var street$2 = RealTimeClient.createCommonjsModule(function (module) {
+var street$2 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adámiho",
   "Ahoj",
@@ -77377,25 +77386,25 @@ module["exports"] = [
 ];
 });
 
-var street_name$i = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street}"
 ];
 });
 
-var street_address$f = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}"
 ];
 });
 
-var default_country$q = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$q = createCommonjsModule(function (module) {
 module["exports"] = [
   "Slovensko"
 ];
 });
 
-var address_1$s = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$s = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$a;
@@ -77415,7 +77424,7 @@ address.street_address = street_address$f;
 address.default_country = default_country$q;
 });
 
-var suffix$x = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$x = createCommonjsModule(function (module) {
 module["exports"] = [
   "s.r.o.",
   "a.s.",
@@ -77423,7 +77432,7 @@ module["exports"] = [
 ];
 });
 
-var adjective$7 = RealTimeClient.createCommonjsModule(function (module) {
+var adjective$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adaptive",
   "Advanced",
@@ -77528,7 +77537,7 @@ module["exports"] = [
 ];
 });
 
-var descriptor$7 = RealTimeClient.createCommonjsModule(function (module) {
+var descriptor$7 = createCommonjsModule(function (module) {
 module["exports"] = [
   "24 hour",
   "24/7",
@@ -77634,7 +77643,7 @@ module["exports"] = [
 ];
 });
 
-var noun$8 = RealTimeClient.createCommonjsModule(function (module) {
+var noun$8 = createCommonjsModule(function (module) {
 module["exports"] = [
   "ability",
   "access",
@@ -77743,7 +77752,7 @@ module["exports"] = [
 ];
 });
 
-var bs_verb$6 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_verb$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "implement",
   "utilize",
@@ -77808,7 +77817,7 @@ module["exports"] = [
 ];
 });
 
-var bs_noun$6 = RealTimeClient.createCommonjsModule(function (module) {
+var bs_noun$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "clicks-and-mortar",
   "value-added",
@@ -77922,7 +77931,7 @@ module["exports"] = [
 ];
 });
 
-var name$D = RealTimeClient.createCommonjsModule(function (module) {
+var name$D = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name} #{suffix}",
@@ -77930,7 +77939,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$m = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$m = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$x;
@@ -77942,7 +77951,7 @@ company.bs_noun = bs_noun$6;
 company.name = name$D;
 });
 
-var free_email$k = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "gmail.com",
   "zoznam.sk",
@@ -77950,7 +77959,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$r = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$r = createCommonjsModule(function (module) {
 module["exports"] = [
   "sk",
   "com",
@@ -77960,14 +77969,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$r = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$r = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$k;
 internet.domain_suffix = domain_suffix$r;
 });
 
-var words$a = RealTimeClient.createCommonjsModule(function (module) {
+var words$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "alias",
   "consequatur",
@@ -78221,7 +78230,7 @@ module["exports"] = [
 ];
 });
 
-var supplemental$6 = RealTimeClient.createCommonjsModule(function (module) {
+var supplemental$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "abbas",
   "abduco",
@@ -79066,14 +79075,14 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$a = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$a = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$a;
 lorem.supplemental = supplemental$6;
 });
 
-var male_first_name$4 = RealTimeClient.createCommonjsModule(function (module) {
+var male_first_name$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Drahoslav",
   "Severín",
@@ -79270,7 +79279,7 @@ module["exports"] = [
 ];
 });
 
-var female_first_name$4 = RealTimeClient.createCommonjsModule(function (module) {
+var female_first_name$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Alexandra",
   "Karina",
@@ -79475,7 +79484,7 @@ module["exports"] = [
 ];
 });
 
-var male_last_name$4 = RealTimeClient.createCommonjsModule(function (module) {
+var male_last_name$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Antal",
   "Babka",
@@ -79737,7 +79746,7 @@ module["exports"] = [
 ];
 });
 
-var female_last_name$4 = RealTimeClient.createCommonjsModule(function (module) {
+var female_last_name$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Antalová",
   "Babková",
@@ -79993,7 +80002,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$n = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ing.",
   "Mgr.",
@@ -80002,13 +80011,13 @@ module["exports"] = [
 ];
 });
 
-var suffix$y = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$y = createCommonjsModule(function (module) {
 module["exports"] = [
   "Phd."
 ];
 });
 
-var title$7 = RealTimeClient.createCommonjsModule(function (module) {
+var title$7 = createCommonjsModule(function (module) {
 module["exports"] = {
   "descriptor": [
     "Lead",
@@ -80103,7 +80112,7 @@ module["exports"] = {
 };
 });
 
-var name$E = RealTimeClient.createCommonjsModule(function (module) {
+var name$E = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{man_first_name} #{man_last_name}",
   "#{prefix} #{woman_first_name} #{woman_last_name}",
@@ -80118,7 +80127,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$o = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$o = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.male_first_name = male_first_name$4;
@@ -80131,7 +80140,7 @@ name.title = title$7;
 name.name = name$E;
 });
 
-var formats$B = RealTimeClient.createCommonjsModule(function (module) {
+var formats$B = createCommonjsModule(function (module) {
 module["exports"] = [
   "09## ### ###",
   "0## #### ####",
@@ -80140,13 +80149,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$s = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$s = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$B;
 });
 
-var sk_1 = RealTimeClient.createCommonjsModule(function (module) {
+var sk_1 = createCommonjsModule(function (module) {
 var sk = {};
 module['exports'] = sk;
 sk.title = "Slovakian";
@@ -80158,7 +80167,7 @@ sk.name = name_1$o;
 sk.phone_number = phone_number_1$s;
 });
 
-var city_prefix$b = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "Söder",
   "Norr",
@@ -80188,7 +80197,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$b = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "stad",
   "land",
@@ -80212,7 +80221,7 @@ module["exports"] = [
 ];
 });
 
-var country$e = RealTimeClient.createCommonjsModule(function (module) {
+var country$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "Ryssland",
   "Kanada",
@@ -80422,14 +80431,14 @@ module["exports"] = [
 ];
 });
 
-var common_street_suffix$1 = RealTimeClient.createCommonjsModule(function (module) {
+var common_street_suffix$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "s Väg",
   "s Gata"
 ];
 });
 
-var street_prefix$4 = RealTimeClient.createCommonjsModule(function (module) {
+var street_prefix$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Västra",
   "Östra",
@@ -80440,7 +80449,7 @@ module["exports"] = [
 ];
 });
 
-var street_root$5 = RealTimeClient.createCommonjsModule(function (module) {
+var street_root$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Björk",
   "Järnvägs",
@@ -80473,7 +80482,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$e = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "vägen",
   "gatan",
@@ -80483,7 +80492,7 @@ module["exports"] = [
 ];
 });
 
-var state$o = RealTimeClient.createCommonjsModule(function (module) {
+var state$o = createCommonjsModule(function (module) {
 module["exports"] = [
   "Blekinge",
   "Dalarna",
@@ -80511,13 +80520,13 @@ module["exports"] = [
 ];
 });
 
-var city$k = RealTimeClient.createCommonjsModule(function (module) {
+var city$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix}#{city_suffix}"
 ];
 });
 
-var street_name$j = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_root}#{street_suffix}",
   "#{street_prefix} #{street_root}#{street_suffix}",
@@ -80526,13 +80535,13 @@ module["exports"] = [
 ];
 });
 
-var postcode$r = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$r = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####"
 ];
 });
 
-var building_number$j = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "###",
   "##",
@@ -80540,26 +80549,26 @@ module["exports"] = [
 ];
 });
 
-var secondary_address$g = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "Lgh. ###",
   "Hus ###"
 ];
 });
 
-var street_address$g = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}"
 ];
 });
 
-var default_country$r = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$r = createCommonjsModule(function (module) {
 module["exports"] = [
   "Sverige"
 ];
 });
 
-var address_1$t = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$t = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$b;
@@ -80579,7 +80588,7 @@ address.street_address = street_address$g;
 address.default_country = default_country$r;
 });
 
-var suffix$z = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$z = createCommonjsModule(function (module) {
 module["exports"] = [
   "Gruppen",
   "AB",
@@ -80591,7 +80600,7 @@ module["exports"] = [
 ];
 });
 
-var name$F = RealTimeClient.createCommonjsModule(function (module) {
+var name$F = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name} #{suffix}",
   "#{Name.last_name}-#{Name.last_name}",
@@ -80599,14 +80608,14 @@ module["exports"] = [
 ];
 });
 
-var company_1$n = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$n = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.suffix = suffix$z;
 company.name = name$F;
 });
 
-var domain_suffix$s = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$s = createCommonjsModule(function (module) {
 module["exports"] = [
   "se",
   "nu",
@@ -80616,13 +80625,13 @@ module["exports"] = [
 ];
 });
 
-var internet_1$s = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$s = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.domain_suffix = domain_suffix$s;
 });
 
-var first_name_women = RealTimeClient.createCommonjsModule(function (module) {
+var first_name_women = createCommonjsModule(function (module) {
 module["exports"] = [
   "Maria",
   "Anna",
@@ -80637,7 +80646,7 @@ module["exports"] = [
 ];
 });
 
-var first_name_men = RealTimeClient.createCommonjsModule(function (module) {
+var first_name_men = createCommonjsModule(function (module) {
 module["exports"] = [
   "Erik",
   "Lars",
@@ -80652,7 +80661,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$k = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "Johansson",
   "Andersson",
@@ -80667,7 +80676,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$o = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$o = createCommonjsModule(function (module) {
 module["exports"] = [
   "Dr.",
   "Prof.",
@@ -80675,7 +80684,7 @@ module["exports"] = [
 ];
 });
 
-var title$8 = RealTimeClient.createCommonjsModule(function (module) {
+var title$8 = createCommonjsModule(function (module) {
 module["exports"] = {
   "descriptor": [
     "Lead",
@@ -80770,7 +80779,7 @@ module["exports"] = {
 };
 });
 
-var name$G = RealTimeClient.createCommonjsModule(function (module) {
+var name$G = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{first_name_women} #{last_name}",
   "#{first_name_men} #{last_name}",
@@ -80783,7 +80792,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$p = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$p = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name_women = first_name_women;
@@ -80794,20 +80803,20 @@ name.title = title$8;
 name.name = name$G;
 });
 
-var formats$C = RealTimeClient.createCommonjsModule(function (module) {
+var formats$C = createCommonjsModule(function (module) {
 module["exports"] = [
   "####-#####",
   "####-######"
 ];
 });
 
-var phone_number_1$t = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$t = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$C;
 });
 
-var common_cell_prefix = RealTimeClient.createCommonjsModule(function (module) {
+var common_cell_prefix = createCommonjsModule(function (module) {
 module["exports"] = [
   56,
   62,
@@ -80815,20 +80824,20 @@ module["exports"] = [
 ];
 });
 
-var formats$D = RealTimeClient.createCommonjsModule(function (module) {
+var formats$D = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{common_cell_prefix}-###-####"
 ];
 });
 
-var cell_phone_1$a = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$a = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.common_cell_prefix = common_cell_prefix;
 cell_phone.formats = formats$D;
 });
 
-var color$4 = RealTimeClient.createCommonjsModule(function (module) {
+var color$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "vit",
   "silver",
@@ -80848,7 +80857,7 @@ module["exports"] = [
 ];
 });
 
-var department$4 = RealTimeClient.createCommonjsModule(function (module) {
+var department$4 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Böcker",
   "Filmer",
@@ -80870,7 +80879,7 @@ module["exports"] = [
 ];
 });
 
-var product_name$4 = RealTimeClient.createCommonjsModule(function (module) {
+var product_name$4 = createCommonjsModule(function (module) {
 module["exports"] = {
   "adjective": [
     "Liten",
@@ -80909,7 +80918,7 @@ module["exports"] = {
 };
 });
 
-var commerce_1$4 = RealTimeClient.createCommonjsModule(function (module) {
+var commerce_1$4 = createCommonjsModule(function (module) {
 var commerce = {};
 module['exports'] = commerce;
 commerce.color = color$4;
@@ -80917,7 +80926,7 @@ commerce.department = department$4;
 commerce.product_name = product_name$4;
 });
 
-var suffix$A = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$A = createCommonjsModule(function (module) {
 module["exports"] = [
   "IF",
   "FF",
@@ -80935,20 +80944,20 @@ module["exports"] = [
 ];
 });
 
-var name$H = RealTimeClient.createCommonjsModule(function (module) {
+var name$H = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Address.city} #{suffix}"
 ];
 });
 
-var team_1$2 = RealTimeClient.createCommonjsModule(function (module) {
+var team_1$2 = createCommonjsModule(function (module) {
 var team = {};
 module['exports'] = team;
 team.suffix = suffix$A;
 team.name = name$H;
 });
 
-var month$5 = RealTimeClient.createCommonjsModule(function (module) {
+var month$5 = createCommonjsModule(function (module) {
 // Source: http://unicode.org/cldr/trac/browser/tags/release-27/common/main/en.xml#L1799
 module["exports"] = {
   wide: [
@@ -80982,7 +80991,7 @@ module["exports"] = {
 };
 });
 
-var weekday$5 = RealTimeClient.createCommonjsModule(function (module) {
+var weekday$5 = createCommonjsModule(function (module) {
 // Source: http://unicode.org/cldr/trac/browser/tags/release-27/common/main/en.xml#L1847
 module["exports"] = {
   wide: [
@@ -81006,14 +81015,14 @@ module["exports"] = {
 };
 });
 
-var date_1$5 = RealTimeClient.createCommonjsModule(function (module) {
+var date_1$5 = createCommonjsModule(function (module) {
 var date = {};
 module["exports"] = date;
 date.month = month$5;
 date.weekday = weekday$5;
 });
 
-var sv_1 = RealTimeClient.createCommonjsModule(function (module) {
+var sv_1 = createCommonjsModule(function (module) {
 var sv = {};
 module['exports'] = sv;
 sv.title = "Swedish";
@@ -81028,7 +81037,7 @@ sv.team = team_1$2;
 sv.date = date_1$5;
 });
 
-var city$l = RealTimeClient.createCommonjsModule(function (module) {
+var city$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "Adana",
   "Adıyaman",
@@ -81114,7 +81123,7 @@ module["exports"] = [
 ];
 });
 
-var street_root$6 = RealTimeClient.createCommonjsModule(function (module) {
+var street_root$6 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Atatürk Bulvarı",
   "Alparslan Türkeş Bulvarı",
@@ -81160,7 +81169,7 @@ module["exports"] = [
 ];
 });
 
-var country$f = RealTimeClient.createCommonjsModule(function (module) {
+var country$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "Afganistan",
   "Almanya",
@@ -81401,19 +81410,19 @@ module["exports"] = [
 ];
 });
 
-var postcode$s = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$s = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####"
 ];
 });
 
-var default_country$s = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$s = createCommonjsModule(function (module) {
 module["exports"] = [
   "Türkiye"
 ];
 });
 
-var building_number$k = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "###",
   "##",
@@ -81424,19 +81433,19 @@ module["exports"] = [
 ];
 });
 
-var street_name$k = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_root}"
 ];
 });
 
-var street_address$h = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name} #{building_number}"
 ];
 });
 
-var address_1$u = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$u = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city = city$l;
@@ -81449,7 +81458,7 @@ address.street_name = street_name$k;
 address.street_address = street_address$h;
 });
 
-var domain_suffix$t = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$t = createCommonjsModule(function (module) {
 module["exports"] = [
   "com.tr",
   "com",
@@ -81460,13 +81469,13 @@ module["exports"] = [
 ];
 });
 
-var internet_1$t = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$t = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.domain_suffix = domain_suffix$t;
 });
 
-var words$b = RealTimeClient.createCommonjsModule(function (module) {
+var words$b = createCommonjsModule(function (module) {
 module["exports"] = [
   "alias",
   "consequatur",
@@ -81720,13 +81729,13 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$b = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$b = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$b;
 });
 
-var area_code$1 = RealTimeClient.createCommonjsModule(function (module) {
+var area_code$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "392",
   "510",
@@ -81828,21 +81837,21 @@ module["exports"] = [
 ];
 });
 
-var formats$E = RealTimeClient.createCommonjsModule(function (module) {
+var formats$E = createCommonjsModule(function (module) {
 module["exports"] = [
   "+90-###-###-##-##",
   "+90-###-###-#-###"
 ];
 });
 
-var phone_number_1$u = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$u = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.area_code = area_code$1;
 phone_number.formats = formats$E;
 });
 
-var formats$F = RealTimeClient.createCommonjsModule(function (module) {
+var formats$F = createCommonjsModule(function (module) {
 module["exports"] = [
   "+90-53#-###-##-##",
   "+90-54#-###-##-##",
@@ -81851,13 +81860,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$b = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$b = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$F;
 });
 
-var first_name$k = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "Aba",
   "Abak",
@@ -82593,7 +82602,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$l = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "Abacı",
   "Abadan",
@@ -82796,7 +82805,7 @@ module["exports"] = [
 ];
 });
 
-var prefix$p = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$p = createCommonjsModule(function (module) {
 module["exports"] = [
   "Bay",
   "Bayan",
@@ -82805,7 +82814,7 @@ module["exports"] = [
 ];
 });
 
-var name$I = RealTimeClient.createCommonjsModule(function (module) {
+var name$I = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{first_name} #{last_name}",
   "#{first_name} #{last_name}",
@@ -82816,7 +82825,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$q = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$q = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$k;
@@ -82825,7 +82834,7 @@ name.prefix = prefix$p;
 name.name = name$I;
 });
 
-var tr_1 = RealTimeClient.createCommonjsModule(function (module) {
+var tr_1 = createCommonjsModule(function (module) {
 var tr = {};
 module['exports'] = tr;
 tr.title = "Turkish";
@@ -82837,7 +82846,7 @@ tr.cell_phone = cell_phone_1$b;
 tr.name = name_1$q;
 });
 
-var country$g = RealTimeClient.createCommonjsModule(function (module) {
+var country$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "Австралія",
   "Австрія",
@@ -83035,7 +83044,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$l = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "#",
   "##",
@@ -83043,7 +83052,7 @@ module["exports"] = [
 ];
 });
 
-var street_prefix$5 = RealTimeClient.createCommonjsModule(function (module) {
+var street_prefix$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "вул.",
   "вулиця",
@@ -83056,25 +83065,25 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$f = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$f = createCommonjsModule(function (module) {
 module["exports"] = [
   "майдан"
 ];
 });
 
-var secondary_address$h = RealTimeClient.createCommonjsModule(function (module) {
+var secondary_address$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "кв. ###"
 ];
 });
 
-var postcode$t = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$t = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####"
 ];
 });
 
-var state$p = RealTimeClient.createCommonjsModule(function (module) {
+var state$p = createCommonjsModule(function (module) {
 module["exports"] = [
   "АР Крим",
   "Вінницька область",
@@ -83106,7 +83115,7 @@ module["exports"] = [
 ];
 });
 
-var street_title$3 = RealTimeClient.createCommonjsModule(function (module) {
+var street_title$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Зелена",
   "Молодіжна",
@@ -83124,7 +83133,7 @@ module["exports"] = [
 ];
 });
 
-var city_name$a = RealTimeClient.createCommonjsModule(function (module) {
+var city_name$a = createCommonjsModule(function (module) {
 module["exports"] = [
   "Алчевськ",
   "Артемівськ",
@@ -83186,14 +83195,14 @@ module["exports"] = [
 ];
 });
 
-var city$m = RealTimeClient.createCommonjsModule(function (module) {
+var city$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_name}",
   "#{city_prefix} #{Name.male_first_name}"
 ];
 });
 
-var city_prefix$c = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "Південний",
   "Північний",
@@ -83202,32 +83211,32 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$c = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "град"
 ];
 });
 
-var street_name$l = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_prefix} #{Address.street_title}",
   "#{Address.street_title} #{street_suffix}"
 ];
 });
 
-var street_address$i = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name}, #{building_number}"
 ];
 });
 
-var default_country$t = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$t = createCommonjsModule(function (module) {
 module["exports"] = [
   "Україна"
 ];
 });
 
-var address_1$v = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$v = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.country = country$g;
@@ -83247,7 +83256,7 @@ address.street_address = street_address$i;
 address.default_country = default_country$t;
 });
 
-var prefix$q = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$q = createCommonjsModule(function (module) {
 module["exports"] = [
   "ТОВ",
   "ПАТ",
@@ -83260,7 +83269,7 @@ module["exports"] = [
 ];
 });
 
-var suffix$B = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$B = createCommonjsModule(function (module) {
 module["exports"] = [
   "Постач",
   "Торг",
@@ -83270,7 +83279,7 @@ module["exports"] = [
 ];
 });
 
-var name$J = RealTimeClient.createCommonjsModule(function (module) {
+var name$J = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{Name.female_first_name}",
   "#{prefix} #{Name.male_first_name}",
@@ -83283,7 +83292,7 @@ module["exports"] = [
 ];
 });
 
-var company_1$o = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$o = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.prefix = prefix$q;
@@ -83291,7 +83300,7 @@ company.suffix = suffix$B;
 company.name = name$J;
 });
 
-var free_email$l = RealTimeClient.createCommonjsModule(function (module) {
+var free_email$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "ukr.net",
   "ex.ua",
@@ -83303,7 +83312,7 @@ module["exports"] = [
 ];
 });
 
-var domain_suffix$u = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$u = createCommonjsModule(function (module) {
 module["exports"] = [
   "cherkassy.ua",
   "cherkasy.ua",
@@ -83368,14 +83377,14 @@ module["exports"] = [
 ];
 });
 
-var internet_1$u = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$u = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.free_email = free_email$l;
 internet.domain_suffix = domain_suffix$u;
 });
 
-var male_first_name$5 = RealTimeClient.createCommonjsModule(function (module) {
+var male_first_name$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Августин",
   "Аврелій",
@@ -83575,7 +83584,7 @@ module["exports"] = [
 ];
 });
 
-var male_middle_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var male_middle_name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Адамович",
   "Азарович",
@@ -83696,7 +83705,7 @@ module["exports"] = [
 ];
 });
 
-var male_last_name$5 = RealTimeClient.createCommonjsModule(function (module) {
+var male_last_name$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Андрухович",
   "Бабух",
@@ -83940,7 +83949,7 @@ module["exports"] = [
 ];
 });
 
-var female_first_name$5 = RealTimeClient.createCommonjsModule(function (module) {
+var female_first_name$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Аврелія",
   "Аврора",
@@ -84138,7 +84147,7 @@ module["exports"] = [
 ];
 });
 
-var female_middle_name$1 = RealTimeClient.createCommonjsModule(function (module) {
+var female_middle_name$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Адамівна",
   "Азарівна",
@@ -84259,7 +84268,7 @@ module["exports"] = [
 ];
 });
 
-var female_last_name$5 = RealTimeClient.createCommonjsModule(function (module) {
+var female_last_name$5 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Андрухович",
   "Бабух",
@@ -84494,14 +84503,14 @@ module["exports"] = [
 ];
 });
 
-var prefix$r = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$r = createCommonjsModule(function (module) {
 module["exports"] = [
   "Пан",
   "Пані"
 ];
 });
 
-var suffix$C = RealTimeClient.createCommonjsModule(function (module) {
+var suffix$C = createCommonjsModule(function (module) {
 module["exports"] = [
   "проф.",
   "доц.",
@@ -84524,7 +84533,7 @@ module["exports"] = [
 ];
 });
 
-var title$9 = RealTimeClient.createCommonjsModule(function (module) {
+var title$9 = createCommonjsModule(function (module) {
 module["exports"] = {
   "descriptor": [
     "Головний",
@@ -84567,7 +84576,7 @@ module["exports"] = {
 };
 });
 
-var name$K = RealTimeClient.createCommonjsModule(function (module) {
+var name$K = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{male_first_name} #{male_last_name}",
   "#{male_last_name} #{male_first_name}",
@@ -84580,7 +84589,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$r = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$r = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.male_first_name = male_first_name$5;
@@ -84595,7 +84604,7 @@ name.title = title$9;
 name.name = name$K;
 });
 
-var formats$G = RealTimeClient.createCommonjsModule(function (module) {
+var formats$G = createCommonjsModule(function (module) {
 module["exports"] = [
   "(044) ###-##-##",
   "(050) ###-##-##",
@@ -84614,13 +84623,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$v = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$v = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$G;
 });
 
-var uk_1 = RealTimeClient.createCommonjsModule(function (module) {
+var uk_1 = createCommonjsModule(function (module) {
 var uk = {};
 module['exports'] = uk;
 uk.title = "Ukrainian";
@@ -84631,7 +84640,7 @@ uk.name = name_1$r;
 uk.phone_number = phone_number_1$v;
 });
 
-var city_root$1 = RealTimeClient.createCommonjsModule(function (module) {
+var city_root$1 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Bắc Giang",
   "Bắc Kạn",
@@ -84699,13 +84708,13 @@ module["exports"] = [
 ];
 });
 
-var city$n = RealTimeClient.createCommonjsModule(function (module) {
+var city$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_root}"
 ];
 });
 
-var county$3 = RealTimeClient.createCommonjsModule(function (module) {
+var county$3 = createCommonjsModule(function (module) {
 module["exports"] = [
   "Avon",
   "Bedfordshire",
@@ -84781,13 +84790,13 @@ module["exports"] = [
 ];
 });
 
-var default_country$u = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$u = createCommonjsModule(function (module) {
 module["exports"] = [
   "Việt Nam"
 ];
 });
 
-var address_1$w = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$w = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_root = city_root$1;
@@ -84796,7 +84805,7 @@ address.county = county$3;
 address.default_country = default_country$u;
 });
 
-var domain_suffix$v = RealTimeClient.createCommonjsModule(function (module) {
+var domain_suffix$v = createCommonjsModule(function (module) {
 module["exports"] = [
   "com",
   "net",
@@ -84806,13 +84815,13 @@ module["exports"] = [
 ];
 });
 
-var internet_1$v = RealTimeClient.createCommonjsModule(function (module) {
+var internet_1$v = createCommonjsModule(function (module) {
 var internet = {};
 module['exports'] = internet;
 internet.domain_suffix = domain_suffix$v;
 });
 
-var formats$H = RealTimeClient.createCommonjsModule(function (module) {
+var formats$H = createCommonjsModule(function (module) {
 module["exports"] = [
   "01#### #####",
   "01### ######",
@@ -84832,13 +84841,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$w = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$w = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$H;
 });
 
-var formats$I = RealTimeClient.createCommonjsModule(function (module) {
+var formats$I = createCommonjsModule(function (module) {
 module["exports"] = [
   "074## ######",
   "075## ######",
@@ -84849,13 +84858,13 @@ module["exports"] = [
 ];
 });
 
-var cell_phone_1$c = RealTimeClient.createCommonjsModule(function (module) {
+var cell_phone_1$c = createCommonjsModule(function (module) {
 var cell_phone = {};
 module['exports'] = cell_phone;
 cell_phone.formats = formats$I;
 });
 
-var first_name$l = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$l = createCommonjsModule(function (module) {
 module["exports"] = [
   "Phạm",
   "Nguyễn",
@@ -84886,7 +84895,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$m = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "Nam",
   "Trung",
@@ -84964,7 +84973,7 @@ module["exports"] = [
 ];
 });
 
-var name$L = RealTimeClient.createCommonjsModule(function (module) {
+var name$L = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{first_name} #{last_name}",
   "#{first_name} #{last_name} #{last_name}",
@@ -84972,7 +84981,7 @@ module["exports"] = [
 ];
 });
 
-var name_1$s = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$s = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$l;
@@ -84980,7 +84989,7 @@ name.last_name = last_name$m;
 name.name = name$L;
 });
 
-var prefix$s = RealTimeClient.createCommonjsModule(function (module) {
+var prefix$s = createCommonjsModule(function (module) {
 module["exports"] = [
   "Công ty",
   "Cty TNHH",
@@ -84991,20 +85000,20 @@ module["exports"] = [
 ];
 });
 
-var name$M = RealTimeClient.createCommonjsModule(function (module) {
+var name$M = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{prefix} #{Name.last_name}"
 ];
 });
 
-var company_1$p = RealTimeClient.createCommonjsModule(function (module) {
+var company_1$p = createCommonjsModule(function (module) {
 var company = {};
 module['exports'] = company;
 company.prefix = prefix$s;
 company.name = name$M;
 });
 
-var words$c = RealTimeClient.createCommonjsModule(function (module) {
+var words$c = createCommonjsModule(function (module) {
 module["exports"] = [
   "đã",
   "đang",
@@ -85112,13 +85121,13 @@ module["exports"] = [
 ];
 });
 
-var lorem_1$c = RealTimeClient.createCommonjsModule(function (module) {
+var lorem_1$c = createCommonjsModule(function (module) {
 var lorem = {};
 module['exports'] = lorem;
 lorem.words = words$c;
 });
 
-var vi_1 = RealTimeClient.createCommonjsModule(function (module) {
+var vi_1 = createCommonjsModule(function (module) {
 var vi = {};
 module['exports'] = vi;
 vi.title = "Vietnamese";
@@ -85131,7 +85140,7 @@ vi.company = company_1$p;
 vi.lorem = lorem_1$c;
 });
 
-var city_prefix$d = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "长",
   "上",
@@ -85157,7 +85166,7 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$d = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$d = createCommonjsModule(function (module) {
 module["exports"] = [
   "沙市",
   "京市",
@@ -85181,7 +85190,7 @@ module["exports"] = [
 ];
 });
 
-var building_number$m = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "#####",
   "####",
@@ -85191,7 +85200,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$g = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$g = createCommonjsModule(function (module) {
 module["exports"] = [
   "巷",
   "街",
@@ -85204,13 +85213,13 @@ module["exports"] = [
 ];
 });
 
-var postcode$u = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$u = createCommonjsModule(function (module) {
 module["exports"] = [
   "######"
 ];
 });
 
-var state$q = RealTimeClient.createCommonjsModule(function (module) {
+var state$q = createCommonjsModule(function (module) {
 module["exports"] = [
   "北京市",
   "上海市",
@@ -85249,7 +85258,7 @@ module["exports"] = [
 ];
 });
 
-var state_abbr$h = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "京",
   "沪",
@@ -85288,31 +85297,31 @@ module["exports"] = [
 ];
 });
 
-var city$o = RealTimeClient.createCommonjsModule(function (module) {
+var city$o = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix}#{city_suffix}"
 ];
 });
 
-var street_name$m = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name}#{street_suffix}"
 ];
 });
 
-var street_address$j = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$j = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name}#{building_number}号"
 ];
 });
 
-var default_country$v = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$v = createCommonjsModule(function (module) {
 module["exports"] = [
   "中国"
 ];
 });
 
-var address_1$x = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$x = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$d;
@@ -85328,7 +85337,7 @@ address.street_address = street_address$j;
 address.default_country = default_country$v;
 });
 
-var first_name$m = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$m = createCommonjsModule(function (module) {
 module["exports"] = [
   "王",
   "李",
@@ -85433,7 +85442,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$n = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "绍齐",
   "博文",
@@ -85572,13 +85581,13 @@ module["exports"] = [
 ];
 });
 
-var name$N = RealTimeClient.createCommonjsModule(function (module) {
+var name$N = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{first_name}#{last_name}"
 ];
 });
 
-var name_1$t = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$t = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$m;
@@ -85586,7 +85595,7 @@ name.last_name = last_name$n;
 name.name = name$N;
 });
 
-var formats$J = RealTimeClient.createCommonjsModule(function (module) {
+var formats$J = createCommonjsModule(function (module) {
 module["exports"] = [
   "###-########",
   "####-########",
@@ -85594,13 +85603,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$x = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$x = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$J;
 });
 
-var zh_CN_1 = RealTimeClient.createCommonjsModule(function (module) {
+var zh_CN_1 = createCommonjsModule(function (module) {
 var zh_CN = {};
 module['exports'] = zh_CN;
 zh_CN.title = "Chinese";
@@ -85609,7 +85618,7 @@ zh_CN.name = name_1$t;
 zh_CN.phone_number = phone_number_1$x;
 });
 
-var city_prefix$e = RealTimeClient.createCommonjsModule(function (module) {
+var city_prefix$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "臺北",
   "新北",
@@ -85634,14 +85643,14 @@ module["exports"] = [
 ];
 });
 
-var city_suffix$e = RealTimeClient.createCommonjsModule(function (module) {
+var city_suffix$e = createCommonjsModule(function (module) {
 module["exports"] = [
   "縣",
   "市"
 ];
 });
 
-var building_number$n = RealTimeClient.createCommonjsModule(function (module) {
+var building_number$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "####",
   "###",
@@ -85650,7 +85659,7 @@ module["exports"] = [
 ];
 });
 
-var street_suffix$h = RealTimeClient.createCommonjsModule(function (module) {
+var street_suffix$h = createCommonjsModule(function (module) {
 module["exports"] = [
   "街",
   "路",
@@ -85661,20 +85670,20 @@ module["exports"] = [
 ];
 });
 
-var postcode$v = RealTimeClient.createCommonjsModule(function (module) {
+var postcode$v = createCommonjsModule(function (module) {
 module["exports"] = [
   "######"
 ];
 });
 
-var state$r = RealTimeClient.createCommonjsModule(function (module) {
+var state$r = createCommonjsModule(function (module) {
 module["exports"] = [
   "福建省",
   "台灣省"
 ];
 });
 
-var state_abbr$i = RealTimeClient.createCommonjsModule(function (module) {
+var state_abbr$i = createCommonjsModule(function (module) {
 module["exports"] = [
   "北",
   "新北",
@@ -85700,31 +85709,31 @@ module["exports"] = [
 ];
 });
 
-var city$p = RealTimeClient.createCommonjsModule(function (module) {
+var city$p = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{city_prefix}#{city_suffix}"
 ];
 });
 
-var street_name$n = RealTimeClient.createCommonjsModule(function (module) {
+var street_name$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{Name.last_name}#{street_suffix}"
 ];
 });
 
-var street_address$k = RealTimeClient.createCommonjsModule(function (module) {
+var street_address$k = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{street_name}#{building_number}號"
 ];
 });
 
-var default_country$w = RealTimeClient.createCommonjsModule(function (module) {
+var default_country$w = createCommonjsModule(function (module) {
 module["exports"] = [
   "Taiwan (R.O.C.)"
 ];
 });
 
-var address_1$y = RealTimeClient.createCommonjsModule(function (module) {
+var address_1$y = createCommonjsModule(function (module) {
 var address = {};
 module['exports'] = address;
 address.city_prefix = city_prefix$e;
@@ -85740,7 +85749,7 @@ address.street_address = street_address$k;
 address.default_country = default_country$w;
 });
 
-var first_name$n = RealTimeClient.createCommonjsModule(function (module) {
+var first_name$n = createCommonjsModule(function (module) {
 module["exports"] = [
   "王",
   "李",
@@ -85845,7 +85854,7 @@ module["exports"] = [
 ];
 });
 
-var last_name$o = RealTimeClient.createCommonjsModule(function (module) {
+var last_name$o = createCommonjsModule(function (module) {
 module["exports"] = [
   "紹齊",
   "博文",
@@ -85973,13 +85982,13 @@ module["exports"] = [
 ];
 });
 
-var name$O = RealTimeClient.createCommonjsModule(function (module) {
+var name$O = createCommonjsModule(function (module) {
 module["exports"] = [
   "#{first_name}#{last_name}"
 ];
 });
 
-var name_1$u = RealTimeClient.createCommonjsModule(function (module) {
+var name_1$u = createCommonjsModule(function (module) {
 var name = {};
 module['exports'] = name;
 name.first_name = first_name$n;
@@ -85987,7 +85996,7 @@ name.last_name = last_name$o;
 name.name = name$O;
 });
 
-var formats$K = RealTimeClient.createCommonjsModule(function (module) {
+var formats$K = createCommonjsModule(function (module) {
 module["exports"] = [
   "0#-#######",
   "02-########",
@@ -85995,13 +86004,13 @@ module["exports"] = [
 ];
 });
 
-var phone_number_1$y = RealTimeClient.createCommonjsModule(function (module) {
+var phone_number_1$y = createCommonjsModule(function (module) {
 var phone_number = {};
 module['exports'] = phone_number;
 phone_number.formats = formats$K;
 });
 
-var zh_TW_1 = RealTimeClient.createCommonjsModule(function (module) {
+var zh_TW_1 = createCommonjsModule(function (module) {
 var zh_TW = {};
 module['exports'] = zh_TW;
 zh_TW.title = "Chinese (Taiwan)";
@@ -86010,7 +86019,7 @@ zh_TW.name = name_1$u;
 zh_TW.phone_number = phone_number_1$y;
 });
 
-var locales = RealTimeClient.createCommonjsModule(function (module, exports) {
+var locales = createCommonjsModule(function (module, exports) {
 exports['az'] = az_1;
 exports['cz'] = cz_1;
 exports['de'] = de_1;
@@ -86050,12 +86059,16 @@ exports['zh_CN'] = zh_CN_1;
 exports['zh_TW'] = zh_TW_1;
 });
 
-var faker_1 = RealTimeClient.createCommonjsModule(function (module) {
+var faker_1 = createCommonjsModule(function (module) {
 // since we are requiring the top level of faker, load all locales by default
 
 var faker = new lib({ locales: locales });
 module['exports'] = faker;
 });
 
-exports.__moduleExports = faker_1;
-exports.default = faker_1;
+var index = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.assign(/*#__PURE__*/Object.create(null), faker_1, {
+	'default': faker_1,
+	__moduleExports: faker_1
+}));
+
+export { index as i };

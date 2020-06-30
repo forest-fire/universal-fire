@@ -11,7 +11,7 @@ function moduleExport(choice) {
     },
     external: ['firemock', 'firebase-admin'],
     plugins: [
-      resolve(),
+      // resolve(),
       typescript({
         rootDir: './',
         tsconfig: `tsconfig.${choice}.json`,
