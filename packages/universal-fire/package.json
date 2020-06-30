@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.53.2",
+  "version": "0.53.3",
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -40,15 +40,15 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.53.1",
-    "@forest-fire/firestore-admin": "^0.53.1",
-    "@forest-fire/firestore-client": "^0.53.1",
-    "@forest-fire/firestore-db": "^0.53.1",
-    "@forest-fire/real-time-admin": "^0.53.1",
-    "@forest-fire/real-time-client": "^0.53.1",
-    "@forest-fire/real-time-db": "^0.53.1",
-    "@forest-fire/serialized-query": "^0.53.2",
-    "@forest-fire/serializer-factory": "^0.53.1",
+    "@forest-fire/abstracted-database": "^0.53.3",
+    "@forest-fire/firestore-admin": "^0.53.3",
+    "@forest-fire/firestore-client": "^0.53.3",
+    "@forest-fire/firestore-db": "^0.53.3",
+    "@forest-fire/real-time-admin": "^0.53.3",
+    "@forest-fire/real-time-client": "^0.53.3",
+    "@forest-fire/real-time-db": "^0.53.3",
+    "@forest-fire/serialized-query": "^0.53.3",
+    "@forest-fire/serializer-factory": "^0.53.3",
     "@forest-fire/serilizer-factory": "^0.52.4",
     "@forest-fire/types": "^0.53.0",
     "common-types": "^1.15.6"
