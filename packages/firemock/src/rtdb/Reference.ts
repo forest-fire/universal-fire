@@ -24,7 +24,7 @@ import {
   slashNotation,
   networkDelay,
   DelayType,
-} from '../shared/index';
+} from '../util/index';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { getDb } from './store';
 

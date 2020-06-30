@@ -1,8 +1,8 @@
+import * as helpers from './testing/helpers';
+import * as util from '../src/util/util';
+
 import { IDictionary } from 'common-types';
 import { expect } from 'chai';
-import * as helpers from './testing/helpers';
-import * as util from '../src/shared/util';
-import 'mocha';
 
 describe('Utilities', () => {
   describe('join', () => {

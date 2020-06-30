@@ -1,8 +1,8 @@
+import { Mock, SchemaCallback } from '../src';
+
 // tslint:disable:no-implicit-dependencies
-import 'mocha';
 import { expect } from 'chai';
 import { length } from './testing/helpers';
-import { Mock, SchemaCallback } from '../src';
 
 describe('Deployment', () => {
   const animalMock: SchemaCallback = (h) => () => ({

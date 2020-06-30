@@ -1,7 +1,6 @@
-// tslint:disable:no-implicit-dependencies
-import 'mocha';
-import { expect } from 'chai';
 import { Mock } from '../src';
+// tslint:disable:no-implicit-dependencies
+import { expect } from 'chai';
 
 describe('EmailAuthProvider =>', () => {
   it('EmailAuthProvider exists and has appropriate props', async () => {

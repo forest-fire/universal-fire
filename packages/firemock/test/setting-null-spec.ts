@@ -1,7 +1,7 @@
-// tslint:disable:no-implicit-dependencies
-import 'mocha';
-import { expect } from 'chai';
 import { Mock, SchemaCallback } from '../src';
+
+// tslint:disable:no-implicit-dependencies
+import { expect } from 'chai';
 
 const animalMock: SchemaCallback = (h) => () => ({
   name: h.faker.name.firstName(),

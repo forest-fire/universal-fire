@@ -6,7 +6,7 @@ import {
 } from '../@types/rtdb-types';
 import type { IRtdbDbEvent, IRtdbDataSnapshot } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
-import { join, stripLeadingDot, removeDots, dotify } from '../shared/index';
+import { join, stripLeadingDot, removeDots, dotify } from '../util/index';
 import get from 'lodash.get';
 import { hashToArray } from 'typed-conversions';
 import {

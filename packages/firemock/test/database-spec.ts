@@ -1,32 +1,33 @@
-// tslint:disable:no-implicit-dependencies
-import { expect } from 'chai';
 import * as helpers from './testing/helpers';
+
 import {
-  Mock,
-  SchemaCallback,
-  IFirebaseEventHandler,
   GenericEventHandler,
   HandleValueEvent,
+  IFirebaseEventHandler,
+  Mock,
+  SchemaCallback,
 } from '../src';
 import {
-  clearDatabase,
-  pushDB,
-  setDB,
-  removeDB,
-  updateDB,
-  reset,
-  getDb,
-} from '../src/rtdb/store';
-import {
   addListener,
-  listenerCount,
-  removeAllListeners,
-  removeListener,
-  listenerPaths,
   findChildListeners,
   findValueListeners,
+  listenerCount,
+  listenerPaths,
+  removeAllListeners,
+  removeListener,
 } from '../src/rtdb/listeners';
-import 'mocha';
+import {
+  clearDatabase,
+  getDb,
+  pushDB,
+  removeDB,
+  reset,
+  setDB,
+  updateDB,
+} from '../src/rtdb/store';
+
+// tslint:disable:no-implicit-dependencies
+import { expect } from 'chai';
 import { wait } from 'common-types';
 
 interface IPerson {

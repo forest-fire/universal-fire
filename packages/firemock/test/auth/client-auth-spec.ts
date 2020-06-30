@@ -1,13 +1,13 @@
-// tslint:disable:no-implicit-dependencies
-import 'mocha';
-import * as chai from 'chai';
-import { Mock } from '../../src/mocking';
+import { expect } from 'chai';
+
 import {
+  addAuthObserver,
   authProviders,
   setCurrentUser,
   setDefaultAnonymousUid,
-  addAuthObserver,
 } from '../../src/auth/state-mgmt';
+
+import { Mock } from '../../src/mocking';
 
 const expect = chai.expect;
 

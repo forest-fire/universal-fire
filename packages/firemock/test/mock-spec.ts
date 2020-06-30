@@ -1,11 +1,12 @@
 // tslint:disable:no-implicit-dependencies
-import 'mocha';
-import { expect } from 'chai';
 import * as helpers from './testing/helpers';
-import { SchemaCallback } from '../src';
+
 import { Mock, SchemaHelper } from '../src/mocking';
+import { firstProp, lastProp } from '../src/util/util';
+
+import { SchemaCallback } from '../src';
+import { expect } from 'chai';
 import first from 'lodash.first';
-import { firstProp, lastProp } from '../src/shared/util';
 
 const employeeMocker: SchemaCallback = (h: SchemaHelper) => () => ({
   first: h.faker.name.firstName(),

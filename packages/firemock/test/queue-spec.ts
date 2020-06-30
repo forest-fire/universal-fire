@@ -1,7 +1,6 @@
-// tslint:disable:no-implicit-dependencies
-import 'mocha';
-import { expect } from 'chai';
 import { Queue } from '../src/mocking';
+// tslint:disable:no-implicit-dependencies
+import { expect } from 'chai';
 
 describe('Queue Class', () => {
   it('can instantiate', () => {

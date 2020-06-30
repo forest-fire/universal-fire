@@ -1,6 +1,7 @@
 import { IRelationship, ISchema, SchemaCallback } from '../@types';
 import { Queue, SchemaHelper } from '../mocking/index';
-import { pluralize, addException } from '../shared';
+import { addException, pluralize } from '../util';
+
 import { getFakerLibrary } from './fakerInitialiation';
 
 /**

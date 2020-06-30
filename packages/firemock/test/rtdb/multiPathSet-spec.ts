@@ -1,6 +1,5 @@
-import 'mocha';
-import { expect } from 'chai';
 import { Mock } from '../../src/mocking';
+import { expect } from 'chai';
 
 describe('multiPathSet() => ', () => {
   it('setting properties shallowly works as expected', async () => {

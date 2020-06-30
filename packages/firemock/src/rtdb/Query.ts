@@ -12,8 +12,8 @@ import {
   SerializedRealTimeQuery,
   RealQueryOrderType,
 } from '@forest-fire/serialized-query';
-import { leafNode, DelayType, networkDelay } from '../shared/index';
-import { runQuery } from '../shared/index';
+import { leafNode, DelayType, networkDelay } from '../util/index';
+import { runQuery } from '../util/index';
 
 /** tslint:ignore:member-ordering */
 export abstract class Query<T = any> implements IRtdbQuery {

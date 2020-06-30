@@ -1,9 +1,9 @@
-import 'mocha';
-import { expect } from 'chai';
+import { clearAuthUsers, initializeAuth } from '../../src/auth/state-mgmt';
+
+import { IDictionary } from 'common-types';
 import { Mock } from '../../src/mocking';
 import { adminAuthSdk } from '../../src';
-import { initializeAuth, clearAuthUsers } from '../../src/auth/state-mgmt';
-import { IDictionary } from 'common-types';
+import { expect } from 'chai';
 
 describe('Admin Auth => ', async () => {
   beforeEach(async () => {

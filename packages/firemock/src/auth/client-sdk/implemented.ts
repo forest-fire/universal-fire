@@ -1,5 +1,5 @@
 import { IPartialUserCredential } from '../../index';
-import { networkDelay } from '../../shared';
+import { networkDelay } from '../../util';
 import { completeUserCredential } from './completeUserCredential';
 import { Omit } from 'common-types';
 import { notImplemented } from './notImplemented';

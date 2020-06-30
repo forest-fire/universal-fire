@@ -8,7 +8,7 @@ import {
   silenceEvents,
   getDb,
 } from '../rtdb/index';
-import { DelayType, setNetworkDelay } from '../shared';
+import { DelayType, setNetworkDelay } from '../util';
 import { auth as fireAuth } from '../auth';
 import { clearAuthUsers, initializeAuth } from '../auth/state-mgmt';
 import { FireMockError } from '../errors/FireMockError';

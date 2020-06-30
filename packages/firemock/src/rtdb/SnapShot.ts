@@ -4,7 +4,7 @@ import type { IRtdbDataSnapshot } from '@forest-fire/types';
 import get from 'lodash.get';
 import { Reference } from '../rtdb/index';
 import { arrayToHash } from 'typed-conversions';
-import { getKey, join } from '../shared/index';
+import { getKey, join } from '../util/index';
 
 /**
  * Each record in the forEach iteration will be passed

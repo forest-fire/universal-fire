@@ -13,7 +13,7 @@ import {
   getUserByEmail,
   allUsers,
 } from '../../state-mgmt';
-import { networkDelay } from '../../../shared';
+import { networkDelay } from '../../../util';
 
 export const users: Partial<Auth> = {
   // https://firebase.google.com/docs/auth/admin/manage-users#create_a_user

@@ -1,22 +1,22 @@
+import * as convert from 'typed-conversions';
+import * as helpers from './testing/helpers';
+
+import {
+  Delays,
+  firstKey,
+  firstProp,
+  lastKey,
+  lastProp,
+} from '../src/util/util';
+import { Mock, SchemaHelper } from '../src/mocking';
+import { getDb, reset } from '../src/rtdb';
+
+import { IDictionary } from 'common-types';
+import { SchemaCallback } from '../src';
+import { difference } from 'lodash';
 // tslint:disable:no-shadowed-variable
 // tslint:disable:no-implicit-dependencies
 import { expect } from 'chai';
-import * as helpers from './testing/helpers';
-import { SchemaCallback } from '../src';
-import { Mock, SchemaHelper } from '../src/mocking';
-import { difference } from 'lodash';
-import { reset, getDb } from '../src/rtdb';
-import {
-  firstProp,
-  lastProp,
-  firstKey,
-  lastKey,
-  Delays,
-} from '../src/shared/util';
-import * as convert from 'typed-conversions';
-
-import 'mocha';
-import { IDictionary } from 'common-types';
 
 describe('Reference functions', () => {
   const mocker: SchemaCallback = (h) => () => ({

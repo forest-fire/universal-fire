@@ -1,4 +1,5 @@
-const typescript = require('@rollup/plugin-typescript');
+import resolve from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
 
 function moduleExport(choice) {
   return {
@@ -10,6 +11,7 @@ function moduleExport(choice) {
     },
     external: ['firemock', 'firebase-admin'],
     plugins: [
+      resolve(),
       typescript({
         rootDir: './',
         tsconfig: `tsconfig.${choice}.json`,

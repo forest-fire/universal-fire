@@ -1,5 +1,4 @@
 // tslint:disable:no-implicit-dependencies
-import 'mocha';
 import { expect } from 'chai';
 import * as helpers from './testing/helpers';
 import { SchemaHelper, Mock, Reference } from '../src';
