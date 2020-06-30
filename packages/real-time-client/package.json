@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-client",
-  "version": "0.53.4",
+  "version": "0.53.5",
   "description": "Helpful abstraction on the Firebase client API",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
@@ -35,7 +35,7 @@
     "watch:test": "npm run test -- --watch"
   },
   "devDependencies": {
-    "@forest-fire/serialized-query": "^0.53.4",
+    "@forest-fire/serialized-query": "^0.53.5",
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "@rollup/plugin-typescript": "^4.1.2",
@@ -74,7 +74,7 @@
     "@firebase/database": "^0.6.6",
     "@firebase/database-types": "^0.5.1",
     "@forest-fire/abstracted-database": "^0.53.3",
-    "@forest-fire/real-time-db": "^0.53.4",
+    "@forest-fire/real-time-db": "^0.53.5",
     "@forest-fire/types": "^0.53.0",
     "@forest-fire/utility": "^0.53.0",
     "common-types": "^1.15.7",
