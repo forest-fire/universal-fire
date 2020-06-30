@@ -1,6 +1,5 @@
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
-import { expect } from 'chai';
 
 const config = {
   apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',
@@ -13,18 +12,18 @@ const config = {
 
 describe('getPushKey() => ', () => {
   let db: RealTimeClient;
-  before(async () => {
+  beforeAll(async () => {
     db = await RealTimeClient.connect(config);
   });
 
-  after(async () => {
+  afterAll(async () => {
     await db.remove('/pushKey');
   });
 
   it('getting pushkey retrieves a pushkey from the server', async () => {
     const key = await db.getPushKey('/pushKey/test');
-    expect(key).to.be.a('string');
-    expect(key.slice(0, 1)).to.equal('-');
+    expect(typeof key).toEqual('string');
+    expect(key.slice(0, 1)).toBe('-');
   });
 
   it('pushing multiple keys with pushkey works and do not collide', async () => {
@@ -35,6 +34,7 @@ describe('getPushKey() => ', () => {
     }
 
     const list = await db.getList('/pushKey/test');
-    expect(list).to.be.an('array').and.have.lengthOf(3);
+    expect(list).toBeArray();
+    expect(list).toHaveLength(3);
   });
 });

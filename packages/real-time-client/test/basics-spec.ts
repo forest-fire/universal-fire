@@ -1,7 +1,7 @@
+import * as helpers from './testing/helpers';
+
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
-import { expect } from 'chai';
-import * as helpers from './testing/helpers';
 import config from './testing/fb-config';
 import { wait } from 'common-types';
 
@@ -11,20 +11,17 @@ describe('Basics: ', () => {
   it('Can connect to Firebase mock DB', async () => {
     const db = new RealTimeClient({ mocking: true, mockData: { foo: 'bar' } });
     await db.connect();
-    expect(db.mock.db).to.be.an('object');
-    expect(db.mock.db.foo).to.equal('bar');
-    expect(db.isConnected).to.equal(true);
+    expect(db.mock.db).toBeInstanceOf(Object);
+    expect(db.mock.db.foo).toBe('bar');
+    expect(db.isConnected).toBe(true);
   });
   it('Can connect to a real Firebase DB', async () => {
     const db = await RealTimeClient.connect(config);
     await wait(1000);
-    expect(db.isConnected).to.equal(
-      true,
-      'after using the connect() static initializer, the database should be connected'
-    );
+    expect(db.isConnected).toBe(true);
   });
   it("can list connected DB's", async () => {
     const dbs = await RealTimeClient.connectedTo();
-    expect(dbs).to.contain('abstracted-admin');
+    expect(dbs).toEqual(expect.arrayContaining(['abstracted-admin']));
   });
 });

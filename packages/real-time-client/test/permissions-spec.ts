@@ -1,6 +1,4 @@
 import { RealTimeClient } from '../src';
-// tslint:disable:no-implicit-dependencies
-import { expect } from 'chai';
 
 const config = {
   apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',
@@ -21,9 +19,9 @@ describe('Permissions', () => {
         'should not have reached this point due to permissions error'
       );
     } catch (e) {
-      expect(e.message).to.include('no-write/foobar');
-      expect(e.name).to.equal('RealTimeDb/permission-denied');
-      expect(e.code).to.equal('permission-denied');
+      expect(e.message).toContain('no-write/foobar');
+      expect(e.name).toBe('RealTimeDb/permission-denied');
+      expect(e.code).toBe('permission-denied');
     }
   });
 
@@ -38,9 +36,9 @@ describe('Permissions', () => {
         'should not have reached this point due to permissions error'
       );
     } catch (e) {
-      expect(e.code).to.equal('permission-denied');
-      expect(e.name).to.equal('RealTimeDb/permission-denied');
-      expect(e.message).to.include('no-write/foobar');
+      expect(e.code).toBe('permission-denied');
+      expect(e.name).toBe('RealTimeDb/permission-denied');
+      expect(e.message).toContain('no-write/foobar');
     }
   });
 });

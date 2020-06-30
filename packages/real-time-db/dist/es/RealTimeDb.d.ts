@@ -2,9 +2,10 @@ import { IAdminEmitter, IClientEmitter, IFirebaseConnectionCallback, IFirebaseLi
 import { IAbstractedDatabase, IAdminApp, IClientApp, IDatabaseConfig, IMockConfigOptions, IRtdbDataSnapshot, IRtdbDatabase, IRtdbDbEvent, IRtdbReference, ISerializedQuery } from '@forest-fire/types';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IDictionary } from 'common-types';
+import type { Mock as IMockApi } from 'firemock';
 /** time by which the dynamically loaded mock library should be loaded */
 export declare const MOCK_LOADING_TIMEOUT = 2000;
-export declare abstract class RealTimeDb extends AbstractedDatabase implements IRealTimeDb, IAbstractedDatabase {
+export declare abstract class RealTimeDb extends AbstractedDatabase implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
     protected _isAdminApi: boolean;
     constructor();
     get isMockDb(): boolean;

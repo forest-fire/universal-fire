@@ -2,7 +2,6 @@ import * as helpers from './testing/helpers';
 
 import { RealTimeClient } from '../src';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { expect } from 'chai';
 
 interface IPerson {
   name: string;
@@ -28,55 +27,55 @@ describe('Query based Read ops:', () => {
 
   it('getSnapshot() works with query passed in', async () => {
     let data = await db.getSnapshot('people');
-    expect(data.numChildren()).to.equal(33); // baseline check
+    expect(data.numChildren()).toBe(33); // baseline check
     const q = SerializedRealTimeQuery.path('people')
       .orderByChild('age')
       .limitToFirst(5);
     data = await db.getSnapshot(q);
-    expect(data.numChildren()).to.equal(5);
+    expect(data.numChildren()).toBe(5);
     // data.val().map(x => x.age).map(age => expect(age).to.equal(5));
-    expect(helpers.firstRecord(data.val()).age).to.equal(100);
-    expect(helpers.lastRecord(data.val()).age).to.equal(100);
+    expect(helpers.firstRecord(data.val()).age).toBe(100);
+    expect(helpers.lastRecord(data.val()).age).toBe(100);
     const q2 = SerializedRealTimeQuery.path('people')
       .orderByChild('age')
       .limitToLast(5);
     data = await db.getSnapshot(q2);
-    expect(data.numChildren()).to.equal(5);
-    expect(helpers.firstRecord(data.val()).age).to.equal(1);
-    expect(helpers.lastRecord(data.val()).age).to.equal(1);
+    expect(data.numChildren()).toBe(5);
+    expect(helpers.firstRecord(data.val()).age).toBe(1);
+    expect(helpers.lastRecord(data.val()).age).toBe(1);
     const q3 = SerializedRealTimeQuery.path('people')
       .orderByChild('age')
       .equalTo(3);
     data = await db.getSnapshot(q3);
-    expect(data.numChildren()).to.equal(3);
-    expect(helpers.firstRecord(data.val()).age).to.equal(3);
-    expect(helpers.lastRecord(data.val()).age).to.equal(3);
+    expect(data.numChildren()).toBe(3);
+    expect(helpers.firstRecord(data.val()).age).toBe(3);
+    expect(helpers.lastRecord(data.val()).age).toBe(3);
   });
 
   it('getList() works with query passed in', async () => {
     let data = await db.getList<IPerson>('people');
-    expect(data.length).to.equal(33); // baseline check
+    expect(data.length).toBe(33); // baseline check
 
     const q = SerializedRealTimeQuery.path('people')
       .orderByChild('age')
       .limitToFirst(5);
     data = await db.getList<IPerson>(q);
-    expect(data.length).to.equal(5);
-    data.map((d) => d.age).map((age) => expect(age).to.equal(100));
+    expect(data.length).toBe(5);
+    data.map((d) => d.age).map((age) => expect(age).toBe(100));
 
     const q2 = SerializedRealTimeQuery.path('people')
       .orderByChild('age')
       .limitToLast(5);
     data = await db.getList<IPerson>(q2);
-    expect(data.length).to.equal(5);
-    data.map((d) => d.age).map((age) => expect(age).to.equal(1));
+    expect(data.length).toBe(5);
+    data.map((d) => d.age).map((age) => expect(age).toBe(1));
 
     const q3 = SerializedRealTimeQuery.path('people')
       .orderByChild('age')
       .equalTo(3);
     data = await db.getList<IPerson>(q3);
-    expect(data.length).to.equal(3);
-    data.map((d) => d.age).map((age) => expect(age).to.equal(3));
+    expect(data.length).toBe(3);
+    data.map((d) => d.age).map((age) => expect(age).toBe(3));
   });
 
   it('getList() with limit query on orderByKey of scalar values', async () => {
@@ -95,7 +94,7 @@ describe('Query based Read ops:', () => {
       .limitToFirst(3);
     const ages = await db.getList(query);
 
-    expect(ages).to.have.lengthOf(3);
+    expect(ages).toHaveLength(3);
   });
 
   it('getList() with limit query on orderByValue', async () => {
@@ -113,6 +112,6 @@ describe('Query based Read ops:', () => {
       .orderByValue()
       .limitToFirst(3);
     const ages = await db.getList(query);
-    expect(ages).to.have.lengthOf(3);
+    expect(ages).toHaveLength(3);
   });
 });

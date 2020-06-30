@@ -31,7 +31,7 @@
     "watch": "run-p watch:esnext ",
     "watch:esnext": "tsc -P tsconfig.es.json -w",
     "build:nuclear": "run-s clean:nuclear build",
-    "test": "yarn do test",
+    "test": "jest",
     "watch:test": "npm run test -- --watch"
   },
   "devDependencies": {

@@ -1,8 +1,9 @@
+import 'jest-extended';
+
 import * as helpers from './testing/helpers';
 
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
-import { expect } from 'chai';
 
 helpers.setupEnv();
 const config = {
@@ -27,36 +28,36 @@ describe('Mocking', () => {
     await mockDb.connect();
   });
   it('ref() returns a mock reference', () => {
-    expect(mockDb.ref('foo')).to.have.property('once');
+    expect(mockDb.ref('foo')).toHaveProperty('once');
   });
 
   it('getSnapshot() returns a mock snapshot', async () => {
     addAnimals(mockDb, 10);
     const animals = await mockDb.getSnapshot('/animals');
-    expect(animals.numChildren()).to.equal(10);
+    expect(animals.numChildren()).toBe(10);
     mockDb.mock.queueSchema('animal', 5).generate();
     const moreAnimals = await mockDb.getSnapshot('/animals');
-    expect(moreAnimals.numChildren()).to.equal(15);
+    expect(moreAnimals.numChildren()).toBe(15);
   });
 
   it('getValue() returns a value from mock DB', async () => {
     addAnimals(mockDb, 10);
     const animals = await mockDb.getValue('/animals');
-    expect(animals).to.be.an('object');
-    expect(helpers.length(animals)).to.equal(10);
-    expect(helpers.firstRecord(animals)).to.have.property('id');
-    expect(helpers.firstRecord(animals)).to.have.property('name');
-    expect(helpers.firstRecord(animals)).to.have.property('age');
+    expect(animals).toBeInstanceOf(Object);
+    expect(helpers.length(animals)).toBe(10);
+    expect(helpers.firstRecord(animals)).toHaveProperty('id');
+    expect(helpers.firstRecord(animals)).toHaveProperty('name');
+    expect(helpers.firstRecord(animals)).toHaveProperty('age');
   });
 
   it('getRecord() returns a record from mock DB', async () => {
     addAnimals(mockDb, 10);
     const firstKey = helpers.firstKey(mockDb.mock.db.animals);
     const animal = await mockDb.getRecord(`/animals/${firstKey}`);
-    expect(animal).to.be.an('object');
-    expect(animal.id).to.equal(firstKey);
-    expect(animal).to.have.property('name');
-    expect(animal).to.have.property('age');
+    expect(animal).toBeInstanceOf(Object);
+    expect(animal.id).toBe(firstKey);
+    expect(animal).toHaveProperty('name');
+    expect(animal).toHaveProperty('age');
   });
 
   it('getRecord() returns a record from mock DB with bespoke id prop', async () => {
@@ -64,30 +65,30 @@ describe('Mocking', () => {
     const firstKey = helpers.firstKey(mockDb.mock.db.animals);
     const animal = await mockDb.getRecord(`/animals/${firstKey}`, 'key');
 
-    expect(animal).to.be.an('object');
-    expect(animal).to.have.property('key');
-    expect(animal).to.have.property('name');
-    expect(animal).to.have.property('age');
+    expect(animal).toBeInstanceOf(Object);
+    expect(animal).toHaveProperty('key');
+    expect(animal).toHaveProperty('name');
+    expect(animal).toHaveProperty('age');
   });
 
   it('getList() returns an array of records', async () => {
     addAnimals(mockDb, 10);
     const animals = await mockDb.getList('/animals');
-    expect(animals).to.be.an('array');
-    expect(animals).has.lengthOf(10);
-    expect(animals[0]).to.have.property('id');
-    expect(animals[0]).to.have.property('name');
-    expect(animals[0]).to.have.property('age');
+    expect(animals).toBeArray();
+    expect(animals).toHaveLength(10);
+    expect(animals[0]).toHaveProperty('id');
+    expect(animals[0]).toHaveProperty('name');
+    expect(animals[0]).toHaveProperty('age');
   });
 
   it('getList() returns an array of records, with bespoke "id" property', async () => {
     addAnimals(mockDb, 10);
     const animals = await mockDb.getList('/animals', 'key');
-    expect(animals).to.be.an('array');
-    expect(animals).has.lengthOf(10);
-    expect(animals[0]).to.have.property('key');
-    expect(animals[0]).to.have.property('name');
-    expect(animals[0]).to.have.property('age');
+    expect(animals).toBeArray();
+    expect(animals).toHaveLength(10);
+    expect(animals[0]).toHaveProperty('key');
+    expect(animals[0]).toHaveProperty('name');
+    expect(animals[0]).toHaveProperty('age');
   });
 
   it('set() sets to the mock DB', async () => {
@@ -96,9 +97,9 @@ describe('Mocking', () => {
       age: 45,
     });
     const people = await mockDb.getRecord('/people/abcd');
-    expect(people).to.have.property('id');
-    expect(people).to.have.property('name');
-    expect(people).to.have.property('age');
+    expect(people).toHaveProperty('id');
+    expect(people).toHaveProperty('name');
+    expect(people).toHaveProperty('age');
   });
 
   it('update() updates the mock DB', async () => {
@@ -112,12 +113,12 @@ describe('Mocking', () => {
     });
     mockDb.update('/people/abcd', { age: 14 });
     const people = await mockDb.getRecord('/people/abcd');
-    expect(people).to.be.an('object');
-    expect(people).to.have.property('id');
-    expect(people).to.have.property('name');
-    expect(people).to.have.property('age');
-    expect(people.name).to.equal('Frank Black');
-    expect(people.age).to.equal(14);
+    expect(people).toBeInstanceOf(Object);
+    expect(people).toHaveProperty('id');
+    expect(people).toHaveProperty('name');
+    expect(people).toHaveProperty('age');
+    expect(people.name).toBe('Frank Black');
+    expect(people.age).toBe(14);
   });
 
   it('push() pushes records into the mock DB', async () => {
@@ -126,12 +127,12 @@ describe('Mocking', () => {
       age: 45,
     });
     const people = await mockDb.getList('/people');
-    expect(people).to.be.an('array');
-    expect(people).has.lengthOf(1);
-    expect(helpers.firstRecord(people)).to.have.property('id');
-    expect(helpers.firstRecord(people)).to.have.property('name');
-    expect(helpers.firstRecord(people)).to.have.property('age');
-    expect(helpers.firstRecord(people).age).to.equal(45);
+    expect(Array.isArray(people)).toBeTruthy();
+    expect(people).toHaveLength(1);
+    expect(helpers.firstRecord(people)).toHaveProperty('id');
+    expect(helpers.firstRecord(people)).toHaveProperty('name');
+    expect(helpers.firstRecord(people)).toHaveProperty('age');
+    expect(helpers.firstRecord(people).age).toBe(45);
   });
 
   it('read operations on mock with a schema prefix are offset correctly', async () => {
@@ -144,10 +145,10 @@ describe('Mocking', () => {
     mockDb.mock.queueSchema('meal', 10);
     mockDb.mock.generate();
 
-    expect(mockDb.mock.db.authenticated).to.be.an('object');
-    expect(mockDb.mock.db.authenticated.meals).to.be.an('object');
+    expect(mockDb.mock.db.authenticated).toBeInstanceOf(Object);
+    expect(mockDb.mock.db.authenticated.meals).toBeInstanceOf(Object);
     const list = await mockDb.getList('/authenticated/meals');
-    expect(list.length).to.equal(10);
+    expect(list.length).toBe(10);
   });
 
   it('setting initial DB state works', async () => {
@@ -158,7 +159,7 @@ describe('Mocking', () => {
       },
     });
     await db2.connect();
-    expect(db2.mock.db.foo).to.equal('bar');
+    expect(db2.mock.db.foo).toBe('bar');
   });
 
   it('setting auth() to accept anonymous works', async () => {
@@ -170,7 +171,7 @@ describe('Mocking', () => {
     });
     const auth = await db3.auth();
     const user = await auth.signInAnonymously();
-    expect(user.user.uid).to.be.a('string');
+    expect(typeof user.user.uid).toEqual('string');
   });
 });
 

@@ -32,12 +32,13 @@ import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { slashNotation } from '@forest-fire/utility';
+import type { Mock as IMockApi } from 'firemock';
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
 export abstract class RealTimeDb extends AbstractedDatabase
-  implements IRealTimeDb, IAbstractedDatabase {
+  implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
   protected _isAdminApi: boolean = false;
 
   constructor() {

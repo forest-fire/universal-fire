@@ -558,7 +558,7 @@ describe('Database', () => {
       });
 
       const callback: HandleValueEvent = (snap) => {
-        expect(getDb('people')).toBeObject();
+        expect(getDb('people')).toBeInstanceOf(Object);
         expect(getDb('people')).not.toHaveProperty('abcd');
       };
       console.log(Object.keys(getDb('people')));
