@@ -1,7 +1,7 @@
 import type { IDictionary } from 'common-types';
 import type { RealTimeDb } from './index';
 import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
-import type { IRtdbReference, IRtdbDataSnapshot, IRtdbOnDisconnect, IRtdbThenableReference, IFirebaseWatchContext, IPathSetter } from '@forest-fire/types';
+import type { IRtdbReference, IRtdbDataSnapshot, IRtdbOnDisconnect, IRtdbThenableReference, IFirebaseWatchContext, IPathSetter, IAbstractedEvent, IRtdbDbEvent } from '@forest-fire/types';
 export declare type IMockLoadingState = 'not-applicable' | 'loaded' | 'loading' | 'timed-out';
 export declare type DebuggingCallback = (message: string) => void;
 export interface IFirebaseListener {
@@ -80,3 +80,4 @@ export interface ITransactionResult<T = any> {
  * we have created this type represents the full typing of `RealTimeDb`
  */
 export declare type IRealTimeDb = RealTimeDb & AbstractedDatabase;
+export declare function isRealTimeEvent(events: IAbstractedEvent | IAbstractedEvent[]): events is IRtdbDbEvent | IRtdbDbEvent[];

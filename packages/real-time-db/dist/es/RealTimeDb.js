@@ -1,5 +1,5 @@
 import * as convert from 'typed-conversions';
-import { AbstractedProxyError, FileDepthExceeded, PermissionDenied, RealTimeDbError, UndefinedAssignment, WatcherEventWrapper, } from './index';
+import { AbstractedProxyError, FileDepthExceeded, PermissionDenied, RealTimeDbError, UndefinedAssignment, WatcherEventWrapper, isRealTimeEvent, } from './index';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { slashNotation } from '@forest-fire/utility';
@@ -64,6 +64,10 @@ export class RealTimeDb extends AbstractedDatabase {
         if (!Array.isArray(events)) {
             events = [events];
         }
+        if (events && !isRealTimeEvent(events)) {
+            //TODO: fill this section out
+            throw new RealTimeDbError(`An attempt to watch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+        }
         try {
             events.map((evt) => {
                 const dispatch = WatcherEventWrapper({
@@ -87,13 +91,17 @@ export class RealTimeDb extends AbstractedDatabase {
         }
     }
     unWatch(events, cb) {
+        if (events && !isRealTimeEvent(events)) {
+            //TODO: fill this section out
+            throw new RealTimeDbError(`An attempt to unwatch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+        }
         try {
-            if (!Array.isArray(events)) {
-                events = [events];
-            }
             if (!events) {
                 this.ref().off();
                 return;
+            }
+            if (!Array.isArray(events)) {
+                events = [events];
             }
             events.map((evt) => {
                 if (cb) {

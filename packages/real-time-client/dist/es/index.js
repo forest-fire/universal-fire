@@ -20304,6 +20304,10 @@ class RealTimeDb extends AbstractedDatabase {
         if (!Array.isArray(events)) {
             events = [events];
         }
+        if (events && !isRealTimeEvent(events)) {
+            //TODO: fill this section out
+            throw new RealTimeDbError(`An attempt to watch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+        }
         try {
             events.map((evt) => {
                 const dispatch = WatcherEventWrapper({
@@ -20327,13 +20331,17 @@ class RealTimeDb extends AbstractedDatabase {
         }
     }
     unWatch(events, cb) {
+        if (events && !isRealTimeEvent(events)) {
+            //TODO: fill this section out
+            throw new RealTimeDbError(`An attempt to unwatch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+        }
         try {
-            if (!Array.isArray(events)) {
-                events = [events];
-            }
             if (!events) {
                 this.ref().off();
                 return;
+            }
+            if (!Array.isArray(events)) {
+                events = [events];
             }
             events.map((evt) => {
                 if (cb) {
@@ -21012,6 +21020,24 @@ class AbstractedProxyError extends Error {
                 `\n${shortStack}`
             : `${e.name ? `[Proxy of ${e.name}]` : ''}[ ${type}/${subType}]: ${e.message}\n${shortStack}`;
     }
+}
+
+var FirebaseBoolean;
+(function (FirebaseBoolean) {
+    FirebaseBoolean[FirebaseBoolean["true"] = 1] = "true";
+    FirebaseBoolean[FirebaseBoolean["false"] = 0] = "false";
+})(FirebaseBoolean || (FirebaseBoolean = {}));
+function isRealTimeEvent(events) {
+    const evts = Array.isArray(events) ? events : [events];
+    return evts.every((e) => [
+        'value',
+        'child_changed',
+        'child_added',
+        'child_removed',
+        'child_moved',
+    ].includes(e)
+        ? true
+        : false);
 }
 
 const WatcherEventWrapper = (context) => (handler) => {

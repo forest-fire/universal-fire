@@ -67,6 +67,10 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         if (!Array.isArray(events)) {
             events = [events];
         }
+        if (events && !index_1.isRealTimeEvent(events)) {
+            //TODO: fill this section out
+            throw new index_1.RealTimeDbError(`An attempt to watch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+        }
         try {
             events.map((evt) => {
                 const dispatch = index_1.WatcherEventWrapper({
@@ -90,13 +94,17 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
         }
     }
     unWatch(events, cb) {
+        if (events && !index_1.isRealTimeEvent(events)) {
+            //TODO: fill this section out
+            throw new index_1.RealTimeDbError(`An attempt to unwatch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+        }
         try {
-            if (!Array.isArray(events)) {
-                events = [events];
-            }
             if (!events) {
                 this.ref().off();
                 return;
+            }
+            if (!Array.isArray(events)) {
+                events = [events];
             }
             events.map((evt) => {
                 if (cb) {

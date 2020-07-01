@@ -1,5 +1,5 @@
 import { IAdminEmitter, IClientEmitter, IFirebaseConnectionCallback, IFirebaseListener, IFirebaseWatchHandler, IMockLoadingState, IRealTimeDb } from './index';
-import { IAbstractedDatabase, IAdminApp, IClientApp, IDatabaseConfig, IMockConfigOptions, IRtdbDataSnapshot, IRtdbDatabase, IRtdbDbEvent, IRtdbReference, ISerializedQuery } from '@forest-fire/types';
+import { IAbstractedDatabase, IAdminApp, IClientApp, IDatabaseConfig, IMockConfigOptions, IRtdbDataSnapshot, IRtdbDatabase, IRtdbReference, ISerializedQuery, IAbstractedEvent } from '@forest-fire/types';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IDictionary } from 'common-types';
 import type { Mock as IMockApi } from 'firemock';
@@ -49,8 +49,8 @@ export declare abstract class RealTimeDb extends AbstractedDatabase implements I
      * @param events an event type or an array of event types (e.g., "value", "child_added")
      * @param cb the callback function to call when event triggered
      */
-    watch(target: string | ISerializedQuery, events: IRtdbDbEvent | IRtdbDbEvent[], cb: IFirebaseWatchHandler): void;
-    unWatch(events?: IRtdbDbEvent | IRtdbDbEvent[], cb?: any): void;
+    watch(target: string | ISerializedQuery, events: IAbstractedEvent | IAbstractedEvent[], cb: IFirebaseWatchHandler): void;
+    unWatch(events?: IAbstractedEvent | IAbstractedEvent[], cb?: any): void;
     /**
      * Get a Firebase SerializedQuery reference
      *

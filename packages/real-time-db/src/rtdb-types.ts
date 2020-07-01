@@ -8,6 +8,8 @@ import type {
   IRtdbThenableReference,
   IFirebaseWatchContext,
   IPathSetter,
+  IAbstractedEvent,
+  IRtdbDbEvent,
 } from '@forest-fire/types';
 
 export type IMockLoadingState =
@@ -131,3 +133,21 @@ export interface ITransactionResult<T = any> {
  * we have created this type represents the full typing of `RealTimeDb`
  */
 export type IRealTimeDb = RealTimeDb & AbstractedDatabase;
+
+export function isRealTimeEvent(
+  events: IAbstractedEvent | IAbstractedEvent[]
+): events is IRtdbDbEvent | IRtdbDbEvent[] {
+  const evts = Array.isArray(events) ? events : [events];
+
+  return evts.every((e) =>
+    [
+      'value',
+      'child_changed',
+      'child_added',
+      'child_removed',
+      'child_moved',
+    ].includes(e)
+      ? true
+      : false
+  );
+}

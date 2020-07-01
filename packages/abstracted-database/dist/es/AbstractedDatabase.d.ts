@@ -1,4 +1,4 @@
-import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IFirestoreDbEvent, IRtdbDatabase, IRtdbDbEvent, SDK, IClientAuthProviders, IAppInfo, IAbstractedDatabase, ISerializedQuery } from '@forest-fire/types';
+import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IRtdbDatabase, SDK, IClientAuthProviders, IAppInfo, IAbstractedDatabase, ISerializedQuery, IAbstractedEvent } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 export declare abstract class AbstractedDatabase implements IAbstractedDatabase {
     readonly sdk: SDK;
@@ -131,11 +131,11 @@ export declare abstract class AbstractedDatabase implements IAbstractedDatabase 
     /**
      * Watch for Firebase events based on a DB path.
      */
-    abstract watch(target: string | ISerializedQuery, events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbDbEvent | IRtdbDbEvent[], cb: any): void;
+    abstract watch(target: string | ISerializedQuery, events: IAbstractedEvent | IAbstractedEvent[], cb: any): void;
     /**
      * Unwatches existing Firebase events.
      */
-    abstract unWatch(events?: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbDbEvent | IRtdbDbEvent[], cb?: any): void;
+    abstract unWatch(events?: IAbstractedEvent | IAbstractedEvent[], cb?: any): void;
     /**
      * Returns a reference for a given path in Firebase
      */

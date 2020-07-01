@@ -13,6 +13,7 @@ import type {
   IAppInfo,
   IAbstractedDatabase,
   ISerializedQuery,
+  IAbstractedEvent,
 } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 import { FireError } from '@forest-fire/utility';
@@ -214,22 +215,14 @@ export abstract class AbstractedDatabase implements IAbstractedDatabase {
    */
   public abstract watch(
     target: string | ISerializedQuery,
-    events:
-      | IFirestoreDbEvent
-      | IFirestoreDbEvent[]
-      | IRtdbDbEvent
-      | IRtdbDbEvent[],
+    events: IAbstractedEvent | IAbstractedEvent[],
     cb: any
   ): void;
   /**
    * Unwatches existing Firebase events.
    */
   public abstract unWatch(
-    events?:
-      | IFirestoreDbEvent
-      | IFirestoreDbEvent[]
-      | IRtdbDbEvent
-      | IRtdbDbEvent[],
+    events?: IAbstractedEvent | IAbstractedEvent[],
     cb?: any
   ): void;
   /**

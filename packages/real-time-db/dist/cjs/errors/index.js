@@ -13,5 +13,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./FileDepthExceeded"), exports);
 __exportStar(require("./PermissionDenied"), exports);
 __exportStar(require("./UndefinedAssignment"), exports);
-__exportStar(require("./RealTimeDb"), exports);
+__exportStar(require("./RealTimeDbError"), exports);
 __exportStar(require("./AbstractedProxyError"), exports);

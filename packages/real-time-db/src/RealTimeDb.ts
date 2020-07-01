@@ -14,6 +14,7 @@ import {
   RealTimeDbError,
   UndefinedAssignment,
   WatcherEventWrapper,
+  isRealTimeEvent,
 } from './index';
 import {
   IAbstractedDatabase,
@@ -26,6 +27,7 @@ import {
   IRtdbDbEvent,
   IRtdbReference,
   ISerializedQuery,
+  IAbstractedEvent,
 } from '@forest-fire/types';
 
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
@@ -120,15 +122,25 @@ export abstract class RealTimeDb extends AbstractedDatabase
    */
   public watch(
     target: string | ISerializedQuery,
-    events: IRtdbDbEvent | IRtdbDbEvent[],
+    events: IAbstractedEvent | IAbstractedEvent[],
     cb: IFirebaseWatchHandler
   ) {
     if (!Array.isArray(events)) {
       events = [events];
     }
 
+    if (events && !isRealTimeEvent(events)) {
+      //TODO: fill this section out
+      throw new RealTimeDbError(
+        `An attempt to watch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(
+          events
+        )}`,
+        'invalid-event'
+      );
+    }
+
     try {
-      events.map((evt) => {
+      events.map((evt: IRtdbDbEvent) => {
         const dispatch = WatcherEventWrapper({
           eventType: evt,
           targetType: 'path',
@@ -151,16 +163,26 @@ export abstract class RealTimeDb extends AbstractedDatabase
     }
   }
 
-  public unWatch(events?: IRtdbDbEvent | IRtdbDbEvent[], cb?: any) {
+  public unWatch(events?: IAbstractedEvent | IAbstractedEvent[], cb?: any) {
+    if (events && !isRealTimeEvent(events)) {
+      //TODO: fill this section out
+      throw new RealTimeDbError(
+        `An attempt to unwatch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(
+          events
+        )}`,
+        'invalid-event'
+      );
+    }
     try {
-      if (!Array.isArray(events)) {
-        events = [events];
-      }
       if (!events) {
         this.ref().off();
         return;
       }
-      events.map((evt) => {
+
+      if (!Array.isArray(events)) {
+        events = [events];
+      }
+      events.map((evt: IRtdbDbEvent) => {
         if (cb) {
           this.ref().off(evt, cb);
         } else {
