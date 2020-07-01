@@ -445,10 +445,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
    * and converts it to a JS object where the snapshot's key
    * is included as part of the record (as `id` by default)
    */
-  public async getRecord<T = any>(
-    path: string | ISerializedQuery<T>,
-    idProp = 'id'
-  ): Promise<T> {
+  public async getRecord<T = any>(path: string, idProp = 'id'): Promise<T> {
     try {
       const snap = await this.getSnapshot<T>(path);
       let object = snap.val();

@@ -4,8 +4,6 @@ import {
   IClientAuth,
   IClientAuthProviders,
   IDatabaseConfig,
-  IFirestoreDbEvent,
-  IRtdbDbEvent,
   ISerializedQuery,
   SDK,
 } from '../index';
@@ -56,10 +54,7 @@ export interface IAbstractedDatabase<TMock = IDictionary> {
 
   getPushKey: (path: string) => Promise<string>;
 
-  getRecord: <T = any>(
-    path: string | ISerializedQuery,
-    idProp?: string
-  ) => Promise<T>;
+  getRecord: <T = any>(path: string, idProp?: string) => Promise<T>;
 
   getValue: <T = any>(path: string) => Promise<T | void>;
 

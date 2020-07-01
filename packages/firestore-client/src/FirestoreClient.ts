@@ -10,7 +10,6 @@ import {
   IClientApp,
   IClientAuth,
   IClientConfig,
-  IClientSdk,
   IMockConfig,
   SDK,
   isClientConfig,

@@ -176,7 +176,7 @@ export abstract class AbstractedDatabase implements IAbstractedDatabase {
    * object where the record's key is included as part of the record.
    */
   public abstract async getRecord<T = any>(
-    path: string | ISerializedQuery<T>,
+    path: string,
     idProp?: string
   ): Promise<T>;
   /**
