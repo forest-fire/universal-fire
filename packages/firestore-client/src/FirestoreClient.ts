@@ -19,8 +19,6 @@ import {
 import { firebase } from '@firebase/app';
 import type { Mock as IMockApi } from 'firemock';
 
-import('@firebase/firestore');
-
 export class FirestoreClient extends FirestoreDb
   implements IFirestoreDb, IAbstractedDatabase<IMockApi> {
   sdk = SDK.FirestoreClient;
@@ -37,6 +35,8 @@ export class FirestoreClient extends FirestoreDb
 
   constructor(config?: IClientConfig | IMockConfig) {
     super();
+    import('@firebase/firestore');
+
     if (!config) {
       config = extractClientConfig();
       if (!config) {

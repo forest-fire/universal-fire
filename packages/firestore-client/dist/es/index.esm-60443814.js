@@ -1,4 +1,4 @@
-import { _ as __extends, a as __awaiter, b as __generator, g as getUA, c as __spreadArrays, L as LogLevel, C as Component, f as firebase$1, d as Logger, i as isMobileCordova, e as isReactNative, h as isElectron, j as isIE, k as isUWP, l as isBrowserExtension } from './index-887effb4.js';
+import { _ as __extends, a as __awaiter, b as __generator, g as getUA, c as __spreadArrays, L as LogLevel, C as Component, f as firebase$1, d as Logger, i as isMobileCordova, e as isReactNative, h as isElectron, j as isIE, k as isUWP, l as isBrowserExtension } from './index-43b0bf2a.js';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -16498,4 +16498,4 @@ Ie.an(new (/** @class */ function() {
 }())), xo(firebase$1);
 
 export { xo as __PRIVATE_registerFirestore };
-//# sourceMappingURL=index.esm-8c04ae72.js.map
+//# sourceMappingURL=index.esm-60443814.js.map
