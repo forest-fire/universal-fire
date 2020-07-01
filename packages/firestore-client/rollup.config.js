@@ -10,7 +10,7 @@ function moduleExport(choice) {
       format: choice,
       sourcemap: true,
     },
-    external: ['@firebase/databaase', 'events', 'firebase-admin'],
+    external: ['@firebase/database', 'events', 'firebase-admin'],
     plugins: [
       commonjs(),
       resolve(),

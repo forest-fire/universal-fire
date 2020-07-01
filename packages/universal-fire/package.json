@@ -36,7 +36,8 @@
     "rollup": "^2.18.1",
     "rollup-plugin-typescript2": "^0.27.1",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "firemock": "^0.53.17"
   },
   "dependencies": {
     "@forest-fire/abstracted-database": "^0.53.17",
@@ -47,8 +48,7 @@
     "@forest-fire/serialized-query": "^0.53.17",
     "@forest-fire/serializer-factory": "^0.53.17",
     "@forest-fire/types": "^0.53.8",
-    "common-types": "^1.15.7",
-    "firemock": "^0.53.17"
+    "common-types": "^1.15.7"
   },
   "license": "MIT"
 }

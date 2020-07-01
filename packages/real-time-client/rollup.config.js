@@ -8,7 +8,7 @@ function moduleExport(choice) {
     output: {
       dir: `./dist/${choice}`,
       format: choice,
-      sourcemap: 'hidden',
+      sourcemap: true,
     },
     external: ['@firebase/firestore', 'events', 'firebase-admin'],
     plugins: [
