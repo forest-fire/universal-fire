@@ -503,10 +503,10 @@ commander@^2.12.1:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
-common-types@^1.14.2, common-types@^1.14.3:
-  version "1.14.3"
-  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.14.3.tgz#b8cdfaea9fc71723642b8c0b66a1a3d81a84c83e"
-  integrity sha512-PcBLbCLOak1PGXpbV1D1xYHeGrbuAQ9Hze2UpsyioWqcx1ZJIi2c/K2aW7gQvXqsw4UDcLjX9Q2nJBEvg7xLIw==
+common-types@^1.15.6, common-types@^1.15.8:
+  version "1.15.8"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.15.8.tgz#7a7f826156eb9ff49f2aaa2109175696560d883c"
+  integrity sha512-xRp6QrwBt+sUvMw95zpzXKkt3lKHhF11FsrqclHFOz/rvvVMU/qJUNph1g+wVKVJhEEIoIfeFaav6ouu1gOK4w==
   dependencies:
     "@types/json-schema" "^7.0.4"
 
@@ -1059,15 +1059,15 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
+lodash-es@^4.17.15:
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
+  integrity sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==
+
 lodash.flattendeep@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz#fb030917f86a3134e5bc9bec0d69e0013ddfedb2"
   integrity sha1-+wMJF/hqMTTlvJvsDWngAT3f7bI=
-
-lodash.get@^4.4.2:
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
-  integrity sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk=
 
 lodash@^4.17.13, lodash@^4.17.15:
   version "4.17.15"
@@ -1782,13 +1782,13 @@ type-fest@^0.8.0:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-typed-conversions@^0.10.4:
-  version "0.10.4"
-  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.10.4.tgz#621c30845328e6429bf61afe1cfe769ce7fff59c"
-  integrity sha512-Qj3Swhl0C5W01jpfB2j6x7FNV9rYU1Sx03ToEHIQbn6FlUZdkJ9D2465ZLyUvqq+CDdk94BOp3y9Xh+gztN9yg==
+typed-conversions@^0.11.1:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.11.1.tgz#06ffbb531027d3ae700419399b54248e86969cfb"
+  integrity sha512-x/5QpXSDY5IrLO2jSxSwZwEFv/sccchDKuP2RsxwzxwUQxBSyZq0IDwCkmuohg0C5rFfLYN5pB8tLF0WBgwJhg==
   dependencies:
-    common-types "^1.14.3"
-    lodash.get "^4.4.2"
+    common-types "^1.15.6"
+    lodash-es "^4.17.15"
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"

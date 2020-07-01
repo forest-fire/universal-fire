@@ -1,6 +1,9 @@
-import { _ as __extends, a as __awaiter, b as __generator, g as getUA, c as __spreadArrays, L as LogLevel, C as Component, f as firebase$1, d as Logger, i as isMobileCordova, e as isReactNative, h as isElectron, j as isIE, k as isUWP, l as isBrowserExtension } from './index-50df175c.js';
-import 'events';
-import 'firebase-admin';
+'use strict';
+
+var index = require('./index-4dec3431.js');
+require('events');
+require('firemock');
+require('firebase-admin');
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -1326,7 +1329,7 @@ var esm_5 = esm.XhrIo;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/** The semver (www.semver.org) version of the SDK. */ var E$1 = firebase$1.SDK_VERSION, b = /** @class */ function() {
+/** The semver (www.semver.org) version of the SDK. */ var E$1 = index.firebase$1.SDK_VERSION, b = /** @class */ function() {
     function t(t) {
         this.uid = t;
     }
@@ -1507,7 +1510,7 @@ var T$1 = {
             return r.name + ": [code=" + r.code + "]: " + r.message;
         }, r;
     }
-    return __extends(n, e), n;
+    return index.__extends(n, e), n;
 }(Error), N$1 = function(t, e) {
     this.user = e, this.type = "OAuth", this.o = {}, 
     // Set the headers using Object Literal notation to avoid minification
@@ -1724,7 +1727,7 @@ var T$1 = {
     function n() {
         return null !== e && e.apply(this, arguments) || this;
     }
-    return __extends(n, e), n.prototype.k = function(t, e, r) {
+    return index.__extends(n, e), n.prototype.k = function(t, e, r) {
         return new n(t, e, r);
     }, n.prototype.j = function() {
         // NOTE: The client is ignorant of any path segments containing escape
@@ -1761,7 +1764,7 @@ var O$1 = /^[_a-zA-Z][_a-zA-Z0-9]*$/, P$1 = /** @class */ function(e) {
     function n() {
         return null !== e && e.apply(this, arguments) || this;
     }
-    return __extends(n, e), n.prototype.k = function(t, e, r) {
+    return index.__extends(n, e), n.prototype.k = function(t, e, r) {
         return new n(t, e, r);
     }, 
     /**
@@ -2557,7 +2560,7 @@ e) {
         return (i = e.call(this) || this).key = t, i.value = n, i.Rt = r, i.type = 0 /* Set */ , 
         i;
     }
-    return __extends(n, e), n.prototype.at = function(t, e) {
+    return index.__extends(n, e), n.prototype.at = function(t, e) {
         this.It(t);
         // Unlike applyToLocalView, if we're applying a mutation to a remote
         // document the server has accepted the mutation so the precondition must
@@ -2583,7 +2586,7 @@ e) {
         return (o = e.call(this) || this).key = t, o.data = n, o.Vt = r, o.Rt = i, o.type = 1 /* Patch */ , 
         o;
     }
-    return __extends(n, e), n.prototype.at = function(t, e) {
+    return index.__extends(n, e), n.prototype.at = function(t, e) {
         if (this.It(t), !this.Rt.Et(t)) 
         // Since the mutation was not rejected, we know that the  precondition
         // matched on the backend. We therefore must not have the expected version
@@ -2631,7 +2634,7 @@ e) {
         // (if successful) should end up with an existing document.
         r.Rt = yt.exists(!0), r;
     }
-    return __extends(n, e), n.prototype.at = function(t, e) {
+    return index.__extends(n, e), n.prototype.at = function(t, e) {
         if (this.It(t), Ve(null != e.transformResults), !this.Rt.Et(t)) 
         // Since the mutation was not rejected, we know that the  precondition
         // matched on the backend. We therefore must not have the expected version
@@ -2721,7 +2724,7 @@ e) {
         var r = this;
         return (r = e.call(this) || this).key = t, r.Rt = n, r.type = 3 /* Delete */ , r;
     }
-    return __extends(n, e), n.prototype.at = function(t, e) {
+    return index.__extends(n, e), n.prototype.at = function(t, e) {
         // Unlike applyToLocalView, if we're applying a mutation to a remote
         // document the server has accepted the mutation so the precondition must
         // have held.
@@ -2740,7 +2743,7 @@ e) {
         var r = this;
         return (r = e.call(this) || this).key = t, r.Rt = n, r.type = 4 /* Verify */ , r;
     }
-    return __extends(n, e), n.prototype.at = function(t, e) {
+    return index.__extends(n, e), n.prototype.at = function(t, e) {
         xe();
     }, n.prototype.ot = function(t, e, n) {
         xe();
@@ -2905,7 +2908,7 @@ var At, _t, Dt = function(t, e) {
         return (o = e.call(this, t, n) || this).$t = r, o.At = !!i.At, o.hasCommittedMutations = !!i.hasCommittedMutations, 
         o;
     }
-    return __extends(n, e), n.prototype.field = function(t) {
+    return index.__extends(n, e), n.prototype.field = function(t) {
         return this.$t.field(t);
     }, n.prototype.data = function() {
         return this.$t;
@@ -2928,7 +2931,7 @@ var At, _t, Dt = function(t, e) {
         return (i = e.call(this, t, n) || this).hasCommittedMutations = !(!r || !r.hasCommittedMutations), 
         i;
     }
-    return __extends(n, e), n.prototype.toString = function() {
+    return index.__extends(n, e), n.prototype.toString = function() {
         return "NoDocument(" + this.key + ", " + this.version + ")";
     }, Object.defineProperty(n.prototype, "hasPendingWrites", {
         get: function() {
@@ -2943,7 +2946,7 @@ var At, _t, Dt = function(t, e) {
     function n() {
         return null !== e && e.apply(this, arguments) || this;
     }
-    return __extends(n, e), n.prototype.toString = function() {
+    return index.__extends(n, e), n.prototype.toString = function() {
         return "UnknownDocument(" + this.key + ", " + this.version + ")";
     }, Object.defineProperty(n.prototype, "hasPendingWrites", {
         get: function() {
@@ -3170,7 +3173,7 @@ var At, _t, Dt = function(t, e) {
     }
     /**
      * Creates a filter based on the provided arguments.
-     */    return __extends(n, e), n.create = function(t, e, r) {
+     */    return index.__extends(n, e), n.create = function(t, e, r) {
         if (t.Y()) return "in" /* IN */ === e ? new Lt(t, r) : new Pt(t, e, r);
         if (it(r)) {
             if ("==" /* EQUAL */ !== e) throw new I$1(T$1.INVALID_ARGUMENT, "Invalid query. Null supports only equality comparisons.");
@@ -3222,7 +3225,7 @@ var At, _t, Dt = function(t, e) {
         var i = this;
         return (i = e.call(this, t, n, r) || this).key = L$1.Z(r.referenceValue), i;
     }
-    return __extends(n, e), n.prototype.matches = function(t) {
+    return index.__extends(n, e), n.prototype.matches = function(t) {
         var e = L$1.N(t.key, this.key);
         return this.de(e);
     }, n;
@@ -3233,7 +3236,7 @@ var At, _t, Dt = function(t, e) {
             return L$1.Z(t.referenceValue);
         })), r;
     }
-    return __extends(n, e), n.prototype.matches = function(t) {
+    return index.__extends(n, e), n.prototype.matches = function(t) {
         return this.keys.some((function(e) {
             return e.isEqual(t.key);
         }));
@@ -3242,7 +3245,7 @@ var At, _t, Dt = function(t, e) {
     function n(t, n) {
         return e.call(this, t, "array-contains" /* ARRAY_CONTAINS */ , n) || this;
     }
-    return __extends(n, e), n.prototype.matches = function(t) {
+    return index.__extends(n, e), n.prototype.matches = function(t) {
         var e = t.field(this.field);
         return rt(e) && Y$1(e.arrayValue, this.value);
     }, n;
@@ -3250,7 +3253,7 @@ var At, _t, Dt = function(t, e) {
     function n(t, n) {
         return e.call(this, t, "in" /* IN */ , n) || this;
     }
-    return __extends(n, e), n.prototype.matches = function(t) {
+    return index.__extends(n, e), n.prototype.matches = function(t) {
         var e = t.field(this.field);
         return null !== e && Y$1(this.value.arrayValue, e);
     }, n;
@@ -3258,7 +3261,7 @@ var At, _t, Dt = function(t, e) {
     function n(t, n) {
         return e.call(this, t, "array-contains-any" /* ARRAY_CONTAINS_ANY */ , n) || this;
     }
-    return __extends(n, e), n.prototype.matches = function(t) {
+    return index.__extends(n, e), n.prototype.matches = function(t) {
         var e = this, n = t.field(this.field);
         return !(!rt(n) || !n.arrayValue.values) && n.arrayValue.values.some((function(t) {
             return Y$1(e.value.arrayValue, t);
@@ -5235,7 +5238,7 @@ function ge() {
     }, t.nt = function() {
         return t.platform || xe(), t.platform;
     }, t;
-}(), Ne = new Logger("@firebase/firestore");
+}(), Ne = new index.Logger("@firebase/firestore");
 
 /**
  * @license
@@ -5264,17 +5267,17 @@ function _e(t) {
 
 function De(t) {
     for (var e = [], n = 1; n < arguments.length; n++) e[n - 1] = arguments[n];
-    if (Ne.logLevel <= LogLevel.DEBUG) {
+    if (Ne.logLevel <= index.LogLevel.DEBUG) {
         var i = e.map(Se);
-        Ne.debug.apply(Ne, __spreadArrays([ "Firestore (" + E$1 + "): " + t ], i));
+        Ne.debug.apply(Ne, index.__spreadArrays([ "Firestore (" + E$1 + "): " + t ], i));
     }
 }
 
 function ke(t) {
     for (var e = [], n = 1; n < arguments.length; n++) e[n - 1] = arguments[n];
-    if (Ne.logLevel <= LogLevel.ERROR) {
+    if (Ne.logLevel <= index.LogLevel.ERROR) {
         var i = e.map(Se);
-        Ne.error.apply(Ne, __spreadArrays([ "Firestore (" + E$1 + "): " + t ], i));
+        Ne.error.apply(Ne, index.__spreadArrays([ "Firestore (" + E$1 + "): " + t ], i));
     }
 }
 
@@ -6154,9 +6157,9 @@ var He = function() {
      * is through `enqueueAndForgetEvenAfterShutdown`.
      */
     t.prototype.Jr = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return this.zr(), this.Or ? [ 3 /*break*/ , 2 ] : (this.Or = !0, (e = Ie.nt().window) && e.removeEventListener("visibilitychange", this.Wr), 
@@ -6190,9 +6193,9 @@ var He = function() {
         var r = this;
         this.zr(), this.Or || (this.Lr = this.Lr.then((function() {
             var i = new He, o = function() {
-                return __awaiter(r, void 0, void 0, (function() {
+                return index.__awaiter(r, void 0, void 0, (function() {
                     var e;
-                    return __generator(this, (function(n) {
+                    return index.__generator(this, (function(n) {
                         switch (n.label) {
                           case 0:
                             return n.trys.push([ 0, 2, , 3 ]), [ 4 /*yield*/ , t() ];
@@ -6257,9 +6260,9 @@ var He = function() {
      * operations are not run.
      */
     t.prototype.eh = function() {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var t;
-            return __generator(this, (function(e) {
+            return index.__generator(this, (function(e) {
                 switch (e.label) {
                   case 0:
                     return [ 4 /*yield*/ , t = this.Mr ];
@@ -6444,9 +6447,9 @@ var rn = /** @class */ function() {
     }), t.prototype.bh = function(t) {
         var r = this, i = this.gh ? 3e5 : 6e4;
         De("LruGarbageCollector", "Garbage collection scheduled in " + i + "ms"), this.ph = this.br.yr("lru_garbage_collection" /* LruGarbageCollection */ , i, (function() {
-            return __awaiter(r, void 0, void 0, (function() {
+            return index.__awaiter(r, void 0, void 0, (function() {
                 var e;
-                return __generator(this, (function(n) {
+                return index.__generator(this, (function(n) {
                     switch (n.label) {
                       case 0:
                         this.ph = null, this.gh = !0, n.label = 1;
@@ -6537,7 +6540,7 @@ var rn = /** @class */ function() {
         })).next((function(e) {
             return i = e, a = Date.now(), c.Mh(t, n);
         })).next((function(t) {
-            return h = Date.now(), Ae() <= LogLevel.DEBUG && De("LruGarbageCollector", "LRU Garbage Collection\n\tCounted targets in " + (o - f) + "ms\n\tDetermined least recently used " + r + " in " + (u - o) + "ms\n\tRemoved " + i + " targets in " + (a - u) + "ms\n\tRemoved " + t + " documents in " + (h - a) + "ms\nTotal Duration: " + (h - f) + "ms"), 
+            return h = Date.now(), Ae() <= index.LogLevel.DEBUG && De("LruGarbageCollector", "LRU Garbage Collection\n\tCounted targets in " + (o - f) + "ms\n\tDetermined least recently used " + r + " in " + (u - o) + "ms\n\tRemoved " + i + " targets in " + (a - u) + "ms\n\tRemoved " + t + " documents in " + (h - a) + "ms\nTotal Duration: " + (h - f) + "ms"), 
             Be.resolve({
                 ah: !0,
                 uh: r,
@@ -6670,7 +6673,7 @@ function sn(t) {
         // bug we're checking for should exist in iOS >= 12.2 and < 13, but for
         // whatever reason it's much harder to hit after 12.2 so we only proactively
         // log on 12.2.
-        12.2 === t.Bh(getUA()) && ke("Firestore persistence suffers from a bug in iOS 12.2 Safari that may cause your app to stop working. See https://stackoverflow.com/q/56496296/110915 for details and a potential workaround.")
+        12.2 === t.Bh(index.getUA()) && ke("Firestore persistence suffers from a bug in iOS 12.2 Safari that may cause your app to stop working. See https://stackoverflow.com/q/56496296/110915 for details and a potential workaround.")
         /**
      * Opens the specified database, creating or upgrading it if necessary.
      *
@@ -6722,7 +6725,7 @@ function sn(t) {
         // For tracking support of this feature, see here:
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/status/indexeddbarraysandmultientrysupport/
         // Check the UA string to find out the browser.
-                var e = getUA(), n = t.Bh(e), r = 0 < n && n < 10, i = t.Wh(e), o = 0 < i && i < 4.5;
+                var e = index.getUA(), n = t.Bh(e), r = 0 < n && n < 10, i = t.Wh(e), o = 0 < i && i < 4.5;
         // IE 10
         // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
         // IE 11
@@ -6760,14 +6763,14 @@ function sn(t) {
             return t(e);
         };
     }, t.prototype.runTransaction = function(t, r, i) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, o, s, u, a;
-            return __generator(this, (function(h) {
+            return index.__generator(this, (function(h) {
                 switch (h.label) {
                   case 0:
                     e = "readonly" === t, o = 0, s = function() {
                         var t, s, a, h, c;
-                        return __generator(this, (function(n) {
+                        return index.__generator(this, (function(n) {
                             switch (n.label) {
                               case 0:
                                 ++o, t = pn.open(u.db, e ? "readonly" : "readwrite", r), n.label = 1;
@@ -6868,7 +6871,7 @@ function sn(t) {
         return (n = e.call(this, T$1.UNAVAILABLE, "IndexedDB transaction failed: " + t) || this).name = "IndexedDbTransactionError", 
         n;
     }
-    return __extends(n, e), n;
+    return index.__extends(n, e), n;
 }(I$1), pn = /** @class */ function() {
     function t(t) {
         var e = this;
@@ -7059,7 +7062,7 @@ function yn(t) {
 var vn = !1;
 
 function mn(t) {
-    var e = cn.Bh(getUA());
+    var e = cn.Bh(index.getUA());
     if (e >= 12.2 && e < 13) {
         var n = "An internal error was encountered in the Indexed Database server";
         if (t.message.indexOf(n) >= 0) {
@@ -7955,7 +7958,7 @@ function On(t) {
             return t.toString();
         })), r;
     }
-    return __extends(n, e), n.prototype.xn = function(t) {
+    return index.__extends(n, e), n.prototype.xn = function(t) {
         var e = this, n = [], r = 0, i = new Yt((function(t, e) {
             return Pe(t.j(), e.j());
         }));
@@ -8647,7 +8650,7 @@ r) {
 /** Keys are automatically assigned via the clientId properties. */
 Jn.keyPath = "clientId";
 
-var tr = __spreadArrays(__spreadArrays(__spreadArrays([ jn.store, Bn.store, Gn.store, Wn.store, Yn.store, Fn.store, Xn.store, Hn.store ], [ Jn.store ]), [ Kn.store ]), [ $n.store ]), er = /** @class */ function() {
+var tr = index.__spreadArrays(index.__spreadArrays(index.__spreadArrays([ jn.store, Bn.store, Gn.store, Wn.store, Yn.store, Fn.store, Xn.store, Hn.store ], [ Jn.store ]), [ Kn.store ]), [ $n.store ]), er = /** @class */ function() {
     function t() {
         /**
          * An in-memory copy of the index entries we've already written since the SDK
@@ -8832,7 +8835,7 @@ function nr(t) {
         var r = this;
         return (r = e.call(this) || this).bo = t, r.va = n, r;
     }
-    return __extends(n, e), n;
+    return index.__extends(n, e), n;
 }(Qe), sr = /** @class */ function() {
     function t(e, n, r, i, o, s, u, a) {
         if (this.allowTabSynchronization = e, this.persistenceKey = n, this.clientId = r, 
@@ -8889,8 +8892,8 @@ function nr(t) {
     t.prototype.Ka = function(t) {
         var r = this;
         return this.$a = function(i) {
-            return __awaiter(r, void 0, void 0, (function() {
-                return __generator(this, (function(e) {
+            return index.__awaiter(r, void 0, void 0, (function() {
+                return index.__generator(this, (function(e) {
                     return this.vh ? [ 2 /*return*/ , t(i) ] : [ 2 /*return*/ ];
                 }));
             }));
@@ -8905,8 +8908,8 @@ function nr(t) {
     t.prototype.Ga = function(t) {
         var r = this;
         this.Ba.Gh((function(i) {
-            return __awaiter(r, void 0, void 0, (function() {
-                return __generator(this, (function(e) {
+            return index.__awaiter(r, void 0, void 0, (function() {
+                return index.__generator(this, (function(e) {
                     switch (e.label) {
                       case 0:
                         return null === i.newVersion ? [ 4 /*yield*/ , t() ] : [ 3 /*break*/ , 2 ];
@@ -8933,8 +8936,8 @@ function nr(t) {
         // Schedule a primary lease refresh for immediate execution. The eventual
         // lease update will be propagated via `primaryStateListener`.
         this.Tr.$r((function() {
-            return __awaiter(r, void 0, void 0, (function() {
-                return __generator(this, (function(t) {
+            return index.__awaiter(r, void 0, void 0, (function() {
+                return index.__generator(this, (function(t) {
                     switch (t.label) {
                       case 0:
                         return this.vh ? [ 4 /*yield*/ , this.qa() ] : [ 3 /*break*/ , 2 ];
@@ -8996,9 +8999,9 @@ function nr(t) {
      * time of all clients.
      */
     t.prototype.eu = function() {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return !this.isPrimary || this.su(this.ka, 18e5) ? [ 3 /*break*/ , 2 ] : (this.ka = Date.now(), 
@@ -9103,9 +9106,9 @@ function nr(t) {
             t;
         }));
     }, t.prototype.hu = function() {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var t = this;
-            return __generator(this, (function(e) {
+            return index.__generator(this, (function(e) {
                 switch (e.label) {
                   case 0:
                     // The shutdown() operations are idempotent and can be called even when
@@ -9155,9 +9158,9 @@ function nr(t) {
             }));
         }));
     }, t.clearPersistence = function(r) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return t.Uh() ? (e = r + t.La, [ 4 /*yield*/ , cn.delete(e) ]) : [ 2 /*return*/ , Promise.resolve() ];
@@ -9588,9 +9591,9 @@ function cr(t, e) {
     // PORTING NOTE: Android and iOS only return the documents affected by the
     // change.
     t.prototype.Su = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r, i, o = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return e = this.Wn, r = this.bu, [ 4 /*yield*/ , this.persistence.runTransaction("Handle user change", "readonly", (function(n) {
@@ -10023,7 +10026,7 @@ var lr = /** @class */ function(r) {
         return (i = r.call(this, t, e, n) || this).persistence = t, i.Wn = t.lu(n), i.yu = t.fu(), 
         i.Oa = t.du(), i;
     }
-    /** Starts the LocalStore. */    return __extends(i, r), i.prototype.start = function() {
+    /** Starts the LocalStore. */    return index.__extends(i, r), i.prototype.start = function() {
         return this.Ku();
     }, 
     /** Returns the local view of the documents affected by a mutation batch. */ i.prototype.Gu = function(t) {
@@ -10068,9 +10071,9 @@ var lr = /** @class */ function(r) {
      * only return changes that happened after client initialization.
      */
     i.prototype.Ku = function() {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var t, e = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return t = this, [ 4 /*yield*/ , this.persistence.runTransaction("Synchronize last document change read time", "readonly", (function(t) {
@@ -10095,8 +10098,8 @@ var lr = /** @class */ function(r) {
  * @param err An error returned by a LocalStore operation.
  * @return A Promise that resolves after we recovered, or the original error.
  */ function pr(t) {
-    return __awaiter(this, void 0, void 0, (function() {
-        return __generator(this, (function(e) {
+    return index.__awaiter(this, void 0, void 0, (function() {
+        return index.__generator(this, (function(e) {
             if (t.code !== T$1.FAILED_PRECONDITION || t.message !== ze) throw t;
             return De("LocalStore", "Unexpectedly lost primary lease"), [ 2 /*return*/ ];
         }));
@@ -10524,7 +10527,7 @@ var Mr = new RegExp("[~\\*/\\[\\]]"), Cr = function(t) {
     function n() {
         return e.call(this, "FieldValue.delete") || this;
     }
-    return __extends(n, e), n.prototype.Di = function(t) {
+    return index.__extends(n, e), n.prototype.Di = function(t) {
         if (2 /* MergeSet */ !== t.lc) throw 1 /* Update */ === t.lc ? t.dc("FieldValue.delete() can only appear at the top level of your update data") : t.dc("FieldValue.delete() cannot be used with set() unless you pass {merge:true}");
         // No transform to add for a delete, but we need to add it to our
         // fieldMask so it gets deleted.
@@ -10536,7 +10539,7 @@ var Mr = new RegExp("[~\\*/\\[\\]]"), Cr = function(t) {
     function n() {
         return e.call(this, "FieldValue.serverTimestamp") || this;
     }
-    return __extends(n, e), n.prototype.Di = function(t) {
+    return index.__extends(n, e), n.prototype.Di = function(t) {
         return new pt(t.path, ut.instance);
     }, n.prototype.isEqual = function(t) {
         return t instanceof n;
@@ -10546,7 +10549,7 @@ var Mr = new RegExp("[~\\*/\\[\\]]"), Cr = function(t) {
         var n = this;
         return (n = e.call(this, "FieldValue.arrayUnion") || this).fc = t, n;
     }
-    return __extends(n, e), n.prototype.Di = function(t) {
+    return index.__extends(n, e), n.prototype.Di = function(t) {
         // Although array transforms are used with writes, the actual elements
         // being uniomed or removed are not considered writes since they cannot
         // contain any FieldValue sentinels, etc.
@@ -10567,7 +10570,7 @@ var Mr = new RegExp("[~\\*/\\[\\]]"), Cr = function(t) {
         var n = this;
         return (n = e.call(this, "FieldValue.arrayRemove") || this).fc = t, n;
     }
-    return __extends(n, e), n.prototype.Di = function(t) {
+    return index.__extends(n, e), n.prototype.Di = function(t) {
         // Although array transforms are used with writes, the actual elements
         // being unioned or removed are not considered writes since they cannot
         // contain any FieldValue sentinels, etc.
@@ -10588,7 +10591,7 @@ var Mr = new RegExp("[~\\*/\\[\\]]"), Cr = function(t) {
         var n = this;
         return (n = e.call(this, "FieldValue.increment") || this).Ec = t, n;
     }
-    return __extends(n, e), n.prototype.Di = function(t) {
+    return index.__extends(n, e), n.prototype.Di = function(t) {
         var e = new Xr({
             lc: 3 /* Argument */ ,
             methodName: this._c
@@ -11005,7 +11008,7 @@ function ei(t, e, n) {
         return function(t) {
             if (t.search(Mr) >= 0) throw new I$1(T$1.INVALID_ARGUMENT, "Invalid field path (" + t + "). Paths must not contain '~', '*', '/', '[', or ']'");
             try {
-                return new (qr.bind.apply(qr, __spreadArrays([ void 0 ], t.split("."))));
+                return new (qr.bind.apply(qr, index.__spreadArrays([ void 0 ], t.split("."))));
             } catch (e) {
                 throw new I$1(T$1.INVALID_ARGUMENT, "Invalid field path (" + t + "). Paths must not be empty, begin with '.', end with '.', or contain '..'");
             }
@@ -11117,8 +11120,8 @@ function ii(t, e) {
      * When stop returns, isStarted() and isOpen() will both return false.
      */
     t.prototype.stop = function() {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(t) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(t) {
                 switch (t.label) {
                   case 0:
                     return this.Bc() ? [ 4 /*yield*/ , this.close(0 /* Initial */) ] : [ 3 /*break*/ , 2 ];
@@ -11165,8 +11168,8 @@ function ii(t, e) {
         this.Gc(), this.stream.send(t);
     }, 
     /** Called by the idle timer when the stream should close due to inactivity. */ t.prototype.jc = function() {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(t) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(t) {
                 return this.qc() ? [ 2 /*return*/ , this.close(0 /* Initial */) ] : [ 2 /*return*/ ];
             }));
         }));
@@ -11188,8 +11191,8 @@ function ii(t, e) {
      * @param error the error the connection was closed with.
      */
     t.prototype.close = function(t, r) {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(e) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(e) {
                 switch (e.label) {
                   case 0:
                     // Notify the listener that the stream closed.
@@ -11263,8 +11266,8 @@ function ii(t, e) {
     }, t.prototype.Uc = function() {
         var t = this;
         this.state = 4 /* Backoff */ , this.Qr.gr((function() {
-            return __awaiter(t, void 0, void 0, (function() {
-                return __generator(this, (function(t) {
+            return index.__awaiter(t, void 0, void 0, (function() {
+                return index.__generator(this, (function(t) {
                     return this.state = 0 /* Initial */ , this.start(), [ 2 /*return*/ ];
                 }));
             }));
@@ -11299,7 +11302,7 @@ function ii(t, e) {
         return (s = e.call(this, t, "listen_stream_connection_backoff" /* ListenStreamConnectionBackoff */ , "listen_stream_idle" /* ListenStreamIdle */ , n, r, o) || this).serializer = i, 
         s;
     }
-    return __extends(n, e), n.prototype.Zc = function(t) {
+    return index.__extends(n, e), n.prototype.Zc = function(t) {
         return this.Mc.e_("Listen", t);
     }, n.prototype.onMessage = function(t) {
         // A successful response means the stream is healthy
@@ -11342,7 +11345,7 @@ function ii(t, e) {
              */
         s.lastStreamToken = C$1.ht, s;
     }
-    return __extends(n, e), Object.defineProperty(n.prototype, "h_", {
+    return index.__extends(n, e), Object.defineProperty(n.prototype, "h_", {
         /**
          * Tracks whether or not a handshake has been successfully exchanged and
          * the stream is ready to accept mutations.
@@ -11400,7 +11403,7 @@ function ii(t, e) {
         var i = this;
         return (i = e.call(this) || this).Mc = t, i.credentials = n, i.serializer = r, i;
     }
-    /** Gets an auth token and invokes the provided RPC. */    return __extends(n, e), n.prototype.l_ = function(t, e) {
+    /** Gets an auth token and invokes the provided RPC. */    return index.__extends(n, e), n.prototype.l_ = function(t, e) {
         var n = this;
         return this.credentials.getToken().then((function(r) {
             return n.Mc.l_(t, e, r);
@@ -11439,16 +11442,16 @@ function ii(t, e) {
         this.w_ = new Set;
     }
     return t.prototype.R_ = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var r, i = this;
-            return __generator(this, (function(o) {
+            return index.__generator(this, (function(o) {
                 switch (o.label) {
                   case 0:
                     if (this.A_(), this.mutations.length > 0) throw new I$1(T$1.INVALID_ARGUMENT, "Firestore transactions require all reads to be executed before all writes.");
                     return [ 4 /*yield*/ , function(t, r) {
-                        return __awaiter(this, void 0, void 0, (function() {
+                        return index.__awaiter(this, void 0, void 0, (function() {
                             var e, i, o, s, u;
-                            return __generator(this, (function(n) {
+                            return index.__generator(this, (function(n) {
                                 switch (n.label) {
                                   case 0:
                                     return e = Re(t), i = {
@@ -11490,9 +11493,9 @@ function ii(t, e) {
     }, t.prototype.delete = function(t) {
         this.write([ new Et(t, this.Rt(t)) ]), this.w_.add(t);
     }, t.prototype.commit = function() {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var t, r = this;
-            return __generator(this, (function(i) {
+            return index.__generator(this, (function(i) {
                 switch (i.label) {
                   case 0:
                     if (this.A_(), this.I_) throw this.I_;
@@ -11506,9 +11509,9 @@ function ii(t, e) {
                     t.forEach((function(t, e) {
                         r.mutations.push(new bt(t, r.Rt(t)));
                     })), [ 4 /*yield*/ , function(t, r) {
-                        return __awaiter(this, void 0, void 0, (function() {
+                        return index.__awaiter(this, void 0, void 0, (function() {
                             var e, i, o;
-                            return __generator(this, (function(n) {
+                            return index.__generator(this, (function(n) {
                                 switch (n.label) {
                                   case 0:
                                     return e = Re(t), i = {
@@ -11700,8 +11703,8 @@ function ii(t, e) {
              */
         this.L_ = !1, this.O_ = s, this.O_.x_((function(t) {
             i.$r((function() {
-                return __awaiter(u, void 0, void 0, (function() {
-                    return __generator(this, (function(t) {
+                return index.__awaiter(u, void 0, void 0, (function() {
+                    return index.__generator(this, (function(t) {
                         switch (t.label) {
                           case 0:
                             return this.B_() ? (De("RemoteStore", "Restarting streams for network reachability change."), 
@@ -11744,9 +11747,9 @@ function ii(t, e) {
     /** Re-enables the network. Idempotent. */ t.prototype.enableNetwork = function() {
         return this.networkEnabled = !0, this.J_();
     }, t.prototype.J_ = function() {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var t;
-            return __generator(this, (function(e) {
+            return index.__generator(this, (function(e) {
                 switch (e.label) {
                   case 0:
                     return this.B_() ? (t = this.G_, [ 4 /*yield*/ , this.F_.do() ]) : [ 3 /*break*/ , 3 ];
@@ -11771,8 +11774,8 @@ function ii(t, e) {
      * enableNetwork().
      */
     t.prototype.disableNetwork = function() {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(t) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(t) {
                 switch (t.label) {
                   case 0:
                     return this.networkEnabled = !1, [ 4 /*yield*/ , this.el() ];
@@ -11785,8 +11788,8 @@ function ii(t, e) {
             }));
         }));
     }, t.prototype.el = function() {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(t) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(t) {
                 switch (t.label) {
                   case 0:
                     return [ 4 /*yield*/ , this.G_.stop() ];
@@ -11801,8 +11804,8 @@ function ii(t, e) {
             }));
         }));
     }, t.prototype.hu = function() {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(t) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(t) {
                 switch (t.label) {
                   case 0:
                     return De("RemoteStore", "RemoteStore shutting down."), this.networkEnabled = !1, 
@@ -11873,17 +11876,17 @@ function ii(t, e) {
     }, t.prototype.sl = function() {
         this.M_ = null;
     }, t.prototype.W_ = function() {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var t = this;
-            return __generator(this, (function(e) {
+            return index.__generator(this, (function(e) {
                 return this.k_.forEach((function(e, n) {
                     t.il(e);
                 })), [ 2 /*return*/ ];
             }));
         }));
     }, t.prototype.j_ = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(e) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(e) {
                 return this.sl(), 
                 // If we still need the watch stream, retry the connection.
                 this.X_() ? (this.U_.D_(t), this.Z_()) : 
@@ -11894,9 +11897,9 @@ function ii(t, e) {
             }));
         }));
     }, t.prototype.K_ = function(t, r) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, i, o;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     if (this.U_.set("Online" /* Online */), !(t instanceof de && 2 /* Removed */ === t.state && t.cause)) 
@@ -11959,9 +11962,9 @@ function ii(t, e) {
      * `enqueueRetryable()`.
      */
     t.prototype.al = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var r = this;
-            return __generator(this, (function(i) {
+            return index.__generator(this, (function(i) {
                 switch (i.label) {
                   case 0:
                     if ("IndexedDbTransactionError" !== t.name) throw t;
@@ -11973,8 +11976,8 @@ function ii(t, e) {
                     return i.sent(), this.U_.set("Offline" /* Offline */), 
                     // Probe IndexedDB periodically and re-enable network
                     this.br.Xr((function() {
-                        return __awaiter(r, void 0, void 0, (function() {
-                            return __generator(this, (function(t) {
+                        return index.__awaiter(r, void 0, void 0, (function() {
+                            return index.__generator(this, (function(t) {
                                 switch (t.label) {
                                   case 0:
                                     // Issue a simple read operation to determine if IndexedDB recovered.
@@ -12036,9 +12039,9 @@ function ii(t, e) {
         })), this.hl.Mu(n);
     }, 
     /** Handles an error on a target */ t.prototype.ol = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r, i, o;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     e = t.cause, r = 0, i = t.targetIds, n.label = 1;
@@ -12070,9 +12073,9 @@ function ii(t, e) {
      * Starts the write stream if necessary.
      */
     t.prototype.tl = function() {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var t, e;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return this._l() ? (t = this.N_.length > 0 ? this.N_[this.N_.length - 1].batchId : -1, 
@@ -12119,8 +12122,8 @@ function ii(t, e) {
     }, t.prototype.fl = function() {
         this.G_.start();
     }, t.prototype.z_ = function() {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(t) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(t) {
                 return this.G_.c_(), [ 2 /*return*/ ];
             }));
         }));
@@ -12140,8 +12143,8 @@ function ii(t, e) {
             return n.tl();
         }));
     }, t.prototype.H_ = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(e) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(e) {
                 switch (e.label) {
                   case 0:
                     return t && this.N_.length > 0 ? this.G_.h_ ? [ 4 /*yield*/ , this.Il(t) ] : [ 3 /*break*/ , 2 ] : [ 3 /*break*/ , 5 ];
@@ -12173,8 +12176,8 @@ function ii(t, e) {
             }));
         }));
     }, t.prototype.wl = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(e) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(e) {
                 // Reset the token if it's a permanent error, signaling the write stream is
                 // no longer valid. Note that the handshake does not count as a write: see
                 // comments on isPermanentWriteError for details.
@@ -12183,9 +12186,9 @@ function ii(t, e) {
             }));
         }));
     }, t.prototype.Il = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r, i = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 // Only handle permanent errors here. If it's transient, just let the retry
                 // logic kick in.
                 return Gt(r = t.code) && r !== T$1.ABORTED ? (e = this.N_.shift(), [ 2 /*return*/ , (this.G_.Qc(), 
@@ -12197,8 +12200,8 @@ function ii(t, e) {
     }, t.prototype.Al = function() {
         return new hi(this.f_);
     }, t.prototype.q_ = function() {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(t) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(t) {
                 switch (t.label) {
                   case 0:
                     return this.networkEnabled = !1, [ 4 /*yield*/ , this.el() ];
@@ -12212,8 +12215,8 @@ function ii(t, e) {
             }));
         }));
     }, t.prototype.ml = function() {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(t) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(t) {
                 switch (t.label) {
                   case 0:
                     return this.B_() ? (
@@ -12235,9 +12238,9 @@ function ii(t, e) {
      * Toggles the network state when the client gains or loses its primary lease.
      */
     t.prototype.Pl = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return this.isPrimary = t, t && this.networkEnabled ? [ 4 /*yield*/ , this.enableNetwork() ] : [ 3 /*break*/ , 2 ];
@@ -12446,9 +12449,9 @@ var yi = /** @class */ function() {
     /** Returns 'true' if WebStorage is available in the current environment. */    return t.Uh = function(t) {
         return !(!t.window || null == t.window.localStorage);
     }, t.prototype.start = function() {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var t, e, r, i, o, s, u, a, h, c, f, l = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return [ 4 /*yield*/ , this.hl._u() ];
@@ -12527,9 +12530,9 @@ var yi = /** @class */ function() {
         if (t.storageArea === this.storage) {
             if (De("SharedClientState", "EVENT", t.key, t.newValue), t.key === this.Fl) return void ke("Received WebStorage notification for local change. Another client might have garbage-collected our state");
             this.Tr.Xr((function() {
-                return __awaiter(r, void 0, void 0, (function() {
+                return index.__awaiter(r, void 0, void 0, (function() {
                     var e, r, i, o, s, u;
-                    return __generator(this, (function(n) {
+                    return index.__generator(this, (function(n) {
                         if (this.vh) {
                             if (null !== t.key) if (this.kl.test(t.key)) {
                                 if (null == t.newValue) return e = this.nd(t.key), [ 2 /*return*/ , this.rd(e, null) ];
@@ -12619,8 +12622,8 @@ var yi = /** @class */ function() {
     t.prototype.xl = function(t) {
         return gi.Vl(t);
     }, t.prototype.ad = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
-            return __generator(this, (function(e) {
+        return index.__awaiter(this, void 0, void 0, (function() {
+            return index.__generator(this, (function(e) {
                 return t.user.uid === this.currentUser.uid ? [ 2 /*return*/ , this.hl.ld(t.batchId, t.state, t.error) ] : (De("SharedClientState", "Ignoring mutation for non-active user " + t.user.uid), 
                 [ 2 /*return*/ ]);
             }));
@@ -12928,9 +12931,9 @@ var yi = /** @class */ function() {
     }, t.prototype.Md = function() {
         var t = this;
         this.Qr.gr((function() {
-            return __awaiter(t, void 0, void 0, (function() {
+            return index.__awaiter(t, void 0, void 0, (function() {
                 var t, e, r = this;
-                return __generator(this, (function(n) {
+                return index.__generator(this, (function(n) {
                     return t = this.Nd.Al(), (e = this.Ld(t)) && e.then((function(e) {
                         r.br.$r((function() {
                             return t.commit().then((function() {
@@ -13039,9 +13042,9 @@ n) {
      * subscribed handlers. Returns the initial snapshot.
      */
     t.prototype.listen = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r, i, o, s;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return this.tf("listen()"), (i = this.Wd.get(t)) ? (
@@ -13073,9 +13076,9 @@ n) {
      * snapshot.
      */
     t.prototype.ef = function(t, r, i) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, o, s, u, a, h;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return [ 4 /*yield*/ , this.F_.Wu(t, 
@@ -13092,9 +13095,9 @@ n) {
         }));
     }, 
     /** Stops listening to the query. */ t.prototype.nl = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r, i = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     // Only clean up the query view and target if this is the only query mapped
@@ -13138,9 +13141,9 @@ n) {
      * backend (or failed locally for any other reason).
      */
     t.prototype.write = function(t, r) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, i;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     this.tf("write()"), n.label = 1;
@@ -13191,9 +13194,9 @@ n) {
     t.prototype.runTransaction = function(t, e, n) {
         new Ai(t, this.Nd, e, n).$d();
     }, t.prototype.Mu = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     this.tf("applyRemoteEvent()"), n.label = 1;
@@ -13241,9 +13244,9 @@ n) {
             i.snapshot && n.push(i.snapshot);
         })), this.Qd.hf(t), this.Qd.s_(n), this.onlineState = t;
     }, t.prototype.cl = function(t, r) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, i, o, s, u, a = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return this.tf("rejectListens()"), 
@@ -13264,9 +13267,9 @@ n) {
             }));
         }));
     }, t.prototype.El = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     this.tf("applySuccessfulWrite()"), e = t.batch.batchId, 
@@ -13297,9 +13300,9 @@ n) {
             }));
         }));
     }, t.prototype.Rl = function(t, r) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     this.tf("rejectFailedWrite()"), 
@@ -13335,9 +13338,9 @@ n) {
      * are acknowledged .
      */
     t.prototype._f = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return this.Nd.B_() || De("SyncEngine", "The network is disabled. The task returned by 'awaitPendingWrites()' will not complete until the network is enabled."), 
@@ -13433,9 +13436,9 @@ n) {
     t.prototype.If = function() {
         return this.Kd;
     }, t.prototype.rf = function(t, r) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, i, o, s = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return e = [], i = [], o = [], this.Wd.forEach((function(n, u) {
@@ -13468,9 +13471,9 @@ n) {
             }));
         }));
     }, t.prototype.tf = function(t) {}, t.prototype.ml = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return e = !this.currentUser.isEqual(t), this.currentUser = t, e ? (
@@ -13518,7 +13521,7 @@ n) {
         // `isPrimary` is true.
         s.isPrimary = void 0, s;
     }
-    return __extends(i, r), Object.defineProperty(i.prototype, "Zd", {
+    return index.__extends(i, r), Object.defineProperty(i.prototype, "Zd", {
         get: function() {
             return !0 === this.isPrimary;
         },
@@ -13534,9 +13537,9 @@ n) {
      * from persistence.
      */
     i.prototype.wf = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return [ 4 /*yield*/ , this.F_.Wu(t.query, 
@@ -13558,9 +13561,9 @@ n) {
         // SharedClientState.
         this.Zd || 1 /* SharedClientState */ !== e || r.prototype.Sd.call(this, t, e);
     }, i.prototype.ld = function(t, r, i) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return this.tf("applyBatchState()"), [ 4 /*yield*/ , this.F_.Gu(t) ];
@@ -13602,9 +13605,9 @@ n) {
             }));
         }));
     }, i.prototype.Pl = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r, i, o, s, u, a, h = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return !0 !== t || !0 === this.isPrimary ? [ 3 /*break*/ , 3 ] : (this.isPrimary = !0, 
@@ -13652,9 +13655,9 @@ n) {
      * client and returns the updated state of all target's query data.
      */
     i.prototype.Rf = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r, i, o, s, u, a, h, c, f, l, p, d;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     e = [], r = [], i = 0, o = t, n.label = 1;
@@ -13729,9 +13732,9 @@ n) {
     }, i.prototype._u = function() {
         return this.F_._u();
     }, i.prototype.dd = function(t, r, i) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, o;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return this.isPrimary ? (
@@ -13776,9 +13779,9 @@ n) {
             }));
         }));
     }, i.prototype.fd = function(t, r) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, i, o, s, u, a, h, c, f, l, p = this;
-            return __generator(this, (function(d) {
+            return index.__generator(this, (function(d) {
                 switch (d.label) {
                   case 0:
                     if (!this.isPrimary) return [ 3 /*break*/ , 10 ];
@@ -13804,7 +13807,7 @@ n) {
 
                   case 6:
                     a = function(t) {
-                        return __generator(this, (function(e) {
+                        return index.__generator(this, (function(e) {
                             switch (e.label) {
                               case 0:
                                 return h.jd.has(t) ? [ 4 /*yield*/ , h.F_.Qu(t, /* keepPersistedTargetData */ !1).then((function() {
@@ -13846,9 +13849,9 @@ n) {
         })), this.onlineState = "Unknown" /* Unknown */ , this.pf = new Set, this.hl.subscribe(this);
     }
     return t.prototype.listen = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r, i, o, s, u;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     if (e = t.query, r = !1, (i = this.gf.get(e)) || (r = !0, i = new xi), !r) return [ 3 /*break*/ , 4 ];
@@ -13873,9 +13876,9 @@ n) {
             }));
         }));
     }, t.prototype.nl = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e, r, i, o;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 return e = t.query, r = !1, (i = this.gf.get(e)) && (o = i.Vf.indexOf(t)) >= 0 && (i.Vf.splice(o, 1), 
                 r = 0 === i.Vf.length), r ? [ 2 /*return*/ , (this.gf.delete(e), this.hl.nl(e)) ] : [ 2 /*return*/ ];
             }));
@@ -13994,7 +13997,7 @@ n) {
         // collection, rather than to perform individual lookups.
                 return e.te() || n.isEqual(x$1.min()) ? this.Of(t, e) : this.Lf.Yn(t, r).next((function(o) {
             var u = i.xf(e, o);
-            return (e.oe() || e.ae()) && i.pd(e.Bt, u, r, n) ? i.Of(t, e) : (Ae() <= LogLevel.DEBUG && De("IndexFreeQueryEngine", "Re-using previous result from %s to execute query: %s", n.toString(), e.toString()), 
+            return (e.oe() || e.ae()) && i.pd(e.Bt, u, r, n) ? i.Of(t, e) : (Ae() <= index.LogLevel.DEBUG && De("IndexFreeQueryEngine", "Re-using previous result from %s to execute query: %s", n.toString(), e.toString()), 
             i.Lf.Zn(t, e, n).next((function(t) {
                 // We merge `previousResults` into `updateResults`, since
                 // `updateResults` is already a DocumentMap. If a document is
@@ -14043,7 +14046,7 @@ n) {
                 var i = "F" /* First */ === t ? e.last() : e.first();
         return !!i && (i.hasPendingWrites || i.version.S(r) > 0);
     }, t.prototype.Of = function(t, e) {
-        return Ae() <= LogLevel.DEBUG && De("IndexFreeQueryEngine", "Using full collection scan to execute query: %s", e.toString()), 
+        return Ae() <= index.LogLevel.DEBUG && De("IndexFreeQueryEngine", "Using full collection scan to execute query: %s", e.toString()), 
         this.Lf.Zn(t, e, x$1.min());
     }, t;
 }(), Pi = /** @class */ function() {
@@ -14274,7 +14277,7 @@ Li.Ia = /** @class */ function(e) {
         var n = this;
         return (n = e.call(this) || this).Aa = t, n;
     }
-    return __extends(n, e), n.prototype.xn = function(t) {
+    return index.__extends(n, e), n.prototype.xn = function(t) {
         var e = this, n = [];
         return this.Dn.forEach((function(r, i) {
             i ? n.push(e.Aa.Nn(t, i, e.readTime)) : e.Aa.$n(r);
@@ -14435,7 +14438,7 @@ var Ui = /** @class */ function() {
         var n = this;
         return (n = e.call(this) || this).va = t, n;
     }
-    return __extends(n, e), n;
+    return index.__extends(n, e), n;
 }(Qe), Ci = /** @class */ function() {
     function t(t) {
         this.persistence = t, 
@@ -14505,9 +14508,9 @@ var Ui = /** @class */ function() {
 }(), Fi = /** @class */ function() {
     function t() {}
     return t.prototype.initialize = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var e = this;
-            return __generator(this, (function(n) {
+            return index.__generator(this, (function(n) {
                 switch (n.label) {
                   case 0:
                     return this.qd = this.aT(t), this.persistence = this.uT(t), [ 4 /*yield*/ , this.persistence.start() ];
@@ -14556,10 +14559,10 @@ var Ui = /** @class */ function() {
     function i() {
         return null !== r && r.apply(this, arguments) || this;
     }
-    return __extends(i, r), i.prototype.initialize = function(t) {
-        return __awaiter(this, void 0, void 0, (function() {
+    return index.__extends(i, r), i.prototype.initialize = function(t) {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var i = this;
-            return __generator(this, (function(o) {
+            return index.__generator(this, (function(o) {
                 switch (o.label) {
                   case 0:
                     return [ 4 /*yield*/ , r.prototype.initialize.call(this, t) ];
@@ -14568,8 +14571,8 @@ var Ui = /** @class */ function() {
                     // NOTE: This will immediately call the listener, so we make sure to
                     // set it after localStore / remoteStore are started.
                     return o.sent(), [ 4 /*yield*/ , this.persistence.Ka((function(t) {
-                        return __awaiter(i, void 0, void 0, (function() {
-                            return __generator(this, (function(e) {
+                        return index.__awaiter(i, void 0, void 0, (function() {
+                            return index.__generator(this, (function(e) {
                                 switch (e.label) {
                                   case 0:
                                     return [ 4 /*yield*/ , this.hl.Pl(t) ];
@@ -14716,9 +14719,9 @@ var Ui = /** @class */ function() {
      *     succeeded.
      */
     t.prototype.VT = function(t, r, i, o) {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var s, u, a, h, c = this;
-            return __generator(this, (function(f) {
+            return index.__generator(this, (function(f) {
                 switch (f.label) {
                   case 0:
                     return f.trys.push([ 0, 3, , 4 ]), [ 4 /*yield*/ , this.platform.gT(this.RT) ];
@@ -14743,8 +14746,8 @@ var Ui = /** @class */ function() {
                     // When a user calls clearPersistence() in one client, all other clients
                     // need to be terminated to allow the delete to succeed.
                     this.persistence.Ga((function() {
-                        return __awaiter(c, void 0, void 0, (function() {
-                            return __generator(this, (function(t) {
+                        return index.__awaiter(c, void 0, void 0, (function() {
+                            return index.__generator(this, (function(t) {
                                 switch (t.label) {
                                   case 0:
                                     return [ 4 /*yield*/ , this.terminate() ];
@@ -14805,8 +14808,8 @@ var Ui = /** @class */ function() {
     }, t.prototype.terminate = function() {
         var t = this;
         return this.br.Jr((function() {
-            return __awaiter(t, void 0, void 0, (function() {
-                return __generator(this, (function(t) {
+            return index.__awaiter(t, void 0, void 0, (function() {
+                return index.__generator(this, (function(t) {
                     switch (t.label) {
                       case 0:
                         // PORTING NOTE: LocalStore does not need an explicit shutdown on web.
@@ -14868,9 +14871,9 @@ var Ui = /** @class */ function() {
     }, t.prototype.ST = function(t) {
         var r = this;
         return this.PT(), this.br.enqueue((function() {
-            return __awaiter(r, void 0, void 0, (function() {
+            return index.__awaiter(r, void 0, void 0, (function() {
                 var e, r, i;
-                return __generator(this, (function(n) {
+                return index.__generator(this, (function(n) {
                     switch (n.label) {
                       case 0:
                         return [ 4 /*yield*/ , this.F_.Wu(t, 
@@ -15109,8 +15112,8 @@ var Qi = /** @class */ function() {
         // TODO(mikelehen): Use modularized initialization instead.
         this.qT = new Ze, this.INTERNAL = {
             delete: function() {
-                return __awaiter(s, void 0, void 0, (function() {
-                    return __generator(this, (function(t) {
+                return index.__awaiter(s, void 0, void 0, (function() {
+                    return index.__generator(this, (function(t) {
                         switch (t.label) {
                           case 0:
                             // The client must be initalized to ensure that all subsequent API usage
@@ -15175,14 +15178,14 @@ var Qi = /** @class */ function() {
             synchronizeTabs: r
         });
     }, t.prototype.clearPersistence = function() {
-        return __awaiter(this, void 0, void 0, (function() {
+        return index.__awaiter(this, void 0, void 0, (function() {
             var t, r = this;
-            return __generator(this, (function(i) {
+            return index.__generator(this, (function(i) {
                 if (void 0 !== this.QT && !this.QT.bT) throw new I$1(T$1.FAILED_PRECONDITION, "Persistence cannot be cleared after this Firestore instance is initialized.");
                 return t = new He, [ 2 /*return*/ , (this.qT.Gr((function() {
-                    return __awaiter(r, void 0, void 0, (function() {
+                    return index.__awaiter(r, void 0, void 0, (function() {
                         var e, r;
-                        return __generator(this, (function(n) {
+                        return index.__generator(this, (function(n) {
                             switch (n.label) {
                               case 0:
                                 return n.trys.push([ 0, 2, , 3 ]), e = this.XT(), [ 4 /*yield*/ , this.GT.clearPersistence(e) ];
@@ -15301,10 +15304,10 @@ var Qi = /** @class */ function() {
     }, Object.defineProperty(t, "logLevel", {
         get: function() {
             switch (Ae()) {
-              case LogLevel.DEBUG:
+              case index.LogLevel.DEBUG:
                 return "debug";
 
-              case LogLevel.SILENT:
+              case index.LogLevel.SILENT:
                 return "silent";
 
               default:
@@ -15318,15 +15321,15 @@ var Qi = /** @class */ function() {
         switch (mr("Firestore.setLogLevel", arguments, 1), Er("Firestore.setLogLevel", "non-empty string", 1, t), 
         t) {
           case "debug":
-            _e(LogLevel.DEBUG);
+            _e(index.LogLevel.DEBUG);
             break;
 
           case "error":
-            _e(LogLevel.ERROR);
+            _e(index.LogLevel.ERROR);
             break;
 
           case "silent":
-            _e(LogLevel.SILENT);
+            _e(index.LogLevel.SILENT);
             break;
 
           default:
@@ -15572,7 +15575,7 @@ var Qi = /** @class */ function() {
     function n() {
         return null !== e && e.apply(this, arguments) || this;
     }
-    return __extends(n, e), n.prototype.data = function(t) {
+    return index.__extends(n, e), n.prototype.data = function(t) {
         return e.prototype.data.call(this, t);
     }, n;
 }(Ji), eo = /** @class */ function() {
@@ -15916,7 +15919,7 @@ var Qi = /** @class */ function() {
         if ((i = e.call(this, Rt.Wt(t), n, r) || this).SE = t, t.length % 2 != 1) throw new I$1(T$1.INVALID_ARGUMENT, "Invalid collection reference. Collection references must have an odd number of segments, but " + t.j() + " has " + t.length);
         return i;
     }
-    return __extends(n, e), Object.defineProperty(n.prototype, "id", {
+    return index.__extends(n, e), Object.defineProperty(n.prototype, "id", {
         get: function() {
             return this.fE.path.O();
         },
@@ -16280,7 +16283,7 @@ var fo = co(Yi, "Use firebase.firestore() instead."), lo = co(Hi, "Use firebase.
         // doesn't have an Origin header. So we have to exclude a few browser environments that are
         // known to (sometimes) not include an Origin. See
         // https://github.com/firebase/firebase-js-sdk/issues/1491.
-        isMobileCordova() || isReactNative() || isElectron() || isIE() || isUWP() || isBrowserExtension() || (i.httpHeadersOverwriteParam = "$httpHeaders");
+        index.isMobileCordova() || index.isReactNative() || index.isElectron() || index.isIE() || index.isUWP() || index.isBrowserExtension() || (i.httpHeadersOverwriteParam = "$httpHeaders");
         var o = n.join("");
         De("Connection", "Creating WebChannel: " + o + " " + i);
         var s = r.createWebChannel(o, i), u = !1, d = !1, y = new _o({
@@ -16422,7 +16425,7 @@ function xo(t) {
  *    instance.
  */
     !function(t, e) {
-        t.INTERNAL.registerComponent(new Component("firestore", (function(t) {
+        t.INTERNAL.registerComponent(new index.Component("firestore", (function(t) {
             return function(t, e) {
                 return new Yi(t, e, new ji);
             }(t.getProvider("app").getImmediate(), t.getProvider("auth-internal"));
@@ -16497,7 +16500,7 @@ Ie.an(new (/** @class */ function() {
         for (var r = 0; r < t; r++) n[r] = Math.floor(256 * Math.random());
         return n;
     }, t;
-}())), xo(firebase$1);
+}())), xo(index.firebase$1);
 
-export { xo as __PRIVATE_registerFirestore };
-//# sourceMappingURL=index.esm-d4329d40-04960b91.js.map
+exports.__PRIVATE_registerFirestore = xo;
+//# sourceMappingURL=index.esm-d4329d40-f45d81f4.js.map
