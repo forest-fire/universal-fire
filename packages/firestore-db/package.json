@@ -43,6 +43,7 @@
     "@forest-fire/abstracted-database": "^0.53.16",
     "@forest-fire/serialized-query": "^0.53.16",
     "@forest-fire/types": "^0.53.8",
+    "firemock": "^0.53.16",
     "@forest-fire/utility": "^0.53.8"
   },
   "license": "MIT"

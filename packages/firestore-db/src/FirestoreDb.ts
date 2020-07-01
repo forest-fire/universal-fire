@@ -3,18 +3,17 @@ import type {
   IAdminApp,
   IClientApp,
   IFirestoreDatabase,
-  IFirestoreDbEvent,
   IAbstractedDatabase,
   ISerializedQuery,
   IAbstractedEvent,
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
-import type { SerializedFirestoreQuery } from '@forest-fire/serialized-query';
 import { IFirestoreDb } from './firestore-types';
 import { isFirestoreEvent, FirestoreDbError, VALID_FIRESTORE_EVENTS } from '.';
+import type { Mock as IMockApi } from 'firemock';
 
 export abstract class FirestoreDb extends AbstractedDatabase
-  implements IFirestoreDb, IAbstractedDatabase {
+  implements IFirestoreDb, IAbstractedDatabase<IMockApi> {
   protected _database?: IFirestoreDatabase;
   protected _app!: IClientApp | IAdminApp;
 
