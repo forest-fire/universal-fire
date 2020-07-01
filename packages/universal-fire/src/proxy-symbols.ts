@@ -18,13 +18,13 @@ export type {
 import type { Mock as IMockApi } from 'firemock';
 
 export { SerializedQuery } from '@forest-fire/serializer-factory';
-import type {
-  IComparisonOperator,
-  ISerializedQuery as ISQ,
-} from '@forest-fire/types';
-export type ISerializedQuery = ISQ<IMockApi>;
+export type { IComparisonOperator, ISerializedQuery } from '@forest-fire/types';
 
-export { IComparisonOperator, IMockApi };
+export { IMockApi };
 
-import { IAbstractedDatabase as IAD } from '@forest-fire/types';
-export type IAbstractedDatabase = IAD<IMockApi>;
+import { IAbstractedDatabase as IGenericAbstractedDatabase } from '@forest-fire/types';
+/**
+ * The minimial interface/contract for an SDK to be used within universal-fire as
+ * an _abstracted database_.
+ */
+export type IAbstractedDatabase = IGenericAbstractedDatabase<IMockApi>;
