@@ -12,4 +12,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./FirestoreDb"), exports);
 __exportStar(require("./firestore-types"), exports);
+__exportStar(require("./FirestoreDbError"), exports);
 //# sourceMappingURL=index.js.map

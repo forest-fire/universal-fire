@@ -1,5 +1,5 @@
 import * as convert from 'typed-conversions';
-import { AbstractedProxyError, FileDepthExceeded, PermissionDenied, RealTimeDbError, UndefinedAssignment, WatcherEventWrapper, isRealTimeEvent, } from './index';
+import { AbstractedProxyError, FileDepthExceeded, PermissionDenied, RealTimeDbError, UndefinedAssignment, WatcherEventWrapper, isRealTimeEvent, VALID_REAL_TIME_EVENTS, } from './index';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { slashNotation } from '@forest-fire/utility';
@@ -65,8 +65,7 @@ export class RealTimeDb extends AbstractedDatabase {
             events = [events];
         }
         if (events && !isRealTimeEvent(events)) {
-            //TODO: fill this section out
-            throw new RealTimeDbError(`An attempt to watch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+            throw new RealTimeDbError(`An attempt to watch an event which is not valid for the Real Time database (but likely is for the Firestore database). Events passed in were: ${JSON.stringify(events)}\n. In contrast, the valid events in Firestore are: ${VALID_REAL_TIME_EVENTS.join(', ')}`, 'invalid-event');
         }
         try {
             events.map((evt) => {
@@ -92,8 +91,7 @@ export class RealTimeDb extends AbstractedDatabase {
     }
     unWatch(events, cb) {
         if (events && !isRealTimeEvent(events)) {
-            //TODO: fill this section out
-            throw new RealTimeDbError(`An attempt to unwatch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+            throw new RealTimeDbError(`An attempt was made to unwatch an event type which is not valid for the Real Time database. Events passed in were: ${JSON.stringify(events)}\nIn contrast, the valid events in Firestore are: ${VALID_REAL_TIME_EVENTS.join(', ')}`, 'invalid-event');
         }
         try {
             if (!events) {

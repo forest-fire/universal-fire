@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FirestoreDb = void 0;
 const abstracted_database_1 = require("@forest-fire/abstracted-database");
 const utility_1 = require("@forest-fire/utility");
+const _1 = require(".");
 class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
     get database() {
         if (this._database) {
@@ -62,10 +63,25 @@ class FirestoreDb extends abstracted_database_1.AbstractedDatabase {
             this._removeDocument(path);
         }
     }
+    /**
+     * watch
+     *
+     * Watch for firebase events based on a DB path or `SerializedQuery` (path plus query elements)
+     *
+     * @param target a database path or a SerializedQuery
+     * @param events an event type or an array of event types (e.g., "value", "child_added")
+     * @param cb the callback function to call when event triggered
+     */
     watch(target, events, cb) {
+        if (events && !_1.isFirestoreEvent(events)) {
+            throw new _1.FirestoreDbError(`An attempt to watch an event which is not valid for the Firestore database (but likely is for the Real Time database). Events passed in were: ${JSON.stringify(events)}\n. In contrast, the valid events in Firestore are: ${_1.VALID_FIRESTORE_EVENTS.join(', ')}`, 'invalid-event');
+        }
         throw new Error('Not implemented');
     }
     unWatch(events, cb) {
+        if (events && !_1.isFirestoreEvent(events)) {
+            throw new _1.FirestoreDbError(`An attempt was made to unwatch an event type which is not valid for the Firestore database. Events passed in were: ${JSON.stringify(events)}\nIn contrast, the valid events in Firestore are: ${_1.VALID_FIRESTORE_EVENTS.join(', ')}`, 'invalid-event');
+        }
         throw new Error('Not implemented');
     }
     ref(path = '/') {

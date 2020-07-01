@@ -1,5 +1,6 @@
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { FireError } from '@forest-fire/utility';
+import { isFirestoreEvent, FirestoreDbError, VALID_FIRESTORE_EVENTS } from '.';
 export class FirestoreDb extends AbstractedDatabase {
     get database() {
         if (this._database) {
@@ -59,10 +60,25 @@ export class FirestoreDb extends AbstractedDatabase {
             this._removeDocument(path);
         }
     }
+    /**
+     * watch
+     *
+     * Watch for firebase events based on a DB path or `SerializedQuery` (path plus query elements)
+     *
+     * @param target a database path or a SerializedQuery
+     * @param events an event type or an array of event types (e.g., "value", "child_added")
+     * @param cb the callback function to call when event triggered
+     */
     watch(target, events, cb) {
+        if (events && !isFirestoreEvent(events)) {
+            throw new FirestoreDbError(`An attempt to watch an event which is not valid for the Firestore database (but likely is for the Real Time database). Events passed in were: ${JSON.stringify(events)}\n. In contrast, the valid events in Firestore are: ${VALID_FIRESTORE_EVENTS.join(', ')}`, 'invalid-event');
+        }
         throw new Error('Not implemented');
     }
     unWatch(events, cb) {
+        if (events && !isFirestoreEvent(events)) {
+            throw new FirestoreDbError(`An attempt was made to unwatch an event type which is not valid for the Firestore database. Events passed in were: ${JSON.stringify(events)}\nIn contrast, the valid events in Firestore are: ${VALID_FIRESTORE_EVENTS.join(', ')}`, 'invalid-event');
+        }
         throw new Error('Not implemented');
     }
     ref(path = '/') {

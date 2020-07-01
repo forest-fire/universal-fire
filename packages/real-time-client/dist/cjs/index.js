@@ -20325,8 +20325,7 @@ class RealTimeDb extends AbstractedDatabase {
             events = [events];
         }
         if (events && !isRealTimeEvent(events)) {
-            //TODO: fill this section out
-            throw new RealTimeDbError(`An attempt to watch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+            throw new RealTimeDbError(`An attempt to watch an event which is not valid for the Real Time database (but likely is for the Firestore database). Events passed in were: ${JSON.stringify(events)}\n. In contrast, the valid events in Firestore are: ${VALID_REAL_TIME_EVENTS.join(', ')}`, 'invalid-event');
         }
         try {
             events.map((evt) => {
@@ -20352,8 +20351,7 @@ class RealTimeDb extends AbstractedDatabase {
     }
     unWatch(events, cb) {
         if (events && !isRealTimeEvent(events)) {
-            //TODO: fill this section out
-            throw new RealTimeDbError(`An attempt to unwatch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+            throw new RealTimeDbError(`An attempt was made to unwatch an event type which is not valid for the Real Time database. Events passed in were: ${JSON.stringify(events)}\nIn contrast, the valid events in Firestore are: ${VALID_REAL_TIME_EVENTS.join(', ')}`, 'invalid-event');
         }
         try {
             if (!events) {
@@ -21055,17 +21053,22 @@ var FirebaseBoolean;
     FirebaseBoolean[FirebaseBoolean["true"] = 1] = "true";
     FirebaseBoolean[FirebaseBoolean["false"] = 0] = "false";
 })(FirebaseBoolean || (FirebaseBoolean = {}));
+const VALID_REAL_TIME_EVENTS = [
+    'value',
+    'child_changed',
+    'child_added',
+    'child_removed',
+    'child_moved',
+];
+/**
+ * Validates that all events passed in are valid events for
+ * the **Real Time** database.
+ *
+ * @param events the event or events which are being tested
+ */
 function isRealTimeEvent(events) {
     const evts = Array.isArray(events) ? events : [events];
-    return evts.every((e) => [
-        'value',
-        'child_changed',
-        'child_added',
-        'child_removed',
-        'child_moved',
-    ].includes(e)
-        ? true
-        : false);
+    return evts.every((e) => (VALID_REAL_TIME_EVENTS.includes(e) ? true : false));
 }
 
 const WatcherEventWrapper = (context) => (handler) => {

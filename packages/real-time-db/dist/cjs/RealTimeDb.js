@@ -68,8 +68,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
             events = [events];
         }
         if (events && !index_1.isRealTimeEvent(events)) {
-            //TODO: fill this section out
-            throw new index_1.RealTimeDbError(`An attempt to watch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+            throw new index_1.RealTimeDbError(`An attempt to watch an event which is not valid for the Real Time database (but likely is for the Firestore database). Events passed in were: ${JSON.stringify(events)}\n. In contrast, the valid events in Firestore are: ${index_1.VALID_REAL_TIME_EVENTS.join(', ')}`, 'invalid-event');
         }
         try {
             events.map((evt) => {
@@ -95,8 +94,7 @@ class RealTimeDb extends abstracted_database_1.AbstractedDatabase {
     }
     unWatch(events, cb) {
         if (events && !index_1.isRealTimeEvent(events)) {
-            //TODO: fill this section out
-            throw new index_1.RealTimeDbError(`An attempt to unwatch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(events)}`, 'invalid-event');
+            throw new index_1.RealTimeDbError(`An attempt was made to unwatch an event type which is not valid for the Real Time database. Events passed in were: ${JSON.stringify(events)}\nIn contrast, the valid events in Firestore are: ${index_1.VALID_REAL_TIME_EVENTS.join(', ')}`, 'invalid-event');
         }
         try {
             if (!events) {

@@ -311,10 +311,25 @@ class FirestoreDb extends AbstractedDatabase {
             this._removeDocument(path);
         }
     }
+    /**
+     * watch
+     *
+     * Watch for firebase events based on a DB path or `SerializedQuery` (path plus query elements)
+     *
+     * @param target a database path or a SerializedQuery
+     * @param events an event type or an array of event types (e.g., "value", "child_added")
+     * @param cb the callback function to call when event triggered
+     */
     watch(target, events, cb) {
+        if (events && !isFirestoreEvent(events)) {
+            throw new FirestoreDbError(`An attempt to watch an event which is not valid for the Firestore database (but likely is for the Real Time database). Events passed in were: ${JSON.stringify(events)}\n. In contrast, the valid events in Firestore are: ${VALID_FIRESTORE_EVENTS.join(', ')}`, 'invalid-event');
+        }
         throw new Error('Not implemented');
     }
     unWatch(events, cb) {
+        if (events && !isFirestoreEvent(events)) {
+            throw new FirestoreDbError(`An attempt was made to unwatch an event type which is not valid for the Firestore database. Events passed in were: ${JSON.stringify(events)}\nIn contrast, the valid events in Firestore are: ${VALID_FIRESTORE_EVENTS.join(', ')}`, 'invalid-event');
+        }
         throw new Error('Not implemented');
     }
     ref(path = '/') {
@@ -335,6 +350,21 @@ class FirestoreDb extends AbstractedDatabase {
         // All or nothing.
         await batch.commit();
     }
+}
+
+const VALID_FIRESTORE_EVENTS = ['added', 'removed', 'modified'];
+/**
+ * Validates that all events passed in are valid events for
+ * the **Firestore** database.
+ *
+ * @param events the event or events which are being tested
+ */
+function isFirestoreEvent(events) {
+    const evts = Array.isArray(events) ? events : [events];
+    return evts.every((e) => (VALID_FIRESTORE_EVENTS.includes(e) ? true : false));
+}
+
+class FirestoreDbError extends FireError {
 }
 
 class FirestoreAdmin extends FirestoreDb {

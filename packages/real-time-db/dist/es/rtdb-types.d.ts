@@ -80,4 +80,11 @@ export interface ITransactionResult<T = any> {
  * we have created this type represents the full typing of `RealTimeDb`
  */
 export declare type IRealTimeDb = RealTimeDb & AbstractedDatabase;
+export declare const VALID_REAL_TIME_EVENTS: string[];
+/**
+ * Validates that all events passed in are valid events for
+ * the **Real Time** database.
+ *
+ * @param events the event or events which are being tested
+ */
 export declare function isRealTimeEvent(events: IAbstractedEvent | IAbstractedEvent[]): events is IRtdbDbEvent | IRtdbDbEvent[];
