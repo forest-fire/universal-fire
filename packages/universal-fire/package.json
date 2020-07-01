@@ -12,10 +12,11 @@
   },
   "scripts": {
     "clean": "rimraf dist/**/*",
-    "build": "run-s clean build:bundle",
+    "build": "run-s clean build:tsc",
+    "build:tsc": "run-p build:es build:cjs",
     "build:bundle": "rollup -c",
-    "build:es": "ttsc -P tsconfig.es.json",
-    "build:cjs": "ttsc -P tsconfig.cjs.json",
+    "build:es": "tsc -P tsconfig.es.json",
+    "build:cjs": "tsc -P tsconfig.cjs.json",
     "build:monorepo": "cd ../../ && yarn build && cd -",
     "watch": "run-p watch:esnext watch:cjs",
     "watch:esnext": "echo not implemented",
@@ -42,7 +43,6 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.53.21",
     "@forest-fire/firestore-admin": "^0.53.21",
     "@forest-fire/firestore-client": "^0.53.21",
     "@forest-fire/real-time-admin": "^0.53.21",
@@ -50,7 +50,7 @@
     "@forest-fire/serialized-query": "^0.53.21",
     "@forest-fire/serializer-factory": "^0.53.21",
     "@forest-fire/types": "^0.53.18",
-    "common-types": "^1.15.7"
+    "common-types": "^1.15.8"
   },
   "license": "MIT"
 }

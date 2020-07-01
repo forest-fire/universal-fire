@@ -1,27 +1,15 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var index = require('./index-5e88db3a.js');
-require('events');
-var realTimeAdmin = require('@forest-fire/real-time-admin');
-var firestoreAdmin = require('@forest-fire/firestore-admin');
-
-
-
-exports.FirestoreClient = index.FirestoreClient;
-exports.RealTimeClient = index.RealTimeClient;
-exports.SerializedQuery = index.SerializedQuery;
-Object.defineProperty(exports, 'RealTimeAdmin', {
-	enumerable: true,
-	get: function () {
-		return realTimeAdmin.RealTimeAdmin;
-	}
-});
-Object.defineProperty(exports, 'FirestoreAdmin', {
-	enumerable: true,
-	get: function () {
-		return firestoreAdmin.FirestoreAdmin;
-	}
-});
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./proxy-symbols"), exports);
+__exportStar(require("./sdks"), exports);
 //# sourceMappingURL=index.js.map
