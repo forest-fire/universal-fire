@@ -134,20 +134,24 @@ export interface ITransactionResult<T = any> {
  */
 export type IRealTimeDb = RealTimeDb & AbstractedDatabase;
 
+export const VALID_REAL_TIME_EVENTS = [
+  'value',
+  'child_changed',
+  'child_added',
+  'child_removed',
+  'child_moved',
+];
+
+/**
+ * Validates that all events passed in are valid events for
+ * the **Real Time** database.
+ *
+ * @param events the event or events which are being tested
+ */
 export function isRealTimeEvent(
   events: IAbstractedEvent | IAbstractedEvent[]
 ): events is IRtdbDbEvent | IRtdbDbEvent[] {
   const evts = Array.isArray(events) ? events : [events];
 
-  return evts.every((e) =>
-    [
-      'value',
-      'child_changed',
-      'child_added',
-      'child_removed',
-      'child_moved',
-    ].includes(e)
-      ? true
-      : false
-  );
+  return evts.every((e) => (VALID_REAL_TIME_EVENTS.includes(e) ? true : false));
 }

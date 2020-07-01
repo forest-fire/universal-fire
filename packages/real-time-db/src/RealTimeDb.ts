@@ -15,6 +15,7 @@ import {
   UndefinedAssignment,
   WatcherEventWrapper,
   isRealTimeEvent,
+  VALID_REAL_TIME_EVENTS,
 } from './index';
 import {
   IAbstractedDatabase,
@@ -130,10 +131,11 @@ export abstract class RealTimeDb extends AbstractedDatabase
     }
 
     if (events && !isRealTimeEvent(events)) {
-      //TODO: fill this section out
       throw new RealTimeDbError(
-        `An attempt to watch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(
+        `An attempt to watch an event which is not valid for the Real Time database (but likely is for the Firestore database). Events passed in were: ${JSON.stringify(
           events
+        )}\n. In contrast, the valid events in Firestore are: ${VALID_REAL_TIME_EVENTS.join(
+          ', '
         )}`,
         'invalid-event'
       );
@@ -165,14 +167,16 @@ export abstract class RealTimeDb extends AbstractedDatabase
 
   public unWatch(events?: IAbstractedEvent | IAbstractedEvent[], cb?: any) {
     if (events && !isRealTimeEvent(events)) {
-      //TODO: fill this section out
       throw new RealTimeDbError(
-        `An attempt to unwatch an event which is not valid for the real time database. Events passed in were: ${JSON.stringify(
+        `An attempt was made to unwatch an event type which is not valid for the Real Time database. Events passed in were: ${JSON.stringify(
           events
+        )}\nIn contrast, the valid events in Firestore are: ${VALID_REAL_TIME_EVENTS.join(
+          ', '
         )}`,
         'invalid-event'
       );
     }
+
     try {
       if (!events) {
         this.ref().off();
