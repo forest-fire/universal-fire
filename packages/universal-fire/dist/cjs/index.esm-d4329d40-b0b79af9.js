@@ -1,8 +1,7 @@
 'use strict';
 
-var index = require('./index-4dec3431.js');
+var index = require('./index-55708e59.js');
 require('events');
-require('firemock');
 require('firebase-admin');
 
 /*! *****************************************************************************
@@ -16503,4 +16502,4 @@ Ie.an(new (/** @class */ function() {
 }())), xo(index.firebase$1);
 
 exports.__PRIVATE_registerFirestore = xo;
-//# sourceMappingURL=index.esm-d4329d40-f45d81f4.js.map
+//# sourceMappingURL=index.esm-d4329d40-b0b79af9.js.map

@@ -1,5 +1,11 @@
-import { EventEmitter } from 'events';
-import firebase from 'firebase-admin';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var events = require('events');
+var firebase = _interopDefault(require('firebase-admin'));
 
 class FireError extends Error {
     constructor(message, 
@@ -2138,7 +2144,7 @@ const WatcherEventWrapper = (context) => (handler) => {
     };
 };
 
-class EventManager extends EventEmitter {
+class EventManager extends events.EventEmitter {
     connection(state) {
         this.emit('connection', state);
     }
@@ -6856,7 +6862,7 @@ let faker;
  */
 async function importFakerLibrary() {
     if (!faker) {
-        faker = await import(/* webpackChunkName: "faker-lib" */ './index-62be410f-d727bee0.js').then(function (n) { return n.i; });
+        faker = await Promise.resolve().then(function () { return require(/* webpackChunkName: "faker-lib" */ './index-62be410f-33575af1.js'); }).then(function (n) { return n.i; });
     }
     return faker;
 }
@@ -7416,5 +7422,5 @@ let RealTimeAdmin = /** @class */ (() => {
     return RealTimeAdmin;
 })();
 
-export { RealTimeAdmin };
+exports.RealTimeAdmin = RealTimeAdmin;
 //# sourceMappingURL=index.js.map

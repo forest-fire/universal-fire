@@ -15,7 +15,7 @@
   },
   "scripts": {
     "clean": "rimraf dist/**/*",
-    "build": "run-s clean build:tsc",
+    "build": "run-s clean build:bundle",
     "build:bundle": "rollup -c",
     "build:tsc": "tsc -P tsconfig.bundle.json",
     "watch": "run-p 'watch:esnext' 'watch:cjs'",

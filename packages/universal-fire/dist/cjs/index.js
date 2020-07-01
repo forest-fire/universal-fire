@@ -2,9 +2,8 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var index = require('./index-4dec3431.js');
+var index = require('./index-55708e59.js');
 require('events');
-require('firemock');
 require('firebase-admin');
 
 

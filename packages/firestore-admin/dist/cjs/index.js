@@ -1,4 +1,27 @@
-import { credential, initializeApp, auth, apps } from 'firebase-admin';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopNamespace(e) {
+    if (e && e.__esModule) { return e; } else {
+        var n = {};
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                var d = Object.getOwnPropertyDescriptor(e, k);
+                Object.defineProperty(n, k, d.get ? d : {
+                    enumerable: true,
+                    get: function () {
+                        return e[k];
+                    }
+                });
+            });
+        }
+        n['default'] = e;
+        return n;
+    }
+}
+
+var firebase = require('firebase-admin');
 
 class FireError extends Error {
     constructor(message, 
@@ -334,12 +357,12 @@ class FirestoreAdmin extends FirestoreDb {
             config.databaseURL = config.databaseURL || extractDataUrl(config);
             config.name = determineDefaultAppName(config);
             this._config = config;
-            const runningApps = getRunningApps(apps);
-            const credential$1 = credential.cert(config.serviceAccount);
+            const runningApps = getRunningApps(firebase.apps);
+            const credential = firebase.credential.cert(config.serviceAccount);
             this._app = runningApps.includes(config.name)
-                ? getRunningFirebaseApp(config.name, apps)
-                : initializeApp({
-                    credential: credential$1,
+                ? getRunningFirebaseApp(config.name, firebase.apps)
+                : firebase.initializeApp({
+                    credential,
                     databaseURL: config.databaseURL,
                 }, config.name);
         }
@@ -365,12 +388,12 @@ class FirestoreAdmin extends FirestoreDb {
         if (this._config.mocking) {
             throw new FireError(`The auth API for MOCK databases is not yet implemented for Firestore`);
         }
-        return auth(this._app);
+        return firebase.auth(this._app);
     }
     async loadFirestoreApi() {
-        await import(/* webpackChunkName: "firebase-admin" */ 'firebase-admin');
+        await Promise.resolve().then(function () { return _interopNamespace(require(/* webpackChunkName: "firebase-admin" */ 'firebase-admin')); });
     }
 }
 
-export { FirestoreAdmin };
+exports.FirestoreAdmin = FirestoreAdmin;
 //# sourceMappingURL=index.js.map

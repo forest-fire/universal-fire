@@ -1,6 +1,5 @@
-import { _ as __extends, a as __awaiter, b as __generator, g as getUA, c as __spreadArrays, L as LogLevel, C as Component, f as firebase$1, d as Logger, i as isMobileCordova, e as isReactNative, h as isElectron, j as isIE, k as isUWP, l as isBrowserExtension } from './index-0ae9d068.js';
+import { _ as __extends, a as __awaiter, b as __generator, g as getUA, c as __spreadArrays, L as LogLevel, C as Component, f as firebase$1, d as Logger, i as isMobileCordova, e as isReactNative, h as isElectron, j as isIE, k as isUWP, l as isBrowserExtension } from './index-a54510c8.js';
 import 'events';
-import 'firemock';
 import 'firebase-admin';
 
 /*! *****************************************************************************
@@ -16501,4 +16500,4 @@ Ie.an(new (/** @class */ function() {
 }())), xo(firebase$1);
 
 export { xo as __PRIVATE_registerFirestore };
-//# sourceMappingURL=index.esm-d4329d40-646163c3.js.map
+//# sourceMappingURL=index.esm-d4329d40-b49ba600.js.map

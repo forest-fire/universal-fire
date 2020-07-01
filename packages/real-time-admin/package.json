@@ -22,7 +22,7 @@
   "scripts": {
     "clean": "rimraf dist/**/*",
     "clean:nuclear": "rimraf lib node_modules && rm yarn.lock && yarn cache clean && yarn && yarn upgrade",
-    "build": "run-s clean build:all",
+    "build": "run-s clean build:bundle",
     "build:bundle": "rollup -c",
     "build:all": "run-p build:esnext build:cjs",
     "build:esnext": "tsc -P tsconfig.bundle.json",
