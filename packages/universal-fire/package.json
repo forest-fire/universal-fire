@@ -14,6 +14,8 @@
     "clean": "rimraf dist/**/*",
     "build": "run-s clean build:bundle",
     "build:bundle": "rollup -c",
+    "build:es": "ttsc -P tsconfig.es.json",
+    "build:cjs": "ttsc -P tsconfig.cjs.json",
     "build:monorepo": "cd ../../ && yarn build && cd -",
     "watch": "run-p watch:esnext watch:cjs",
     "watch:esnext": "echo not implemented",

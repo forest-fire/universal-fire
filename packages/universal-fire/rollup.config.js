@@ -9,7 +9,12 @@ function moduleExport(choice) {
       format: choice,
       sourcemap: true,
     },
-    external: ['firemock', 'firebase-admin'],
+    external: [
+      'firemock',
+      'firebase-admin',
+      '@forest-fire/firestore-admin',
+      '@forest-fire/real-time-admin',
+    ],
     plugins: [
       resolve(),
       typescript({

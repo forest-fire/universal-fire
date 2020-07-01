@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.bundle.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "module": "ESNext",
+    "outDir": "dist/es"
+  },
+  "exclude": ["test"]
+}

@@ -1,4 +1,5 @@
-export { n as FirestoreAdmin, F as FirestoreClient, m as RealTimeAdmin, R as RealTimeClient, S as SerializedQuery } from './index-50e644f5.js';
+export { F as FirestoreClient, R as RealTimeClient, S as SerializedQuery } from './index-bb3afa1c.js';
 import 'events';
-import 'firebase-admin';
+export { RealTimeAdmin } from '@forest-fire/real-time-admin';
+export { FirestoreAdmin } from '@forest-fire/firestore-admin';
 //# sourceMappingURL=index.js.map
