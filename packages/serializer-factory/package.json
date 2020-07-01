@@ -32,7 +32,7 @@
   "dependencies": {
     "@forest-fire/serialized-query": "^0.53.18",
     "@forest-fire/types": "^0.53.18",
-    "common-types": "^1.14.3"
+    "common-types": "^1.15.8"
   },
   "license": "MIT"
 }

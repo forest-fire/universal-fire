@@ -41,6 +41,7 @@
     "@types/rimraf": "^3.0.0",
     "@types/shelljs": "^0.8.7",
     "@types/stack-trace": "^0.0.29",
+    "@forest-fire/types": "^0.53.18",
     "chai": "^4.2.0",
     "chalk": "^3.0.0",
     "do-devops": "^0.3.6",
@@ -60,8 +61,7 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@forest-fire/types": "^0.53.18",
-    "common-types": "^1.14.3",
+    "common-types": "^1.15.8",
     "universal-fire": "^0.53.19"
   },
   "license": "MIT"

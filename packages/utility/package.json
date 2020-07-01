@@ -28,6 +28,7 @@
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
   "devDependencies": {
+    "@forest-fire/types": "^0.53.18",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
@@ -39,7 +40,6 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "@forest-fire/types": "^0.53.18",
     "common-types": "^1.14.3",
     "is-gzip": "^2.0.0"
   },
