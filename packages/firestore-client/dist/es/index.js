@@ -1,2 +1,2 @@
-export { F as FirestoreClient } from './index-8e9731ba.js';
+export { F as FirestoreClient } from './index-887effb4.js';
 //# sourceMappingURL=index.js.map

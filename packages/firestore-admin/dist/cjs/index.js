@@ -173,25 +173,6 @@ function determineDefaultAppName(config) {
             : '[DEFAULT]';
 }
 
-class FireError$1 extends Error {
-    constructor(message, 
-    /**
-     * a type/subtype of the error or you can just state the "subtype"
-     * and it will
-     */
-    classification = 'UniversalFire/error', statusCode = 400) {
-        super(message);
-        this.universalFire = true;
-        this.kind = 'FireError';
-        const parts = classification.split('/');
-        const klass = this.constructor.name;
-        this.name = parts.length === 2 ? classification : `${klass}/${parts[0]}`;
-        this.code = parts.length === 2 ? parts[1] : parts[0];
-        this.kind = parts[0];
-        this.statusCode = statusCode;
-    }
-}
-
 class AbstractedDatabase {
     constructor() {
         /**
@@ -208,7 +189,7 @@ class AbstractedDatabase {
      */
     get app() {
         if (this.config.mocking) {
-            throw new FireError$1(`The "app" object is provided as direct access to the Firebase API when using a real database but not when using a Mock DB!`, 'not-allowed');
+            throw new FireError(`The "app" object is provided as direct access to the Firebase API when using a real database but not when using a Mock DB!`, 'not-allowed');
         }
         if (this._app) {
             return {
@@ -224,7 +205,7 @@ class AbstractedDatabase {
                     : '',
             };
         }
-        throw new FireError$1('Attempt to access Firebase App without having instantiated it');
+        throw new FireError('Attempt to access Firebase App without having instantiated it');
     }
     /**
      * Provides a set of API's that are exposed by the various "providers". Examples
@@ -233,7 +214,7 @@ class AbstractedDatabase {
      * > **Note:** this is only really available on the Client SDK's
      */
     get authProviders() {
-        throw new FireError$1(`Only the client SDK's have a authProviders property`);
+        throw new FireError(`Only the client SDK's have a authProviders property`);
     }
     /**
      * Indicates if the database is using the admin SDK.
@@ -263,10 +244,10 @@ class AbstractedDatabase {
      */
     get mock() {
         if (!this.isMockDb) {
-            throw new FireError$1(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, 'AbstractedDatabase/not-allowed');
+            throw new FireError(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, 'AbstractedDatabase/not-allowed');
         }
         if (!this._mock) {
-            throw new FireError$1(`Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`);
+            throw new FireError(`Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`);
         }
         return this._mock;
     }
@@ -283,7 +264,7 @@ class FirestoreDb extends AbstractedDatabase {
         if (this._database) {
             return this._database;
         }
-        throw new FireError$1('Attempt to use Firestore without having instantiated it', 'not-ready');
+        throw new FireError('Attempt to use Firestore without having instantiated it', 'not-ready');
     }
     set database(value) {
         this._database = value;
@@ -298,7 +279,7 @@ class FirestoreDb extends AbstractedDatabase {
     get mock() {
         throw new Error('Not implemented');
     }
-    async getList(path, idProp) {
+    async getList(path, idProp = 'id') {
         path = typeof path !== 'string' ? path.path : path;
         const querySnapshot = await this.database.collection(path).get();
         // @ts-ignore
@@ -312,7 +293,7 @@ class FirestoreDb extends AbstractedDatabase {
     async getPushKey(path) {
         return this.database.collection(path).doc().id;
     }
-    async getRecord(path, idProp = 'idProp') {
+    async getRecord(path, idProp = 'id') {
         const documentSnapshot = await this.database.doc(path).get();
         return {
             ...documentSnapshot.data(),
@@ -390,7 +371,7 @@ function isFirestoreEvent(events) {
     return evts.every((e) => (VALID_FIRESTORE_EVENTS.includes(e) ? true : false));
 }
 
-class FirestoreDbError extends FireError$1 {
+class FirestoreDbError extends FireError {
 }
 
 class FirestoreAdmin extends FirestoreDb {

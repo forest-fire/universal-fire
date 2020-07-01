@@ -46,7 +46,7 @@ export abstract class FirestoreDb extends AbstractedDatabase
 
   public async getList<T = any>(
     path: string | ISerializedQuery<T>,
-    idProp: string
+    idProp: string = 'id'
   ): Promise<T[]> {
     path = typeof path !== 'string' ? path.path : path;
     const querySnapshot = await this.database.collection(path).get();
@@ -63,7 +63,7 @@ export abstract class FirestoreDb extends AbstractedDatabase
     return this.database.collection(path).doc().id;
   }
 
-  public async getRecord<T = any>(path: string, idProp: string = 'idProp') {
+  public async getRecord<T = any>(path: string, idProp: string = 'id') {
     const documentSnapshot = await this.database.doc(path).get();
     return {
       ...documentSnapshot.data(),

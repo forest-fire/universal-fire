@@ -1,6 +1,8 @@
-import { EventEmitter as EventEmitter$1 } from 'events';
-import '@forest-fire/real-time-admin';
-import '@forest-fire/firestore-admin';
+'use strict';
+
+var events = require('events');
+require('@forest-fire/real-time-admin');
+require('@forest-fire/firestore-admin');
 
 class BaseSerializer {
     constructor(path = '/') {
@@ -19396,7 +19398,7 @@ class ClientError extends FireError {
     }
 }
 
-class EventManager extends EventEmitter$1 {
+class EventManager extends events.EventEmitter {
     connection(state) {
         this.emit('connection', state);
     }
@@ -21286,8 +21288,8 @@ class RealTimeDb extends AbstractedDatabase {
      * then sets `isConnected` to **true**
      */
     async getFireMock(config = {}) {
-        const FireMock = await import(
-        /* webpackChunkName: "firemock" */ './index-0524e087-ce50297c.js');
+        const FireMock = await Promise.resolve().then(function () { return require(
+        /* webpackChunkName: "firemock" */ './index-0524e087-65f7b8fa.js'); });
         this._mock = await FireMock.Mock.prepare(config);
     }
 }
@@ -21695,25 +21697,6 @@ function extractClientConfig$1() {
     return extractEncodedString$1(process.env.FIREBASE_CONFIG);
 }
 
-class FireError$1$1 extends Error {
-    constructor(message, 
-    /**
-     * a type/subtype of the error or you can just state the "subtype"
-     * and it will
-     */
-    classification = 'UniversalFire/error', statusCode = 400) {
-        super(message);
-        this.universalFire = true;
-        this.kind = 'FireError';
-        const parts = classification.split('/');
-        const klass = this.constructor.name;
-        this.name = parts.length === 2 ? classification : `${klass}/${parts[0]}`;
-        this.code = parts.length === 2 ? parts[1] : parts[0];
-        this.kind = parts[0];
-        this.statusCode = statusCode;
-    }
-}
-
 class AbstractedDatabase$1 {
     constructor() {
         /**
@@ -21730,7 +21713,7 @@ class AbstractedDatabase$1 {
      */
     get app() {
         if (this.config.mocking) {
-            throw new FireError$1$1(`The "app" object is provided as direct access to the Firebase API when using a real database but not when using a Mock DB!`, 'not-allowed');
+            throw new FireError$2(`The "app" object is provided as direct access to the Firebase API when using a real database but not when using a Mock DB!`, 'not-allowed');
         }
         if (this._app) {
             return {
@@ -21746,7 +21729,7 @@ class AbstractedDatabase$1 {
                     : '',
             };
         }
-        throw new FireError$1$1('Attempt to access Firebase App without having instantiated it');
+        throw new FireError$2('Attempt to access Firebase App without having instantiated it');
     }
     /**
      * Provides a set of API's that are exposed by the various "providers". Examples
@@ -21755,7 +21738,7 @@ class AbstractedDatabase$1 {
      * > **Note:** this is only really available on the Client SDK's
      */
     get authProviders() {
-        throw new FireError$1$1(`Only the client SDK's have a authProviders property`);
+        throw new FireError$2(`Only the client SDK's have a authProviders property`);
     }
     /**
      * Indicates if the database is using the admin SDK.
@@ -21785,10 +21768,10 @@ class AbstractedDatabase$1 {
      */
     get mock() {
         if (!this.isMockDb) {
-            throw new FireError$1$1(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, 'AbstractedDatabase/not-allowed');
+            throw new FireError$2(`Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`, 'AbstractedDatabase/not-allowed');
         }
         if (!this._mock) {
-            throw new FireError$1$1(`Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`);
+            throw new FireError$2(`Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`);
         }
         return this._mock;
     }
@@ -21805,7 +21788,7 @@ class FirestoreDb extends AbstractedDatabase$1 {
         if (this._database) {
             return this._database;
         }
-        throw new FireError$1$1('Attempt to use Firestore without having instantiated it', 'not-ready');
+        throw new FireError$2('Attempt to use Firestore without having instantiated it', 'not-ready');
     }
     set database(value) {
         this._database = value;
@@ -21820,7 +21803,7 @@ class FirestoreDb extends AbstractedDatabase$1 {
     get mock() {
         throw new Error('Not implemented');
     }
-    async getList(path, idProp) {
+    async getList(path, idProp = 'id') {
         path = typeof path !== 'string' ? path.path : path;
         const querySnapshot = await this.database.collection(path).get();
         // @ts-ignore
@@ -21834,7 +21817,7 @@ class FirestoreDb extends AbstractedDatabase$1 {
     async getPushKey(path) {
         return this.database.collection(path).doc().id;
     }
-    async getRecord(path, idProp = 'idProp') {
+    async getRecord(path, idProp = 'id') {
         const documentSnapshot = await this.database.doc(path).get();
         return {
             ...documentSnapshot.data(),
@@ -21912,7 +21895,7 @@ function isFirestoreEvent(events) {
     return evts.every((e) => (VALID_FIRESTORE_EVENTS.includes(e) ? true : false));
 }
 
-class FirestoreDbError extends FireError$1$1 {
+class FirestoreDbError extends FireError$2 {
 }
 
 /*! *****************************************************************************
@@ -22909,7 +22892,7 @@ var instances$1 = [];
  * you set the log level to `INFO`, errors will still be logged, but `DEBUG` and
  * `VERBOSE` logs will not)
  */
-var LogLevel$1;
+
 (function (LogLevel) {
     LogLevel[LogLevel["DEBUG"] = 0] = "DEBUG";
     LogLevel[LogLevel["VERBOSE"] = 1] = "VERBOSE";
@@ -22917,19 +22900,19 @@ var LogLevel$1;
     LogLevel[LogLevel["WARN"] = 3] = "WARN";
     LogLevel[LogLevel["ERROR"] = 4] = "ERROR";
     LogLevel[LogLevel["SILENT"] = 5] = "SILENT";
-})(LogLevel$1 || (LogLevel$1 = {}));
+})(exports.LogLevel || (exports.LogLevel = {}));
 var levelStringToEnum$1 = {
-    'debug': LogLevel$1.DEBUG,
-    'verbose': LogLevel$1.VERBOSE,
-    'info': LogLevel$1.INFO,
-    'warn': LogLevel$1.WARN,
-    'error': LogLevel$1.ERROR,
-    'silent': LogLevel$1.SILENT
+    'debug': exports.LogLevel.DEBUG,
+    'verbose': exports.LogLevel.VERBOSE,
+    'info': exports.LogLevel.INFO,
+    'warn': exports.LogLevel.WARN,
+    'error': exports.LogLevel.ERROR,
+    'silent': exports.LogLevel.SILENT
 };
 /**
  * The default log level
  */
-var defaultLogLevel$1 = LogLevel$1.INFO;
+var defaultLogLevel$1 = exports.LogLevel.INFO;
 /**
  * By default, `console.debug` is not displayed in the developer console (in
  * chrome). To avoid forcing users to have to opt-in to these logs twice
@@ -22937,11 +22920,11 @@ var defaultLogLevel$1 = LogLevel$1.INFO;
  * logs to the `console.log` function.
  */
 var ConsoleMethod$1 = (_a$2 = {},
-    _a$2[LogLevel$1.DEBUG] = 'log',
-    _a$2[LogLevel$1.VERBOSE] = 'log',
-    _a$2[LogLevel$1.INFO] = 'info',
-    _a$2[LogLevel$1.WARN] = 'warn',
-    _a$2[LogLevel$1.ERROR] = 'error',
+    _a$2[exports.LogLevel.DEBUG] = 'log',
+    _a$2[exports.LogLevel.VERBOSE] = 'log',
+    _a$2[exports.LogLevel.INFO] = 'info',
+    _a$2[exports.LogLevel.WARN] = 'warn',
+    _a$2[exports.LogLevel.ERROR] = 'error',
     _a$2);
 /**
  * The default log handler will forward DEBUG, VERBOSE, INFO, WARN, and ERROR
@@ -22997,7 +22980,7 @@ var Logger$1 = /** @class */ (function () {
             return this._logLevel;
         },
         set: function (val) {
-            if (!(val in LogLevel$1)) {
+            if (!(val in exports.LogLevel)) {
                 throw new TypeError('Invalid value assigned to `logLevel`');
             }
             this._logLevel = val;
@@ -23036,40 +23019,40 @@ var Logger$1 = /** @class */ (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        this._userLogHandler && this._userLogHandler.apply(this, __spreadArrays$1$1([this, LogLevel$1.DEBUG], args));
-        this._logHandler.apply(this, __spreadArrays$1$1([this, LogLevel$1.DEBUG], args));
+        this._userLogHandler && this._userLogHandler.apply(this, __spreadArrays$1$1([this, exports.LogLevel.DEBUG], args));
+        this._logHandler.apply(this, __spreadArrays$1$1([this, exports.LogLevel.DEBUG], args));
     };
     Logger.prototype.log = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        this._userLogHandler && this._userLogHandler.apply(this, __spreadArrays$1$1([this, LogLevel$1.VERBOSE], args));
-        this._logHandler.apply(this, __spreadArrays$1$1([this, LogLevel$1.VERBOSE], args));
+        this._userLogHandler && this._userLogHandler.apply(this, __spreadArrays$1$1([this, exports.LogLevel.VERBOSE], args));
+        this._logHandler.apply(this, __spreadArrays$1$1([this, exports.LogLevel.VERBOSE], args));
     };
     Logger.prototype.info = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        this._userLogHandler && this._userLogHandler.apply(this, __spreadArrays$1$1([this, LogLevel$1.INFO], args));
-        this._logHandler.apply(this, __spreadArrays$1$1([this, LogLevel$1.INFO], args));
+        this._userLogHandler && this._userLogHandler.apply(this, __spreadArrays$1$1([this, exports.LogLevel.INFO], args));
+        this._logHandler.apply(this, __spreadArrays$1$1([this, exports.LogLevel.INFO], args));
     };
     Logger.prototype.warn = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        this._userLogHandler && this._userLogHandler.apply(this, __spreadArrays$1$1([this, LogLevel$1.WARN], args));
-        this._logHandler.apply(this, __spreadArrays$1$1([this, LogLevel$1.WARN], args));
+        this._userLogHandler && this._userLogHandler.apply(this, __spreadArrays$1$1([this, exports.LogLevel.WARN], args));
+        this._logHandler.apply(this, __spreadArrays$1$1([this, exports.LogLevel.WARN], args));
     };
     Logger.prototype.error = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        this._userLogHandler && this._userLogHandler.apply(this, __spreadArrays$1$1([this, LogLevel$1.ERROR], args));
-        this._logHandler.apply(this, __spreadArrays$1$1([this, LogLevel$1.ERROR], args));
+        this._userLogHandler && this._userLogHandler.apply(this, __spreadArrays$1$1([this, exports.LogLevel.ERROR], args));
+        this._logHandler.apply(this, __spreadArrays$1$1([this, exports.LogLevel.ERROR], args));
     };
     return Logger;
 }());
@@ -23121,7 +23104,7 @@ function setUserLogHandler$1(logCallback, options) {
                     .join(' ');
                 if (level >= (customLogLevel !== null && customLogLevel !== void 0 ? customLogLevel : instance.logLevel)) {
                     logCallback({
-                        level: LogLevel$1[level].toLowerCase(),
+                        level: exports.LogLevel[level].toLowerCase(),
                         message: message,
                         args: args,
                         type: instance.name
@@ -23798,7 +23781,7 @@ firebase$2.initializeApp = function () {
 var firebase$1$1 = firebase$2;
 registerCoreComponents$1(firebase$1$1);
 
-import('./index.esm-8e3af1de-01f8ce7a.js');
+Promise.resolve().then(function () { return require('./index.esm-8c04ae72-57fe8e31.js'); });
 class FirestoreClient extends FirestoreDb {
     constructor(config) {
         super();
@@ -23870,12 +23853,28 @@ class FirestoreClient extends FirestoreDb {
         return this._auth;
     }
     async loadAuthApi() {
-        await import('./auth.esm-43bc6b90-aca21d4a.js');
+        await Promise.resolve().then(function () { return require('./auth.esm-72ab0701-b7a13e56.js'); });
     }
     async loadFirestoreApi() {
-        await import('./index.esm-8e3af1de-01f8ce7a.js');
+        await Promise.resolve().then(function () { return require('./index.esm-8c04ae72-57fe8e31.js'); });
     }
 }
 
-export { Component$1 as C, FirestoreClient as F, LogLevel$1 as L, RealTimeClient as R, SerializedQuery as S, __extends$2 as _, __awaiter$2 as a, __generator$2 as b, __spreadArrays$1 as c, Logger$1 as d, isReactNative$1 as e, firebase$1$1 as f, getUA$1 as g, isElectron as h, isMobileCordova$1 as i, isIE as j, isUWP as k, isBrowserExtension as l };
-//# sourceMappingURL=index-f83a3de7.js.map
+exports.Component = Component$1;
+exports.FirestoreClient = FirestoreClient;
+exports.Logger = Logger$1;
+exports.RealTimeClient = RealTimeClient;
+exports.SerializedQuery = SerializedQuery;
+exports.__awaiter = __awaiter$2;
+exports.__extends = __extends$2;
+exports.__generator = __generator$2;
+exports.__spreadArrays = __spreadArrays$1;
+exports.firebase$1 = firebase$1$1;
+exports.getUA = getUA$1;
+exports.isBrowserExtension = isBrowserExtension;
+exports.isElectron = isElectron;
+exports.isIE = isIE;
+exports.isMobileCordova = isMobileCordova$1;
+exports.isReactNative = isReactNative$1;
+exports.isUWP = isUWP;
+//# sourceMappingURL=index-5e88db3a.js.map

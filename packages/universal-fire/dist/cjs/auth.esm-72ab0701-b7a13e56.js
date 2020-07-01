@@ -1,6 +1,9 @@
 'use strict';
 
-var index = require('./index-a81fbd48.js');
+var index = require('./index-5e88db3a.js');
+require('events');
+require('@forest-fire/real-time-admin');
+require('@forest-fire/firestore-admin');
 
 (function() {/*
 
@@ -379,4 +382,4 @@ Y(lm.prototype,{Ob:{name:"getSession",j:[]},dc:{name:"enroll",j:[ro(),V("display
 (function(){if("undefined"!==typeof index.firebase$1&&index.firebase$1.INTERNAL&&index.firebase$1.INTERNAL.registerComponent){var a={ActionCodeInfo:{Operation:{EMAIL_SIGNIN:xf,PASSWORD_RESET:"PASSWORD_RESET",RECOVER_EMAIL:"RECOVER_EMAIL",REVERT_SECOND_FACTOR_ADDITION:zf,VERIFY_AND_CHANGE_EMAIL:yf,VERIFY_EMAIL:"VERIFY_EMAIL"}},Auth:un,AuthCredential:yg,Error:u};Z(a,"EmailAuthProvider",Vg,[]);Z(a,"FacebookAuthProvider",Mg,[]);Z(a,"GithubAuthProvider",Og,[]);Z(a,"GoogleAuthProvider",Qg,[]);Z(a,"TwitterAuthProvider",Sg,[]);
 Z(a,"OAuthProvider",M,[V("providerId")]);Z(a,"SAMLAuthProvider",Lg,[V("providerId")]);Z(a,"PhoneAuthProvider",hh,[oo()]);Z(a,"RecaptchaVerifier",ho,[X(V(),no(),"recaptchaContainer"),W("recaptchaParameters",!0),po()]);Z(a,"ActionCodeURL",Gf,[]);Z(a,"PhoneMultiFactorGenerator",Rn,[]);index.firebase$1.INTERNAL.registerComponent({name:"auth",instanceFactory:function(b){b=b.getProvider("app").getImmediate();return new un(b)},multipleInstances:!1,serviceProps:a,instantiationMode:"LAZY",type:"PUBLIC"});index.firebase$1.INTERNAL.registerComponent({name:"auth-internal",
 instanceFactory:function(b){b=b.getProvider("auth").getImmediate();return {getUid:r(b.getUid,b),getToken:r(b.kc,b),addAuthTokenListener:r(b.bc,b),removeAuthTokenListener:r(b.Nc,b)}},multipleInstances:!1,instantiationMode:"LAZY",type:"PRIVATE"});index.firebase$1.registerVersion("@firebase/auth","0.14.5");index.firebase$1.INTERNAL.extendNamespace({User:P});}else throw Error("Cannot find the firebase namespace; be sure to include firebase-app.js before this library.");})();}).apply(typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : {});
-//# sourceMappingURL=auth.esm-d1e074b7.js.map
+//# sourceMappingURL=auth.esm-72ab0701-b7a13e56.js.map

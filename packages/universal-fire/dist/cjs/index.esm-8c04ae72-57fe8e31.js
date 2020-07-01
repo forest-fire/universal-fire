@@ -1,6 +1,9 @@
 'use strict';
 
-var index = require('./index-a81fbd48.js');
+var index = require('./index-5e88db3a.js');
+require('events');
+require('@forest-fire/real-time-admin');
+require('@forest-fire/firestore-admin');
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -16500,4 +16503,4 @@ Ie.an(new (/** @class */ function() {
 }())), xo(index.firebase$1);
 
 exports.__PRIVATE_registerFirestore = xo;
-//# sourceMappingURL=index.esm-79d167fa.js.map
+//# sourceMappingURL=index.esm-8c04ae72-57fe8e31.js.map

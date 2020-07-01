@@ -1,21 +1,4 @@
-class FireError extends Error {
-    constructor(message, 
-    /**
-     * a type/subtype of the error or you can just state the "subtype"
-     * and it will
-     */
-    classification = 'UniversalFire/error', statusCode = 400) {
-        super(message);
-        this.universalFire = true;
-        this.kind = 'FireError';
-        const parts = classification.split('/');
-        const klass = this.constructor.name;
-        this.name = parts.length === 2 ? classification : `${klass}/${parts[0]}`;
-        this.code = parts.length === 2 ? parts[1] : parts[0];
-        this.kind = parts[0];
-        this.statusCode = statusCode;
-    }
-}
+import { FireError } from '@forest-fire/utility';
 
 class AbstractedDatabase {
     constructor() {
@@ -123,7 +106,7 @@ class FirestoreDb extends AbstractedDatabase {
     get mock() {
         throw new Error('Not implemented');
     }
-    async getList(path, idProp) {
+    async getList(path, idProp = 'id') {
         path = typeof path !== 'string' ? path.path : path;
         const querySnapshot = await this.database.collection(path).get();
         // @ts-ignore
@@ -137,7 +120,7 @@ class FirestoreDb extends AbstractedDatabase {
     async getPushKey(path) {
         return this.database.collection(path).doc().id;
     }
-    async getRecord(path, idProp = 'idProp') {
+    async getRecord(path, idProp = 'id') {
         const documentSnapshot = await this.database.doc(path).get();
         return {
             ...documentSnapshot.data(),
