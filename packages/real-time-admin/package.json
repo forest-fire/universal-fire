@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-admin",
-  "version": "0.53.17",
+  "version": "0.53.18",
   "description": "Helpful abstraction on the Firebase admin API",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
@@ -39,8 +39,8 @@
     "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'"
   },
   "devDependencies": {
-    "@forest-fire/abstracted-database": "^0.53.17",
-    "@forest-fire/serialized-query": "^0.53.17",
+    "@forest-fire/abstracted-database": "^0.53.18",
+    "@forest-fire/serialized-query": "^0.53.18",
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "@rollup/plugin-typescript": "^4.1.2",
@@ -76,11 +76,11 @@
   "dependencies": {
     "@firebase/app": "^0.6.4",
     "@firebase/database-types": "^0.5.1",
-    "@forest-fire/real-time-db": "^0.53.17",
-    "@forest-fire/types": "^0.53.8",
-    "@forest-fire/utility": "^0.53.8",
+    "@forest-fire/real-time-db": "^0.53.18",
+    "@forest-fire/types": "^0.53.18",
+    "@forest-fire/utility": "^0.53.18",
     "common-types": "^1.14.3",
-    "firemock": "^0.53.17",
+    "firemock": "^0.53.18",
     "is-gzip": "^2.0.0",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
