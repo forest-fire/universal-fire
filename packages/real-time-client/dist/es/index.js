@@ -20677,7 +20677,7 @@ class RealTimeDb extends AbstractedDatabase {
      */
     async getFireMock(config = {}) {
         const FireMock = await import(
-        /* webpackChunkName: "firemock" */ './index-32df3add.js');
+        /* webpackChunkName: "firemock" */ './index-0524e087.js');
         this._mock = await FireMock.Mock.prepare(config);
     }
 }
@@ -21259,3 +21259,4 @@ class RealTimeClient extends RealTimeDb {
 }
 
 export { MOCK_LOADING_TIMEOUT, RealTimeClient };
+//# sourceMappingURL=index.js.map

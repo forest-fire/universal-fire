@@ -157,7 +157,7 @@ export declare abstract class RealTimeDb extends AbstractedDatabase implements I
      * and converts it to a JS object where the snapshot's key
      * is included as part of the record (as `id` by default)
      */
-    getRecord<T = any>(path: string | ISerializedQuery<T>, idProp?: string): Promise<T>;
+    getRecord<T = any>(path: string, idProp?: string): Promise<T>;
     /**
      * **getList**
      *

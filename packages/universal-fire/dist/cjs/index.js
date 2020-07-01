@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var index = require('./index-c8ee153d.js');
+var index = require('./index-60c2529f.js');
 require('events');
 require('firebase-admin');
 

@@ -54,6 +54,13 @@ function isAdminConfig(config) {
         : false;
 }
 
+var RealQueryOrderType;
+(function (RealQueryOrderType) {
+    RealQueryOrderType["orderByChild"] = "orderByChild";
+    RealQueryOrderType["orderByKey"] = "orderByKey";
+    RealQueryOrderType["orderByValue"] = "orderByValue";
+})(RealQueryOrderType || (RealQueryOrderType = {}));
+
 /**
  * Takes as input a variety of possible formats and converts it into
  * a Firebase service account (`IServiceAccount`). The input formats

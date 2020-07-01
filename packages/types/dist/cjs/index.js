@@ -1,22 +1,43 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function isMockConfig(config) {
+    return config && config.mocking === true;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
-//#region exports
-__exportStar(require("./fire-type-fns"), exports);
-__exportStar(require("./@types/fire-types"), exports);
-__exportStar(require("./@types/fire-proxies"), exports);
-__exportStar(require("./@types/fire-apis"), exports);
-__exportStar(require("./@types/events"), exports);
-__exportStar(require("./@types/serialized-query"), exports);
-__exportStar(require("./@types/abstracted-database"), exports);
-//#endregion export
+function isRealDbConfig(config) {
+    return config && config.mocking !== true;
+}
+/**
+ * In a client SDK setting, this checks that the typing is NOT a mock
+ * typing (and that apiKey and databaseURL are indeed set) and responds
+ * by letting typescript know that it is a `IClientConfig` configuration.
+ */
+function isClientConfig(config) {
+    return config &&
+        config.mocking !== true &&
+        config.apiKey !== undefined &&
+        config.databaseURL !== undefined
+        ? true
+        : false;
+}
+function isAdminConfig(config) {
+    return config &&
+        config.mocking !== true &&
+        config.apiKey === undefined &&
+        config.databaseURL !== undefined
+        ? true
+        : false;
+}
+
+(function (RealQueryOrderType) {
+    RealQueryOrderType["orderByChild"] = "orderByChild";
+    RealQueryOrderType["orderByKey"] = "orderByKey";
+    RealQueryOrderType["orderByValue"] = "orderByValue";
+})(exports.RealQueryOrderType || (exports.RealQueryOrderType = {}));
+
+exports.isAdminConfig = isAdminConfig;
+exports.isClientConfig = isClientConfig;
+exports.isMockConfig = isMockConfig;
+exports.isRealDbConfig = isRealDbConfig;
 //# sourceMappingURL=index.js.map
