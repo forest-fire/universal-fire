@@ -1,3 +1,4 @@
+export * from './proxy-symbols';
 export class FirestoreAdmin {
     static async connect() {
         const admin = (await import('@forest-fire/firestore-admin'));
@@ -10,4 +11,4 @@ export class RealTimeAdmin {
         return admin.connect();
     }
 }
-//# sourceMappingURL=admin-sdks.js.map
+//# sourceMappingURL=admin.js.map

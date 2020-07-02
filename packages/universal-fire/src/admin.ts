@@ -1,4 +1,5 @@
-import { IFirestoreAdmin, IRealTimeAdmin } from '../sdk-types';
+import { IFirestoreAdmin, IRealTimeAdmin } from './sdk-types';
+export * from './proxy-symbols';
 
 export class FirestoreAdmin {
   static async connect() {

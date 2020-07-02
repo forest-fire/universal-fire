@@ -11,6 +11,9 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
@@ -20,6 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RealTimeAdmin = exports.FirestoreAdmin = void 0;
+__exportStar(require("./proxy-symbols"), exports);
 class FirestoreAdmin {
     static async connect() {
         const admin = (await Promise.resolve().then(() => __importStar(require('@forest-fire/firestore-admin'))));
@@ -34,4 +38,4 @@ class RealTimeAdmin {
     }
 }
 exports.RealTimeAdmin = RealTimeAdmin;
-//# sourceMappingURL=admin-sdks.js.map
+//# sourceMappingURL=admin.js.map
