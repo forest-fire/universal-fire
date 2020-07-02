@@ -1,6 +1,6 @@
 {
   "name": "firemock",
-  "version": "0.53.26",
+  "version": "0.53.28",
   "description": "firemock",
   "license": "MIT",
   "repository": "git@github.com:forest-fire/firemock.git",
@@ -76,7 +76,7 @@
     "vuepress": "^1.5.0"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.53.26",
+    "@forest-fire/serialized-query": "^0.53.28",
     "@forest-fire/types": "^0.53.25",
     "@types/faker": "^4.1.12",
     "common-types": "^1.15.8",
