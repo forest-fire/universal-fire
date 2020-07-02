@@ -57,7 +57,110 @@ export declare type ListUsersResult = import('firebase-admin').auth.ListUsersRes
 export declare type UpdateRequest = import('firebase-admin').auth.UpdateRequest;
 export declare type UserRecord = import('firebase-admin').auth.UserRecord;
 export declare type IAdminAuth = adminAuth.Auth;
-export declare type IServiceAccount = import('firebase-admin').ServiceAccount;
+import type { default as admin } from 'firebase-admin';
+export interface IAdminDatabaseApi {
+    DataSnapshot: admin.database.DataSnapshot;
+    Database: admin.database.Database;
+    EventType: admin.database.EventType;
+    OnDisconnect: admin.database.OnDisconnect;
+    Query: admin.database.Query;
+    Reference: admin.database.Reference;
+    ThenableReference: admin.database.ThenableReference;
+}
+export interface IAdminAuthApi {
+    ActionCodeSettings: admin.auth.ActionCodeSettings;
+    Auth: admin.auth.Auth;
+    AuthProviderConfig: admin.auth.AuthProviderConfig;
+    AuthProviderConfigFilter: admin.auth.AuthProviderConfigFilter;
+    BaseAuth: admin.auth.BaseAuth;
+    CreateMultiFactorInfoRequest: admin.auth.CreateMultiFactorInfoRequest;
+    CreatePhoneMultiFactorInfoRequest: admin.auth.CreatePhoneMultiFactorInfoRequest;
+    CreateRequest: admin.auth.CreateRequest;
+    CreateTenantRequest: admin.auth.CreateTenantRequest;
+    DecodedIdToken: admin.auth.DecodedIdToken;
+    DeleteUsersResult: admin.auth.DeleteUsersResult;
+    GetUsersResult: admin.auth.GetUsersResult;
+    HashAlgorithmType: admin.auth.HashAlgorithmType;
+    ListProviderConfigResults: admin.auth.ListProviderConfigResults;
+    ListTenantsResult: admin.auth.ListTenantsResult;
+    ListUsersResult: admin.auth.ListUsersResult;
+    MultiFactorCreateSettings: admin.auth.MultiFactorCreateSettings;
+    MultiFactorInfo: admin.auth.MultiFactorInfo;
+    MultiFactorUpdateSettings: admin.auth.MultiFactorUpdateSettings;
+    OIDCAuthProviderConfig: admin.auth.OIDCAuthProviderConfig;
+    OIDCUpdateAuthProviderRequest: admin.auth.OIDCUpdateAuthProviderRequest;
+    PhoneMultiFactorInfo: admin.auth.PhoneMultiFactorInfo;
+    SAMLAuthProviderConfig: admin.auth.SAMLAuthProviderConfig;
+    SAMLUpdateAuthProviderRequest: admin.auth.SAMLUpdateAuthProviderRequest;
+    SessionCookieOptions: admin.auth.SessionCookieOptions;
+    Tenant: admin.auth.Tenant;
+    TenantAwareAuth: admin.auth.TenantAwareAuth;
+    TenantManager: admin.auth.TenantManager;
+    UpdateAuthProviderRequest: admin.auth.UpdateAuthProviderRequest;
+    UpdateMultiFactorInfoRequest: admin.auth.UpdateMultiFactorInfoRequest;
+    UpdateRequest: admin.auth.UpdateRequest;
+    UpdateTenantRequest: admin.auth.UpdateTenantRequest;
+    UserImportOptions: admin.auth.UserImportOptions;
+    UserImportRecord: admin.auth.UserImportRecord;
+    UserImportResult: admin.auth.UserImportResult;
+    UserInfo: admin.auth.UserInfo;
+    UserMetadata: admin.auth.UserMetadata;
+    UserRecord: admin.auth.UserRecord;
+}
+export interface IAdminMessagingApi {
+    AndroidConfig: admin.messaging.AndroidConfig;
+    AndroidFcmOptions: admin.messaging.AndroidFcmOptions;
+    AndroidNotification: admin.messaging.AndroidNotification;
+    ApnsConfig: admin.messaging.ApnsConfig;
+    ApnsFcmOptions: admin.messaging.ApnsFcmOptions;
+    ApnsPayload: admin.messaging.ApnsPayload;
+    Aps: admin.messaging.Aps;
+    ApsAlert: admin.messaging.ApsAlert;
+    BatchResponse: admin.messaging.BatchResponse;
+    CriticalSound: admin.messaging.CriticalSound;
+    DataMessagePayload: admin.messaging.DataMessagePayload;
+    FcmOptions: admin.messaging.FcmOptions;
+    LightSettings: admin.messaging.LightSettings;
+    Message: admin.messaging.Message;
+    Messaging: admin.messaging.Messaging;
+    MessagingConditionResponse: admin.messaging.MessagingConditionResponse;
+    MessagingDeviceGroupResponse: admin.messaging.MessagingDeviceGroupResponse;
+    MessagingDeviceResult: admin.messaging.MessagingDeviceResult;
+}
+export interface IAdminFirestoreApi {
+    CollectionReference: admin.firestore.CollectionReference;
+    DocumentData: admin.firestore.DocumentData;
+    DocumentReference: admin.firestore.DocumentReference;
+    DocumentSnapshot: admin.firestore.DocumentSnapshot;
+    FieldPath: admin.firestore.FieldPath;
+    FieldValue: admin.firestore.FieldValue;
+    Firestore: admin.firestore.Firestore;
+    GeoPoint: admin.firestore.GeoPoint;
+    Query: admin.firestore.Query;
+    QueryDocumentSnapshot: admin.firestore.QueryDocumentSnapshot;
+    QuerySnapshot: admin.firestore.QuerySnapshot;
+    Timestamp: admin.firestore.Timestamp;
+    Transaction: admin.firestore.Transaction;
+    WriteBatch: admin.firestore.WriteBatch;
+    WriteResult: admin.firestore.WriteResult;
+}
+/** this is a partially complete typing of Admin interface */
+export interface IAdminFirebaseNamespace {
+    app: (name?: string) => admin.app.App;
+    apps: (admin.app.App | null)[];
+    initializeApp: (options?: admin.AppOptions, name?: string) => admin.app.App;
+    AppOptions: admin.AppOptions;
+    database: () => IAdminDatabaseApi;
+    firestore: (app?: any) => IAdminFirestoreApi;
+    auth: ((app?: any) => IAdminAuth) & IAdminAuthApi;
+    messaging: () => IAdminMessagingApi;
+    serviceAccount: admin.ServiceAccount;
+    GoogleOAuthAccessToken: admin.GoogleOAuthAccessToken;
+    credential: {
+        cert: (serviceAccountPathOrObject: string | admin.ServiceAccount) => admin.credential.Credential;
+    };
+}
+export declare type IServiceAccount = admin.ServiceAccount;
 export declare type IAdminApp = adminApp.App;
 export declare type IAdminFirestoreDatabase = adminFirestore.Firestore;
 export declare type IFirestoreDatabase = IClientFirestoreDatabase | IAdminFirestoreDatabase;

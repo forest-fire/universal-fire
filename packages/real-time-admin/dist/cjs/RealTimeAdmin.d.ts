@@ -1,4 +1,4 @@
-import { IAbstractedDatabase, IAdminApp, IAdminAuth, IAdminConfig, IAdminRtdbDatabase, IMockConfig, SDK } from '@forest-fire/types';
+import { IAbstractedDatabase, IAdminApp, IAdminAuth, IAdminConfig, IAdminRtdbDatabase, IMockConfig, SDK, IAdminFirebaseNamespace } from '@forest-fire/types';
 import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
 import { EventManager } from './EventManager';
 import type { Mock as IMockApi } from 'firemock';
@@ -11,6 +11,7 @@ export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb, IA
     static connect(config?: IAdminConfig | IMockConfig): Promise<RealTimeAdmin>;
     private static _connections;
     static get connections(): string[];
+    protected _admin?: IAdminFirebaseNamespace;
     protected _eventManager: EventManager;
     protected _clientType: string;
     protected _isAuthorized: boolean;
@@ -40,6 +41,7 @@ export declare class RealTimeAdmin extends RealTimeDb implements IRealTimeDb, IA
     get isConnected(): boolean;
     connect(): Promise<RealTimeAdmin>;
     protected _connectMockDb(config: IMockConfig): Promise<this>;
+    protected _loadAdminApi(): Promise<IAdminFirebaseNamespace>;
     protected _connectRealDb(config: IAdminConfig): Promise<void>;
     /**
      * listenForConnectionStatus

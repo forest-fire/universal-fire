@@ -1,5 +1,4 @@
 import { EventEmitter } from 'events';
-import firebase from 'firebase-admin';
 
 class FireError extends Error {
     constructor(message, 
@@ -121,17 +120,6 @@ function extractDataUrl(config) {
  */
 function getRunningApps(apps) {
     return apps.filter((i) => i !== null).map((i) => i.name);
-}
-
-/** Gets the  */
-function getRunningFirebaseApp(name, apps) {
-    const result = name
-        ? apps.find((i) => i && i.name === name)
-        : undefined;
-    if (!result) {
-        throw new FireError(`Attempt to get the Firebase app named "${name}" failed`, 'invalid-app-name');
-    }
-    return result;
 }
 
 function looksLikeJson(data) {
@@ -7304,24 +7292,36 @@ let RealTimeAdmin = /** @class */ (() => {
                 databaseURL: extractDataUrl(config),
                 name: determineDefaultAppName(config),
             };
-            if (isAdminConfig(config)) {
-                this._config = config;
-                const runningApps = getRunningApps(firebase.apps);
-                RealTimeAdmin._connections = firebase.apps;
-                const credential = firebase.credential.cert(config.serviceAccount);
-                this._app = runningApps.includes(this._config.name)
-                    ? getRunningFirebaseApp(config.name, firebase.apps)
-                    : firebase.initializeApp({
-                        credential,
-                        databaseURL: config.databaseURL,
-                    }, config.name);
-            }
-            else if (isMockConfig(config)) {
-                this._config = config;
-            }
-            else {
-                throw new FireError(`The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(config, null, 2)}`, 'invalid-configuration');
-            }
+            this._config = config;
+            // if (isAdminConfig(config)) {
+            //   this._config = config;
+            //   const runningApps = getRunningApps(firebase.apps);
+            //   RealTimeAdmin._connections = firebase.apps;
+            //   const credential = firebase.credential.cert(config.serviceAccount);
+            //   this._app = runningApps.includes(this._config.name)
+            //     ? getRunningFirebaseApp<IAdminApp>(
+            //         config.name,
+            //         (firebase.apps as unknown) as IAdminApp[]
+            //       )
+            //     : firebase.initializeApp(
+            //         {
+            //           credential,
+            //           databaseURL: config.databaseURL,
+            //         },
+            //         config.name
+            //       );
+            // } else if (isMockConfig(config)) {
+            //   this._config = config;
+            // } else {
+            //   throw new FireError(
+            //     `The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(
+            //       config,
+            //       null,
+            //       2
+            //     )}`,
+            //     'invalid-configuration'
+            //   );
+            // }
         }
         /**
          * Instantiates a DB and then waits for the connection
@@ -7361,7 +7361,8 @@ let RealTimeAdmin = /** @class */ (() => {
             if (this._config.mocking) {
                 return adminAuthSdk;
             }
-            return firebase.auth(this._app);
+            //TODO: check this typing
+            return this._admin.auth(this._app);
         }
         goOnline() {
             if (this._database) {
@@ -7391,7 +7392,7 @@ let RealTimeAdmin = /** @class */ (() => {
             return (this._app &&
                 this.config &&
                 this.config.name &&
-                getRunningApps(firebase.apps).includes(this.config.name));
+                getRunningApps(this._admin.apps).includes(this.config.name));
         }
         async connect() {
             if (isMockConfig(this._config)) {
@@ -7413,14 +7414,23 @@ let RealTimeAdmin = /** @class */ (() => {
             this._isConnected = true;
             return this;
         }
+        async _loadAdminApi() {
+            const api = (await import('firebase-admin'));
+            return api;
+        }
         async _connectRealDb(config) {
-            const found = firebase.apps.find((i) => i.name === this.config.name);
+            if (!this._admin) {
+                this._admin = (await import('firebase-admin'));
+            }
+            const found = this._admin.apps.find((i) => i.name === this.config.name);
             this._database = (found &&
                 found.database &&
                 typeof found.database !== 'function'
                 ? found.database
                 : this._app.database());
-            this.enableDatabaseLogging = firebase.database.enableLogging.bind(firebase.database);
+            // this.enableDatabaseLogging = this._admin.database.enableLogging.bind(
+            //   this._admin.database
+            // );
             this.goOnline();
             this._eventManager.connection(true);
             await this._listenForConnectionStatus();

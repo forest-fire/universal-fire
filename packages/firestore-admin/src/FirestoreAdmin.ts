@@ -1,13 +1,4 @@
 import {
-  app,
-  apps,
-  credential as fbCredential,
-  initializeApp,
-  auth,
-  firestore,
-} from 'firebase-admin';
-
-import {
   FireError,
   determineDefaultAppName,
   extractDataUrl,
@@ -25,6 +16,7 @@ import {
   SDK,
   isAdminConfig,
   isMockConfig,
+  IAdminFirebaseNamespace,
 } from '@forest-fire/types';
 
 import { FirestoreDb } from '@forest-fire/firestore-db';
@@ -41,6 +33,7 @@ export class FirestoreAdmin extends FirestoreDb
 
   protected _isAdminApi = true;
   protected _auth?: IAdminAuth;
+  protected _admin?: IAdminFirebaseNamespace;
   protected _app!: IAdminApp;
   protected _config: IAdminConfig | IMockConfig;
 
@@ -77,15 +70,30 @@ export class FirestoreAdmin extends FirestoreDb
     this._config = config;
   }
 
+  /**
+   * Connects the database by async loading the npm dependencies
+   * for the Admin API. This is all that is needed to be considered
+   * "connected" in an Admin SDK.
+   */
   public async connect(): Promise<FirestoreAdmin> {
     if (this._isConnected) {
-      console.info(`Firestore ${this.config.name} already connected`);
+      console.info(
+        `Firestore already connected to app name "${this.config.name}"`
+      );
       return this;
     }
     if (isAdminConfig(this._config)) {
       await this._connectRealDb(this._config);
     } else if (isMockConfig(this._config)) {
       await this._connectMockDb(this._config);
+    } else {
+      console.warn(
+        `Call to connect() being ignored as the configuration was not recognized as a valid admin or mock config. The config was: ${JSON.stringify(
+          this._config,
+          null,
+          2
+        )}`
+      );
     }
   }
 
@@ -95,26 +103,46 @@ export class FirestoreAdmin extends FirestoreDb
         `The auth API for MOCK databases is not yet implemented for Firestore`
       );
     }
+    if (this._admin) {
+      throw new FireError(
+        `Attempt to call Auth API initializer before setting up the firebase namespace!`,
+        'not-allowed'
+      );
+    }
 
-    return auth(this._app as app.App);
+    return this._admin.auth(this._app) as IAdminAuth;
+  }
+
+  protected async _loadAdminApi() {
+    const api = ((await import(
+      'firebase-admin'
+    )) as unknown) as IAdminFirebaseNamespace;
+    return api;
   }
 
   protected async _connectRealDb(config: IAdminConfig) {
+    if (!this._admin) {
+      this._admin = ((await import(
+        'firebase-admin'
+      )) as unknown) as IAdminFirebaseNamespace;
+    }
+
     if (!config?.serviceAccount) {
       throw new FireError(
         `There was no service account found in the configuration!`
       );
     }
-    const runningApps = getRunningApps(apps);
-    const credential = fbCredential.cert(config.serviceAccount);
+
+    const runningApps = getRunningApps(this._admin.apps);
+    const credential = this._admin.credential.cert(config.serviceAccount);
 
     if (!this._isConnected) {
       this._app = runningApps.includes(config.name)
         ? getRunningFirebaseApp<IAdminApp>(
             config.name,
-            (apps as unknown) as IAdminApp[]
+            (this._admin.apps as unknown) as IAdminApp[]
           )
-        : initializeApp(
+        : this._admin.initializeApp(
             {
               credential,
               databaseURL: config.databaseURL,

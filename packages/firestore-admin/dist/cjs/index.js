@@ -2,7 +2,24 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var firebaseAdmin = require('firebase-admin');
+function _interopNamespace(e) {
+    if (e && e.__esModule) { return e; } else {
+        var n = {};
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                var d = Object.getOwnPropertyDescriptor(e, k);
+                Object.defineProperty(n, k, d.get ? d : {
+                    enumerable: true,
+                    get: function () {
+                        return e[k];
+                    }
+                });
+            });
+        }
+        n['default'] = e;
+        return n;
+    }
+}
 
 class FireError extends Error {
     constructor(message, 
@@ -397,9 +414,14 @@ class FirestoreAdmin extends FirestoreDb {
         await obj.connect();
         return obj;
     }
+    /**
+     * Connects the database by async loading the npm dependencies
+     * for the Admin API. This is all that is needed to be considered
+     * "connected" in an Admin SDK.
+     */
     async connect() {
         if (this._isConnected) {
-            console.info(`Firestore ${this.config.name} already connected`);
+            console.info(`Firestore already connected to app name "${this.config.name}"`);
             return this;
         }
         if (isAdminConfig(this._config)) {
@@ -408,23 +430,36 @@ class FirestoreAdmin extends FirestoreDb {
         else if (isMockConfig(this._config)) {
             await this._connectMockDb(this._config);
         }
+        else {
+            console.warn(`Call to connect() being ignored as the configuration was not recognized as a valid admin or mock config. The config was: ${JSON.stringify(this._config, null, 2)}`);
+        }
     }
     async auth() {
         if (this._config.mocking) {
             throw new FireError(`The auth API for MOCK databases is not yet implemented for Firestore`);
         }
-        return firebaseAdmin.auth(this._app);
+        if (this._admin) {
+            throw new FireError(`Attempt to call Auth API initializer before setting up the firebase namespace!`, 'not-allowed');
+        }
+        return this._admin.auth(this._app);
+    }
+    async _loadAdminApi() {
+        const api = (await Promise.resolve().then(function () { return _interopNamespace(require('firebase-admin')); }));
+        return api;
     }
     async _connectRealDb(config) {
+        if (!this._admin) {
+            this._admin = (await Promise.resolve().then(function () { return _interopNamespace(require('firebase-admin')); }));
+        }
         if (!config?.serviceAccount) {
             throw new FireError(`There was no service account found in the configuration!`);
         }
-        const runningApps = getRunningApps(firebaseAdmin.apps);
-        const credential = firebaseAdmin.credential.cert(config.serviceAccount);
+        const runningApps = getRunningApps(this._admin.apps);
+        const credential = this._admin.credential.cert(config.serviceAccount);
         if (!this._isConnected) {
             this._app = runningApps.includes(config.name)
-                ? getRunningFirebaseApp(config.name, firebaseAdmin.apps)
-                : firebaseAdmin.initializeApp({
+                ? getRunningFirebaseApp(config.name, this._admin.apps)
+                : this._admin.initializeApp({
                     credential,
                     databaseURL: config.databaseURL,
                 }, config.name);
