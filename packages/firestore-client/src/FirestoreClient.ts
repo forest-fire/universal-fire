@@ -15,6 +15,8 @@ import {
   isClientConfig,
   isMockConfig,
   FirebaseNamespace,
+  IFirestoreDatabase,
+  IClientFirestoreDatabase,
 } from '@forest-fire/types';
 
 import type { Mock as IMockApi } from 'firemock';
@@ -82,16 +84,26 @@ export class FirestoreClient extends FirestoreDb
     return this._auth;
   }
 
-  protected async loadFirebaseApi() {
-    return await import('@firebase/app');
+  protected async loadFirebaseAppApi() {
+    return ((await import('@firebase/app')) as unknown) as IClientApp;
   }
 
-  protected async loadAuthApi() {
-    return import('@firebase/auth');
+  protected async loadAuthApi(): Promise<IClientAuth> {
+    return (import('@firebase/auth') as unknown) as IClientAuth;
   }
 
-  protected async loadFirestoreApi() {
-    return import('@firebase/firestore');
+  /**
+   * This loads the firestore API but more importantly this makes the
+   * firestore function available off the Firebase App API which provides
+   * us instances of the of the firestore API.
+   */
+  protected async loadFirestoreApi(): Promise<IClientFirestoreDatabase> {
+    // TODO: the typing return here is being ignored because we're using this
+    // only as a pre-step to use the App API but in fact this probably does
+    // return the static Firestore API which may very well be useful.
+    return (import(
+      '@firebase/firestore'
+    ) as unknown) as IClientFirestoreDatabase;
   }
 
   /**
@@ -109,13 +121,22 @@ export class FirestoreClient extends FirestoreDb
   protected async _connectRealDb(config: IClientConfig) {
     if (!this._isConnected) {
       await this.loadFirestoreApi();
-      if (config.useAuth) {
-        // await this.loadAuthApi();
-        this._auth = this._app.auth();
-      }
-      const firebase = ((await this.loadFirebaseApi()) as unknown) as FirebaseNamespace & {
-        firestore: any;
+      let firebase: FirebaseNamespace & {
+        firestore: (appOptions?: any) => IClientFirestoreDatabase;
+        auth: () => IClientAuth | undefined;
       };
+      if (config.useAuth) {
+        this._auth = await this.loadAuthApi();
+        firebase = ((await this.loadFirebaseAppApi()) as unknown) as FirebaseNamespace & {
+          firestore: (appOptions?: any) => IClientFirestoreDatabase;
+          auth: () => IClientAuth;
+        };
+      } else {
+        firebase = ((await this.loadFirebaseAppApi()) as unknown) as FirebaseNamespace & {
+          firestore: (appOptions?: any) => IClientFirestoreDatabase;
+          auth: undefined;
+        };
+      }
       const runningApps = getRunningApps(firebase.apps);
       this._app = runningApps.includes(config.name)
         ? (getRunningFirebaseApp<IClientApp>(

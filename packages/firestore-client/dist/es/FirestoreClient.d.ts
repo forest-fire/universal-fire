@@ -1,5 +1,5 @@
 import { FirestoreDb, IFirestoreDb } from '@forest-fire/firestore-db';
-import { IAbstractedDatabase, IClientApp, IClientAuth, IClientConfig, IMockConfig, SDK, FirebaseNamespace } from '@forest-fire/types';
+import { IAbstractedDatabase, IClientApp, IClientAuth, IClientConfig, IMockConfig, SDK, FirebaseNamespace, IClientFirestoreDatabase } from '@forest-fire/types';
 import type { Mock as IMockApi } from 'firemock';
 export declare class FirestoreClient extends FirestoreDb implements IFirestoreDb, IAbstractedDatabase<IMockApi> {
     sdk: SDK;
@@ -13,14 +13,14 @@ export declare class FirestoreClient extends FirestoreDb implements IFirestoreDb
     constructor(config?: IClientConfig | IMockConfig);
     connect(): Promise<FirestoreClient>;
     auth(): Promise<IClientAuth>;
-    protected loadFirebaseApi(): Promise<typeof import("@firebase/app")>;
-    protected loadAuthApi(): Promise<{
-        default: typeof import("@firebase/auth");
-    }>;
-    protected loadFirestoreApi(): Promise<{
-        default: typeof import("@firebase/firestore");
-        registerFirestore(instance: import("@firebase/app-types").FirebaseNamespace): void;
-    }>;
+    protected loadFirebaseAppApi(): Promise<import("@firebase/app-types").FirebaseApp>;
+    protected loadAuthApi(): Promise<IClientAuth>;
+    /**
+     * This loads the firestore API but more importantly this makes the
+     * firestore function available off the Firebase App API which provides
+     * us instances of the of the firestore API.
+     */
+    protected loadFirestoreApi(): Promise<IClientFirestoreDatabase>;
     /**
      * The steps needed to connect a database to a Firemock
      * mocked DB.

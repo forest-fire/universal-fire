@@ -358,13 +358,21 @@ class FirestoreClient extends FirestoreDb {
         this._auth = this._app.auth();
         return this._auth;
     }
-    async loadFirebaseApi() {
-        return await import('./index.esm-77aeca66.js').then(function (n) { return n.m; });
+    async loadFirebaseAppApi() {
+        return (await import('./index.esm-77aeca66.js').then(function (n) { return n.m; }));
     }
     async loadAuthApi() {
         return import('./auth.esm-dfb8311a.js');
     }
+    /**
+     * This loads the firestore API but more importantly this makes the
+     * firestore function available off the Firebase App API which provides
+     * us instances of the of the firestore API.
+     */
     async loadFirestoreApi() {
+        // TODO: the typing return here is being ignored because we're using this
+        // only as a pre-step to use the App API but in fact this probably does
+        // return the static Firestore API which may very well be useful.
         return import('./index.esm-d395a947.js');
     }
     /**
@@ -381,11 +389,14 @@ class FirestoreClient extends FirestoreDb {
     async _connectRealDb(config) {
         if (!this._isConnected) {
             await this.loadFirestoreApi();
+            let firebase;
             if (config.useAuth) {
-                // await this.loadAuthApi();
-                this._auth = this._app.auth();
+                this._auth = await this.loadAuthApi();
+                firebase = (await this.loadFirebaseAppApi());
             }
-            const firebase = (await this.loadFirebaseApi());
+            else {
+                firebase = (await this.loadFirebaseAppApi());
+            }
             const runningApps = getRunningApps(firebase.apps);
             this._app = runningApps.includes(config.name)
                 ? getRunningFirebaseApp(config.name, firebase.apps)
