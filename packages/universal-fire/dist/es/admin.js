@@ -1,4 +1,5 @@
 export * from './proxy-symbols';
+export * from './sdk-types';
 export class FirestoreAdmin {
     static async connect() {
         const admin = (await import('@forest-fire/firestore-admin'));

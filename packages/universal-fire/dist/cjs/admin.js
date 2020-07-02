@@ -24,6 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RealTimeAdmin = exports.FirestoreAdmin = void 0;
 __exportStar(require("./proxy-symbols"), exports);
+__exportStar(require("./sdk-types"), exports);
 class FirestoreAdmin {
     static async connect() {
         const admin = (await Promise.resolve().then(() => __importStar(require('@forest-fire/firestore-admin'))));
