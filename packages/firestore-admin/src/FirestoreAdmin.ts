@@ -17,6 +17,7 @@ import {
   isAdminConfig,
   isMockConfig,
   IAdminFirebaseNamespace,
+  IAdminFirestoreDatabase,
 } from '@forest-fire/types';
 
 import { FirestoreDb } from '@forest-fire/firestore-db';
@@ -33,6 +34,7 @@ export class FirestoreAdmin extends FirestoreDb
 
   protected _isAdminApi = true;
   protected _auth?: IAdminAuth;
+  protected _firestore?: IAdminFirestoreDatabase;
   protected _admin?: IAdminFirebaseNamespace;
   protected _app!: IAdminApp;
   protected _config: IAdminConfig | IMockConfig;
@@ -127,7 +129,7 @@ export class FirestoreAdmin extends FirestoreDb
       )) as unknown) as IAdminFirebaseNamespace;
     }
 
-    if (!config?.serviceAccount) {
+    if (!config.serviceAccount) {
       throw new FireError(
         `There was no service account found in the configuration!`
       );
@@ -149,6 +151,9 @@ export class FirestoreAdmin extends FirestoreDb
             },
             config.name
           );
+
+      this._firestore = this._admin.firestore(this._app);
+      this;
     }
   }
   /**

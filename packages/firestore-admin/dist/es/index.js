@@ -428,7 +428,7 @@ class FirestoreAdmin extends FirestoreDb {
         if (!this._admin) {
             this._admin = (await import('firebase-admin'));
         }
-        if (!config?.serviceAccount) {
+        if (!config.serviceAccount) {
             throw new FireError(`There was no service account found in the configuration!`);
         }
         const runningApps = getRunningApps(this._admin.apps);
