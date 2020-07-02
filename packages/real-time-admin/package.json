@@ -71,7 +71,8 @@
     "typescript": "^3.9.2"
   },
   "peerDependencies": {
-    "firebase-admin": ">=8.13.0"
+    "firebase-admin": ">=8.13.0",
+    "firemock": ">= 0.53.24"
   },
   "dependencies": {
     "@firebase/app": "^0.6.4",

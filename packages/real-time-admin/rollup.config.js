@@ -10,7 +10,7 @@ function moduleExport(choice) {
       format: choice,
       sourcemap: true,
     },
-    external: ['@firebase/firestore', 'events', 'firebase-admin'],
+    external: ['events', 'firebase-admin', '@grpc/grpc-js', 'firemock'],
     plugins: [
       commonjs(),
       resolve(),
