@@ -1,3 +1,5 @@
+import firebase from 'firebase-admin';
+
 class FireError extends Error {
     constructor(message, 
     /**
@@ -240,7 +242,7 @@ class AbstractedDatabase {
      */
     async getFireMock(config = {}) {
         const FireMock = await import(
-        /* webpackChunkName: "firemock" */ './index-0524e087.js');
+        /* webpackChunkName: "firemock" */ 'firemock');
         this._mock = await FireMock.Mock.prepare(config);
     }
 }
@@ -415,31 +417,22 @@ class FirestoreAdmin extends FirestoreDb {
         if (this._config.mocking) {
             throw new FireError(`The auth API for MOCK databases is not yet implemented for Firestore`);
         }
-        if (this._admin) {
-            throw new FireError(`Attempt to call Auth API initializer before setting up the firebase namespace!`, 'not-allowed');
-        }
-        return this._admin.auth(this._app);
-    }
-    async _loadAdminApi() {
-        const api = (await import('firebase-admin'));
-        return api;
+        return firebase.auth(this._app);
     }
     async _connectRealDb(config) {
-        if (!this._admin) {
-            this._admin = (await import('firebase-admin'));
-        }
         if (!config.serviceAccount) {
             throw new FireError(`There was no service account found in the configuration!`);
         }
-        const runningApps = getRunningApps(this._admin.apps);
-        const credential = this._admin.credential.cert(config.serviceAccount);
+        const runningApps = getRunningApps(firebase.apps);
+        const credential = firebase.credential.cert(config.serviceAccount);
         if (!this._isConnected) {
             this._app = runningApps.includes(config.name)
-                ? getRunningFirebaseApp(config.name, this._admin.apps)
-                : this._admin.initializeApp({
+                ? getRunningFirebaseApp(config.name, firebase.apps)
+                : firebase.initializeApp({
                     credential,
                     databaseURL: config.databaseURL,
                 }, config.name);
+            // this._firestore = firebase.firestore(this._app);
         }
     }
     /**

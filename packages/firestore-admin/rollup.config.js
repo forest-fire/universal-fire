@@ -1,4 +1,5 @@
 import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 
@@ -10,8 +11,9 @@ function moduleExport(choice) {
       format: choice,
       sourcemap: true,
     },
-    external: ['@firebase/database', 'events', 'firebase-admin'],
+    external: ['events', 'firebase-admin', 'firemock'],
     plugins: [
+      json(),
       commonjs(),
       resolve(),
       typescript({

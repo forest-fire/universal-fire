@@ -16,12 +16,12 @@ import {
   SDK,
   isAdminConfig,
   isMockConfig,
-  IAdminFirebaseNamespace,
   IAdminFirestoreDatabase,
 } from '@forest-fire/types';
 
 import { FirestoreDb } from '@forest-fire/firestore-db';
 import type { Mock as IMockApi } from 'firemock';
+import firebase from 'firebase-admin';
 
 export class FirestoreAdmin extends FirestoreDb
   implements IAdminSdk, IAbstractedDatabase<IMockApi> {
@@ -35,7 +35,6 @@ export class FirestoreAdmin extends FirestoreDb
   protected _isAdminApi = true;
   protected _auth?: IAdminAuth;
   protected _firestore?: IAdminFirestoreDatabase;
-  protected _admin?: IAdminFirebaseNamespace;
   protected _app!: IAdminApp;
   protected _config: IAdminConfig | IMockConfig;
 
@@ -105,46 +104,27 @@ export class FirestoreAdmin extends FirestoreDb
         `The auth API for MOCK databases is not yet implemented for Firestore`
       );
     }
-    if (this._admin) {
-      throw new FireError(
-        `Attempt to call Auth API initializer before setting up the firebase namespace!`,
-        'not-allowed'
-      );
-    }
 
-    return this._admin.auth(this._app) as IAdminAuth;
-  }
-
-  protected async _loadAdminApi() {
-    const api = ((await import(
-      'firebase-admin'
-    )) as unknown) as IAdminFirebaseNamespace;
-    return api;
+    return firebase.auth(this._app) as IAdminAuth;
   }
 
   protected async _connectRealDb(config: IAdminConfig) {
-    if (!this._admin) {
-      this._admin = ((await import(
-        'firebase-admin'
-      )) as unknown) as IAdminFirebaseNamespace;
-    }
-
     if (!config.serviceAccount) {
       throw new FireError(
         `There was no service account found in the configuration!`
       );
     }
 
-    const runningApps = getRunningApps(this._admin.apps);
-    const credential = this._admin.credential.cert(config.serviceAccount);
+    const runningApps = getRunningApps(firebase.apps);
+    const credential = firebase.credential.cert(config.serviceAccount);
 
     if (!this._isConnected) {
       this._app = runningApps.includes(config.name)
         ? getRunningFirebaseApp<IAdminApp>(
             config.name,
-            (this._admin.apps as unknown) as IAdminApp[]
+            (firebase.apps as unknown) as IAdminApp[]
           )
-        : this._admin.initializeApp(
+        : firebase.initializeApp(
             {
               credential,
               databaseURL: config.databaseURL,
@@ -152,8 +132,7 @@ export class FirestoreAdmin extends FirestoreDb
             config.name
           );
 
-      this._firestore = this._admin.firestore(this._app);
-      this;
+      // this._firestore = firebase.firestore(this._app);
     }
   }
   /**

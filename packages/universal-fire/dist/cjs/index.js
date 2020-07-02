@@ -11,5 +11,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./proxy-symbols"), exports);
+__exportStar(require("./sdk-types"), exports);
 __exportStar(require("./sdks"), exports);
 //# sourceMappingURL=index.js.map
