@@ -240,7 +240,7 @@ class AbstractedDatabase {
      */
     async getFireMock(config = {}) {
         const FireMock = await import(
-        /* webpackChunkName: "firemock" */ 'firemock');
+        /* webpackChunkName: "firemock" */ './index-7a9e11a7.js');
         this._mock = await FireMock.Mock.prepare(config);
     }
 }

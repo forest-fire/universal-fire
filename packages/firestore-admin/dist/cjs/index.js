@@ -262,8 +262,8 @@ class AbstractedDatabase {
      * then sets `isConnected` to **true**
      */
     async getFireMock(config = {}) {
-        const FireMock = await Promise.resolve().then(function () { return _interopNamespace(require(
-        /* webpackChunkName: "firemock" */ 'firemock')); });
+        const FireMock = await Promise.resolve().then(function () { return require(
+        /* webpackChunkName: "firemock" */ './index-4556b15d.js'); });
         this._mock = await FireMock.Mock.prepare(config);
     }
 }
