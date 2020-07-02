@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.53.31",
+  "version": "0.53.32",
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -47,7 +47,7 @@
     "@forest-fire/firestore-client": "^0.53.26",
     "@forest-fire/real-time-admin": "^0.53.31",
     "@forest-fire/real-time-client": "^0.53.31",
-    "@forest-fire/serialized-query": "^0.53.31",
+    "@forest-fire/serialized-query": "^0.53.32",
     "@forest-fire/serializer-factory": "^0.53.31",
     "@forest-fire/types": "^0.53.25",
     "common-types": "^1.15.8"
