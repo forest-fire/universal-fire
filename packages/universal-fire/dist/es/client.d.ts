@@ -1,3 +1,3 @@
 export * from './proxy-symbols';
 export * from './sdk-types';
-export * from './sdks';
+export * from './client-sdks';

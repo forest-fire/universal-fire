@@ -1,7 +1,4 @@
-import { IFirestoreAdmin, IRealTimeAdmin } from './index';
-
-export { RealTimeClient } from '@forest-fire/real-time-client';
-export { FirestoreClient } from '@forest-fire/firestore-client';
+import { IFirestoreAdmin, IRealTimeAdmin } from '../sdk-types';
 
 export class FirestoreAdmin {
   static async connect() {

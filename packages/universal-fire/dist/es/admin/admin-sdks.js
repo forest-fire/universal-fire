@@ -1,5 +1,3 @@
-export { RealTimeClient } from '@forest-fire/real-time-client';
-export { FirestoreClient } from '@forest-fire/firestore-client';
 export class FirestoreAdmin {
     static async connect() {
         const admin = (await import('@forest-fire/firestore-admin'));
@@ -12,4 +10,4 @@ export class RealTimeAdmin {
         return admin.connect();
     }
 }
-//# sourceMappingURL=sdks.js.map
+//# sourceMappingURL=admin-sdks.js.map

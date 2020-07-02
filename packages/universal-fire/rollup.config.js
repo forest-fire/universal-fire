@@ -1,11 +1,11 @@
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 
-function moduleExport(choice) {
+function moduleExport(choice, isAdmin) {
   return {
-    input: './src/index.ts',
+    input: './src/${isAdmin ? "admin" : "client"}.ts',
     output: {
-      dir: `./dist/${choice}`,
+      dir: `./dist/${choice}${isAdmin ? '/admin' : false}`,
       format: choice,
       sourcemap: true,
     },
@@ -26,4 +26,9 @@ function moduleExport(choice) {
   };
 }
 
-export default [moduleExport('es'), moduleExport('cjs')];
+export default [
+  moduleExport('es', false),
+  moduleExport('cjs', false),
+  moduleExport('es', true),
+  moduleExport('cjs', true),
+];

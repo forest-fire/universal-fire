@@ -20,10 +20,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RealTimeAdmin = exports.FirestoreAdmin = void 0;
-var real_time_client_1 = require("@forest-fire/real-time-client");
-Object.defineProperty(exports, "RealTimeClient", { enumerable: true, get: function () { return real_time_client_1.RealTimeClient; } });
-var firestore_client_1 = require("@forest-fire/firestore-client");
-Object.defineProperty(exports, "FirestoreClient", { enumerable: true, get: function () { return firestore_client_1.FirestoreClient; } });
 class FirestoreAdmin {
     static async connect() {
         const admin = (await Promise.resolve().then(() => __importStar(require('@forest-fire/firestore-admin'))));
@@ -38,4 +34,4 @@ class RealTimeAdmin {
     }
 }
 exports.RealTimeAdmin = RealTimeAdmin;
-//# sourceMappingURL=sdks.js.map
+//# sourceMappingURL=admin-sdks.js.map
