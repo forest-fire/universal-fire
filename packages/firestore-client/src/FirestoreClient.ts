@@ -14,9 +14,9 @@ import {
   SDK,
   isClientConfig,
   isMockConfig,
+  FirebaseNamespace,
 } from '@forest-fire/types';
 
-import { firebase } from '@firebase/app';
 import type { Mock as IMockApi } from 'firemock';
 
 export class FirestoreClient extends FirestoreDb
@@ -31,11 +31,12 @@ export class FirestoreClient extends FirestoreDb
   protected _isAdminApi = false;
   protected _auth?: IClientAuth;
   protected _app!: IClientApp;
+  protected _firestore: any;
   protected _config: IClientConfig | IMockConfig;
+  protected _authProviders: FirebaseNamespace['auth'];
 
   constructor(config?: IClientConfig | IMockConfig) {
     super();
-    import('@firebase/firestore');
 
     if (!config) {
       config = extractClientConfig();
@@ -46,48 +47,23 @@ export class FirestoreClient extends FirestoreDb
         );
       }
     }
-    if (isMockConfig(config)) {
-      throw new FireError(
-        `Mock is not supported by Firestore`,
-        `invalid-configuration`
-      );
-    }
-    if (isClientConfig(config)) {
-      config.name =
-        config.name || config.databaseURL
-          ? config.databaseURL.replace(/.*https:\W*([\w-]*)\.((.|\n)*)/g, '$1')
-          : '[DEFAULT]';
-      try {
-        const runningApps = getRunningApps(firebase.apps);
-        this._app = runningApps.includes(config.name)
-          ? getRunningFirebaseApp<IClientApp>(config.name, firebase.apps)
-          : firebase.initializeApp(config, config.name);
-      } catch (e) {
-        if (e.message && e.message.indexOf('app/duplicate-app') !== -1) {
-          console.log(`The "${config.name}" app already exists; will proceed.`);
-        } else {
-          throw e;
-        }
-      }
-    } else {
-      throw new FireError(
-        `The configuration passed to FiresotreClient was invalid`,
-        `invalid-configuration`
-      );
-    }
+
     this._config = config;
   }
 
   public async connect(): Promise<FirestoreClient> {
-    if (this._isConnected) {
-      console.info(`Firestore ${this.config.name} already connected`);
-      return this;
+    if (isMockConfig(this._config)) {
+      await this._connectMockDb(this._config);
+    } else if (isClientConfig(this._config)) {
+      await this._connectRealDb(this._config);
+    } else {
+      throw new Error(
+        `The configuration is of an unknown type: ${JSON.stringify(
+          this._config
+        )}`
+      );
     }
-    // await this.loadFirestoreApi();
-    if (this.config.useAuth) {
-      await this.loadAuthApi();
-    }
-    // this.database = firebase.app.firestore();
+
     return this;
   }
 
@@ -106,11 +82,50 @@ export class FirestoreClient extends FirestoreDb
     return this._auth;
   }
 
+  protected async loadFirebaseApi() {
+    return await import('@firebase/app');
+  }
+
   protected async loadAuthApi() {
-    await import('@firebase/auth');
+    return import('@firebase/auth');
   }
 
   protected async loadFirestoreApi() {
-    await import('@firebase/firestore');
+    return import('@firebase/firestore');
+  }
+
+  /**
+   * The steps needed to connect a database to a Firemock
+   * mocked DB.
+   */
+  protected async _connectMockDb(config: IMockConfig) {
+    await this.getFireMock({
+      db: config.mockData || {},
+      auth: { providers: [], ...config.mockAuth },
+    });
+    this._authProviders = this._mock.authProviders;
+  }
+
+  protected async _connectRealDb(config: IClientConfig) {
+    if (!this._isConnected) {
+      await this.loadFirestoreApi();
+      if (config.useAuth) {
+        // await this.loadAuthApi();
+        this._auth = this._app.auth();
+      }
+      const firebase = ((await this.loadFirebaseApi()) as unknown) as FirebaseNamespace & {
+        firestore: any;
+      };
+      const runningApps = getRunningApps(firebase.apps);
+      this._app = runningApps.includes(config.name)
+        ? (getRunningFirebaseApp<IClientApp>(
+            config.name,
+            firebase.apps
+          ) as IClientApp)
+        : firebase.initializeApp(config, config.name);
+      this._database = firebase.firestore(this._app);
+    } else {
+      console.info(`Database ${config.name} already connected`);
+    }
   }
 }

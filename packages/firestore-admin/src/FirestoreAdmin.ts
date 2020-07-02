@@ -1,4 +1,11 @@
-import * as firebase from 'firebase-admin';
+import {
+  app,
+  apps,
+  credential as fbCredential,
+  initializeApp,
+  auth,
+  firestore,
+} from 'firebase-admin';
 
 import {
   FireError,
@@ -57,21 +64,6 @@ export class FirestoreAdmin extends FirestoreDb
       config.databaseURL = config.databaseURL || extractDataUrl(config);
       config.name = determineDefaultAppName(config);
       this._config = config;
-
-      const runningApps = getRunningApps(firebase.apps);
-      const credential = firebase.credential.cert(config.serviceAccount);
-      this._app = runningApps.includes(config.name)
-        ? getRunningFirebaseApp<IAdminApp>(
-            config.name,
-            (firebase.apps as unknown) as IAdminApp[]
-          )
-        : firebase.initializeApp(
-            {
-              credential,
-              databaseURL: config.databaseURL,
-            },
-            config.name
-          );
     } else {
       throw new FireError(
         `The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(
@@ -90,8 +82,11 @@ export class FirestoreAdmin extends FirestoreDb
       console.info(`Firestore ${this.config.name} already connected`);
       return this;
     }
-    await this.loadFirestoreApi();
-    this.database = this._app.firestore();
+    if (isAdminConfig(this._config)) {
+      await this._connectRealDb(this._config);
+    } else if (isMockConfig(this._config)) {
+      await this._connectMockDb(this._config);
+    }
   }
 
   public async auth(): Promise<IAdminAuth> {
@@ -101,10 +96,41 @@ export class FirestoreAdmin extends FirestoreDb
       );
     }
 
-    return firebase.auth(this._app as firebase.app.App);
+    return auth(this._app as app.App);
   }
 
-  protected async loadFirestoreApi() {
-    await import(/* webpackChunkName: "firebase-admin" */ 'firebase-admin');
+  protected async _connectRealDb(config: IAdminConfig) {
+    if (!config?.serviceAccount) {
+      throw new FireError(
+        `There was no service account found in the configuration!`
+      );
+    }
+    const runningApps = getRunningApps(apps);
+    const credential = fbCredential.cert(config.serviceAccount);
+
+    if (!this._isConnected) {
+      this._app = runningApps.includes(config.name)
+        ? getRunningFirebaseApp<IAdminApp>(
+            config.name,
+            (apps as unknown) as IAdminApp[]
+          )
+        : initializeApp(
+            {
+              credential,
+              databaseURL: config.databaseURL,
+            },
+            config.name
+          );
+    }
+  }
+  /**
+   * The steps needed to connect a database to a Firemock
+   * mocked DB.
+   */
+  protected async _connectMockDb(config: IMockConfig) {
+    await this.getFireMock({
+      db: config.mockData || {},
+      auth: { providers: [], ...config.mockAuth },
+    });
   }
 }

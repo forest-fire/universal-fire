@@ -1,5 +1,5 @@
 import { IAdminEmitter, IClientEmitter, IFirebaseConnectionCallback, IFirebaseListener, IFirebaseWatchHandler, IMockLoadingState, IRealTimeDb } from './index';
-import { IAbstractedDatabase, IAdminApp, IClientApp, IDatabaseConfig, IMockConfigOptions, IRtdbDataSnapshot, IRtdbDatabase, IRtdbReference, ISerializedQuery, IAbstractedEvent } from '@forest-fire/types';
+import { IAbstractedDatabase, IAdminApp, IClientApp, IDatabaseConfig, IRtdbDataSnapshot, IRtdbDatabase, IRtdbReference, ISerializedQuery, IAbstractedEvent } from '@forest-fire/types';
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IDictionary } from 'common-types';
 import type { Mock as IMockApi } from 'firemock';
@@ -214,11 +214,4 @@ export declare abstract class RealTimeDb extends AbstractedDatabase implements I
      * that can be useful and this has links to various providers.
      */
     get authProviders(): any;
-    /**
-     * **getFireMock**
-     *
-     * Asynchronously imports both `FireMock` and the `Faker` libraries
-     * then sets `isConnected` to **true**
-     */
-    protected getFireMock(config?: IMockConfigOptions): Promise<void>;
 }

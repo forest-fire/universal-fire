@@ -1,4 +1,4 @@
-import * as convert from 'typed-conversions';
+import { snapshotToArray } from 'typed-conversions';
 
 import {
   AbstractedProxyError,
@@ -475,7 +475,7 @@ export abstract class RealTimeDb extends AbstractedDatabase
   ): Promise<T[]> {
     try {
       const snap = await this.getSnapshot<T>(path);
-      return snap.val() ? convert.snapshotToArray<T>(snap, idProp) : [];
+      return snap.val() ? snapshotToArray<T>(snap, idProp) : [];
     } catch (e) {
       throw new AbstractedProxyError(e);
     }
@@ -569,18 +569,5 @@ export abstract class RealTimeDb extends AbstractedDatabase
       `The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`,
       'missing-auth-providers'
     );
-  }
-
-  /**
-   * **getFireMock**
-   *
-   * Asynchronously imports both `FireMock` and the `Faker` libraries
-   * then sets `isConnected` to **true**
-   */
-  protected async getFireMock(config: IMockConfigOptions = {}) {
-    const FireMock = await import(
-      /* webpackChunkName: "firemock" */ 'firemock'
-    );
-    this._mock = await FireMock.Mock.prepare(config);
   }
 }

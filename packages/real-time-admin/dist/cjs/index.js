@@ -1414,6 +1414,16 @@ class AbstractedDatabase {
     get isConnected() {
         return this._isConnected;
     }
+    /**
+     * **getFireMock**
+     *
+     * Asynchronously imports both `FireMock` and the `Faker` libraries
+     * then sets `isConnected` to **true**
+     */
+    async getFireMock(config = {}) {
+        const FireMock = await Promise.resolve().then(function () { return index; });
+        this._mock = await FireMock.Mock.prepare(config);
+    }
 }
 
 class BaseSerializer {
@@ -2033,16 +2043,6 @@ class RealTimeDb extends AbstractedDatabase {
      */
     get authProviders() {
         throw new RealTimeDbError(`The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`, 'missing-auth-providers');
-    }
-    /**
-     * **getFireMock**
-     *
-     * Asynchronously imports both `FireMock` and the `Faker` libraries
-     * then sets `isConnected` to **true**
-     */
-    async getFireMock(config = {}) {
-        const FireMock = await Promise.resolve().then(function () { return index; });
-        this._mock = await FireMock.Mock.prepare(config);
     }
 }
 

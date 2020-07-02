@@ -11,5 +11,10 @@ export declare class FirestoreAdmin extends FirestoreDb implements IAdminSdk, IA
     constructor(config?: IAdminConfig | IMockConfig);
     connect(): Promise<FirestoreAdmin>;
     auth(): Promise<IAdminAuth>;
-    protected loadFirestoreApi(): Promise<void>;
+    protected _connectRealDb(config: IAdminConfig): Promise<void>;
+    /**
+     * The steps needed to connect a database to a Firemock
+     * mocked DB.
+     */
+    protected _connectMockDb(config: IMockConfig): Promise<void>;
 }

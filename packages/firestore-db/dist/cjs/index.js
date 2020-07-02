@@ -2,6 +2,25 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+function _interopNamespace(e) {
+    if (e && e.__esModule) { return e; } else {
+        var n = {};
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                var d = Object.getOwnPropertyDescriptor(e, k);
+                Object.defineProperty(n, k, d.get ? d : {
+                    enumerable: true,
+                    get: function () {
+                        return e[k];
+                    }
+                });
+            });
+        }
+        n['default'] = e;
+        return n;
+    }
+}
+
 var utility = require('@forest-fire/utility');
 
 class AbstractedDatabase {
@@ -87,6 +106,17 @@ class AbstractedDatabase {
      */
     get isConnected() {
         return this._isConnected;
+    }
+    /**
+     * **getFireMock**
+     *
+     * Asynchronously imports both `FireMock` and the `Faker` libraries
+     * then sets `isConnected` to **true**
+     */
+    async getFireMock(config = {}) {
+        const FireMock = await Promise.resolve().then(function () { return _interopNamespace(require(
+        /* webpackChunkName: "firemock" */ 'firemock')); });
+        this._mock = await FireMock.Mock.prepare(config);
     }
 }
 

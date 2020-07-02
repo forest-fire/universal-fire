@@ -1,4 +1,4 @@
-import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IRtdbDatabase, SDK, IClientAuthProviders, IAppInfo, IAbstractedDatabase, ISerializedQuery, IAbstractedEvent } from '@forest-fire/types';
+import type { IAdminApp, IAdminAuth, IClientApp, IClientAuth, IDatabaseConfig, IFirestoreDatabase, IRtdbDatabase, SDK, IClientAuthProviders, IAppInfo, IAbstractedDatabase, ISerializedQuery, IAbstractedEvent, IMockConfigOptions } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 export declare abstract class AbstractedDatabase implements IAbstractedDatabase {
     readonly sdk: SDK;
@@ -140,4 +140,11 @@ export declare abstract class AbstractedDatabase implements IAbstractedDatabase 
      * Returns a reference for a given path in Firebase
      */
     abstract ref(path?: string): any;
+    /**
+     * **getFireMock**
+     *
+     * Asynchronously imports both `FireMock` and the `Faker` libraries
+     * then sets `isConnected` to **true**
+     */
+    protected getFireMock(config?: IMockConfigOptions): Promise<void>;
 }

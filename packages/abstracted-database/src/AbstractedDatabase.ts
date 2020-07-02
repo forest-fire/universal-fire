@@ -14,6 +14,7 @@ import type {
   IAbstractedDatabase,
   ISerializedQuery,
   IAbstractedEvent,
+  IMockConfigOptions,
 } from '@forest-fire/types';
 import type { Mock as MockDb } from 'firemock';
 import { FireError } from '@forest-fire/utility';
@@ -229,4 +230,17 @@ export abstract class AbstractedDatabase implements IAbstractedDatabase {
    * Returns a reference for a given path in Firebase
    */
   public abstract ref(path?: string): any;
+
+  /**
+   * **getFireMock**
+   *
+   * Asynchronously imports both `FireMock` and the `Faker` libraries
+   * then sets `isConnected` to **true**
+   */
+  protected async getFireMock(config: IMockConfigOptions = {}) {
+    const FireMock = await import(
+      /* webpackChunkName: "firemock" */ 'firemock'
+    );
+    this._mock = await FireMock.Mock.prepare(config);
+  }
 }

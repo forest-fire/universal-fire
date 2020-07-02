@@ -61,6 +61,9 @@
     "ttypescript": "^1.5.10",
     "typescript": "^3.9.5"
   },
+  "peerDependencies": {
+    "firemock": ">= 0.53.23"
+  },
   "dependencies": {
     "@forest-fire/abstracted-database": "^0.53.23",
     "@forest-fire/serialized-query": "^0.53.23",

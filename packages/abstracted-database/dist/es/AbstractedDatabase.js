@@ -83,5 +83,16 @@ export class AbstractedDatabase {
     get isConnected() {
         return this._isConnected;
     }
+    /**
+     * **getFireMock**
+     *
+     * Asynchronously imports both `FireMock` and the `Faker` libraries
+     * then sets `isConnected` to **true**
+     */
+    async getFireMock(config = {}) {
+        const FireMock = await import(
+        /* webpackChunkName: "firemock" */ 'firemock');
+        this._mock = await FireMock.Mock.prepare(config);
+    }
 }
 //# sourceMappingURL=AbstractedDatabase.js.map
