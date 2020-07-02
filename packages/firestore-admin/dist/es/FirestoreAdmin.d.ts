@@ -1,4 +1,4 @@
-import { IAbstractedDatabase, IAdminApp, IAdminAuth, IAdminConfig, IAdminSdk, IMockConfig, SDK, IAdminFirestoreDatabase } from '@forest-fire/types';
+import { IAbstractedDatabase, IAdminApp, IAdminAuth, IAdminConfig, IAdminSdk, IMockConfig, SDK, IAdminFirebaseNamespace, IAdminFirestoreDatabase } from '@forest-fire/types';
 import { FirestoreDb } from '@forest-fire/firestore-db';
 import type { Mock as IMockApi } from 'firemock';
 export declare class FirestoreAdmin extends FirestoreDb implements IAdminSdk, IAbstractedDatabase<IMockApi> {
@@ -7,6 +7,7 @@ export declare class FirestoreAdmin extends FirestoreDb implements IAdminSdk, IA
     protected _isAdminApi: boolean;
     protected _auth?: IAdminAuth;
     protected _firestore?: IAdminFirestoreDatabase;
+    protected _admin?: IAdminFirebaseNamespace;
     protected _app: IAdminApp;
     protected _config: IAdminConfig | IMockConfig;
     constructor(config?: IAdminConfig | IMockConfig);
@@ -17,6 +18,7 @@ export declare class FirestoreAdmin extends FirestoreDb implements IAdminSdk, IA
      */
     connect(): Promise<FirestoreAdmin>;
     auth(): Promise<IAdminAuth>;
+    protected _loadAdminApi(): Promise<IAdminFirebaseNamespace>;
     protected _connectRealDb(config: IAdminConfig): Promise<void>;
     /**
      * The steps needed to connect a database to a Firemock

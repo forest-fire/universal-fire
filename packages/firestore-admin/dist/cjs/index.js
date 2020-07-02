@@ -2,8 +2,6 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
 function _interopNamespace(e) {
     if (e && e.__esModule) { return e; } else {
         var n = {};
@@ -22,8 +20,6 @@ function _interopNamespace(e) {
         return n;
     }
 }
-
-var firebase = _interopDefault(require('firebase-admin'));
 
 class FireError extends Error {
     constructor(message, 
@@ -442,22 +438,32 @@ class FirestoreAdmin extends FirestoreDb {
         if (this._config.mocking) {
             throw new FireError(`The auth API for MOCK databases is not yet implemented for Firestore`);
         }
-        return firebase.auth(this._app);
+        if (this._admin) {
+            throw new FireError(`Attempt to call Auth API initializer before setting up the firebase namespace!`, 'not-allowed');
+        }
+        return this._admin.auth(this._app);
+    }
+    async _loadAdminApi() {
+        const api = (await Promise.resolve().then(function () { return _interopNamespace(require('firebase-admin')); }));
+        return api;
     }
     async _connectRealDb(config) {
+        if (!this._admin) {
+            this._admin = (await Promise.resolve().then(function () { return _interopNamespace(require('firebase-admin')); }));
+        }
         if (!config.serviceAccount) {
             throw new FireError(`There was no service account found in the configuration!`);
         }
-        const runningApps = getRunningApps(firebase.apps);
-        const credential = firebase.credential.cert(config.serviceAccount);
+        const runningApps = getRunningApps(this._admin.apps);
+        const credential = this._admin.credential.cert(config.serviceAccount);
         if (!this._isConnected) {
             this._app = runningApps.includes(config.name)
-                ? getRunningFirebaseApp(config.name, firebase.apps)
-                : firebase.initializeApp({
+                ? getRunningFirebaseApp(config.name, this._admin.apps)
+                : this._admin.initializeApp({
                     credential,
                     databaseURL: config.databaseURL,
                 }, config.name);
-            // this._firestore = firebase.firestore(this._app);
+            // this._firestore = this._admin.firestore(this._app);
         }
     }
     /**
