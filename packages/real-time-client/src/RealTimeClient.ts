@@ -1,7 +1,5 @@
-import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
-import {
-  isMockConfig,
-  isClientConfig,
+import type { IRealTimeDb } from '@forest-fire/real-time-db';
+import type {
   IClientConfig,
   IClientAuth,
   IMockConfig,
@@ -10,6 +8,9 @@ import {
   IRtdbDataSnapshot,
   FirebaseNamespace,
 } from '@forest-fire/types';
+
+import { RealTimeDb } from '@forest-fire/real-time-db';
+import { isMockConfig, isClientConfig } from '@forest-fire/types';
 import {
   extractClientConfig,
   FireError,
@@ -17,13 +18,16 @@ import {
   getRunningFirebaseApp,
   determineDefaultAppName,
 } from '@forest-fire/utility';
+
+import { wait } from 'common-types';
+import { firebase } from '@firebase/app';
+import { EventManager } from './EventManager';
+import { ClientError } from './ClientError';
+
 export enum FirebaseBoolean {
   true = 1,
   false = 0,
 }
-import { firebase } from '@firebase/app';
-import { wait } from 'common-types';
-import { EventManager, ClientError } from './private';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 
