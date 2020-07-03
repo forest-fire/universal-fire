@@ -1,5 +1,5 @@
-import { IAdminConfig, IMockConfig } from '@forest-fire/types';
-import { FireError } from '../index';
+import type { IAdminConfig, IMockConfig } from '@forest-fire/types';
+import { FireError } from '../errors';
 
 /**
  * extracts the Firebase **databaseURL** property either from the passed in

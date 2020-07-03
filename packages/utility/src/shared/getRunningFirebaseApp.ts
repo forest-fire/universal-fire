@@ -1,5 +1,5 @@
-import { IAdminApp, IClientApp } from '@forest-fire/types';
-import { FireError } from '../index';
+import type { IAdminApp, IClientApp } from '@forest-fire/types';
+import { FireError } from '../errors';
 
 /** Gets the  */
 export function getRunningFirebaseApp<T extends IAdminApp | IClientApp>(

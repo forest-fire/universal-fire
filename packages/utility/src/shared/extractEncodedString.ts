@@ -1,4 +1,5 @@
-import { looksLikeJson, FireError } from '../index';
+import { looksLikeJson } from './looksLikeJson';
+import { FireError } from '../errors';
 
 export function extractEncodedString<T>(data?: string): T | undefined {
   if (!data) {

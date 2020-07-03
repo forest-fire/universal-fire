@@ -1,5 +1,6 @@
-import { IServiceAccount, IAdminConfig, IMockConfig } from '@forest-fire/types';
-import { looksLikeJson, FireError } from '../index';
+import type { IServiceAccount, IAdminConfig, IMockConfig } from '@forest-fire/types';
+import { looksLikeJson } from '../shared';
+import { FireError } from '../errors';
 
 /**
  * Takes as input a variety of possible formats and converts it into

@@ -1,4 +1,4 @@
-import { IAdminApp, IAdminConfig, IDatabaseConfig } from '@forest-fire/types';
+import type { IDatabaseConfig } from '@forest-fire/types';
 
 export function determineDefaultAppName(config?: IDatabaseConfig) {
   if (!config) {
