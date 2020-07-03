@@ -1,18 +1,20 @@
 import { SerializedRealTimeQuery } from "@forest-fire/serialized-query";
-import {
+import type {
   IFirebaseEventHandler,
   IListener,
   IMockWatcherGroupEvent
 } from "../@types/rtdb-types";
-import {
+import type {
   IRtdbEventType,
   IRtdbDataSnapshot,
 } from "@forest-fire/types"
-import { IDictionary } from "common-types";
+import type { IDictionary } from "common-types";
 import { join, stripLeadingDot, removeDots, dotify } from "../shared/index";
 import get from "lodash.get";
 import { hashToArray } from "typed-conversions";
-import { getDb, SnapShot, Reference, shouldSendEvents, groupEventsByWatcher } from "../rtdb/index";
+import { getDb, shouldSendEvents, groupEventsByWatcher } from "./store";
+import { Reference } from "./Reference";
+import { SnapShot } from "./SnapShot";
 
 let _listeners: IListener[] = [];
 

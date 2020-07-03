@@ -1,4 +1,5 @@
-import { IDictionary } from "common-types";
+import type { IDictionary } from "common-types";
+
 export default class Disconnected /** implements firebase.database.OnDisconnect */ {
   public cancel(onComplete?: (a: Error) => any): Promise<void> {
     return Promise.resolve();

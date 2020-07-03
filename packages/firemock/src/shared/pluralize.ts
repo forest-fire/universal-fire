@@ -1,4 +1,4 @@
-import { IDictionary } from 'common-types';
+import type { IDictionary } from 'common-types';
 
 const exceptions: IDictionary<string> = {
   child: 'children',

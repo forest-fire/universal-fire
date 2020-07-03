@@ -1,6 +1,6 @@
+import type { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
 import { hashToArray, arrayToHash } from 'typed-conversions';
-import { IDictionary } from 'common-types';
 import { SortOrder } from '../@types/query-types';
 
 import * as sortFns from './sortFns';

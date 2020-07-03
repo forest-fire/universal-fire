@@ -1,34 +1,34 @@
-import { IDictionary } from 'common-types';
-import {
+import type { IDictionary } from 'common-types';
+import type {
   IRtdbReference,
   IRtdbDataSnapshot,
   IRtdbThenableReference,
   IRtdbEventType,
 } from '@forest-fire/types';
 
-import {
+import type {
   IFirebaseEventHandler,
 } from '../@types/rtdb-types';
 
 import {
+  getDb,
   setDB,
   updateDB,
   pushDB,
   removeDB,
   multiPathUpdateDB,
-  SnapShot,
-  addListener,
-  Query,
-} from '../rtdb/index';
+} from './store';
+import { Query } from './Query';
+import { SnapShot } from './SnapShot';
+import { addListener } from './listeners';
 import {
   parts,
   join,
   slashNotation,
   networkDelay,
   DelayType,
-} from '../shared/index';
+} from '../shared';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { getDb } from './store';
 
 function isMultiPath(data: IDictionary) {
   Object.keys(data).map((d: any) => {

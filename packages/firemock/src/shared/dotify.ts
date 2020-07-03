@@ -1,4 +1,4 @@
-import { IDictionary } from 'common-types';
+import type { IDictionary } from 'common-types';
 
 export const dotify = (path: string) => {
   const dotPath = path.replace(/[\\\/]/g, '.');

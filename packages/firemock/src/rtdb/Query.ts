@@ -1,19 +1,13 @@
-import { IDictionary } from 'common-types';
-import {
-  IRtdbQuery,
-  IRtdbReference,
-  IRtdbDataSnapshot,
-  IRtdbEventType,
-} from '@forest-fire/types'
+import type { IDictionary } from 'common-types';
+import type { IRtdbQuery, IRtdbReference, IRtdbDataSnapshot, IRtdbEventType } from '@forest-fire/types'
+import type { QueryValue, IFirebaseEventHandler } from '../@types/rtdb-types';
+import type { DelayType } from '../shared/util';
 
-import {
-  QueryValue,
-  IFirebaseEventHandler,
-} from '../@types/rtdb-types';
-import { getDb, SnapShot } from '../rtdb/index';
 import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
-import { leafNode, DelayType, networkDelay } from '../shared/index';
-import { runQuery } from '../shared/index';
+import { leafNode, networkDelay } from '../shared/util';
+import { runQuery } from '../shared/runQuery';
+import { SnapShot } from './SnapShot';
+import { getDb } from './store';
 
 /** tslint:ignore:member-ordering */
 export abstract class Query<T = any> implements IRtdbQuery {

@@ -1,6 +1,6 @@
-import { networkDelay } from "./shared";
-import { IMockAuth } from "@forest-fire/types";
+import type { IMockAuth } from "@forest-fire/types";
 import { implemented } from "./auth/client-sdk/implemented";
+import { networkDelay } from "./shared";
 
 let hasConnectedToAuthService: boolean = false;
 

@@ -2,7 +2,7 @@ import { IDictionary, SortingFunction } from 'common-types';
 import { IRtdbDataSnapshot } from '@forest-fire/types';
 
 import get from 'lodash.get';
-import { Reference } from '../rtdb/index';
+import { Reference } from './Reference';
 import { arrayToHash } from 'typed-conversions';
 import { getKey, join } from '../shared/index';
 
