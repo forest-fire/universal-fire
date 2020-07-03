@@ -14,21 +14,27 @@ import { IDictionary } from "common-types";
 import { SerializedRealTimeQuery } from "@forest-fire/serialized-query";
 import { slashNotation } from "@forest-fire/utility";
 
-import {
+import type {
   IFirebaseListener,
   IMockLoadingState,
   IClientEmitter,
   IAdminEmitter,
-  PermissionDenied,
-  UndefinedAssignment,
-  AbstractedProxyError,
-  WatcherEventWrapper,
-  FileDepthExceeded,
-  RealTimeDbError,
   IRealTimeDb,
   IFirebaseWatchHandler,
   IFirebaseConnectionCallback,
-} from "./index";
+} from "./types";
+
+import {
+  PermissionDenied,
+  UndefinedAssignment,
+  AbstractedProxyError,
+  FileDepthExceeded,
+  RealTimeDbError,
+} from './errors';
+
+import {
+  WatcherEventWrapper,
+} from './WatcherEventWrapper'
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;

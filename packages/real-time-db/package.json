@@ -15,7 +15,7 @@
   ],
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
-  "types": "dist/es/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "sideEffects": false,
   "scripts": {
     "clean": "rimraf dist/**/*",
