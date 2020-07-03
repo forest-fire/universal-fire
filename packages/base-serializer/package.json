@@ -10,10 +10,6 @@
   ],
   "scripts": {
     "clean": "rimraf dist/**/*",
-    "build": "run-s clean build:all",
-    "build:all": "run-p build:esnext build:cjs",
-    "build:esnext": "tsc -P tsconfig.es.json",
-    "build:cjs": "tsc -P tsconfig.cjs.json",
     "test": "yarn do test",
     "watch": "yarn do watch"
   },

@@ -22,11 +22,6 @@
   "scripts": {
     "clean": "rimraf dist/**/*",
     "clean:nuclear": "rimraf lib node_modules && rm yarn.lock && yarn cache clean && yarn && yarn upgrade",
-    "build": "run-s clean build:all",
-    "build:all": "run-p build:esnext build:cjs",
-    "build:esnext": "tsc -P tsconfig.es.json",
-    "build:cjs": "tsc -P tsconfig.cjs.json",
-    "build:rtdb": "cd ../.. && yarn build:db:rtdb && cd -",
     "watch": "run-p watch:esnext watch:cjs",
     "watch:esnext": "tsc -P tsconfig.es.json -w",
     "watch:cjs": "tsc -P tsconfig.es.json -w",
