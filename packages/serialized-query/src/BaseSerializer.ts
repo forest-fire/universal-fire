@@ -1,12 +1,11 @@
+import type { IFirestoreQuery, IRealTimeQuery } from "@forest-fire/types";
 import type {
   IComparisonOperator,
-  IFirestoreQuery,
   IFirestoreQueryOrderType,
   IRealQueryOrderType,
-  IRealTimeQuery,
   ISerializedIdentity,
   ISimplifiedDatabase,
-} from "./index";
+ } from "./@types/serialized-types";
 
 export abstract class BaseSerializer<T = any> {
   protected _endAtKey?: keyof T & string;

@@ -1,14 +1,14 @@
 import type { IDictionary } from "common-types";
 
-import { RealQueryOrderType } from "./index";
-import { BaseSerializer } from "./index";
-import type {
-  IComparisonOperator,
-  IRealQueryOrderType,
-  IRealTimeQuery,
-  ISimplifiedDatabase,
-} from "./index";
-import { IRtdbDataSnapshot } from "@forest-fire/types";
+import { BaseSerializer } from "./BaseSerializer";
+import type { IRtdbDataSnapshot, IRealTimeQuery } from "@forest-fire/types";
+import type { IComparisonOperator, IRealQueryOrderType, ISimplifiedDatabase } from "./@types/serialized-types";
+
+export enum RealQueryOrderType {
+  orderByChild = "orderByChild",
+  orderByKey = "orderByKey",
+  orderByValue = "orderByValue",
+}
 
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime

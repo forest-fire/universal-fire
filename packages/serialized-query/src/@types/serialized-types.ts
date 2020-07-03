@@ -1,11 +1,6 @@
 import type { IDictionary } from "common-types";
 import type { IFirestoreQuery, IRealTimeQuery } from "@forest-fire/types";
-
-export enum RealQueryOrderType {
-  orderByChild = "orderByChild",
-  orderByKey = "orderByKey",
-  orderByValue = "orderByValue",
-}
+import type { RealQueryOrderType } from '../SerializedRealTimeQuery';
 
 export type IRealQueryOrderType = keyof typeof RealQueryOrderType;
 
@@ -34,5 +29,3 @@ export type IComparisonOperator = "=" | ">" | "<";
 export interface ISimplifiedDatabase {
   ref: (path: string) => any | IRealTimeQuery | IFirestoreQuery;
 }
-
-export { IFirestoreQuery, IRealTimeQuery };
