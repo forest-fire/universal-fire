@@ -13,6 +13,7 @@
     "release": "yarn lerna publish",
     "clean": "yarn lerna clean --yes",
     "bootstrap": "yarn lerna bootstrap",
+    "prebuild": "rimraf packages/*/dist",
     "build": "node build",
     "build:docs": "yarn docs:build",
     "test": "run-s test:shared test:db test:sdk test:closure",
@@ -44,6 +45,7 @@
     "lerna": "^3.21.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
+    "rimraf": "3.0.2",
     "rollup": "2.18.2",
     "rollup-plugin-typescript2": "0.27.1",
     "typescript": "3.9.6"
