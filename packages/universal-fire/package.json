@@ -45,8 +45,6 @@
   "dependencies": {
     "@forest-fire/firestore-admin": "^0.54.0",
     "@forest-fire/firestore-client": "^0.54.0",
-    "@forest-fire/real-time-admin": "^0.54.0",
-    "@forest-fire/real-time-client": "^0.54.0",
     "@forest-fire/serialized-query": "^0.54.0",
     "@forest-fire/serializer-factory": "^0.54.0",
     "@forest-fire/types": "^0.54.0",

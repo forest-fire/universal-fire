@@ -81,8 +81,7 @@ export type IAdminAuth = adminAuth.Auth;
 //#endregion Admin Auth API
 
 //#region Admin App API
-import type { default as admin } from 'firebase-admin';
-import { IDictionary } from 'common-types';
+import type admin from 'firebase-admin';
 export interface IAdminDatabaseApi {
   DataSnapshot: admin.database.DataSnapshot;
   Database: admin.database.Database;
