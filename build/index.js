@@ -70,7 +70,7 @@ async function build(name, opts) {
 
 (async function () {
   for (const name of sequence) {
-    if (name === 'db') {
+    if (name === 'universal-fire') {
       console.log('universal-fire (browser)');
       await build(name, {
         input: 'index.browser.ts',

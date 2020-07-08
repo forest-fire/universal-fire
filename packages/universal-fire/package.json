@@ -4,7 +4,8 @@
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
-  "types": "dist/types/index.d.ts",
+  "browser": "dist/es/browser.js",
+  "types": "dist/types/index.node.d.ts",
   "sideEffects": false,
   "repository": {
     "type": "git",
@@ -37,7 +38,9 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "@forest-fire/firestore-admin": "^0.54.3",
     "@forest-fire/firestore-client": "^0.54.3",
+    "@forest-fire/real-time-admin": "^0.54.3",
     "@forest-fire/real-time-client": "^0.54.3",
     "@forest-fire/serialized-query": "^0.54.3",
     "@forest-fire/serializer-factory": "^0.54.3",
