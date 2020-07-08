@@ -47,7 +47,8 @@ async function build(name, opts) {
     plugins: toPlugins(dir),
     external: [
       ...builtinModules,
-      ...Object.keys(pkg.dependencies || {})
+      ...Object.keys(pkg.dependencies || {}),
+      ...Object.keys(pkg.peerDependencies || {})
     ]
   });
 
