@@ -22,12 +22,6 @@
   "scripts": {
     "clean": "rimraf dist/**/*",
     "clean:nuclear": "rimraf dist node_modules yarn.lock && yarn cache clean && yarn && yarn upgrade",
-    "build": "run-s clean build:all",
-    "build:all": "rollup -c",
-    "build:db": "cd ../.. && yarn build:db && cd -",
-    "build:monorepo": "cd ../.. && yarn build && cd -",
-    "bootstrap": "cd ../.. && yarn bootstrap && cd -",
-    "build:docs": "cd ../.. && yarn build:docs && cd -",
     "watch": "run-p watch:esnext ",
     "watch:esnext": "tsc -P tsconfig.es.json -w",
     "build:nuclear": "run-s clean:nuclear build",

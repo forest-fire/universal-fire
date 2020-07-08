@@ -21,11 +21,6 @@
   "scripts": {
     "clean": "rimraf dist/**/*",
     "clean:nuclear": "rimraf dist node_modules && yarn cache clean && rm yarn.lock && yarn && yarn upgrade",
-    "build": "run-s clean build:bundle",
-    "build:bundle": "rollup -c",
-    "build:all": "run-p build:esnext build:cjs",
-    "build:esnext": "ttsc -P tsconfig.es.json",
-    "build:cjs": "ttsc -P tsconfig.cjs.json",
     "test": "yarn jest",
     "coverage": "nyc --reporter=text --reporter=html mocha --compilers ts:ts-node/register",
     "watch": "ts-node ./scripts/watch.ts",

@@ -1,9 +1,5 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "module": "es2015",
-    "noEmit": true
-  },
+  "extends": "../../tsconfig.json",
   "files": ["global.d.ts"],
-  "include": ["src/**/*.ts", "global.d.ts", "test/**/*.ts"]
+  "include": ["src", "global.d.ts", "test"]
 }
