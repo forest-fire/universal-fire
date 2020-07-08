@@ -4703,7 +4703,7 @@ let faker;
  */
 async function importFakerLibrary() {
     if (!faker) {
-        faker = await import(/* webpackChunkName: "faker-lib" */ './index-62be410f-9c30765c.js').then(function (n) { return n.i; });
+        faker = await import(/* webpackChunkName: "faker-lib" */ './index-62be410f-d727bee0.js').then(function (n) { return n.i; });
     }
     return faker;
 }
@@ -5056,4 +5056,4 @@ const notImplemented$2 = {
 const authMockApi = Object.assign(Object.assign({}, notImplemented$2), implemented);
 
 export { Delays, Deployment, Mock, MockHelper, Query, Queue, Reference, Schema, SchemaHelper, SnapShot, SortOrder, addListener, adminAuthSdk, auth$1 as auth, authMockApi, clearDatabase, findChildListeners, findValueListeners, getDb, getFakerLibrary, getListeners, getMockHelper, groupEventsByWatcher, importFakerLibrary, listenerCount, listenerPaths, multiPathUpdateDB, notify, pushDB, removeAllListeners, removeDB, removeListener, reset, restoreEvents, setDB, shouldSendEvents, silenceEvents, updateDB, updateDatabase };
-//# sourceMappingURL=index-7a9e11a7.js.map
+//# sourceMappingURL=index-0524e087.js.map

@@ -263,7 +263,7 @@ class AbstractedDatabase {
      */
     async getFireMock(config = {}) {
         const FireMock = await Promise.resolve().then(function () { return require(
-        /* webpackChunkName: "firemock" */ './index-4556b15d.js'); });
+        /* webpackChunkName: "firemock" */ './index-9f3b3fbe.js'); });
         this._mock = await FireMock.Mock.prepare(config);
     }
 }

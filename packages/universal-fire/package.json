@@ -43,7 +43,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@forest-fire/firestore-admin": "^0.54.1",
+    "@forest-fire/real-time-client": "^0.54.1",
     "@forest-fire/firestore-client": "^0.54.1",
     "@forest-fire/serialized-query": "^0.54.1",
     "@forest-fire/serializer-factory": "^0.54.1",

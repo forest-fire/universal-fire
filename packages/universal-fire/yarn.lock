@@ -1239,6 +1239,13 @@ common-types@^1.15.7:
   dependencies:
     "@types/json-schema" "^7.0.4"
 
+common-types@^1.15.8:
+  version "1.15.8"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.15.8.tgz#7a7f826156eb9ff49f2aaa2109175696560d883c"
+  integrity sha512-xRp6QrwBt+sUvMw95zpzXKkt3lKHhF11FsrqclHFOz/rvvVMU/qJUNph1g+wVKVJhEEIoIfeFaav6ouu1gOK4w==
+  dependencies:
+    "@types/json-schema" "^7.0.4"
+
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"

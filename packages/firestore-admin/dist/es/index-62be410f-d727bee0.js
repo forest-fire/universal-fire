@@ -1,5 +1,3 @@
-'use strict';
-
 function createCommonjsModule(fn, basedir, module) {
 	return module = {
 	  path: basedir,
@@ -86073,5 +86071,5 @@ var index = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.assign(/*#__PURE__*/O
 	__moduleExports: faker_1
 }));
 
-exports.i = index;
-//# sourceMappingURL=index-62be410f-82346398.js.map
+export { index as i };
+//# sourceMappingURL=index-62be410f-d727bee0.js.map

@@ -57,7 +57,7 @@ export declare type ListUsersResult = import('firebase-admin').auth.ListUsersRes
 export declare type UpdateRequest = import('firebase-admin').auth.UpdateRequest;
 export declare type UserRecord = import('firebase-admin').auth.UserRecord;
 export declare type IAdminAuth = adminAuth.Auth;
-import type { default as admin } from 'firebase-admin';
+import type admin from 'firebase-admin';
 export interface IAdminDatabaseApi {
     DataSnapshot: admin.database.DataSnapshot;
     Database: admin.database.Database;
