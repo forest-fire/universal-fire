@@ -286,6 +286,14 @@
     "@forest-fire/utility" "^0.44.13"
     firemock "^0.44.13"
 
+"@forest-fire/base-serializer@^0.44.10":
+  version "0.44.13"
+  resolved "https://registry.yarnpkg.com/@forest-fire/base-serializer/-/base-serializer-0.44.13.tgz#6659a871eb0e6832d593ccb1852e7bd341f82d1a"
+  integrity sha512-wZXDqFcosUbUW/qp3EwPkFzgbJsm3hXEC0RpsdCYZnpZvbRuvNXcOb+hWw5cuvTY+RKI+o2TwUtwR/lEejz3vg==
+  dependencies:
+    "@forest-fire/serialized-query" "^0.44.13"
+    common-types "^1.14.3"
+
 "@forest-fire/firestore-admin@^0.44.13":
   version "0.44.13"
   resolved "https://registry.yarnpkg.com/@forest-fire/firestore-admin/-/firestore-admin-0.44.13.tgz#b715422fa0a2900a3e0bc501e0a486736f6ddcc8"
