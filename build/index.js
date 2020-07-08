@@ -6,12 +6,12 @@ const packages = join(__dirname, '..', 'packages');
 
 // TODO(lukeed): docs
 const sequence = [
-  'types', 'utility',
-  'serialized-query', 'base-serializer',
-  'firemock', 'abstracted-database',
-  'real-time-db', 'real-time-client', 'real-time-admin',
-  'firestore-db', 'firestore-client', 'firestore-admin',
-  'db', // "universal-fire"
+  'types', // build:types
+  'utility', 'serialized-query', 'serializer-factory', // build:shared
+  'abstracted-database', // build:base
+  'firemock', 'real-time-db', 'firestore-db', // build:db
+  'real-time-client', 'real-time-admin', 'firestore-client', 'firestore-admin', // build:sdk
+  'universal-fire', // build:closure
 ];
 
 function toPlugins(dir) {
