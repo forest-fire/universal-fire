@@ -8,8 +8,9 @@ const packages = join(__dirname, '..', 'packages');
 const sequence = [
   'types', // build:types
   'utility', 'serialized-query', 'serializer-factory', // build:shared
+  'firemock', // (abstracted dep)
   'abstracted-database', // build:base
-  'firemock', 'real-time-db', 'firestore-db', // build:db
+  'real-time-db', 'firestore-db', // build:db
   'real-time-client', 'real-time-admin', 'firestore-client', 'firestore-admin', // build:sdk
   'universal-fire', // build:closure
 ];
