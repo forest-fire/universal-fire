@@ -15,7 +15,7 @@
     "dist"
   ],
   "module": "dist/es/index.js",
-  "types": "dist/es/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "main": "dist/cjs/index.js",
   "sideEffects": false,
   "scripts": {

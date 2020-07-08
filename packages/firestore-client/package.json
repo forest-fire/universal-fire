@@ -4,7 +4,7 @@
   "description": "The univeral-fire SDK to connect to Firebase's Firestore database using the Client SDK",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
-  "types": "dist/es/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist"
