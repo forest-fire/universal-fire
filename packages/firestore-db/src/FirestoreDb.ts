@@ -3,14 +3,19 @@ import type {
   IAdminApp,
   IClientApp,
   IFirestoreDatabase,
-  IFirestoreDbEvent,
+  IAbstractedDatabase,
+  ISerializedQuery,
+  IAbstractedEvent,
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
-import type { SerializedFirestoreQuery } from '@forest-fire/serialized-query';
+import { IFirestoreDb } from './firestore-types';
+import { isFirestoreEvent, FirestoreDbError, VALID_FIRESTORE_EVENTS } from '.';
+import type { Mock as IMockApi } from 'firemock';
 
-export abstract class FirestoreDb extends AbstractedDatabase {
+export abstract class FirestoreDb extends AbstractedDatabase
+  implements IFirestoreDb, IAbstractedDatabase<IMockApi> {
   protected _database?: IFirestoreDatabase;
-  protected _app?: IClientApp | IAdminApp;
+  protected _app!: IClientApp | IAdminApp;
 
   protected get database() {
     if (this._database) {
@@ -26,12 +31,12 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     this._database = value;
   }
 
-  protected _isCollection(path: string | SerializedFirestoreQuery) {
+  protected _isCollection(path: string | ISerializedQuery) {
     path = typeof path !== 'string' ? path.path : path;
     return path.split('/').length % 2 === 0;
   }
 
-  protected _isDocument(path: string | SerializedFirestoreQuery) {
+  protected _isDocument(path: string | ISerializedQuery) {
     return this._isCollection(path) === false;
   }
 
@@ -40,8 +45,8 @@ export abstract class FirestoreDb extends AbstractedDatabase {
   }
 
   public async getList<T = any>(
-    path: string | SerializedFirestoreQuery<T>,
-    idProp: string
+    path: string | ISerializedQuery<T>,
+    idProp: string = 'id'
   ): Promise<T[]> {
     path = typeof path !== 'string' ? path.path : path;
     const querySnapshot = await this.database.collection(path).get();
@@ -58,7 +63,7 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     return this.database.collection(path).doc().id;
   }
 
-  public async getRecord<T = any>(path: string, idProp: string = 'idProp') {
+  public async getRecord<T = any>(path: string, idProp: string = 'id') {
     const documentSnapshot = await this.database.doc(path).get();
     return {
       ...documentSnapshot.data(),
@@ -87,15 +92,46 @@ export abstract class FirestoreDb extends AbstractedDatabase {
     }
   }
 
+  /**
+   * watch
+   *
+   * Watch for firebase events based on a DB path or `SerializedQuery` (path plus query elements)
+   *
+   * @param target a database path or a SerializedQuery
+   * @param events an event type or an array of event types (e.g., "value", "child_added")
+   * @param cb the callback function to call when event triggered
+   */
   public watch(
-    target: string | SerializedFirestoreQuery,
-    events: IFirestoreDbEvent | IFirestoreDbEvent[],
+    target: string | ISerializedQuery,
+    events: IAbstractedEvent | IAbstractedEvent[],
     cb: any
   ): void {
+    if (events && !isFirestoreEvent(events)) {
+      throw new FirestoreDbError(
+        `An attempt to watch an event which is not valid for the Firestore database (but likely is for the Real Time database). Events passed in were: ${JSON.stringify(
+          events
+        )}\n. In contrast, the valid events in Firestore are: ${VALID_FIRESTORE_EVENTS.join(
+          ', '
+        )}`,
+        'invalid-event'
+      );
+    }
+
     throw new Error('Not implemented');
   }
 
-  public unWatch(events: IFirestoreDbEvent[], cb?: any) {
+  public unWatch(events?: IAbstractedEvent | IAbstractedEvent[], cb?: any) {
+    if (events && !isFirestoreEvent(events)) {
+      throw new FirestoreDbError(
+        `An attempt was made to unwatch an event type which is not valid for the Firestore database. Events passed in were: ${JSON.stringify(
+          events
+        )}\nIn contrast, the valid events in Firestore are: ${VALID_FIRESTORE_EVENTS.join(
+          ', '
+        )}`,
+        'invalid-event'
+      );
+    }
+
     throw new Error('Not implemented');
   }
 

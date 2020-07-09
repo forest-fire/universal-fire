@@ -1,38 +1,46 @@
-import { RealTimeDb, IRealTimeDb } from '@forest-fire/real-time-db';
+import '@firebase/auth';
+import '@firebase/database';
+
+import { ClientError, EventManager } from './private';
 import {
-  isMockConfig,
-  isClientConfig,
-  IClientConfig,
-  IClientAuth,
-  IMockConfig,
-  IRtdbDatabase,
-  IClientApp,
-  IRtdbDataSnapshot,
-  FirebaseNamespace,
-} from '@forest-fire/types';
-import {
-  extractClientConfig,
   FireError,
+  determineDefaultAppName,
+  extractClientConfig,
   getRunningApps,
   getRunningFirebaseApp,
-  determineDefaultAppName,
 } from '@forest-fire/utility';
-export enum FirebaseBoolean {
-  true = 1,
-  false = 0,
-}
+import {
+  FirebaseNamespace,
+  IAbstractedDatabase,
+  IClientApp,
+  IClientAuth,
+  IClientAuthProviders,
+  IClientConfig,
+  IMockConfig,
+  IRtdbDataSnapshot,
+  SDK,
+  isClientConfig,
+  isMockConfig,
+} from '@forest-fire/types';
+import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
+
+import { FirebaseApp } from '@firebase/app-types';
+import { FirebaseDatabase } from '@firebase/database-types';
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
-import { EventManager, ClientError } from './private';
 
 export let MOCK_LOADING_TIMEOUT = 200;
+export { IEmitter } from './private';
+import type { Mock as IMockApi } from 'firemock';
 
-export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
+export class RealTimeClient extends RealTimeDb
+  implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
+  sdk = SDK.RealTimeClient;
   /**
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
    * and then returns a promise which is resolved once the _connection_ is established.
    */
-  public static async connect(config: IClientConfig | IMockConfig) {
+  public static async connect(config?: IClientConfig | IMockConfig) {
     const obj = new RealTimeClient(config);
     await obj.connect();
     return obj;
@@ -40,23 +48,15 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
 
   /** lists the database names which are currently connected */
   public static async connectedTo() {
-    const fb = await import(
-      /* webpackChunkName: 'firebase-auth' */ '@firebase/app'
-    );
-    await import(
-      /* webpackChunkName: 'firebase-database' */ '@firebase/database'
-    );
-    return Array.from(new Set(fb.firebase.apps.map((i) => i.name)));
+    return Array.from(new Set(firebase.apps.map((i) => i.name)));
   }
 
   protected _isAdminApi = false;
   protected _eventManager: EventManager;
-  protected _database?: IRtdbDatabase;
+  protected _database?: FirebaseDatabase;
   protected _auth?: IClientAuth;
   protected _config: IClientConfig | IMockConfig;
-  protected _fbClass:
-    | FirebaseNamespace
-    | (FirebaseNamespace & { auth: () => FirebaseNamespace['auth'] });
+  protected _fbClass: IClientApp;
   protected _authProviders: FirebaseNamespace['auth'];
   protected _app: IClientApp;
 
@@ -83,7 +83,10 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
       try {
         const runningApps = getRunningApps(firebase.apps);
         this._app = runningApps.includes(config.name)
-          ? getRunningFirebaseApp<IClientApp>(config.name, firebase.apps)
+          ? (getRunningFirebaseApp<IClientApp>(
+              config.name,
+              firebase.apps
+            ) as FirebaseApp)
           : firebase.initializeApp(config, config.name);
       } catch (e) {
         if (e.message && e.message.indexOf('app/duplicate-app') !== -1) {
@@ -99,19 +102,6 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
       );
     }
     this._config = config;
-  }
-
-  protected get app() {
-    if (this._app) {
-      return this._app;
-    }
-    throw new FireError(
-      'Attempt to access Firebase App without having instantiated it'
-    );
-  }
-
-  protected set app(value: IClientApp) {
-    this._app = value;
   }
 
   public async connect(): Promise<RealTimeClient> {
@@ -133,7 +123,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
   /**
    * access to provider specific providers
    */
-  get authProviders(): FirebaseNamespace['auth'] {
+  get authProviders(): IClientAuthProviders {
     if (!this._fbClass) {
       throw new ClientError(
         `There was a problem getting the Firebase default export/class!`,
@@ -148,6 +138,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
           'missing-auth'
         );
       }
+      this._authProviders = firebase.auth;
     }
     this._authProviders = this._fbClass.auth;
 
@@ -166,9 +157,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
       this._auth = await this.mock.auth();
       return this._auth;
     }
-    if (!this._app.auth) {
-      await this.loadAuthApi();
-    }
+
     this._auth = this._app.auth() as IClientAuth;
     return this._auth;
   }
@@ -188,10 +177,10 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
 
   protected async _connectRealDb(config: IClientConfig) {
     if (!this._isConnected) {
-      await this.loadDatabaseApi();
-      this._database = this._app.database();
+      // await this.loadDatabaseApi();
+      this._database = firebase.database(this._app);
       if (config.useAuth) {
-        await this.loadAuthApi();
+        // await this.loadAuthApi();
         this._auth = this._app.auth();
       }
       await this._listenForConnectionStatus();
@@ -206,14 +195,6 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeDb {
           : (message: string) => console.log('[FIREBASE]', message)
       );
     }
-  }
-
-  protected async loadAuthApi() {
-    await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
-  }
-
-  protected async loadDatabaseApi() {
-    await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
   }
 
   /**

@@ -1,5 +1,6 @@
-import { atRandom } from '../../../../shared/atRandom';
 import { allUsers, currentUser } from '../../../state-mgmt';
+
+import { atRandom } from '../../../../util/atRandom';
 
 export async function getIdToken() {
   const user = currentUser();

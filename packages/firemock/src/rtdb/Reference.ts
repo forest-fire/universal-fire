@@ -1,14 +1,12 @@
 import { IDictionary } from 'common-types';
-import {
+import type {
   IRtdbReference,
   IRtdbDataSnapshot,
   IRtdbThenableReference,
-  IRtdbEventType,
+  IRtdbDbEvent,
 } from '@forest-fire/types';
 
-import {
-  IFirebaseEventHandler,
-} from '../@types/rtdb-types';
+import { IFirebaseEventHandler, DelayType } from '@/@types';
 
 import {
   setDB,
@@ -19,16 +17,10 @@ import {
   SnapShot,
   addListener,
   Query,
-} from '../rtdb/index';
-import {
-  parts,
-  join,
-  slashNotation,
-  networkDelay,
-  DelayType,
-} from '../shared/index';
+  getDb,
+} from '@/rtdb';
+import { parts, join, slashNotation, networkDelay } from '@/util';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { getDb } from './store';
 
 function isMultiPath(data: IDictionary) {
   Object.keys(data).map((d: any) => {
@@ -177,7 +169,7 @@ export class Reference<T = any> extends Query<T> implements IRtdbReference {
 
   protected addListener(
     pathOrQuery: string | SerializedRealTimeQuery<any>,
-    eventType: IRtdbEventType,
+    eventType: IRtdbDbEvent,
     callback: IFirebaseEventHandler,
     cancelCallbackOrContext?: (err?: Error) => void,
     context?: IDictionary

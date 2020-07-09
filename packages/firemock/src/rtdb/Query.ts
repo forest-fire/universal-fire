@@ -1,19 +1,16 @@
-import { IDictionary } from 'common-types';
+import { DelayType, IFirebaseEventHandler, QueryValue } from '@/@types';
 import {
+  IRtdbDataSnapshot,
+  IRtdbDbEvent,
   IRtdbQuery,
   IRtdbReference,
-  IRtdbDataSnapshot,
-  IRtdbEventType,
-} from '@forest-fire/types'
+  RealQueryOrderType,
+} from '@forest-fire/types';
+import { SnapShot, getDb } from '@/rtdb';
+import { leafNode, networkDelay, runQuery } from '@/util';
 
-import {
-  QueryValue,
-  IFirebaseEventHandler,
-} from '../@types/rtdb-types';
-import { getDb, SnapShot } from '../rtdb/index';
-import { SerializedRealTimeQuery, RealQueryOrderType } from '@forest-fire/serialized-query';
-import { leafNode, DelayType, networkDelay } from '../shared/index';
-import { runQuery } from '../shared/index';
+import { IDictionary } from 'common-types';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 
 /** tslint:ignore:member-ordering */
 export abstract class Query<T = any> implements IRtdbQuery {
@@ -73,7 +70,7 @@ export abstract class Query<T = any> implements IRtdbQuery {
    * Setup an event listener for a given eventType
    */
   public on(
-    eventType: IRtdbEventType,
+    eventType: IRtdbDbEvent,
     callback: (a: IRtdbDataSnapshot, b?: null | string) => any,
     cancelCallbackOrContext?: (err?: Error) => void | null,
     context?: object | null
@@ -180,7 +177,7 @@ export abstract class Query<T = any> implements IRtdbQuery {
 
   protected abstract addListener(
     pathOrQuery: string | SerializedRealTimeQuery<any>,
-    eventType: IRtdbEventType,
+    eventType: IRtdbDbEvent,
     callback: IFirebaseEventHandler,
     cancelCallbackOrContext?: (err?: Error) => void,
     context?: IDictionary

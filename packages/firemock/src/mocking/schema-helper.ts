@@ -1,5 +1,5 @@
-import { ISchemaHelper } from '../@types/mocking-types';
-import type { FakerStatic } from '@forest-fire/types'
+import { ISchemaHelper } from '@/@types';
+import type { FakerStatic } from '@forest-fire/types';
 
 export class SchemaHelper<T = any> implements ISchemaHelper<T> {
   /**

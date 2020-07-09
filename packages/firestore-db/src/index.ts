@@ -1,2 +1,3 @@
 export * from './FirestoreDb';
-export * from './types';
+export * from './firestore-types';
+export * from './FirestoreDbError';

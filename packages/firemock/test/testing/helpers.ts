@@ -1,12 +1,14 @@
-// tslint:disable:no-implicit-dependencies
+import './test-console'; // TS declaration
+
+import * as fs from 'fs';
+import * as process from 'process';
+import * as yaml from 'js-yaml';
+
+import { stderr, stdout } from 'test-console';
+
 import { IDictionary } from 'common-types';
 import first from 'lodash.first';
 import last from 'lodash.last';
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import * as process from 'process';
-import './test-console'; // TS declaration
-import { stdout, stderr } from 'test-console';
 
 // tslint:disable-next-line
 interface Console {

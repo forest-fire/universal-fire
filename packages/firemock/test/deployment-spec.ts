@@ -1,8 +1,6 @@
-// tslint:disable:no-implicit-dependencies
-import 'mocha';
-import { expect } from 'chai';
-import { length } from './testing/helpers';
 import { Mock, SchemaCallback } from '../src';
+
+import { length } from './testing/helpers';
 
 describe('Deployment', () => {
   const animalMock: SchemaCallback = (h) => () => ({
@@ -26,8 +24,8 @@ describe('Deployment', () => {
       .equalTo(12, 'age')
       .once('value');
 
-    expect(results.numChildren()).to.equal(6);
-    expect(filtered.numChildren()).to.equal(2);
+    expect(results.numChildren()).toBe(6);
+    expect(filtered.numChildren()).toBe(2);
   });
 
   it('orderByChild() simulates ordering on server side', async () => {
@@ -50,17 +48,17 @@ describe('Deployment', () => {
       .once('value');
 
     const animals = orderedOnServer.val();
-    expect(orderedOnServer.numChildren()).to.equal(30); // housekeeping
+    expect(orderedOnServer.numChildren()).toBe(30); // housekeeping
     // correct ages were filtered by server query
     Object.keys(animals).map((animal) => {
-      expect(animals[animal].age).to.be.greaterThan(13);
+      expect(animals[animal].age).toBeGreaterThan(13);
     });
     // the order of the returned list, however, does not follow the sort
     const sequence = Object.keys(animals).map((animal) => animals[animal].age);
     const sorted = sequence.reduce((prev, curr) =>
       typeof prev === 'number' && curr < prev ? curr : false
     );
-    expect(sorted).to.equal(false);
+    expect(sorted).toBe(false);
   });
 
   it('startAt(x, y) filter works', async () => {
@@ -83,17 +81,17 @@ describe('Deployment', () => {
       .once('value');
 
     const animals = orderedOnServer.val();
-    expect(orderedOnServer.numChildren()).to.equal(30); // housekeeping
+    expect(orderedOnServer.numChildren()).toBe(30); // housekeeping
     // correct ages were filtered by server query
     Object.keys(animals).map((animal) => {
-      expect(animals[animal].age).to.be.greaterThan(13);
+      expect(animals[animal].age).toBeGreaterThan(13);
     });
     // the order of the returned list, however, does not follow the sort
     const sequence = Object.keys(animals).map((animal) => animals[animal].age);
     const sorted = sequence.reduce((prev, curr) =>
       typeof prev === 'number' && curr < prev ? curr : false
     );
-    expect(sorted).to.equal(false);
+    expect(sorted).toBe(false);
   });
 
   it('using modelName() changes path in DB', async () => {
@@ -103,9 +101,9 @@ describe('Deployment', () => {
     m.queueSchema('cat', 10);
     m.queueSchema('dog', 10);
     m.generate();
-    expect(length(m.db.cats)).to.equal(10);
-    expect(length(m.db.dogs)).to.equal(0);
-    expect(length(m.db.animals)).to.equal(10);
+    expect(length(m.db.cats)).toBe(10);
+    expect(length(m.db.dogs)).toBe(0);
+    expect(length(m.db.animals)).toBe(10);
   });
 
   it('offset property is incorporated into DB path', async () => {
@@ -121,11 +119,11 @@ describe('Deployment', () => {
     m.queueSchema('dog', 10, { kind: 'dog' });
     m.generate();
 
-    expect(length(m.db.dogs)).to.equal(0);
-    expect(length(m.db.cats)).to.equal(0);
-    expect(length(m.db.animals)).to.equal(0);
-    expect(length(m.db.auth)).to.equal(1);
-    expect(length(m.db.auth.anonymous)).to.equal(1);
-    expect(length(m.db.auth.anonymous.animals)).to.equal(20);
+    expect(length(m.db.dogs)).toBe(0);
+    expect(length(m.db.cats)).toBe(0);
+    expect(length(m.db.animals)).toBe(0);
+    expect(length(m.db.auth)).toBe(1);
+    expect(length(m.db.auth.anonymous)).toBe(1);
+    expect(length(m.db.auth.anonymous.animals)).toBe(20);
   });
 });

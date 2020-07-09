@@ -1,5 +1,11 @@
-import { IDictionary } from "common-types";
-import { Queue, Schema, Deployment, MockHelper } from "../mocking/index";
+import { IDictionary } from 'common-types';
+import {
+  Queue,
+  Schema,
+  Deployment,
+  getFakerLibrary,
+  importFakerLibrary,
+} from '@/mocking';
 import {
   Reference,
   clearDatabase,
@@ -7,28 +13,28 @@ import {
   restoreEvents,
   silenceEvents,
   getDb,
-} from "../rtdb/index";
-import { DelayType, setNetworkDelay } from "../shared";
-import { auth as fireAuth } from "../auth";
-import { clearAuthUsers, initializeAuth } from "../auth/state-mgmt";
-import { FireMockError } from "../errors/FireMockError";
+} from '@/rtdb';
+import { setNetworkDelay } from '@/util';
+import { DelayType } from '@/@types';
+import { auth as fireAuth } from '@/auth';
+import { clearAuthUsers, initializeAuth } from '@/auth/state-mgmt';
+import { FireMockError } from '@/errors';
 import {
   IRelationship,
   ISchema,
   IQueue,
   SchemaCallback,
   IMockSetup,
-} from "../@types";
-import authProviders from "../auth/client-sdk/AuthProviders";
-import {
+} from '@/@types';
+import authProviders from '@/auth/client-sdk/AuthProviders';
+import type {
   FirebaseNamespace,
   IMockAuthConfig,
   IAdminAuth,
   IMockConfigOptions,
   AsyncMockData,
-} from "@forest-fire/types";
-import { getFakerLibrary, importFakerLibrary } from "./fakerInitialiation";
-import { adminAuthSdk } from "../auth/admin-sdk";
+} from '@forest-fire/types';
+import { adminAuthSdk } from '@/auth/admin-sdk';
 
 /* tslint:disable:max-classes-per-file */
 export class Mock {
@@ -49,13 +55,13 @@ export class Mock {
     await importFakerLibrary();
     const obj = new Mock(
       options.db
-        ? typeof options.db === "function"
+        ? typeof options.db === 'function'
           ? {}
           : options.db || defaultDbConfig
         : defaultDbConfig,
       options.auth
     );
-    if (typeof options.db === "function") {
+    if (typeof options.db === 'function') {
       obj.updateDB(await (options.db as AsyncMockData)(obj));
     }
     return obj;
@@ -70,9 +76,9 @@ export class Mock {
   }
 
   // TODO: should these attributes be removed?
-  private _schemas = new Queue<ISchema>("schemas").clear();
-  private _relationships = new Queue<IRelationship>("relationships").clear();
-  private _queues = new Queue<IQueue>("queues").clear();
+  private _schemas = new Queue<ISchema>('schemas').clear();
+  private _relationships = new Queue<IRelationship>('relationships').clear();
+  private _queues = new Queue<IQueue>('queues').clear();
   private _mockInitializer: IMockSetup;
   private _fakerLoaded: Promise<any>;
 
@@ -85,17 +91,17 @@ export class Mock {
      */
     dataOrMock?: IDictionary | IMockSetup,
     authConfig: IMockAuthConfig = {
-      providers: ["anonymous"],
+      providers: ['anonymous'],
       users: [],
     }
   ) {
     Queue.clearAll();
     clearDatabase();
     clearAuthUsers();
-    if (dataOrMock && typeof dataOrMock === "object") {
+    if (dataOrMock && typeof dataOrMock === 'object') {
       this.updateDB(dataOrMock);
     }
-    if (dataOrMock && typeof dataOrMock === "function") {
+    if (dataOrMock && typeof dataOrMock === 'function') {
       this._mockInitializer = dataOrMock(this) as IMockSetup;
     }
 
@@ -134,6 +140,9 @@ export class Mock {
     restoreEvents();
   }
 
+  /**
+   * Gives access to a mocked version of the Client Auth SDK
+   */
   public async auth() {
     return fireAuth();
   }
@@ -142,7 +151,7 @@ export class Mock {
     return adminAuthSdk;
   }
 
-  public get authProviders(): FirebaseNamespace["auth"] {
+  public get authProviders(): FirebaseNamespace['auth'] {
     return authProviders;
   }
 
@@ -153,23 +162,6 @@ export class Mock {
     return getFakerLibrary();
   }
 
-  // /**
-  //  * **getMockHelper**
-  //  *
-  //  * returns a MockHelper class which should always contain
-  //  * access to the faker library off the `faker` property exposed;
-  //  * you can also set some additional `context` where desirable.
-  //  */
-  // public getMockHelper(context?: IDictionary) {
-  //   if (!faker && !faker.address) {
-  //     throw new FireMockError(
-  //       `The Faker library must be loaded before a MockHelper can be returned`,
-  //       "firemock/faker-not-ready"
-  //     );
-  //   }
-  //   return new MockHelper(context);
-  // }
-
   public addSchema<S = any>(schema: string, mock?: SchemaCallback<S>) {
     return new Schema<S>(schema, mock);
   }
@@ -179,7 +171,11 @@ export class Mock {
     setNetworkDelay(d);
   }
 
-  public queueSchema<T = any>(schemaId: string, quantity: number = 1, overrides: IDictionary = {}) {
+  public queueSchema<T = any>(
+    schemaId: string,
+    quantity: number = 1,
+    overrides: IDictionary = {}
+  ) {
     const d = new Deployment();
     d.queueSchema(schemaId, quantity, overrides);
     return d;
@@ -190,7 +186,7 @@ export class Mock {
     if (!faker && !faker.address) {
       throw new FireMockError(
         `The Faker library must be loaded before you can generate mocked data can be returned`,
-        "firemock/faker-not-ready"
+        'firemock/faker-not-ready'
       );
     }
 

@@ -1,26 +1,26 @@
-import type { IDictionary } from "common-types";
+import type { IDictionary } from 'common-types';
 import type {
   IServiceAccount,
   UserRecord,
   IEmailAuthProvider,
   IClientAuth,
-} from "../index";
+} from '../index';
 
-export type FakerStatic = typeof import("faker");
+export type FakerStatic = typeof import('faker');
 
 export const enum AuthProviderName {
-  emailPassword = "emailPassword",
-  phone = "phone",
-  google = "google",
-  playGames = "playGames",
-  gameCenter = "gameCenter",
-  facebook = "facebook",
-  twitter = "twitter",
-  github = "github",
-  yahoo = "yahoo",
-  microsoft = "microsoft",
-  apple = "apple",
-  anonymous = "anonymous",
+  emailPassword = 'emailPassword',
+  phone = 'phone',
+  google = 'google',
+  playGames = 'playGames',
+  gameCenter = 'gameCenter',
+  facebook = 'facebook',
+  twitter = 'twitter',
+  github = 'github',
+  yahoo = 'yahoo',
+  microsoft = 'microsoft',
+  apple = 'apple',
+  anonymous = 'anonymous',
 }
 
 export type IAuthProviderName = keyof typeof AuthProviderName;
@@ -88,7 +88,7 @@ export interface IMockUser extends UserRecord {
  * parts are un-implementated currently) as well as extending
  * to add an "administrative" API for mocking.
  */
-export interface IMockAuth extends IClientAuth, IAuthProviders { }
+export interface IMockAuth extends IClientAuth, IAuthProviders {}
 
 /**
  * A basic configuration for a user that allows default values to fill in some of
@@ -96,7 +96,7 @@ export interface IMockAuth extends IClientAuth, IAuthProviders { }
  */
 export type ISimplifiedMockUser = Omit<
   IMockUser,
-  "emailVerified" | "disabled" | "uid" | "toJSON" | "providerData" | "metadata"
+  'emailVerified' | 'disabled' | 'uid' | 'toJSON' | 'providerData' | 'metadata'
 > & {
   emailVerified?: boolean;
   disabled?: boolean;
@@ -189,4 +189,15 @@ export interface IEmitter {
   emit: (event: string | symbol, ...args: any[]) => boolean;
   on: (event: string, value: any) => any;
   once: (event: string, value: any) => any;
+}
+
+/**
+ * An SDK that Firemodel supports connecting to Firebase by the
+ * equivalently named SDK.
+ */
+export const enum SDK {
+  FirestoreAdmin = 'FirestoreAdmin',
+  FirestoreClient = 'FirestoreClient',
+  RealTimeAdmin = 'RealTimeAdmin',
+  RealTimeClient = 'RealTimeClient',
 }

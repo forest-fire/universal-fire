@@ -1,1 +1,1 @@
-export * from './FirestoreAdmin'
+export * from './FirestoreAdmin';

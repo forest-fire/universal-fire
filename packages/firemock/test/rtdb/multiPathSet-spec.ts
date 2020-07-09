@@ -1,5 +1,3 @@
-import 'mocha';
-import { expect } from 'chai';
 import { Mock } from '../../src/mocking';
 
 describe('multiPathSet() => ', () => {
@@ -10,10 +8,10 @@ describe('multiPathSet() => ', () => {
       '/bar': 2,
       '/foo/baz': 5,
     });
-    expect(m.db.baz).to.equal(1);
-    expect(m.db.bar).to.equal(2);
-    expect(m.db.foo).to.be.an('object');
-    expect(m.db.foo.baz).to.equal(5);
+    expect(m.db.baz).toBe(1);
+    expect(m.db.bar).toBe(2);
+    expect(m.db.foo).toBeInstanceOf(Object);
+    expect(m.db.foo.baz).toBe(5);
   });
 
   it('setting properties deeply ', async () => {
@@ -23,9 +21,9 @@ describe('multiPathSet() => ', () => {
       '/foo/bar/bar': 2,
       '/foo/bar/baz': 5,
     });
-    expect(m.db.foo.bar.foo).to.equal(1);
-    expect(m.db.foo.bar.bar).to.equal(2);
-    expect(m.db.foo.bar.baz).to.equal(5);
+    expect(m.db.foo.bar.foo).toBe(1);
+    expect(m.db.foo.bar.bar).toBe(2);
+    expect(m.db.foo.bar.baz).toBe(5);
   });
 
   it('explicit paths are set destructively but neighboring properties are left untouched', async () => {
@@ -45,9 +43,9 @@ describe('multiPathSet() => ', () => {
       '/foo/bar/added': true,
       '/foo/bar/white': false,
     });
-    expect(m.db.foo.bar.added).is.equal(true);
-    expect(m.db.foo.bar.white).is.equal(false);
-    expect(m.db.foo.bar.green).is.equal(false);
-    expect(m.db.foo.bar.red).is.equal(true);
+    expect(m.db.foo.bar.added).toBe(true);
+    expect(m.db.foo.bar.white).toBe(false);
+    expect(m.db.foo.bar.green).toBe(false);
+    expect(m.db.foo.bar.red).toBe(true);
   });
 });

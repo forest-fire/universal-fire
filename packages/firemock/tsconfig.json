@@ -1,19 +1,16 @@
 {
+  "extends": "../../tsconfig.json",
+  "include": ["src", "global.d.ts", "test"],
+  "files": ["global.d.ts"],
   "compilerOptions": {
-    "declaration": true,
-    "module": "commonjs",
-    "target": "es2017",
-    "lib": ["es2017", "esnext.asynciterable", "es2015.reflect"],
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "outDir": "./dist/cjs",
-    "removeComments": false,
-    "typeRoots": ["./node_modules/@types"],
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*-spec.ts"]
+    "lib": ["esnext.asynciterable", "es2015.reflect"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "plugins": [
+      { "transform": "typescript-transform-paths" },
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ]
+  }
 }

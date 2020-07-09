@@ -1,11 +1,10 @@
-// tslint:disable:no-implicit-dependencies
-import 'mocha';
-import { expect } from 'chai';
 import * as helpers from './testing/helpers';
-import { SchemaCallback } from '../src';
+
 import { Mock, SchemaHelper } from '../src/mocking';
+import { firstProp, lastProp } from '../src/util/other';
+
+import { SchemaCallback } from '../src';
 import first from 'lodash.first';
-import { firstProp, lastProp } from '../src/shared/util';
 
 const employeeMocker: SchemaCallback = (h: SchemaHelper) => () => ({
   first: h.faker.name.firstName(),
@@ -17,23 +16,22 @@ describe('Mock class()', () => {
   it.skip('using Mock without prepare() does not provide faker support at onset', async () => {
     const m = new Mock();
     // this is unreliable; it may or may not be resolved
-    expect(m.faker).is.a('undefined');
+    expect(m.faker).toBeUndefined();
   });
 
   it('using Mock.prepare() initializer returns immediate use of faker library', async () => {
     const m = await Mock.prepare();
-    expect(m.faker).is.a('object');
-    expect(m.faker.address.city).is.a('function');
+    expect(m.faker).toBeInstanceOf(Object);
+    expect(m.faker.address.city).toBeFunction();
   });
 
   it('Mock a Schema API structured correctly', async () => {
     const m = await Mock.prepare();
     const schemaApi = m.addSchema('foo');
-    expect(schemaApi.mock).is.a('function');
-    expect(schemaApi.belongsTo).is.a('function');
-    expect(schemaApi.hasMany).is.a('function');
-    expect(schemaApi.pluralName).is.a('function');
-    // expect(schemaApi.databasePrefix).is.a('function');
+    expect(schemaApi.mock).toBeFunction();
+    expect(schemaApi.belongsTo).toBeFunction();
+    expect(schemaApi.hasMany).toBeFunction();
+    expect(schemaApi.pluralName).toBeFunction();
   });
 
   it('Mock → Deployment API structured correctly', async () => {
@@ -41,10 +39,10 @@ describe('Mock class()', () => {
     m.addSchema('foo').mock((h: SchemaHelper) => () => 'testing');
     const deployApi = m.deploy.queueSchema('foo');
 
-    expect(deployApi.queueSchema).is.a('function');
-    expect(deployApi.quantifyHasMany).is.a('function');
-    expect(deployApi.fulfillBelongsTo).is.a('function');
-    expect(deployApi.generate).is.a('function');
+    expect(deployApi.queueSchema).toBeFunction();
+    expect(deployApi.quantifyHasMany).toBeFunction();
+    expect(deployApi.fulfillBelongsTo).toBeFunction();
+    expect(deployApi.generate).toBeFunction();
   });
 
   describe('Building and basic config of database', () => {
@@ -59,10 +57,10 @@ describe('Mock class()', () => {
         },
       });
 
-      expect(m.db.monkeys).to.be.an('object');
-      expect(m.db.monkeys.a.name).to.equal('abbey');
+      expect(m.db.monkeys).toBeInstanceOf(Object);
+      expect(m.db.monkeys.a.name).toBe('abbey');
       const result = await m.ref('/monkeys').once('value');
-      expect(result.numChildren()).to.equal(3);
+      expect(result.numChildren()).toBe(3);
     });
 
     it('Adding a call to updateDB() allows additional state in conjunction with API additions', async () => {
@@ -80,14 +78,14 @@ describe('Mock class()', () => {
         },
       });
 
-      expect(m.db.monkeys).to.be.an('object');
-      expect(m.db.owners).to.be.an('object');
-      expect(m.db.monkeys.a.name).to.equal('abbey');
+      expect(m.db.monkeys).toBeInstanceOf(Object);
+      expect(m.db.owners).toBeInstanceOf(Object);
+      expect(m.db.monkeys.a.name).toBe('abbey');
       const monkeys = await m.ref('/monkeys').once('value');
-      expect(monkeys.numChildren()).to.equal(3);
+      expect(monkeys.numChildren()).toBe(3);
 
       const owners = await m.ref('/owners').once('value');
-      expect(owners.numChildren()).to.equal(10);
+      expect(owners.numChildren()).toBe(10);
     });
 
     it('Simple mock-to-generate populates DB correctly', async () => {
@@ -104,10 +102,10 @@ describe('Mock class()', () => {
       const keys = Object.keys(listOfFoos);
       const firstFoo = listOfFoos[first(keys)];
 
-      expect(listOfFoos).is.an('object');
-      expect(firstFoo.first).is.a('string');
-      expect(firstFoo.last).is.a('string');
-      expect(keys.length).is.equal(5);
+      expect(listOfFoos).toBeInstanceOf(Object);
+      expect(firstFoo.first).toBeString();
+      expect(firstFoo.last).toBeString();
+      expect(keys.length).toBe(5);
     });
 
     it("using pluralName() modifier changes a schema's database path", async () => {
@@ -125,11 +123,11 @@ describe('Mock class()', () => {
         .queueSchema('fungus')
         .generate();
 
-      expect(m.db.foos).is.equal(undefined);
-      expect(m.db.fooie).is.an('object');
-      expect(firstProp(m.db.fooie).result).is.equal('result');
-      expect(m.db.companies).is.an('object');
-      expect(m.db.fungi).is.an('object');
+      expect(m.db.foos).toBeUndefined();
+      expect(m.db.fooie).toBeInstanceOf(Object);
+      expect(firstProp(m.db.fooie).result).toBe('result');
+      expect(m.db.companies).toBeInstanceOf(Object);
+      expect(m.db.fungi).toBeInstanceOf(Object);
     });
 
     it('using modelName() modifier changes db path appropriately', async () => {
@@ -139,10 +137,10 @@ describe('Mock class()', () => {
         .modelName('car');
       m.deploy.queueSchema('foo').generate();
 
-      expect(m.db.foos).is.equal(undefined);
-      expect(m.db.cars).is.an('object');
+      expect(m.db.foos).toBeUndefined();
+      expect(m.db.cars).toBeInstanceOf(Object);
 
-      expect(firstProp(m.db.cars).result).is.equal('result');
+      expect(firstProp(m.db.cars).result).toBe('result');
     });
 
     it('using pathPrefix the generated data is appropriately offset', async () => {
@@ -152,7 +150,7 @@ describe('Mock class()', () => {
         .pathPrefix('authenticated');
       m.deploy.queueSchema('car', 10).generate();
 
-      expect(m.db.authenticated).is.an('object');
+      expect(m.db.authenticated).toBeInstanceOf(Object);
     });
 
     it('Mocking function that returns a scalar works as intended', async () => {
@@ -165,10 +163,10 @@ describe('Mock class()', () => {
       m.queueSchema('string', 10);
       m.generate();
 
-      expect(firstProp(m.db.strings)).is.a('string');
-      expect(lastProp(m.db.strings)).is.a('string');
-      expect(firstProp(m.db.numbers)).is.a('number');
-      expect(lastProp(m.db.numbers)).is.a('number');
+      expect(firstProp(m.db.strings)).toBeString();
+      expect(lastProp(m.db.strings)).toBeString();
+      expect(firstProp(m.db.numbers)).toBeNumber();
+      expect(lastProp(m.db.numbers)).toBeNumber();
     });
   });
 
@@ -182,8 +180,8 @@ describe('Mock class()', () => {
         .belongsTo('company');
       m.queueSchema('user').generate();
 
-      expect(firstProp(m.db.users)).has.property('companyId');
-      expect(firstProp(m.db.users).companyId).is.equal('');
+      expect(firstProp(m.db.users)).toHaveProperty('companyId');
+      expect(firstProp(m.db.users).companyId).toBe('');
     });
     it('Adding belongsTo relationship adds fulfilled shadow FK property when external schema not present', async () => {
       const m = await Mock.prepare();
@@ -194,11 +192,11 @@ describe('Mock class()', () => {
         .belongsTo('company');
       m.queueSchema('user', 2).fulfillBelongsTo('company').generate();
 
-      expect(firstProp(m.db.users)).has.property('companyId');
-      expect(lastProp(m.db.users)).has.property('companyId');
-      expect(firstProp(m.db.users).companyId).is.a('string');
-      expect(firstProp(m.db.users).companyId.slice(0, 1)).is.equal('-');
-      expect(firstProp(m.db.users).companyId).is.not.equal(
+      expect(firstProp(m.db.users)).toHaveProperty('companyId');
+      expect(lastProp(m.db.users)).toHaveProperty('companyId');
+      expect(firstProp(m.db.users).companyId).toBeString();
+      expect(firstProp(m.db.users).companyId.slice(0, 1)).toBe('-');
+      expect(firstProp(m.db.users).companyId).not.toBe(
         lastProp(m.db.users).companyId
       );
     });
@@ -215,12 +213,12 @@ describe('Mock class()', () => {
       });
       m.deploy.queueSchema('user', 2).fulfillBelongsTo('company').generate();
 
-      expect(firstProp(m.db.users)).has.property('companyId');
-      expect(firstProp(m.db.users).companyId).is.a('string');
-      expect(firstProp(m.db.users).companyId.slice(0, 1)).is.equal('-');
+      expect(firstProp(m.db.users)).toHaveProperty('companyId');
+      expect(firstProp(m.db.users).companyId).toBeString();
+      expect(firstProp(m.db.users).companyId.slice(0, 1)).toBe('-');
       const companyFK = firstProp(m.db.users).companyId;
       const companyIds = Object.keys(m.db.companies);
-      expect(companyIds.indexOf(companyFK)).is.not.equal(-1);
+      expect(companyIds.indexOf(companyFK)).not.toBe(-1);
     });
 
     it('Adding belongsTo relationship adds fulfilled real FK property when available in DB', async () => {
@@ -241,10 +239,10 @@ describe('Mock class()', () => {
 
       const firstCompanyId = firstProp(m.db.users).companyId;
       const companyIds = Object.keys(m.db.companies);
-      expect(firstProp(m.db.users)).has.property('companyId');
-      expect(firstCompanyId).is.a('string');
-      expect(firstCompanyId.slice(0, 1)).is.equal('-');
-      expect(companyIds.indexOf(firstCompanyId)).is.not.equal(-1);
+      expect(firstProp(m.db.users)).toHaveProperty('companyId');
+      expect(firstCompanyId).toBeString();
+      expect(firstCompanyId.slice(0, 1)).toBe('-');
+      expect(companyIds.indexOf(firstCompanyId)).not.toBe(-1);
     });
 
     it('Adding hasMany relationship does not add FK property without quantifyHasMany()', async () => {
@@ -256,7 +254,7 @@ describe('Mock class()', () => {
         .hasMany('employee');
       m.deploy.queueSchema('company').generate();
 
-      expect(firstProp(m.db.companies).employees).is.equal(undefined);
+      expect(firstProp(m.db.companies).employees).toBeUndefined();
     });
 
     it('Adding hasMany with quantifyHasMany() produces ghost references when FK reference is not a defined schema', async () => {
@@ -271,11 +269,9 @@ describe('Mock class()', () => {
         .quantifyHasMany('employee', 10)
         .generate();
 
-      expect(firstProp(m.db.companies).employees).is.an('object');
-      expect(Object.keys(firstProp(m.db.companies).employees).length).is.equal(
-        10
-      );
-      expect(m.db.employees).to.not.be.an('object');
+      expect(firstProp(m.db.companies).employees).toBeInstanceOf(Object);
+      expect(Object.keys(firstProp(m.db.companies).employees).length).toBe(10);
+      expect(m.db.employees).not.toBeInstanceOf(Object);
     });
     it('Adding hasMany with quantifyHasMany() produces real references when FK reference is a defined schema', async () => {
       const m = await Mock.prepare();
@@ -295,11 +291,9 @@ describe('Mock class()', () => {
         .quantifyHasMany('employee', 10)
         .generate();
 
-      expect(firstProp(m.db.companies).employees).is.an('object');
-      expect(Object.keys(firstProp(m.db.companies).employees).length).is.equal(
-        10
-      );
-      expect(m.db.employees).to.not.equal(undefined);
+      expect(firstProp(m.db.companies).employees).toBeInstanceOf(Object);
+      expect(Object.keys(firstProp(m.db.companies).employees).length).toBe(10);
+      expect(m.db.employees).toBeDefined();
     });
 
     it('Adding hasMany with quantifyHasMany() leverages existing FK schemas when they already exist', async () => {
@@ -322,10 +316,10 @@ describe('Mock class()', () => {
       m.deploy.generate();
 
       const company = firstProp(m.db.companies);
-      expect(company.employees).is.an('object');
-      expect(Object.keys(company.employees).length).is.equal(10);
-      expect(m.db.employees).to.not.equal(undefined);
-      expect(Object.keys(m.db.employees).length).to.equal(25);
+      expect(company.employees).toBeInstanceOf(Object);
+      expect(Object.keys(company.employees).length).toBe(10);
+      expect(m.db.employees).toBeDefined();
+      expect(Object.keys(m.db.employees).length).toBe(25);
     });
 
     it('Adding hasMany with quantifyHasMany() leverages existing FK schemas when they already exist, adds more when runs out', async () => {
@@ -347,12 +341,10 @@ describe('Mock class()', () => {
         .quantifyHasMany('employee', 10)
         .generate();
 
-      expect(firstProp(m.db.companies).employees).is.an('object');
-      expect(Object.keys(firstProp(m.db.companies).employees).length).is.equal(
-        10
-      );
-      expect(m.db.employees).to.not.equal(undefined);
-      expect(Object.keys(m.db.employees).length).to.equal(10);
+      expect(firstProp(m.db.companies).employees).toBeInstanceOf(Object);
+      expect(Object.keys(firstProp(m.db.companies).employees).length).toBe(10);
+      expect(m.db.employees).toBeDefined();
+      expect(Object.keys(m.db.employees).length).toBe(10);
     });
 
     it('Mock can generate more than once', async () => {
@@ -360,10 +352,10 @@ describe('Mock class()', () => {
       m.addSchema('employee', employeeMocker);
       m.queueSchema('employee', 10);
       m.generate();
-      expect(helpers.length(m.db.employees)).to.equal(10);
+      expect(helpers.length(m.db.employees)).toBe(10);
       m.queueSchema('employee', 5);
       m.generate();
-      expect(helpers.length(m.db.employees)).to.equal(15);
+      expect(helpers.length(m.db.employees)).toBe(15);
     });
   });
 });

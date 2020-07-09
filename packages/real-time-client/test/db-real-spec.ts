@@ -1,7 +1,7 @@
-import { expect } from 'chai';
 import * as helpers from './testing/helpers';
+
 import { IDictionary } from 'common-types';
-import { RealTimeClient } from '../src/private';
+import { RealTimeClient } from '../src/';
 
 const config = {
   apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',
@@ -9,47 +9,44 @@ const config = {
   databaseURL: 'https://abstracted-admin.firebaseio.com',
   projectId: 'abstracted-admin',
   storageBucket: 'abstracted-admin.appspot.com',
-  messagingSenderId: '547394508788'
+  messagingSenderId: '547394508788',
 };
 
 helpers.setupEnv();
 describe('Connecting to Database', () => {
   it('can instantiate', async () => {
     const db = new RealTimeClient(config);
-    expect(db).to.be.an('object');
-    expect(db).to.be.instanceof(RealTimeClient);
-    expect(db.getValue).to.be.a('function');
+    expect(db).toBeInstanceOf(Object);
+    expect(db).toBeInstanceOf(RealTimeClient);
+    expect(db.getValue).toBeInstanceOf('function');
   });
 
   it('RealTimeClient.connect() static initializer returns a connected database', async () => {
     const db = await RealTimeClient.connect(config);
-    expect(db.isConnected).to.equal(true);
+    expect(db.isConnected).toEqual(true);
   });
 
   it('isConnected is true once connect() returns', async () => {
     const db = new RealTimeClient(config);
     await db.connect();
-    expect(db.isConnected).to.equal(true);
+    expect(db.isConnected).toEqual(true);
   });
 
   it('adding an onConnect callback with context works', async () => {
     const db = new RealTimeClient(config);
     const itHappened: IDictionary<boolean> = { status: false };
 
-    const notificationId: string = db.notifyWhenConnected(database => {
-      expect(database).to.be.an('object', 'database object passed back');
-      expect(database.isConnected).to.be.a(
-        'boolean',
-        'the database objects reports that it is connected'
-      );
-      expect((database.config as any).apiKey).to.equal(config.apiKey);
+    const notificationId: string = db.notifyWhenConnected((database) => {
+      expect(database).toBeInstanceOf(Object);
+      expect(database.isConnected).toBeInstanceOf('boolean');
+      expect((database.config as any).apiKey).toBe(config.apiKey);
 
       itHappened.status = true;
     });
 
     await db.connect();
-    expect(itHappened.status).to.equal(true);
-    expect(db.isConnected).to.equal(true);
+    expect(itHappened.status).toEqual(true);
+    expect(db.isConnected).toEqual(true);
     db.removeNotificationOnConnection(notificationId);
   });
 });
@@ -60,42 +57,42 @@ describe('Read operations: ', () => {
   let dbMock: RealTimeClient;
   const personMockGenerator = (h: any) => () => ({
     name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
-    age: h.faker.random.number({ min: 10, max: 99 })
+    age: h.faker.random.number({ min: 10, max: 99 }),
   });
-  before(async () => {
+  beforeAll(async () => {
     db = await RealTimeClient.connect(config);
     await db.set('client-test-data', {
       one: 'foo',
       two: 'bar',
-      three: 'baz'
+      three: 'baz',
     });
     await db.set('client-test-records', {
       123456: {
         name: 'Chris',
-        age: 50
+        age: 50,
       },
       654321: {
         name: 'Bob',
-        age: 68
-      }
+        age: 68,
+      },
     });
   });
 
   it('getSnapshot() gets statically set data in test DB', async () => {
     const data = await db.getSnapshot('client-test-data');
-    expect(data.val()).to.be.an('object');
-    expect(data.val().one).to.be.equal('foo');
-    expect(data.val().two).to.be.equal('bar');
-    expect(data.val().three).to.be.equal('baz');
-    expect(data.key).to.equal('client-test-data');
+    expect(data.val()).toBeInstanceOf(Object);
+    expect(data.val().one).toBe('foo');
+    expect(data.val().two).toBe('bar');
+    expect(data.val().three).toBe('baz');
+    expect(data.key).toBe('client-test-data');
   });
 
   it('getValue() gets statically set data in test DB', async () => {
     const data = await db.getValue('client-test-data');
-    expect(data).to.be.an('object');
-    expect(data.one).to.be.equal('foo');
-    expect(data.two).to.be.equal('bar');
-    expect(data.three).to.be.equal('baz');
+    expect(data).toBeInstanceOf(Object);
+    expect(data.one).toBe('foo');
+    expect(data.two).toBe('bar');
+    expect(data.three).toBe('baz');
   });
 
   it('getRecord() gets statically set data in test DB', async () => {
@@ -107,10 +104,10 @@ describe('Read operations: ', () => {
 
     const record = await db.getRecord<ITest>('/client-test-records/123456');
 
-    expect(record).to.be.an('object');
-    expect(record.id).to.be.equal('123456');
-    expect(record.name).to.be.equal('Chris');
-    expect(record.age).to.be.equal(50);
+    expect(record).toBeInstanceOf(Object);
+    expect(record.id).toBe('123456');
+    expect(record.name).toBe('Chris');
+    expect(record.age).toBe(50);
   });
 });
 
@@ -129,73 +126,77 @@ describe('Write Operations', () => {
   it('push() variables into database', async () => {
     await db.push<INameAndAge>('client-test-data/pushed', {
       name: 'Charlie',
-      age: 25
+      age: 25,
     });
     await db.push('client-test-data/pushed', {
       name: 'Sandy',
-      age: 32
+      age: 32,
     });
     const users = await db
       .getValue('client-test-data/pushed')
-      .catch(e => new Error(e.message));
-    expect(Object.keys(users).length).to.equal(2);
-    expect(helpers.valuesOf(users, 'name')).to.include('Charlie');
-    expect(helpers.valuesOf(users, 'name')).to.include('Sandy');
+      .catch((e) => new Error(e.message));
+    expect(Object.keys(users).length).toBe(2);
+    expect(helpers.valuesOf(users, 'name')).toEqual(
+      expect.arrayContaining(['Charlie'])
+    );
+    expect(helpers.valuesOf(users, 'name')).toEqual(
+      expect.arrayContaining(['Sandy'])
+    );
   });
 
   it('set() sets data at a given path in DB', async () => {
     await db.set<INameAndAge>('client-test-data/set/user', {
       name: 'Charlie',
-      age: 25
+      age: 25,
     });
     const user = await db.getValue<INameAndAge>('client-test-data/set/user');
-    expect(user.name).to.equal('Charlie');
-    expect(user.age).to.equal(25);
+    expect(user.name).toBe('Charlie');
+    expect(user.age).toBe(25);
   });
 
   it('update() can "set" and then "update" contents', async () => {
     await db.update('client-test-data/update/user', {
       name: 'Charlie',
-      age: 25
+      age: 25,
     });
     let user = await db.getValue<INameAndAge>('client-test-data/update/user');
-    expect(user.name).to.equal('Charlie');
-    expect(user.age).to.equal(25);
+    expect(user.name).toBe('Charlie');
+    expect(user.age).toBe(25);
     await db.update('client-test-data/update/user', {
       name: 'Charles',
-      age: 34
+      age: 34,
     });
     user = await db.getValue<INameAndAge>('client-test-data/update/user');
-    expect(user.name).to.equal('Charles');
-    expect(user.age).to.equal(34);
+    expect(user.name).toBe('Charles');
+    expect(user.age).toBe(34);
   });
 
   it('update() leaves unchanged attributes as they were', async () => {
     await db.update('client-test-data/update/user', {
       name: 'Rodney',
-      age: 25
+      age: 25,
     });
     let user = await db.getValue<INameAndAge>('client-test-data/update/user');
-    expect(user.name).to.equal('Rodney');
-    expect(user.age).to.equal(25);
+    expect(user.name).toBe('Rodney');
+    expect(user.age).toBe(25);
     await db.update('client-test-data/update/user', {
-      age: 34
+      age: 34,
     });
     user = await db.getValue<INameAndAge>('client-test-data/update/user');
-    expect(user.name).to.equal('Rodney');
-    expect(user.age).to.equal(34);
+    expect(user.name).toBe('Rodney');
+    expect(user.age).toBe(34);
   });
 
   it('remove() eliminates a path -- and all children -- in DB', async () => {
     await db.set('client-test-data/removal/user', {
       name: 'Rodney',
-      age: 25
+      age: 25,
     });
     let user = await db.getValue<INameAndAge>('client-test-data/removal/user');
-    expect(user.name).to.equal('Rodney');
+    expect(user.name).toBe('Rodney');
     await db.remove('client-test-data/removal/user');
     user = await db.getValue<INameAndAge>('client-test-data/removal/user');
-    expect(user).to.equal(null);
+    expect(user).toBe(null);
   });
 });
 
@@ -209,9 +210,9 @@ describe('Other Operations', () => {
   it('exists() tests to true/false based on existance of data', async () => {
     await db.set('/client-test-data/existance', 'foobar');
     let exists = await db.exists('/client-test-data/existance');
-    expect(exists).to.equal(true);
+    expect(exists).toEqual(true);
     await db.remove('/client-test-data/existance');
     exists = await db.exists('/client-test-data/existance');
-    expect(exists).to.equal(false);
+    expect(exists).toBe(false);
   });
 });

@@ -1,6 +1,10 @@
-import { GoogleRecaptchaVerifier, RecaptchaVerifier_Instance } from "@forest-fire/types";
+import type {
+  GoogleRecaptchaVerifier,
+  RecaptchaVerifier_Instance,
+} from '@forest-fire/types';
 
-export class RecaptchaVerifier implements RecaptchaVerifier_Instance, GoogleRecaptchaVerifier {
+export class RecaptchaVerifier
+  implements RecaptchaVerifier_Instance, GoogleRecaptchaVerifier {
   public type: string;
 
   public clear() {
@@ -8,10 +12,10 @@ export class RecaptchaVerifier implements RecaptchaVerifier_Instance, GoogleReca
   }
 
   public async render(): Promise<number> {
-    throw new Error("not-implemented");
+    throw new Error('not-implemented');
   }
 
   public async verify(): Promise<string> {
-    throw new Error("not-implemented");
+    throw new Error('not-implemented');
   }
 }

@@ -5,15 +5,20 @@ import type {
   IClientAuth,
   IDatabaseConfig,
   IFirestoreDatabase,
-  IFirestoreDbEvent,
   IRtdbDatabase,
-  IRtdbEventType,
-} from "@forest-fire/types";
-import type { Mock as MockDb } from "firemock";
-import { BaseSerializer } from "@forest-fire/serialized-query";
-import { FireError } from "@forest-fire/utility";
+  SDK,
+  IClientAuthProviders,
+  IAppInfo,
+  IAbstractedDatabase,
+  ISerializedQuery,
+  IAbstractedEvent,
+  IMockConfigOptions,
+} from '@forest-fire/types';
+import type { Mock as MockDb } from 'firemock';
+import { FireError } from '@forest-fire/utility';
 
-export abstract class AbstractedDatabase {
+export abstract class AbstractedDatabase implements IAbstractedDatabase {
+  public readonly sdk: SDK;
   /**
    * Indicates if the database is using the admin SDK.
    */
@@ -46,13 +51,44 @@ export abstract class AbstractedDatabase {
    */
   protected abstract _auth?: IAdminAuth | IClientAuth;
   /**
-   * Returns the `_app`.
+   * Returns key characteristics about the Firebase app being managed.
    */
-  protected abstract get app(): IAdminApp | IClientApp;
+  public get app() {
+    if (this.config.mocking) {
+      throw new FireError(
+        `The "app" object is provided as direct access to the Firebase API when using a real database but not when using a Mock DB!`,
+        'not-allowed'
+      );
+    }
+    if (this._app) {
+      return {
+        name: this._app.name,
+        databaseURL: this._app.options.databaseURL
+          ? this._app.options.databaseURL
+          : '',
+        projectId: this._app.options.projectId
+          ? this._app.options.projectId
+          : '',
+        storageBucket: this._app.options.storageBucket
+          ? this._app.options.storageBucket
+          : '',
+      } as IAppInfo;
+    }
+    throw new FireError(
+      'Attempt to access Firebase App without having instantiated it'
+    );
+  }
+
   /**
-   * Sets the `_app`.
+   * Provides a set of API's that are exposed by the various "providers". Examples
+   * include "emailPassword", "github", etc.
+   *
+   * > **Note:** this is only really available on the Client SDK's
    */
-  protected abstract set app(value: IAdminApp | IClientApp);
+  public get authProviders(): IClientAuthProviders {
+    throw new FireError(`Only the client SDK's have a authProviders property`);
+  }
+
   /**
    * Returns a type safe accessor to the database; when the database has not been set yet
    * it will throw a `not-ready` error.
@@ -101,7 +137,7 @@ export abstract class AbstractedDatabase {
     if (!this.isMockDb) {
       throw new FireError(
         `Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`,
-        "AbstractedDatabase/not-allowed"
+        'AbstractedDatabase/not-allowed'
       );
     }
     if (!this._mock) {
@@ -123,7 +159,7 @@ export abstract class AbstractedDatabase {
    * `idProp` parameter.
    */
   public abstract async getList<T = any>(
-    path: string | BaseSerializer<T>,
+    path: string | ISerializedQuery<T>,
     idProp?: string
   ): Promise<T[]>;
   /**
@@ -138,7 +174,10 @@ export abstract class AbstractedDatabase {
    * Gets a record from a given path in the Firebase DB and converts it to an
    * object where the record's key is included as part of the record.
    */
-  public abstract async getRecord<T = any>(path: string, idProp?: string): Promise<T>;
+  public abstract async getRecord<T = any>(
+    path: string,
+    idProp?: string
+  ): Promise<T>;
   /**
    * Returns the value at a given path in the database. This method is a
    * typescript _generic_ which defaults to `any` but you can set the type to
@@ -152,7 +191,10 @@ export abstract class AbstractedDatabase {
    * that exist in the DB, but not in the value passed in then these properties
    * will _not_ be changed.
    */
-  public abstract async update<T = any>(path: string, value: Partial<T>): Promise<void>;
+  public abstract async update<T = any>(
+    path: string,
+    value: Partial<T>
+  ): Promise<void>;
   /**
    * Sets a value in the database at a given path.
    */
@@ -160,24 +202,43 @@ export abstract class AbstractedDatabase {
   /**
    * Removes a path from the database.
    */
-  public abstract async remove(path: string, ignoreMissing?: boolean): Promise<any>;
+  public abstract async remove(
+    path: string,
+    ignoreMissing?: boolean
+  ): Promise<any>;
+
+  // TODO: improve the signature for a callback in watch/unWatch
+
   /**
    * Watch for Firebase events based on a DB path.
    */
   public abstract watch(
-    target: string | BaseSerializer<any>,
-    events: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[],
+    target: string | ISerializedQuery,
+    events: IAbstractedEvent | IAbstractedEvent[],
     cb: any
   ): void;
   /**
    * Unwatches existing Firebase events.
    */
   public abstract unWatch(
-    events?: IFirestoreDbEvent | IFirestoreDbEvent[] | IRtdbEventType | IRtdbEventType[],
+    events?: IAbstractedEvent | IAbstractedEvent[],
     cb?: any
   ): void;
   /**
    * Returns a reference for a given path in Firebase
    */
   public abstract ref(path?: string): any;
+
+  /**
+   * **getFireMock**
+   *
+   * Asynchronously imports both `FireMock` and the `Faker` libraries
+   * then sets `isConnected` to **true**
+   */
+  protected async getFireMock(config: IMockConfigOptions = {}) {
+    const FireMock = await import(
+      /* webpackChunkName: "firemock" */ 'firemock'
+    );
+    this._mock = await FireMock.Mock.prepare(config);
+  }
 }

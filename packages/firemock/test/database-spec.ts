@@ -1,32 +1,31 @@
-// tslint:disable:no-implicit-dependencies
-import { expect } from 'chai';
 import * as helpers from './testing/helpers';
+
 import {
-  Mock,
-  SchemaCallback,
-  IFirebaseEventHandler,
   GenericEventHandler,
   HandleValueEvent,
+  IFirebaseEventHandler,
+  Mock,
+  SchemaCallback,
 } from '../src';
 import {
-  clearDatabase,
-  pushDB,
-  setDB,
-  removeDB,
-  updateDB,
-  reset,
-  getDb,
-} from '../src/rtdb/store';
-import {
   addListener,
-  listenerCount,
-  removeAllListeners,
-  removeListener,
-  listenerPaths,
   findChildListeners,
   findValueListeners,
+  listenerCount,
+  listenerPaths,
+  removeAllListeners,
+  removeListener,
 } from '../src/rtdb/listeners';
-import 'mocha';
+import {
+  clearDatabase,
+  getDb,
+  pushDB,
+  removeDB,
+  reset,
+  setDB,
+  updateDB,
+} from '../src/rtdb/store';
+
 import { wait } from 'common-types';
 
 interface IPerson {
@@ -44,9 +43,9 @@ describe('Database', () => {
   describe('Basics', () => {
     it('can clear database', () => {
       setDB('foo', 'bar');
-      expect(Object.keys(getDb()).length).to.equal(1);
+      expect(Object.keys(getDb()).length).toBe(1);
       clearDatabase();
-      expect(Object.keys(getDb()).length).to.equal(0);
+      expect(Object.keys(getDb()).length).toBe(0);
     });
   });
 
@@ -54,9 +53,9 @@ describe('Database', () => {
     it('can add listeners', () => {
       const callback: GenericEventHandler = (snap) => null;
       addListener('/path/to/node', 'value', callback);
-      expect(listenerCount()).to.equal(1);
+      expect(listenerCount()).toBe(1);
       addListener('/path/to/node', 'value', callback);
-      expect(listenerCount()).to.equal(2);
+      expect(listenerCount()).toBe(2);
     });
 
     it('can remove all listeners', () => {
@@ -65,13 +64,13 @@ describe('Database', () => {
       addListener('/path/to/node', 'value', callback);
       addListener('/path/to/node', 'value', callback);
       addListener('/path/to/node', 'value', callback);
-      expect(listenerCount()).to.equal(3);
+      expect(listenerCount()).toBe(3);
       removeListener();
-      expect(listenerCount()).to.equal(0);
+      expect(listenerCount()).toBe(0);
       addListener('/path/to/node', 'value', callback);
       addListener('/path/to/node', 'value', callback);
       addListener('/path/to/node', 'value', callback);
-      expect(listenerCount()).to.equal(3);
+      expect(listenerCount()).toBe(3);
       removeAllListeners();
     });
 
@@ -83,11 +82,13 @@ describe('Database', () => {
       addListener('/path/to/value2', 'value', callback);
       addListener('/path/to/moved', 'child_moved', callback);
       removeListener('child_added');
-      expect(listenerCount()).to.equal(3);
-      listenerPaths().forEach((p) => expect(p).to.not.include('added'));
+      expect(listenerCount()).toBe(3);
+      listenerPaths().forEach((p) =>
+        expect(p).toEqual(expect.not.arrayContaining(['added']))
+      );
       removeListener('value');
-      expect(listenerCount()).to.equal(1);
-      listenerPaths().forEach((p) => expect(p).to.include('moved'));
+      expect(listenerCount()).toBe(1);
+      listenerPaths().forEach((p) => expect(p.includes('moved')).toBeTrue());
     });
 
     it('can remove listeners of same eventType, callback', () => {
@@ -100,9 +101,11 @@ describe('Database', () => {
       addListener('/path/to/value3', 'value', callback2);
       addListener('/path/to/moved', 'child_moved', callback);
       removeListener('value', callback);
-      expect(listenerCount()).to.equal(3);
-      expect(listenerCount('value')).to.equal(1);
-      listenerPaths('value').forEach((l) => expect(l).to.include('value3'));
+      expect(listenerCount()).toBe(3);
+      expect(listenerCount('value')).toBe(1);
+      listenerPaths('value').forEach((l) => {
+        expect(l).toContain('value3');
+      });
     });
 
     it('can remove listeners of same eventType, callback, and context', () => {
@@ -116,10 +119,10 @@ describe('Database', () => {
       addListener('/path/to/added', 'child_added', callback, null, context);
       addListener('/path/to/value3', 'value', callback2, null, context2);
       addListener('/path/to/moved', 'child_moved', callback, null, context);
-      expect(listenerCount()).to.equal(5);
+      expect(listenerCount()).toBe(5);
       removeListener('value', callback2, context2);
-      expect(listenerCount()).to.equal(4);
-      expect(listenerPaths('value')).to.be.length(2);
+      expect(listenerCount()).toBe(4);
+      expect(listenerPaths('value')).toHaveLength(2);
     });
 
     it('cancel callbacks are called when set', () => {
@@ -134,16 +137,16 @@ describe('Database', () => {
       addListener('/path/to/value3', 'value', callback2);
       addListener('/path/to/moved', 'child_moved', callback);
       let howMany = removeAllListeners();
-      expect(howMany).to.equal(3);
-      expect(count).to.equal(3);
+      expect(howMany).toBe(3);
+      expect(count).toBe(3);
       addListener('/path/to/value1', 'value', callback, cancelCallback);
       addListener('/path/to/value2', 'value', callback2, cancelCallback);
       addListener('/path/to/added', 'child_added', callback, cancelCallback);
       addListener('/path/to/value3', 'value', callback2);
       addListener('/path/to/moved', 'child_moved', callback);
       howMany = removeListener('value');
-      expect(howMany).to.equal(2);
-      expect(count).to.equal(5);
+      expect(howMany).toBe(2);
+      expect(count).toBe(5);
     });
   });
 
@@ -155,10 +158,10 @@ describe('Database', () => {
         age: 5,
       });
       // check directly in DB
-      expect(pushKey).to.be.a('string');
-      expect(pushKey).to.include('-');
-      expect(getDb().people[pushKey]).to.be.an('object');
-      expect(getDb().people[pushKey].name).to.equal('Humpty Dumpty');
+      expect(pushKey).toBeString();
+      expect(pushKey.includes('-')).toBeTruthy();
+      expect(getDb().people[pushKey]).toBeInstanceOf(Object);
+      expect(getDb().people[pushKey].name).toBe('Humpty Dumpty');
     });
 
     it('setDB() works', () => {
@@ -167,8 +170,8 @@ describe('Database', () => {
         name: 'Humpty Dumpty',
         age: 5,
       });
-      expect(getDb().people.abc).to.be.an('object');
-      expect(getDb().people.abc.name).to.equal('Humpty Dumpty');
+      expect(getDb().people.abc).toBeInstanceOf(Object);
+      expect(getDb().people.abc.name).toBe('Humpty Dumpty');
     });
 
     it('updateDB() works', () => {
@@ -177,16 +180,16 @@ describe('Database', () => {
         name: 'Humpty Dumpty',
         age: 5,
       });
-      expect(getDb().people.update).to.be.an('object');
-      expect(getDb().people.update.name).to.equal('Humpty Dumpty');
-      expect(getDb().people.update.age).to.equal(5);
+      expect(getDb().people.update).toBeInstanceOf(Object);
+      expect(getDb().people.update.name).toBe('Humpty Dumpty');
+      expect(getDb().people.update.age).toBe(5);
       updateDB('/people/update', {
         age: 6,
         nickname: 'Humpty',
       });
-      expect(getDb().people.update.name).to.equal('Humpty Dumpty');
-      expect(getDb().people.update.age).to.equal(6);
-      expect(getDb().people.update.nickname).to.equal('Humpty');
+      expect(getDb().people.update.name).toBe('Humpty Dumpty');
+      expect(getDb().people.update.age).toBe(6);
+      expect(getDb().people.update.nickname).toBe('Humpty');
     });
 
     it('removeDB() works', () => {
@@ -195,11 +198,11 @@ describe('Database', () => {
         name: 'Humpty Dumpty',
         age: 5,
       });
-      expect(getDb().people.remove.name).to.equal('Humpty Dumpty');
-      expect(getDb().people.remove.age).to.equal(5);
+      expect(getDb().people.remove.name).toBe('Humpty Dumpty');
+      expect(getDb().people.remove.age).toBe(5);
       removeDB('/people/remove');
 
-      expect(getDb().people.remove).to.equal(undefined);
+      expect(getDb().people.remove).toBeUndefined();
     });
   });
 
@@ -215,7 +218,7 @@ describe('Database', () => {
       addListener('/auth/company', 'child_removed', callback);
       const listeners = findChildListeners('/auth/people');
 
-      expect(listeners).length(3);
+      expect(listeners).toHaveLength(3);
     });
 
     it('find all child listeners at a path below the listening path', () => {
@@ -229,7 +232,7 @@ describe('Database', () => {
       addListener('/auth/company', 'child_removed', callback);
       const listeners = findChildListeners('/auth/people/1234');
 
-      expect(listeners).length(3);
+      expect(listeners).toHaveLength(3);
     });
 
     it('find all child listeners at a path and event type', () => {
@@ -242,7 +245,7 @@ describe('Database', () => {
       addListener('/auth/people', 'value', callback);
       addListener('/auth/company', 'child_removed', callback);
       const listeners = findChildListeners('/auth/people', 'child_added');
-      expect(listeners).length(1);
+      expect(listeners).toHaveLength(1);
     });
 
     it('find all value listeners at a path', () => {
@@ -256,9 +259,9 @@ describe('Database', () => {
       addListener('/auth', 'value', callback);
       addListener('/auth/company', 'child_removed', callback);
       const listenAtpeople = findValueListeners('/auth/people');
-      expect(listenAtpeople).length(2);
+      expect(listenAtpeople).toHaveLength(2);
       const listenAtAuth = findValueListeners('/auth');
-      expect(listenAtAuth).length(1);
+      expect(listenAtAuth).toHaveLength(1);
     });
   });
 
@@ -268,12 +271,12 @@ describe('Database', () => {
       const callback: HandleValueEvent = (snap) => {
         if (snap.val()) {
           const record = helpers.firstRecord(snap.val());
-          expect(record.name).to.equal('Humpty Dumpty');
-          expect(record.age).to.equal(5);
+          expect(record.name).toBe('Humpty Dumpty');
+          expect(record.age).toBe(5);
         }
       };
       await addListener('/people', 'value', callback);
-      expect(listenerCount()).to.equal(1);
+      expect(listenerCount()).toBe(1);
       const pushKey = pushDB('/people', {
         name: 'Humpty Dumpty',
         age: 5,
@@ -294,12 +297,12 @@ describe('Database', () => {
         if (status === 'has-listener') {
           const list: any = snap.val();
           const first: any = list[firstKey];
-          expect(first.age).to.equal(firstRecord.age + 1);
+          expect(first.age).toBe(firstRecord.age + 1);
         }
       };
 
       await addListener('/people', 'value', callback);
-      expect(listenerCount()).to.equal(1);
+      expect(listenerCount()).toBe(1);
 
       status = 'has-listener';
       const people = await m.ref('/people').once('value');
@@ -315,15 +318,15 @@ describe('Database', () => {
       const callback: HandleValueEvent = (snap) => {
         const record = snap.val();
         if (record) {
-          expect(record.a.b.c.d.name).to.equal('Humpty Dumpty');
-          expect(record.a.b.c.d.age).to.equal(5);
+          expect(record.a.b.c.d.name).toBe('Humpty Dumpty');
+          expect(record.a.b.c.d.age).toBe(5);
         } else {
           // during initialization
-          expect(snap.val()).to.equal(null);
+          expect(snap.val()).toBe(null);
         }
       };
       await addListener('/people', 'value', callback);
-      expect(listenerCount()).to.equal(1);
+      expect(listenerCount()).toBe(1);
       setDB('/people/a/b/c/d', {
         name: 'Humpty Dumpty',
         age: 5,
@@ -338,31 +341,37 @@ describe('Database', () => {
       m.generate();
       let status = 'starting';
       const people = (await m.ref('/people').once('value')).val();
-      expect(Object.keys(people)).to.have.lengthOf(10);
+      expect(Object.keys(people)).toHaveLength(10);
       const firstKey = helpers.firstKey(people);
 
       const callback: IFirebaseEventHandler = (snap) => {
         const list = snap.val();
         if (list) {
-          expect(snap.numChildren()).to.equal(status === 'starting' ? 10 : 9);
+          expect(snap.numChildren()).toBe(status === 'starting' ? 10 : 9);
           if (status === 'starting') {
-            expect(Object.keys(list)).to.include(firstKey);
+            expect(Object.keys(list)).toEqual(
+              expect.arrayContaining([firstKey])
+            );
           } else {
-            expect(Object.keys(list)).to.not.include(firstKey);
+            expect(Object.keys(list)).toEqual(
+              expect.not.arrayContaining([firstKey])
+            );
           }
         }
       };
 
       await addListener('/people', 'value', callback);
-      expect(listenerCount()).to.equal(1);
+      expect(listenerCount()).toBe(1);
 
       status = 'after';
       removeDB(`/people/${firstKey}`);
 
       const andThen = (await m.ref('/people').once('value')).val();
 
-      expect(Object.keys(andThen)).to.have.lengthOf(9);
-      expect(Object.keys(andThen)).to.not.include(firstKey);
+      expect(Object.keys(andThen)).toHaveLength(9);
+      expect(Object.keys(andThen)).toEqual(
+        expect.not.arrayContaining([firstKey])
+      );
     });
   });
 
@@ -373,10 +382,10 @@ describe('Database', () => {
         db: { foo: { bar: true, baz: true } },
       });
 
-      expect(getDb()).to.be.an('object');
-      expect(getDb().foo).to.be.an('object');
-      expect(getDb().foo.bar).to.equal(true);
-      expect(getDb().foo.baz).to.equal(true);
+      expect(getDb()).toBeInstanceOf(Object);
+      expect(getDb().foo).toBeInstanceOf(Object);
+      expect(getDb().foo.bar).toBe(true);
+      expect(getDb().foo.baz).toBe(true);
     });
 
     it('passing in an async function to db config initializes the DB', async () => {
@@ -390,10 +399,10 @@ describe('Database', () => {
         },
       });
 
-      expect(getDb()).to.be.an('object');
-      expect(getDb().foo).to.be.an('object');
-      expect(getDb().foo.bar).to.equal(true);
-      expect(getDb().foo.baz).to.equal(true);
+      expect(getDb()).toBeInstanceOf(Object);
+      expect(getDb().foo).toBeInstanceOf(Object);
+      expect(getDb().foo.bar).toBe(true);
+      expect(getDb().foo.baz).toBe(true);
     });
   });
 
@@ -404,7 +413,7 @@ describe('Database', () => {
       const callback: IFirebaseEventHandler = (snap) => {
         if (status === 'listener') {
           const scalar = snap.val();
-          expect(scalar).to.equal(53);
+          expect(scalar).toBe(53);
         }
       };
       await addListener('/scalar', 'value', callback);
@@ -417,8 +426,8 @@ describe('Database', () => {
       const callback: HandleValueEvent = (snap) => {
         if (ready) {
           const person = snap.val();
-          expect(person.name).equal('Chris Christy');
-          expect(person.age).equal(100);
+          expect(person.name).toBe('Chris Christy');
+          expect(person.age).toBe(100);
         }
       };
       await addListener('/people', 'child_added', callback);
@@ -472,10 +481,10 @@ describe('Database', () => {
       let ready = false;
       const callback: HandleValueEvent = (snap) => {
         if (ready) {
-          expect(getDb().people).to.be.an('object');
-          expect(Object.keys(getDb().people)).length(0);
+          expect(getDb().people).toBeInstanceOf(Object);
+          expect(Object.keys(getDb().people)).toHaveLength(0);
         } else {
-          expect(Object.keys(getDb().people)).length(1);
+          expect(Object.keys(getDb().people)).toHaveLength(1);
         }
       };
       await addListener('/people', 'child_removed', callback);
@@ -525,10 +534,12 @@ describe('Database', () => {
       let ready = false;
       const callback: HandleValueEvent = (snap) => {
         if (ready) {
-          expect(getDb('people')).to.be.an('object');
-          expect(getDb('people')).to.have.all.keys('abcd', snap.key);
-          expect(helpers.length(getDb('people'))).to.equal(2);
-          expect(snap.val().name).to.equal('Barbara Streisand');
+          expect(getDb('people')).toBeInstanceOf(Object);
+          expect(getDb('people')).toHaveProperty('abcd');
+          expect(getDb('people')).toHaveProperty(snap.key);
+
+          expect(helpers.length(getDb('people'))).toBe(2);
+          expect(snap.val().name).toBe('Barbara Streisand');
         }
       };
       await addListener('/people', 'child_changed', callback);
@@ -539,7 +550,7 @@ describe('Database', () => {
       });
     });
 
-    it('"child_changed" responds to a removed child', (done) => {
+    it('"child_changed" responds to a removed child', async () => {
       reset();
       setDB('people.abcd', {
         name: 'Chris Chisty',
@@ -547,13 +558,15 @@ describe('Database', () => {
       });
 
       const callback: HandleValueEvent = (snap) => {
-        expect(getDb('people')).to.be.an('object');
-        expect(getDb('people')).to.not.have.key('abcd');
-        done();
+        expect(getDb('people')).toBeInstanceOf(Object);
+        expect(getDb('people')).not.toHaveProperty('abcd');
       };
-      expect(getDb('people')).to.have.key('abcd');
-      addListener('/people', 'child_removed', callback);
+      console.log(Object.keys(getDb('people')));
+
       removeDB(`/people.abcd`);
+      addListener('/people', 'child_removed', callback);
+
+      expect(getDb('people')).not.toHaveProperty('abcd');
     });
   });
 });
