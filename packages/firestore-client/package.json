@@ -33,12 +33,18 @@
     "nyc": "^15.0.0",
     "rimraf": "^3.0.2",
     "ts-node": "^8.10.1",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.3",
+    "@firebase/app": "^0.6.0",
+    "@firebase/firestore": "^1.14.0"
+  },
+  "peerDependencies": {
+    "@firebase/app": "^0.6.0",
+    "@firebase/firestore": "^1.14.0"
+  },
+  "optionalDependencies": {
+    "@firebase/auth": "^0.14.2"
   },
   "dependencies": {
-    "@firebase/app": "^0.6.0",
-    "@firebase/auth": "^0.14.2",
-    "@firebase/firestore": "^1.14.0",
     "@forest-fire/firestore-db": "^0.54.3",
     "@forest-fire/types": "^0.54.3",
     "@forest-fire/utility": "^0.54.3",
