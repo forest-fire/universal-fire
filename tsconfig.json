@@ -7,14 +7,10 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "removeComments": true,
+    "removeComments": false,
     "noImplicitAny": true,
     "sourceMap": true,
     "noEmit": true
   },
-  "exclude": [
-    "**/node_modules/**",
-    "packages/*/dist",
-    "**/test/**"
-  ]
+  "exclude": ["**/node_modules/**", "packages/*/dist", "**/test/**"]
 }

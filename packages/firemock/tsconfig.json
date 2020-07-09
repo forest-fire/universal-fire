@@ -1,10 +1,9 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*", "global.d.ts", "test/**/*"],
+  "include": ["src", "global.d.ts", "test"],
   "files": ["global.d.ts"],
   "compilerOptions": {
-    "lib": ["es2017", "esnext.asynciterable", "es2015.reflect"],
-    "removeComments": false,
+    "lib": ["esnext.asynciterable", "es2015.reflect"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

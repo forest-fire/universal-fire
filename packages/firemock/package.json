@@ -32,8 +32,6 @@
     "circular": "yarn run madge --circular --extensions ts ./src"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^13.0.0",
-    "@rollup/plugin-node-resolve": "^8.1.0",
     "@types/deepmerge": "^2.2.0",
     "@types/jest": "^26.0.3",
     "@types/js-yaml": "^3.12.1",
@@ -57,15 +55,12 @@
     "npm-run-all": "^4.1.5",
     "nyc": "^15.0.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.18.1",
-    "rollup-plugin-typescript2": "^0.27.1",
     "test-console": "^1.1.0",
     "ts-babel": "^6.1.7",
     "ts-jest": "^26.1.1",
     "ts-node": "^8.10.2",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
-    "ttypescript": "^1.5.10",
     "typescript": "^3.9.5",
     "typescript-transform-paths": "^1.1.14",
     "vuepress": "^1.5.0"

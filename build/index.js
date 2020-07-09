@@ -20,6 +20,7 @@ function toPlugins(dir) {
     require('@rollup/plugin-node-resolve').default(),
     require('rollup-plugin-typescript2')({
       tsconfig: join(dir, 'tsconfig.json'),
+      typescript: require('ttypescript'),
       useTsconfigDeclarationDir: true, //~> "dist/types"
       tsconfigOverride: {
         compilerOptions: {
@@ -48,7 +49,8 @@ async function build(name, opts) {
     external: [
       ...builtinModules,
       ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {})
+      ...Object.keys(pkg.peerDependencies || {}),
+      ...Object.keys(pkg.optionalDependencies || {})
     ]
   });
 
