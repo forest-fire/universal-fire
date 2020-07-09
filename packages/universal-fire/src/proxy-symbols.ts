@@ -1,11 +1,7 @@
 export type {
-  IAdminConfig,
   IMockConfig,
-  IClientConfig,
   IRtdbDbEvent,
   IFirestoreDbEvent,
-  IClientAuth,
-  IAdminAuth,
   AuthCredential,
   User,
   UserCredential,
@@ -15,12 +11,12 @@ export type {
   IValueBasedWatchEvent,
   IAbstractedEvent,
 } from '@forest-fire/types';
-import type { Mock as IMockApi } from 'firemock';
 
 export { SerializedQuery } from '@forest-fire/serializer-factory';
 export type { IComparisonOperator, ISerializedQuery } from '@forest-fire/types';
 
-export { IMockApi };
+import type { Mock as IMockApi } from 'firemock';
+export type { IMockApi };
 
 import { IAbstractedDatabase as IGenericAbstractedDatabase } from '@forest-fire/types';
 /**

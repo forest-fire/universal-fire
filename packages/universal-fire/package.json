@@ -4,7 +4,8 @@
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
-  "types": "dist/es/index.d.ts",
+  "browser": "dist/es/browser.js",
+  "types": "dist/types/index.node.d.ts",
   "sideEffects": false,
   "repository": {
     "type": "git",
@@ -12,12 +13,6 @@
   },
   "scripts": {
     "clean": "rimraf dist/**/*",
-    "build": "run-s clean build:tsc",
-    "build:tsc": "run-p build:es build:cjs",
-    "build:bundle": "rollup -c",
-    "build:es": "tsc -P tsconfig.es.json",
-    "build:cjs": "tsc -P tsconfig.cjs.json",
-    "build:monorepo": "cd ../../ && yarn build && cd -",
     "watch": "run-p watch:esnext watch:cjs",
     "watch:esnext": "echo not implemented",
     "watch:cjs": "echo not implemented",
@@ -37,13 +32,13 @@
     "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.18.1",
-    "rollup-plugin-typescript2": "^0.27.1",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "@forest-fire/firestore-admin": "^0.54.3",
     "@forest-fire/firestore-client": "^0.54.3",
+    "@forest-fire/real-time-admin": "^0.54.3",
     "@forest-fire/real-time-client": "^0.54.3",
     "@forest-fire/serialized-query": "^0.54.3",
     "@forest-fire/serializer-factory": "^0.54.3",
