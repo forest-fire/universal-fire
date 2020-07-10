@@ -43,7 +43,7 @@
     "@types/rimraf": "^2.0.2",
     "async-shelljs": "^0.1.4",
     "do-devops": "^0.3.20",
-    "faker": "^4.1.0",
+    "firemock": "^0.53.24",
     "jest": "^26.1.0",
     "jest-extended": "^0.11.5",
     "js-yaml": "^3.14.0",
@@ -68,7 +68,8 @@
     "@firebase/database": "^0.6.6"
   },
   "optionalDependencies": {
-    "@firebase/auth": "^0.14.7"
+    "@firebase/auth": "^0.14.7",
+    "firemock": "^0.53.24"
   },
   "dependencies": {
     "@firebase/app-types": "^0.6.1",
