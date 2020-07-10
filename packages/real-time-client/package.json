@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-client",
-  "version": "0.55.3",
+  "version": "0.55.4",
   "description": "Client SDK for the Real Time database",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@firebase/app": "^0.6.8",
-    "@forest-fire/serialized-query": "^0.55.3",
+    "@forest-fire/serialized-query": "^0.55.4",
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "@types/events": "^3.0.0",
@@ -70,15 +70,15 @@
   "optionalDependencies": {
     "@firebase/auth": "^0.14.8",
     "@firebase/database": "^0.6.7",
-    "firemock": "^0.55.3"
+    "firemock": "^0.55.4"
   },
   "dependencies": {
     "@firebase/app-types": "^0.6.1",
     "@firebase/auth-types": "^0.10.1",
     "@firebase/database-types": "^0.5.1",
-    "@forest-fire/real-time-db": "^0.55.3",
-    "@forest-fire/types": "^0.55.3",
-    "@forest-fire/utility": "^0.55.3",
+    "@forest-fire/real-time-db": "^0.55.4",
+    "@forest-fire/types": "^0.55.4",
+    "@forest-fire/utility": "^0.55.4",
     "common-types": "^1.15.8",
     "events": "^3.1.0",
     "lodash.first": "^3.0.0",
