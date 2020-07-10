@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-client",
-  "version": "0.55.0",
+  "version": "0.55.2",
   "description": "Helpful abstraction on the Firebase client API",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
@@ -29,7 +29,7 @@
     "watch:test": "npm run test -- --watch"
   },
   "devDependencies": {
-    "@forest-fire/serialized-query": "^0.55.0",
+    "@forest-fire/serialized-query": "^0.55.2",
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "@types/events": "^3.0.0",
@@ -43,6 +43,7 @@
     "@types/rimraf": "^2.0.2",
     "async-shelljs": "^0.1.4",
     "do-devops": "^0.3.20",
+    "firemock": "^0.55.0",
     "jest": "^26.1.0",
     "jest-extended": "^0.11.5",
     "js-yaml": "^3.14.0",
@@ -60,22 +61,21 @@
     "tslint": "^6.1.2",
     "ttypescript": "^1.5.10",
     "typescript": "^3.9.5",
-    "typescript-transform-paths": "^1.1.14",
-    "firemock": "^0.55.0"
+    "typescript-transform-paths": "^1.1.14"
   },
   "peerDependencies": {
     "@firebase/app": "^0.6.8"
   },
   "optionalDependencies": {
-    "@firebase/database": "^0.6.7",
     "@firebase/auth": "^0.14.8",
-    "firemock": "^0.55.0"
+    "@firebase/database": "^0.6.7",
+    "firemock": "^0.55.2"
   },
   "dependencies": {
     "@firebase/app-types": "^0.6.1",
     "@firebase/auth-types": "^0.10.1",
     "@firebase/database-types": "^0.5.1",
-    "@forest-fire/real-time-db": "^0.55.0",
+    "@forest-fire/real-time-db": "^0.55.2",
     "@forest-fire/types": "^0.55.0",
     "@forest-fire/utility": "^0.55.0",
     "common-types": "^1.15.8",
