@@ -4,6 +4,7 @@ import {
   extractServiceAccount,
   getRunningApps,
   FireError,
+  initializeAdminApp,
 } from '@forest-fire/utility';
 import {
   IAbstractedDatabase,
@@ -38,6 +39,10 @@ export class RealTimeAdmin extends RealTimeDb
   }
 
   private static _connections: IAdminApp[] = [];
+  /** add an App connection to the managed pool */
+  private static addConnection(connection: IAdminApp) {
+    RealTimeAdmin._connections = RealTimeAdmin._connections.concat(connection);
+  }
 
   public static get connections() {
     return RealTimeAdmin._connections.map((i) => i.name);
@@ -67,7 +72,7 @@ export class RealTimeAdmin extends RealTimeDb
   }
 
   public get database(): IAdminRtdbDatabase {
-    if (this.config.mocking) {
+    if (this._config.mocking) {
       throw new RealTimeAdminError(
         `The "database" provides direct access to the Firebase database API when using a real database but not when using a Mock DB!`,
         'not-allowed'
@@ -99,7 +104,11 @@ export class RealTimeAdmin extends RealTimeDb
     if (this._config.mocking) {
       return adminAuthSdk;
     }
-    //TODO: check this typing
+
+    if (!this._admin) {
+      this._admin = await this._loadAdminApi();
+      this._app = initializeAdminApp(this._admin, this._config);
+    }
     return (this._admin.auth() as unknown) as IAdminAuth;
   }
 
@@ -169,7 +178,6 @@ export class RealTimeAdmin extends RealTimeDb
       const api = ((await import(
         'firebase-admin'
       )) as unknown) as IAdminFirebaseNamespace;
-
       return api;
     } catch (e) {
       throw new FireError(
@@ -179,117 +187,39 @@ export class RealTimeAdmin extends RealTimeDb
     }
   }
 
-  protected _initializeApp() {
-    if (!this._admin) {
-      throw new FireError(
-        `Can not initialize app before first loading the Admin API!`,
-        'not-ready'
-      );
-    }
-
-    try {
-      this._admin.initializeApp(this._config as IAdminConfig);
-    } catch (e) {
-      throw new FireError(
-        `There were problems with the credentials provided to RealTimeAdmin! The error reported was:\n\n${e.message}\n`,
-        'invalid-credentials'
-      );
-    }
-  }
-
   protected async _connectRealDb(config: IAdminConfig) {
     if (!this._admin) {
-      this._admin = await this._loadAdminApi();
+      this._admin = (await this._loadAdminApi()) as IAdminFirebaseNamespace;
     }
-    if (this.isConnected && this.app && this.database) {
+    if (this.isConnected && this._database) {
       return;
     }
     // look for existing instance of the app
-    const found = this._admin.apps.find((i) => i.name === this.config.name);
-    console.log({ config: this._config });
-    if (found) {
-      console.debug(
-        `The Firebase App "${this.config.name}" was found; reusing this App instance.`
-      );
-      if (found.database && typeof found.database === 'function') {
-        console.debug(
-          `The Firebase App API is providing a database function endpoint indicating that the app is not initialized`
-        );
-        // this._initializeApp();
-        this._database = found.database();
-      }
-    } else {
-      console.debug(
-        `The Firebase App "${this.config.name}" was NOT found; creating now.`
-      );
-      this._initializeApp();
-      this._app = this._admin.app();
-      this._database = this._app.database();
-    }
+    const name = determineDefaultAppName(config);
+    const found = this._admin.apps.find((i) => i.name === name);
 
-    // use found app or instance's app to instatiate the database API
-    if (found && found.database) {
-      this._app = found;
-      this._database =
-        typeof found.database == 'function'
-          ? found.database()
-          : ((found.database as unknown) as IAdminRtdbDatabase);
-    } else if (
-      this._app &&
-      this._app.database &&
-      typeof this._app.database === 'function'
-    ) {
-      this._database = this._app.database();
-    } else if (!this._app) {
-      this._initializeApp();
-
-      try {
-        const app = this._admin.app(this._config.name);
-        this._app = app;
-        if (this._app && this._app.database) {
-          this._database = this._app.database();
-        } else {
-          if (!this._app) {
-            throw new FireError(
-              `The attemp to instantiate the App API didn't throw an error but didn't return the API!`,
-              'invalid-app'
-            );
-          }
-          throw new FireError(
-            `The Firebase App API was instantiated but for unknown reasons it is not providing the appopriate API surface to continue! The App API exposes the following properties ${Object.keys(
-              this._app
-            ).join(', ')} but not the required "database()" function!`,
-            'invalid-app'
-          );
-        }
-      } catch (e) {
-        if (e.universalFire) {
-          throw e;
-        }
-        throw new FireError(
-          `An unexpected error was encountered while trying to setup Firebase's database API!\n\n${e.message}`,
-          'no-database-api'
-        );
+    try {
+      if (found) {
+        this._app = found;
+      } else {
+        this._app = initializeAdminApp(this._admin, this._config);
+        RealTimeAdmin.addConnection(this._app);
       }
-    } else {
+
+      this._database = this._app.database();
+    } catch (e) {
+      if (e.universalFire) {
+        throw e;
+      }
       throw new FireError(
-        `Failed to instantiate Firebase's Real Time Database API due to missing resources that are required. In order to start a valid Firebase APP Api must be used and we couldn't set this up!\n${JSON.stringify(
-          { found: found ? true : false, type: typeof found.database },
-          null,
-          2
-        )}`,
-        'missing-app-api'
+        `An unexpected error was encountered while trying to setup Firebase's database API!\n\n${e.message}`,
+        'no-database-api'
       );
     }
 
     this.goOnline();
     this._eventManager.connection(true);
     await this._listenForConnectionStatus();
-    if (this.isConnected) {
-      console.info(
-        `Database ${this.app.name} was already connected. Reusing connection.`
-      );
-    }
   }
 
   /**

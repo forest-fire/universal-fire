@@ -1,6 +1,9 @@
 import type { IDatabaseConfig } from '@forest-fire/types';
 import { FireError } from '../errors';
 
+/**
+ * Determines the appropriate App name based on the configuration passed in
+ */
 export function determineDefaultAppName(config?: IDatabaseConfig) {
   if (!config) {
     return '[DEFAULT]';

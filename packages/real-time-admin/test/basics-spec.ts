@@ -16,7 +16,7 @@ describe('Basics: ', () => {
     expect(db.isConnected).to.equal(true, 'isConnected returns true');
   });
 
-  it.only('Connecting provides access to all API endpoints that are expected', async () => {
+  it('Connecting provides access to all API endpoints that are expected', async () => {
     const db = await RealTimeAdmin.connect();
     const root = await db.getRecord('/');
     expect(root).to.be.an('object');
