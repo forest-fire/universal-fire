@@ -10,6 +10,8 @@ export type {
   IPathBasedWatchEvent,
   IValueBasedWatchEvent,
   IAbstractedEvent,
+  IAdminConfig,
+  IClientConfig,
 } from '@forest-fire/types';
 
 export { SerializedQuery } from '@forest-fire/serializer-factory';
