@@ -47,9 +47,9 @@
     "async-shelljs": "^0.1.4",
     "chai": "^4.2.0",
     "chalk": "3.0.0",
-    "do-devops": "^0.3.6",
+    "do-devops": "^0.3.20",
     "firebase-admin": "^8.13.0",
-    "firemock": "^0.54.3",
+    "firemock": "^0.55.0",
     "js-yaml": "^3.13.1",
     "mocha": "^7.1.1",
     "npm-run-all": "^4.1.5",
@@ -63,10 +63,10 @@
   },
   "peerDependencies": {
     "@firebase/app": "^0.6.4",
-    "firebase-admin": "^8.13.x"
+    "firebase-admin": "^8.13.0"
   },
   "optionalDependencies": {
-    "firemock": "^0.53.24"
+    "firemock": "^0.55.0"
   },
   "dependencies": {
     "@firebase/database-types": "^0.5.1",

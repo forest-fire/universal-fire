@@ -95,15 +95,19 @@ export class FirestoreClient extends FirestoreDb
   /**
    * This loads the firestore API but more importantly this makes the
    * firestore function available off the Firebase App API which provides
-   * us instances of the of the firestore API.
+   * us instances of the of the Firestore API.
    */
-  protected async loadFirestoreApi(): Promise<IClientFirestoreDatabase> {
-    // TODO: the typing return here is being ignored because we're using this
-    // only as a pre-step to use the App API but in fact this probably does
-    // return the static Firestore API which may very well be useful.
-    return (import(
-      '@firebase/firestore'
-    ) as unknown) as IClientFirestoreDatabase;
+  protected async _loadFirestoreApi(): Promise<IClientFirestoreDatabase> {
+    try {
+      return (import(
+        '@firebase/firestore'
+      ) as unknown) as IClientFirestoreDatabase;
+    } catch (e) {
+      throw new FireError(
+        `An attempt to load the "@firebase/firestore" peer dependency failed, this probably means that your application has not installed this required dependency!`,
+        'missing-dependency'
+      );
+    }
   }
 
   /**
@@ -120,7 +124,7 @@ export class FirestoreClient extends FirestoreDb
 
   protected async _connectRealDb(config: IClientConfig) {
     if (!this._isConnected) {
-      await this.loadFirestoreApi();
+      await this._loadFirestoreApi();
       let firebase: FirebaseNamespace & {
         firestore: (appOptions?: any) => IClientFirestoreDatabase;
         auth: () => IClientAuth | undefined;

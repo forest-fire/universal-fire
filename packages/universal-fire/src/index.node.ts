@@ -112,7 +112,7 @@ export const RealTimeAdmin: ISdkFactory<IRealTimeAdmin, IAdminConfig> = {
     return new RTA();
   },
 
-  async connect(config: IAdminConfig | IMockConfig) {
+  async connect(config) {
     return RTA.connect(config);
   },
 };

@@ -9,7 +9,7 @@ import {
 
 import { FirestoreClient as FC } from '@forest-fire/firestore-client';
 import { RealTimeClient as RTC } from '@forest-fire/real-time-client';
-import { IClientConfig, IMockConfig, IAdminConfig } from '@forest-fire/types';
+import { IClientConfig, IAdminConfig } from '@forest-fire/types';
 import { ISdkFactory } from './ISdkFactory';
 
 /**
