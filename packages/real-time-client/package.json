@@ -1,7 +1,7 @@
 {
   "name": "@forest-fire/real-time-client",
   "version": "0.55.2",
-  "description": "Helpful abstraction on the Firebase client API",
+  "description": "Client SDK for the Real Time database",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
   "author": "Ken Snyder <ken@ken.net>",

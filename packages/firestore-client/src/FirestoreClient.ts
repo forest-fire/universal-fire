@@ -15,7 +15,6 @@ import {
   isClientConfig,
   isMockConfig,
   FirebaseNamespace,
-  IFirestoreDatabase,
   IClientFirestoreDatabase,
 } from '@forest-fire/types';
 
