@@ -3,6 +3,7 @@ import {
   extractDataUrl,
   extractServiceAccount,
   getRunningApps,
+  FireError,
 } from '@forest-fire/utility';
 import {
   IAbstractedDatabase,
@@ -63,35 +64,6 @@ export class RealTimeAdmin extends RealTimeDb
       name: determineDefaultAppName(config),
     } as IAdminConfig | IMockConfig;
     this._config = config;
-    // if (isAdminConfig(config)) {
-    //   this._config = config;
-    //   const runningApps = getRunningApps(firebase.apps);
-    //   RealTimeAdmin._connections = firebase.apps;
-    //   const credential = firebase.credential.cert(config.serviceAccount);
-    //   this._app = runningApps.includes(this._config.name)
-    //     ? getRunningFirebaseApp<IAdminApp>(
-    //         config.name,
-    //         (firebase.apps as unknown) as IAdminApp[]
-    //       )
-    //     : firebase.initializeApp(
-    //         {
-    //           credential,
-    //           databaseURL: config.databaseURL,
-    //         },
-    //         config.name
-    //       );
-    // } else if (isMockConfig(config)) {
-    //   this._config = config;
-    // } else {
-    //   throw new FireError(
-    //     `The configuration sent into an Admin SDK abstraction was invalid and may be a client SDK configuration instead. The configuration was: \n${JSON.stringify(
-    //       config,
-    //       null,
-    //       2
-    //     )}`,
-    //     'invalid-configuration'
-    //   );
-    // }
   }
 
   public get database(): IAdminRtdbDatabase {
@@ -128,7 +100,7 @@ export class RealTimeAdmin extends RealTimeDb
       return adminAuthSdk;
     }
     //TODO: check this typing
-    return (this._admin.auth(this._app) as unknown) as IAdminAuth;
+    return (this._admin.auth() as unknown) as IAdminAuth;
   }
 
   public goOnline() {
@@ -193,28 +165,123 @@ export class RealTimeAdmin extends RealTimeDb
   }
 
   protected async _loadAdminApi() {
-    const api = ((await import(
-      'firebase-admin'
-    )) as unknown) as IAdminFirebaseNamespace;
-    return api;
+    try {
+      const api = ((await import(
+        'firebase-admin'
+      )) as unknown) as IAdminFirebaseNamespace;
+
+      return api;
+    } catch (e) {
+      throw new FireError(
+        `Attempt to instantiate Firebase's admin SDK failed. This is likely because you have not installed the "firebase-admin" npm package as a dependency of your project. The precise error received when trying to instantiate was:\n\n${e.message}`,
+        'invalid-import'
+      );
+    }
+  }
+
+  protected _initializeApp() {
+    if (!this._admin) {
+      throw new FireError(
+        `Can not initialize app before first loading the Admin API!`,
+        'not-ready'
+      );
+    }
+
+    try {
+      this._admin.initializeApp(this._config as IAdminConfig);
+    } catch (e) {
+      throw new FireError(
+        `There were problems with the credentials provided to RealTimeAdmin! The error reported was:\n\n${e.message}\n`,
+        'invalid-credentials'
+      );
+    }
   }
 
   protected async _connectRealDb(config: IAdminConfig) {
     if (!this._admin) {
-      this._admin = ((await import(
-        'firebase-admin'
-      )) as unknown) as IAdminFirebaseNamespace;
+      this._admin = await this._loadAdminApi();
+    }
+    if (this.isConnected && this.app && this.database) {
+      return;
+    }
+    // look for existing instance of the app
+    const found = this._admin.apps.find((i) => i.name === this.config.name);
+    console.log({ config: this._config });
+    if (found) {
+      console.debug(
+        `The Firebase App "${this.config.name}" was found; reusing this App instance.`
+      );
+      if (found.database && typeof found.database === 'function') {
+        console.debug(
+          `The Firebase App API is providing a database function endpoint indicating that the app is not initialized`
+        );
+        // this._initializeApp();
+        this._database = found.database();
+      }
+    } else {
+      console.debug(
+        `The Firebase App "${this.config.name}" was NOT found; creating now.`
+      );
+      this._initializeApp();
+      this._app = this._admin.app();
+      this._database = this._app.database();
     }
 
-    const found = this._admin.apps.find((i) => i.name === this.config.name);
-    this._database = (found &&
-    found.database &&
-    typeof found.database !== 'function'
-      ? found.database
-      : this._app.database()) as IAdminRtdbDatabase;
-    // this.enableDatabaseLogging = this._admin.database.enableLogging.bind(
-    //   this._admin.database
-    // );
+    // use found app or instance's app to instatiate the database API
+    if (found && found.database) {
+      this._app = found;
+      this._database =
+        typeof found.database == 'function'
+          ? found.database()
+          : ((found.database as unknown) as IAdminRtdbDatabase);
+    } else if (
+      this._app &&
+      this._app.database &&
+      typeof this._app.database === 'function'
+    ) {
+      this._database = this._app.database();
+    } else if (!this._app) {
+      this._initializeApp();
+
+      try {
+        const app = this._admin.app(this._config.name);
+        this._app = app;
+        if (this._app && this._app.database) {
+          this._database = this._app.database();
+        } else {
+          if (!this._app) {
+            throw new FireError(
+              `The attemp to instantiate the App API didn't throw an error but didn't return the API!`,
+              'invalid-app'
+            );
+          }
+          throw new FireError(
+            `The Firebase App API was instantiated but for unknown reasons it is not providing the appopriate API surface to continue! The App API exposes the following properties ${Object.keys(
+              this._app
+            ).join(', ')} but not the required "database()" function!`,
+            'invalid-app'
+          );
+        }
+      } catch (e) {
+        if (e.universalFire) {
+          throw e;
+        }
+        throw new FireError(
+          `An unexpected error was encountered while trying to setup Firebase's database API!\n\n${e.message}`,
+          'no-database-api'
+        );
+      }
+    } else {
+      throw new FireError(
+        `Failed to instantiate Firebase's Real Time Database API due to missing resources that are required. In order to start a valid Firebase APP Api must be used and we couldn't set this up!\n${JSON.stringify(
+          { found: found ? true : false, type: typeof found.database },
+          null,
+          2
+        )}`,
+        'missing-app-api'
+      );
+    }
+
     this.goOnline();
     this._eventManager.connection(true);
     await this._listenForConnectionStatus();

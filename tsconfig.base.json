@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": [],
+    "target": "esnext",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": false,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "noEmit": true
+  },
+  "exclude": ["**/node_modules/**", "packages/*/dist", "**/test/**"]
+}

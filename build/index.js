@@ -19,7 +19,7 @@ function toPlugins(dir) {
   return [
     require('@rollup/plugin-node-resolve').default(),
     require('rollup-plugin-typescript2')({
-      tsconfig: join(dir, 'tsconfig.json'),
+      tsconfig: join(dir, 'tsconfig.bundle.json'),
       typescript: require('ttypescript'),
       useTsconfigDeclarationDir: true, //~> "dist/types"
       tsconfigOverride: {

@@ -49,7 +49,7 @@
     "chalk": "3.0.0",
     "do-devops": "^0.3.20",
     "firebase-admin": "^8.13.0",
-    "firemock": "^0.55.0",
+    "firemock": "^0.55.3",
     "js-yaml": "^3.13.1",
     "mocha": "^7.1.1",
     "npm-run-all": "^4.1.5",
@@ -73,11 +73,11 @@
     "@forest-fire/real-time-db": "^0.55.3",
     "@forest-fire/types": "^0.55.3",
     "@forest-fire/utility": "^0.55.3",
-    "common-types": "^1.14.3",
+    "common-types": "^1.15.8",
     "is-gzip": "^2.0.0",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
-    "typed-conversions": "^0.10.4"
+    "typed-conversions": "^0.11.1"
   },
   "engines": {
     "node": ">=8.13.0"
