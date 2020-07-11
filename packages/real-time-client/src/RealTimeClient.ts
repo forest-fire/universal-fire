@@ -166,7 +166,7 @@ export class RealTimeClient extends RealTimeDb
    * mocked DB.
    */
   protected async _connectMockDb(config: IMockConfig) {
-    await this.getFireMock({
+    await this.getFiremock({
       db: config.mockData || {},
       auth: { providers: [], ...config.mockAuth },
     });

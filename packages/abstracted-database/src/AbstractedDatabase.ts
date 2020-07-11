@@ -230,15 +230,32 @@ export abstract class AbstractedDatabase implements IAbstractedDatabase {
   public abstract ref(path?: string): any;
 
   /**
-   * **getFireMock**
+   * **getFiremock**
    *
-   * Asynchronously imports both `FireMock` and the `Faker` libraries
-   * then sets `isConnected` to **true**
+   * Asynchronously imports the `firemock` library and _prepares_ it
+   * for use.
+   *
+   * > because this is an optional requirement for consumers it will
+   * wrap with a try/catch and produce a graceful error message
+   * if an error is encountered.
    */
-  protected async getFireMock(config: IMockConfigOptions = {}) {
-    const FireMock = await import(
-      /* webpackChunkName: "firemock" */ 'firemock'
-    );
-    this._mock = await FireMock.Mock.prepare(config);
+  protected async getFiremock(config: IMockConfigOptions = {}) {
+    let Firemock;
+    try {
+      Firemock = await import(/* webpackChunkName: "firemock" */ 'firemock');
+    } catch (e) {
+      throw new FireError(
+        `To use mocking functions you must ensure that "firemock" is installed in your repo. Typically this would be installed as a "devDep" assuming that this mocking functionality is used as part of your tests but if you are shipping this mocking functionality then you will need to add it as full dependency.\n\n${e.message}`,
+        'missing-dependency'
+      );
+    }
+    try {
+      this._mock = await Firemock.Mock.prepare(config);
+    } catch (e) {
+      throw new FireError(
+        `The firemock library was imported asynchronously successfully but in trying to "prepare" it there was a failure: ${e.message}`,
+        'failed-mock-prep'
+      );
+    }
   }
 }
