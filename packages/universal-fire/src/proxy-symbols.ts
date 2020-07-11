@@ -12,6 +12,8 @@ export type {
   IAbstractedEvent,
   IAdminConfig,
   IClientConfig,
+  IClientAuth,
+  IAdminAuth,
 } from '@forest-fire/types';
 
 export { SerializedQuery } from '@forest-fire/serializer-factory';
