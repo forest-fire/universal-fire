@@ -31,7 +31,7 @@ import { ISdkFactory } from './ISdkFactory';
  * capabilities that `universal-fire` provides.
  */
 export const FirestoreClient: ISdkFactory<IFirestoreClient, IClientConfig> = {
-  create() {
+  create(config) {
     throw new Error(
       'You are using the node entry point for universal-fire; use FirestoreAdmin instead.'
     );
@@ -62,13 +62,13 @@ export const FirestoreClient: ISdkFactory<IFirestoreClient, IClientConfig> = {
  * capabilities that `universal-fire` provides.
  */
 export const RealTimeClient: ISdkFactory<IRealTimeClient, IClientConfig> = {
-  create() {
+  create(config) {
     throw new Error(
       'You are using the node entry point for universal-fire; use RealTimeAdmin instead.'
     );
   },
 
-  async connect(config: IClientConfig | IMockConfig) {
+  async connect(config) {
     throw new Error(
       'You are using the node entry point for universal-fire; use RealTimeAdmin instead.'
     );
@@ -87,11 +87,11 @@ export const RealTimeClient: ISdkFactory<IRealTimeClient, IClientConfig> = {
  * capabilities that `universal-fire` provides.
  */
 export const FirestoreAdmin: ISdkFactory<IFirestoreAdmin, IAdminConfig> = {
-  create() {
-    return new FSA();
+  create(config) {
+    return new FSA(config);
   },
 
-  async connect(config: IAdminConfig | IMockConfig) {
+  async connect(config) {
     return FSA.connect(config);
   },
 };
@@ -108,8 +108,8 @@ export const FirestoreAdmin: ISdkFactory<IFirestoreAdmin, IAdminConfig> = {
  * capabilities that `universal-fire` provides.
  */
 export const RealTimeAdmin: ISdkFactory<IRealTimeAdmin, IAdminConfig> = {
-  create() {
-    return new RTA();
+  create(config) {
+    return new RTA(config);
   },
 
   async connect(config) {
