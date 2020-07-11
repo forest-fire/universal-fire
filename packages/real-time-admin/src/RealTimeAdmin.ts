@@ -22,11 +22,11 @@ import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
 
 import { EventManager } from './EventManager';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
-import { adminAuthSdk } from 'firemock';
+import { adminAuthSdk, Mock as IMockApi } from 'firemock';
 import { debug } from './util';
 
 export class RealTimeAdmin extends RealTimeDb
-  implements IRealTimeDb, IAbstractedDatabase {
+  implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
   sdk = SDK.RealTimeAdmin;
   /**
    * Instantiates a DB and then waits for the connection
