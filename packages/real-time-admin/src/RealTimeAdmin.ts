@@ -22,7 +22,7 @@ import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
 
 import { EventManager } from './EventManager';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
-import { adminAuthSdk, Mock as IMockApi } from 'firemock';
+import type { Mock as IMockApi } from 'firemock';
 import { debug } from './util';
 
 export class RealTimeAdmin extends RealTimeDb
@@ -102,14 +102,16 @@ export class RealTimeAdmin extends RealTimeDb
    */
   public async auth(): Promise<IAdminAuth> {
     if (this._config.mocking) {
-      return adminAuthSdk;
+      // TODO: Fix Firemock to export just the admin API; auth management should be done through a different
+      // entry point. Also the name should be something more like `adminAuth` not `adminSdk`
+      return (this._mock.adminSdk as unknown) as IAdminAuth;
     }
 
     if (!this._admin) {
       this._admin = await this._loadAdminApi();
       this._app = initializeAdminApp(this._admin, this._config);
     }
-    return (this._admin.auth() as unknown) as IAdminAuth;
+    return this._admin.auth();
   }
 
   public goOnline() {

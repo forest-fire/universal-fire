@@ -233,7 +233,8 @@ export abstract class AbstractedDatabase implements IAbstractedDatabase {
    * **getFiremock**
    *
    * Asynchronously imports the `firemock` library and _prepares_ it
-   * for use.
+   * for use. When the promise resolves from this method the class's
+   * `_mock` property will be setup with a proper mock API.
    *
    * > because this is an optional requirement for consumers it will
    * wrap with a try/catch and produce a graceful error message
