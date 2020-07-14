@@ -62,7 +62,10 @@
     "tslint": "^6.1.2",
     "ttypescript": "^1.5.10",
     "typescript": "^3.9.5",
-    "typescript-transform-paths": "^1.1.14"
+    "typescript-transform-paths": "^1.1.14",
+    "@firebase/app-types": "^0.6.1",
+    "@firebase/auth-types": "^0.10.1",
+    "@firebase/database-types": "^0.5.1"
   },
   "peerDependencies": {
     "@firebase/app": "^0.6.8"
@@ -70,12 +73,10 @@
   "optionalDependencies": {
     "@firebase/auth": "^0.14.8",
     "@firebase/database": "^0.6.7",
+    "@firebase/database-types": "^0.5.1",
     "firemock": "^0.55.8"
   },
   "dependencies": {
-    "@firebase/app-types": "^0.6.1",
-    "@firebase/auth-types": "^0.10.1",
-    "@firebase/database-types": "^0.5.1",
     "@forest-fire/real-time-db": "^0.55.9",
     "@forest-fire/types": "^0.55.4",
     "@forest-fire/utility": "^0.55.4",

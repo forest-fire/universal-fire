@@ -41,11 +41,11 @@
     "typescript": "^3.9.5"
   },
   "peerDependencies": {
-    "@firebase/app": "^0.6.8",
-    "@firebase/firestore-types": "^1.12.0"
+    "@firebase/app": "^0.6.8"
   },
   "optionalDependencies": {
     "@firebase/auth": "^0.14.8",
+    "@firebase/firestore-types": "^1.12.0",
     "@firebase/firestore": "^1.16.0",
     "firemock": "^0.55.8"
   },
