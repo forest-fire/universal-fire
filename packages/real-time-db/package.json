@@ -52,7 +52,7 @@
     "typescript": "^3.9.5"
   },
   "peerDependencies": {
-    "firemock": ">= 0.53.23"
+    "firemock": ">= 0.55.10"
   },
   "dependencies": {
     "@forest-fire/abstracted-database": "^0.55.10",
