@@ -17,7 +17,11 @@ export type {
 } from '@forest-fire/types';
 
 export { SerializedQuery } from '@forest-fire/serializer-factory';
-export type { IComparisonOperator, ISerializedQuery } from '@forest-fire/types';
+export type {
+  IComparisonOperator,
+  ISerializedQuery,
+  ISerializedIdentity,
+} from '@forest-fire/types';
 
 import type { Mock as IMockApi } from 'firemock';
 export type { IMockApi };
