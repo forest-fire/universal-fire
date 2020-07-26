@@ -27,6 +27,7 @@ import {
   clearCurrentUser,
   addAuthObserver,
   getAnonymousUid,
+  currentUser,
 } from '@/auth/state-mgmt';
 import { clientApiUser } from './UserObject';
 
@@ -41,6 +42,8 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
   },
   onAuthStateChanged(observer: IAuthObserver) {
     addAuthObserver(observer);
+    // TODO: the typing in Firemock must be changed to convert a `currentUser` to either client or admin SDK; right now we're getting an
+    observer((currentUser() as unknown) as User);
   },
   async setPersistence() {
     console.warn(
@@ -191,6 +194,7 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
   get currentUser() {
     return completeUserCredential({}).user;
   },
+
   languageCode: '',
   async updateCurrentUser() {
     return;
