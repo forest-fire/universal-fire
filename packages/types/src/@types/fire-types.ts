@@ -201,3 +201,8 @@ export const enum SDK {
   RealTimeAdmin = 'RealTimeAdmin',
   RealTimeClient = 'RealTimeClient',
 }
+
+export const enum Database {
+  Firestore = 'Firestore',
+  RTDB = 'RTDB',
+}

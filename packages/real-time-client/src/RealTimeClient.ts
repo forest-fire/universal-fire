@@ -1,5 +1,3 @@
-import '@firebase/auth';
-
 import { ClientError, EventManager } from './private';
 import {
   FireError,
@@ -20,11 +18,10 @@ import {
   SDK,
   isClientConfig,
   isMockConfig,
+  IRtdbDatabase,
 } from '@forest-fire/types';
 import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
 
-import { FirebaseApp } from '@firebase/app-types';
-import { FirebaseDatabase } from '@firebase/database-types';
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
 
@@ -34,7 +31,8 @@ import type { Mock as IMockApi } from 'firemock';
 
 export class RealTimeClient extends RealTimeDb
   implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
-  sdk = SDK.RealTimeClient;
+  public readonly sdk = SDK.RealTimeClient;
+  public readonly isAdminApi = false;
   /**
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
    * and then returns a promise which is resolved once the _connection_ is established.
@@ -50,9 +48,8 @@ export class RealTimeClient extends RealTimeDb
     return Array.from(new Set(firebase.apps.map((i) => i.name)));
   }
 
-  protected _isAdminApi = false;
   protected _eventManager: EventManager;
-  protected _database?: FirebaseDatabase;
+  protected _database?: IRtdbDatabase;
   protected _auth?: IClientAuth;
   protected _config: IClientConfig | IMockConfig;
   protected _fbClass: IClientApp;
@@ -85,7 +82,7 @@ export class RealTimeClient extends RealTimeDb
           ? (getRunningFirebaseApp<IClientApp>(
               config.name,
               firebase.apps
-            ) as FirebaseApp)
+            ) as IClientApp)
           : firebase.initializeApp(config, config.name);
       } catch (e) {
         if (e.message && e.message.indexOf('app/duplicate-app') !== -1) {

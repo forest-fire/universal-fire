@@ -18,11 +18,15 @@ import type { Mock as MockDb } from 'firemock';
 import { FireError } from '@forest-fire/utility';
 
 export abstract class AbstractedDatabase implements IAbstractedDatabase {
+  /** the Firbase client used to gain DB access */
   public readonly sdk: SDK;
+  public readonly dbType: 'Firestore' | 'RTDB';
+
   /**
-   * Indicates if the database is using the admin SDK.
+   * Indicates if this connection is exposing the Admin API/SDK
    */
-  protected _isAdminApi: boolean = false;
+  public readonly isAdminApi: boolean = false;
+
   /**
    * Indicates if the database is connected.
    */
@@ -107,12 +111,7 @@ export abstract class AbstractedDatabase implements IAbstractedDatabase {
    * Returns the authentication API of the database.
    */
   public abstract async auth(): Promise<IClientAuth | IAdminAuth>;
-  /**
-   * Indicates if the database is using the admin SDK.
-   */
-  public get isAdminApi() {
-    return this._isAdminApi;
-  }
+
   /**
    * Indicates if the database is a mock database or not
    */

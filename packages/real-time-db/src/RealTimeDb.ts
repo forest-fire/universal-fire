@@ -22,7 +22,6 @@ import {
   IAdminApp,
   IClientApp,
   IDatabaseConfig,
-  IMockConfigOptions,
   IRtdbDataSnapshot,
   IRtdbDatabase,
   IRtdbDbEvent,
@@ -42,19 +41,7 @@ export const MOCK_LOADING_TIMEOUT = 2000;
 
 export abstract class RealTimeDb extends AbstractedDatabase
   implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
-  protected _isAdminApi: boolean = false;
-
-  constructor() {
-    super();
-  }
-
-  public get isMockDb() {
-    return this._config.mocking;
-  }
-
-  public get isAdminApi() {
-    return this._isAdminApi;
-  }
+  public readonly dbType = 'RTDB';
 
   /**
    * **getPushKey**
@@ -68,10 +55,6 @@ export abstract class RealTimeDb extends AbstractedDatabase
   public async getPushKey(path: string) {
     const key = await this.ref(path).push().key;
     return key;
-  }
-
-  public get isConnected() {
-    return this._isConnected;
   }
 
   /** how many miliseconds before the attempt to connect to DB is timed out */

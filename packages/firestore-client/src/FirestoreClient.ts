@@ -22,14 +22,15 @@ import type { Mock as IMockApi } from 'firemock';
 
 export class FirestoreClient extends FirestoreDb
   implements IFirestoreDb, IAbstractedDatabase<IMockApi> {
-  sdk = SDK.FirestoreClient;
+  public readonly sdk = SDK.FirestoreClient;
+  public readonly isAdminApi = false;
+
   static async connect(config: IClientConfig | IMockConfig) {
     const obj = new FirestoreClient(config);
     await obj.connect();
     return obj;
   }
 
-  protected _isAdminApi = false;
   protected _auth?: IClientAuth;
   protected _app!: IClientApp;
   protected _firestore: any;

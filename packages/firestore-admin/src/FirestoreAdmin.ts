@@ -25,14 +25,15 @@ import type { Mock as IMockApi } from 'firemock';
 
 export class FirestoreAdmin extends FirestoreDb
   implements IAdminSdk, IAbstractedDatabase<IMockApi> {
-  sdk = SDK.FirestoreAdmin;
+  public readonly sdk = SDK.FirestoreAdmin;
+  public readonly isAdminApi = true;
+
   static async connect(config: IAdminConfig | IMockConfig) {
     const obj = new FirestoreAdmin(config);
     await obj.connect();
     return obj;
   }
 
-  protected _isAdminApi = true;
   protected _auth?: IAdminAuth;
   protected _firestore?: IAdminFirestoreDatabase;
   protected _admin?: IAdminFirebaseNamespace;

@@ -27,7 +27,9 @@ import { debug } from './util';
 
 export class RealTimeAdmin extends RealTimeDb
   implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
-  sdk = SDK.RealTimeAdmin;
+  public readonly sdk = SDK.RealTimeAdmin;
+  public readonly isAdminApi = true;
+
   /**
    * Instantiates a DB and then waits for the connection
    * to finish before resolving the promise.
@@ -56,7 +58,6 @@ export class RealTimeAdmin extends RealTimeDb
   protected _config: IAdminConfig | IMockConfig;
   protected _app!: IAdminApp;
   protected _database?: IAdminRtdbDatabase;
-  protected _isAdminApi = true;
 
   constructor(config?: IAdminConfig | IMockConfig) {
     super();
