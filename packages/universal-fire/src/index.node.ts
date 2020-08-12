@@ -9,7 +9,7 @@ import {
 
 import { FirestoreAdmin as FSA } from '@forest-fire/firestore-admin';
 import { RealTimeAdmin as RTA } from '@forest-fire/real-time-admin';
-import { IClientConfig, IMockConfig, IAdminConfig } from '@forest-fire/types';
+import { IClientConfig, IAdminConfig } from '@forest-fire/types';
 import { ISdkFactory } from './ISdkFactory';
 
 /**

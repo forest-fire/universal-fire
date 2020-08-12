@@ -53,5 +53,6 @@
     "@forest-fire/utility": "^0.56.1",
     "firemock": "^0.56.2"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "gitHead": "79d0cb2e966ae213f21991b08bf40f61f212275e"
 }

@@ -17,6 +17,7 @@ import {
   FirebaseNamespace,
   IClientFirestoreDatabase,
 } from '@forest-fire/types';
+import '@firebase/firestore';
 
 import type { Mock as IMockApi } from 'firemock';
 
@@ -97,18 +98,18 @@ export class FirestoreClient extends FirestoreDb
    * firestore function available off the Firebase App API which provides
    * us instances of the of the Firestore API.
    */
-  protected async _loadFirestoreApi(): Promise<IClientFirestoreDatabase> {
-    try {
-      return (import(
-        '@firebase/firestore'
-      ) as unknown) as IClientFirestoreDatabase;
-    } catch (e) {
-      throw new FireError(
-        `An attempt to load the "@firebase/firestore" peer dependency failed, this probably means that your application has not installed this required dependency!`,
-        'missing-dependency'
-      );
-    }
-  }
+  // protected async _loadFirestoreApi(): Promise<IClientFirestoreDatabase> {
+  //   try {
+  //     return (import(
+  //       '@firebase/firestore'
+  //     ) as unknown) as IClientFirestoreDatabase;
+  //   } catch (e) {
+  //     throw new FireError(
+  //       `An attempt to load the "@firebase/firestore" peer dependency failed, this probably means that your application has not installed this required dependency!`,
+  //       'missing-dependency'
+  //     );
+  //   }
+  // }
 
   /**
    * The steps needed to connect a database to a Firemock
@@ -124,7 +125,7 @@ export class FirestoreClient extends FirestoreDb
 
   protected async _connectRealDb(config: IClientConfig) {
     if (!this._isConnected) {
-      await this._loadFirestoreApi();
+      // await this._loadFirestoreApi();
       let firebase: FirebaseNamespace & {
         firestore: (appOptions?: any) => IClientFirestoreDatabase;
         auth: () => IClientAuth | undefined;
