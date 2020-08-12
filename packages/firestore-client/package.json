@@ -28,6 +28,7 @@
     "@firebase/auth": "^0.14.8",
     "@firebase/firestore": "^1.16.0",
     "@firebase/firestore-types": "^1.12.0",
+    "@forest-fire/firestore-db": "^0.56.1",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
@@ -41,18 +42,17 @@
     "typescript": "^3.9.5"
   },
   "peerDependencies": {
-    "@firebase/app": "^0.6.9"
+    "@firebase/app": "^0.6.9",
+    "@forest-fire/firestore-db": "^0.56.1"
   },
   "optionalDependencies": {
     "@firebase/auth": "^0.14.9",
     "@firebase/firestore": "^1.16.3",
     "@firebase/firestore-types": "^1.12.0",
-    "firemock": "^0.56.1"
-  },
-  "dependencies": {
-    "@forest-fire/firestore-db": "^0.56.1",
+    "firemock": "^0.56.1",
     "@forest-fire/types": "^0.56.1",
     "@forest-fire/utility": "^0.56.1"
   },
+  "dependencies": {},
   "license": "MIT"
 }

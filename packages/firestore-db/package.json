@@ -34,14 +34,14 @@
     "rimraf": "^3.0.2",
     "ts-node": "^8.10.1",
     "ttypescript": "^1.5.10",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.2",
+    "firemock": "^0.56.1"
   },
   "dependencies": {
     "@forest-fire/abstracted-database": "^0.56.1",
     "@forest-fire/serialized-query": "^0.56.1",
     "@forest-fire/types": "^0.56.1",
-    "@forest-fire/utility": "^0.56.1",
-    "firemock": "^0.56.1"
+    "@forest-fire/utility": "^0.56.1"
   },
   "license": "MIT"
 }
