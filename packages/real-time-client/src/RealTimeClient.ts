@@ -21,7 +21,6 @@ import {
   IRtdbDatabase,
 } from '@forest-fire/types';
 import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
-import '@firebase/database';
 
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
@@ -175,13 +174,13 @@ export class RealTimeClient extends RealTimeDb
     await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
   }
 
-  // protected async _loadDatabaseApi() {
-  //   await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
-  // }
+  protected async _loadDatabaseApi() {
+    await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
+  }
 
   protected async _connectRealDb(config: IClientConfig) {
     if (!this._isConnected) {
-      // await this._loadDatabaseApi();
+      await this._loadDatabaseApi();
       this._database = firebase.database(this._app);
       if (config.useAuth) {
         // await this.loadAuthApi();
