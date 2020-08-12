@@ -1,5 +1,4 @@
 import '@firebase/auth';
-import '@firebase/database';
 
 import { ClientError, EventManager } from './private';
 import {
@@ -174,9 +173,17 @@ export class RealTimeClient extends RealTimeDb
     await this._listenForConnectionStatus();
   }
 
+  protected async _loadAuthApi() {
+    await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
+  }
+
+  protected async _loadDatabaseApi() {
+    await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
+  }
+
   protected async _connectRealDb(config: IClientConfig) {
     if (!this._isConnected) {
-      // await this.loadDatabaseApi();
+      await this._loadDatabaseApi();
       this._database = firebase.database(this._app);
       if (config.useAuth) {
         // await this.loadAuthApi();
