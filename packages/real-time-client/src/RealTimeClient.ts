@@ -183,7 +183,7 @@ export class RealTimeClient extends RealTimeDb
       await this._loadDatabaseApi();
       this._database = firebase.database(this._app);
       if (config.useAuth) {
-        // await this.loadAuthApi();
+        await this._loadAuthApi();
         this._auth = this._app.auth();
       }
       await this._listenForConnectionStatus();
