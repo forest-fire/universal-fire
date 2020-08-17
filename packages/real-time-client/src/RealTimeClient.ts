@@ -141,19 +141,20 @@ export class RealTimeClient extends RealTimeDb
   }
 
   public async auth(): Promise<IClientAuth> {
+    if (!this._app) {
+      // this._loadFirebaseApp()
+    }
     if (this._auth) {
       return this._auth;
-    }
-    if (!this.isConnected) {
-      this._config.useAuth = true;
-      await this.connect();
     }
     if (this.isMockDb) {
       this._auth = await this.mock.auth();
       return this._auth;
+    } else {
+      await this._loadAuthApi();
+      this._auth = this._app.auth();
     }
 
-    this._auth = this._app.auth() as IClientAuth;
     return this._auth;
   }
 
