@@ -8,11 +8,16 @@ import type {
   User,
   UserRecord,
 } from '@forest-fire/types';
-import { pk } from 'common-types';
+import { IDictionary, pk } from 'common-types';
 import { FireMockError } from '@/errors/FireMockError';
 import { clientApiUser } from '@/auth/client-sdk/UserObject';
 import { IAuthObserver } from '@/@types';
-import { isUserCredential, isUserRecord } from '../client-sdk/type-guards';
+import {
+  isMockUserRecord,
+  isUserCredential,
+  isUserRecord,
+  isUser,
+} from '../client-sdk/type-guards';
 
 /**
  * The recognized users in the mock Auth system
@@ -60,10 +65,6 @@ export function initializeAuth(config: IMockAuthConfig) {
       (u) => ({ ...baseUser(), ...u } as IMockUserRecord)
     ) || [];
   _providers = config.providers || [];
-}
-
-function isUser(user: User | UserCredential): user is User {
-  return (user as User).uid !== undefined ? true : false;
 }
 
 /** sets the current user based on a given `UserCredential` */
@@ -146,11 +147,26 @@ export function getAnonymousUid() {
 export function addToUserPool(
   user: IMockUser | User | UserCredential | UserRecord | IMockUserRecord
 ) {
-  let mockUser: Partial<IMockUserRecord>;
+  let mockUser: IMockUserRecord;
+
+  // for those that need fake data:
+  const metadata: UserRecord['metadata'] = {
+    lastSignInTime: undefined,
+    creationTime: new Date().toUTCString(),
+    toJSON: () => ({}),
+  };
 
   // you typically wouldn't add from a `UserCredential` but you can
-  if (isUserCredential(user)) {
+  if (isMockUserRecord(user)) {
+    mockUser = user;
+  } else if (isUserRecord(user)) {
     mockUser = {
+      ...user,
+      kind: 'MockUserRecord',
+    };
+  } else if (isUserCredential(user)) {
+    mockUser = {
+      kind: 'MockUserRecord',
       uid: user.user.uid,
       emailVerified: user.user.emailVerified,
       disabled: false,
@@ -159,12 +175,24 @@ export function addToUserPool(
       isAnonymous: user.user.isAnonymous,
       photoURL: user.user.photoURL,
       tokenIds: [],
+      metadata,
+      providerData: undefined,
+      toJSON: () => ({}),
     };
-  } else if (isUserRecord(user)) {
+  } else if (isUser(user)) {
     mockUser = {
-      ...user,
       kind: 'MockUserRecord',
-    } as IMockUserRecord;
+      uid: user.uid,
+      email: user.email,
+      emailVerified: user.emailVerified,
+      disabled: false,
+      customClaims: {},
+      claims: {},
+      password: (user as IDictionary).password as string | 'abcdefg',
+      metadata,
+      providerData: undefined,
+      toJSON: () => ({}),
+    };
   }
 
   const defaultUser: Partial<IMockUserRecord> = {

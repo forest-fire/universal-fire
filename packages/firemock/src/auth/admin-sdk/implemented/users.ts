@@ -32,10 +32,7 @@ export const users: Partial<Auth> = {
       toJSON: () => null as any,
       providerData: null as any,
     };
-    console.info(
-      `Firemock: call to AdminSDK's createUser() created a UserRecord`,
-      { UserRecord }
-    );
+
     addToUserPool(UserRecord);
 
     return UserRecord;

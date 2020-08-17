@@ -89,7 +89,7 @@ export function pathDiff(longPath: string, pathSubset: string) {
 
 export function orderedSnapToJS<T = any>(snap: IRtdbDataSnapshot) {
   const jsObject: IDictionary<T> = {};
-  snap.forEach((record) => (jsObject[record.key] = record.val()));
+  snap.forEach((record: any) => (jsObject[record.key] = record.val()));
 
   return jsObject;
 }

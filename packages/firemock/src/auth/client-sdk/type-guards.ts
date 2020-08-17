@@ -1,5 +1,6 @@
 import {
   IMockUser,
+  IMockUserRecord,
   User,
   UserCredential,
   UserRecord,
@@ -18,22 +19,18 @@ export function isUserCredential(
 /**
  * Boolean flag and type guard that checks whether this is Firemock `IMock` user
  * definition.
- *
- * @param u
  */
-export function isMockUser(
+export function isMockUserRecord(
   u: UserCredential | User | UserRecord | IMockUser
-): u is IMockUser {
+): u is IMockUserRecord {
   const check = (u as unknown) as IDictionary;
-  return check.kind && check.kind === 'MockUser';
+  return check.kind && check.kind === 'MockUserRecord';
 }
 
 /**
  * Boolean flag and type guard that checks whether this is Admin SDK's `UserRecord`.
  *
  * Note: the `IMockUser` is a superset of this.
- *
- * @param u
  */
 export function isUserRecord(
   u: UserCredential | User | UserRecord | IMockUser
@@ -45,4 +42,16 @@ export function isUserRecord(
     check.emailVerified !== undefined &&
     check.kind === undefined
   );
+}
+/**
+ * Boolean flat to detect if user-like object is a `User` from the client SDK
+ */
+export function isUser(
+  user: UserCredential | User | UserRecord | IMockUser
+): user is User {
+  return !isMockUserRecord(user) &&
+    !isUserRecord(user) &&
+    (user as User).uid !== undefined
+    ? true
+    : false;
 }

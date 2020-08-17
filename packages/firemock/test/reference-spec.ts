@@ -1,17 +1,11 @@
 import * as convert from 'typed-conversions';
 import * as helpers from './testing/helpers';
 
-import {
-  Delays,
-  firstKey,
-  firstProp,
-  lastKey,
-  lastProp,
-} from '../src/util/other';
+import { firstKey, firstProp, lastKey, lastProp } from '../src/util/other';
 import { Mock, SchemaHelper } from '../src/mocking';
 
 import { IDictionary } from 'common-types';
-import { SchemaCallback } from '../src';
+import { Delays, SchemaCallback } from '../src';
 import { difference } from 'lodash';
 import { reset } from '../src/rtdb';
 

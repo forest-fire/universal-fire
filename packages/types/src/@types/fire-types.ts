@@ -69,6 +69,7 @@ export interface IMockConfigOptions {
  * > API it will be converted to `IMockRecord`.
  */
 export interface IMockUserRecord extends UserRecord {
+  kind: 'MockUserRecord';
   /** Optionally sets a fixed UID for this user. */
   uid: string;
   isAnonymous?: boolean;
@@ -107,7 +108,13 @@ export interface IMockAuth extends IClientAuth, IAuthProviders {}
  */
 export type IMockUser = Omit<
   IMockUserRecord,
-  'emailVerified' | 'disabled' | 'uid' | 'toJSON' | 'providerData' | 'metadata'
+  | 'emailVerified'
+  | 'disabled'
+  | 'uid'
+  | 'toJSON'
+  | 'providerData'
+  | 'metadata'
+  | 'kind'
 > & {
   emailVerified?: boolean;
   disabled?: boolean;
