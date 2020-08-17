@@ -1,21 +1,23 @@
 import type {
-  IMockUser,
+  IMockUserRecord,
   IMockAuthConfig,
   IAuthProviderName,
-  ISimplifiedMockUser,
+  IMockUser,
   UpdateRequest,
   UserCredential,
   User,
+  UserRecord,
 } from '@forest-fire/types';
 import { pk } from 'common-types';
 import { FireMockError } from '@/errors/FireMockError';
 import { clientApiUser } from '@/auth/client-sdk/UserObject';
 import { IAuthObserver } from '@/@types';
+import { isUserCredential, isUserRecord } from '../client-sdk/type-guards';
 
 /**
  * The recognized users in the mock Auth system
  */
-let _users: IMockUser[] = [];
+let _users: IMockUserRecord[] = [];
 
 /**
  * The `uid` of the user which is currently logged in.
@@ -48,14 +50,15 @@ export function addAuthObserver(ob: IAuthObserver) {
 }
 
 export function initializeAuth(config: IMockAuthConfig) {
-  const baseUser: () => Partial<IMockUser> = () => ({
+  const baseUser: () => Partial<IMockUserRecord> = () => ({
     emailVerified: false,
     uid: getRandomMockUid(),
     providerData: [],
   });
   _users =
-    (config.users || []).map((u) => ({ ...baseUser(), ...u } as IMockUser)) ||
-    [];
+    (config.users || []).map(
+      (u) => ({ ...baseUser(), ...u } as IMockUserRecord)
+    ) || [];
   _providers = config.providers || [];
 }
 
@@ -90,7 +93,7 @@ export function setCurrentUser(user: User | UserCredential) {
 }
 
 /**
- * Returns the `IMockUser` record for the currently logged in user
+ * Returns the `IMockUserRecord` record for the currently logged in user
  */
 export function currentUser() {
   return _currentUser ? _users.find((u) => u.uid === _currentUser) : undefined;
@@ -135,13 +138,41 @@ export function getAnonymousUid() {
   return _defaultAnonymousUid ? _defaultAnonymousUid : getRandomMockUid();
 }
 
-export function addUser(user: ISimplifiedMockUser | User) {
-  const defaultUser: Partial<IMockUser> = {
+/**
+ * Adds a "known user" to the user pool that Firemock is managing
+ *
+ * @param user either a `IMockUser` or the client SDK's `User` definition
+ */
+export function addToUserPool(
+  user: IMockUser | User | UserCredential | UserRecord | IMockUserRecord
+) {
+  let mockUser: Partial<IMockUserRecord>;
+
+  // you typically wouldn't add from a `UserCredential` but you can
+  if (isUserCredential(user)) {
+    mockUser = {
+      uid: user.user.uid,
+      emailVerified: user.user.emailVerified,
+      disabled: false,
+      claims: {},
+      phoneNumber: user.user.phoneNumber,
+      isAnonymous: user.user.isAnonymous,
+      photoURL: user.user.photoURL,
+      tokenIds: [],
+    };
+  } else if (isUserRecord(user)) {
+    mockUser = {
+      ...user,
+      kind: 'MockUserRecord',
+    } as IMockUserRecord;
+  }
+
+  const defaultUser: Partial<IMockUserRecord> = {
     uid: getRandomMockUid(),
     disabled: false,
     emailVerified: false,
   };
-  const fullUser = { ...defaultUser, ...user } as IMockUser;
+  const fullUser = { ...defaultUser, ...user } as IMockUserRecord;
   if (_users.find((u) => u.uid === fullUser.uid)) {
     throw new FireMockError(
       `Attempt to add user with UID of "${fullUser.uid}" failed as the user already exists!`
@@ -160,16 +191,31 @@ export function getUserByEmail(email: string) {
 }
 
 /**
+ * Find a "known user" that has been configured for the Mock
+ * Auth system.
+ *
+ * ```ts
+ * const u: IMockUserRecord = findKnownUser('email', 'bob@company.com' })
+ * ```
+ */
+export function findKnownUser<K extends keyof IMockUserRecord>(
+  prop: K,
+  value: IMockUserRecord[K]
+) {
+  return _users.find((u) => u[prop] === value);
+}
+
+/**
  * Converts the basic properties provided by a
- * `IMockUser` definition into a full fledged `User` object
+ * `IMockUserRecord` definition into a full fledged `User` object
  * which is a superset including methods such as `updateEmail`,
  * `updatePassword`, etc. For more info refer to docs on `User`:
  *
  * [User Docs](https://firebase.google.com/docs/reference/js/firebase.User)
  *
- * @param user a mock user defined by `IMockUser`
+ * @param user a mock user defined by `IMockUserRecord`
  */
-export function convertToFirebaseUser(user: IMockUser): User {
+export function convertToFirebaseUser(user: IMockUserRecord): User {
   return {
     ...user,
     ...clientApiUser,
@@ -178,7 +224,7 @@ export function convertToFirebaseUser(user: IMockUser): User {
 
 export function updateUser(
   uid: string,
-  update: Partial<IMockUser> | UpdateRequest
+  update: Partial<IMockUserRecord> | UpdateRequest
 ) {
   const existing = _users.find((u) => u.uid === uid);
   if (!existing) {
@@ -187,7 +233,7 @@ export function updateUser(
     );
   }
   _users = _users.map((u) =>
-    u.uid === uid ? ({ ...u, ...update } as IMockUser) : u
+    u.uid === uid ? ({ ...u, ...update } as IMockUserRecord) : u
   );
 }
 

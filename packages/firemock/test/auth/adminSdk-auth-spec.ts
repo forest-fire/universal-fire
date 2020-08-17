@@ -2,6 +2,7 @@ import { IDictionary } from 'common-types';
 import { Mock } from '../../src/mocking';
 import { adminAuthSdk } from '../../src';
 import { clearAuthUsers } from '../../src/auth/state-mgmt';
+import 'jest-extended';
 
 describe('Admin Auth => ', () => {
   beforeEach(async () => {

@@ -23,13 +23,12 @@
     "test:coverage": "nyc --reporter=text mocha -require ts-node/register test/**/*.spec.ts",
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
-  "dependencies": {
-    "universal-fire": "^0.56.5"
-  },
   "optionalDependencies": {
+    "universal-fire": "^0.56.5",
     "common-types": "~1.15.8"
   },
   "devDependencies": {
+    "universal-fire": "^0.56.5",
     "@forest-fire/types": "^0.56.5",
     "@types/chai": "^4.2.11",
     "@types/chalk": "^2.2.0",

@@ -20,14 +20,14 @@ import {
   emailIsValidFormat,
 } from './authMockHelpers';
 import {
-  addUser,
-  allUsers,
   authProviders,
   setCurrentUser,
   clearCurrentUser,
   addAuthObserver,
   getAnonymousUid,
   currentUser,
+  findKnownUser,
+  addToUserPool,
 } from '@/auth/state-mgmt';
 import { clientApiUser } from './UserObject';
 
@@ -70,7 +70,7 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
       };
 
       const userCredential = completeUserCredential(credentials);
-      addUser(userCredential.user);
+      addToUserPool(userCredential.user);
       setCurrentUser(userCredential);
 
       return userCredential;
@@ -81,8 +81,19 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
       );
     }
   },
+  /**
+   * Sign into Firebase with Email and Password:
+   * [Docs](https://firebase.google.com/docs/reference/js/firebase.auth.Auth#signinwithemailandpassword)
+   *
+   * Error Codes:
+   *  - auth/invalid-email
+   *  - auth/user-disabled
+   *  - auth/user-not-found
+   *  - auth/wrong-password
+   */
   async signInWithEmailAndPassword(email: string, password: string) {
     await networkDelay();
+
     if (!emailValidationAllowed()) {
       throw new FireMockError(
         'email authentication not allowed',
@@ -92,11 +103,18 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
     if (!emailIsValidFormat(email)) {
       throw new FireMockError(`invalid email: ${email}`, 'auth/invalid-email');
     }
-    const found = allUsers().find((i) => i.email === email);
-    if (!found) {
+
+    const user = findKnownUser('email', email);
+    if (!user) {
       throw new FireMockError(
-        `The email "${email}" was not found`,
+        `The email "${email}" is not a known user in the mock database`,
         `auth/user-not-found`
+      );
+    }
+    if (user.disabled) {
+      throw new FireMockError(
+        `The user identified by "${user.email}" has been disabled!`,
+        `auth/user-disabled`
       );
     }
 
@@ -108,11 +126,11 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
     }
     const partial: IPartialUserCredential = {
       user: {
-        email: found.email,
+        email: user.email,
         isAnonymous: false,
-        emailVerified: found.emailVerified,
+        emailVerified: user.emailVerified,
         uid: userUid(email),
-        displayName: found.displayName,
+        displayName: user.displayName,
       },
       credential: {
         signInMethod: 'signInWithEmailAndPassword',
@@ -129,7 +147,15 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
   },
 
   /**
-   * Add a new user with the Email/Password provider
+   * Add a new user with the Email/Password provider.
+   *
+   * Possible errors:
+   * - auth/email-already-in-use
+   * - auth/invalid-email
+   * - auth/operation-not-allowed
+   * - auth/weak-password
+   *
+   * [Docs](https://firebase.google.com/docs/reference/js/firebase.auth.Auth#createuserwithemailandpassword)
    */
   async createUserWithEmailAndPassword(email: string, password: string) {
     await networkDelay();
@@ -170,7 +196,7 @@ export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
       },
     };
     const u = completeUserCredential(partial);
-    addUser({ uid: partial.user.uid, email, password });
+    addToUserPool({ uid: partial.user.uid, email, password });
     setCurrentUser(u);
 
     return u;

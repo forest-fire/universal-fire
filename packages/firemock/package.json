@@ -32,7 +32,9 @@
     "circular": "yarn run madge --circular --extensions ts ./src"
   },
   "devDependencies": {
+    "@forest-fire/types": "^0.56.5",
     "@types/deepmerge": "^2.2.0",
+    "@types/faker": "^4.1.12",
     "@types/jest": "^26.0.3",
     "@types/js-yaml": "^3.12.1",
     "@types/lodash.first": "^3.0.6",
@@ -47,7 +49,8 @@
     "@vuepress/plugin-pwa": "^1.5.0",
     "async-shelljs": "^0.1.4",
     "chalk": "^4.0.0",
-    "do-devops": "^0.3.20",
+    "common-types": "~1.15.8",
+    "do-devops": "^0.4.8",
     "jest": "^26.1.0",
     "jest-extended": "^0.11.5",
     "lodash": "^4.17.15",
@@ -61,28 +64,29 @@
     "ts-node": "^8.10.2",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
+    "typed-conversions": "~0.11.1",
     "typescript": "^3.9.5",
     "typescript-transform-paths": "^1.1.14",
     "vuepress": "^1.5.0"
   },
   "dependencies": {
     "@forest-fire/serialized-query": "^0.56.5",
-    "@forest-fire/types": "^0.56.5",
-    "@types/faker": "^4.1.12",
-    "common-types": "^1.15.8",
     "deepmerge": "^4.2.2",
     "email-validator": "^2.0.4",
-    "faker": "^4.1.0",
     "fast-copy": "^2.1.0",
-    "fast-equals": "^2.0.0",
+    "fast-equals": "^2.0.0"
+  },
+  "optionalDependencies": {
+    "common-types": "~1.15.8",
+    "faker": "^4.1.0",
     "firebase-key": "^2.0.2",
     "lodash.first": "^3.0.0",
     "lodash.get": "^4.4.2",
     "lodash.last": "^3.0.0",
     "lodash.set": "^4.3.2",
-    "typed-conversions": "^0.11.1"
+    "typed-conversions": "~0.11.1"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   }
 }

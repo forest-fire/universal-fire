@@ -45,7 +45,7 @@ export interface IMockAuthConfig {
   /** The auth providers which have been enabled for this app */
   providers: IAuthProviderName[];
   /** Arrya of known users who should be in the mock Auth system to start. */
-  users?: ISimplifiedMockUser[];
+  users?: IMockUser[];
 }
 
 export interface IMockConfigOptions {
@@ -58,7 +58,17 @@ export interface IMockConfigOptions {
   db?: IDictionary | AsyncMockData;
 }
 
-export interface IMockUser extends UserRecord {
+/**
+ * Firemock's internal representation of a user.
+ *
+ * This representation extends the Admin SDK's `UserRecord` interface but is different from the
+ * Client SDK's `User` and `UserCredential` interfaces.
+ *
+ * > **Note:** external users configuring the mock DB will just use the `IMockUser`
+ * > type -- a simplified requirement -- and when it is consumed by Firemock via the
+ * > API it will be converted to `IMockRecord`.
+ */
+export interface IMockUserRecord extends UserRecord {
   /** Optionally sets a fixed UID for this user. */
   uid: string;
   isAnonymous?: boolean;
@@ -92,10 +102,11 @@ export interface IMockAuth extends IClientAuth, IAuthProviders {}
 
 /**
  * A basic configuration for a user that allows default values to fill in some of
- * the non-essential properties which Firebase requires
+ * the non-essential properties which Firebase requires (but Firemock is less sensative
+ * to)
  */
-export type ISimplifiedMockUser = Omit<
-  IMockUser,
+export type IMockUser = Omit<
+  IMockUserRecord,
   'emailVerified' | 'disabled' | 'uid' | 'toJSON' | 'providerData' | 'metadata'
 > & {
   emailVerified?: boolean;
