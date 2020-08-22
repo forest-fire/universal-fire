@@ -251,7 +251,7 @@ export abstract class AbstractedDatabase implements IAbstractedDatabase {
     }
 
     try {
-      this._mock = await Firemock.Mock.prepare(this.sdk, config);
+      this._mock = await Firemock.Mock.prepare(config, this.sdk);
     } catch (e) {
       throw new FireError(
         `The firemock library was imported successfully but in trying to "prepare" it there was a failure: ${e.message}`,

@@ -63,6 +63,16 @@ export class Mock<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
   ) {
     const defaultDbConfig = {};
     await importFakerLibrary();
+
+    if (options.auth) {
+      if (typeof options.auth.providers === 'function') {
+        options.auth.providers = await options.auth.providers;
+      }
+      if (typeof options.auth.users === 'function') {
+        options.auth.users = await options.auth.users;
+      }
+    }
+
     const obj = new Mock<TAuth>(
       options.db
         ? typeof options.db === 'function'
@@ -75,6 +85,7 @@ export class Mock<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
     if (typeof options.db === 'function') {
       obj.updateDB(await (options.db as AsyncMockData)(obj));
     }
+
     return obj;
   }
 
