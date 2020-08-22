@@ -561,7 +561,6 @@ describe('Database', () => {
         expect(getDb('people')).toBeInstanceOf(Object);
         expect(getDb('people')).not.toHaveProperty('abcd');
       };
-      console.log(Object.keys(getDb('people')));
 
       removeDB(`/people.abcd`);
       addListener('/people', 'child_removed', callback);

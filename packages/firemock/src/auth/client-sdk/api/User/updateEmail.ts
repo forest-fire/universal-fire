@@ -1,6 +1,6 @@
-import { currentUser, updateUser } from '../../state-mgmt';
+import { currentUser, updateUser } from '@/auth/user-mgmt/index';
 
-import { FireMockError } from '@/errors/FireMockError';
+import { FireMockError } from '@/errors/index';
 import { networkDelay } from '@/util/other';
 
 /**

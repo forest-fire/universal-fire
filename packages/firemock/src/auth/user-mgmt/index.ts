@@ -2,11 +2,11 @@
 
 //#region autoindexed files
 
-// index last changed at: 8th Aug, 2020, 05:40 PM ( GMT-7 )
+// index last changed at: 8th Aug, 2020, 07:53 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: FireMockError.
+// files: authUsersApi.
 
 // local file exports
-export * from "./FireMockError";
+export * from "./authUsersApi";
 
 //#endregion

@@ -20,7 +20,6 @@ export type ConfirmationResult = import('@firebase/auth-types').ConfirmationResu
 export type AuthSettings = import('@firebase/auth-types').AuthSettings;
 export type EmailAuthProvider_Instance = import('@firebase/auth-types').EmailAuthProvider_Instance;
 export type FacebookAuthProvider_Instance = import('@firebase/auth-types').FacebookAuthProvider_Instance;
-export type FirebaseAuth = import('@firebase/auth-types').FirebaseAuth;
 export type GithubAuthProvider_Instance = import('@firebase/auth-types').GithubAuthProvider_Instance;
 export type GoogleAuthProvider = import('@firebase/auth-types').GoogleAuthProvider;
 export type GoogleEmailAuthProvider = import('@firebase/auth-types').EmailAuthProvider;

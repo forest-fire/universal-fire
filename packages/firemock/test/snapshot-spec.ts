@@ -1,4 +1,3 @@
-import { IDictionary } from 'common-types';
 import { SnapShot } from '../src/rtdb';
 
 describe('SnapShot:', () => {

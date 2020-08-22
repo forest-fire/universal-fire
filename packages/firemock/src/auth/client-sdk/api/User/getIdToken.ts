@@ -1,6 +1,5 @@
-import { allUsers, currentUser } from '../../state-mgmt';
-
-import { atRandom } from '../../../util/atRandom';
+import { allUsers, currentUser } from '@/auth/user-mgmt';
+import { atRandom } from 'native-dash';
 
 export async function getIdToken() {
   const user = currentUser();

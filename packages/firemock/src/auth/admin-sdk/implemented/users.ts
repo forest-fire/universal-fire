@@ -12,7 +12,7 @@ import {
   removeUser,
   getUserByEmail,
   allUsers,
-} from '../../state-mgmt';
+} from '../../user-mgmt';
 import { networkDelay } from '../../../util';
 
 export const users: Partial<Auth> = {

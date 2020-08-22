@@ -10,14 +10,14 @@ import type {
 } from '@forest-fire/types';
 import { IDictionary, pk } from 'common-types';
 import { FireMockError } from '@/errors/FireMockError';
-import { clientApiUser } from '@/auth/client-sdk/UserObject';
-import { IAuthObserver } from '@/@types';
 import {
+  clientApiUser,
   isMockUserRecord,
   isUserCredential,
   isUserRecord,
   isUser,
-} from '../client-sdk/type-guards';
+} from '@/auth/client-sdk';
+import { IAuthObserver } from '@/@types';
 
 /**
  * The recognized users in the mock Auth system
@@ -55,15 +55,7 @@ export function addAuthObserver(ob: IAuthObserver) {
 }
 
 export function initializeAuth(config: IMockAuthConfig) {
-  const baseUser: () => Partial<IMockUserRecord> = () => ({
-    emailVerified: false,
-    uid: getRandomMockUid(),
-    providerData: [],
-  });
-  _users =
-    (config.users || []).map(
-      (u) => ({ ...baseUser(), ...u } as IMockUserRecord)
-    ) || [];
+  (config.users || []).forEach((u) => addToUserPool(u));
   _providers = config.providers || [];
 }
 
@@ -127,7 +119,7 @@ export function clearAuthUsers() {
 }
 
 /**
- * The _default_ **uid** to assigne to anonymous users
+ * The _default_ **uid** to assign to anonymous users
  */
 let _defaultAnonymousUid: string;
 

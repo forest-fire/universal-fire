@@ -1,11 +1,12 @@
+import 'jest-extended';
+import { Mock } from '../../src/mocking/index';
+
 import {
   addAuthObserver,
   authProviders,
   setCurrentUser,
   setDefaultAnonymousUid,
-} from '../../src/auth/state-mgmt';
-
-import { Mock } from '../../src/mocking';
+} from '../../src/auth/user-mgmt/index';
 
 describe('Firebase Auth →', () => {
   it('Calling auth() gives you API', async () => {

@@ -15,6 +15,7 @@ export type {
   IClientAuth,
   IAdminAuth,
 } from '@forest-fire/types';
+export { SDK } from '@forest-fire/types';
 
 export { SerializedQuery } from '@forest-fire/serializer-factory';
 export type {

@@ -29,6 +29,7 @@
     "deploy": "ts-node ./scripts/deploy.ts ",
     "info": "yarn do info",
     "autoindex": "yarn do autoindex",
+    "visualize": "yarn madge src --ts-config tsconfig.json --extensions ts -i /tmp/dep-visualize.png && open /tmp/dep-visualize.png",
     "circular": "yarn run madge --circular --extensions ts ./src"
   },
   "devDependencies": {
@@ -55,6 +56,7 @@
     "jest-extended": "^0.11.5",
     "lodash": "^4.17.15",
     "madge": "^3.9.2",
+    "native-dash": "~1.2.6",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.0.0",
     "rimraf": "^3.0.2",
@@ -84,7 +86,9 @@
     "lodash.get": "^4.4.2",
     "lodash.last": "^3.0.0",
     "lodash.set": "^4.3.2",
-    "typed-conversions": "~0.11.1"
+    "native-dash": "~1.2.6",
+    "typed-conversions": "~0.11.1",
+    "@forest-fire/types": "^0.57.1"
   },
   "engines": {
     "node": ">=10.0.0"

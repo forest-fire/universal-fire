@@ -5,7 +5,7 @@ import {
   authProviders,
   getRandomMockUid,
   getAuthObservers,
-} from '../state-mgmt';
+} from '@/auth/user-mgmt/index';
 
 export function emailExistsAsUserInAuth(email: string) {
   const emails = allUsers().map((i) => i.email);

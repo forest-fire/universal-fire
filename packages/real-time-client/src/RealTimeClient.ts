@@ -142,13 +142,13 @@ export class RealTimeClient extends RealTimeDb
 
   public async auth(): Promise<IClientAuth> {
     if (!this._app) {
-      // this._loadFirebaseApp()
+      // await this._loadFirebaseApp()
     }
     if (this._auth) {
       return this._auth;
     }
     if (this.isMockDb) {
-      this._auth = await this.mock.auth();
+      this._auth = (await this.mock.auth()) as IClientAuth;
       return this._auth;
     } else {
       await this._loadAuthApi();
@@ -165,7 +165,7 @@ export class RealTimeClient extends RealTimeDb
   protected async _connectMockDb(config: IMockConfig) {
     await this.getFiremock({
       db: config.mockData || {},
-      auth: { providers: [], ...config.mockAuth },
+      auth: { providers: [], users: [], ...config.mockAuth },
     });
     this._authProviders = this._mock.authProviders;
     await this._listenForConnectionStatus();

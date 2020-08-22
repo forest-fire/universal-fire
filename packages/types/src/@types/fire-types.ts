@@ -213,14 +213,14 @@ export interface IEmitter {
  * An SDK that Firemodel supports connecting to Firebase by the
  * equivalently named SDK.
  */
-export const enum SDK {
+export enum SDK {
   FirestoreAdmin = 'FirestoreAdmin',
   FirestoreClient = 'FirestoreClient',
   RealTimeAdmin = 'RealTimeAdmin',
   RealTimeClient = 'RealTimeClient',
 }
 
-export const enum Database {
+export enum Database {
   Firestore = 'Firestore',
   RTDB = 'RTDB',
 }

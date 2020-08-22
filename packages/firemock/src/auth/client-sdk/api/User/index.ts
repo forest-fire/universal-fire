@@ -1,5 +1,6 @@
 import type { User } from '@forest-fire/types';
 
+import { getAnonymousUid } from '@/auth/user-mgmt/index';
 import { notImplemented } from './notImplemented';
 import { updateEmail } from './updateEmail';
 import { updatePassword } from './updatePassword';
@@ -10,7 +11,7 @@ import { getIdTokenResult } from './getIdTokenResult';
 
 export const clientApiUser: User = {
   ...(notImplemented as Required<typeof notImplemented>),
-  ...userProperties(),
+  ...userProperties(getAnonymousUid()),
   getIdToken,
   getIdTokenResult,
   updateEmail,

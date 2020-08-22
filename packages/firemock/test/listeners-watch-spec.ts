@@ -1,5 +1,5 @@
 import * as helpers from './testing/helpers';
-import { SchemaHelper, Mock, Reference } from '../src';
+import { SchemaHelper, Mock } from '../src/mocking';
 import {
   updateDB,
   removeDB,
@@ -7,16 +7,21 @@ import {
   setDB,
   multiPathUpdateDB,
   clearDatabase,
-  listenerCount,
+  Reference,
+  Query,
   reset,
 } from '../src/rtdb';
 import { IDictionary } from 'common-types';
-import type { IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IRtdbDataSnapshot, IRtdbReference } from '@forest-fire/types';
+import 'jest-extended';
 
 describe('Listener events ->', () => {
   it('listening on "on_child" events', async () => {
     reset();
-    const queryRef = Reference.createQuery('userProfile', 10);
+    const queryRef = (Reference.createQuery(
+      'userProfile',
+      10
+    ) as unknown) as IRtdbReference;
     let events: IDictionary[] = [];
     const cb = (eventType: string) => (
       snap: IRtdbDataSnapshot,

@@ -1,5 +1,5 @@
-import { FireMockError } from '../../../errors/FireMockError';
-import { updateUser, currentUser } from '../../state-mgmt';
+import { FireMockError } from '@/errors/FireMockError';
+import { updateUser, currentUser } from '@/auth/user-mgmt/index';
 
 /**
  * **updatePassword**

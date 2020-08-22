@@ -1,24 +1,25 @@
-import { IPartialUserCredential } from '../../index';
-import { networkDelay } from '@/util';
-import { completeUserCredential } from './completeUserCredential';
+import { IPartialUserCredential, IAuthObserver } from '@/@types/index';
+import { networkDelay } from '@/util/index';
 import { Omit } from 'common-types';
-import { notImplemented } from './notImplemented';
-import type {
-  ActionCodeSettings,
-  FirebaseAuth,
-  UserCredential,
-  AuthCredential,
-  User,
-} from '@forest-fire/types';
-import { IAuthObserver } from '@/@types';
-import { FireMockError } from '@/errors';
+import { completeUserCredential } from '../helpers/index';
 import {
+  notImplemented,
   emailExistsAsUserInAuth,
   emailHasCorrectPassword,
   userUid,
   emailValidationAllowed,
   emailIsValidFormat,
-} from './authMockHelpers';
+  clientApiUser,
+} from '@/auth/client-sdk/index';
+import type {
+  ActionCodeSettings,
+  UserCredential,
+  AuthCredential,
+  User,
+  IClientAuth,
+} from '@forest-fire/types';
+
+import { FireMockError } from '@/errors';
 import {
   authProviders,
   setCurrentUser,
@@ -28,10 +29,9 @@ import {
   currentUser,
   findKnownUser,
   addToUserPool,
-} from '@/auth/state-mgmt';
-import { clientApiUser } from './UserObject';
+} from '@/auth/user-mgmt';
 
-export const implemented: Omit<FirebaseAuth, keyof typeof notImplemented> = {
+export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
   app: {
     name: 'mocked-app',
     options: {},

@@ -1,7 +1,7 @@
-import type { FirebaseAuth, ActionCodeInfo } from '@forest-fire/types';
+import type { ActionCodeInfo, IClientAuth } from '@forest-fire/types';
 import { createError } from 'common-types';
 
-export const notImplemented: Partial<FirebaseAuth> = {
+export const notImplemented: Partial<IClientAuth> = {
   async applyActionCode(code: string) {
     return;
   },
@@ -11,28 +11,6 @@ export const notImplemented: Partial<FirebaseAuth> = {
       operation: '',
     };
   },
-  // async createUserAndRetrieveDataWithEmailAndPassword(
-  //   email: string,
-  //   password: string
-  // ): Promise<UserCredential> {
-  //   return completeUserCredential({});
-  // },
-
-  // async fetchProvidersForEmail(email: string) {
-  //   return [];
-  // },
-
-  // async signInAnonymouslyAndRetrieveData() {
-  //   return completeUserCredential({});
-  // },
-
-  // async signInAndRetrieveDataWithCustomToken(token: string) {
-  //   return completeUserCredential({});
-  // },
-
-  // async signInAndRetrieveDataWithEmailAndPassword(email: string, password: string) {
-  //   return completeUserCredential({});
-  // },
 
   async fetchSignInMethodsForEmail() {
     throw createError(

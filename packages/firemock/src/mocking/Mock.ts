@@ -14,10 +14,9 @@ import {
   silenceEvents,
   getDb,
 } from '@/rtdb';
-import { setNetworkDelay } from '@/util';
+import { networkDelay, setNetworkDelay } from '@/util';
 import { DelayType } from '@/@types';
-import { auth as fireAuth } from '@/auth';
-import { clearAuthUsers, initializeAuth } from '@/auth/state-mgmt';
+import { clearAuthUsers, initializeAuth } from '@/auth/user-mgmt';
 import { FireMockError } from '@/errors';
 import {
   IRelationship,
@@ -26,40 +25,52 @@ import {
   SchemaCallback,
   IMockSetup,
 } from '@/@types';
-import authProviders from '@/auth/client-sdk/AuthProviders';
-import type {
+import authProviders from '@/auth/client-sdk/api/AuthProviders';
+import {
   FirebaseNamespace,
   IMockAuthConfig,
   IAdminAuth,
   IMockConfigOptions,
   AsyncMockData,
+  SDK,
+  IClientAuth,
 } from '@forest-fire/types';
+
+import { clientAuthSdk } from '@/auth/client-sdk';
 import { adminAuthSdk } from '@/auth/admin-sdk';
 
-/* tslint:disable:max-classes-per-file */
-export class Mock {
+export { SDK };
+
+export class Mock<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
   /**
    * returns a Mock object while also ensuring that the
    * Faker library has been asynchronously imported.
    */
-  public static async prepare(
-    options: IMockConfigOptions = {}
+  public static async prepare<
+    TAuth extends IClientAuth | IAdminAuth = IClientAuth
+  >(
     /**
      * allows publishing of raw data into the database as the databases
      * initial state or alternatively to assign a callback function which
      * will be executed when the Mock DB is "connecting" and allows the
      * DB to be setup via mocking.
      */
+    options: IMockConfigOptions = {},
+    /**
+     * The Firebase SDK which invoked this Mock DB
+     */
+    sdk: SDK = SDK.RealTimeClient
   ) {
     const defaultDbConfig = {};
     await importFakerLibrary();
-    const obj = new Mock(
+    const obj = new Mock<TAuth>(
       options.db
         ? typeof options.db === 'function'
           ? {}
           : options.db || defaultDbConfig
         : defaultDbConfig,
-      options.auth
+      options.auth,
+      sdk
     );
     if (typeof options.db === 'function') {
       obj.updateDB(await (options.db as AsyncMockData)(obj));
@@ -82,30 +93,47 @@ export class Mock {
   private _mockInitializer: IMockSetup;
   private _fakerLoaded: Promise<any>;
 
+  private _hasConnectedToAuth: boolean = false;
+
   constructor(
     /**
+     * Allows the initial **state** of the database to be specified. Either
+     * _synchronously_ as a dictionary passed in or as function returning
+     * a Promise to the database's state.
+     *
+     * When choosing the _asynchronous_ approach the function will be passed
+     * an instance of
+     *
      * allows publishing of raw data into the database as the databases
      * initial state or alternatively to assign a callback function which
      * will be executed when the Mock DB is "connecting" and allows the
      * DB to be setup via mocking.
      */
-    dataOrMock?: IDictionary | IMockSetup,
-    authConfig: IMockAuthConfig = {
+    mockData?: IDictionary | IMockSetup,
+    /**
+     * Provides configuration for the AUTH mocking.
+     */
+    mockAuth: IMockAuthConfig = {
       providers: ['anonymous'],
       users: [],
-    }
+    },
+    /**
+     * indicates which database and SDK (aka, client/admin) that has requested
+     * this mock db.
+     */
+    protected sdk: SDK = SDK.RealTimeClient
   ) {
     Queue.clearAll();
     clearDatabase();
     clearAuthUsers();
-    if (dataOrMock && typeof dataOrMock === 'object') {
-      this.updateDB(dataOrMock);
+    if (mockData && typeof mockData === 'object') {
+      this.updateDB(mockData);
     }
-    if (dataOrMock && typeof dataOrMock === 'function') {
-      this._mockInitializer = dataOrMock(this) as IMockSetup;
+    if (mockData && typeof mockData === 'function') {
+      this._mockInitializer = mockData(this) as IMockSetup;
     }
 
-    initializeAuth(authConfig);
+    initializeAuth(mockAuth);
   }
 
   /**
@@ -141,12 +169,25 @@ export class Mock {
   }
 
   /**
-   * Gives access to a mocked version of the Client Auth SDK
+   * Gives access to the appropriate Auth SDK (aka, _client_ or _admin_
+   * based on the SDK which originated this Mock database)
    */
-  public async auth() {
-    return fireAuth();
+  public async auth(): Promise<TAuth> {
+    if (!this._hasConnectedToAuth) {
+      await networkDelay();
+      this._hasConnectedToAuth = true;
+    }
+
+    // TODO: This typing is a temporary hack until we refactor `Mock` away from
+    // property mocking or there's more time to address a semi-perm solution with
+    // better typing
+    return (([SDK.FirestoreAdmin, SDK.RealTimeAdmin].includes(this.sdk)
+      ? adminAuthSdk
+      : clientAuthSdk) as unknown) as TAuth;
   }
 
+  // TODO: this should _not_ be on the API surface; this should be refactored in
+  // movement
   public async adminSdk(): Promise<IAdminAuth> {
     return adminAuthSdk;
   }

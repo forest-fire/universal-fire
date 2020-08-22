@@ -249,11 +249,12 @@ export abstract class AbstractedDatabase implements IAbstractedDatabase {
         'missing-dependency'
       );
     }
+
     try {
-      this._mock = await Firemock.Mock.prepare(config);
+      this._mock = await Firemock.Mock.prepare(this.sdk, config);
     } catch (e) {
       throw new FireError(
-        `The firemock library was imported asynchronously successfully but in trying to "prepare" it there was a failure: ${e.message}`,
+        `The firemock library was imported successfully but in trying to "prepare" it there was a failure: ${e.message}`,
         'failed-mock-prep'
       );
     }
