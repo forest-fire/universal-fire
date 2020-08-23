@@ -25,7 +25,7 @@ import {
   SchemaCallback,
   IMockSetup,
 } from '@/@types';
-import authProviders from '@/auth/client-sdk/api/AuthProviders';
+import * as authProviders from '@/auth/client-sdk/api/AuthProviders';
 import {
   FirebaseNamespace,
   IMockAuthConfig,
@@ -36,7 +36,7 @@ import {
   IClientAuth,
 } from '@forest-fire/types';
 
-import { clientAuthSdk } from '@/auth/client-sdk';
+import { AuthProviders, clientAuthSdk } from '@/auth/client-sdk';
 import { adminAuthSdk } from '@/auth/admin-sdk';
 
 export { SDK };
@@ -200,7 +200,7 @@ export class Mock<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
   }
 
   public get authProviders(): FirebaseNamespace['auth'] {
-    return authProviders;
+    return AuthProviders as FirebaseNamespace['auth'];
   }
 
   /**

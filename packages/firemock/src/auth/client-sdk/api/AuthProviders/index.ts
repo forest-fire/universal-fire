@@ -11,7 +11,7 @@ import { PhoneAuthProvider } from './PhoneAuthProvider';
 import { RecaptchaVerifier } from './RecaptchaVerifier';
 
 // tslint:disable-next-line: no-object-literal-type-assertion
-const api: Partial<FirebaseNamespace['auth']> = {
+const AuthProviders: Partial<FirebaseNamespace['auth']> = {
   Auth: Auth as any,
   EmailAuthProvider,
   FacebookAuthProvider,
@@ -28,4 +28,4 @@ const fn = (): IClientAuth => {
   throw new Error('not allowed');
 };
 
-export default (api || fn) as FirebaseNamespace['auth'];
+export { AuthProviders };
