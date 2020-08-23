@@ -54,9 +54,34 @@ export function addAuthObserver(ob: IAuthObserver) {
   _authObservers.push(ob);
 }
 
-export function initializeAuth(config: IMockAuthConfig) {
-  (config.users || []).forEach((u) => addToUserPool(u));
-  _providers = config.providers || [];
+/**
+ * Makes sure all _providers_ and _users_ are configured in
+ * the Mock database.
+ *
+ * Valid properties for users and providers is either a concrete
+ * synchronous value _or_ a function which returns a promise of
+ * the concrete value.
+ */
+export async function initializeAuth(config: IMockAuthConfig) {
+  let users: IMockUser[] = [];
+  let providers: IAuthProviderName[] = [];
+
+  let promises: Promise<any>[] = [];
+  if (typeof config.users === 'function') {
+    promises.push(config.users().then((u) => (users = u)));
+  } else {
+    users = config.users || [];
+  }
+
+  if (typeof config.providers === 'function') {
+    promises.push(config.providers().then((p) => (config.providers = p)));
+  } else {
+    providers = config.providers || [];
+  }
+  await Promise.all(promises);
+
+  users.forEach((u) => addToUserPool(u));
+  _providers = providers;
 }
 
 /** sets the current user based on a given `UserCredential` */

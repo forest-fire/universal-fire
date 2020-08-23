@@ -1,5 +1,4 @@
-import first from 'lodash.first';
-import last from 'lodash.last';
+import { firstKey, lastKey } from 'native-dash';
 import { IDictionary, wait } from 'common-types';
 import type { IRtdbDataSnapshot } from '@forest-fire/types';
 import type { Delays } from '@/@types';
@@ -39,14 +38,6 @@ export function lastProp<T = IDictionary>(listOf: IDictionary<any>) {
 export function objectIndex(obj: IDictionary, index: number) {
   const keys = Object.keys(obj);
   return keys ? obj[keys[index - 1]] : null;
-}
-
-export function firstKey<T = any>(listOf: IDictionary<T>) {
-  return first(Object.keys(listOf));
-}
-
-export function lastKey<T = any>(listOf: IDictionary<T>) {
-  return last(Object.keys(listOf));
 }
 
 export function removeKeys(obj: IDictionary, remove: string[]) {

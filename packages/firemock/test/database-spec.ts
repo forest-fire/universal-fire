@@ -25,6 +25,7 @@ import {
   setDB,
   updateDB,
 } from '../src/rtdb/store';
+import { firstKey } from 'native-dash';
 
 import { wait } from 'common-types';
 
@@ -342,7 +343,7 @@ describe('Database', () => {
       let status = 'starting';
       const people = (await m.ref('/people').once('value')).val();
       expect(Object.keys(people)).toHaveLength(10);
-      const firstKey = helpers.firstKey(people);
+      const firstPerson = firstKey(people);
 
       const callback: IFirebaseEventHandler = (snap) => {
         const list = snap.val();
@@ -350,11 +351,11 @@ describe('Database', () => {
           expect(snap.numChildren()).toBe(status === 'starting' ? 10 : 9);
           if (status === 'starting') {
             expect(Object.keys(list)).toEqual(
-              expect.arrayContaining([firstKey])
+              expect.arrayContaining([firstPerson])
             );
           } else {
             expect(Object.keys(list)).toEqual(
-              expect.not.arrayContaining([firstKey])
+              expect.not.arrayContaining([firstPerson])
             );
           }
         }
@@ -364,13 +365,13 @@ describe('Database', () => {
       expect(listenerCount()).toBe(1);
 
       status = 'after';
-      removeDB(`/people/${firstKey}`);
+      removeDB(`/people/${firstPerson}`);
 
       const andThen = (await m.ref('/people').once('value')).val();
 
       expect(Object.keys(andThen)).toHaveLength(9);
       expect(Object.keys(andThen)).toEqual(
-        expect.not.arrayContaining([firstKey])
+        expect.not.arrayContaining([firstPerson])
       );
     });
   });

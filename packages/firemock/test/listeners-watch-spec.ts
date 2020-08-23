@@ -14,6 +14,7 @@ import {
 import { IDictionary } from 'common-types';
 import type { IRtdbDataSnapshot, IRtdbReference } from '@forest-fire/types';
 import 'jest-extended';
+import { firstKey } from 'native-dash';
 
 describe('Listener events ->', () => {
   it('listening on "on_child" events', async () => {
@@ -240,8 +241,8 @@ describe('Listener events ->', () => {
       .quantifyHasMany('employee', 10)
       .generate();
 
-    const firstEmployee = helpers.firstKey(m.db.employees);
-    const firstCompany = helpers.firstKey(m.db.companies);
+    const firstEmployee = firstKey(m.db.employees);
+    const firstCompany = firstKey(m.db.companies);
     expect(m.db.employees[firstEmployee]).toBeInstanceOf(Object);
     expect(m.db.companies[firstCompany]).toBeInstanceOf(Object);
 

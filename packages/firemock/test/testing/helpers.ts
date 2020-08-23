@@ -7,8 +7,7 @@ import * as yaml from 'js-yaml';
 import { stderr, stdout } from 'test-console';
 
 import { IDictionary } from 'common-types';
-import first from 'lodash.first';
-import last from 'lodash.last';
+import { last, first } from 'native-dash';
 
 // tslint:disable-next-line
 interface Console {

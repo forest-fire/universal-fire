@@ -57,6 +57,26 @@ describe('Firebase Auth →', () => {
     expect(user.user.emailVerified).toEqual(true);
   });
 
+  it(`signInWithEmail when user's configuration is passed in asynchronously`, async () => {
+    const m = await Mock.prepare({
+      auth: {
+        users: () =>
+          Promise.resolve([
+            { email: 'test@test.com', password: 'foobar', emailVerified: true },
+          ]),
+        providers: ['emailPassword'],
+      },
+    });
+    const auth = await m.auth();
+    const user = await auth.signInWithEmailAndPassword(
+      'test@test.com',
+      'foobar'
+    );
+    expect(user.user.email).toBeString();
+    expect(user.user.email).toEqual('test@test.com');
+    expect(user.user.emailVerified).toEqual(true);
+  });
+
   it('signInWithEmail with valid email but invalid password fails', async () => {
     const m = await Mock.prepare({
       auth: {

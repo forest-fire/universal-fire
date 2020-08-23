@@ -10,7 +10,7 @@ const db = RealTimeClient.create( { mocking: true } )
 const db = RealTimeAdmin.create( { mocking: true } )
 ```
 
-## Configuring the Database
+## Configuring the Database and Auth
 
 There are two main config paths: `mockDb` and `mockAuth`:
 

@@ -1,13 +1,14 @@
 import * as convert from 'typed-conversions';
 import * as helpers from './testing/helpers';
 
-import { firstKey, firstProp, lastKey, lastProp } from '../src/util/other';
+import { firstProp, lastProp } from '../src/util/other';
 import { Mock, SchemaHelper } from '../src/mocking';
 
 import { IDictionary } from 'common-types';
 import { Delays, SchemaCallback } from '../src';
 import { difference } from 'lodash';
 import { reset } from '../src/rtdb';
+import { firstKey, lastKey } from 'native-dash';
 
 describe('Reference functions', () => {
   const mocker: SchemaCallback = (h) => () => ({
@@ -546,7 +547,7 @@ describe('Reference functions', () => {
       });
       const people = (await m.ref('/people').once('value')).val();
       expect(helpers.length(people)).toBe(1);
-      expect(helpers.firstKey(people)).toBe('abcd');
+      expect(firstKey(people)).toBe('abcd');
       expect(helpers.firstRecord(people).name).toBe('Happy Jack');
     });
 
@@ -582,7 +583,7 @@ describe('Reference functions', () => {
       });
       const people = (await m.ref('/people').once('value')).val();
       expect(helpers.length(people)).toBe(1);
-      expect(helpers.firstKey(people)).toBe('abcd');
+      expect(firstKey(people)).toBe('abcd');
       expect(helpers.firstRecord(people).name).toBe('Happy Jack');
       expect(helpers.firstRecord(people).age).toBe(26);
     });
