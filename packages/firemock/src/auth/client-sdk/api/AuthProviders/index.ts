@@ -28,4 +28,4 @@ const fn = (): IClientAuth => {
   throw new Error('not allowed');
 };
 
-export { AuthProviders };
+export default (AuthProviders || fn) as FirebaseNamespace['auth'];

@@ -25,7 +25,7 @@ import {
   SchemaCallback,
   IMockSetup,
 } from '@/@types';
-import * as authProviders from '@/auth/client-sdk/api/AuthProviders';
+import AuthProviders from '@/auth/client-sdk/api/AuthProviders';
 import {
   FirebaseNamespace,
   IMockAuthConfig,
@@ -36,7 +36,7 @@ import {
   IClientAuth,
 } from '@forest-fire/types';
 
-import { AuthProviders, clientAuthSdk } from '@/auth/client-sdk';
+import { clientAuthSdk } from '@/auth/client-sdk';
 import { adminAuthSdk } from '@/auth/admin-sdk';
 
 export { SDK };
