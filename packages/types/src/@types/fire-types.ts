@@ -158,10 +158,12 @@ export interface IMockConfig extends IFirebaseBaseConfig {
    * or you can pass in an async function which resolves to the dictionary
    * asynchronously
    */
-  mockData?: IDictionary | AsyncMockData;
+  mockData?: IMockData;
   /** optionally configure mocking for Firebase Authentication */
   mockAuth?: IMockAuthConfig;
 }
+
+export type IMockData = IDictionary | AsyncMockData;
 
 export interface IClientConfig extends IFirebaseBaseConfig {
   apiKey: string;
