@@ -1,6 +1,6 @@
 {
   "name": "firemock",
-  "version": "0.59.0",
+  "version": "0.59.2",
   "description": "firemock",
   "license": "MIT",
   "repository": "git@github.com:forest-fire/firemock.git",
@@ -72,14 +72,14 @@
     "vuepress": "^1.5.0"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.59.0",
+    "@forest-fire/serialized-query": "^0.59.2",
     "deepmerge": "^4.2.2",
     "email-validator": "^2.0.4",
     "fast-copy": "^2.1.0",
     "fast-equals": "^2.0.0"
   },
   "optionalDependencies": {
-    "@forest-fire/types": "^0.59.0",
+    "@forest-fire/types": "^0.59.2",
     "common-types": "~1.15.8",
     "faker": "^4.1.0",
     "firebase-key": "^2.0.2",

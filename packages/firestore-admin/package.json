@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/firestore-admin",
-  "version": "0.59.0",
+  "version": "0.59.2",
   "description": "Admin SDK for the Firestore database",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -27,7 +27,7 @@
     "firebase-admin": ">= 8.13.0"
   },
   "optionalDependencies": {
-    "firemock": "^0.59.0"
+    "firemock": "^0.59.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
@@ -44,10 +44,10 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.59.0",
-    "@forest-fire/firestore-db": "^0.59.0",
-    "@forest-fire/types": "^0.59.0",
-    "@forest-fire/utility": "^0.59.0"
+    "@forest-fire/abstracted-database": "^0.59.2",
+    "@forest-fire/firestore-db": "^0.59.2",
+    "@forest-fire/types": "^0.59.2",
+    "@forest-fire/utility": "^0.59.2"
   },
   "license": "MIT"
 }
