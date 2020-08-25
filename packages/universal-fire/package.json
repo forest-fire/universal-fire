@@ -7,6 +7,12 @@
   "browser": "dist/es/browser.js",
   "types": "dist/types/index.node.d.ts",
   "sideEffects": false,
+  "files": [
+    "rest",
+    "rtdb",
+    "firestore",
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/forest-fire/universal-fire.git"

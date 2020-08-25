@@ -8,7 +8,6 @@ import {
 } from '@forest-fire/utility';
 import {
   FirebaseNamespace,
-  IAbstractedDatabase,
   IClientApp,
   IClientAuth,
   IClientAuthProviders,
@@ -19,19 +18,20 @@ import {
   isClientConfig,
   isMockConfig,
   IRtdbDatabase,
+  IRealTimeClient,
+  ApiKind,
 } from '@forest-fire/types';
-import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
+import { RealTimeDb } from '@forest-fire/real-time-db';
 
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';
-import type { Mock as IMockApi } from 'firemock';
 
-export class RealTimeClient extends RealTimeDb
-  implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
+export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
   public readonly sdk = SDK.RealTimeClient;
+  public readonly apiKind = ApiKind.client;
   public readonly isAdminApi = false;
   /**
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
@@ -48,6 +48,7 @@ export class RealTimeClient extends RealTimeDb
     return Array.from(new Set(firebase.apps.map((i) => i.name)));
   }
 
+  public CONNECTION_TIMEOUT: number = 5000;
   protected _eventManager: EventManager;
   protected _database?: IRtdbDatabase;
   protected _auth?: IClientAuth;

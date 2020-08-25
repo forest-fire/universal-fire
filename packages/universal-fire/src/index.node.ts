@@ -1,11 +1,10 @@
 export * from './proxy-symbols';
-export * from './sdk-types';
 import {
   IFirestoreAdmin,
   IFirestoreClient,
   IRealTimeAdmin,
   IRealTimeClient,
-} from './sdk-types';
+} from './proxy-symbols';
 
 import { FirestoreAdmin as FSA } from '@forest-fire/firestore-admin';
 import { RealTimeAdmin as RTA } from '@forest-fire/real-time-admin';

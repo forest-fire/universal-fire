@@ -1,15 +1,15 @@
 export * from './proxy-symbols';
-export * from './sdk-types';
-import {
-  IFirestoreAdmin,
-  IFirestoreClient,
-  IRealTimeAdmin,
-  IRealTimeClient,
-} from './sdk-types';
 
 import { FirestoreClient as FC } from '@forest-fire/firestore-client';
 import { RealTimeClient as RTC } from '@forest-fire/real-time-client';
-import { IClientConfig, IAdminConfig } from '@forest-fire/types';
+import {
+  IClientConfig,
+  IAdminConfig,
+  IFirestoreClient,
+  IFirestoreAdmin,
+  IRealTimeAdmin,
+  IRealTimeClient,
+} from '@forest-fire/types';
 import { ISdkFactory } from './ISdkFactory';
 
 /**

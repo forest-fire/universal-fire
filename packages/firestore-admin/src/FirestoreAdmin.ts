@@ -7,25 +7,25 @@ import {
   getRunningFirebaseApp,
 } from '@forest-fire/utility';
 import {
-  IAbstractedDatabase,
   IAdminApp,
   IAdminAuth,
   IAdminConfig,
-  IAdminSdk,
   IMockConfig,
   SDK,
   isAdminConfig,
   isMockConfig,
   IAdminFirebaseNamespace,
   IAdminFirestoreDatabase,
+  IFirestoreAdmin,
+  ApiKind,
 } from '@forest-fire/types';
 
 import { FirestoreDb } from '@forest-fire/firestore-db';
 import type { Mock as IMockApi } from 'firemock';
 
-export class FirestoreAdmin extends FirestoreDb
-  implements IAdminSdk, IAbstractedDatabase<IMockApi> {
+export class FirestoreAdmin extends FirestoreDb implements IFirestoreAdmin {
   public readonly sdk = SDK.FirestoreAdmin;
+  public readonly apiKind = ApiKind.admin;
   public readonly isAdminApi = true;
 
   static async connect(config: IAdminConfig | IMockConfig) {

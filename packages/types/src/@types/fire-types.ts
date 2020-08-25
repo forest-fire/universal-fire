@@ -224,3 +224,9 @@ export enum Database {
   Firestore = 'Firestore',
   RTDB = 'RTDB',
 }
+
+export enum ApiKind {
+  admin = 'admin',
+  client = 'client',
+  rest = 'rest',
+}

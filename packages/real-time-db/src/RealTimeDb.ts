@@ -9,7 +9,6 @@ import {
   IFirebaseListener,
   IFirebaseWatchHandler,
   IMockLoadingState,
-  IRealTimeDb,
   PermissionDenied,
   RealTimeDbError,
   UndefinedAssignment,
@@ -18,7 +17,6 @@ import {
   VALID_REAL_TIME_EVENTS,
 } from './index';
 import {
-  IAbstractedDatabase,
   IAdminApp,
   IClientApp,
   IDatabaseConfig,
@@ -28,20 +26,21 @@ import {
   IRtdbReference,
   ISerializedQuery,
   IAbstractedEvent,
+  Database,
+  IBaseAbstractedDatabase,
 } from '@forest-fire/types';
 
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { slashNotation } from '@forest-fire/utility';
-import type { Mock as IMockApi } from 'firemock';
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
 export abstract class RealTimeDb extends AbstractedDatabase
-  implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
-  public readonly dbType = 'RTDB';
+  implements IBaseAbstractedDatabase {
+  public readonly dbType = Database.RTDB;
 
   /**
    * **getPushKey**

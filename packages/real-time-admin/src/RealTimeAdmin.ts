@@ -7,7 +7,6 @@ import {
   initializeAdminApp,
 } from '@forest-fire/utility';
 import {
-  IAbstractedDatabase,
   IAdminApp,
   IAdminAuth,
   IAdminConfig,
@@ -17,17 +16,18 @@ import {
   isAdminConfig,
   isMockConfig,
   IAdminFirebaseNamespace,
+  IRealTimeAdmin,
+  ApiKind,
 } from '@forest-fire/types';
-import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
+import { RealTimeDb } from '@forest-fire/real-time-db';
 
 import { EventManager } from './EventManager';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
-import type { Mock as IMockApi } from 'firemock';
 import { debug } from './util';
 
-export class RealTimeAdmin extends RealTimeDb
-  implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
+export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
   public readonly sdk = SDK.RealTimeAdmin;
+  public readonly apiKind = ApiKind.admin;
   public readonly isAdminApi = true;
 
   /**
@@ -70,6 +70,16 @@ export class RealTimeAdmin extends RealTimeDb
       name: determineDefaultAppName(config),
     } as IAdminConfig | IMockConfig;
     this._config = config;
+  }
+
+  public get app(): IAdminApp {
+    if (!this._app) {
+      throw new RealTimeAdminError(
+        `Attempt to access the "app" property from RealTimeAdmin before it has been loaded. Be sure that all Firebase async requirements are loaded first`,
+        'not-ready'
+      );
+    }
+    return this._app;
   }
 
   public get database(): IAdminRtdbDatabase {
