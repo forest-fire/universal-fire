@@ -139,13 +139,6 @@ export interface IDatabaseGenericApi {
   unWatch: (events?: IAbstractedEvent | IAbstractedEvent[], cb?: any) => void;
 }
 
-export interface IAppInfo {
-  name: string;
-  databaseURL: string;
-  projectId: string;
-  storageBucket: string;
-}
-
 export interface IRealTimeAdmin extends IBaseAbstractedDatabase {
   app: IAdminApp;
   sdk: Readonly<SDK.RealTimeAdmin>;

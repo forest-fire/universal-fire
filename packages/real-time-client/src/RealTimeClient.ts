@@ -30,8 +30,8 @@ export let MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';
 
 export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
-  public readonly sdk = SDK.RealTimeClient;
-  public readonly apiKind = ApiKind.client;
+  public readonly sdk: SDK.RealTimeClient = SDK.RealTimeClient;
+  public readonly apiKind: ApiKind.client = ApiKind.client;
   public readonly isAdminApi = false;
   /**
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK

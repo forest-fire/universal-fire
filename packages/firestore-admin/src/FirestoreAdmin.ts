@@ -24,8 +24,8 @@ import { FirestoreDb } from '@forest-fire/firestore-db';
 import type { Mock as IMockApi } from 'firemock';
 
 export class FirestoreAdmin extends FirestoreDb implements IFirestoreAdmin {
-  public readonly sdk = SDK.FirestoreAdmin;
-  public readonly apiKind = ApiKind.admin;
+  public readonly sdk: SDK.FirestoreAdmin = SDK.FirestoreAdmin;
+  public readonly apiKind: ApiKind.admin = ApiKind.admin;
   public readonly isAdminApi = true;
 
   static async connect(config: IAdminConfig | IMockConfig) {

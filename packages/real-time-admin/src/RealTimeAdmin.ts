@@ -26,8 +26,8 @@ import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { debug } from './util';
 
 export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
-  public readonly sdk = SDK.RealTimeAdmin;
-  public readonly apiKind = ApiKind.admin;
+  public readonly sdk: SDK.RealTimeAdmin = SDK.RealTimeAdmin;
+  public readonly apiKind: ApiKind.admin = ApiKind.admin;
   public readonly isAdminApi = true;
 
   /**

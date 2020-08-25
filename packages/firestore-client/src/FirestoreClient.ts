@@ -19,11 +19,9 @@ import {
   ApiKind,
 } from '@forest-fire/types';
 
-import type { Mock as IMockApi } from 'firemock';
-
 export class FirestoreClient extends FirestoreDb implements IFirestoreClient {
-  public readonly sdk = SDK.FirestoreClient;
-  public readonly apiKind = ApiKind.client;
+  public readonly sdk: SDK.FirestoreClient = SDK.FirestoreClient;
+  public readonly apiKind: ApiKind.client = ApiKind.client;
   public readonly isAdminApi = false;
 
   static async connect(config: IClientConfig | IMockConfig) {
