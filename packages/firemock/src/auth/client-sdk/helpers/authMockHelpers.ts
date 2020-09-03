@@ -1,47 +1,44 @@
-import type { User } from '@forest-fire/types';
+import type { IMockAuthMgmt, User } from '@forest-fire/types';
 import { validate } from 'email-validator';
-import {
-  allUsers,
-  authProviders,
-  getRandomMockUid,
-  getAuthObservers,
-} from '@/auth/user-mgmt/index';
+import { allUsers, authProviders, getAuthObservers } from '@/auth/util/index';
 
-export function emailExistsAsUserInAuth(email: string) {
+export const emailExistsAsUserInAuth = (api: IMockAuthMgmt) => (
+  email: string
+) => {
   const emails = allUsers().map((i) => i.email);
 
   return emails.includes(email);
-}
+};
 
-export function emailIsValidFormat(email: string) {
+export const emailIsValidFormat = (api: IMockAuthMgmt) => (email: string) => {
   return validate(email);
-}
+};
 
-export function emailHasCorrectPassword(email: string, password: string) {
+export const emailHasCorrectPassword = (email: string, password: string) => {
   const config = allUsers().find((i) => i.email === email);
 
   return config ? config.password === password : false;
-}
+};
 
-export function emailVerified(email: string) {
+export const emailVerified = (api: IMockAuthMgmt) => (email: string) => {
   const user = allUsers().find((i) => i.email === email);
   return user ? user.emailVerified || false : false;
-}
+};
 
-export function userUid(email: string) {
-  const config = allUsers().find((i) => i.email === email);
+export const userUid = (api: IMockAuthMgmt) => (email: string) => {
+  const user = api.findKnownUser('email', email);
 
-  return config ? config.uid || getRandomMockUid() : getRandomMockUid();
-}
+  return user ? user.uid : api.getAnonymousUid();
+};
 
-export function emailValidationAllowed() {
+export const emailValidationAllowed = (api: IMockAuthMgmt) => () => {
   return authProviders().includes('emailPassword');
-}
+};
 
-export function loggedIn(user: User) {
+export const loggedIn = (api: IMockAuthMgmt) => (user: User) => {
   getAuthObservers().map((o) => o(user));
-}
+};
 
-export function loggedOut() {
+export const loggedOut = (api: IMockAuthMgmt) => () => {
   getAuthObservers().map((o) => o(null));
-}
+};

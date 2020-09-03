@@ -38,9 +38,8 @@ import { slashNotation } from '@forest-fire/utility';
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
-export abstract class RealTimeDb extends AbstractedDatabase
-  implements IBaseAbstractedDatabase {
-  public readonly dbType = Database.RTDB;
+export abstract class RealTimeDb extends AbstractedDatabase {
+  public readonly dbType: Database.RTDB = Database.RTDB;
 
   /**
    * **getPushKey**

@@ -1,3 +1,4 @@
+import { IDictionary } from 'common-types';
 import {
   IAbstractedEvent,
   IAdminAuth,
@@ -6,10 +7,20 @@ import {
   IDatabaseConfig,
   ISerializedQuery,
   SDK,
+  IAdminApp,
+  IClientApp,
+  ApiKind,
+  Database,
+  IMockDatabase,
 } from '../index';
-
-import { ApiKind, Database } from './fire-types';
-import { IAdminApp, IClientApp, IFirebaseApp } from './fire-proxies';
+import {
+  IAdminFirestoreMock,
+  IAdminRtdbMock,
+  IAuthApi,
+  IClientFirestoreMock,
+  IClientRtdbMock,
+} from './db-mocking';
+import { IFirestoreDatabase, IRtdbDatabase } from './fire-proxies';
 
 /**
  * The public contract that any SDK client must meet to behave
@@ -48,6 +59,7 @@ export interface IBaseAbstractedDatabase extends IDatabaseGenericApi {
    * Returns true if the database is connected, false otherwise.
    */
   isConnected: boolean;
+
   /**
    * The configuration used to setup/configure the database.
    */
@@ -58,12 +70,10 @@ export interface IBaseAbstractedDatabase extends IDatabaseGenericApi {
    */
   isMockDb: boolean;
   /**
-   * The **Firemock** API, providing management features along with direct access to the
-   * in-memory data structure.
-   *
-   * Attempting to access this property when using a _real_ database will result in an error
+   * The administrative interface for any package which will provide a _mocked_
+   * database.
    */
-  mock: any;
+  mock: IMockDatabase;
 }
 
 /**
@@ -146,6 +156,8 @@ export interface IRealTimeAdmin extends IBaseAbstractedDatabase {
   apiKind: Readonly<ApiKind.admin>;
   isAdminApi: true;
   auth: () => Promise<IAdminAuth>;
+  mock: IAdminRtdbMock;
+  CONNECTION_TIMEOUT: number;
 }
 
 export interface IRealTimeClient extends IBaseAbstractedDatabase {
@@ -155,6 +167,7 @@ export interface IRealTimeClient extends IBaseAbstractedDatabase {
   apiKind: Readonly<ApiKind.client>;
   isAdminApi: false;
   auth: () => Promise<IClientAuth>;
+  mock: IClientRtdbMock;
   CONNECTION_TIMEOUT: number;
 }
 
@@ -165,6 +178,7 @@ export interface IFirestoreClient extends IBaseAbstractedDatabase {
   apiKind: Readonly<ApiKind.client>;
   isAdminApi: false;
   auth: () => Promise<IClientAuth>;
+  mock: IClientFirestoreMock;
 }
 
 export interface IFirestoreAdmin extends IBaseAbstractedDatabase {
@@ -174,6 +188,7 @@ export interface IFirestoreAdmin extends IBaseAbstractedDatabase {
   apiKind: ApiKind.admin;
   isAdminApi: true;
   auth: () => Promise<IAdminAuth>;
+  mock: IAdminFirestoreMock;
 }
 
 export type IAbstractedDatabase =

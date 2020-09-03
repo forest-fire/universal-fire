@@ -20,18 +20,23 @@ import {
   IRtdbDatabase,
   IRealTimeClient,
   ApiKind,
+  Database,
+  IMockDatabase,
+  IMockDbFactory,
 } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 
 import { firebase } from '@firebase/app';
-import { wait } from 'common-types';
+import { IDictionary, wait } from 'common-types';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';
 
 export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
+  public readonly app: IClientApp;
   public readonly sdk: SDK.RealTimeClient = SDK.RealTimeClient;
   public readonly apiKind: ApiKind.client = ApiKind.client;
+  public readonly dbType: Database.RTDB = Database.RTDB;
   public readonly isAdminApi = false;
   /**
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
@@ -149,7 +154,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
       return this._auth;
     }
     if (this.isMockDb) {
-      this._auth = (await this.mock.auth()) as IClientAuth;
+      this._auth = this.mock.auth();
       return this._auth;
     } else {
       await this._loadAuthApi();
@@ -164,16 +169,27 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
    * mocked DB.
    */
   protected async _connectMockDb(config: IMockConfig) {
-    await this.getFiremock({
-      db: config.mockData || {},
-      auth: { providers: [], users: [], ...config.mockAuth },
-    });
-    this._authProviders = this._mock.authProviders;
+    // await this.getFiremock({
+    //   db: config.mockData || {},
+    //   auth: { providers: [], users: [], ...config.mockAuth },
+    // });
+    const firemock: IMockDbFactory = await this._loadFiremock();
+    const mock: IMockDatabase = await firemock<IDictionary, IClientAuth>(
+      this,
+      config.mockData,
+      config.mockAuth
+    );
+    this._authProviders = mock.authProviders;
     await this._listenForConnectionStatus();
   }
 
   protected async _loadAuthApi() {
     await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
+  }
+
+  protected async _loadFiremock() {
+    const fm = await import(/* webpackChunkName: "firebase-auth" */ 'firemock');
+    return fm.default;
   }
 
   protected async _loadDatabaseApi() {

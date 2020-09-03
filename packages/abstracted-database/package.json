@@ -32,13 +32,16 @@
     "nyc": "^15.0.0",
     "rimraf": "^3.0.2",
     "ts-node": "^8.10.1",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.2",
+    "firemock": "^0.59.2"
   },
   "dependencies": {
     "@forest-fire/serialized-query": "^0.59.2",
     "@forest-fire/types": "^0.59.2",
     "@forest-fire/utility": "^0.59.2",
-    "brilliant-errors": "^0.1.1",
+    "brilliant-errors": "^0.1.1"
+  },
+  "optionalDependencies": {
     "firemock": "^0.59.2"
   },
   "license": "MIT"

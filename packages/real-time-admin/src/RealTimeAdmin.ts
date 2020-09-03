@@ -18,6 +18,8 @@ import {
   IAdminFirebaseNamespace,
   IRealTimeAdmin,
   ApiKind,
+  IAbstractedDatabase,
+  IBaseAbstractedDatabase,
 } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 
@@ -70,16 +72,6 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
       name: determineDefaultAppName(config),
     } as IAdminConfig | IMockConfig;
     this._config = config;
-  }
-
-  public get app(): IAdminApp {
-    if (!this._app) {
-      throw new RealTimeAdminError(
-        `Attempt to access the "app" property from RealTimeAdmin before it has been loaded. Be sure that all Firebase async requirements are loaded first`,
-        'not-ready'
-      );
-    }
-    return this._app;
   }
 
   public get database(): IAdminRtdbDatabase {

@@ -13,8 +13,8 @@ import type {
   IMockConfigOptions,
   Database,
   IBaseAbstractedDatabase,
+  IMockDatabase,
 } from '@forest-fire/types';
-import type { Mock as MockDb } from 'firemock';
 import { FireError } from '@forest-fire/utility';
 import { AbstractedDatabaseError } from './index';
 
@@ -35,7 +35,7 @@ export abstract class AbstractedDatabase implements IBaseAbstractedDatabase {
   /**
    * The mock API provided by **firemock**
    */
-  protected _mock?: MockDb;
+  protected _mock?: IMockDatabase;
   /**
    * The Firebase App API.
    */
@@ -88,6 +88,7 @@ export abstract class AbstractedDatabase implements IBaseAbstractedDatabase {
    */
   public abstract async connect(): Promise<any>;
   public abstract async auth(): Promise<IClientAuth | IAdminAuth>;
+
   public get isMockDb() {
     return this._config.mocking;
   }
@@ -95,7 +96,7 @@ export abstract class AbstractedDatabase implements IBaseAbstractedDatabase {
     return this._config;
   }
 
-  public get mock(): MockDb {
+  public get mock(): IMockDatabase {
     if (!this.isMockDb) {
       throw new FireError(
         `Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`,

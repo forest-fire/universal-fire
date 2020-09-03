@@ -33,7 +33,7 @@
     "circular": "yarn run madge --circular --extensions ts ./src"
   },
   "devDependencies": {
-    "@forest-fire/types": "^0.58.0",
+    "@forest-fire/types": "^0.59.2",
     "@types/deepmerge": "^2.2.0",
     "@types/faker": "^4.1.12",
     "@types/jest": "^26.0.3",
@@ -83,7 +83,7 @@
     "common-types": "~1.15.8",
     "faker": "^4.1.0",
     "firebase-key": "^2.0.2",
-    "native-dash": "~1.2.7",
+    "native-dash": "^1.2.7",
     "typed-conversions": "~0.11.1"
   },
   "engines": {

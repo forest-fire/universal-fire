@@ -1,7 +1,13 @@
 // #autoindex:named, exclude: RealTimeClient
 
 //#region autoindexed files
-// indexed at: 5th May, 2020, 03:07 PM ( GMT-7 )
-export * from './ClientError';
-export * from './EventManager';
+
+// index last changed at: 8th Aug, 2020, 03:01 PM ( GMT-7 )
+// export: named; exclusions: RealTimeClient, index, private.
+// files: ClientError, EventManager.
+
+// local file exports
+export * from "./ClientError";
+export * from "./EventManager";
+
 //#endregion

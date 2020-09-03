@@ -1,3 +1,4 @@
+import { User, UserInfo } from '@firebase/auth-types';
 import type { IDictionary } from 'common-types';
 import type {
   IServiceAccount,
@@ -5,11 +6,13 @@ import type {
   IEmailAuthProvider,
   IClientAuth,
 } from '../index';
+import { IMockDelayedState, IMockServerOptions } from './db-mocking/index';
 
 export type FakerStatic = typeof import('faker');
 
 export const enum AuthProviderName {
   emailPassword = 'emailPassword',
+  oauth = 'oauth',
   phone = 'phone',
   google = 'google',
   playGames = 'playGames',
@@ -20,6 +23,8 @@ export const enum AuthProviderName {
   yahoo = 'yahoo',
   microsoft = 'microsoft',
   apple = 'apple',
+  saml = 'saml',
+  recaptcha = 'recaptcha',
   anonymous = 'anonymous',
 }
 
@@ -43,9 +48,10 @@ export interface ISimplifiedMockApi extends IDictionary {
  */
 export interface IMockAuthConfig {
   /** The auth providers which have been enabled for this app */
-  providers: IAuthProviderName[] | (() => Promise<IAuthProviderName[]>);
+  providers: AuthProviderName[] | (() => Promise<AuthProviderName[]>);
   /** Arrya of known users who should be in the mock Auth system to start. */
   users?: IMockUser[] | (() => Promise<IMockUser[]>);
+  options?: IMockServerOptions;
 }
 
 export interface IMockConfigOptions {
@@ -73,8 +79,6 @@ export interface IMockUserRecord extends UserRecord {
   /** Optionally sets a fixed UID for this user. */
   uid: string;
   isAnonymous?: boolean;
-  /** Optionally gives the user a set of claims. */
-  claims?: IDictionary;
   /**
    * Optionally state token Ids which should be returned when calling
    * the `getTokenId()` method. This is useful if you have an associated
@@ -92,6 +96,17 @@ export interface IMockUserRecord extends UserRecord {
    * on the verification link.
    */
   emailVerified: boolean;
+  /**
+   * an `id` uniquely identifing the "provider" used to login a given user.
+   */
+  providerId?: string;
+  /**
+   * Any client config for multi-factor that has been picked up
+   *
+   * Note: admin and client SDK's both have a multiFactor property but they
+   * are not the same.
+   */
+  clientMultiFactor?: User['multiFactor'];
 }
 
 /**
@@ -125,7 +140,9 @@ export type IMockUser = Omit<
 export type DebuggingCallback = (message: string) => void;
 
 /** an _async_ mock function which returns a dictionary data structure */
-export type AsyncMockData = (db: ISimplifiedMockApi) => Promise<IDictionary>;
+export type AsyncMockData<T extends IDictionary = IDictionary> = () => Promise<
+  T
+>;
 
 export interface IFirebaseBaseConfig {
   /** Flag to set debugging override from logging configuration. */
@@ -163,7 +180,9 @@ export interface IMockConfig extends IFirebaseBaseConfig {
   mockAuth?: IMockAuthConfig;
 }
 
-export type IMockData = IDictionary | AsyncMockData;
+export type IMockData<TState extends IDictionary = IDictionary> =
+  | TState
+  | IMockDelayedState<TState>;
 
 export interface IClientConfig extends IFirebaseBaseConfig {
   apiKey: string;

@@ -1,6 +1,6 @@
-import type { DecodedIdToken, Auth } from '@forest-fire/types';
+import type { DecodedIdToken, Auth, IMockAuthMgmt } from '@forest-fire/types';
 
-export const tokens: Partial<Auth> = {
+export const tokens: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
   /**
    * Verifies a Firebase ID token (JWT). If the token is valid, the promise is fulfilled
    * with the token's decoded claims; otherwise, the promise is rejected. An optional
@@ -17,4 +17,4 @@ export const tokens: Partial<Auth> = {
   ): Promise<DecodedIdToken> {
     return;
   },
-};
+});
