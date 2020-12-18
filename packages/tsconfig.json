@@ -1,0 +1,19 @@
+{
+  "files": [],
+  "references": [
+    { "path": "abstracted-database" },
+    { "path": "docs" },
+    { "path": "firemock" },
+    { "path": "firestore-admin" },
+    { "path": "firestore-client" },
+    { "path": "firestore-db" },
+    { "path": "real-time-admin" },
+    { "path": "real-time-client" },
+    { "path": "real-time-db" },
+    { "path": "serialized-query" },
+    { "path": "serializer-factor" },
+    { "path": "types" },
+    { "path": "universal-fire" },
+    { "path": "utility" }
+  ]
+}
