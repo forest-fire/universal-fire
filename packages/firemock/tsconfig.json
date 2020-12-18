@@ -1,16 +1,9 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "include": ["src", "global.d.ts", "test"],
-  "files": ["global.d.ts"],
+  "extends": "../tsconfig.settings.json",
   "compilerOptions": {
     "lib": ["esnext.asynciterable", "es2015.reflect"],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src", "test"]
-    },
-    "plugins": [
-      { "transform": "typescript-transform-paths" },
-      { "transform": "typescript-transform-paths", "afterDeclarations": true }
-    ]
-  }
+    "composite": true,
+    "rootDir": "src"
+  },
+  "include": ["src", "test"]
 }

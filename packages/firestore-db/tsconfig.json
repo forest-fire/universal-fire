@@ -1,8 +1,9 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "include": ["src", "test"],
+  "extends": "../tsconfig.settings.json",
   "compilerOptions": {
-    "strictNullChecks": false,
+    "composite": true,
+    "rootDir": "src",
     "strict": false
-  }
+  },
+  "include": ["src", "test"]
 }
