@@ -11,11 +11,10 @@ import { snapshot } from './snapshot';
 
 export type IRtdbMockQueryFactory = (
   store: IMockStore<IDictionary>,
-  query: ISerializedQuery,
-  ref: IRtdbReference
+  query: ISerializedQuery
 ) => IRtdbQuery;
 
-export const query: IRtdbMockQueryFactory = (store, query, ref) => {
+export const query: IRtdbMockQueryFactory = (store, query) => {
   const q: IRtdbQuery = {
     endAt: (value, key) => {
       query.endAt(value, key);
@@ -47,7 +46,7 @@ export const query: IRtdbMockQueryFactory = (store, query, ref) => {
       cancelCallbackOrContext?: (err?: Error) => void | null,
       context?: object | null
     ): ((a: IRtdbDataSnapshot, b?: null | string) => Promise<null>) => {
-      store.addWatchListener<IRtdbDbEvent, IRtdbDataSnapshot>(
+      store.addListener<IRtdbDbEvent, IRtdbDataSnapshot>(
         query,
         eventType,
         callback,

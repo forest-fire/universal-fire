@@ -11,22 +11,16 @@ import {
 } from '@/util';
 import { deepEqual } from 'fast-equals';
 import copy from 'fast-copy';
-import { notify, removeAllListeners } from './rtdb/components/listeners';
 import { key as fbKey } from 'firebase-key';
 import {
   IAbstractedDatabase,
   IMockDelayedState,
   IMockListener,
   IMockStore,
-  IRtdbDataSnapshot,
-  IRtdbDbEvent,
-  ISerializedQuery,
   mockDataIsDelayed,
   NetworkDelay,
 } from '@forest-fire/types';
-import { IFirebaseEventHandler } from '..';
-import { Reference, SnapShot } from './rtdb/components';
-import { hashToArray } from 'typed-conversions';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 
 export function createStore<TState extends IDictionary = IDictionary>(
   container: IAbstractedDatabase,
@@ -42,7 +36,7 @@ export function createStore<TState extends IDictionary = IDictionary>(
   /** the artificial time delay used to simulate a real DB's network latency */
   let _networkDelay: NetworkDelay | number | [number, number] =
     NetworkDelay.lazer;
-
+  /** event listeners setup to watch Firebase paths/queries */
   let _listeners: IMockListener[] = [];
 
   const networkDelay = async () => {
@@ -69,20 +63,18 @@ export function createStore<TState extends IDictionary = IDictionary>(
     _state = data;
   };
 
-  const addWatchListener = async (
-    pathOrQuery: string | ISerializedQuery,
-    eventType: IRtdbDbEvent,
-    callback: IFirebaseEventHandler,
-    cancelCallbackOrContext?: (err?: Error) => void,
-    context?: IDictionary
-  ): Promise<IRtdbDataSnapshot> => {
+  const addListener: IMockStore<IDictionary>['addListener'] = async (
+    pathOrQuery,
+    eventType,
+    callback,
+    cancelCallbackOrContext,
+    context
+  ) => {
     const query =
       typeof pathOrQuery === 'string'
-        ? new SerializedRealTimeQuery(join(pathOrQuery))
+        ? // TODO: this needs to be generalized across RTDB and Firestore
+          new SerializedRealTimeQuery(pathOrQuery)
         : pathOrQuery;
-    pathOrQuery = (typeof pathOrQuery === 'string'
-      ? join(pathOrQuery)
-      : query.path) as string;
 
     _listeners.push({
       id: Math.random().toString(36).substr(2, 10),
@@ -93,34 +85,48 @@ export function createStore<TState extends IDictionary = IDictionary>(
       context,
     });
 
-    function ref(dbPath: string) {
-      return new Reference(dbPath, api);
-    }
-    const snapshot = await query
-      .deserialize({ ref })
-      .once(eventType === 'value' ? 'value' : 'child_added');
+    // function ref(dbPath: string) {
+    //   return reference(api, dbPath);
+    // }
+    // const snapshot = await query
+    //   .deserialize({ ref })
+    //   .once(eventType === 'value' ? 'value' : 'child_added');
 
-    if (eventType === 'value') {
-      callback(snapshot);
-    } else {
-      const list = hashToArray(snapshot.val());
-      if (eventType === 'child_added') {
-        list.forEach((i: IDictionary) =>
-          callback(new SnapShot(join(query.path, i.id), i))
-        );
-      }
-    }
+    // if (eventType === 'value') {
+    //   callback(snapshot);
+    // } else {
+    //   const list = hashToArray(snapshot.val());
+    //   if (eventType === 'child_added') {
+    //     list.forEach((i: IDictionary) =>
+    //       callback(new SnapShot(join(query.path, i.id), i))
+    //     );
+    //   }
+    // }
 
-    return snapshot;
+    // return snapshot;
+  };
+
+  const removeListener = (id: string) => {
+    _listeners = _listeners.filter((l) => l.id !== id);
+  };
+  const getAllListeners = () => {
+    return _listeners;
   };
 
   const api: IMockStore<TState> = {
+    api: container.apiKind,
+    db: container.dbType,
     config,
+
+    state: _state,
+
     networkDelay,
     setNetworkDelay,
-    addWatchListener,
-    removeWatchListener,
-    state: _state,
+
+    addListener,
+    removeListener,
+    getAllListeners,
+
     silenceEvents: () => {
       _silenceEvents = true;
     },
@@ -130,11 +136,11 @@ export function createStore<TState extends IDictionary = IDictionary>(
     shouldSendEvents: () => {
       return !_silenceEvents;
     },
+
     clearDb() {
       const keys = Object.keys(_state);
       keys.forEach((key) => delete _state[key]);
     },
-
     getDb<T = any>(path?: string) {
       return (path ? get(_state, dotify(path)) : _state) as T;
     },

@@ -6,11 +6,17 @@ import {
   IRtdbDataSnapshot,
   IRtdbDbEvent,
 } from '../fire-proxies';
+import { ApiKind, Database } from '../fire-types';
 import { ISerializedQuery } from '../serialized-query';
 import { IMockListener } from './IMockListener';
 import { NetworkDelay } from './index';
 
 export interface IMockStore<TState extends IDictionary> {
+  /** the API exposed by the underlying SDK (e.g., admin, client, rest) which is being used */
+  api: ApiKind;
+  /** the underlying DB technology (e.g., RTDB, Firestore) */
+  db: Database;
+
   /**
    * The in-memory state tree representing the mock database's state
    */
@@ -22,10 +28,15 @@ export interface IMockStore<TState extends IDictionary> {
   config: IDatabaseConfig;
 
   /**
-   * Adds a "watcher" to listen to the database based on a specified
-   * event.
+   * FUTURE: to hold the database rules, if they are provided
    */
-  addWatchListener<
+  rules?: IDictionary;
+
+  /**
+   * Adds a listener to the mock database based on a specified
+   * event type.
+   */
+  addListener<
     TEvent extends IRtdbDbEvent | IFirestoreDbEvent,
     TSnap extends IRtdbDataSnapshot | IFirestoreQuerySnapshot
   >(
@@ -41,6 +52,7 @@ export interface IMockStore<TState extends IDictionary> {
      * The event type which this listener will respond to.
      */
     eventType: TEvent,
+    //TODO: make this generalized across RTDB and Firestore
     /**
      * A callback which is called when a change is detected on the passed in `query`
      * and the `eventType` matches.
@@ -59,10 +71,10 @@ export interface IMockStore<TState extends IDictionary> {
   /**
    * removes a "watcher" from the mock database
    */
-  removeWatchListener(id: string): void;
+  removeListener(id: string): void;
 
   /** lists all the watchers currently operating on the mock database */
-  listWatchListeners(): IMockListener<any, any>[];
+  getAllListeners(): IMockListener<any, any>[];
 
   /**
    * Sets the network delay characteristics to be used for DB functions

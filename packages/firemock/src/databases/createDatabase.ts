@@ -10,8 +10,10 @@ import {
   isClientSdk,
 } from '@forest-fire/types';
 import { createStore } from './createStore';
-import { FirestoreAdminMock, FirestoreClientMock } from './firestore/index';
-import { createAdminMock, RtdbClientMock } from './rtdb/index';
+import {
+  createRtdbClientMock,
+  createRtdbAdminMock,
+} from './rtdb/factories/index';
 
 /**
  * A factory object which returns an implementation to handle either RTDB or
@@ -31,11 +33,12 @@ export function createDatabase<TState>(
     );
   }
   const rtdb = isClientSdk(container)
-    ? new RtdbClientMock(container.sdk, container.config, store)
-    : createAdminMock(store);
-  const firestore = isClientSdk(container)
-    ? new FirestoreClientMock(container.sdk, container.config, store)
-    : new FirestoreAdminMock(container.sdk, container.config, store);
+    ? createRtdbClientMock(store)
+    : createRtdbAdminMock(store);
+  // const firestore = isClientSdk(container)
+  //   ? new FirestoreClientMock(container.sdk, container.config, store)
+  //   : new FirestoreAdminMock(container.sdk, container.config, store);
 
-  return isRtdbBacked(container) ? [rtdb, store] : [firestore, store];
+  // return isRtdbBacked(container) ? [rtdb, store] : [firestore, store];
+  return rtdb;
 }

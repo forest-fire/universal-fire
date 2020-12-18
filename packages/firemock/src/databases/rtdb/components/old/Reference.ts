@@ -154,7 +154,7 @@ export class Reference<T = any> extends Query<T>
     context?: IDictionary
   ): Promise<IRtdbDataSnapshot> {
     // TODO: get this plugged into store API
-    this._store.addWatchListener();
+    this._store.addListener();
     return addListener(
       pathOrQuery,
       eventType,

@@ -8,6 +8,7 @@ import {
   ISimplifiedDatabase,
   RealQueryOrderType,
   IRtdbDataSnapshot,
+  IRtdbReference,
 } from '@forest-fire/types';
 
 /**

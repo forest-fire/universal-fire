@@ -6,7 +6,10 @@ import type {
   UserRecord,
   UpdateRequest,
   ListUsersResult,
-  IMockAuthMgmt,, User, IMockUserRecord, uid
+  IMockAuthMgmt,
+  User,
+  IMockUserRecord,
+  uid,
 } from '@forest-fire/types';
 
 export const users: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
@@ -37,13 +40,12 @@ export const users: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
     properties: UpdateRequest
   ): Promise<UserRecord> {
     let uid: uid;
-    if(isUser(user) || isMockUserRecord(user)
-    ) {
-      uid = user.uid
+    if (isUser(user) || isMockUserRecord(user)) {
+      uid = user.uid;
     } else {
       uid = user;
     }
-    
+
     api.updateUser(uid, properties);
     return toUserRecord(api.getCurrentUser());
   },

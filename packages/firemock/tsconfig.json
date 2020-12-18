@@ -6,7 +6,7 @@
     "lib": ["esnext.asynciterable", "es2015.reflect"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src", "test"]
     },
     "plugins": [
       { "transform": "typescript-transform-paths" },

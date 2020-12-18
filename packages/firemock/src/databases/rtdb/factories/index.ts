@@ -1,35 +1,15 @@
-// #autoindex:named
-
-//#region autoindexed files
-
-// index last changed at: 8th Aug, 2020, 03:01 PM ( GMT-7 )
-// export: named; exclusions: index, private.
-// files: EventManager, RealTimeAdmin, util.
-
-// local file exports
-export * from "./EventManager";
-export * from "./RealTimeAdmin";
-export * from "./util";
-
-//#endregion
-
-
-
-
-
-
+//#autoindex
 
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 07:08 AM ( GMT-7 )
+// index last changed at: 10th Oct, 2020, 09:29 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: EventManager, RealTimeAdmin, util.
+// files: createRtdbAdminMock, createRtdbClientMock.
 
 // local file exports
-export * from "./EventManager";
-export * from "./RealTimeAdmin";
-export * from "./util";
+export * from "./createRtdbAdminMock";
+export * from "./createRtdbClientMock";
 
 // Note:
 // -----

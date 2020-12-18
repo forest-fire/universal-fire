@@ -1,6 +1,5 @@
 import { FireMockError } from '@/errors';
 import {
-  IAuthObserver,
   IMockAuthMgmt,
   IMockUser,
   IMockUserRecord,
@@ -9,7 +8,9 @@ import {
   UserRecord,
   AuthProviderName,
   IMockAuthConfig,
-  UpdateRequest,NetworkDelay
+  UpdateRequest,
+  IAuthObserver,
+  NetworkDelay,
 } from '@forest-fire/types';
 import { IDictionary, wait } from 'common-types';
 import {
@@ -191,10 +192,10 @@ export function createAuthManager(): IMockAuthMgmt {
     return _knownUsers.length;
   };
 
-  const removeFromUserPool=(uid: string) =>{
-    _knownUsers = _knownUsers.filter(i => i.uid !== uid)
-    return _knownUsers.length
-  }
+  const removeFromUserPool = (uid: string) => {
+    _knownUsers = _knownUsers.filter((i) => i.uid !== uid);
+    return _knownUsers.length;
+  };
 
   const knownUsers = () => {
     return _knownUsers;
@@ -266,10 +267,9 @@ export function createAuthManager(): IMockAuthMgmt {
     await delay(_networkDelay);
   };
 
-  const setNetworkDelay = (delay: NetworkDelay | number | [number, number]) {
+  const setNetworkDelay = (delay: NetworkDelay | number | [number, number]) => {
     _networkDelay = delay;
-  }
-
+  };
 
   return {
     getAuthObservers,

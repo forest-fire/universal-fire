@@ -1,13 +1,13 @@
 import {
   IMockStore,
   IAdminRtdbDatabase,
-  IRtdbReference,
+  IRtdbAdminReference,
 } from '@forest-fire/types';
 import { url } from 'common-types';
 
 import { IDictionary } from 'native-dash';
+import { reference } from '..';
 import { createAdminApp } from '../../firebase-app';
-import { reference, Reference } from '../components/Reference';
 
 /**
  * Creates a mock Admin SDK for the RTDB which is able
@@ -17,17 +17,21 @@ export type MockAdminFactory = (
   store: IMockStore<IDictionary>
 ) => IAdminRtdbDatabase;
 
-export const createAdminMock: MockAdminFactory = (store) => {
+export const createRtdbAdminMock: MockAdminFactory = (store) => {
   const db: IAdminRtdbDatabase = {
     app: createAdminApp(store),
-    ref(path = null) {
-      return reference(store, path);
+    ref() {
+      return reference(store, null) as IRtdbAdminReference;
     },
-    async refFromURL(url: url) {
-      return new Reference(url, this._store);
+    refFromURL(url: url) {
+      return reference(store, null) as IRtdbAdminReference;
     },
-    async getRules() {},
-    async getRulesJSON() {},
+    async getRules() {
+      return JSON.stringify(store.rules);
+    },
+    async getRulesJSON() {
+      return store.rules;
+    },
     goOffline() {},
     goOnline() {},
     async setRules() {},

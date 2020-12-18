@@ -1,8 +1,4 @@
-import {
-  IMockStore,
-  IRtdbAdminReference,
-  ISerializedQuery,
-} from '@forest-fire/types';
+import { IMockStore, ISerializedQuery } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 import { IRtdbReference } from '@forest-fire/types';
 import { query } from './query';
@@ -13,7 +9,7 @@ import { FireMockError } from '@/errors';
 
 export type IRtdbMockReferenceFactory = (
   store: IMockStore<IDictionary>,
-  path: string
+  path: string | SerializedRealTimeQuery
 ) => IRtdbReference;
 
 export const reference: IRtdbMockReferenceFactory = (
@@ -58,6 +54,7 @@ export const reference: IRtdbMockReferenceFactory = (
         if (onComplete) onComplete(e);
       }
     },
+    root: reference(store, null),
     set: async (value, onComplete) => {
       try {
         store.setDb(_query.path, value);
