@@ -19,17 +19,17 @@
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "typings": "dist/es/index.d.ts",
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
   "scripts": {
-    "clean": "rimraf dist/**/*",
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty",
     "clean:nuclear": "rimraf lib node_modules && rm yarn.lock && yarn cache clean && yarn && yarn upgrade",
-    "build": "run-s clean build:all",
-    "build:all": "run-p build:esnext build:cjs",
-    "build:esnext": "tsc -P tsconfig.es.json",
-    "build:cjs": "tsc -P tsconfig.cjs.json",
     "watch": "run-p watch:esnext watch:cjs",
     "watch:esnext": "tsc -P tsconfig.es.json -w",
     "watch:cjs": "tsc -P tsconfig.es.json -w",
-    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build:nuclear": "yarn clean:nuclear && yarn build",
     "test": "yarn do test",
     "docs": "vuepress dev docs",

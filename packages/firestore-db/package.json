@@ -13,15 +13,17 @@
     "type": "git",
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
   "scripts": {
-    "clean": "rimraf dist/**/*",
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty",
+    "test": "scripty",
     "watch": "run-p 'watch:esnext' 'watch:cjs'",
     "watch:esnext": "tsc -P tsconfig.es.json -w",
-    "watch:cjs": "tsc -P tsconfig.es.json -w",
-    "test": "yarn do test",
-    "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files src src/**/*.ts",
-    "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*.spec.ts",
-    "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
+    "watch:cjs": "tsc -P tsconfig.es.json -w"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",

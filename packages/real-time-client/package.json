@@ -19,14 +19,14 @@
   "files": [
     "dist"
   ],
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
   "scripts": {
-    "clean": "rimraf dist/**/*",
-    "clean:nuclear": "rimraf dist node_modules yarn.lock && yarn cache clean && yarn && yarn upgrade",
-    "watch": "run-p watch:esnext ",
-    "watch:esnext": "tsc -P tsconfig.es.json -w",
-    "build:nuclear": "run-s clean:nuclear build",
-    "test": "jest",
-    "watch:test": "npm run test -- --watch"
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty",
+    "test": "scripty"
   },
   "devDependencies": {
     "@firebase/app": "^0.6.8",

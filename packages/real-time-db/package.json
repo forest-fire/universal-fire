@@ -17,19 +17,17 @@
   "main": "dist/cjs/index.js",
   "types": "dist/types/index.d.ts",
   "sideEffects": false,
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
   "scripts": {
-    "clean": "rimraf dist/**/*",
-    "clean:nuclear": "rimraf dist node_modules && rm yarn.lock && yarn cache clean && yarn && yarn upgrade",
-    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty",
+    "test": "scripty",
     "watch": "run-p 'watch:esnext' 'watch:cjs'",
     "watch:esnext": "tsc -P tsconfig.es.json -w",
-    "watch:cjs": "tsc -P tsconfig.es.json -w",
-    "build:nuclear": "yarn clean:nuclear && yarn build",
-    "test": "mocha --require ts-node/register test/**/*-spec.ts",
-    "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files test test/**/*-spec.ts",
-    "test:coverage": "nyc --reporter=text mocha -require ts-node/register test/**/*-spec.ts",
-    "deploy": "ts-node ./scripts/deploy.ts ",
-    "watch:test": "npm run test -- --watch"
+    "watch:cjs": "tsc -P tsconfig.es.json -w"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",

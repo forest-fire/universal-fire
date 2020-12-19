@@ -18,9 +18,13 @@
   "types": "dist/types/index.d.ts",
   "main": "dist/cjs/index.js",
   "sideEffects": false,
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
   "scripts": {
-    "clean": "rimraf dist/**/*",
-    "clean:nuclear": "rimraf dist node_modules && yarn cache clean && rm yarn.lock && yarn && yarn upgrade",
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty",
     "test": "yarn jest",
     "coverage": "nyc --reporter=text --reporter=html mocha --compilers ts:ts-node/register",
     "watch": "ts-node ./scripts/watch.ts",

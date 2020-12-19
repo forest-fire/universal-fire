@@ -8,10 +8,14 @@
   "files": [
     "dist"
   ],
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
   "scripts": {
-    "clean": "rimraf dist/**/*",
-    "test": "yarn do test",
-    "watch": "yarn do watch"
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty",
+    "test": "scripty"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",

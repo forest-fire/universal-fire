@@ -13,16 +13,14 @@
     "type": "git",
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
   "scripts": {
-    "clean": "rimraf dist/**/*",
-    "build": "run-s clean build:bundle",
-    "build:bundle": "rollup -c",
-    "build:all": "run-p build:esnext build:cjs",
-    "build:esnext": "tsc -P tsconfig.es.json",
-    "build:cjs": "tsc -P tsconfig.cjs.json",
-    "watch": "run-p 'watch:esnext' 'watch:cjs'",
-    "watch:esnext": "tsc -P tsconfig.es.json ",
-    "watch:cjs": "tsc -P tsconfig.es.json "
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty",
+    "test": "scripty"
   },
   "dependencies": {
     "@firebase/app-types": "^0.6.1",

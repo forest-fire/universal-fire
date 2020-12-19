@@ -13,8 +13,13 @@
     "type": "git",
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
   "scripts": {
-    "clean": "rimraf dist/**/*",
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty",
     "watch": "run-p 'watch:esnext' 'watch:cjs'",
     "watch:esnext": "tsc -P tsconfig.es.json -w",
     "watch:cjs": "tsc -P tsconfig.es.json -w",
