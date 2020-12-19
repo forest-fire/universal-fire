@@ -1,7 +1,7 @@
 import type {
   IFirestoreQuery,
   IFirestoreQueryOrderType,
-  IRealQueryOrderType,
+  IRtdbOrder,
   IRealTimeQuery,
   ISerializedIdentity,
   ISimplifiedDatabase,
@@ -21,7 +21,7 @@ export abstract class BaseSerializer<T = unknown>
   protected _startAtKey?: keyof T & string;
   protected _startAt?: string;
   protected _db?: ISimplifiedDatabase;
-  protected abstract _orderBy: IFirestoreQueryOrderType | IRealQueryOrderType;
+  protected abstract _orderBy: IFirestoreQueryOrderType | IRtdbOrder;
 
   constructor(path = '/') {
     this._path = slashNotation(path);

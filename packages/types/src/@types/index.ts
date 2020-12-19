@@ -2,9 +2,9 @@
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 09:29 AM ( GMT-7 )
+// index last changed at: 12th Dec, 2020, 11:11 AM ( GMT-8 )
 // export: named; exclusions: index, private.
-// files: abstracted-database, events, fire-apis, fire-proxies, fire-types, serialized-query.
+// files: abstracted-database, events, fire-apis, fire-proxies, fire-types, models, serialized-query.
 // directories: db-mocking, proxy-plus.
 
 // local file exports
@@ -13,6 +13,7 @@ export * from "./events";
 export * from "./fire-apis";
 export * from "./fire-proxies";
 export * from "./fire-types";
+export * from "./models";
 export * from "./serialized-query";
 
 // directory exports

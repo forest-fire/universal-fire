@@ -6,7 +6,7 @@ import {
   IRtdbDbEvent,
   IRtdbQuery,
   IRtdbReference,
-  RealQueryOrderType,
+  RtdbOrder,
 } from '@forest-fire/types';
 import { leafNode, runQuery } from '@/util';
 
@@ -42,7 +42,7 @@ export abstract class Query<T = any> implements IRtdbQuery, IRtdbAdminQuery {
   }
 
   public equalTo(value: QueryValue, key?: Extract<keyof T, string>): Query<T> {
-    if (key && this._query.identity.orderBy === RealQueryOrderType.orderByKey) {
+    if (key && this._query.identity.orderBy === RtdbOrder.orderByKey) {
       throw new Error(
         `You can not use "equalTo(val, key)" with a "key" property defined when using a key sort!`
       );

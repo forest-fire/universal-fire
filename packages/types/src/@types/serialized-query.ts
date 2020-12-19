@@ -38,7 +38,7 @@ export interface ISerializedQuery<T = unknown> {
 
 export interface ISerializedIdentity<T>
   extends Omit<ISerializedRealTimeIdentity<T>, 'orderBy'> {
-  orderBy: IRealQueryOrderType | IFirestoreQueryOrderType;
+  orderBy: IRtdbOrder | IFirestoreQueryOrderType;
 }
 
 export type IComparisonOperator = '=' | '>' | '<';
@@ -55,18 +55,18 @@ export interface ISimplifiedDatabase {
   ) => Record<string, unknown> | IRealTimeQuery | IFirestoreQuery;
 }
 
-export enum RealQueryOrderType {
+export enum RtdbOrder {
   orderByChild = 'orderByChild',
   orderByKey = 'orderByKey',
   orderByValue = 'orderByValue',
 }
 
-export type IRealQueryOrderType = keyof typeof RealQueryOrderType;
+export type IRtdbOrder = keyof typeof RtdbOrder;
 
-export type IFirestoreQueryOrderType = IRealQueryOrderType | 'orderBy';
+export type IFirestoreQueryOrderType = IRtdbOrder | 'orderBy';
 
 export interface ISerializedRealTimeIdentity<T = IDictionary> {
-  orderBy: IRealQueryOrderType;
+  orderBy: IRtdbOrder;
   orderByKey?: keyof T;
   limitToFirst?: number;
   limitToLast?: number;

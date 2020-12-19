@@ -31,7 +31,9 @@ export class SerializedFirestoreQuery<T extends IModel>
   protected _db?: IFirestoreDatabase;
 
   /** Static initializer */
-  public static path<T = IDictionary>(path = '/'): SerializedFirestoreQuery<T> {
+  public static path<T extends IModel>(
+    path = '/'
+  ): SerializedFirestoreQuery<T> {
     return new SerializedFirestoreQuery<T>(path);
   }
 
@@ -118,7 +120,7 @@ export class SerializedFirestoreQuery<T extends IModel>
   }
 
   public async execute(
-    db?: ISimplifiedDatabase
+    db?: IFirestoreDatabase
   ): Promise<IFirestoreQuerySnapshot> {
     const database = db || this.db;
     const snapshot = await this.deserialize(database).get();
