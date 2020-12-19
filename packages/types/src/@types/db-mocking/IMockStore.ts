@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import { IDatabaseConfig } from '..';
+import { IDatabaseConfig } from '../index';
 import {
   IFirestoreDbEvent,
   IFirestoreQuerySnapshot,
@@ -10,6 +10,8 @@ import { ApiKind, Database } from '../fire-types';
 import { ISerializedQuery } from '../serialized-query';
 import { IMockListener } from './IMockListener';
 import { NetworkDelay } from './index';
+import { DataSnapshot, EventType } from '@firebase/database-types';
+import { QuerySnapshot } from '@firebase/firestore-types';
 
 export interface IMockStore<TState extends IDictionary> {
   /** the API exposed by the underlying SDK (e.g., admin, client, rest) which is being used */
@@ -57,7 +59,7 @@ export interface IMockStore<TState extends IDictionary> {
      * A callback which is called when a change is detected on the passed in `query`
      * and the `eventType` matches.
      */
-    callback: (snap: TSnap, b?: null | string) => any,
+    callback: (snap: TSnap, b?: null | string) => unknown,
     /**
      * conditionally cancel the callback with _another_ callback function that responds to errors
      */
@@ -65,7 +67,7 @@ export interface IMockStore<TState extends IDictionary> {
     /**
      * optionally provide any additional context needed to the primary event callback
      */
-    context?: object | null
+    context?: Record<string, unknown> | null
   ): IMockListener<TEvent, TSnap>;
 
   /**
@@ -74,7 +76,7 @@ export interface IMockStore<TState extends IDictionary> {
   removeListener(id: string): void;
 
   /** lists all the watchers currently operating on the mock database */
-  getAllListeners(): IMockListener<any, any>[];
+  getAllListeners(): IMockListener<EventType, DataSnapshot | QuerySnapshot>[];
 
   /**
    * Sets the network delay characteristics to be used for DB functions
@@ -107,22 +109,22 @@ export interface IMockStore<TState extends IDictionary> {
   /**
    * Get the state at a given path in the mock database's state tree
    */
-  getDb<T = any>(path?: string): T;
+  getDb<T extends IDictionary = IDictionary>(path?: string): T;
   /**
    * Sets the state at a given path of the Mock DB's state tree
    */
-  setDb(path: string, value: any, silent?: boolean): void;
+  setDb(path: string, value: unknown, silent?: boolean): void;
   /**
    * replaces passed in properties while maintaining untouched properties.
    * This is half-way between the "set" and "merge" operations in that it is
    * non-destructive to props unchanged but it _sets_ the new value in replace
    * of the old where new props are provided.
    */
-  updateDb<T = any>(path: string, value: T): void;
+  updateDb<T extends IDictionary = IDictionary>(path: string, value: T): void;
   /**
    * merges the passed in value with the existing state non-destructively
    */
-  mergeDb<T = any>(path: string, value: T): void;
+  mergeDb<T extends IDictionary = IDictionary>(path: string, value: T): void;
   /**
    * **multiPathUpdate**
    *
@@ -144,7 +146,7 @@ export interface IMockStore<TState extends IDictionary> {
    * attempts to use the same algorithm as Firebase
    * itself.
    */
-  pushDb(path: string, value: any): string;
+  pushDb(path: string, value: unknown): string;
   /** Clears the DB and removes all listeners */
   reset(): void;
 }

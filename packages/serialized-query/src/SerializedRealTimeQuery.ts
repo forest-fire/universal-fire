@@ -1,32 +1,66 @@
 import type { IDictionary } from 'common-types';
 
-import { BaseSerializer } from './index';
+import { BaseSerializer, slashNotation } from './index';
 import {
   IComparisonOperator,
-  IRealQueryOrderType,
+  IRtdbOrder,
   IRealTimeQuery,
   ISimplifiedDatabase,
-  RealQueryOrderType,
+  RtdbOrder,
   IRtdbDataSnapshot,
+  ISerializedQuery,
+  IModel,
+  IRtdbDatabase,
 } from '@forest-fire/types';
 
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime
  * Database query.
  */
-export class SerializedRealTimeQuery<
-  T = IDictionary
-> extends BaseSerializer<T> {
-  public static path<T = IDictionary>(path: string = '/') {
+export class SerializedRealTimeQuery<T extends IModel>
+  implements ISerializedQuery<T> {
+  protected _endAtKey?: keyof T & string;
+  protected _endAt?: string;
+  protected _equalToKey?: keyof T & string;
+  protected _equalTo?: string;
+  protected _limitToFirst?: number;
+  protected _limitToLast?: number;
+  protected _orderKey?: keyof T & string;
+  protected _path: string;
+  protected _startAtKey?: keyof T & string;
+  protected _startAt?: string;
+  protected _db?: IRtdbDatabase;
+  protected _orderBy: IRtdbOrder = 'orderByKey';
+
+  /** Static Initializer */
+  public static path<T extends IModel>(path = '/'): SerializedRealTimeQuery<T> {
     return new SerializedRealTimeQuery<T>(path);
   }
 
-  protected _orderBy: IRealQueryOrderType = 'orderByKey';
+  /**
+   * Constructor
+   */
+  constructor(path = '/') {
+    this._path = slashNotation(path);
+  }
+
+  public get db(): IRtdbDatabase {
+    if (this._db) {
+      return this._db;
+    }
+    throw new Error(
+      'Attempt to use SerializedFirestoreQuery without setting database'
+    );
+  }
+
+  public set db(value: IRtdbDatabase) {
+    this._db = value;
+  }
 
   public startAt(value: any, key?: keyof T & string) {
     this.validateKey('startAt', key, [
-      RealQueryOrderType.orderByChild,
-      RealQueryOrderType.orderByValue,
+      RtdbOrder.orderByChild,
+      RtdbOrder.orderByValue,
     ]);
     super.startAt(value, key);
     return this;
@@ -34,8 +68,8 @@ export class SerializedRealTimeQuery<
 
   public endAt(value: any, key?: keyof T & string) {
     this.validateKey('endAt', key, [
-      RealQueryOrderType.orderByChild,
-      RealQueryOrderType.orderByValue,
+      RtdbOrder.orderByChild,
+      RtdbOrder.orderByValue,
     ]);
     super.endAt(value, key);
     return this;
@@ -44,8 +78,8 @@ export class SerializedRealTimeQuery<
   public equalTo(value: any, key?: keyof T & string) {
     super.equalTo(value, key);
     this.validateKey('equalTo', key, [
-      RealQueryOrderType.orderByChild,
-      RealQueryOrderType.orderByValue,
+      RtdbOrder.orderByChild,
+      RtdbOrder.orderByValue,
     ]);
     return this;
   }
@@ -121,7 +155,7 @@ export class SerializedRealTimeQuery<
   protected validateKey(
     caller: string,
     key: keyof T | undefined,
-    allowed: IRealQueryOrderType[]
+    allowed: IRtdbOrder[]
   ) {
     const isNotAllowed = allowed.includes(this._orderBy) === false;
     if (key && isNotAllowed) {

@@ -2,7 +2,7 @@ import { IRtdbDbEvent } from './fire-proxies';
 
 export interface IFirebaseWatchContext {
   eventType: IRtdbDbEvent;
-  targetType: any;
+  targetType: unknown;
   /**
    * this tagging has been added as optional to not break prior API but all
    * server events will set this variable so that when it is received by **Firemodel**
@@ -11,7 +11,7 @@ export interface IFirebaseWatchContext {
   kind?: 'server-event';
 }
 
-export interface IPathSetter<T = any> {
+export interface IPathSetter<T = unknown> {
   path: string;
   value: T;
 }
@@ -20,7 +20,7 @@ export interface IPathSetter<T = any> {
 export interface IValueBasedWatchEvent extends IFirebaseWatchContext {
   targetType: 'query';
   key: string;
-  value: any;
+  value: unknown;
   previousChildKey?: string;
 }
 /**

@@ -1,4 +1,4 @@
-import { User, UserInfo } from '@firebase/auth-types';
+import { User } from '@firebase/auth-types';
 import type { IDictionary } from 'common-types';
 import type {
   IServiceAccount,
@@ -140,9 +140,9 @@ export type IMockUser = Omit<
 export type DebuggingCallback = (message: string) => void;
 
 /** an _async_ mock function which returns a dictionary data structure */
-export type AsyncMockData<T extends IDictionary = IDictionary> = () => Promise<
-  T
->;
+export type AsyncMockData<
+  T extends IDictionary = IDictionary
+> = () => Promise<T>;
 
 export interface IFirebaseBaseConfig {
   /** Flag to set debugging override from logging configuration. */
@@ -156,7 +156,7 @@ export interface IFirebaseBaseConfig {
    */
   databaseURL?: string;
   apiKey?: string;
-  logging?: any;
+  logging?: unknown;
   /** Override the default timeout of 5 seconds. */
   timeout?: number;
   /**
@@ -225,9 +225,9 @@ export type IDatabaseConfig = IAdminConfig | IClientConfig | IMockConfig;
  * provided by the `event-emitter` **npm** module are are abstracted away.
  */
 export interface IEmitter {
-  emit: (event: string | symbol, ...args: any[]) => boolean;
-  on: (event: string, value: any) => any;
-  once: (event: string, value: any) => any;
+  emit: (event: string | symbol, ...args: unknown[]) => boolean;
+  on: (event: string, value: unknown) => unknown;
+  once: (event: string, value: unknown) => unknown;
 }
 
 /**

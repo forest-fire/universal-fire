@@ -1,10 +1,8 @@
-import type { IDictionary } from 'common-types';
 import { slashNotation } from './slashNotation';
 import type {
   IComparisonOperator,
   IFirestoreQuery,
   IFirestoreQueryOrderType,
-  ISimplifiedDatabase,
   IFirestoreQuerySnapshot,
   ISerializedQuery,
   IFirestoreDatabase,

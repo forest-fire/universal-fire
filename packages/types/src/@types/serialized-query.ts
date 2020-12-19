@@ -1,5 +1,9 @@
-import { IFirestoreQuery, IRealTimeQuery } from './fire-proxies';
-import { IDictionary } from 'common-types';
+import { IModel, IRtdbDatabase } from '../index';
+import {
+  IFirestoreDatabase,
+  IFirestoreQuery,
+  IRealTimeQuery,
+} from './fire-proxies';
 
 /**
  * Defines the public interface which any serializer must
@@ -10,11 +14,11 @@ import { IDictionary } from 'common-types';
  * off of **BaseSerializer** as this was problematic and we are trying
  * to move away from classes's providing interfaces implicitly
  */
-export interface ISerializedQuery<T = unknown> {
-  db: ISimplifiedDatabase;
+export interface ISerializedQuery<T extends IModel = unknown> {
+  db: IRtdbDatabase | IFirestoreDatabase;
   path: string;
   identity: ISerializedIdentity<T>;
-  setDB: (db: ISimplifiedDatabase) => ISerializedQuery<T>;
+  setDB: (db: IRtdbDatabase | IFirestoreDatabase) => ISerializedQuery<T>;
   setPath: (path: string) => ISerializedQuery<T>;
   hashCode: () => number;
   limitToFirst: (value: number) => ISerializedQuery<T>;
@@ -27,8 +31,10 @@ export interface ISerializedQuery<T = unknown> {
   equalTo: (value: unknown, key?: keyof T & string) => ISerializedQuery<T>;
   toJSON: () => ISerializedIdentity<T>;
   toString: () => string;
-  deserialize: (db: ISimplifiedDatabase) => IFirestoreQuery | IRealTimeQuery;
-  execute(db?: ISimplifiedDatabase): Promise<unknown>;
+  deserialize: (
+    db: IRtdbDatabase | IFirestoreDatabase
+  ) => IFirestoreQuery | IRealTimeQuery;
+  execute(db?: IRtdbDatabase | IFirestoreDatabase): Promise<unknown>;
   where: (
     operation: IComparisonOperator,
     value: unknown,
@@ -43,18 +49,6 @@ export interface ISerializedIdentity<T>
 
 export type IComparisonOperator = '=' | '>' | '<';
 
-/**
- * Lowest-common-denominator for a database definition, typically should
- * be either a `IRealTimeQuery` or `IFirestoreQuery`. You can use the
- * `isRealTimeQuery()` and `isFirestoreQuery()` type gaurds to test and
- * get strong typing.
- */
-export interface ISimplifiedDatabase {
-  ref: (
-    path: string
-  ) => Record<string, unknown> | IRealTimeQuery | IFirestoreQuery;
-}
-
 export enum RtdbOrder {
   orderByChild = 'orderByChild',
   orderByKey = 'orderByKey',
@@ -65,7 +59,7 @@ export type IRtdbOrder = keyof typeof RtdbOrder;
 
 export type IFirestoreQueryOrderType = IRtdbOrder | 'orderBy';
 
-export interface ISerializedRealTimeIdentity<T = IDictionary> {
+export interface ISerializedRealTimeIdentity<T extends IModel = unknown> {
   orderBy: IRtdbOrder;
   orderByKey?: keyof T;
   limitToFirst?: number;

@@ -1,13 +1,11 @@
 import { IDictionary } from 'common-types';
-import { IMockStore, INoAuth, IMockAuthMgmt } from '../../index';
+import { IMockStore, IMockAuthMgmt } from '../../index';
 import {
   IAdminAuth,
   IClientAuth,
-  IClientRtdbDatabase,
   IFirestoreDatabase,
   IRtdbDatabase,
 } from '../fire-proxies';
-import { IAuthApi } from './other';
 
 /**
  * This is the surface area returned by a Mock Database Factory (`IMockDbFactory`) and

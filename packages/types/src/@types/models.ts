@@ -8,5 +8,5 @@ export interface IModel {
   id?: string;
   lastUpdated?: epochWithMilliseconds;
   createdAt?: epochWithMilliseconds;
-  META?: Record<string, any>;
+  META?: Record<string, unknown>;
 }

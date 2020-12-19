@@ -1,4 +1,3 @@
-import { IDictionary } from 'common-types';
 import {
   IAbstractedEvent,
   IAdminAuth,
@@ -16,14 +15,12 @@ import {
 import {
   IAdminFirestoreMock,
   IAdminRtdbMock,
-  IAuthApi,
   IClientFirestoreMock,
   IClientRtdbMock,
 } from './db-mocking';
-import { IFirestoreDatabase, IRtdbDatabase } from './fire-proxies';
 
 /**
- * The public contract that any SDK client must meet to behave
+ * The public contract that unknown SDK client must meet to behave
  * like an _abstracted database_.
  */
 export interface IBaseAbstractedDatabase extends IDatabaseGenericApi {
@@ -49,7 +46,7 @@ export interface IBaseAbstractedDatabase extends IDatabaseGenericApi {
   /**
    * Connect to the database
    */
-  connect: () => Promise<any>;
+  connect: () => Promise<unknown>;
   /**
    * Get access to the Firebase Auth API
    */
@@ -70,7 +67,7 @@ export interface IBaseAbstractedDatabase extends IDatabaseGenericApi {
    */
   isMockDb: boolean;
   /**
-   * The administrative interface for any package which will provide a _mocked_
+   * The administrative interface for unknown package which will provide a _mocked_
    * database.
    */
   mock: IMockDatabase;
@@ -88,14 +85,14 @@ export interface IDatabaseGenericApi {
   /**
    * Get a database _reference_ to the underlying database at a given path
    */
-  ref: (path?: string) => any;
+  ref: (path?: string) => unknown;
 
   /**
    * Get a _list_ of records at a given path in the database. The return representation will be
    * an array of dictionaries where the _key_ for the record will be assigned the property value
    * of `id` (unless overriden by the `idProp` param)
    */
-  getList: <T = any>(
+  getList: <T = unknown>(
     path: string | ISerializedQuery<T>,
     idProp?: string
   ) => Promise<T[]>;
@@ -111,13 +108,13 @@ export interface IDatabaseGenericApi {
    * Gets a record from a given path in the Firebase DB and converts it to an
    * object where the record's key is included as part of the record.
    */
-  getRecord: <T = any>(path: string, idProp?: string) => Promise<T>;
+  getRecord: <T = unknown>(path: string, idProp?: string) => Promise<T>;
   /**
    * Returns the value at a given path in the database. This method is a
-   * typescript _generic_ which defaults to `any` but you can set the type to
+   * typescript _generic_ which defaults to `unknown` but you can set the type to
    * whatever value you expect at that path in the database.
    */
-  getValue: <T = any>(path: string) => Promise<T | void>;
+  getValue: <T = unknown>(path: string) => Promise<T | void>;
   /**
    * Updates the database at a given path.
    *
@@ -126,27 +123,30 @@ export interface IDatabaseGenericApi {
    * properties that exist in the DB, but not in the value passed in then these properties
    * will _not_ be changed.
    */
-  update: <T = any>(path: string, value: Partial<T>) => Promise<void>;
+  update: <T = unknown>(path: string, value: Partial<T>) => Promise<void>;
   /**
    * Sets a value in the database at a given path.
    */
-  set: <T = any>(path: string, value: T) => Promise<void>;
+  set: <T = unknown>(path: string, value: T) => Promise<void>;
   /**
    * Removes a path from the database.
    */
-  remove: (path: string, ignoreMissing?: boolean) => Promise<any>;
+  remove: (path: string, ignoreMissing?: boolean) => Promise<unknown>;
   /**
    * Watch for Firebase events based on a DB path.
    */
   watch: (
     target: string | ISerializedQuery,
     events: IAbstractedEvent | IAbstractedEvent[],
-    cb: any
+    cb: unknown
   ) => void;
   /**
    * Unwatches existing Firebase events.
    */
-  unWatch: (events?: IAbstractedEvent | IAbstractedEvent[], cb?: any) => void;
+  unWatch: (
+    events?: IAbstractedEvent | IAbstractedEvent[],
+    cb?: unknown
+  ) => void;
 }
 
 export interface IRealTimeAdmin extends IBaseAbstractedDatabase {
@@ -212,12 +212,12 @@ export function isRtdbBacked(
 }
 
 /** The database connection was established using the Admin SDK */
-export function isAdminSdk(db: IAbstractedDatabase) {
+export function isAdminSdk(db: IAbstractedDatabase): boolean {
   return db.apiKind === ApiKind.admin;
 }
 
 /** The database connection was established using the Admin SDK */
-export function isClientSdk(db: IAbstractedDatabase) {
+export function isClientSdk(db: IAbstractedDatabase): boolean {
   return db.apiKind === ApiKind.client;
 }
 

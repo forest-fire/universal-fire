@@ -4,9 +4,8 @@ import {
   IMockAuthConfig,
   IMockData,
   IMockDatabase,
-  INoAuth,
 } from '../index';
-import { IAuthApi, IMockServerOptions } from './index';
+import { IMockServerOptions } from './index';
 
 /**
  * **IMockDbFactory**

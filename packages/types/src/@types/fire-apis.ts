@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 /**
  * Defines a minimum required interface for any abstraction which
  * is intended to abstract the Client SDK for a database.

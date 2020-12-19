@@ -11,7 +11,7 @@ import { UpdateRequest } from '../fire-proxies';
 import { AuthProviderName } from '../fire-types';
 import { NetworkDelay } from './network';
 
-export type IAuthObserver = (user: User | null) => any;
+export type IAuthObserver = (user: User | null) => unknown;
 
 /**
  * **IMockAuthMgmt**

@@ -26,7 +26,7 @@ export interface IMockListener<
    * The callback which will be called if the `query` has the record/path "in scope"
    * and the `eventType` matches.
    */
-  callback: (snap: TSnap, b?: null | string) => any;
+  callback: <T = unknown>(snap: TSnap, b?: null | string) => T;
   /**
    * Conditionally cancel the callback with _another_ callback function that responds to errors
    */
@@ -34,5 +34,5 @@ export interface IMockListener<
   /**
    * Provide any additional context needed to the primary event callback
    */
-  context?: object | null;
+  context?: Record<string, unknown> | null;
 }

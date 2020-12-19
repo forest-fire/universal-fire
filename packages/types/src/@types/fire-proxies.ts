@@ -186,8 +186,8 @@ export interface IAdminFirebaseNamespace {
   initializeApp: (options?: admin.AppOptions, name?: string) => admin.app.App;
   AppOptions: admin.AppOptions;
   database: () => IAdminDatabaseApi;
-  firestore: (app?: any) => IAdminFirestoreApi;
-  auth: ((app?: any) => IAdminAuth) & IAdminAuthApi;
+  firestore: (app?: unknown) => IAdminFirestoreApi;
+  auth: ((app?: unknown) => IAdminAuth) & IAdminAuthApi;
   messaging: () => IAdminMessagingApi;
   serviceAccount: admin.ServiceAccount;
   GoogleOAuthAccessToken: admin.GoogleOAuthAccessToken;
