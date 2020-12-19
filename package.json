@@ -46,13 +46,18 @@
     "path": "./scripts/workspace"
   },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@commitlint/config-lerna-scopes": "^11.0.0",
     "@rollup/plugin-node-resolve": "8.1.0",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
+    "commitlint": "^11.0.0",
     "do-devops": "^0.5.5",
     "eslint": "^7.16.0",
     "husky": "^4.3.6",
     "lerna": "^3.22.1",
+    "lerna-changelog": "^1.0.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
     "rimraf": "3.0.2",
@@ -72,6 +77,8 @@
     "common-types": "^1.17.3"
   },
   "husky": {
-    "hooks": {}
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }
