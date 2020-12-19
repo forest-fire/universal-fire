@@ -1,29 +1,66 @@
 import type { IDictionary } from 'common-types';
-
+import { slashNotation } from './slashNotation';
 import type {
   IComparisonOperator,
   IFirestoreQuery,
   IFirestoreQueryOrderType,
   ISimplifiedDatabase,
   IFirestoreQuerySnapshot,
+  ISerializedQuery,
+  IFirestoreDatabase,
+  IModel,
+  ISerializedIdentity,
 } from '@forest-fire/types';
-import { BaseSerializer } from './index';
 
 /**
  * Provides a way to serialize the full characteristics of a Firebase Firestore
  * Database query.
  */
-export class SerializedFirestoreQuery<T = IDictionary> extends BaseSerializer<
-  T
-> {
-  public static path<T = IDictionary>(path: string = '/') {
+export class SerializedFirestoreQuery<T extends IModel>
+  implements ISerializedQuery<T> {
+  protected _endAtKey?: keyof T & string;
+  protected _endAt?: string;
+  protected _equalToKey?: keyof T & string;
+  protected _equalTo?: string;
+  protected _limitToFirst?: number;
+  protected _limitToLast?: number;
+  protected _orderKey?: keyof T & string;
+  protected _path: string;
+  protected _startAtKey?: keyof T & string;
+  protected _startAt?: string;
+  protected _db?: IFirestoreDatabase;
+
+  /** Static initializer */
+  public static path<T = IDictionary>(path = '/'): SerializedFirestoreQuery<T> {
     return new SerializedFirestoreQuery<T>(path);
   }
 
-  protected _orderBy: IFirestoreQueryOrderType = 'orderBy';
-  protected _db?: ISimplifiedDatabase;
+  /**
+   * Constructor
+   */
+  constructor(path = '/') {
+    this._path = slashNotation(path);
+  }
 
-  public get db() {
+  protected _orderBy: IFirestoreQueryOrderType = 'orderBy';
+
+  public get identity(): ISerializedIdentity<T> {
+    return {
+      endAtKey: this._endAtKey,
+      endAt: this._endAt,
+      equalToKey: this._equalToKey,
+      equalTo: this._equalTo,
+      limitToFirst: this._limitToFirst,
+      limitToLast: this._limitToLast,
+      orderByKey: this._orderKey,
+      orderBy: this._orderBy,
+      path: this._path,
+      startAtKey: this._startAtKey,
+      startAt: this._startAt,
+    };
+  }
+
+  public get db(): IFirestoreDatabase {
     if (this._db) {
       return this._db;
     }
@@ -32,17 +69,17 @@ export class SerializedFirestoreQuery<T = IDictionary> extends BaseSerializer<
     );
   }
 
-  public orderBy(child: keyof T & string) {
+  public set db(value: IFirestoreDatabase) {
+    this._db = value;
+  }
+
+  public orderBy(child: keyof T & string): SerializedFirestoreQuery<T> {
     this._orderBy = 'orderBy';
     this._orderKey = child;
     return this;
   }
 
-  public set db(value: ISimplifiedDatabase) {
-    this._db = value;
-  }
-
-  public deserialize(db?: ISimplifiedDatabase): IFirestoreQuery {
+  public deserialize(db?: IFirestoreDatabase): IFirestoreQuery {
     const database = db || this.db;
     let q: IFirestoreQuery = database.ref(this.path);
 

@@ -1,3 +1,4 @@
+import { IFirestoreQuery, IRealTimeQuery } from './@types';
 import type {
   IAdminConfig,
   IClientConfig,
@@ -7,6 +8,28 @@ import type {
 
 export function isMockConfig(config: IDatabaseConfig): config is IMockConfig {
   return config && (config as IMockConfig).mocking === true;
+}
+
+/**
+ * Provides a type guard, ensuring payload is a **Firestore** query
+ */
+export function isRealTimeQuery(
+  query: Record<string, unknown> | IRealTimeQuery | IFirestoreQuery
+): query is IRealTimeQuery {
+  // even though the orderByPriority is shit, it is a distinquishing
+  // characteristic on RTDB not found elsewhere
+  return (query as IRealTimeQuery).orderByPriority ? true : false;
+}
+
+/**
+ * Provides a type guard, ensuring payload is a **Firestore** query
+ */
+export function isFirestoreQuery(
+  query: Record<string, unknown> | IRealTimeQuery | IFirestoreQuery
+): query is IRealTimeQuery {
+  // where is the most query operator but it does not exist on RTDB,
+  // TODO: this will need re-evaluation if we ever support non-Firebase databases
+  return (query as IFirestoreQuery).where ? true : false;
 }
 
 export function isRealDbConfig(

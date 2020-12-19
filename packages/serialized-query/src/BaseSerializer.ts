@@ -1,5 +1,4 @@
 import type {
-  IComparisonOperator,
   IFirestoreQuery,
   IFirestoreQueryOrderType,
   IRealQueryOrderType,
@@ -9,7 +8,8 @@ import type {
   ISerializedQuery,
 } from '@forest-fire/types';
 
-export abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
+export abstract class BaseSerializer<T = unknown>
+  implements ISerializedQuery<T> {
   protected _endAtKey?: keyof T & string;
   protected _endAt?: string;
   protected _equalToKey?: keyof T & string;
@@ -23,25 +23,11 @@ export abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
   protected _db?: ISimplifiedDatabase;
   protected abstract _orderBy: IFirestoreQueryOrderType | IRealQueryOrderType;
 
-  static async create<T extends BaseSerializer>(
-    constructor: new (path: string) => T,
-    path: string = '/'
-  ) {
-    return new constructor(path);
-  }
-
-  constructor(path: string = '/') {
+  constructor(path = '/') {
     this._path = slashNotation(path);
   }
 
-  public get db() {
-    if (this._db) {
-      return this._db;
-    }
-    throw new Error('Attempt to use SerializedQuery without setting database');
-  }
-
-  public get path() {
+  public get path(): string {
     return this._path;
   }
 
@@ -61,16 +47,23 @@ export abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
     };
   }
 
+  public get db(): ISimplifiedDatabase {
+    if (this._db) {
+      return this._db;
+    }
+    throw new Error('Attempt to use SerializedQuery without setting database');
+  }
+
   /**
    * Allows the DB interface to be setup early, allowing clients
    * to call execute without any params.
    */
-  public setDB(db: ISimplifiedDatabase) {
+  public setDB(db: ISimplifiedDatabase): BaseSerializer {
     this._db = db;
     return this;
   }
 
-  public setPath(path: string) {
+  public setPath(path: string): BaseSerializer {
     this._path = slashNotation(path);
     return this;
   }
@@ -78,7 +71,7 @@ export abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
   /**
    * Returns a unique numeric hashcode for this query
    */
-  public hashCode() {
+  public hashCode(): number {
     const identity = JSON.stringify(this.identity);
     let hash = 0;
     if (identity.length === 0) {
@@ -93,55 +86,55 @@ export abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
     return hash;
   }
 
-  public limitToFirst(value: number) {
+  public limitToFirst(value: number): BaseSerializer<T> {
     this._limitToFirst = value;
     return this;
   }
 
-  public limitToLast(value: number) {
+  public limitToLast(value: number): BaseSerializer<T> {
     this._limitToLast = value;
     return this;
   }
 
-  public orderByChild(child: keyof T & string) {
+  public orderByChild(child: keyof T & string): BaseSerializer<T> {
     this._orderBy = 'orderByChild';
     this._orderKey = child;
     return this;
   }
 
-  public orderByValue() {
+  public orderByValue(): BaseSerializer<T> {
     this._orderBy = 'orderByValue';
     return this;
   }
 
-  public orderByKey() {
+  public orderByKey(): BaseSerializer<T> {
     this._orderBy = 'orderByKey';
     return this;
   }
 
-  public startAt(value: any, key?: keyof T & string) {
+  public startAt(value: any, key?: keyof T & string): BaseSerializer<T> {
     this._startAt = value;
     this._startAtKey = key;
     return this;
   }
 
-  public endAt(value: any, key?: keyof T & string) {
+  public endAt(value: any, key?: keyof T & string): BaseSerializer<T> {
     this._endAt = value;
     this._endAtKey = key;
     return this;
   }
 
-  public equalTo(value: any, key?: keyof T & string) {
+  public equalTo(value: any, key?: keyof T & string): BaseSerializer<T> {
     this._equalTo = value;
     this._equalToKey = key;
     return this;
   }
 
-  public toJSON() {
+  public toJSON(): ISerializedIdentity<T> {
     return this.identity;
   }
 
-  public toString() {
+  public toString(): string {
     return JSON.stringify(this.identity, null, 2);
   }
 
@@ -151,22 +144,4 @@ export abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
   public abstract deserialize(
     db?: ISimplifiedDatabase
   ): IFirestoreQuery | IRealTimeQuery;
-
-  /**
-   * Execute the query as a one time fetch.
-   */
-  public abstract async execute(db?: ISimplifiedDatabase): Promise<any>;
-
-  /**
-   * Allows a shorthand notation for simple serialized queries.
-   */
-  public abstract where<V>(
-    operation: IComparisonOperator,
-    value: V,
-    key?: (keyof T & string) | undefined
-  ): this;
-}
-
-function slashNotation(path: string) {
-  return path.replace(/\./g, '/');
 }

@@ -8,16 +8,15 @@ import {
   ISimplifiedDatabase,
   RealQueryOrderType,
   IRtdbDataSnapshot,
-  IRtdbReference,
 } from '@forest-fire/types';
 
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime
  * Database query.
  */
-export class SerializedRealTimeQuery<T = IDictionary> extends BaseSerializer<
-  T
-> {
+export class SerializedRealTimeQuery<
+  T = IDictionary
+> extends BaseSerializer<T> {
   public static path<T = IDictionary>(path: string = '/') {
     return new SerializedRealTimeQuery<T>(path);
   }

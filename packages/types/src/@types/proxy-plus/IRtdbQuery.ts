@@ -11,7 +11,7 @@ export interface IRtdbQuery extends _IRtdbQuery_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.Query#endAt),
    * [rest](https://firebase.google.com/docs/database/rest/retrieve-data#section-rest-filtering) ]
    *
-   * Creates a Query with a specified _ending point_.
+   * Creates a Query with a specified _ending point_.
    */
   endAt: import('@firebase/database-types').Query['endAt'];
   /**
@@ -21,9 +21,9 @@ export interface IRtdbQuery extends _IRtdbQuery_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.Query#equalto),
    * [rest](https://firebase.google.com/docs/database/rest/retrieve-data#section-rest-filtering) ]
    *
-   * Creates a Query that includes children that match the specified value.
+   * Creates a Query that includes children that match the specified value.
    *
-   * Using startAt(), endAt(), and equalTo() allows us to choose arbitrary starting and ending
+   * Using startAt(), endAt(), and equalTo() allows us to choose arbitrary starting and ending
    * points for our queries.
    *
    * The optional key argument can be used to further limit the range of the query. If it is specified,
@@ -58,7 +58,7 @@ export interface IRtdbQuery extends _IRtdbQuery_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.Query#limittofirst),
    * [rest](https://firebase.google.com/docs/database/rest/retrieve-data#limit-queries) ]
    *
-   * Generates a new Query limited to the first specific number of children.
+   * Generates a new Query limited to the first specific number of children.
    */
   limitToFirst: import('@firebase/database-types').Query['limitToFirst'];
   /**
@@ -68,7 +68,7 @@ export interface IRtdbQuery extends _IRtdbQuery_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.Query#limittolast),
    * [rest](https://firebase.google.com/docs/database/rest/retrieve-data#limit-queries) ]
    *
-   * Generates a new Query limited to the last specific number of children.
+   * Generates a new Query limited to the last specific number of children.
    */
   limitToLast: import('@firebase/database-types').Query['limitToLast'];
 
@@ -79,16 +79,16 @@ export interface IRtdbQuery extends _IRtdbQuery_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.Query#off),
    * [~rest~]() ]
    *
-   * Detaches a callback previously attached with on().
+   * Detaches a callback previously attached with on().
    *
-   * Detach a callback previously attached with on(). Note that if on() was called multiple times
+   * Detach a callback previously attached with on(). Note that if on() was called multiple times
    * with the same eventType and callback, the callback will be called multiple times for each event,
-   * and off() must be called multiple times to remove the callback. Calling off() on a parent listener
-   * will not automatically remove listeners registered on child nodes, off() must also be called on any
+   * and off() must be called multiple times to remove the callback. Calling off() on a parent listener
+   * will not automatically remove listeners registered on child nodes, off() must also be called on any
    * child listeners to remove the callback.
    *
    * If a callback is not specified, all callbacks for the specified eventType will be removed. Similarly,
-   * if no eventType or callback is specified, all callbacks for the Reference will be removed.
+   * if no eventType or callback is specified, all callbacks for the Reference will be removed.
    */
   off: import('@firebase/database-types').Query['off'];
 
@@ -102,7 +102,7 @@ export interface IRtdbQuery extends _IRtdbQuery_ {
    * Listens for data changes at a particular location (or query).
    *
    * This is the primary way to read data from a Database. Your callback will be triggered for
-   * the initial data and again whenever the data changes. Use `off()` to stop receiving updates.
+   * the initial data and again whenever the data changes. Use `off()` to stop receiving updates.
    */
   on: import('@firebase/database-types').Query['on'];
 
@@ -124,7 +124,7 @@ export interface IRtdbQuery extends _IRtdbQuery_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.Query#orderbychild),
    * [rest](https://firebase.google.com/docs/database/rest/retrieve-data#orderby) ]
    *
-   * Generates a new Query object ordered by the specified child key.
+   * Generates a new Query object ordered by the specified child key.
    *
    * Queries can only order by one key at a time. Calling orderByChild() multiple times on the same
    * query is an error.
@@ -142,7 +142,7 @@ export interface IRtdbQuery extends _IRtdbQuery_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.Query#orderbykey),
    * [rest](https://firebase.google.com/docs/database/rest/retrieve-data#orderby=key) ]
    *
-   * Generates a new Query object ordered by key. Sorts the results of a query by their (ascending)
+   * Generates a new Query object ordered by key. Sorts the results of a query by their (ascending)
    * key values.
    */
   orderByKey: import('@firebase/database-types').Query['orderByKey'];
@@ -154,7 +154,7 @@ export interface IRtdbQuery extends _IRtdbQuery_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.Query#orderbyvalue),
    * [rest](https://firebase.google.com/docs/database/rest/retrieve-data#orderby=value) ]
    *
-   * Generates a new Query object ordered by value. If the children of a query are all scalar values
+   * Generates a new Query object ordered by value. If the children of a query are all scalar values
    * (string, number, or boolean), you can order the results by their (ascending) values.
    */
   orderByValue: import('@firebase/database-types').Query['orderByValue'];
@@ -166,9 +166,9 @@ export interface IRtdbQuery extends _IRtdbQuery_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.Query#startat),
    * [rest](https://firebase.google.com/docs/database/rest/retrieve-data#orderby=value) ]
    *
-   * Creates a Query with the specified starting point.
+   * Creates a Query with the specified starting point.
    *
-   * Using startAt(), endAt(), and equalTo() allows you to choose arbitrary starting and ending
+   * Using startAt(), endAt(), and equalTo() allows you to choose arbitrary starting and ending
    * points for your queries.
    *
    * The starting point is inclusive, so children with exactly the specified value will be included

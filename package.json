@@ -11,6 +11,7 @@
     "autoindex": "scripty",
     "clean": "scripty",
     "lint": "scripty",
+    "lintp": "scripty",
     "publish": "lerna publish --conventional-commits",
     "changed": "yarn lerna changed",
     "release": "yarn lerna publish",

@@ -1,13 +1,16 @@
 import { IFirestoreQuery, IRealTimeQuery } from './fire-proxies';
-
 import { IDictionary } from 'common-types';
 
 /**
  * Defines the public interface which any serializer must
  * conform to to be recognized as a Serialized Query in
  * `universal-fire`.
+ *
+ * NOTE: in `0.60.x` onward this fully replaces the class inheritance
+ * off of **BaseSerializer** as this was problematic and we are trying
+ * to move away from classes's providing interfaces implicitly
  */
-export interface ISerializedQuery<T = any> {
+export interface ISerializedQuery<T = unknown> {
   db: ISimplifiedDatabase;
   path: string;
   identity: ISerializedIdentity<T>;
@@ -19,16 +22,16 @@ export interface ISerializedQuery<T = any> {
   orderByChild: (child: keyof T & string) => ISerializedQuery<T>;
   orderByValue: () => ISerializedQuery<T>;
   orderByKey: () => ISerializedQuery<T>;
-  startAt: (value: any, key?: keyof T & string) => ISerializedQuery<T>;
-  endAt: (value: any, key?: keyof T & string) => ISerializedQuery<T>;
-  equalTo: (value: any, key?: keyof T & string) => ISerializedQuery<T>;
+  startAt: (value: unknown, key?: keyof T & string) => ISerializedQuery<T>;
+  endAt: (value: unknown, key?: keyof T & string) => ISerializedQuery<T>;
+  equalTo: (value: unknown, key?: keyof T & string) => ISerializedQuery<T>;
   toJSON: () => ISerializedIdentity<T>;
   toString: () => string;
   deserialize: (db: ISimplifiedDatabase) => IFirestoreQuery | IRealTimeQuery;
-  execute(db?: ISimplifiedDatabase): Promise<any>;
+  execute(db?: ISimplifiedDatabase): Promise<unknown>;
   where: (
     operation: IComparisonOperator,
-    value: any,
+    value: unknown,
     key?: (keyof T & string) | undefined
   ) => ISerializedQuery<T>;
 }
@@ -40,8 +43,16 @@ export interface ISerializedIdentity<T>
 
 export type IComparisonOperator = '=' | '>' | '<';
 
+/**
+ * Lowest-common-denominator for a database definition, typically should
+ * be either a `IRealTimeQuery` or `IFirestoreQuery`. You can use the
+ * `isRealTimeQuery()` and `isFirestoreQuery()` type gaurds to test and
+ * get strong typing.
+ */
 export interface ISimplifiedDatabase {
-  ref: (path: string) => any | IRealTimeQuery | IFirestoreQuery;
+  ref: (
+    path: string
+  ) => Record<string, unknown> | IRealTimeQuery | IFirestoreQuery;
 }
 
 export enum RealQueryOrderType {
