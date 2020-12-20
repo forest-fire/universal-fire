@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --unhandled-rejections=strict
 
 const { join } = require('path');
 const { rollup } = require('rollup');
@@ -36,6 +36,7 @@ function toPlugins(dir) {
   return [
     require('@rollup/plugin-node-resolve').default(),
     require('rollup-plugin-typescript2')({
+      include: ['../**/src/**/*.ts'],
       tsconfig: 'tsconfig.bundle.json',
       typescript: require('ttypescript'),
       useTsconfigDeclarationDir: true, //~> "dist/types"
@@ -152,7 +153,10 @@ async function fullBuild() {
   if (argv.length === 0 && !pkg) {
     await fullBuild();
   } else {
-    if (pkg) build(pkg);
+    if (pkg)
+      build(pkg).catch((e) => {
+        throw e;
+      });
     else {
       for (const namedPkg of argv) {
         await build.pkg(namedPkg).catch((e) => {
@@ -166,5 +170,5 @@ async function fullBuild() {
   }
 })().catch((err) => {
   console.error('Oops~!', err);
-  process.exit(1);
+  process.exit(2);
 });

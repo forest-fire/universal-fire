@@ -1,8 +1,12 @@
 .nyc_output/
 node_modules/
 yarn-error.log
-.env
 lerna-debug.log
+.env
 
 packages/*/dist
+packages/*/yarn-error.log
+packages/*/.env
+
 temp
+

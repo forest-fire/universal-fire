@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 if [[ -z "$1" ]]; then 
-  echo "┏━━━ 📦 Build/Bundle (es, cjs, types) ━━━━━━━"
-  lerna run 
+  echo "┏━━━ 📦 Build/Bundle Monorepo ━━━━━━━"
+  lerna run build --stream
 else
   cd "./packages/$1"
   echo "┏━━━ 📦 Build/Bundle [ packages/$1 ] (es, cjs, types) ━━━━━━━"

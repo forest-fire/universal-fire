@@ -159,7 +159,7 @@ export class SerializedFirestoreQuery<
 
   public deserialize(db?: IFirestoreDatabase): IFirestoreQuery {
     const database = db || this.db;
-    let q = database.collection(this.path);
+    let q: IFirestoreQuery = database.collection(this.path);
 
     switch (this.identity.orderBy) {
       case 'orderByKey':
