@@ -17,30 +17,14 @@
     "path": "../../scripts/packages"
   },
   "scripts": {
-    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "clean": "rimraf dist *.tsbuildinfo",
     "build": "scripty",
-    "lint": "eslint src --ext js,ts src test",
+    "lint": "eslint src --ext js,ts && eslint test --ext ts",
     "test": "scripty"
-  },
-  "optionalDependencies": {
-    "universal-fire": "^0.59.2"
   },
   "dependencies": {
     "@forest-fire/types": "^0.59.2"
   },
-  "devDependencies": {
-    "@types/chai": "^4.2.11",
-    "@types/chalk": "^2.2.0",
-    "@types/js-yaml": "^3.12.3",
-    "@types/lodash.first": "^3.0.6",
-    "@types/lodash.last": "^3.0.6",
-    "@types/mocha": "^7.0.2",
-    "@types/node": "^10.10.0",
-    "@types/rimraf": "^3.0.0",
-    "chai": "^4.2.0",
-    "chalk": "^3.0.0",
-    "firemodel": "^0.58.3",
-    "universal-fire": "^0.56.5"
-  },
+  "devDependencies": {},
   "license": "MIT"
 }

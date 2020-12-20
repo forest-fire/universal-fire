@@ -19,47 +19,20 @@
   "files": [
     "dist"
   ],
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
   "scripts": {
-    "clean": "rimraf dist/**/*",
-    "clean:nuclear": "rimraf lib node_modules && rm yarn.lock && yarn cache clean && yarn && yarn upgrade",
-    "watch": "run-p watch:esnext watch:cjs",
-    "watch:esnext": "rollup -c -w",
-    "watch:cjs": "tsc -P tsconfig.es.json -w",
-    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
-    "build:nuclear": "yarn clean:nuclear && yarn build",
-    "test": "yarn do test",
-    "docs": "vuepress docs",
-    "build:docs": "vuepress build docs",
-    "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'"
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty",
+    "test": "scripty",
+    "docs": "vuepress docs"
   },
   "devDependencies": {
-    "@firebase/app": "^0.6.4",
-    "@forest-fire/abstracted-database": "^0.59.2",
-    "@forest-fire/serialized-query": "^0.59.2",
-    "@types/chai": "^4.2.11",
-    "@types/faker": "^4.1.12",
-    "@types/js-yaml": "^3.12.1",
-    "@types/lodash.first": "^3.0.6",
-    "@types/lodash.last": "^3.0.6",
-    "@types/mocha": "^7.0.2",
-    "@types/node": "^10.0.0",
-    "@types/rimraf": "^2.0.3",
-    "async-shelljs": "^0.1.4",
-    "chai": "^4.2.0",
-    "chalk": "3.0.0",
-    "do-devops": "^0.3.21",
+    "@firebase/app": "^0.6.13",
     "firebase-admin": "^8.13.0",
-    "firemock": "^0.55.4",
-    "js-yaml": "^3.13.1",
-    "mocha": "^7.1.1",
-    "npm-run-all": "^4.1.5",
-    "nyc": "^15.0.0",
-    "rimraf": "^3.0.2",
-    "test-console": "^1.1.0",
-    "ts-mocha": "^7.0.0",
-    "ts-node": "^8.9.1",
-    "tslint": "^6.1.2",
-    "typescript": "^3.9.5"
+    "firemock": "^0.55.4"
   },
   "peerDependencies": {
     "firebase-admin": "^8.13.0"
@@ -68,11 +41,11 @@
     "firemock": "^0.59.2"
   },
   "dependencies": {
-    "@firebase/database-types": "^0.5.1",
     "@forest-fire/real-time-db": "^0.59.2",
     "@forest-fire/types": "^0.59.2",
     "@forest-fire/utility": "^0.59.2",
-    "common-types": "^1.15.8",
+    "@forest-fire/abstracted-database": "^0.59.2",
+    "@forest-fire/serialized-query": "^0.59.2",
     "is-gzip": "^2.0.0",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
