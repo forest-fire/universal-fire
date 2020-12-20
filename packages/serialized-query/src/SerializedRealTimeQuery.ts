@@ -1,34 +1,33 @@
-import type { IDictionary } from 'common-types';
-
-import { BaseSerializer, slashNotation } from './index';
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+import { SerializedError, slashNotation } from './index';
 import {
   IComparisonOperator,
-  IRtdbOrder,
-  IRealTimeQuery,
-  ISimplifiedDatabase,
-  RtdbOrder,
-  IRtdbDataSnapshot,
-  ISerializedQuery,
   IModel,
+  IRealTimeQuery,
   IRtdbDatabase,
+  IRtdbDataSnapshot,
+  IRtdbOrder,
+  ISerializedIdentity,
+  ISerializedQuery,
 } from '@forest-fire/types';
 
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime
  * Database query.
  */
-export class SerializedRealTimeQuery<T extends IModel>
-  implements ISerializedQuery<T> {
+export class SerializedRealTimeQuery<
+  T extends IModel = Record<string, unknown> & IModel
+> implements ISerializedQuery<T, IRtdbDatabase> {
   protected _endAtKey?: keyof T & string;
-  protected _endAt?: string;
+  protected _endAt?: string | number | boolean;
   protected _equalToKey?: keyof T & string;
-  protected _equalTo?: string;
+  protected _equalTo?: string | number | boolean;
   protected _limitToFirst?: number;
   protected _limitToLast?: number;
   protected _orderKey?: keyof T & string;
   protected _path: string;
   protected _startAtKey?: keyof T & string;
-  protected _startAt?: string;
+  protected _startAt?: string | number | boolean;
   protected _db?: IRtdbDatabase;
   protected _orderBy: IRtdbOrder = 'orderByKey';
 
@@ -57,34 +56,112 @@ export class SerializedRealTimeQuery<T extends IModel>
     this._db = value;
   }
 
-  public startAt(value: any, key?: keyof T & string) {
-    this.validateKey('startAt', key, [
-      RtdbOrder.orderByChild,
-      RtdbOrder.orderByValue,
-    ]);
-    super.startAt(value, key);
+  public get path(): string {
+    return this._path;
+  }
+
+  public get identity(): ISerializedIdentity<T> {
+    return {
+      endAtKey: this._endAtKey,
+      endAt: this._endAt,
+      equalToKey: this._equalToKey,
+      equalTo: this._equalTo,
+      limitToFirst: this._limitToFirst,
+      limitToLast: this._limitToLast,
+      orderByKey: this._orderKey,
+      orderBy: this._orderBy,
+      path: this._path,
+      startAtKey: this._startAtKey,
+      startAt: this._startAt,
+    };
+  }
+
+  /**
+   * Allows the DB interface to be setup early, allowing clients
+   * to call execute without any params.
+   */
+  public setDB(db: IRtdbDatabase): SerializedRealTimeQuery<T> {
+    this._db = db;
     return this;
   }
 
-  public endAt(value: any, key?: keyof T & string) {
-    this.validateKey('endAt', key, [
-      RtdbOrder.orderByChild,
-      RtdbOrder.orderByValue,
-    ]);
-    super.endAt(value, key);
+  public setPath(path: string): SerializedRealTimeQuery<T> {
+    this._path = slashNotation(path);
     return this;
   }
 
-  public equalTo(value: any, key?: keyof T & string) {
-    super.equalTo(value, key);
-    this.validateKey('equalTo', key, [
-      RtdbOrder.orderByChild,
-      RtdbOrder.orderByValue,
-    ]);
+  public limitToFirst(value: number): SerializedRealTimeQuery<T> {
+    this._limitToFirst = value;
     return this;
   }
 
-  public deserialize(db?: ISimplifiedDatabase): IRealTimeQuery {
+  public limitToLast(value: number): SerializedRealTimeQuery<T> {
+    this._limitToLast = value;
+    return this;
+  }
+
+  public orderByChild(child: keyof T & string): SerializedRealTimeQuery<T> {
+    this._orderBy = 'orderByChild';
+    this._orderKey = child;
+    return this;
+  }
+
+  public orderByValue(): SerializedRealTimeQuery<T> {
+    this._orderBy = 'orderByValue';
+    return this;
+  }
+
+  public orderByKey(): SerializedRealTimeQuery<T> {
+    this._orderBy = 'orderByKey';
+    return this;
+  }
+
+  public startAt(
+    value: string | number | boolean,
+    key?: keyof T & string
+  ): SerializedRealTimeQuery<T> {
+    this._startAt = value;
+    this._startAtKey = key;
+    return this;
+  }
+
+  public endAt(
+    value: string | number | boolean,
+    key?: keyof T & string
+  ): SerializedRealTimeQuery<T> {
+    this._endAt = value;
+    this._endAtKey = key;
+    return this;
+  }
+
+  public equalTo(
+    value: string | number | boolean,
+    key?: keyof T & string
+  ): SerializedRealTimeQuery<T> {
+    this._equalTo = value;
+    this._equalToKey = key;
+    return this;
+  }
+
+  /**
+   * Returns a unique numeric hashcode for this query
+   */
+  public hashCode(): number {
+    const identity = JSON.stringify(this.identity);
+    let hash = 0;
+    if (identity.length === 0) {
+      return hash;
+    }
+    for (let i = 0; i < identity.length; i++) {
+      const char = identity.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      // Convert to 32bit integer.
+      hash = hash & hash;
+    }
+    return hash;
+  }
+
+  public deserialize(db?: IRtdbDatabase): IRealTimeQuery {
     const database = db || this.db;
     let q: IRealTimeQuery = database.ref(this.path);
 
@@ -119,17 +196,17 @@ export class SerializedRealTimeQuery<T extends IModel>
     return q;
   }
 
-  public async execute(db?: ISimplifiedDatabase): Promise<IRtdbDataSnapshot> {
+  public async execute(db?: IRtdbDatabase): Promise<IRtdbDataSnapshot> {
     const database = db || this.db;
     const snapshot = await this.deserialize(database).once('value');
     return snapshot;
   }
 
-  public where<V>(
+  public where(
     operation: IComparisonOperator,
-    value: V,
+    value: string | number | boolean,
     key?: keyof T & string
-  ) {
+  ): ISerializedQuery<T, IRtdbDatabase> {
     switch (operation) {
       case '=':
         return this.equalTo(value, key);
@@ -138,32 +215,18 @@ export class SerializedRealTimeQuery<T extends IModel>
       case '<':
         return this.endAt(value, key);
       default:
-        const err: any = new Error(`Unknown comparison operator: ${operation}`);
-        err.code = 'invalid-operator';
-        throw err;
+        throw new SerializedError(
+          `Unknown comparison operator: ${operation}`,
+          'invalid-operator'
+        );
     }
   }
 
-  /**
-   * Ensures that when a `key` is passed in as part of the query modifiers --
-   * such as "startAt", "endAt", etc. -- that the sorting strategy is valid.
-   *
-   * @param caller gives a simple string name for the method
-   * which is currently being called to modify the search filters
-   * @param key the key value that _might_ have been erroneously passed in
-   */
-  protected validateKey(
-    caller: string,
-    key: keyof T | undefined,
-    allowed: IRtdbOrder[]
-  ) {
-    const isNotAllowed = allowed.includes(this._orderBy) === false;
-    if (key && isNotAllowed) {
-      throw new Error(
-        `You can not use the "key" parameter with ${caller}() when using a "${
-          this._orderBy
-        }" sort. Valid ordering strategies are: ${allowed.join(', ')}`
-      );
-    }
+  public toJSON(): ISerializedIdentity<T> {
+    return this.identity;
+  }
+
+  public toString(): string {
+    return JSON.stringify(this.identity, null, 2);
   }
 }

@@ -13,7 +13,6 @@ describe('SerializedRealTimeQuery', () => {
     mockDb = await RealTimeAdmin({ mocking: true });
     // TODO: remove the comment below when we update FireModel to use the new
     // version if `universal-fire`.
-    // @ts-ignore
     FireModel.defaultDb = mockDb;
   });
   it('instantiates', () => {
@@ -32,7 +31,7 @@ describe('SerializedRealTimeQuery', () => {
     expect(q.path).to.equal('/foobar');
   });
 
-  it('same query structure gives same hashCode', async () => {
+  it('same query structure gives same hashCode', () => {
     const foo = new SerializedRealTimeQuery('/foo/bar').orderByChild('goober');
     const bar = new SerializedRealTimeQuery('/foo/bar').orderByChild('goober');
     expect(foo.hashCode()).to.equal(bar.hashCode());
@@ -45,7 +44,7 @@ describe('SerializedRealTimeQuery', () => {
     expect(foo2.hashCode()).to.equal(bar2.hashCode());
   });
 
-  it('different query structure gives different hashCode', async () => {
+  it('different query structure gives different hashCode', () => {
     const foo2 = new SerializedRealTimeQuery('/foo/bar')
       .orderByChild('goober')
       .limitToFirst(5);

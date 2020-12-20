@@ -1,26 +1,26 @@
 import { expect } from 'chai';
 import { List, Mock } from 'firemodel';
-import { RealTimeAdmin, IRealTimeAdmin } from 'universal-fire';
 import { Person } from './testing/Person';
 import * as helpers from './testing/helpers';
 import { SerializedRealTimeQuery } from '../src/index';
 import { hashToArray } from 'typed-conversions';
 import { DeepPerson } from './testing/DeepPerson';
 import { peopleDataset } from './data/people';
+import { IRealTimeAdmin } from '@forest-fire/types';
+import { RealTimeAdmin } from '@forest-fire/real-time-admin';
 
 helpers.setupEnv();
 
-describe('Tests using REAL RealTimeAdmin =>’', () => {
+describe('Tests using REAL RealTimeAdmin =>', () => {
   let db: IRealTimeAdmin;
   before(async () => {
-    db = await RealTimeAdmin();
-    // @ts-ignore
+    db = await RealTimeAdmin.connect();
     List.defaultDb = db;
     await db.set('/', peopleDataset());
   });
   after(async () => {
     await db.remove(`/authenticated/fancyPeople`, true);
-    db.remove('/authenticated');
+    await db.remove('/authenticated');
   });
 
   it('equalTo() deserializes into valid response', async () => {
@@ -50,7 +50,7 @@ describe('Tests using REAL RealTimeAdmin =>’', () => {
       .limitToFirst(2);
 
     const deserializedJson: Person[] = hashToArray(
-      (await q.execute(db)).toJSON() as any
+      (await q.execute(db)).toJSON()
     );
     const sortedPeople = hashToArray<Person>(
       peopleDataset().authenticated.people
@@ -69,17 +69,11 @@ describe('Tests using REAL RealTimeAdmin =>’', () => {
   });
 
   it.skip('Firemodel List.where() reduces the result set to appropriate records (with a dynamic path)', async () => {
-    const mockDb = await RealTimeAdmin({ mocking: true });
-    // TODO: remove the comment below when we update FireModel to use the new
-    // version if `universal-fire`.
-    // @ts-ignore
+    const mockDb = await RealTimeAdmin.connect({ mocking: true });
     await Mock(DeepPerson, mockDb).generate(5, {
       favoriteColor: 'green',
       group: 'group1',
     });
-    // TODO: remove the comment below when we update FireModel to use the new
-    // version if `universal-fire`.
-    // @ts-ignore
     await Mock(DeepPerson, mockDb).generate(5, {
       favoriteColor: 'blue',
       group: 'group1',

@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
     "lib": [],
-    "target": "esnext",
-    "module": "esnext",
-    "esModuleInterop": true,
+    "target": "es2018",
+    "module": "commonjs",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "noEmit": true
   },
-  "exclude": ["**/node_modules/**", "packages/*/dist", "**/test/**"]
+  "include": ["packages/**/src", "packages/**/test/*.ts"],
+  "exclude": ["**/node_modules/**", "packages/*/dist"]
 }

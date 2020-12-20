@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable no-var */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as fs from 'fs';
 import * as process from 'process';
 import * as yaml from 'js-yaml';
@@ -31,26 +35,26 @@ export function restoreStdoutAndStderr() {
 }
 
 export async function wait(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export async function timeout(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function setupEnv() {
   if (!process.env.AWS_STAGE) {
     process.env.AWS_STAGE = 'test';
   }
-  const current = process.env;
+
   const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
-    ...process.env
+    ...process.env,
   };
 
   console.log(`Loading ENV for "${process.env.AWS_STAGE}"`);
-  Object.keys(combined).forEach(key => (process.env[key] = combined[key]));
+  Object.keys(combined).forEach((key) => (process.env[key] = combined[key]));
   return combined;
 }
 

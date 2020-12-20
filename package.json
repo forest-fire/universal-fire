@@ -1,7 +1,7 @@
 {
   "name": "@forest-fire/universal-fire",
-  "version": "0.50.0",
-  "description": "Forest Fire monorepo for Firebase",
+  "version": "0.60.0",
+  "description": "monorepo for UniversalFire, Firemock, and supporting repos",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/forest-fire/universal-fire.git"
@@ -12,12 +12,12 @@
     "clean": "scripty",
     "lint": "scripty",
     "lintp": "scripty",
+    "build": "scripty",
     "publish": "lerna publish --conventional-commits",
     "changed": "yarn lerna changed",
     "release": "yarn lerna publish",
     "bootstrap": "yarn lerna bootstrap",
     "prebuild": "rimraf packages/*/dist",
-    "build": "node build",
     "build:docs": "yarn docs:build",
     "test": "lerna run test --concurrency 4 --stream",
     "test:serial": "lerna run test --concurrency 1 --stream",
@@ -54,12 +54,15 @@
     "@microsoft/api-documenter": "^7.12.1",
     "@microsoft/api-extractor": "^7.12.1",
     "@rollup/plugin-node-resolve": "8.1.0",
+    "@types/jest": "^26.0.19",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
     "commitlint": "^11.0.0",
     "do-devops": "^0.5.5",
     "eslint": "^7.16.0",
     "husky": "^4.3.6",
+    "jest": "^26.6.3",
+    "jest-extended": "^0.11.5",
     "lerna": "^3.22.1",
     "lerna-changelog": "^1.0.1",
     "npm-run-all": "^4.1.5",
@@ -78,6 +81,7 @@
     "yarn": "1.22.10"
   },
   "dependencies": {
+    "brilliant-errors": "^0.1.1",
     "common-types": "^1.17.3"
   },
   "husky": {

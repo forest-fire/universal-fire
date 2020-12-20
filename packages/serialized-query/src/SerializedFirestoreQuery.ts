@@ -1,31 +1,34 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { slashNotation } from './slashNotation';
 import type {
   IComparisonOperator,
   IFirestoreQuery,
-  IFirestoreQueryOrderType,
   IFirestoreQuerySnapshot,
   ISerializedQuery,
   IFirestoreDatabase,
   IModel,
   ISerializedIdentity,
+  IFirestoreOrder,
 } from '@forest-fire/types';
+import { SerializedError } from './SerializedError';
 
 /**
  * Provides a way to serialize the full characteristics of a Firebase Firestore
  * Database query.
  */
-export class SerializedFirestoreQuery<T extends IModel>
-  implements ISerializedQuery<T> {
+export class SerializedFirestoreQuery<
+  T extends IModel = Record<string, unknown> & IModel
+> implements ISerializedQuery<T, IFirestoreDatabase> {
   protected _endAtKey?: keyof T & string;
-  protected _endAt?: string;
+  protected _endAt?: string | number | boolean;
   protected _equalToKey?: keyof T & string;
-  protected _equalTo?: string;
+  protected _equalTo?: string | number | boolean;
   protected _limitToFirst?: number;
   protected _limitToLast?: number;
   protected _orderKey?: keyof T & string;
   protected _path: string;
   protected _startAtKey?: keyof T & string;
-  protected _startAt?: string;
+  protected _startAt?: string | number | boolean;
   protected _db?: IFirestoreDatabase;
 
   /** Static initializer */
@@ -42,7 +45,7 @@ export class SerializedFirestoreQuery<T extends IModel>
     this._path = slashNotation(path);
   }
 
-  protected _orderBy: IFirestoreQueryOrderType = 'orderBy';
+  protected _orderBy: IFirestoreOrder = 'orderBy';
 
   public get identity(): ISerializedIdentity<T> {
     return {
@@ -73,15 +76,90 @@ export class SerializedFirestoreQuery<T extends IModel>
     this._db = value;
   }
 
+  public get path(): string {
+    return this._path;
+  }
+
   public orderBy(child: keyof T & string): SerializedFirestoreQuery<T> {
     this._orderBy = 'orderBy';
     this._orderKey = child;
     return this;
   }
 
+  public limitToFirst(value: number): SerializedFirestoreQuery<T> {
+    this._limitToFirst = value;
+    return this;
+  }
+
+  public limitToLast(value: number): SerializedFirestoreQuery<T> {
+    this._limitToLast = value;
+    return this;
+  }
+
+  public orderByChild(child: keyof T & string): SerializedFirestoreQuery<T> {
+    this._orderBy = 'orderByChild';
+    this._orderKey = child;
+    return this;
+  }
+
+  public orderByValue(): SerializedFirestoreQuery<T> {
+    this._orderBy = 'orderByValue';
+    return this;
+  }
+
+  public orderByKey(): SerializedFirestoreQuery<T> {
+    this._orderBy = 'orderByKey';
+    return this;
+  }
+
+  public startAt(
+    value: string | number | boolean,
+    key?: keyof T & string
+  ): SerializedFirestoreQuery<T> {
+    this._startAt = value;
+    this._startAtKey = key;
+    return this;
+  }
+
+  public endAt(
+    value: string | number | boolean,
+    key?: keyof T & string
+  ): SerializedFirestoreQuery<T> {
+    this._endAt = value;
+    this._endAtKey = key;
+    return this;
+  }
+
+  public equalTo(
+    value: string | number | boolean,
+    key?: keyof T & string
+  ): SerializedFirestoreQuery<T> {
+    this._equalTo = value;
+    this._equalToKey = key;
+    return this;
+  }
+
+  /**
+   * Returns a unique numeric hashcode for this query
+   */
+  public hashCode(): number {
+    const identity = JSON.stringify(this.identity);
+    let hash = 0;
+    if (identity.length === 0) {
+      return hash;
+    }
+    for (let i = 0; i < identity.length; i++) {
+      const char = identity.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      // Convert to 32bit integer.
+      hash = hash & hash;
+    }
+    return hash;
+  }
+
   public deserialize(db?: IFirestoreDatabase): IFirestoreQuery {
     const database = db || this.db;
-    let q: IFirestoreQuery = database.ref(this.path);
+    let q = database.collection(this.path);
 
     switch (this.identity.orderBy) {
       case 'orderByKey':
@@ -125,11 +203,11 @@ export class SerializedFirestoreQuery<T extends IModel>
     return snapshot;
   }
 
-  public where<V>(
+  public where(
     operation: IComparisonOperator,
-    value: V,
+    value: string | number | boolean,
     key?: keyof T & string
-  ) {
+  ): SerializedFirestoreQuery<T> {
     switch (operation) {
       case '=':
         return this.equalTo(value, key);
@@ -138,9 +216,32 @@ export class SerializedFirestoreQuery<T extends IModel>
       case '<':
         return this.endAt(value, key);
       default:
-        const err: any = new Error(`Unknown comparison operator: ${operation}`);
-        err.code = 'invalid-operator';
-        throw err;
+        throw new SerializedError(
+          `Unknown comparison operator: ${operation}`,
+          'invalid-operator'
+        );
     }
+  }
+
+  /**
+   * Allows the DB interface to be setup early, allowing clients
+   * to call execute without any params.
+   */
+  public setDB(db: IFirestoreDatabase): SerializedFirestoreQuery<T> {
+    this._db = db;
+    return this;
+  }
+
+  public setPath(path: string): SerializedFirestoreQuery<T> {
+    this._path = slashNotation(path);
+    return this as ISerializedQuery<T, IFirestoreDatabase>;
+  }
+
+  public toJSON(): ISerializedIdentity<T> {
+    return this.identity;
+  }
+
+  public toString(): string {
+    return JSON.stringify(this.identity, null, 2);
   }
 }

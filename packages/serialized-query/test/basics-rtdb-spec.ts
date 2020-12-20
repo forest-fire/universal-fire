@@ -1,9 +1,9 @@
 import { SerializedRealTimeQuery } from '../src/index';
 import * as chai from 'chai';
-import { RealTimeAdmin, IRealTimeAdmin } from 'universal-fire';
 import { FireModel } from 'firemodel';
 import * as helpers from './testing/helpers';
-helpers.setupEnv();
+import { IRealTimeAdmin } from '@forest-fire/types';
+import { RealTimeAdmin } from '@forest-fire/real-time-admin';
 
 helpers.setupEnv();
 const expect = chai.expect;
@@ -11,10 +11,7 @@ const expect = chai.expect;
 describe('SerializedRealTimeQuery', () => {
   let mockDb: IRealTimeAdmin;
   before(async () => {
-    mockDb = await RealTimeAdmin({ mocking: true });
-    // TODO: remove the comment below when we update FireModel to use the new
-    // version if `universal-fire`.
-    // @ts-ignore
+    mockDb = await RealTimeAdmin.connect({ mocking: true });
     FireModel.defaultDb = mockDb;
   });
   it('instantiates', () => {
@@ -33,7 +30,7 @@ describe('SerializedRealTimeQuery', () => {
     expect(q.path).to.equal('/foobar');
   });
 
-  it('same query structure gives same hashCode', async () => {
+  it('same query structure gives same hashCode', () => {
     const foo = new SerializedRealTimeQuery('/foo/bar').orderByChild('goober');
     const bar = new SerializedRealTimeQuery('/foo/bar').orderByChild('goober');
     expect(foo.hashCode()).to.equal(bar.hashCode());
@@ -46,7 +43,7 @@ describe('SerializedRealTimeQuery', () => {
     expect(foo2.hashCode()).to.equal(bar2.hashCode());
   });
 
-  it('different query structure gives different hashCode', async () => {
+  it('different query structure gives different hashCode', () => {
     const foo2 = new SerializedRealTimeQuery('/foo/bar')
       .orderByChild('goober')
       .limitToFirst(5);
@@ -63,19 +60,19 @@ describe('SerializedRealTimeQuery', () => {
     expect(foo.identity.startAt).to.equal(undefined);
   });
 
-  it('setting different props for equalTo and orderByChild behaves as expected', async () => {
+  it('setting different props for equalTo and orderByChild behaves as expected', () => {
     const q = new SerializedRealTimeQuery()
       .orderByChild('foobar')
       .equalTo('foo', 'bar');
     expect(q.identity.equalToKey).is.equal('bar');
   });
 
-  it('limitToFirst sets identity()', async () => {
+  it('limitToFirst sets identity()', () => {
     const q = new SerializedRealTimeQuery().orderByValue().limitToFirst(3);
     expect(q.identity.limitToFirst).is.equal(3);
   });
 
-  it('limitToLast sets identity()', async () => {
+  it('limitToLast sets identity()', () => {
     const q = new SerializedRealTimeQuery().orderByValue().limitToLast(3);
     expect(q.identity.limitToLast).is.equal(3);
   });

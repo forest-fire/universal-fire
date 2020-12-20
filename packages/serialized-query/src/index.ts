@@ -4,15 +4,15 @@
 
 // #region autoindexed files
 
-// index last changed at: 12th Dec, 2020, 11:11 AM ( GMT-8 )
+// index last changed at: 12th Dec, 2020, 09:48 AM ( GMT-8 )
 // export: named; exclusions: index, private.
-// files: BaseSerializer, SerializedFirestoreQuery, SerializedRealTimeQuery, identity, slashNotation.
+// files: BaseSerializer, SerializedError, SerializedFirestoreQuery, SerializedRealTimeQuery, slashNotation.
 
 // local file exports
 export * from "./BaseSerializer";
+export * from "./SerializedError";
 export * from "./SerializedFirestoreQuery";
 export * from "./SerializedRealTimeQuery";
-export * from "./identity";
 export * from "./slashNotation";
 
 // Note:

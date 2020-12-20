@@ -14,37 +14,60 @@ import {
  * off of **BaseSerializer** as this was problematic and we are trying
  * to move away from classes's providing interfaces implicitly
  */
-export interface ISerializedQuery<T extends IModel = unknown> {
-  db: IRtdbDatabase | IFirestoreDatabase;
+export interface ISerializedQuery<
+  /** the data model being serialized */
+  TModel extends IModel = unknown,
+  /** the type of database it is being serialized down to */
+  TDatabase extends IRtdbDatabase | IFirestoreDatabase = IRtdbDatabase,
+  K = keyof TModel & string
+> {
+  db: TDatabase;
   path: string;
-  identity: ISerializedIdentity<T>;
-  setDB: (db: IRtdbDatabase | IFirestoreDatabase) => ISerializedQuery<T>;
-  setPath: (path: string) => ISerializedQuery<T>;
+  identity: ISerializedIdentity<TModel>;
+  setDB: (db: TDatabase) => ISerializedQuery<TModel, TDatabase>;
+  setPath: (path: string) => ISerializedQuery<TModel, TDatabase>;
   hashCode: () => number;
-  limitToFirst: (value: number) => ISerializedQuery<T>;
-  limitToLast: (value: number) => ISerializedQuery<T>;
-  orderByChild: (child: keyof T & string) => ISerializedQuery<T>;
-  orderByValue: () => ISerializedQuery<T>;
-  orderByKey: () => ISerializedQuery<T>;
-  startAt: (value: unknown, key?: keyof T & string) => ISerializedQuery<T>;
-  endAt: (value: unknown, key?: keyof T & string) => ISerializedQuery<T>;
-  equalTo: (value: unknown, key?: keyof T & string) => ISerializedQuery<T>;
-  toJSON: () => ISerializedIdentity<T>;
-  toString: () => string;
-  deserialize: (
-    db: IRtdbDatabase | IFirestoreDatabase
-  ) => IFirestoreQuery | IRealTimeQuery;
-  execute(db?: IRtdbDatabase | IFirestoreDatabase): Promise<unknown>;
+  limitToFirst: (value: number) => ISerializedQuery<TModel, TDatabase>;
+  limitToLast: (value: number) => ISerializedQuery<TModel, TDatabase>;
+  orderByChild: (child: K) => ISerializedQuery<TModel, TDatabase>;
+  orderByValue: () => ISerializedQuery<TModel, TDatabase>;
+  orderByKey: () => ISerializedQuery<TModel, TDatabase>;
+  startAt: (
+    value: string | number | boolean,
+    key?: keyof TModel & string
+  ) => ISerializedQuery<TModel, TDatabase>;
+  endAt: (
+    value: string | number | boolean,
+    key?: keyof TModel & string
+  ) => ISerializedQuery<TModel, TDatabase>;
+  equalTo: (
+    value: string | number | boolean,
+    key?: keyof TModel & string
+  ) => ISerializedQuery<TModel, TDatabase>;
+  /**
+   * Use the familiar "where" logical construct to build a query.
+   * The _property_ being operated on is determined by which
+   * ordering you choose but typically is "orderByChild".
+   */
   where: (
     operation: IComparisonOperator,
     value: unknown,
-    key?: (keyof T & string) | undefined
-  ) => ISerializedQuery<T>;
+    key?: (keyof TModel & string) | undefined
+  ) => ISerializedQuery<TModel, TDatabase>;
+
+  toJSON: () => ISerializedIdentity<TModel>;
+  toString: () => string;
+  /**
+   * Deserialize a `SerializedQuery` into a specific DB's query type:
+   * {@link @firebase/firestore-types/Query} or {@link @firebase/database-types/Query}.
+   */
+  deserialize: (db: TDatabase) => IFirestoreQuery | IRealTimeQuery;
+  execute(db?: TDatabase): Promise<unknown>;
 }
 
 export interface ISerializedIdentity<T>
   extends Omit<ISerializedRealTimeIdentity<T>, 'orderBy'> {
-  orderBy: IRtdbOrder | IFirestoreQueryOrderType;
+  orderBy: IRtdbOrder | IFirestoreOrder;
 }
 
 export type IComparisonOperator = '=' | '>' | '<';
@@ -57,18 +80,18 @@ export enum RtdbOrder {
 
 export type IRtdbOrder = keyof typeof RtdbOrder;
 
-export type IFirestoreQueryOrderType = IRtdbOrder | 'orderBy';
+export type IFirestoreOrder = IRtdbOrder | 'orderBy';
 
 export interface ISerializedRealTimeIdentity<T extends IModel = unknown> {
   orderBy: IRtdbOrder;
-  orderByKey?: keyof T;
+  orderByKey?: keyof T & string;
   limitToFirst?: number;
   limitToLast?: number;
-  startAt?: string;
+  startAt?: string | number | boolean;
   startAtKey?: string;
-  endAt?: string;
-  endAtKey?: string;
-  equalTo?: string;
-  equalToKey?: string;
+  endAt?: string | number | boolean;
+  endAtKey?: keyof T & string;
+  equalTo?: string | number | boolean;
+  equalToKey?: keyof T & string;
   path: string;
 }
