@@ -10,3 +10,5 @@ export interface IModel {
   createdAt?: epochWithMilliseconds;
   META?: Record<string, unknown>;
 }
+
+export type IGenericModel = Record<string, unknown> & IModel;

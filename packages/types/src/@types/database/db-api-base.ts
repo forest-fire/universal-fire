@@ -1,6 +1,11 @@
-import { IAbstractedEvent } from '../fire-proxies';
+import {
+  IAbstractedEvent,
+  IFirestoreDatabase,
+  IRtdbDatabase,
+} from '../fire-proxies';
 import { Database } from '../fire-types';
 import { ISerializedQuery } from '../query';
+import { IDatabase } from './db';
 
 /**
  * The commands which `universal-fire` exposes to interact with the database
@@ -10,22 +15,27 @@ import { ISerializedQuery } from '../query';
  * > to expose while intereacting with the DB's native language to provide the
  * > functionality
  */
-export interface IDatabase {
+export interface IDatabaseApi<
+  TType extends Database = Database,
+  TDb extends IDatabase = TType extends Database.RTDB
+    ? IRtdbDatabase
+    : IFirestoreDatabase
+> {
   /**
    * The underlying database which is being connected to
    */
-  dbType: Database;
+  dbType: Readonly<TType>;
   /**
    * Get a database _reference_ to the underlying database at a given path
    */
-  ref: (path?: string) => unknown;
+  ref: (path?: string) => TDb;
 
   /**
    * Get a _list_ of records at a given path in the database. The return representation will be
    * an array of dictionaries where the _key_ for the record will be assigned the property value
    * of `id` (unless overriden by the `idProp` param)
    */
-  getList: <T = unknown>(
+  getList: <T extends Record<string, unknown> = Record<string, unknown>>(
     path: string | ISerializedQuery<T>,
     idProp?: string
   ) => Promise<T[]>;
@@ -41,7 +51,10 @@ export interface IDatabase {
    * Gets a record from a given path in the Firebase DB and converts it to an
    * object where the record's key is included as part of the record.
    */
-  getRecord: <T = unknown>(path: string, idProp?: string) => Promise<T>;
+  getRecord: <T extends Record<string, unknown> = Record<string, unknown>>(
+    path: string,
+    idProp?: string
+  ) => Promise<T>;
   /**
    * Returns the value at a given path in the database. This method is a
    * typescript _generic_ which defaults to `unknown` but you can set the type to

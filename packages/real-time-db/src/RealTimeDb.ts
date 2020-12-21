@@ -23,14 +23,16 @@ import {
   IRtdbDataSnapshot,
   IRtdbDatabase,
   IRtdbDbEvent,
-  IRtdbReference,
+  IFirebaseRtdbReference,
   ISerializedQuery,
   IAbstractedEvent,
   Database,
-  IDatabase,
   IModel,
   IMockDatabase,
+  IRealTimeApi,
 } from '@forest-fire/types';
+
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 
 import { IDictionary } from 'common-types';
 import { FireError, slashNotation } from '@forest-fire/utility';
@@ -39,7 +41,7 @@ import { IRealTimeDb } from './rtdb-types';
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
-export abstract class RealTimeDb implements IDatabase {
+export abstract class RealTimeDb implements IRealTimeApi {
   public readonly dbType: Database.RTDB = Database.RTDB;
 
   /**
@@ -126,7 +128,7 @@ export abstract class RealTimeDb implements IDatabase {
    * @param cb the callback function to call when event triggered
    */
   public watch<T extends IModel>(
-    target: string | ISerializedQuery<T, IRealTimeDb>,
+    target: string | ISerializedQuery<T, IRealTimeApi>,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: IFirebaseWatchHandler
   ): void {
@@ -216,7 +218,7 @@ export abstract class RealTimeDb implements IDatabase {
   }
 
   /** Get a DB reference for a given path in Firebase */
-  public ref(path = '/'): IRtdbReference {
+  public ref(path = '/'): IFirebaseRtdbReference {
     return this.isMockDb ? this.mock.ref(path) : this._database.ref(path);
   }
 

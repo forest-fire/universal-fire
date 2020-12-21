@@ -1,4 +1,4 @@
-import { IDatabase } from '../database/index';
+import { IDatabaseApi } from '../database/index';
 import {
   IAdminFirestoreMock,
   IAdminRtdbMock,
@@ -18,10 +18,9 @@ import { ApiKind, Database, IDatabaseConfig, SDK } from '../fire-types';
 export type IAdminSdk<T extends IDatabaseSdk> = T & { isAdminApi: true };
 export type IClientSdk<T extends IDatabaseSdk> = T & { isAdminApi: false };
 
-export interface IRealTimeAdmin extends IDatabaseSdk {
+export interface IRealTimeAdmin
+  extends IDatabaseSdk<SDK.RealTimeAdmin, Database.RTDB> {
   app: IAdminApp;
-  sdk: Readonly<SDK.RealTimeAdmin>;
-  dbType: Readonly<Database.RTDB>;
   apiKind: Readonly<ApiKind.admin>;
   isAdminApi: true;
   auth: () => Promise<IAdminAuth>;
@@ -29,10 +28,9 @@ export interface IRealTimeAdmin extends IDatabaseSdk {
   CONNECTION_TIMEOUT: number;
 }
 
-export interface IRealTimeClient extends IDatabaseSdk {
+export interface IRealTimeClient
+  extends IDatabaseSdk<SDK.RealTimeClient, Database.RTDB> {
   app: IClientApp;
-  sdk: Readonly<SDK.RealTimeClient>;
-  dbType: Readonly<Database.RTDB>;
   apiKind: Readonly<ApiKind.client>;
   isAdminApi: false;
   auth: () => Promise<IClientAuth>;
@@ -40,20 +38,18 @@ export interface IRealTimeClient extends IDatabaseSdk {
   CONNECTION_TIMEOUT: number;
 }
 
-export interface IFirestoreClient extends IDatabaseSdk {
+export interface IFirestoreClient
+  extends IDatabaseSdk<SDK.FirestoreClient, Database.Firestore> {
   app: IClientApp;
-  sdk: Readonly<SDK.FirestoreClient>;
-  dbType: Readonly<Database.Firestore>;
   apiKind: Readonly<ApiKind.client>;
   isAdminApi: false;
   auth: () => Promise<IClientAuth>;
   mock: IClientFirestoreMock;
 }
 
-export interface IFirestoreAdmin extends IDatabaseSdk {
+export interface IFirestoreAdmin
+  extends IDatabaseSdk<SDK.FirestoreAdmin, Database.Firestore> {
   app: IAdminApp;
-  sdk: SDK.FirestoreAdmin;
-  dbType: Database.Firestore;
   apiKind: ApiKind.admin;
   isAdminApi: true;
   auth: () => Promise<IAdminAuth>;
@@ -64,9 +60,12 @@ export interface IFirestoreAdmin extends IDatabaseSdk {
  * The basic contract required to be considered a "database"
  * within the **Universal Fire** universe.
  */
-export interface IDatabaseSdk extends IDatabase {
+export interface IDatabaseSdk<
+  TSdk extends SDK = SDK,
+  TDb extends Database = Database
+> extends IDatabaseApi<TDb> {
   /** the SDK which is being used (aka, "admin", "client", ...) */
-  sdk: SDK;
+  sdk: Readonly<TSdk>;
 
   /**
    * Boolean flag indicating whether the underlying database connection is using

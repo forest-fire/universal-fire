@@ -9,6 +9,8 @@ import type {
   ISerializedIdentity,
   IFirestoreOrder,
   IFirestoreApi,
+  IFirebaseFirestoreQuery,
+  IGenericModel,
 } from '@forest-fire/types';
 import { SerializedError } from './SerializedError';
 
@@ -16,9 +18,8 @@ import { SerializedError } from './SerializedError';
  * Provides a way to serialize the full characteristics of a Firebase Firestore
  * Database query.
  */
-export class SerializedFirestoreQuery<
-  T extends IModel = Record<string, unknown> & IModel
-> implements ISerializedQuery<T, IFirestoreApi> {
+export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
+  implements ISerializedQuery<T, IFirestoreApi> {
   protected _endAtKey?: keyof T & string;
   protected _endAt?: string | number | boolean;
   protected _equalToKey?: keyof T & string;
@@ -157,11 +158,9 @@ export class SerializedFirestoreQuery<
     return hash;
   }
 
-  public deserialize(db?: IFirestoreDatabase): IFirestoreQuery {
+  public deserialize(db?: IFirestoreDatabase): IFirebaseFirestoreQuery {
     const database = db || this.db;
-    // TODO: resolve this typing!
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let q: any = database.collection(this.path);
+    let q = database.collection(this.path) as IFirebaseFirestoreQuery;
 
     switch (this.identity.orderBy) {
       case 'orderByKey':
@@ -196,8 +195,6 @@ export class SerializedFirestoreQuery<
       q = q.where(this.path, '==', this.identity.equalTo);
     }
 
-    // TODO: remove this!
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return q;
   }
 
@@ -205,8 +202,7 @@ export class SerializedFirestoreQuery<
     db?: IFirestoreDatabase
   ): Promise<IFirestoreQuerySnapshot> {
     const database = db || this.db;
-    const snapshot = await this.deserialize(database).get();
-    return snapshot;
+    return this.deserialize(database).get();
   }
 
   public where(

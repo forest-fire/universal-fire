@@ -3,22 +3,20 @@ import { SerializedError, slashNotation } from './index';
 import {
   IComparisonOperator,
   IFirebaseRtdbQuery,
+  IGenericModel,
   IModel,
-  IRealTimeApi,
-  IRtdbDatabase,
   IRtdbDataSnapshot,
   IRtdbOrder,
   ISerializedIdentity,
-  ISerializedQuery,
 } from '@forest-fire/types';
+import { IRtdbDatabase } from '../../types/dist/types';
 
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime
  * Database query.
  */
-export class SerializedRealTimeQuery<
-  T extends IModel = Record<string, unknown> & IModel
-> implements ISerializedQuery<T, IRealTimeApi> {
+export class SerializedRealTimeQuery<T extends IModel = IGenericModel>
+  implements SerializedRealTimeQuery<T> {
   protected _endAtKey?: keyof T & string;
   protected _endAt?: string | number | boolean;
   protected _equalToKey?: keyof T & string;
@@ -29,7 +27,7 @@ export class SerializedRealTimeQuery<
   protected _path: string;
   protected _startAtKey?: keyof T & string;
   protected _startAt?: string | number | boolean;
-  protected _db?: IRealTimeApi;
+  protected _db?: IRtdbDatabase;
   protected _orderBy: IRtdbOrder = 'orderByKey';
 
   /** Static Initializer */
@@ -44,7 +42,7 @@ export class SerializedRealTimeQuery<
     this._path = slashNotation(path);
   }
 
-  public get db(): IRealTimeApi {
+  public get db(): IRtdbDatabase {
     if (this._db) {
       return this._db;
     }
@@ -53,7 +51,7 @@ export class SerializedRealTimeQuery<
     );
   }
 
-  public set db(value: IRealTimeApi) {
+  public set db(value: IRtdbDatabase) {
     this._db = value;
   }
 
@@ -81,7 +79,7 @@ export class SerializedRealTimeQuery<
    * Allows the DB interface to be setup early, allowing clients
    * to call execute without any params.
    */
-  public setDB(db: IRealTimeApi): SerializedRealTimeQuery<T> {
+  public setDB(db: IRtdbDatabase): SerializedRealTimeQuery<T> {
     this._db = db;
     return this;
   }
@@ -162,9 +160,9 @@ export class SerializedRealTimeQuery<
     return hash;
   }
 
-  public deserialize(db?: IRealTimeApi): IFirebaseRtdbQuery {
+  public deserialize(db?: IRtdbDatabase): IFirebaseRtdbQuery {
     const database = db || this.db;
-    let q: IFirebaseRtdbQuery = database.ref(this.path);
+    let q = database.ref(this.path) as IFirebaseRtdbQuery;
 
     switch (this._orderBy) {
       case 'orderByKey':
@@ -174,7 +172,7 @@ export class SerializedRealTimeQuery<
         q = q.orderByValue();
         break;
       case 'orderByChild':
-        q = q.orderByChild(this.identity.orderByKey as string);
+        q = q.orderByChild(this.identity.orderByKey);
         break;
     }
     if (this.identity.limitToFirst) {
@@ -197,7 +195,7 @@ export class SerializedRealTimeQuery<
     return q;
   }
 
-  public async execute(db?: IRealTimeApi): Promise<IRtdbDataSnapshot> {
+  public async execute(db?: IRtdbDatabase): Promise<IRtdbDataSnapshot> {
     const database = db || this.db;
     const snapshot = await this.deserialize(database).once('value');
     return snapshot;
@@ -207,7 +205,7 @@ export class SerializedRealTimeQuery<
     operation: IComparisonOperator,
     value: string | number | boolean,
     key?: keyof T & string
-  ): ISerializedQuery<T, IRealTimeApi> {
+  ): SerializedRealTimeQuery<T> {
     switch (operation) {
       case '=':
         return this.equalTo(value, key);

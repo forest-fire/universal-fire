@@ -1,5 +1,5 @@
 import { Database } from '../fire-types';
-import { IDatabase } from './db-api-base';
+import { IDatabaseApi } from './db-api-base';
 import { IFirestoreApi, IRealTimeApi } from './db-api-derivatives';
 import { IAdminSdk, IDatabaseSdk } from './db-sdk';
 
@@ -7,11 +7,11 @@ import { IAdminSdk, IDatabaseSdk } from './db-sdk';
  * a _type guard_ which provides a test that the database API or SDK passed
  * is indeed a **Firebase RTDB**.
  */
-export function isRealTimeDatabase(db: IDatabase): db is IRealTimeApi {
+export function isRealTimeDatabase(db: IDatabaseApi): db is IRealTimeApi {
   return db.dbType === Database.RTDB;
 }
 
-export function isFirestoreDatabase(db: IDatabase): db is IFirestoreApi {
+export function isFirestoreDatabase(db: IDatabaseApi): db is IFirestoreApi {
   return db.dbType === Database.Firestore;
 }
 
