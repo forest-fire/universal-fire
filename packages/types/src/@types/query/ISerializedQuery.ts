@@ -74,13 +74,13 @@ export interface ISerializedQuery<
    * {@link @firebase/firestore-types/Query} or {@link @firebase/database-types/Query}.
    */
   deserialize: <
-    TQuery = TDb extends IRtdbDatabase
+    TQuery extends
+      | IFirebaseRtdbQuery
+      | IFirebaseCollectionReference = TDb extends IRtdbDatabase
       ? IFirebaseRtdbQuery
-      : TDb extends IFirestoreDatabase
-      ? IFirebaseCollectionReference
-      : unknown
+      : IFirebaseCollectionReference
   >(
-    db: TDb
+    db?: TDb
   ) => TQuery;
 
   execute: <

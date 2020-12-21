@@ -1,22 +1,23 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { SerializedError, slashNotation } from './index';
+import { slashNotation } from './index';
 import {
   IComparisonOperator,
   IFirebaseRtdbQuery,
   IGenericModel,
   IModel,
+  IRealTimeApi,
   IRtdbDataSnapshot,
   IRtdbOrder,
   ISerializedIdentity,
+  ISerializedQuery,
+  IRtdbDatabase,
 } from '@forest-fire/types';
-import { IRtdbDatabase } from '../../types/dist/types';
 
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime
  * Database query.
  */
 export class SerializedRealTimeQuery<T extends IModel = IGenericModel>
-  implements SerializedRealTimeQuery<T> {
+  implements ISerializedQuery<T, IRealTimeApi> {
   protected _endAtKey?: keyof T & string;
   protected _endAt?: string | number | boolean;
   protected _equalToKey?: keyof T & string;
@@ -213,11 +214,6 @@ export class SerializedRealTimeQuery<T extends IModel = IGenericModel>
         return this.startAt(value, key);
       case '<':
         return this.endAt(value, key);
-      default:
-        throw new SerializedError(
-          `Unknown comparison operator: ${operation}`,
-          'invalid-operator'
-        );
     }
   }
 

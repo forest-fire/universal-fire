@@ -1,12 +1,17 @@
-import { IDatabaseApi, IModel, isRealTimeDatabase } from '@forest-fire/types';
+import {
+  IDatabaseApi,
+  IGenericModel,
+  IModel,
+  isRealTimeDatabase,
+} from '@forest-fire/types';
 import { SerializedRealTimeQuery, SerializedFirestoreQuery } from './index';
 
 export class SerializedQuery {
   static create<
-    TModel extends IModel = Record<string, unknown> & IModel,
-    TDatabase extends IDatabaseApi = IDatabaseApi
+    TModel extends IModel = IGenericModel,
+    TApi extends IDatabaseApi = IDatabaseApi
   >(
-    db: TDatabase,
+    db: TApi,
     path = '/'
   ): SerializedRealTimeQuery<TModel> | SerializedFirestoreQuery<TModel> {
     if (isRealTimeDatabase(db)) {

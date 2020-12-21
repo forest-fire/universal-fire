@@ -1,3 +1,4 @@
+import { IRtdbDatabase } from '../fire-proxies';
 import { Database } from '../fire-types';
 import { IDatabaseApi } from './db-api-base';
 

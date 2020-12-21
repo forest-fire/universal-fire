@@ -4,6 +4,7 @@ import {
   IRtdbDatabase,
 } from '../fire-proxies';
 import { Database } from '../fire-types';
+import { IGenericModel, IModel } from '../models';
 import { ISerializedQuery } from '../query';
 import { IDatabase } from './db';
 
@@ -35,7 +36,7 @@ export interface IDatabaseApi<
    * an array of dictionaries where the _key_ for the record will be assigned the property value
    * of `id` (unless overriden by the `idProp` param)
    */
-  getList: <T extends Record<string, unknown> = Record<string, unknown>>(
+  getList: <T extends IModel = IGenericModel>(
     path: string | ISerializedQuery<T>,
     idProp?: string
   ) => Promise<T[]>;
@@ -51,7 +52,7 @@ export interface IDatabaseApi<
    * Gets a record from a given path in the Firebase DB and converts it to an
    * object where the record's key is included as part of the record.
    */
-  getRecord: <T extends Record<string, unknown> = Record<string, unknown>>(
+  getRecord: <T extends IModel = IGenericModel>(
     path: string,
     idProp?: string
   ) => Promise<T>;
@@ -81,8 +82,8 @@ export interface IDatabaseApi<
   /**
    * Watch for Firebase events based on a DB path.
    */
-  watch: (
-    target: string | ISerializedQuery,
+  watch: <T>(
+    target: string | ISerializedQuery<T, IDatabaseApi & { dbType: TDb }>,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: unknown
   ) => void;
