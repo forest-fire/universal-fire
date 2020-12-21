@@ -16,6 +16,10 @@ export type IFirebaseRtdbQuery = import('@firebase/database-types').Query;
  */
 export type IFirebaseRtdbReference = import('@firebase/database-types').Reference;
 
+export type IFirebaseCollectionReference<
+  T = DocumentData
+> = import('@firebase/firestore-types').CollectionReference<T>;
+
 /**
  * The direct **Firebase** interface for the Firestore's **Query** from the
  * `@firebase/database-types` library proxied through to be used in

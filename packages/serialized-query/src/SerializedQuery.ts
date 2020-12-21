@@ -1,10 +1,10 @@
-import { IDatabase, IModel, isRealTimeDatabase } from '@forest-fire/types';
+import { IDatabaseApi, IModel, isRealTimeDatabase } from '@forest-fire/types';
 import { SerializedRealTimeQuery, SerializedFirestoreQuery } from './index';
 
 export class SerializedQuery {
   static create<
     TModel extends IModel = Record<string, unknown> & IModel,
-    TDatabase extends IDatabase = IDatabase
+    TDatabase extends IDatabaseApi = IDatabaseApi
   >(
     db: TDatabase,
     path = '/'

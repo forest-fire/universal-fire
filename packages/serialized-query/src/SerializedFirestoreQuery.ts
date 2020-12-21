@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { slashNotation } from './slashNotation';
 import type {
@@ -9,8 +10,8 @@ import type {
   ISerializedIdentity,
   IFirestoreOrder,
   IFirestoreApi,
-  IFirebaseFirestoreQuery,
   IGenericModel,
+  IFirebaseCollectionReference,
 } from '@forest-fire/types';
 import { SerializedError } from './SerializedError';
 
@@ -158,9 +159,9 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
     return hash;
   }
 
-  public deserialize(db?: IFirestoreDatabase): IFirebaseFirestoreQuery {
+  public deserialize(db?: IFirestoreDatabase): IFirebaseCollectionReference {
     const database = db || this.db;
-    let q = database.collection(this.path) as IFirebaseFirestoreQuery;
+    const q = database.collection(this.path);
 
     switch (this.identity.orderBy) {
       case 'orderByKey':
@@ -175,7 +176,7 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
         break;
       case 'orderByChild':
       case 'orderBy':
-        q = q.orderBy(this.identity.orderByKey as string);
+        q.orderBy(this.identity.orderByKey as string);
         break;
     }
 
@@ -183,26 +184,30 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
       q.limit(this.identity.limitToFirst);
     }
     if (this.identity.limitToLast) {
-      q = q.limitToLast(this.identity.limitToLast);
+      q.limitToLast(this.identity.limitToLast);
     }
     if (this.identity.startAt) {
-      q = q.where(this.path, '>', this.identity.startAt);
+      q.where(this.path, '>', this.identity.startAt);
     }
     if (this.identity.endAt) {
-      q = q.where(this.path, '<', this.identity.endAt);
+      q.where(this.path, '<', this.identity.endAt);
     }
     if (this.identity.equalTo) {
-      q = q.where(this.path, '==', this.identity.equalTo);
+      q.where(this.path, '==', this.identity.equalTo);
     }
 
-    return q;
+    // TODO: look into what the typing problem is
+    return (q as unknown) as IFirebaseCollectionReference;
   }
 
   public async execute(
     db?: IFirestoreDatabase
   ): Promise<IFirestoreQuerySnapshot> {
     const database = db || this.db;
-    return this.deserialize(database).get();
+    const value = (await (this.deserialize(
+      database
+    ).get() as unknown)) as IFirestoreQuerySnapshot;
+    return value;
   }
 
   public where(

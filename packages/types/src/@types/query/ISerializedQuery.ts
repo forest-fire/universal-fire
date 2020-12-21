@@ -4,13 +4,13 @@ import { IFirestoreDatabase, IRtdbDatabase } from '../fire-proxies';
 import {
   IModel,
   IComparisonOperator,
-  IFirebaseFirestoreQuery,
   IFirebaseRtdbQuery,
   ISerializedIdentity,
+  IFirebaseCollectionReference,
 } from '../index';
 import { IGenericModel } from '../models';
 import { IRtdbSnapshot } from '../proxy-plus';
-import { IFirestoreQuerySnapshot } from '../snapshot';
+import { IFirestoreQuerySnapshot, ISnapshot } from '../snapshot';
 
 /**
  * Defines the public interface which any serializer must
@@ -77,15 +77,17 @@ export interface ISerializedQuery<
     TQuery = TDb extends IRtdbDatabase
       ? IFirebaseRtdbQuery
       : TDb extends IFirestoreDatabase
-      ? IFirebaseFirestoreQuery
+      ? IFirebaseCollectionReference
       : unknown
   >(
     db: TDb
   ) => TQuery;
 
-  execute<
-    TSnap = TDb extends IRtdbDatabase ? IRtdbSnapshot : IFirestoreQuerySnapshot
+  execute: <
+    TSnap extends ISnapshot = TDb extends IRtdbDatabase
+      ? IRtdbSnapshot
+      : IFirestoreQuerySnapshot
   >(
     db?: TDb
-  ): Promise<TSnap>;
+  ) => Promise<TSnap>;
 }
