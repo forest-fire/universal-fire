@@ -32,10 +32,7 @@ export abstract class AbstractedDatabase implements IBaseAbstractedDatabase {
    * Indicates if the database is connected.
    */
   protected _isConnected = false;
-  /**
-   * The mock API provided by **firemock**
-   */
-  protected _mock?: IMockDatabase;
+
   /**
    * The Firebase App API.
    */

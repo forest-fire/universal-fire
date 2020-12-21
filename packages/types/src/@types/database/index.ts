@@ -1,24 +1,16 @@
-//#autoindex
+// #autoindex
 
 // #region autoindexed files
 
 // index last changed at: 12th Dec, 2020, 08:11 PM ( GMT-8 )
 // export: named; exclusions: index, private.
-// files: auth, events, fire-proxies, fire-types, models.
-// directories: database, db-mocking, proxy-plus, query.
+// files: db-api-base, db-api-derivatives, db-guards, db-sdk.
 
 // local file exports
-export * from "./auth";
-export * from "./events";
-export * from "./fire-proxies";
-export * from "./fire-types";
-export * from "./models";
-
-// directory exports
-export * from "./database/index";
-export * from "./db-mocking/index";
-export * from "./proxy-plus/index";
-export * from "./query/index";
+export * from "./db-api-base";
+export * from "./db-api-derivatives";
+export * from "./db-guards";
+export * from "./db-sdk";
 
 // Note:
 // -----

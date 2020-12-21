@@ -1,9 +1,12 @@
-import { IModel, IRtdbDatabase } from '../index';
+import { IDatabase } from '../database/db-api-base';
 import {
-  IFirestoreDatabase,
-  IFirestoreQuery,
-  IRealTimeQuery,
-} from './fire-proxies';
+  IModel,
+  IRtdbDatabase,
+  IComparisonOperator,
+  IFirebaseFirestoreQuery,
+  IFirebaseRtdbQuery,
+  ISerializedIdentity,
+} from '../index';
 
 /**
  * Defines the public interface which any serializer must
@@ -18,7 +21,7 @@ export interface ISerializedQuery<
   /** the data model being serialized */
   TModel extends IModel = unknown,
   /** the type of database it is being serialized down to */
-  TDatabase extends IRtdbDatabase | IFirestoreDatabase = IRtdbDatabase,
+  TDatabase extends IDatabase = IDatabase,
   K = keyof TModel & string
 > {
   db: TDatabase;
@@ -61,37 +64,13 @@ export interface ISerializedQuery<
    * Deserialize a `SerializedQuery` into a specific DB's query type:
    * {@link @firebase/firestore-types/Query} or {@link @firebase/database-types/Query}.
    */
-  deserialize: (db: TDatabase) => IFirestoreQuery | IRealTimeQuery;
-  execute(db?: TDatabase): Promise<unknown>;
-}
-
-export interface ISerializedIdentity<T>
-  extends Omit<ISerializedRealTimeIdentity<T>, 'orderBy'> {
-  orderBy: IRtdbOrder | IFirestoreOrder;
-}
-
-export type IComparisonOperator = '=' | '>' | '<';
-
-export enum RtdbOrder {
-  orderByChild = 'orderByChild',
-  orderByKey = 'orderByKey',
-  orderByValue = 'orderByValue',
-}
-
-export type IRtdbOrder = keyof typeof RtdbOrder;
-
-export type IFirestoreOrder = IRtdbOrder | 'orderBy';
-
-export interface ISerializedRealTimeIdentity<T extends IModel = unknown> {
-  orderBy: IRtdbOrder;
-  orderByKey?: keyof T & string;
-  limitToFirst?: number;
-  limitToLast?: number;
-  startAt?: string | number | boolean;
-  startAtKey?: string;
-  endAt?: string | number | boolean;
-  endAtKey?: keyof T & string;
-  equalTo?: string | number | boolean;
-  equalToKey?: keyof T & string;
-  path: string;
+  deserialize: <
+    TDb = TDatabase,
+    TQuery = TDb extends IRtdbDatabase
+      ? IFirebaseRtdbQuery
+      : IFirebaseFirestoreQuery
+  >(
+    db: TDb
+  ) => TQuery;
+  execute<T = unknown>(db?: TDatabase): Promise<T>;
 }

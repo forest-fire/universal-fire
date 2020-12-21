@@ -5,6 +5,8 @@ if [[ -z "$1" ]]; then
   lerna run build --stream
 else
   cd "./packages/$1"
+  echo "┏━━━ 🧹 Clean [ packages/$1 ] (es, cjs, types) ━━━━━━━"
+  yarn clean
   echo "┏━━━ 📦 Build/Bundle [ packages/$1 ] (es, cjs, types) ━━━━━━━"
   ../../devops/build.js $1
   cd - > /dev/null

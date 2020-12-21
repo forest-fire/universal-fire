@@ -29,10 +29,11 @@ import {
   Database,
   IDatabase,
   IModel,
+  IMockDatabase,
 } from '@forest-fire/types';
 
 import { IDictionary } from 'common-types';
-import { slashNotation } from '@forest-fire/utility';
+import { FireError, slashNotation } from '@forest-fire/utility';
 import { IRealTimeDb } from './rtdb-types';
 
 /** time by which the dynamically loaded mock library should be loaded */
@@ -51,22 +52,21 @@ export abstract class RealTimeDb implements IDatabase {
    * @param path the path in the database where the push-key will be pushed to
    */
   public async getPushKey(path: string): Promise<string> {
-    const key = this.ref(path).push().key;
-    return key;
+    const node = await this.ref(path).push();
+    return node.key;
   }
 
   /** how many miliseconds before the attempt to connect to DB is timed out */
   public CONNECTION_TIMEOUT = 5000;
   /** Logs debugging information to the console */
   public enableDatabaseLogging: (
-    logger?: boolean | ((a: string) => any),
+    logger?: boolean | ((a: string) => unknown),
     persistent?: boolean
-  ) => any;
+  ) => unknown;
 
   protected abstract _eventManager: IClientEmitter | IAdminEmitter;
   protected _isConnected = false;
   protected _mockLoadingState: IMockLoadingState = 'not-applicable';
-  // tslint:disable-next-line:whitespace
 
   protected _resetMockDb: () => void;
   protected _waitingForConnection: Array<() => void> = [];
@@ -74,6 +74,7 @@ export abstract class RealTimeDb implements IDatabase {
   protected _mocking = false;
   protected _allowMocking = false;
   protected _app: IClientApp | IAdminApp;
+  protected _mock?: IMockDatabase;
   protected _database?: IRtdbDatabase;
   protected _onConnected: IFirebaseListener[] = [];
   protected _onDisconnected: IFirebaseListener[] = [];
@@ -93,6 +94,28 @@ export abstract class RealTimeDb implements IDatabase {
     this._database = value;
   }
 
+  public get isMockDb(): boolean {
+    return this._config.mocking;
+  }
+  public get config(): IDatabaseConfig {
+    return this._config;
+  }
+
+  public get mock(): IMockDatabase {
+    if (!this.isMockDb) {
+      throw new FireError(
+        `Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`,
+        'AbstractedDatabase/not-allowed'
+      );
+    }
+    if (!this._mock) {
+      throw new FireError(
+        `Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`
+      );
+    }
+    return this._mock;
+  }
+
   /**
    * watch
    *
@@ -102,8 +125,8 @@ export abstract class RealTimeDb implements IDatabase {
    * @param events an event type or an array of event types (e.g., "value", "child_added")
    * @param cb the callback function to call when event triggered
    */
-  public watch(
-    target: string | ISerializedQuery,
+  public watch<T extends IModel>(
+    target: string | ISerializedQuery<T, IRealTimeDb>,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: IFirebaseWatchHandler
   ): void {
@@ -132,10 +155,7 @@ export abstract class RealTimeDb implements IDatabase {
         if (typeof target === 'string') {
           this.ref(slashNotation(target)).on(evt, dispatch);
         } else {
-          (target as SerializedRealTimeQuery)
-            .setDB(this)
-            .deserialize(this)
-            .on(evt, dispatch);
+          target.setDB(this).deserialize(this).on(evt, dispatch);
         }
       });
     } catch (e) {

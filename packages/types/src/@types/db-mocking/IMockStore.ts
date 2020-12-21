@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import { IDatabaseConfig } from '../index';
+import { IDatabaseConfig, ISerializedQuery } from '../index';
 import {
   IFirestoreDbEvent,
   IFirestoreQuerySnapshot,
@@ -7,7 +7,6 @@ import {
   IRtdbDbEvent,
 } from '../fire-proxies';
 import { ApiKind, Database } from '../fire-types';
-import { ISerializedQuery } from '../serialized-query';
 import { IMockListener } from './IMockListener';
 import { NetworkDelay } from './index';
 import { DataSnapshot, EventType } from '@firebase/database-types';

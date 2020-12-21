@@ -1,24 +1,17 @@
-//#autoindex
+// #autoindex
 
 // #region autoindexed files
 
-// index last changed at: 12th Dec, 2020, 08:11 PM ( GMT-8 )
+// index last changed at: 12th Dec, 2020, 08:21 PM ( GMT-8 )
 // export: named; exclusions: index, private.
-// files: auth, events, fire-proxies, fire-types, models.
-// directories: database, db-mocking, proxy-plus, query.
+// files: ISerializedQuery, query-base, query-guards, query-identity, query-order.
 
 // local file exports
-export * from "./auth";
-export * from "./events";
-export * from "./fire-proxies";
-export * from "./fire-types";
-export * from "./models";
-
-// directory exports
-export * from "./database/index";
-export * from "./db-mocking/index";
-export * from "./proxy-plus/index";
-export * from "./query/index";
+export * from "./ISerializedQuery";
+export * from "./query-base";
+export * from "./query-guards";
+export * from "./query-identity";
+export * from "./query-order";
 
 // Note:
 // -----
