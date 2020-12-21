@@ -2,8 +2,9 @@
 import { SerializedError, slashNotation } from './index';
 import {
   IComparisonOperator,
+  IFirebaseRtdbQuery,
   IModel,
-  IRealTimeQuery,
+  IRealTimeApi,
   IRtdbDatabase,
   IRtdbDataSnapshot,
   IRtdbOrder,
@@ -17,7 +18,7 @@ import {
  */
 export class SerializedRealTimeQuery<
   T extends IModel = Record<string, unknown> & IModel
-> implements ISerializedQuery<T, IRtdbDatabase> {
+> implements ISerializedQuery<T, IRealTimeApi> {
   protected _endAtKey?: keyof T & string;
   protected _endAt?: string | number | boolean;
   protected _equalToKey?: keyof T & string;
@@ -28,7 +29,7 @@ export class SerializedRealTimeQuery<
   protected _path: string;
   protected _startAtKey?: keyof T & string;
   protected _startAt?: string | number | boolean;
-  protected _db?: IRtdbDatabase;
+  protected _db?: IRealTimeApi;
   protected _orderBy: IRtdbOrder = 'orderByKey';
 
   /** Static Initializer */
@@ -43,7 +44,7 @@ export class SerializedRealTimeQuery<
     this._path = slashNotation(path);
   }
 
-  public get db(): IRtdbDatabase {
+  public get db(): IRealTimeApi {
     if (this._db) {
       return this._db;
     }
@@ -52,7 +53,7 @@ export class SerializedRealTimeQuery<
     );
   }
 
-  public set db(value: IRtdbDatabase) {
+  public set db(value: IRealTimeApi) {
     this._db = value;
   }
 
@@ -80,7 +81,7 @@ export class SerializedRealTimeQuery<
    * Allows the DB interface to be setup early, allowing clients
    * to call execute without any params.
    */
-  public setDB(db: IRtdbDatabase): SerializedRealTimeQuery<T> {
+  public setDB(db: IRealTimeApi): SerializedRealTimeQuery<T> {
     this._db = db;
     return this;
   }
@@ -161,9 +162,9 @@ export class SerializedRealTimeQuery<
     return hash;
   }
 
-  public deserialize(db?: IRtdbDatabase): IRealTimeQuery {
+  public deserialize(db?: IRealTimeApi): IFirebaseRtdbQuery {
     const database = db || this.db;
-    let q: IRealTimeQuery = database.ref(this.path);
+    let q: IFirebaseRtdbQuery = database.ref(this.path);
 
     switch (this._orderBy) {
       case 'orderByKey':
@@ -196,7 +197,7 @@ export class SerializedRealTimeQuery<
     return q;
   }
 
-  public async execute(db?: IRtdbDatabase): Promise<IRtdbDataSnapshot> {
+  public async execute(db?: IRealTimeApi): Promise<IRtdbDataSnapshot> {
     const database = db || this.db;
     const snapshot = await this.deserialize(database).once('value');
     return snapshot;
@@ -206,7 +207,7 @@ export class SerializedRealTimeQuery<
     operation: IComparisonOperator,
     value: string | number | boolean,
     key?: keyof T & string
-  ): ISerializedQuery<T, IRtdbDatabase> {
+  ): ISerializedQuery<T, IRealTimeApi> {
     switch (operation) {
       case '=':
         return this.equalTo(value, key);

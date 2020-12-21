@@ -2,14 +2,13 @@
 import { slashNotation } from './slashNotation';
 import type {
   IComparisonOperator,
-  IFirestoreQuery,
   IFirestoreQuerySnapshot,
   ISerializedQuery,
   IFirestoreDatabase,
   IModel,
   ISerializedIdentity,
   IFirestoreOrder,
-  IFirestoreCollectionRef,
+  IFirestoreApi,
 } from '@forest-fire/types';
 import { SerializedError } from './SerializedError';
 
@@ -19,7 +18,7 @@ import { SerializedError } from './SerializedError';
  */
 export class SerializedFirestoreQuery<
   T extends IModel = Record<string, unknown> & IModel
-> implements ISerializedQuery<T, IFirestoreDatabase> {
+> implements ISerializedQuery<T, IFirestoreApi> {
   protected _endAtKey?: keyof T & string;
   protected _endAt?: string | number | boolean;
   protected _equalToKey?: keyof T & string;

@@ -1,25 +1,15 @@
-//#autoindex
+// #autoindex
 
 // #region autoindexed files
 
-// index last changed at: 12th Dec, 2020, 09:00 PM ( GMT-8 )
+// index last changed at: 12th Dec, 2020, 09:04 PM ( GMT-8 )
 // export: named; exclusions: index, private.
-// files: auth, events, fire-proxies, fire-types, models.
-// directories: database, db-mocking, proxy-plus, query, snapshot.
+// files: ISnapshot, snap-guards, snap-underlying.
 
 // local file exports
-export * from "./auth";
-export * from "./events";
-export * from "./fire-proxies";
-export * from "./fire-types";
-export * from "./models";
-
-// directory exports
-export * from "./database/index";
-export * from "./db-mocking/index";
-export * from "./proxy-plus/index";
-export * from "./query/index";
-export * from "./snapshot/index";
+export * from "./ISnapshot";
+export * from "./snap-guards";
+export * from "./snap-underlying";
 
 // Note:
 // -----

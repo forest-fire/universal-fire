@@ -1,15 +1,11 @@
 import { timestring } from 'common-types';
 import { ISerializedQuery } from '../query';
-import {
-  IFirestoreDbEvent,
-  IFirestoreQuerySnapshot,
-  IRtdbDataSnapshot,
-  IRtdbDbEvent,
-} from '../fire-proxies';
+import { IFirestoreDbEvent, IRtdbDbEvent } from '../fire-proxies';
+import { ISnapshot } from '../snapshot';
 
 export interface IMockListener<
   TEvent extends IRtdbDbEvent | IFirestoreDbEvent,
-  TSnap extends IRtdbDataSnapshot | IFirestoreQuerySnapshot
+  TSnap extends ISnapshot
 > {
   /** string uniquely identifying the listener */
   id: string;

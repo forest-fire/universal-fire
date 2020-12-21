@@ -1,16 +1,12 @@
 import { IDictionary } from 'common-types';
 import { IDatabaseConfig, ISerializedQuery } from '../index';
-import {
-  IFirestoreDbEvent,
-  IFirestoreQuerySnapshot,
-  IRtdbDataSnapshot,
-  IRtdbDbEvent,
-} from '../fire-proxies';
+import { IFirestoreDbEvent, IRtdbDbEvent } from '../fire-proxies';
 import { ApiKind, Database } from '../fire-types';
 import { IMockListener } from './IMockListener';
 import { NetworkDelay } from './index';
 import { DataSnapshot, EventType } from '@firebase/database-types';
 import { QuerySnapshot } from '@firebase/firestore-types';
+import { ISnapshot } from '../snapshot';
 
 export interface IMockStore<TState extends IDictionary> {
   /** the API exposed by the underlying SDK (e.g., admin, client, rest) which is being used */
@@ -39,7 +35,7 @@ export interface IMockStore<TState extends IDictionary> {
    */
   addListener<
     TEvent extends IRtdbDbEvent | IFirestoreDbEvent,
-    TSnap extends IRtdbDataSnapshot | IFirestoreQuerySnapshot
+    TSnap extends ISnapshot
   >(
     /**
      * The query being used to represent the watcher.
