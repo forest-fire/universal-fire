@@ -9,6 +9,7 @@ import type {
   IModel,
   ISerializedIdentity,
   IFirestoreOrder,
+  IFirestoreCollectionRef,
 } from '@forest-fire/types';
 import { SerializedError } from './SerializedError';
 
@@ -159,7 +160,9 @@ export class SerializedFirestoreQuery<
 
   public deserialize(db?: IFirestoreDatabase): IFirestoreQuery {
     const database = db || this.db;
-    let q: IFirestoreQuery = database.collection(this.path);
+    // TODO: resolve this typing!
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let q: any = database.collection(this.path);
 
     switch (this.identity.orderBy) {
       case 'orderByKey':
@@ -177,6 +180,7 @@ export class SerializedFirestoreQuery<
         q = q.orderBy(this.identity.orderByKey as string);
         break;
     }
+
     if (this.identity.limitToFirst) {
       q.limit(this.identity.limitToFirst);
     }
@@ -192,6 +196,9 @@ export class SerializedFirestoreQuery<
     if (this.identity.equalTo) {
       q = q.where(this.path, '==', this.identity.equalTo);
     }
+
+    // TODO: remove this!
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return q;
   }
 
@@ -234,7 +241,7 @@ export class SerializedFirestoreQuery<
 
   public setPath(path: string): SerializedFirestoreQuery<T> {
     this._path = slashNotation(path);
-    return this as ISerializedQuery<T, IFirestoreDatabase>;
+    return this;
   }
 
   public toJSON(): ISerializedIdentity<T> {

@@ -67,10 +67,21 @@ export type IRtdbThenableReference = import('@firebase/database-types').Thenable
 //#endregion Client Rtdb API
 
 //#region Client Firestore API
-export type IClientFirestoreDatabase = import('@firebase/firestore-types').FirebaseFirestore;
-export type IFirestoreDbEvent = import('@firebase/firestore-types').DocumentChangeType;
-export type IFirestoreQuery = import('@firebase/firestore-types').Query;
-export type IFirestoreQuerySnapshot = import('@firebase/firestore-types').QuerySnapshot;
+import {
+  FirebaseFirestore,
+  DocumentChangeType,
+  Query,
+  CollectionReference,
+  QuerySnapshot,
+  DocumentData,
+} from '@firebase/firestore-types';
+
+export type IDocumentData = DocumentData;
+export type IClientFirestoreDatabase = FirebaseFirestore;
+export type IFirestoreDbEvent = DocumentChangeType;
+export type IFirestoreQuery<T = DocumentData> = Query<T>;
+export type IFirestoreCollectionRef<T> = CollectionReference<T>;
+export type IFirestoreQuerySnapshot = QuerySnapshot;
 //#endregion Client Firestore API
 
 //#region Admin Auth API

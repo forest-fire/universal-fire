@@ -27,18 +27,18 @@ import {
   ISerializedQuery,
   IAbstractedEvent,
   Database,
-  IBaseAbstractedDatabase,
+  IDatabase,
+  IModel,
 } from '@forest-fire/types';
 
-import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IDictionary } from 'common-types';
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { slashNotation } from '@forest-fire/utility';
+import { IRealTimeDb } from './rtdb-types';
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
-export abstract class RealTimeDb extends AbstractedDatabase {
+export abstract class RealTimeDb implements IDatabase {
   public readonly dbType: Database.RTDB = Database.RTDB;
 
   /**
@@ -50,8 +50,8 @@ export abstract class RealTimeDb extends AbstractedDatabase {
    *
    * @param path the path in the database where the push-key will be pushed to
    */
-  public async getPushKey(path: string) {
-    const key = await this.ref(path).push().key;
+  public async getPushKey(path: string): Promise<string> {
+    const key = this.ref(path).push().key;
     return key;
   }
 
@@ -64,15 +64,15 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   ) => any;
 
   protected abstract _eventManager: IClientEmitter | IAdminEmitter;
-  protected _isConnected: boolean = false;
+  protected _isConnected = false;
   protected _mockLoadingState: IMockLoadingState = 'not-applicable';
   // tslint:disable-next-line:whitespace
 
   protected _resetMockDb: () => void;
   protected _waitingForConnection: Array<() => void> = [];
-  protected _debugging: boolean = false;
-  protected _mocking: boolean = false;
-  protected _allowMocking: boolean = false;
+  protected _debugging = false;
+  protected _mocking = false;
+  protected _allowMocking = false;
   protected _app: IClientApp | IAdminApp;
   protected _database?: IRtdbDatabase;
   protected _onConnected: IFirebaseListener[] = [];
@@ -106,7 +106,7 @@ export abstract class RealTimeDb extends AbstractedDatabase {
     target: string | ISerializedQuery,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: IFirebaseWatchHandler
-  ) {
+  ): void {
     if (!Array.isArray(events)) {
       events = [events];
     }
@@ -146,7 +146,10 @@ export abstract class RealTimeDb extends AbstractedDatabase {
     }
   }
 
-  public unWatch(events?: IAbstractedEvent | IAbstractedEvent[], cb?: any) {
+  public unWatch(
+    events?: IAbstractedEvent | IAbstractedEvent[],
+    cb?: any
+  ): void {
     if (events && !isRealTimeEvent(events)) {
       throw new RealTimeDbError(
         `An attempt was made to unwatch an event type which is not valid for the Real Time database. Events passed in were: ${JSON.stringify(
@@ -186,12 +189,14 @@ export abstract class RealTimeDb extends AbstractedDatabase {
    *
    * @param path path for query
    */
-  public query<T extends object = any>(path: string) {
+  public query<T extends IModel = Record<string, unknown> & IModel>(
+    path: string
+  ): ISerializedQuery<T, IRealTimeDb> {
     return SerializedRealTimeQuery.path<T>(path) as ISerializedQuery<T>;
   }
 
   /** Get a DB reference for a given path in Firebase */
-  public ref(path: string = '/'): IRtdbReference {
+  public ref(path = '/'): IRtdbReference {
     return this.isMockDb ? this.mock.ref(path) : this._database.ref(path);
   }
 

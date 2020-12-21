@@ -31,7 +31,7 @@ export abstract class AbstractedDatabase implements IBaseAbstractedDatabase {
   /**
    * Indicates if the database is connected.
    */
-  protected _isConnected: boolean = false;
+  protected _isConnected = false;
   /**
    * The mock API provided by **firemock**
    */

@@ -20,10 +20,10 @@ import {
 } from './db-mocking';
 
 /**
- * The public contract that unknown SDK client must meet to behave
- * like an _abstracted database_.
+ * The basic contract required to be considered a "database"
+ * within the **Universal Fire** universe.
  */
-export interface IBaseAbstractedDatabase extends IDatabaseGenericApi {
+export interface IDatabaseSdk extends IDatabase {
   /** the Firebase SDK which is being used as an abstracted database */
   sdk: SDK;
   /**
@@ -81,7 +81,7 @@ export interface IBaseAbstractedDatabase extends IDatabaseGenericApi {
  * > to expose while intereacting with the DB's native language to provide the
  * > functionality
  */
-export interface IDatabaseGenericApi {
+export interface IDatabase {
   /**
    * Get a database _reference_ to the underlying database at a given path
    */
@@ -149,7 +149,7 @@ export interface IDatabaseGenericApi {
   ) => void;
 }
 
-export interface IRealTimeAdmin extends IBaseAbstractedDatabase {
+export interface IRealTimeAdmin extends IDatabaseSdk {
   app: IAdminApp;
   sdk: Readonly<SDK.RealTimeAdmin>;
   dbType: Readonly<Database.RTDB>;
@@ -160,7 +160,7 @@ export interface IRealTimeAdmin extends IBaseAbstractedDatabase {
   CONNECTION_TIMEOUT: number;
 }
 
-export interface IRealTimeClient extends IBaseAbstractedDatabase {
+export interface IRealTimeClient extends IDatabaseSdk {
   app: IClientApp;
   sdk: Readonly<SDK.RealTimeClient>;
   dbType: Readonly<Database.RTDB>;
@@ -171,7 +171,7 @@ export interface IRealTimeClient extends IBaseAbstractedDatabase {
   CONNECTION_TIMEOUT: number;
 }
 
-export interface IFirestoreClient extends IBaseAbstractedDatabase {
+export interface IFirestoreClient extends IDatabaseSdk {
   app: IClientApp;
   sdk: Readonly<SDK.FirestoreClient>;
   dbType: Readonly<Database.Firestore>;
@@ -181,7 +181,7 @@ export interface IFirestoreClient extends IBaseAbstractedDatabase {
   mock: IClientFirestoreMock;
 }
 
-export interface IFirestoreAdmin extends IBaseAbstractedDatabase {
+export interface IFirestoreAdmin extends IDatabaseSdk {
   app: IAdminApp;
   sdk: SDK.FirestoreAdmin;
   dbType: Database.Firestore;
