@@ -13,5 +13,5 @@
     "sourceMap": true,
     "noEmit": true
   },
-  "exclude": ["**/node_modules/**", "packages/*/dist", "**/test/**"]
+  "exclude": ["**/node_modules/**", "packages/*/dist" ]
 }
