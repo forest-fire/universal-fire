@@ -33,7 +33,7 @@
     "circular": "yarn run madge --circular --extensions ts ./src"
   },
   "devDependencies": {
-    "@forest-fire/types": "^0.59.2",
+    "@forest-fire/types": "^0.58.0",
     "@types/deepmerge": "^2.2.0",
     "@types/faker": "^4.1.12",
     "@types/jest": "^26.0.3",
@@ -52,7 +52,6 @@
     "chalk": "^4.0.0",
     "common-types": "~1.15.8",
     "do-devops": "^0.4.8",
-    "eledoc": "^0.2.1",
     "jest": "^26.1.0",
     "jest-extended": "^0.11.5",
     "lodash": "^4.17.15",
@@ -68,8 +67,7 @@
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
     "typed-conversions": "~0.11.1",
-    "typedoc": "^0.19.0",
-    "typescript": "^4.0.2",
+    "typescript": "^3.9.5",
     "typescript-transform-paths": "^1.1.14",
     "vuepress": "^1.5.0"
   },

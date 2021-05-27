@@ -17,6 +17,7 @@ import type {
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
 import { AbstractedDatabaseError } from './index';
+import type { Mock as MockDb } from 'firemock';
 
 export abstract class AbstractedDatabase implements IBaseAbstractedDatabase {
   /** the Firbase client used to gain DB access */
@@ -35,7 +36,7 @@ export abstract class AbstractedDatabase implements IBaseAbstractedDatabase {
   /**
    * The mock API provided by **firemock**
    */
-  protected _mock?: IMockDatabase;
+  protected _mock?: MockDb;
   /**
    * The Firebase App API.
    */
@@ -86,8 +87,8 @@ export abstract class AbstractedDatabase implements IBaseAbstractedDatabase {
    * Connects to the database and returns a promise which resolves when this
    * connection has been established.
    */
-  public abstract async connect(): Promise<any>;
-  public abstract async auth(): Promise<IClientAuth | IAdminAuth>;
+  public abstract connect(): Promise<any>;
+  public abstract auth(): Promise<IClientAuth | IAdminAuth>;
 
   public get isMockDb() {
     return this._config.mocking;
@@ -96,7 +97,7 @@ export abstract class AbstractedDatabase implements IBaseAbstractedDatabase {
     return this._config;
   }
 
-  public get mock(): IMockDatabase {
+  public get mock(): MockDb {
     if (!this.isMockDb) {
       throw new FireError(
         `Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`,
@@ -115,25 +116,25 @@ export abstract class AbstractedDatabase implements IBaseAbstractedDatabase {
     return this._isConnected;
   }
 
-  public abstract async getList<T = any>(
+  public abstract getList<T = any>(
     path: string | ISerializedQuery<T>,
     idProp?: string
   ): Promise<T[]>;
-  public abstract async getPushKey(path: string): Promise<string>;
-  public abstract async getRecord<T = any>(
+  public abstract getPushKey(path: string): Promise<string>;
+  public abstract getRecord<T = any>(
     path: string,
     idProp?: string
   ): Promise<T>;
-  public abstract async getValue<T = any>(path: string): Promise<T | void>;
+  public abstract getValue<T = any>(path: string): Promise<T | void>;
 
-  public abstract async update<T = any>(
+  public abstract update<T = any>(
     path: string,
     value: Partial<T>
   ): Promise<void>;
 
-  public abstract async set<T = any>(path: string, value: T): Promise<void>;
+  public abstract set<T = any>(path: string, value: T): Promise<void>;
 
-  public abstract async remove(
+  public abstract remove(
     path: string,
     ignoreMissing?: boolean
   ): Promise<any>;

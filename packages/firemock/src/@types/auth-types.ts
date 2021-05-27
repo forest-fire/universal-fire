@@ -6,6 +6,8 @@ import type {
 } from '@forest-fire/types';
 import type { IDictionary } from 'common-types';
 
+export type MockKlass = import('../mocking/Mock').Mock<any>;
+
 /**
  * Create a user in the Auth system which can be logged in via the
  * email/password authentication style
@@ -27,6 +29,8 @@ export interface IEmailUser {
   tokenIds?: string[];
 }
 
+export type IMockSetup = (mock: MockKlass) => () => Promise<void>;
+
 export interface IPartialUserCredential {
   additionalUserInfo?: Partial<AdditionalUserInfo>;
   credential?: Partial<AuthCredential> | null;
@@ -40,3 +44,5 @@ export interface IPartialUserCredential {
  * to add an "administrative" API for mocking
  */
 export interface IMockAuth extends IClientAuth {}
+
+export type IAuthObserver = (user: User | null) => any;

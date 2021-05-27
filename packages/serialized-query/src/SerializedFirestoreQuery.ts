@@ -21,7 +21,7 @@ export class SerializedFirestoreQuery<T = IDictionary> extends BaseSerializer<
   }
 
   protected _orderBy: IFirestoreQueryOrderType = 'orderBy';
-  protected _db?: ISimplifiedDatabase;
+  declare protected _db?: ISimplifiedDatabase;
 
   public get db() {
     if (this._db) {

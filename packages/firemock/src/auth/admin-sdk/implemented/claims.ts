@@ -1,15 +1,16 @@
 import { IDictionary } from 'common-types';
-import type { Auth, IMockAuthMgmt } from '@forest-fire/types';
+import type { Auth } from '@forest-fire/types';
+import { updateUser } from '@/auth/user-mgmt';
 
-export const claims: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
+export const claims: Partial<Auth> = {
   /**
    * Sets additional developer claims on an existing user identified by the provided uid,
    * typically used to define user roles and levels of access.
    */
   async setCustomUserClaims(
     uid: string,
-    customClaims: IDictionary | null
+    customUserClaims: IDictionary | null
   ): Promise<void> {
-    api.updateUser(uid, { customClaims });
+    updateUser(uid, { customClaims: customUserClaims });
   },
-});
+};

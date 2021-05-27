@@ -73,7 +73,7 @@ export interface IBaseAbstractedDatabase extends IDatabaseGenericApi {
    * The administrative interface for any package which will provide a _mocked_
    * database.
    */
-  mock: IMockDatabase;
+  mock: any;
 }
 
 /**
@@ -156,7 +156,6 @@ export interface IRealTimeAdmin extends IBaseAbstractedDatabase {
   apiKind: Readonly<ApiKind.admin>;
   isAdminApi: true;
   auth: () => Promise<IAdminAuth>;
-  mock: IAdminRtdbMock;
   CONNECTION_TIMEOUT: number;
 }
 
@@ -167,7 +166,6 @@ export interface IRealTimeClient extends IBaseAbstractedDatabase {
   apiKind: Readonly<ApiKind.client>;
   isAdminApi: false;
   auth: () => Promise<IClientAuth>;
-  mock: IClientRtdbMock;
   CONNECTION_TIMEOUT: number;
 }
 
@@ -178,7 +176,6 @@ export interface IFirestoreClient extends IBaseAbstractedDatabase {
   apiKind: Readonly<ApiKind.client>;
   isAdminApi: false;
   auth: () => Promise<IClientAuth>;
-  mock: IClientFirestoreMock;
 }
 
 export interface IFirestoreAdmin extends IBaseAbstractedDatabase {
@@ -188,7 +185,6 @@ export interface IFirestoreAdmin extends IBaseAbstractedDatabase {
   apiKind: ApiKind.admin;
   isAdminApi: true;
   auth: () => Promise<IAdminAuth>;
-  mock: IAdminFirestoreMock;
 }
 
 export type IAbstractedDatabase =

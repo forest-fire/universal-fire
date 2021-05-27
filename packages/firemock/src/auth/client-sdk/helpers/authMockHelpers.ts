@@ -1,44 +1,47 @@
-import type { IMockAuthMgmt, User } from '@forest-fire/types';
+import type { User } from '@forest-fire/types';
 import { validate } from 'email-validator';
-import { allUsers, authProviders, getAuthObservers } from '@/auth/util/index';
+import {
+  allUsers,
+  authProviders,
+  getRandomMockUid,
+  getAuthObservers,
+} from '@/auth/user-mgmt/index';
 
-export const emailExistsAsUserInAuth = (api: IMockAuthMgmt) => (
-  email: string
-) => {
+export function emailExistsAsUserInAuth(email: string) {
   const emails = allUsers().map((i) => i.email);
 
   return emails.includes(email);
-};
+}
 
-export const emailIsValidFormat = (api: IMockAuthMgmt) => (email: string) => {
+export function emailIsValidFormat(email: string) {
   return validate(email);
-};
+}
 
-export const emailHasCorrectPassword = (email: string, password: string) => {
+export function emailHasCorrectPassword(email: string, password: string) {
   const config = allUsers().find((i) => i.email === email);
 
   return config ? config.password === password : false;
-};
+}
 
-export const emailVerified = (api: IMockAuthMgmt) => (email: string) => {
+export function emailVerified(email: string) {
   const user = allUsers().find((i) => i.email === email);
   return user ? user.emailVerified || false : false;
-};
+}
 
-export const userUid = (api: IMockAuthMgmt) => (email: string) => {
-  const user = api.findKnownUser('email', email);
+export function userUid(email: string) {
+  const config = allUsers().find((i) => i.email === email);
 
-  return user ? user.uid : api.getAnonymousUid();
-};
+  return config ? config.uid || getRandomMockUid() : getRandomMockUid();
+}
 
-export const emailValidationAllowed = (api: IMockAuthMgmt) => () => {
+export function emailValidationAllowed() {
   return authProviders().includes('emailPassword');
-};
+}
 
-export const loggedIn = (api: IMockAuthMgmt) => (user: User) => {
+export function loggedIn(user: User) {
   getAuthObservers().map((o) => o(user));
-};
+}
 
-export const loggedOut = (api: IMockAuthMgmt) => () => {
+export function loggedOut() {
   getAuthObservers().map((o) => o(null));
-};
+}

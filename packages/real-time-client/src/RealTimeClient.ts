@@ -33,7 +33,7 @@ export let MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';
 
 export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
-  public readonly app: IClientApp;
+  // public readonly app: IClientApp;
   public readonly sdk: SDK.RealTimeClient = SDK.RealTimeClient;
   public readonly apiKind: ApiKind.client = ApiKind.client;
   public readonly dbType: Database.RTDB = Database.RTDB;
@@ -154,7 +154,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
       return this._auth;
     }
     if (this.isMockDb) {
-      this._auth = this.mock.auth();
+      this._auth = (await this.mock.auth()) as IClientAuth;
       return this._auth;
     } else {
       await this._loadAuthApi();
@@ -169,17 +169,11 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
    * mocked DB.
    */
   protected async _connectMockDb(config: IMockConfig) {
-    // await this.getFiremock({
-    //   db: config.mockData || {},
-    //   auth: { providers: [], users: [], ...config.mockAuth },
-    // });
-    const firemock: IMockDbFactory = await this._loadFiremock();
-    const mock: IMockDatabase = await firemock<IDictionary, IClientAuth>(
-      this,
-      config.mockData,
-      config.mockAuth
-    );
-    this._authProviders = mock.authProviders;
+    await this.getFiremock({
+      db: config.mockData || {},
+      auth: { providers: [], users: [], ...config.mockAuth },
+    });
+    this._authProviders = this._mock.authProviders;
     await this._listenForConnectionStatus();
   }
 
@@ -245,7 +239,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
   protected async _detectConnection() {
     const connectionEvent = () => {
       try {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
           this._eventManager.once('connection', (state: boolean) => {
             if (state) {
               resolve();

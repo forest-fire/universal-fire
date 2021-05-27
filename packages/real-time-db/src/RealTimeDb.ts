@@ -73,8 +73,8 @@ export abstract class RealTimeDb extends AbstractedDatabase {
   protected _debugging: boolean = false;
   protected _mocking: boolean = false;
   protected _allowMocking: boolean = false;
-  protected _app: IClientApp | IAdminApp;
-  protected _database?: IRtdbDatabase;
+  declare protected _app: IClientApp | IAdminApp;
+  declare protected _database?: IRtdbDatabase;
   protected _onConnected: IFirebaseListener[] = [];
   protected _onDisconnected: IFirebaseListener[] = [];
   protected _config: IDatabaseConfig;

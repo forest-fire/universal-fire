@@ -1,8 +1,8 @@
 import { users, claims, tokens } from './implemented/index';
-import type { Auth, IMockAuthMgmt } from '@forest-fire/types';
+import type { Auth } from '@forest-fire/types';
 
-export const implemented: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
-  ...users(api),
-  ...claims(api),
-  ...tokens(api),
-});
+export const implemented: Partial<Auth> = {
+  ...users,
+  ...claims,
+  ...tokens,
+};
