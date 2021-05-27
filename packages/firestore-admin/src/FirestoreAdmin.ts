@@ -37,8 +37,8 @@ export class FirestoreAdmin extends FirestoreDb implements IFirestoreAdmin {
   protected _auth?: IAdminAuth;
   protected _firestore?: IAdminFirestoreDatabase;
   protected _admin?: IAdminFirebaseNamespace;
-  protected _app!: IAdminApp;
-  protected _config: IAdminConfig | IMockConfig;
+  declare protected _app: IAdminApp;
+  declare protected _config: IAdminConfig | IMockConfig;
 
   constructor(config?: IAdminConfig | IMockConfig) {
     super();

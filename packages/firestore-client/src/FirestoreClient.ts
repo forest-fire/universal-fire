@@ -31,9 +31,9 @@ export class FirestoreClient extends FirestoreDb implements IFirestoreClient {
   }
 
   protected _auth?: IClientAuth;
-  protected _app!: IClientApp;
+  declare protected _app: IClientApp;
   protected _firestore: any;
-  protected _config: IClientConfig | IMockConfig;
+  declare protected _config: IClientConfig | IMockConfig;
   protected _authProviders: FirebaseNamespace['auth'];
 
   constructor(config?: IClientConfig | IMockConfig) {

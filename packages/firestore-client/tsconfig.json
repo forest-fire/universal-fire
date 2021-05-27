@@ -3,6 +3,6 @@
   "include": ["src", "test"],
   "compilerOptions": {
     "strictNullChecks": false,
-    "strict": false
+    "strict": false,
   }
 }
