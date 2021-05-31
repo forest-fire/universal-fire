@@ -4,6 +4,7 @@ import * as helpers from './testing/helpers';
 
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
+import { AuthProviderName } from '@forest-fire/types';
 
 helpers.setupEnv();
 const config = {
@@ -166,7 +167,7 @@ describe('Mocking', () => {
     const db3 = await RealTimeClient.connect({
       mocking: true,
       mockAuth: {
-        providers: ['anonymous'],
+        providers: [AuthProviderName.anonymous],
       },
     });
     const auth = await db3.auth();

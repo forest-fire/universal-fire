@@ -21,19 +21,16 @@ import {
   IRealTimeClient,
   ApiKind,
   Database,
-  IMockDatabase,
-  IMockDbFactory,
 } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 
-import { firebase } from '@firebase/app';
-import { IDictionary, wait } from 'common-types';
+import firebase from '@firebase/app';
+import { wait } from 'common-types';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';
 
 export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
-  // public readonly app: IClientApp;
   public readonly sdk: SDK.RealTimeClient = SDK.RealTimeClient;
   public readonly apiKind: ApiKind.client = ApiKind.client;
   public readonly dbType: Database.RTDB = Database.RTDB;
@@ -55,12 +52,12 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
 
   public CONNECTION_TIMEOUT: number = 5000;
   protected _eventManager: EventManager;
-  protected _database?: IRtdbDatabase;
+  protected declare _database?: IRtdbDatabase;
   protected _auth?: IClientAuth;
-  protected _config: IClientConfig | IMockConfig;
-  protected _fbClass: IClientApp;
-  protected _authProviders: FirebaseNamespace['auth'];
-  protected _app: IClientApp;
+  protected declare _config: IClientConfig | IMockConfig;
+  protected _fbClass: any;
+  protected _authProviders: any;
+  protected declare _app: IClientApp;
 
   /**
    * Builds the client and then waits for all to `connect()` to
@@ -68,6 +65,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
    */
   constructor(config?: IClientConfig | IMockConfig) {
     super();
+    this._fbClass = firebase;
     this._eventManager = new EventManager();
     this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
     if (!config) {
@@ -84,6 +82,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
     if (isClientConfig(config)) {
       try {
         const runningApps = getRunningApps(firebase.apps);
+
         this._app = runningApps.includes(config.name)
           ? (getRunningFirebaseApp<IClientApp>(
               config.name,
@@ -134,13 +133,13 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
     }
 
     if (!this._authProviders) {
-      if (!this._fbClass.auth) {
+      if (!('auth' in this._fbClass)) {
         throw new ClientError(
           `Attempt to get the authProviders getter before connecting to the database!`,
           'missing-auth'
         );
       }
-      this._authProviders = firebase.auth;
+      this._authProviders = (firebase as any).auth;
     }
 
     return this._authProviders;
@@ -158,7 +157,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
       return this._auth;
     } else {
       await this._loadAuthApi();
-      this._auth = this._app.auth();
+      this._auth = this._app.auth() as any;
     }
 
     return this._auth;
@@ -193,10 +192,10 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
   protected async _connectRealDb(config: IClientConfig) {
     if (!this._isConnected) {
       await this._loadDatabaseApi();
-      this._database = firebase.database(this._app);
+      this._database = this._app.database();
       if (config.useAuth) {
         await this._loadAuthApi();
-        this._auth = this._app.auth();
+        this._auth = this._app.auth() as any;
       }
       await this._listenForConnectionStatus();
     } else {
