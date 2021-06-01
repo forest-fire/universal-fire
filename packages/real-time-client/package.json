@@ -36,6 +36,8 @@
     "@firebase/database": "^0.6.13",
     "@firebase/database-types": "^0.5.2",
     "@forest-fire/serialized-query": "^0.59.2",
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/events": "^3.0.0",
     "@types/jest": "^26.0.3",
     "@types/js-yaml": "^3.12.1",
@@ -52,6 +54,7 @@
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.50.0",
+    "rollup-plugin-typescript2": "^0.30.0",
     "test-console": "^1.1.0",
     "ts-babel": "^6.1.7",
     "ts-jest": "^27.0.1",
@@ -60,7 +63,7 @@
     "tslint": "^6.1.2",
     "ttypescript": "^1.5.10",
     "typescript": "^4.3.2",
-    "typescript-transform-paths": "^1.1.14"
+    "typescript-transform-paths": "^2.2.4"
   },
   "peerDependencies": {
     "@firebase/app": "0.6.11",

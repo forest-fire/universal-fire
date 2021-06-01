@@ -47,7 +47,6 @@
     "async-shelljs": "^0.1.4",
     "chai": "^4.3.4",
     "chalk": "4.1.1",
-    "do-devops": "^0.8.0",
     "firebase-admin": "9.4.1",
     "firemock": "^0.59.2",
     "js-yaml": "^4.1.0",
