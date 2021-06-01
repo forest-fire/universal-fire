@@ -25,7 +25,7 @@ export const users: Partial<Auth> = {
         lastSignInTime: null,
         creationTime: String(new Date()),
         toJSON() {
-          return JSON.stringify(properties);
+          return properties;
         },
       },
       multiFactor: null as any,
