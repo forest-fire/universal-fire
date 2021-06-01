@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/abstracted-database",
-  "version": "0.59.3",
+  "version": "0.59.4",
   "description": "",
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
@@ -35,13 +35,13 @@
     "typescript": "^4.3.2"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.59.3",
-    "@forest-fire/types": "^0.59.3",
-    "@forest-fire/utility": "^0.59.3",
+    "@forest-fire/serialized-query": "^0.59.4",
+    "@forest-fire/types": "^0.59.4",
+    "@forest-fire/utility": "^0.59.4",
     "brilliant-errors": "^0.1.1"
   },
   "optionalDependencies": {
-    "firemock": "^0.59.3"
+    "firemock": "^0.59.4"
   },
   "license": "MIT",
   "gitHead": "f1e9c8369d9f717da11f4d9f6c1bf6c18f220f08"
