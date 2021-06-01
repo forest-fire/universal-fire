@@ -29,12 +29,13 @@
     "watch:test": "npm run test -- --watch"
   },
   "devDependencies": {
-    "@firebase/app": "^0.6.11",
+    "@firebase/app": "0.6.11",
     "@firebase/app-types": "^0.6.1",
     "@firebase/auth": "^0.15.0",
     "@firebase/auth-types": "^0.10.1",
     "@firebase/database": "^0.6.13",
     "@firebase/database-types": "^0.5.2",
+    "@forest-fire/serialized-query": "^0.59.2",
     "@types/events": "^3.0.0",
     "@types/jest": "^26.0.3",
     "@types/js-yaml": "^3.12.1",
@@ -62,7 +63,7 @@
     "typescript-transform-paths": "^1.1.14"
   },
   "peerDependencies": {
-    "@firebase/app": "^0.6.11",
+    "@firebase/app": "0.6.11",
     "@firebase/app-types": "^0.6.1",
     "@firebase/auth": "^0.15.0",
     "@firebase/auth-types": "^0.10.1",

@@ -48,7 +48,7 @@ export function setupEnv() {
   }
 
   const current = process.env;
-  const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8')) as IDictionary;
+  const yamlConfig = yaml.load(fs.readFileSync('./env.yml', 'utf8')) as IDictionary;
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env,
