@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.59.3",
+  "version": "0.59.4",
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -33,7 +33,7 @@
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
     "dd": "^0.11.3",
-    "firemock": "^0.59.3",
+    "firemock": "^0.59.4",
     "mocha": "^8.0.1",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
@@ -42,15 +42,15 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@forest-fire/firestore-admin": "^0.59.3",
-    "@forest-fire/firestore-client": "^0.59.3",
-    "@forest-fire/real-time-admin": "^0.59.3",
-    "@forest-fire/real-time-client": "^0.59.3",
-    "@forest-fire/serialized-query": "^0.59.3",
-    "@forest-fire/serializer-factory": "^0.59.3",
-    "@forest-fire/types": "^0.59.3",
+    "@forest-fire/firestore-admin": "^0.59.4",
+    "@forest-fire/firestore-client": "^0.59.4",
+    "@forest-fire/real-time-admin": "^0.59.4",
+    "@forest-fire/real-time-client": "^0.59.4",
+    "@forest-fire/serialized-query": "^0.59.4",
+    "@forest-fire/serializer-factory": "^0.59.4",
+    "@forest-fire/types": "^0.59.4",
     "common-types": "^1.25.0"
   },
   "license": "MIT",
-  "gitHead": "f1e9c8369d9f717da11f4d9f6c1bf6c18f220f08"
+  "gitHead": "563ab89150ba4ae1f654577e1cb0b02a370d72f2"
 }
