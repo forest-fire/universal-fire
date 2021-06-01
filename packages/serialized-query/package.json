@@ -23,9 +23,9 @@
     "test:coverage": "nyc --reporter=text mocha -require ts-node/register test/**/*.spec.ts",
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
   },
-  "optionalDependencies": {
-    "common-types": "~1.15.8",
-    "universal-fire": "^0.59.2"
+  "peerDependencies": {
+    "common-types": "~1.25.0",
+    "@forest-fire/types": "^0.59.2"
   },
   "devDependencies": {
     "@forest-fire/types": "^0.59.2",
@@ -42,7 +42,6 @@
     "chai": "^4.3.4",
     "chalk": "^4.1.1",
     "common-types": "~1.25.0",
-    "firemodel": "^0.59.0",
     "js-yaml": "^4.1.0",
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
@@ -55,8 +54,7 @@
     "test-console": "^1.1.0",
     "ts-node": "^10",
     "typed-conversions": "^0.11.1",
-    "typescript": "^4.3.2",
-    "universal-fire": "^0.59.2"
+    "typescript": "^4.3.2"
   },
   "license": "MIT"
 }

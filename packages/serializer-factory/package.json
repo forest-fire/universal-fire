@@ -10,25 +10,25 @@
   ],
   "scripts": {
     "clean": "rimraf dist/**/*",
-    "test": "yarn do test",
-    "watch": "yarn do watch"
+    "test": "yarn dd test",
+    "watch": "yarn dd watch"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.11",
-    "@types/mocha": "^7.0.2",
-    "chai": "^4.2.0",
-    "do-devops": "^0.3.6",
-    "mocha": "^7.1.1",
+    "@types/chai": "^4.2.18",
+    "@types/mocha": "^8.2.2",
+    "chai": "^4.3.4",
+    "dd": "^0.11.3",
+    "mocha": "^8.4.0",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.0.0",
     "rimraf": "^3.0.2",
-    "ts-node": "^8.9.1",
-    "typescript": "^3.8.3"
+    "ts-node": "10",
+    "typescript": "^4.2.4"
   },
   "dependencies": {
     "@forest-fire/serialized-query": "^0.59.2",
     "@forest-fire/types": "^0.59.2",
-    "common-types": "^1.15.8"
+    "common-types": "^1.25.0"
   },
   "license": "MIT"
 }
