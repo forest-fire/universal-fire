@@ -7,6 +7,7 @@ import {
   setCurrentUser,
   setDefaultAnonymousUid,
 } from '../../src/auth/user-mgmt/index';
+import { AuthProviderName } from '@forest-fire/types';
 
 describe('Firebase Auth →', () => {
   it('Calling auth() gives you API', async () => {
@@ -26,7 +27,7 @@ describe('Firebase Auth →', () => {
   it('Signing in with email is defaulted to false', async () => {
     const m = await Mock.prepare();
     const auth = await m.auth();
-    expect(authProviders().includes('emailPassword')).toEqual(false);
+    expect(authProviders().includes(AuthProviderName.emailPassword)).toEqual(false);
   });
 
   it('signInAnonymously returns uid of default anonymous user (when set)', async () => {
@@ -44,7 +45,7 @@ describe('Firebase Auth →', () => {
         users: [
           { email: 'test@test.com', password: 'foobar', emailVerified: true },
         ],
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
       },
     });
     const auth = await m.auth();
@@ -64,7 +65,7 @@ describe('Firebase Auth →', () => {
           Promise.resolve([
             { email: 'test@test.com', password: 'foobar', emailVerified: true },
           ]),
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
       },
     });
     const auth = await m.auth();
@@ -83,7 +84,7 @@ describe('Firebase Auth →', () => {
         users: [
           { email: 'test@test.com', password: 'foobar', emailVerified: true },
         ],
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
       },
     });
     const auth = await m.auth();
@@ -102,7 +103,7 @@ describe('Firebase Auth →', () => {
   it('createUserWithEmailAndPassword created unverified user', async () => {
     const m = await Mock.prepare({
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [],
       },
     });
@@ -114,7 +115,7 @@ describe('Firebase Auth →', () => {
   it('once user is created, it can be used to login with', async () => {
     const m = await Mock.prepare({
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [],
       },
     });
@@ -129,7 +130,7 @@ describe('Firebase Auth →', () => {
   it('userCredential passed back from creation allows password reset', async () => {
     const m = await Mock.prepare({
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [],
       },
     });
@@ -149,7 +150,7 @@ describe('Firebase Auth →', () => {
     const expectedToken = '123456789';
     const m = await Mock.prepare({
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [
           {
             email: 'test@company.com',
@@ -174,7 +175,7 @@ describe('Firebase Auth →', () => {
     const user = { email: 'test@test.com', password: 'foobar' };
     const m = await Mock.prepare({
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [user],
       },
     });
@@ -192,7 +193,7 @@ describe('Firebase Auth →', () => {
     const user = { email: 'test@test.com', password: 'foobar' };
     const m = await Mock.prepare({
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [user],
       },
     });

@@ -27,22 +27,22 @@
     "watch:test": "ts-node ./scripts/watch.ts test",
     "watch:all": "ts-node ./scripts/watch.ts all",
     "deploy": "ts-node ./scripts/deploy.ts ",
-    "info": "yarn do info",
-    "autoindex": "yarn do autoindex",
+    "info": "yarn dd info",
+    "autoindex": "yarn dd autoindex",
     "visualize": "yarn madge src --ts-config tsconfig.json --extensions ts -i /tmp/dep-visualize.png && open /tmp/dep-visualize.png",
     "circular": "yarn run madge --circular --extensions ts ./src"
   },
   "devDependencies": {
-    "@forest-fire/types": "^0.58.0",
+    "@forest-fire/types": "^0.59.2",
     "@types/deepmerge": "^2.2.0",
-    "@types/faker": "^4.1.12",
-    "@types/jest": "^26.0.3",
-    "@types/js-yaml": "^3.12.1",
+    "@types/faker": "^5.5.6",
+    "@types/jest": "^26.0.23",
+    "@types/js-yaml": "^4.0.1",
     "@types/lodash.first": "^3.0.6",
     "@types/lodash.get": "^4.4.6",
     "@types/lodash.last": "^3.0.6",
     "@types/lodash.set": "^4.3.6",
-    "@types/node": "^8.0.0",
+    "@types/node": "^12",
     "@types/stack-trace": "^0.0.29",
     "@vuepress/plugin-back-to-top": "^1.5.0",
     "@vuepress/plugin-last-updated": "^1.5.0",
@@ -50,8 +50,8 @@
     "@vuepress/plugin-pwa": "^1.5.0",
     "async-shelljs": "^0.1.4",
     "chalk": "^4.0.0",
-    "common-types": "~1.15.8",
-    "do-devops": "^0.4.8",
+    "common-types": "~1.25.0",
+    "dd": "^0.11.3",
     "jest": "^26.1.0",
     "jest-extended": "^0.11.5",
     "lodash": "^4.17.15",
@@ -63,11 +63,11 @@
     "test-console": "^1.1.0",
     "ts-babel": "^6.1.7",
     "ts-jest": "^26.1.1",
-    "ts-node": "^8.10.2",
+    "ts-node": "10",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
     "typed-conversions": "~0.11.1",
-    "typescript": "^3.9.5",
+    "typescript": "^4.3.2",
     "typescript-transform-paths": "^1.1.14",
     "vuepress": "^1.5.0"
   },
@@ -80,13 +80,13 @@
   },
   "optionalDependencies": {
     "@forest-fire/types": "^0.59.2",
-    "common-types": "~1.15.8",
-    "faker": "^4.1.0",
+    "common-types": "~1.25.0",
+    "faker": "^5.5.3",
     "firebase-key": "^2.0.2",
     "native-dash": "~1.2.7",
     "typed-conversions": "~0.11.1"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=12"
   }
 }

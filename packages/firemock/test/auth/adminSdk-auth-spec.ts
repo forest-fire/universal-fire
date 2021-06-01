@@ -3,6 +3,7 @@ import { Mock } from '../../src/mocking';
 import { adminAuthSdk } from '../../src';
 import { clearAuthUsers } from '../../src/auth/user-mgmt';
 import 'jest-extended';
+import { AuthProviderName } from '@forest-fire/types';
 
 describe('Admin Auth => ', () => {
   beforeEach(async () => {
@@ -34,7 +35,9 @@ describe('Admin Auth => ', () => {
   });
 
   it('creating a User allows the client API to use that user to login', async () => {
-    const m = await Mock.prepare({ auth: { providers: ['emailPassword'] } });
+    const m = await Mock.prepare({
+      auth: { providers: [AuthProviderName.emailPassword] },
+    });
     const auth = await m.auth();
     const admin = adminAuthSdk;
     await admin.createUser({
