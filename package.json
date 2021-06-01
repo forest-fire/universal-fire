@@ -8,7 +8,7 @@
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
   "scripts": {
-    "autoindex": "yarn do autoindex",
+    "autoindex": "yarn dd autoindex",
     "changed": "yarn lerna changed",
     "release": "yarn lerna publish",
     "clean": "yarn lerna clean --yes",
@@ -49,7 +49,7 @@
     "rollup": "2.50.1",
     "rollup-plugin-typescript2": "0.30.0",
     "ttypescript": "^1.5.10",
-    "typescript": "4.3.2",
+    "typescript": "4.2.4",
     "typescript-transform-paths": "^1.1.14"
   },
   "license": "MIT"
