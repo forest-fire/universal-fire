@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/serialized-query",
-  "version": "0.59.5",
+  "version": "0.59.6",
   "description": "",
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
@@ -28,7 +28,7 @@
     "common-types": "~1.25.0"
   },
   "devDependencies": {
-    "@forest-fire/types": "^0.59.5",
+    "@forest-fire/types": "^0.59.6",
     "@types/chai": "^4.2.18",
     "@types/chalk": "^2.2.0",
     "@types/js-yaml": "^4.0.1",
@@ -57,5 +57,5 @@
     "typescript": "^4.3.2"
   },
   "license": "MIT",
-  "gitHead": "3f16ea360707b8579b4d09453465153be4d2b1eb"
+  "gitHead": "17c21f30b0bc51984dd3e24d14f87f742b8fe0bc"
 }
