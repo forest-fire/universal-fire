@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/docs",
-  "version": "0.54.3",
+  "version": "0.59.3",
   "description": "An ecosystem of abstraction on top of Firebase",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
@@ -31,7 +31,6 @@
     "watch:cjs": "tsc -P tsconfig.es.json -w",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build:nuclear": "yarn clean:nuclear && yarn build",
-    "test": "yarn do test",
     "docs": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "coverage": "nyc --include='src/**/*.ts' --reporter=text --reporter=html --reporter=lcov mocha --compilers ts:ts-node/register --recursive 'test/**/*.test.ts'"
@@ -41,33 +40,17 @@
     "lodash.last": "^3.0.0"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.5",
-    "@types/faker": "^4.1.12",
-    "@types/js-yaml": "^3.12.1",
-    "@types/lodash.first": "^3.0.6",
-    "@types/lodash.last": "^3.0.6",
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^10.0.0",
-    "@types/rimraf": "^2.0.3",
-    "@vuepress/plugin-back-to-top": "^1.4.1",
-    "@vuepress/plugin-last-updated": "^1.4.1",
-    "@vuepress/plugin-medium-zoom": "^1.4.1",
-    "@vuepress/plugin-pwa": "^1.4.1",
-    "async-shelljs": "^0.1.4",
-    "chai": "^4.2.0",
-    "chalk": "3.0.0",
-    "firemock": "^0.54.3",
-    "js-yaml": "^3.13.1",
-    "mocha": "^6.2.2",
-    "rimraf": "^3.0.0",
-    "test-console": "^1.1.0",
-    "ts-node": "^8.9.0",
-    "tslint": "^6.1.1",
-    "typescript": "^3.9.2",
-    "vuepress": "^1.4.1",
+    "@vuepress/plugin-back-to-top": "^1.8.2",
+    "@vuepress/plugin-last-updated": "^1.8.2",
+    "@vuepress/plugin-medium-zoom": "^1.8.2",
+    "@vuepress/plugin-pwa": "^1.8.2",
+    "ts-node": "^10.0.0",
+    "tslint": "^6.1.2",
+    "typescript": "^4.3.2",
+    "vuepress": "^1.8.2",
     "vuepress-plugin-autometa": "^0.1.13"
   },
   "engines": {
-    "node": ">=8.13.0"
+    "node": ">=10"
   }
 }

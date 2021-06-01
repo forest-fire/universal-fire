@@ -1,4 +1,5 @@
 import { Mock } from '../src';
+import 'jest-extended';
 
 describe('EmailAuthProvider =>', () => {
   it('EmailAuthProvider exists and has appropriate props', async () => {

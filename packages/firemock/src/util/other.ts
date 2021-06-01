@@ -1,8 +1,7 @@
-import first from 'lodash.first';
-import last from 'lodash.last';
+import { firstKey, lastKey } from 'native-dash';
 import { IDictionary, wait } from 'common-types';
 import type { IRtdbDataSnapshot } from '@forest-fire/types';
-import { Delays } from '@/@types';
+import type { Delays } from '@/@types';
 
 export function normalizeRef(r: string): string {
   r = r.replace('/', '.');
@@ -39,14 +38,6 @@ export function lastProp<T = IDictionary>(listOf: IDictionary<any>) {
 export function objectIndex(obj: IDictionary, index: number) {
   const keys = Object.keys(obj);
   return keys ? obj[keys[index - 1]] : null;
-}
-
-export function firstKey<T = any>(listOf: IDictionary<T>) {
-  return first(Object.keys(listOf));
-}
-
-export function lastKey<T = any>(listOf: IDictionary<T>) {
-  return last(Object.keys(listOf));
 }
 
 export function removeKeys(obj: IDictionary, remove: string[]) {
@@ -89,7 +80,7 @@ export function pathDiff(longPath: string, pathSubset: string) {
 
 export function orderedSnapToJS<T = any>(snap: IRtdbDataSnapshot) {
   const jsObject: IDictionary<T> = {};
-  snap.forEach((record) => (jsObject[record.key] = record.val()));
+  snap.forEach((record: any) => (jsObject[record.key] = record.val()));
 
   return jsObject;
 }

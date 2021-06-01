@@ -1,14 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "module": "commonjs",
     "preserveConstEnums": true,
-    "removeComments": false,
+    "removeComments": false
   },
-  "include": ["src"],
-  "exclude": [
-    "**/*-spec.ts",
-    "node_modules/firebase-admin/lib/index.d.ts",
-    "node_modules/@google-cloud/firestore/types/firestore.d.ts",
-    "typings"
-  ]
+  "include": ["src", "test"]
 }

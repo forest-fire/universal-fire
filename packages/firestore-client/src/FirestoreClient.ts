@@ -4,9 +4,8 @@ import {
   getRunningApps,
   getRunningFirebaseApp,
 } from '@forest-fire/utility';
-import { FirestoreDb, IFirestoreDb } from '@forest-fire/firestore-db';
+import { FirestoreDb } from '@forest-fire/firestore-db';
 import {
-  IAbstractedDatabase,
   IClientApp,
   IClientAuth,
   IClientConfig,
@@ -15,26 +14,26 @@ import {
   isClientConfig,
   isMockConfig,
   FirebaseNamespace,
-  IFirestoreDatabase,
   IClientFirestoreDatabase,
+  IFirestoreClient,
+  ApiKind,
 } from '@forest-fire/types';
 
-import type { Mock as IMockApi } from 'firemock';
+export class FirestoreClient extends FirestoreDb implements IFirestoreClient {
+  public readonly sdk: SDK.FirestoreClient = SDK.FirestoreClient;
+  public readonly apiKind: ApiKind.client = ApiKind.client;
+  public readonly isAdminApi = false;
 
-export class FirestoreClient extends FirestoreDb
-  implements IFirestoreDb, IAbstractedDatabase<IMockApi> {
-  sdk = SDK.FirestoreClient;
   static async connect(config: IClientConfig | IMockConfig) {
     const obj = new FirestoreClient(config);
     await obj.connect();
     return obj;
   }
 
-  protected _isAdminApi = false;
   protected _auth?: IClientAuth;
-  protected _app!: IClientApp;
+  declare protected _app: IClientApp;
   protected _firestore: any;
-  protected _config: IClientConfig | IMockConfig;
+  declare protected _config: IClientConfig | IMockConfig;
   protected _authProviders: FirebaseNamespace['auth'];
 
   constructor(config?: IClientConfig | IMockConfig) {
@@ -95,15 +94,19 @@ export class FirestoreClient extends FirestoreDb
   /**
    * This loads the firestore API but more importantly this makes the
    * firestore function available off the Firebase App API which provides
-   * us instances of the of the firestore API.
+   * us instances of the of the Firestore API.
    */
-  protected async loadFirestoreApi(): Promise<IClientFirestoreDatabase> {
-    // TODO: the typing return here is being ignored because we're using this
-    // only as a pre-step to use the App API but in fact this probably does
-    // return the static Firestore API which may very well be useful.
-    return (import(
-      '@firebase/firestore'
-    ) as unknown) as IClientFirestoreDatabase;
+  protected async _loadFirestoreApi(): Promise<IClientFirestoreDatabase> {
+    try {
+      return (import(
+        '@firebase/firestore'
+      ) as unknown) as IClientFirestoreDatabase;
+    } catch (e) {
+      throw new FireError(
+        `An attempt to load the "@firebase/firestore" peer dependency failed, this probably means that your application has not installed this required dependency!`,
+        'missing-dependency'
+      );
+    }
   }
 
   /**
@@ -111,7 +114,7 @@ export class FirestoreClient extends FirestoreDb
    * mocked DB.
    */
   protected async _connectMockDb(config: IMockConfig) {
-    await this.getFireMock({
+    await this.getFiremock({
       db: config.mockData || {},
       auth: { providers: [], ...config.mockAuth },
     });
@@ -120,7 +123,7 @@ export class FirestoreClient extends FirestoreDb
 
   protected async _connectRealDb(config: IClientConfig) {
     if (!this._isConnected) {
-      await this.loadFirestoreApi();
+      await this._loadFirestoreApi();
       let firebase: FirebaseNamespace & {
         firestore: (appOptions?: any) => IClientFirestoreDatabase;
         auth: () => IClientAuth | undefined;

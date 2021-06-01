@@ -6,37 +6,38 @@ import type {
   ListUsersResult,
 } from '@forest-fire/types';
 import {
-  addUser,
+  addToUserPool,
   updateUser,
   getUserById,
   removeUser,
   getUserByEmail,
   allUsers,
-} from '../../state-mgmt';
+} from '../../user-mgmt';
 import { networkDelay } from '../../../util';
 
 export const users: Partial<Auth> = {
   // https://firebase.google.com/docs/auth/admin/manage-users#create_a_user
   async createUser(properties: CreateRequest): Promise<UserRecord> {
-    addUser({
-      password: Math.random().toString(36).substr(2, 10),
-      multiFactor: null as any,
-      ...properties,
-    });
-    return {
+    // addToUserPool();
+    const UserRecord: UserRecord = {
       ...(properties as Required<CreateRequest>),
       metadata: {
         lastSignInTime: null,
         creationTime: String(new Date()),
         toJSON() {
-          return {};
+          return properties;
         },
       },
       multiFactor: null as any,
       toJSON: () => null as any,
       providerData: null as any,
     };
+
+    addToUserPool(UserRecord);
+
+    return UserRecord;
   },
+
   /** Updates an existing user. */
   async updateUser(
     uid: string,

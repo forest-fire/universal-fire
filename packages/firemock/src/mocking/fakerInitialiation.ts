@@ -1,5 +1,5 @@
-import { MockHelper } from './index';
 import type { FakerStatic } from '@forest-fire/types';
+import { MockHelper } from '@/mocking/index';
 import { FireMockError } from '@/errors';
 
 let faker: FakerStatic;

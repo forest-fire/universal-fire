@@ -10,26 +10,24 @@ describe('DB Read operations: ', () => {
   let dbMock: RealTimeAdmin;
 
   before(async () => {
-    console.log({ FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL });
-
     db = await RealTimeAdmin.connect();
     dbMock = await RealTimeAdmin.connect({ mocking: true });
 
     await db.set('test-data', {
       one: 'foo',
       two: 'bar',
-      three: 'baz'
+      three: 'baz',
     });
 
     await db.set('test-records', {
       123456: {
         name: 'Chris',
-        age: 50
+        age: 50,
       },
       654321: {
         name: 'Bob',
-        age: 68
-      }
+        age: 68,
+      },
     });
   });
 

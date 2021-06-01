@@ -1,7 +1,12 @@
 //#autoindex
 
 //#region autoindexed files
-// indexed at: 6th Jun, 2020, 07:47 PM ( GMT-7 )
+
+// index last changed at: 8th Aug, 2020, 05:40 PM ( GMT-7 )
+// export: named; exclusions: index, private.
+// files: FireMockError.
+
 // local file exports
 export * from "./FireMockError";
+
 //#endregion

@@ -1,6 +1,3 @@
-import '@firebase/auth';
-import '@firebase/database';
-
 import { ClientError, EventManager } from './private';
 import {
   FireError,
@@ -11,7 +8,6 @@ import {
 } from '@forest-fire/utility';
 import {
   FirebaseNamespace,
-  IAbstractedDatabase,
   IClientApp,
   IClientAuth,
   IClientAuthProviders,
@@ -21,21 +17,24 @@ import {
   SDK,
   isClientConfig,
   isMockConfig,
+  IRtdbDatabase,
+  IRealTimeClient,
+  ApiKind,
+  Database,
 } from '@forest-fire/types';
-import { IRealTimeDb, RealTimeDb } from '@forest-fire/real-time-db';
+import { RealTimeDb } from '@forest-fire/real-time-db';
 
-import { FirebaseApp } from '@firebase/app-types';
-import { FirebaseDatabase } from '@firebase/database-types';
-import { firebase } from '@firebase/app';
+import firebase from '@firebase/app';
 import { wait } from 'common-types';
 
 export let MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';
-import type { Mock as IMockApi } from 'firemock';
 
-export class RealTimeClient extends RealTimeDb
-  implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
-  sdk = SDK.RealTimeClient;
+export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
+  public readonly sdk: SDK.RealTimeClient = SDK.RealTimeClient;
+  public readonly apiKind: ApiKind.client = ApiKind.client;
+  public readonly dbType: Database.RTDB = Database.RTDB;
+  public readonly isAdminApi = false;
   /**
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
    * and then returns a promise which is resolved once the _connection_ is established.
@@ -51,14 +50,14 @@ export class RealTimeClient extends RealTimeDb
     return Array.from(new Set(firebase.apps.map((i) => i.name)));
   }
 
-  protected _isAdminApi = false;
+  public CONNECTION_TIMEOUT: number = 5000;
   protected _eventManager: EventManager;
-  protected _database?: FirebaseDatabase;
+  protected declare _database?: IRtdbDatabase;
   protected _auth?: IClientAuth;
-  protected _config: IClientConfig | IMockConfig;
-  protected _fbClass: IClientApp;
-  protected _authProviders: FirebaseNamespace['auth'];
-  protected _app: IClientApp;
+  protected declare _config: IClientConfig | IMockConfig;
+  protected _fbClass: any;
+  protected _authProviders: any;
+  protected declare _app: IClientApp;
 
   /**
    * Builds the client and then waits for all to `connect()` to
@@ -66,6 +65,7 @@ export class RealTimeClient extends RealTimeDb
    */
   constructor(config?: IClientConfig | IMockConfig) {
     super();
+    this._fbClass = firebase;
     this._eventManager = new EventManager();
     this.CONNECTION_TIMEOUT = config ? config.timeout || 5000 : 5000;
     if (!config) {
@@ -82,11 +82,12 @@ export class RealTimeClient extends RealTimeDb
     if (isClientConfig(config)) {
       try {
         const runningApps = getRunningApps(firebase.apps);
+
         this._app = runningApps.includes(config.name)
           ? (getRunningFirebaseApp<IClientApp>(
               config.name,
               firebase.apps
-            ) as FirebaseApp)
+            ) as IClientApp)
           : firebase.initializeApp(config, config.name);
       } catch (e) {
         if (e.message && e.message.indexOf('app/duplicate-app') !== -1) {
@@ -132,13 +133,13 @@ export class RealTimeClient extends RealTimeDb
     }
 
     if (!this._authProviders) {
-      if (!this._fbClass.auth) {
+      if (!('auth' in this._fbClass)) {
         throw new ClientError(
           `Attempt to get the authProviders getter before connecting to the database!`,
           'missing-auth'
         );
       }
-      this._authProviders = firebase.auth;
+      this._authProviders = (firebase as any).auth;
     }
     this._authProviders = this._fbClass.auth;
 
@@ -146,19 +147,20 @@ export class RealTimeClient extends RealTimeDb
   }
 
   public async auth(): Promise<IClientAuth> {
+    if (!this._app) {
+      // await this._loadFirebaseApp()
+    }
     if (this._auth) {
       return this._auth;
     }
-    if (!this.isConnected) {
-      this._config.useAuth = true;
-      await this.connect();
-    }
     if (this.isMockDb) {
-      this._auth = await this.mock.auth();
+      this._auth = (await this.mock.auth()) as IClientAuth;
       return this._auth;
+    } else {
+      await this._loadAuthApi();
+      this._auth = this._app.auth() as any;
     }
 
-    this._auth = this._app.auth() as IClientAuth;
     return this._auth;
   }
 
@@ -167,21 +169,34 @@ export class RealTimeClient extends RealTimeDb
    * mocked DB.
    */
   protected async _connectMockDb(config: IMockConfig) {
-    await this.getFireMock({
+    await this.getFiremock({
       db: config.mockData || {},
-      auth: { providers: [], ...config.mockAuth },
+      auth: { providers: [], users: [], ...config.mockAuth },
     });
     this._authProviders = this._mock.authProviders;
     await this._listenForConnectionStatus();
   }
 
+  protected async _loadAuthApi() {
+    await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
+  }
+
+  protected async _loadFiremock() {
+    const fm = await import(/* webpackChunkName: "firebase-auth" */ 'firemock');
+    return fm.default;
+  }
+
+  protected async _loadDatabaseApi() {
+    await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
+  }
+
   protected async _connectRealDb(config: IClientConfig) {
     if (!this._isConnected) {
-      // await this.loadDatabaseApi();
-      this._database = firebase.database(this._app);
+      await this._loadDatabaseApi();
+      this._database = this._app.database();
       if (config.useAuth) {
-        // await this.loadAuthApi();
-        this._auth = this._app.auth();
+        await this._loadAuthApi();
+        this._auth = this._app.auth() as any;
       }
       await this._listenForConnectionStatus();
     } else {
@@ -224,7 +239,7 @@ export class RealTimeClient extends RealTimeDb
   protected async _detectConnection() {
     const connectionEvent = () => {
       try {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
           this._eventManager.once('connection', (state: boolean) => {
             if (state) {
               resolve();

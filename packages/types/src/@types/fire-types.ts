@@ -1,3 +1,4 @@
+import { User, UserInfo } from '@firebase/auth-types';
 import type { IDictionary } from 'common-types';
 import type {
   IServiceAccount,
@@ -5,11 +6,13 @@ import type {
   IEmailAuthProvider,
   IClientAuth,
 } from '../index';
+import { IMockDelayedState, IMockServerOptions } from './db-mocking/index';
 
 export type FakerStatic = typeof import('faker');
 
 export const enum AuthProviderName {
   emailPassword = 'emailPassword',
+  oauth = 'oauth',
   phone = 'phone',
   google = 'google',
   playGames = 'playGames',
@@ -20,6 +23,8 @@ export const enum AuthProviderName {
   yahoo = 'yahoo',
   microsoft = 'microsoft',
   apple = 'apple',
+  saml = 'saml',
+  recaptcha = 'recaptcha',
   anonymous = 'anonymous',
 }
 
@@ -43,9 +48,10 @@ export interface ISimplifiedMockApi extends IDictionary {
  */
 export interface IMockAuthConfig {
   /** The auth providers which have been enabled for this app */
-  providers: IAuthProviderName[];
+  providers: AuthProviderName[] | (() => Promise<AuthProviderName[]>);
   /** Arrya of known users who should be in the mock Auth system to start. */
-  users?: ISimplifiedMockUser[];
+  users?: IMockUser[] | (() => Promise<IMockUser[]>);
+  options?: IMockServerOptions;
 }
 
 export interface IMockConfigOptions {
@@ -58,12 +64,21 @@ export interface IMockConfigOptions {
   db?: IDictionary | AsyncMockData;
 }
 
-export interface IMockUser extends UserRecord {
+/**
+ * Firemock's internal representation of a user.
+ *
+ * This representation extends the Admin SDK's `UserRecord` interface but is different from the
+ * Client SDK's `User` and `UserCredential` interfaces.
+ *
+ * > **Note:** external users configuring the mock DB will just use the `IMockUser`
+ * > type -- a simplified requirement -- and when it is consumed by Firemock via the
+ * > API it will be converted to `IMockRecord`.
+ */
+export interface IMockUserRecord extends UserRecord {
+  kind: 'MockUserRecord';
   /** Optionally sets a fixed UID for this user. */
   uid: string;
   isAnonymous?: boolean;
-  /** Optionally gives the user a set of claims. */
-  claims?: IDictionary;
   /**
    * Optionally state token Ids which should be returned when calling
    * the `getTokenId()` method. This is useful if you have an associated
@@ -81,6 +96,17 @@ export interface IMockUser extends UserRecord {
    * on the verification link.
    */
   emailVerified: boolean;
+  /**
+   * an `id` uniquely identifing the "provider" used to login a given user.
+   */
+  providerId?: string;
+  /**
+   * Any client config for multi-factor that has been picked up
+   *
+   * Note: admin and client SDK's both have a multiFactor property but they
+   * are not the same.
+   */
+  clientMultiFactor?: User['multiFactor'];
 }
 
 /**
@@ -92,11 +118,18 @@ export interface IMockAuth extends IClientAuth, IAuthProviders {}
 
 /**
  * A basic configuration for a user that allows default values to fill in some of
- * the non-essential properties which Firebase requires
+ * the non-essential properties which Firebase requires (but Firemock is less sensative
+ * to)
  */
-export type ISimplifiedMockUser = Omit<
-  IMockUser,
-  'emailVerified' | 'disabled' | 'uid' | 'toJSON' | 'providerData' | 'metadata'
+export type IMockUser = Omit<
+  IMockUserRecord,
+  | 'emailVerified'
+  | 'disabled'
+  | 'uid'
+  | 'toJSON'
+  | 'providerData'
+  | 'metadata'
+  | 'kind'
 > & {
   emailVerified?: boolean;
   disabled?: boolean;
@@ -107,7 +140,9 @@ export type ISimplifiedMockUser = Omit<
 export type DebuggingCallback = (message: string) => void;
 
 /** an _async_ mock function which returns a dictionary data structure */
-export type AsyncMockData = (db: ISimplifiedMockApi) => Promise<IDictionary>;
+export type AsyncMockData<T extends IDictionary = IDictionary> = () => Promise<
+  T
+>;
 
 export interface IFirebaseBaseConfig {
   /** Flag to set debugging override from logging configuration. */
@@ -140,10 +175,14 @@ export interface IMockConfig extends IFirebaseBaseConfig {
    * or you can pass in an async function which resolves to the dictionary
    * asynchronously
    */
-  mockData?: IDictionary | AsyncMockData;
+  mockData?: IMockData;
   /** optionally configure mocking for Firebase Authentication */
   mockAuth?: IMockAuthConfig;
 }
+
+export type IMockData<TState extends IDictionary = IDictionary> =
+  | TState
+  | IMockDelayedState<TState>;
 
 export interface IClientConfig extends IFirebaseBaseConfig {
   apiKey: string;
@@ -195,9 +234,20 @@ export interface IEmitter {
  * An SDK that Firemodel supports connecting to Firebase by the
  * equivalently named SDK.
  */
-export const enum SDK {
+export enum SDK {
   FirestoreAdmin = 'FirestoreAdmin',
   FirestoreClient = 'FirestoreClient',
   RealTimeAdmin = 'RealTimeAdmin',
   RealTimeClient = 'RealTimeClient',
+}
+
+export enum Database {
+  Firestore = 'Firestore',
+  RTDB = 'RTDB',
+}
+
+export enum ApiKind {
+  admin = 'admin',
+  client = 'client',
+  rest = 'rest',
 }

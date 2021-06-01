@@ -1,4 +1,4 @@
-import { Mock } from '../../src/mocking';
+import { Mock, SDK } from '../../src/mocking';
 
 describe('multiPathSet() => ', () => {
   it('setting properties shallowly works as expected', async () => {

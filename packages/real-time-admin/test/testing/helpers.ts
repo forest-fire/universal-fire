@@ -1,5 +1,5 @@
 import './test-console'; // TS declaration
-import '@/global.d.ts';
+// import '@/global.d.ts';
 
 import * as fs from 'fs';
 import * as process from 'process';
@@ -49,7 +49,7 @@ export function setupEnv() {
   process.env.NODE_ENV = stage;
 
   const current = process.env;
-  const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
+  const yamlConfig = yaml.load(fs.readFileSync('./env.yml', 'utf8')) as IDictionary;
   const combined = {
     ...yamlConfig[stage],
     ...process.env,

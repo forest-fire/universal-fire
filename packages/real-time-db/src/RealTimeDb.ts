@@ -9,7 +9,6 @@ import {
   IFirebaseListener,
   IFirebaseWatchHandler,
   IMockLoadingState,
-  IRealTimeDb,
   PermissionDenied,
   RealTimeDbError,
   UndefinedAssignment,
@@ -18,43 +17,29 @@ import {
   VALID_REAL_TIME_EVENTS,
 } from './index';
 import {
-  IAbstractedDatabase,
   IAdminApp,
   IClientApp,
   IDatabaseConfig,
-  IMockConfigOptions,
   IRtdbDataSnapshot,
   IRtdbDatabase,
   IRtdbDbEvent,
   IRtdbReference,
   ISerializedQuery,
   IAbstractedEvent,
+  Database,
+  IBaseAbstractedDatabase,
 } from '@forest-fire/types';
 
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { slashNotation } from '@forest-fire/utility';
-import type { Mock as IMockApi } from 'firemock';
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
-export abstract class RealTimeDb extends AbstractedDatabase
-  implements IRealTimeDb, IAbstractedDatabase<IMockApi> {
-  protected _isAdminApi: boolean = false;
-
-  constructor() {
-    super();
-  }
-
-  public get isMockDb() {
-    return this._config.mocking;
-  }
-
-  public get isAdminApi() {
-    return this._isAdminApi;
-  }
+export abstract class RealTimeDb extends AbstractedDatabase {
+  public readonly dbType: Database.RTDB = Database.RTDB;
 
   /**
    * **getPushKey**
@@ -68,10 +53,6 @@ export abstract class RealTimeDb extends AbstractedDatabase
   public async getPushKey(path: string) {
     const key = await this.ref(path).push().key;
     return key;
-  }
-
-  public get isConnected() {
-    return this._isConnected;
   }
 
   /** how many miliseconds before the attempt to connect to DB is timed out */
@@ -92,8 +73,8 @@ export abstract class RealTimeDb extends AbstractedDatabase
   protected _debugging: boolean = false;
   protected _mocking: boolean = false;
   protected _allowMocking: boolean = false;
-  protected _app: IClientApp | IAdminApp;
-  protected _database?: IRtdbDatabase;
+  declare protected _app: IClientApp | IAdminApp;
+  declare protected _database?: IRtdbDatabase;
   protected _onConnected: IFirebaseListener[] = [];
   protected _onDisconnected: IFirebaseListener[] = [];
   protected _config: IDatabaseConfig;

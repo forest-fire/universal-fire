@@ -6,7 +6,7 @@ import type {
 } from '@forest-fire/types';
 import type { IDictionary } from 'common-types';
 
-export type MockKlass = import('../mocking/Mock').Mock;
+export type MockKlass = import('../mocking/Mock').Mock<any>;
 
 /**
  * Create a user in the Auth system which can be logged in via the

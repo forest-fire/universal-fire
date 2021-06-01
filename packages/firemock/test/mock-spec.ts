@@ -5,6 +5,7 @@ import { firstProp, lastProp } from '../src/util/other';
 
 import { SchemaCallback } from '../src';
 import first from 'lodash.first';
+import 'jest-extended';
 
 const employeeMocker: SchemaCallback = (h: SchemaHelper) => () => ({
   first: h.faker.name.firstName(),

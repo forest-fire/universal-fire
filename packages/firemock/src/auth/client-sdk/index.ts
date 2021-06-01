@@ -1,9 +1,18 @@
-import { notImplemented } from './notImplemented';
-import { implemented } from './implemented';
-import type { FirebaseAuth } from '@forest-fire/types';
+//#autoindex
 
-// tslint:disable-next-line:no-object-literal-type-assertion
-export const authMockApi: FirebaseAuth = {
-  ...notImplemented,
-  ...implemented,
-} as FirebaseAuth;
+//#region autoindexed files
+
+// index last changed at: 8th Aug, 2020, 07:50 AM ( GMT-7 )
+// export: named; exclusions: index, private.
+// files: clientAuthApi, type-guards.
+// directories: api, helpers.
+
+// local file exports
+export * from "./clientAuthApi";
+export * from "./type-guards";
+
+// directory exports
+export * from "./api/index";
+export * from "./helpers/index";
+
+//#endregion

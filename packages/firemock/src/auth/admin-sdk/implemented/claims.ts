@@ -1,6 +1,6 @@
 import { IDictionary } from 'common-types';
 import type { Auth } from '@forest-fire/types';
-import { updateUser } from '@/auth/state-mgmt';
+import { updateUser } from '@/auth/user-mgmt';
 
 export const claims: Partial<Auth> = {
   /**

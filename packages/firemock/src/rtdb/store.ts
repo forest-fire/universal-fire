@@ -1,8 +1,7 @@
 // tslint:disable:no-implicit-dependencies
-import { IDictionary, pathJoin } from 'common-types';
+import { IDictionary } from 'common-types';
 import { dotify, dotifyKeys, get, getKey, getParent, join, set } from '@/util';
 import { getListeners, notify, removeAllListeners } from '@/rtdb';
-
 import { IMockWatcherGroupEvent } from '@/@types';
 import copy from 'fast-copy';
 import { deepEqual } from 'fast-equals';
@@ -218,7 +217,7 @@ export function groupEventsByWatcher(
           ? justKey(changeObject)
           : listener.query.path.split('.').pop()
         : dotify(
-            pathJoin(slashify(listener.query.path), justKey(changeObject))
+            join(slashify(listener.query.path), justKey(changeObject))
           );
 
     const newResponse = {

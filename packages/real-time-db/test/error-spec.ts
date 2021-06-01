@@ -1,4 +1,3 @@
-// tslint:disable:no-implicit-dependencies
 import { AbstractedProxyError, PermissionDenied } from '../src/errors';
 import { expect } from 'chai';
 

@@ -4,6 +4,7 @@ import type {
   IRtdbDataSnapshot,
   IRtdbThenableReference,
   IRtdbDbEvent,
+  IRtdbQuery,
 } from '@forest-fire/types';
 
 import { IFirebaseEventHandler, DelayType } from '@/@types';
@@ -37,11 +38,12 @@ function isMultiPath(data: IDictionary) {
   return indexesAreStrings && indexesLookLikeAPath ? true : false;
 }
 
-export class Reference<T = any> extends Query<T> implements IRtdbReference {
+export class Reference<T = any> extends Query<T>
+  implements IRtdbReference, IRtdbQuery {
   public static createQuery(
     query: string | SerializedRealTimeQuery,
     delay: DelayType = 5
-  ) {
+  ): IRtdbReference {
     if (typeof query === 'string') {
       query = new SerializedRealTimeQuery(query);
     }
@@ -49,8 +51,8 @@ export class Reference<T = any> extends Query<T> implements IRtdbReference {
     obj._query = query;
     return obj;
   }
-  public static create(path: string) {
-    return new Reference(path);
+  public static create<T = any>(path: string): IRtdbReference {
+    return new Reference<T>(path);
   }
 
   constructor(path: string, _delay: DelayType = 5) {

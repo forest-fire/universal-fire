@@ -1,5 +1,5 @@
 import * as helpers from './testing/helpers';
-import { SchemaHelper, Mock, Reference } from '../src';
+import { SchemaHelper, Mock } from '../src/mocking';
 import {
   updateDB,
   removeDB,
@@ -7,16 +7,22 @@ import {
   setDB,
   multiPathUpdateDB,
   clearDatabase,
-  listenerCount,
+  Reference,
+  Query,
   reset,
 } from '../src/rtdb';
 import { IDictionary } from 'common-types';
-import type { IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IRtdbDataSnapshot, IRtdbReference } from '@forest-fire/types';
+import 'jest-extended';
+import { firstKey } from 'native-dash';
 
 describe('Listener events ->', () => {
   it('listening on "on_child" events', async () => {
     reset();
-    const queryRef = Reference.createQuery('userProfile', 10);
+    const queryRef = (Reference.createQuery(
+      'userProfile',
+      10
+    ) as unknown) as IRtdbReference;
     let events: IDictionary[] = [];
     const cb = (eventType: string) => (
       snap: IRtdbDataSnapshot,
@@ -235,8 +241,8 @@ describe('Listener events ->', () => {
       .quantifyHasMany('employee', 10)
       .generate();
 
-    const firstEmployee = helpers.firstKey(m.db.employees);
-    const firstCompany = helpers.firstKey(m.db.companies);
+    const firstEmployee = firstKey(m.db.employees);
+    const firstCompany = firstKey(m.db.companies);
     expect(m.db.employees[firstEmployee]).toBeInstanceOf(Object);
     expect(m.db.companies[firstCompany]).toBeInstanceOf(Object);
 

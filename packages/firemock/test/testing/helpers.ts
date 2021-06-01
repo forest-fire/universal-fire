@@ -7,8 +7,7 @@ import * as yaml from 'js-yaml';
 import { stderr, stdout } from 'test-console';
 
 import { IDictionary } from 'common-types';
-import first from 'lodash.first';
-import last from 'lodash.last';
+import { last, first } from 'native-dash';
 
 // tslint:disable-next-line
 interface Console {
@@ -39,9 +38,9 @@ export function setupEnv() {
     process.env.AWS_STAGE = 'test';
   }
   const current = process.env;
-  const yamlConfig: IDictionary = yaml.safeLoad(
+  const yamlConfig: IDictionary = yaml.load(
     fs.readFileSync('./env.yml', 'utf8')
-  );
+  ) as IDictionary;
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env,

@@ -5,22 +5,28 @@ import type {
   firestore as adminFirestore,
 } from 'firebase-admin';
 
+export type uid = string;
+
 // TODO: we should prefix the types with "I".
 
 //#region Client Auth API
 export type IClientAuth = import('@firebase/auth-types').FirebaseAuth;
 export type IClientAuthProviders = FirebaseNamespace['auth'];
 export type ActionCodeInfo = import('@firebase/auth-types').ActionCodeInfo;
+export type Unsubscribe = () => void;
 export type ActionCodeSettings = import('@firebase/auth-types').ActionCodeSettings;
 export type AdditionalUserInfo = import('@firebase/auth-types').AdditionalUserInfo;
 export type ApplicationVerifier = import('@firebase/auth-types').ApplicationVerifier;
 export type AuthCredential = import('@firebase/auth-types').AuthCredential;
+/**
+ * A dictionary which has the `providerId` included in it as the sole property.
+ * Valid examples of a _providerId_ can be found in the `FirebaseAuthProvider` enumeration.
+ */
 export type AuthProvider = import('@firebase/auth-types').AuthProvider;
 export type ConfirmationResult = import('@firebase/auth-types').ConfirmationResult;
 export type AuthSettings = import('@firebase/auth-types').AuthSettings;
 export type EmailAuthProvider_Instance = import('@firebase/auth-types').EmailAuthProvider_Instance;
 export type FacebookAuthProvider_Instance = import('@firebase/auth-types').FacebookAuthProvider_Instance;
-export type FirebaseAuth = import('@firebase/auth-types').FirebaseAuth;
 export type GithubAuthProvider_Instance = import('@firebase/auth-types').GithubAuthProvider_Instance;
 export type GoogleAuthProvider = import('@firebase/auth-types').GoogleAuthProvider;
 export type GoogleEmailAuthProvider = import('@firebase/auth-types').EmailAuthProvider;
@@ -57,9 +63,6 @@ export type IClientRtdbDatabase = import('@firebase/database-types').FirebaseDat
 export type IRealTimeQuery = import('@firebase/database-types').Query;
 export type IRtdbDataSnapshot = import('@firebase/database-types').DataSnapshot;
 export type IRtdbDbEvent = import('@firebase/database-types').EventType;
-export type IRtdbOnDisconnect = import('@firebase/database-types').OnDisconnect;
-export type IRtdbQuery = import('@firebase/database-types').Query;
-export type IRtdbReference = import('@firebase/database-types').Reference;
 export type IRtdbThenableReference = import('@firebase/database-types').ThenableReference;
 //#endregion Client Rtdb API
 
@@ -91,6 +94,10 @@ export interface IAdminDatabaseApi {
   Reference: admin.database.Reference;
   ThenableReference: admin.database.ThenableReference;
 }
+/** the Admin SDK's typing for `Reference` */
+export type IRtdbAdminReference = admin.database.Reference;
+export type IRtdbAdminQuery = admin.database.Reference;
+
 export interface IAdminAuthApi {
   ActionCodeSettings: admin.auth.ActionCodeSettings;
   Auth: admin.auth.Auth;

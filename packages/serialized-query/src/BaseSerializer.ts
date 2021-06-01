@@ -20,7 +20,7 @@ export abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
   protected _path: string;
   protected _startAtKey?: keyof T & string;
   protected _startAt?: string;
-  protected _db?: ISimplifiedDatabase;
+  declare protected _db?: ISimplifiedDatabase;
   protected abstract _orderBy: IFirestoreQueryOrderType | IRealQueryOrderType;
 
   static async create<T extends BaseSerializer>(
@@ -155,7 +155,7 @@ export abstract class BaseSerializer<T = any> implements ISerializedQuery<T> {
   /**
    * Execute the query as a one time fetch.
    */
-  public abstract async execute(db?: ISimplifiedDatabase): Promise<any>;
+  public abstract execute(db?: ISimplifiedDatabase): Promise<any>;
 
   /**
    * Allows a shorthand notation for simple serialized queries.

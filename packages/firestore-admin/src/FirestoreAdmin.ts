@@ -7,37 +7,38 @@ import {
   getRunningFirebaseApp,
 } from '@forest-fire/utility';
 import {
-  IAbstractedDatabase,
   IAdminApp,
   IAdminAuth,
   IAdminConfig,
-  IAdminSdk,
   IMockConfig,
   SDK,
   isAdminConfig,
   isMockConfig,
   IAdminFirebaseNamespace,
   IAdminFirestoreDatabase,
+  IFirestoreAdmin,
+  ApiKind,
 } from '@forest-fire/types';
 
 import { FirestoreDb } from '@forest-fire/firestore-db';
 import type { Mock as IMockApi } from 'firemock';
 
-export class FirestoreAdmin extends FirestoreDb
-  implements IAdminSdk, IAbstractedDatabase<IMockApi> {
-  sdk = SDK.FirestoreAdmin;
+export class FirestoreAdmin extends FirestoreDb implements IFirestoreAdmin {
+  public readonly sdk: SDK.FirestoreAdmin = SDK.FirestoreAdmin;
+  public readonly apiKind: ApiKind.admin = ApiKind.admin;
+  public readonly isAdminApi = true;
+
   static async connect(config: IAdminConfig | IMockConfig) {
     const obj = new FirestoreAdmin(config);
     await obj.connect();
     return obj;
   }
 
-  protected _isAdminApi = true;
   protected _auth?: IAdminAuth;
   protected _firestore?: IAdminFirestoreDatabase;
   protected _admin?: IAdminFirebaseNamespace;
-  protected _app!: IAdminApp;
-  protected _config: IAdminConfig | IMockConfig;
+  declare protected _app: IAdminApp;
+  declare protected _config: IAdminConfig | IMockConfig;
 
   constructor(config?: IAdminConfig | IMockConfig) {
     super();
@@ -160,7 +161,7 @@ export class FirestoreAdmin extends FirestoreDb
    * mocked DB.
    */
   protected async _connectMockDb(config: IMockConfig) {
-    await this.getFireMock({
+    await this.getFiremock({
       db: config.mockData || {},
       auth: { providers: [], ...config.mockAuth },
     });

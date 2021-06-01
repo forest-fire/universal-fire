@@ -1,7 +1,4 @@
-import * as helpers from './testing/helpers';
 import * as util from '../src/util/other';
-
-import { IDictionary } from 'common-types';
 
 describe('Utilities', () => {
   describe('join', () => {

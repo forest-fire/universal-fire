@@ -3,19 +3,21 @@ import type {
   IAdminApp,
   IClientApp,
   IFirestoreDatabase,
-  IAbstractedDatabase,
   ISerializedQuery,
   IAbstractedEvent,
+  Database,
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
-import { IFirestoreDb } from './firestore-types';
-import { isFirestoreEvent, FirestoreDbError, VALID_FIRESTORE_EVENTS } from '.';
-import type { Mock as IMockApi } from 'firemock';
+import {
+  isFirestoreEvent,
+  FirestoreDbError,
+  VALID_FIRESTORE_EVENTS,
+} from './index';
 
-export abstract class FirestoreDb extends AbstractedDatabase
-  implements IFirestoreDb, IAbstractedDatabase<IMockApi> {
-  protected _database?: IFirestoreDatabase;
-  protected _app!: IClientApp | IAdminApp;
+export abstract class FirestoreDb extends AbstractedDatabase {
+  declare public readonly dbType: Database.Firestore;
+  declare protected _database?: IFirestoreDatabase;
+  // protected _app!: IClientApp | IAdminApp;
 
   protected get database() {
     if (this._database) {
@@ -146,9 +148,9 @@ export abstract class FirestoreDb extends AbstractedDatabase
   private async _removeCollection(path: string) {
     const batch = this.database.batch();
     // @ts-ignore
-    this.database.collection(path).onSnapshot((snapshot) => {
+    this.database.collection(path).onSnapshot((snapshot: QuerySnapshot<any>) => {
       // @ts-ignore
-      snapshot.docs.forEach((doc) => {
+      (snapshot.docs).forEach((doc) => {
         batch.delete(doc.ref);
       });
     });
