@@ -57,9 +57,9 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
   protected _clientType = 'admin';
   protected _isAuthorized: boolean = true;
   protected _auth?: IAdminAuth;
-  protected _config: IAdminConfig | IMockConfig;
-  protected _app!: IAdminApp;
-  protected _database?: IAdminRtdbDatabase;
+  declare protected _config: IAdminConfig | IMockConfig;
+  declare protected _app: IAdminApp;
+  declare protected _database?: IAdminRtdbDatabase;
 
   constructor(config?: IAdminConfig | IMockConfig) {
     super();
