@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-db",
-  "version": "0.59.2",
+  "version": "0.59.3",
   "description": "Core functional library supporting 'abstracted-admin' and 'abstracted-client'",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/abstracted-firebase",
@@ -55,12 +55,12 @@
     "firemock": ">= 0.59.2"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.59.2",
-    "@forest-fire/serialized-query": "^0.59.2",
-    "@forest-fire/types": "^0.59.2",
-    "@forest-fire/utility": "^0.59.2",
+    "@forest-fire/abstracted-database": "^0.59.3",
+    "@forest-fire/serialized-query": "^0.59.3",
+    "@forest-fire/types": "^0.59.3",
+    "@forest-fire/utility": "^0.59.3",
     "common-types": "^1.25.0",
-    "firemock": "^0.59.2",
+    "firemock": "^0.59.3",
     "typed-conversions": "^0.11.1"
   },
   "engines": {

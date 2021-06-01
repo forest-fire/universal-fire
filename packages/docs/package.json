@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/docs",
-  "version": "0.59.2",
+  "version": "0.59.3",
   "description": "An ecosystem of abstraction on top of Firebase",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
