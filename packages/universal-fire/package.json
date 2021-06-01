@@ -22,7 +22,7 @@
     "watch": "run-p watch:esnext watch:cjs",
     "watch:esnext": "echo not implemented",
     "watch:cjs": "echo not implemented",
-    "test": "yarn do test",
+    "test": "yarn dd test",
     "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files src src/**/*.ts",
     "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*.spec.ts",
     "test:e2e": "mocha --require ts-node/register test/*.e2e.ts"
@@ -32,7 +32,7 @@
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
-    "do-devops": "^0.3.20",
+    "dd": "^0.11.3",
     "firemock": "^0.59.2",
     "mocha": "^8.0.1",
     "npm-run-all": "^4.1.5",
@@ -49,7 +49,7 @@
     "@forest-fire/serialized-query": "^0.59.2",
     "@forest-fire/serializer-factory": "^0.59.2",
     "@forest-fire/types": "^0.59.2",
-    "common-types": "^1.15.8"
+    "common-types": "^1.25.0"
   },
   "license": "MIT"
 }
