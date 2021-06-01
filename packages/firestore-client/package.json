@@ -24,8 +24,8 @@
     "test:e2e": "mocha --require ts-node/register test/*-e2e.ts"
   },
   "devDependencies": {
-    "@firebase/app": "^0.6.8",
-    "@firebase/auth": "^0.14.8",
+    "@firebase/app": "0.6.11",
+    "@firebase/auth": "^0.15.0",
     "@firebase/firestore": "^1.16.0",
     "@firebase/firestore-types": "^1.12.0",
     "@forest-fire/firestore-db": "^0.56.5",
@@ -42,8 +42,8 @@
     "typescript": "^4.3.2"
   },
   "optionalDependencies": {
-    "@firebase/app": "^0.6.9",
-    "@firebase/auth": "^0.14.9",
+    "@firebase/app": "0.6.11",
+    "@firebase/auth": "^0.15.0",
     "@firebase/firestore": "^1.16.3",
     "@firebase/firestore-types": "^1.12.0",
     "@forest-fire/firestore-db": "^0.59.2",
