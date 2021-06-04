@@ -1,4 +1,5 @@
 import {
+  IDatabaseApi,
   IFirestoreDatabase,
   IMockDelayedState,
   IMockStore,
@@ -18,7 +19,7 @@ import {
  * admin and client SDK's
  */
 export function createDatabase<TState>(
-  container: IAbstractedDatabase,
+  container: IDatabaseApi,
   initialState: TState | IMockDelayedState<TState>
 ): [IRtdbDatabase | IFirestoreDatabase, IMockStore<TState>] {
   const store = createStore<TState>(container, initialState);

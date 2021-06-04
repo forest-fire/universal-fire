@@ -17,7 +17,7 @@ const firemock: IMockDbFactory = async (
   options = {}
 ) => {
   const [auth, authManager] = await createAuth(container, mockAuth);
-  const [db, store] = await createDatabase(container, mockData);
+  const [db, store] = createDatabase(container, mockData);
 
   authManager.setNetworkDelay(options.networkDelay || NetworkDelay.lazer);
 

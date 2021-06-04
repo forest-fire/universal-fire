@@ -1,5 +1,4 @@
 import {
-  IAbstractedDatabase,
   IAuthApi,
   IMockAuthConfig,
   IMockAuthMgmt,
