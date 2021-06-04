@@ -20,7 +20,14 @@
       "name": "📦 @forest-fire/abstracted-database",
       "path": "packages/abstracted-database"
     },
-
+    {
+      "name": "📦 @forest-fire/firestore-db",
+      "path": "packages/firestore-db"
+    },
+    {
+      "name": "📦 @forest-fire/real-time-db",
+      "path": "packages/real-time-db"
+    },
     {
       "name": "📦 @forest-fire/firestore-admin",
       "path": "packages/firestore-admin"
@@ -29,10 +36,7 @@
       "name": "📦 @forest-fire/firestore-client",
       "path": "packages/firestore-client"
     },
-    {
-      "name": "📦 @forest-fire/firestore-db",
-      "path": "packages/firestore-db"
-    },
+
     {
       "name": "📦 @forest-fire/real-time-admin",
       "path": "packages/real-time-admin"
@@ -42,11 +46,7 @@
       "path": "packages/real-time-client"
     },
     {
-      "name": "📦 @forest-fire/real-time-db",
-      "path": "packages/real-time-db"
-    },
-    {
-      "name": "📦 @forest-fire/serialized-query",
+      "name": "⚙️ @forest-fire/serialized-query",
       "path": "packages/serialized-query"
     },
     {
