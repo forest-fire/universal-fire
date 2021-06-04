@@ -1,14 +1,11 @@
-import { FireMockError } from '@/errors';
 import {
-  IAbstractedDatabase,
   IFirestoreDatabase,
   IMockDelayedState,
   IMockStore,
   IRtdbDatabase,
-  isRtdbBacked,
-  isFirestoreBacked,
   isClientSdk,
 } from '@forest-fire/types';
+import { FireMockError } from '../errors';
 import { createStore } from './createStore';
 import {
   createRtdbClientMock,
@@ -42,3 +39,7 @@ export function createDatabase<TState>(
   // return isRtdbBacked(container) ? [rtdb, store] : [firestore, store];
   return rtdb;
 }
+function isFirestoreBacked(container: any): boolean {
+  throw new Error('Function not implemented.');
+}
+
