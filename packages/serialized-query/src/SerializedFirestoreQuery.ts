@@ -88,7 +88,7 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
     return this;
   }
 
-  public limitToFirst(value: number): SerializedFirestoreQuery<T> {
+  public limitToFirst(value: number):  SerializedFirestoreQuery<T> {
     this._limitToFirst = value;
     return this;
   }

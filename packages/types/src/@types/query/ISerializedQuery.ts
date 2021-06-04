@@ -73,15 +73,11 @@ export interface ISerializedQuery<
    * Deserialize a `SerializedQuery` into a specific DB's query type:
    * {@link @firebase/firestore-types/Query} or {@link @firebase/database-types/Query}.
    */
-  deserialize: <
-    TQuery extends
-      | IFirebaseRtdbQuery
-      | IFirebaseCollectionReference = TDb extends IRtdbDatabase
-      ? IFirebaseRtdbQuery
-      : IFirebaseCollectionReference
-  >(
+  deserialize: (
     db?: TDb
-  ) => TQuery;
+  ) => TDb extends IRtdbDatabase
+    ? IFirebaseRtdbQuery
+    : IFirebaseCollectionReference;
 
   execute: <
     TSnap extends ISnapshot = TDb extends IRtdbDatabase
