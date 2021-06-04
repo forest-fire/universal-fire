@@ -79,11 +79,9 @@ export interface ISerializedQuery<
     ? IFirebaseRtdbQuery
     : IFirebaseCollectionReference;
 
-  execute: <
-    TSnap extends ISnapshot = TDb extends IRtdbDatabase
-      ? IRtdbSnapshot
-      : IFirestoreQuerySnapshot
-  >(
+  execute: (
     db?: TDb
-  ) => Promise<TSnap>;
+  ) => Promise<TDb extends IRtdbDatabase
+  ? IRtdbSnapshot
+  : IFirestoreQuerySnapshot>;
 }
