@@ -1,0 +1,68 @@
+{
+  "folders": [
+    {
+      "name": "✨ root",
+      "path": "."
+    },
+    {
+      "name": "🔥 universal-fire",
+      "path": "packages/universal-fire"
+    },
+    {
+      "name": "🤖 firemock",
+      "path": "packages/firemock"
+    },
+    {
+      "name": "📔 Documentation",
+      "path": "packages/docs"
+    },
+    {
+      "name": "📦 @forest-fire/abstracted-database",
+      "path": "packages/abstracted-database"
+    },
+
+    {
+      "name": "📦 @forest-fire/firestore-admin",
+      "path": "packages/firestore-admin"
+    },
+    {
+      "name": "📦 @forest-fire/firestore-client",
+      "path": "packages/firestore-client"
+    },
+    {
+      "name": "📦 @forest-fire/firestore-db",
+      "path": "packages/firestore-db"
+    },
+    {
+      "name": "📦 @forest-fire/real-time-admin",
+      "path": "packages/real-time-admin"
+    },
+    {
+      "name": "📦 @forest-fire/real-time-client",
+      "path": "packages/real-time-client"
+    },
+    {
+      "name": "📦 @forest-fire/real-time-db",
+      "path": "packages/real-time-db"
+    },
+    {
+      "name": "📦 @forest-fire/serialized-query",
+      "path": "packages/serialized-query"
+    },
+    {
+      "name": "⚙️ @forest-fire/types",
+      "path": "packages/types"
+    },
+    {
+      "name": "⚙️ @forest-fire/utility",
+      "path": "packages/utility"
+    }
+  ],
+  "settings": {
+    "monorepoWorkspace.folders.prefix.unknown": "📦"
+  },
+  "extensions": {
+    "recommendations": []
+  },
+  "name": "Universal Fire"
+}
