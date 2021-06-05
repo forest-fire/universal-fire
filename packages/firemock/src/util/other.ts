@@ -1,7 +1,6 @@
 import { firstKey, lastKey } from 'native-dash';
-import { IDictionary, wait } from 'common-types';
+import { IDictionary} from 'common-types';
 import type { IRtdbDataSnapshot } from '@forest-fire/types';
-import type { Delays } from '@/@types';
 
 export function normalizeRef(r: string): string {
   r = r.replace('/', '.');
@@ -80,6 +79,7 @@ export function pathDiff(longPath: string, pathSubset: string) {
 
 export function orderedSnapToJS<T = any>(snap: IRtdbDataSnapshot) {
   const jsObject: IDictionary<T> = {};
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   snap.forEach((record: any) => (jsObject[record.key] = record.val()));
 
   return jsObject;
@@ -113,14 +113,6 @@ export function getParent(dotPath: string) {
 /** Get the Key from the end of a path string */
 export function getKey(dotPath: string) {
   return keyAndParent(dotPath).key;
-}
-
-let _delay: IDictionary | number | number[] | Delays = 5;
-
-export function setNetworkDelay(
-  value: IDictionary | number | number[] | Delays
-) {
-  _delay = value;
 }
 
 export function stripLeadingDot(str: string) {

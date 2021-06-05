@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import { IDatabaseApi } from '../database';
+import { IDatabaseSdk } from '../database';
 import { IMockAuthConfig, IMockData, IMockDatabase } from '../index';
 import { IMockServerOptions } from './index';
 
@@ -11,7 +11,7 @@ import { IMockServerOptions } from './index';
  */
 export interface IMockDbFactory {
   (
-    container: IDatabaseApi,
+    container: IDatabaseSdk,
     mockData: IMockData<IDictionary>,
     mockAuth: IMockAuthConfig,
     options: IMockServerOptions

@@ -1,3 +1,4 @@
+//@ts-ignore
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 
 export function startAt(query: SerializedRealTimeQuery) {

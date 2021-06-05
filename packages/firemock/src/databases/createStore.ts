@@ -8,22 +8,23 @@ import {
   join,
   networkDelay as delay,
   set,
-} from '@/util';
+} from '../util';
 import { deepEqual } from 'fast-equals';
 import copy from 'fast-copy';
 import { key as fbKey } from 'firebase-key';
 import {
-  IAbstractedDatabase,
+  IDatabaseSdk,
   IMockDelayedState,
   IMockListener,
   IMockStore,
   mockDataIsDelayed,
   NetworkDelay,
 } from '@forest-fire/types';
+//@ts-ignore
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 
 export function createStore<TState extends IDictionary = IDictionary>(
-  container: IAbstractedDatabase,
+  container: IDatabaseSdk,
   initialState: TState | IMockDelayedState<TState>
 ) {
   /**
@@ -32,7 +33,7 @@ export function createStore<TState extends IDictionary = IDictionary>(
    */
   let _state: TState;
   /** flag to indicate whether dispatch events should be fired */
-  let _silenceEvents: boolean = false;
+  let _silenceEvents = false;
   /** the artificial time delay used to simulate a real DB's network latency */
   let _networkDelay: NetworkDelay | number | [number, number] =
     NetworkDelay.lazer;

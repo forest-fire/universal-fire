@@ -1,5 +1,5 @@
 import {
-  IDatabaseApi,
+  IDatabaseSdk,
   IFirestoreDatabase,
   IMockDelayedState,
   IMockStore,
@@ -8,6 +8,7 @@ import {
 } from '@forest-fire/types';
 import { FireMockError } from '../errors';
 import { createStore } from './createStore';
+import { FirestoreAdminMock, FirestoreClientMock } from './firestore';
 import {
   createRtdbClientMock,
   createRtdbAdminMock,
@@ -19,7 +20,7 @@ import {
  * admin and client SDK's
  */
 export function createDatabase<TState>(
-  container: IDatabaseApi,
+  container: IDatabaseSdk,
   initialState: TState | IMockDelayedState<TState>
 ): [IRtdbDatabase | IFirestoreDatabase, IMockStore<TState>] {
   const store = createStore<TState>(container, initialState);
@@ -33,14 +34,19 @@ export function createDatabase<TState>(
   const rtdb = isClientSdk(container)
     ? createRtdbClientMock(store)
     : createRtdbAdminMock(store);
-  // const firestore = isClientSdk(container)
-  //   ? new FirestoreClientMock(container.sdk, container.config, store)
-  //   : new FirestoreAdminMock(container.sdk, container.config, store);
+  const firestore = isClientSdk(container)
+    ? new FirestoreClientMock(container.sdk, container.config, store)
+    : new FirestoreAdminMock(container.sdk, container.config, store);
 
-  // return isRtdbBacked(container) ? [rtdb, store] : [firestore, store];
-  return rtdb;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return isRtdbBacked(container) ? [rtdb, store] as any : [firestore, store] as any;
+  // return rtdb;
 }
 function isFirestoreBacked(container: any): boolean {
+  throw new Error('Function not implemented.');
+}
+
+function isRtdbBacked(container: IDatabaseSdk): boolean {
   throw new Error('Function not implemented.');
 }
 

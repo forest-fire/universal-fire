@@ -1,4 +1,5 @@
 import { IDictionary } from 'common-types';
+//@ts-ignore
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { ISchemaHelper } from './mocking-types';
 import type { IRtdbDbEvent, IRtdbDataSnapshot } from '@forest-fire/types';

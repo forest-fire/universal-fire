@@ -1,5 +1,6 @@
 import {
   IAuthApi,
+  IDatabaseSdk,
   IMockAuthConfig,
   IMockAuthMgmt,
   isAdminSdk,
@@ -14,11 +15,11 @@ import { createAdminAuth } from './admin-sdk/createAdminAuth';
  * with super-powers.
  */
 export async function createAuth(
-  container: IAbstractedDatabase,
+  container: IDatabaseSdk,
   mockAuth: IMockAuthConfig
 ): Promise<[IAuthApi, IMockAuthMgmt]> {
   const authManager = createAuthManager();
-  await authManager.initializeAuth(mockAuth);
+  authManager.initializeAuth(mockAuth);
 
   return [
     isAdminSdk(container)

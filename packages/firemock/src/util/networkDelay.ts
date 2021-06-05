@@ -1,4 +1,4 @@
-import { NetworkDelay } from '../../../types/src';
+import { NetworkDelay } from '@forest-fire/types';
 import { ms, wait } from 'common-types';
 import { between } from 'native-dash';
 

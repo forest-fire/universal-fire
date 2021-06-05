@@ -6,6 +6,7 @@ import { arrayToHash, hashToArray } from 'typed-conversions';
 
 import { IDictionary } from 'common-types';
 import { RtdbOrder } from '@forest-fire/types';
+//@ts-ignore
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { SortOrder } from '../@types/query-types';
 
