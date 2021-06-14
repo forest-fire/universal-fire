@@ -10,7 +10,7 @@ import {
 } from '../index';
 import { IGenericModel } from '../models';
 import { IRtdbSnapshot } from '../proxy-plus';
-import { IFirestoreQuerySnapshot, ISnapshot } from '../snapshot';
+import { IFirestoreQuerySnapshot } from '../snapshot';
 
 /**
  * Defines the public interface which any serializer must
@@ -27,10 +27,10 @@ export interface ISerializedQuery<
   /** the type of database it is being serialized down to */
   TApi extends IDatabaseApi = IDatabaseApi,
   TDb extends IDatabase = TApi extends IRealTimeApi
-    ? IRtdbDatabase
-    : IFirestoreDatabase,
+  ? IRtdbDatabase
+  : IFirestoreDatabase,
   K = keyof TModel & string
-> {
+  > {
   db: TDb;
   path: string;
   identity: ISerializedIdentity<TModel>;
@@ -82,6 +82,6 @@ export interface ISerializedQuery<
   execute: (
     db?: TDb
   ) => Promise<TDb extends IRtdbDatabase
-  ? IRtdbSnapshot
-  : IFirestoreQuerySnapshot>;
+    ? IRtdbSnapshot
+    : IFirestoreQuerySnapshot>;
 }
