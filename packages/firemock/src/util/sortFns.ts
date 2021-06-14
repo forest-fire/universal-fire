@@ -1,6 +1,5 @@
 import { IDictionary } from 'common-types';
 import { RtdbOrder } from '@forest-fire/types';
-//@ts-ignore
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 
 export type ISortFns = (a: any, b: any) => number;

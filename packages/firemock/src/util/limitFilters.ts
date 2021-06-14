@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-//@ts-ignore
+
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 
 /** an filter function for queries with a `limitToFirst` value */

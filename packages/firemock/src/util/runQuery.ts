@@ -6,7 +6,7 @@ import { arrayToHash, hashToArray } from 'typed-conversions';
 
 import { IDictionary } from 'common-types';
 import { RtdbOrder } from '@forest-fire/types';
-//@ts-ignore
+
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { SortOrder } from '../@types/query-types';
 
@@ -34,8 +34,8 @@ const sortFn: (query: any) => sortFns.ISortFns = (query) =>
   query.identity.orderBy === RtdbOrder.orderByChild
     ? sortFns.orderByChild(query.identity.orderByKey)
     : (sortFns[
-        query.identity.orderBy as keyof typeof sortFns
-      ] as sortFns.ISortFns);
+      query.identity.orderBy as keyof typeof sortFns
+    ] as sortFns.ISortFns);
 
 export function runQuery(query: SerializedRealTimeQuery, data: any) {
   /**
@@ -65,8 +65,8 @@ export function runQuery(query: SerializedRealTimeQuery, data: any) {
     const limitToKeys = query.identity.limitToFirst
       ? Object.keys(data).slice(0, query.identity.limitToFirst)
       : query.identity.limitToLast
-      ? Object.keys(data).slice(-1 * query.identity.limitToLast)
-      : false;
+        ? Object.keys(data).slice(-1 * query.identity.limitToLast)
+        : false;
 
     if (limitToKeys) {
       Object.keys(data).forEach((k) => {
@@ -92,9 +92,9 @@ export function runQuery(query: SerializedRealTimeQuery, data: any) {
 
   return isListOfObjects
     ? // this is list of records to convert back to hash for Firebase compatability
-      arrayToHash(list)
+    arrayToHash(list)
     : dataIsAnObject
-    ? // if it was an Object but values weren't objects then this is probably
+      ? // if it was an Object but values weren't objects then this is probably
       // a key/value pairing
       list.reduce((agg: IDictionary, curr) => {
         if (curr.id && curr.value) {
@@ -115,7 +115,7 @@ export function runQuery(query: SerializedRealTimeQuery, data: any) {
 
         return agg;
       }, {})
-    : list;
+      : list;
 }
 
 function _limitFilter(query: SerializedRealTimeQuery) {

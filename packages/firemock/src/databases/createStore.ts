@@ -20,7 +20,7 @@ import {
   mockDataIsDelayed,
   NetworkDelay,
 } from '@forest-fire/types';
-//@ts-ignore
+
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 
 export function createStore<TState extends IDictionary = IDictionary>(
@@ -74,7 +74,7 @@ export function createStore<TState extends IDictionary = IDictionary>(
     const query =
       typeof pathOrQuery === 'string'
         ? // TODO: this needs to be generalized across RTDB and Firestore
-          new SerializedRealTimeQuery(pathOrQuery)
+        new SerializedRealTimeQuery(pathOrQuery)
         : pathOrQuery;
 
     _listeners.push({
