@@ -1,4 +1,4 @@
-import { FireMockError } from '@/errors';
+import { FireMockError } from "../errors";
 import {
   IMockAuthMgmt,
   IMockUser,
@@ -12,7 +12,7 @@ import {
   IAuthObserver,
   NetworkDelay,
 } from '@forest-fire/types';
-import { IDictionary, wait } from 'common-types';
+import { IDictionary } from 'common-types';
 import {
   isMockUserRecord,
   isUser,
