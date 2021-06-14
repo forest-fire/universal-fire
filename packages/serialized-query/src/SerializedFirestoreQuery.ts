@@ -88,7 +88,7 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
     return this;
   }
 
-  public limitToFirst(value: number):  SerializedFirestoreQuery<T> {
+  public limitToFirst(value: number): SerializedFirestoreQuery<T> {
     this._limitToFirst = value;
     return this;
   }
@@ -225,7 +225,7 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
       default:
         throw new SerializedError(
           `Unknown comparison operator: ${operation}`,
-          'invalid-operator'
+          'firestore/invalid-operator'
         );
     }
   }

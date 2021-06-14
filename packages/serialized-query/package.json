@@ -22,9 +22,16 @@
     "lint": "eslint src --ext js,ts && eslint test --ext ts",
     "test": "scripty"
   },
-  "dependencies": {
-    "@forest-fire/types": "^0.59.2"
+  "devDependencies": {
+    "brilliant-errors": "^0.3.1",
+    "@forest-fire/types": "^0.59.2",
+    "scripty": "2.0.0",
+    "eslint": "7.28.0",
+    "rimraf": "3.0.2"
   },
-  "devDependencies": {},
-  "license": "MIT"
+  "license": "MIT",
+  "peerDependencies": {
+    "brilliant-errors": "^0.3.1",
+    "@forest-fire/types": "^0.59.2"
+  }
 }

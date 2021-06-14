@@ -1,3 +1,3 @@
-import { createLibraryError } from 'brilliant-errors';
+import { createError } from 'brilliant-errors';
 
-export const SerializedError = createLibraryError('serialized-query');
+export const SerializedError = createError("SerializedError", 'serialized-query');
