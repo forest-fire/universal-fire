@@ -17,6 +17,8 @@
     "changed": "yarn lerna changed",
     "release": "yarn lerna publish",
     "bootstrap": "yarn lerna bootstrap",
+    "build:types": "lerna exec --scope @forest-fire/types yarn build",
+    "build:firemock": "lerna exec --scope firemock yarn build",
     "build:docs": "yarn docs:build",
     "test": "lerna run test --concurrency 4 --stream",
     "test:serial": "lerna run test --concurrency 1 --stream",

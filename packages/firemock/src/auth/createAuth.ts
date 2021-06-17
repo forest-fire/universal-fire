@@ -21,10 +21,10 @@ export async function createAuth(
   const authManager = createAuthManager();
   authManager.initializeAuth(mockAuth);
 
-  return [
+  return Promise.resolve([
     isAdminSdk(container)
       ? createAdminAuth(authManager)
       : createClientAuth(authManager),
     authManager,
-  ];
+  ]);
 }
