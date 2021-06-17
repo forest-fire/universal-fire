@@ -44,6 +44,7 @@
   "dependencies": {
     "@forest-fire/serialized-query": "^0.59.2",
     "@forest-fire/types": "^0.59.2",
+    "brilliant-errors": "^0.3.1",
     "deepmerge": "^4.2.2",
     "email-validator": "^2.0.4",
     "fast-copy": "^2.1.0",

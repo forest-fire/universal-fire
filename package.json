@@ -85,7 +85,7 @@
     "@firebase/app-types": "^0.6.1",
     "@firebase/auth-types": "^0.10.1",
     "@firebase/database-types": "^0.6.1",
-    "@firebase/firestore-types": "^2.1.0",
+    "@firebase/firestore-types": "^1.12.0",
     "@types/node": "12",
     "brilliant-errors": "^0.1.1",
     "common-types": "^1.17.3"

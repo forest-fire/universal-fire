@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/require-await */
 import type {
   ActionCodeInfo,
   ActionCodeSettings,
   IAuthObserver,
   IClientAuth,
 } from '@forest-fire/types';
-import { User } from '@forest-fire/types/src';
-import { createError } from 'common-types';
+import {createError} from 'brilliant-errors';
 
 /**
  * Implements the interface's functions but functions just
@@ -15,6 +15,13 @@ export const notImplemented: Omit<
   IClientAuth,
   'app' | 'settings' | 'currentUser' | 'languageCode' | 'tenantId'
 > = {
+  useEmulator(url, opts) {
+    throw createError(
+      'auth/not-implemented',
+      'This feature is not implemented yet in FireMock auth module'
+    );
+  },
+  emulatorConfig: null,
   onAuthStateChanged(nextOrObserver: IAuthObserver) {
     throw createError(
       'auth/not-implemented',
@@ -64,12 +71,12 @@ export const notImplemented: Omit<
     );
   },
 
-  async isSignInWithEmailLink(emailLink: string) {
-    throw createError(
-      'auth/not-implemented',
-      'This feature is not implemented yet in FireMock auth module'
-    );
-  },
+  // async isSignInWithEmailLink(emailLink: string) {
+  //   throw createError(
+  //     'auth/not-implemented',
+  //     'This feature is not implemented yet in FireMock auth module'
+  //   );
+  // },
 
   async signInWithEmailAndPassword(email: string, password: string) {
     throw createError(
@@ -188,16 +195,16 @@ export const notImplemented: Omit<
       'This feature is not implemented yet in FireMock auth module'
     );
   },
-  async useDeviceLanguage() {
-    throw createError(
-      'auth/not-implemented',
-      'This feature is not implemented yet in FireMock auth module'
-    );
-  },
-  async verifyPasswordResetCode(code: string) {
-    throw createError(
-      'auth/not-implemented',
-      'This feature is not implemented yet in FireMock auth module'
-    );
-  },
+  // async useDeviceLanguage() {
+  //   throw createError(
+  //     'auth/not-implemented',
+  //     'This feature is not implemented yet in FireMock auth module'
+  //   );
+  // },
+  // async verifyPasswordResetCode(code: string) {
+  //   throw createError(
+  //     'auth/not-implemented',
+  //     'This feature is not implemented yet in FireMock auth module'
+  //   );
+  // },
 };

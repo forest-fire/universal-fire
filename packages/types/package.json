@@ -26,7 +26,8 @@
   "dependencies": {
     "@types/faker": "^4.1.12",
     "faker": "^4.1.0",
-    "firebase-admin": "^9.4.2"
+    "firebase-admin": "9.4.1",
+    "@firebase/auth-types": "^0.10.1"
   },
   "devDependencies": {
     "typescript": "^4.1.3"

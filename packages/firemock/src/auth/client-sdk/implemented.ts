@@ -1,5 +1,6 @@
-import { IPartialUserCredential } from '@/@types/index';
-import { networkDelay } from '@/util/index';
+/* eslint-disable @typescript-eslint/require-await */
+import { IPartialUserCredential } from '../../@types/index';
+import { networkDelay } from '../../util/index';
 import { Omit } from 'common-types';
 
 import {
@@ -9,7 +10,7 @@ import {
   userUid,
   emailValidationAllowed,
   emailIsValidFormat,
-} from '@/auth/client-sdk/index';
+} from '../../auth/client-sdk/index';
 import {
   ActionCodeSettings,
   UserCredential,
@@ -23,8 +24,8 @@ import {
   UpdateRequest,
 } from '@forest-fire/types';
 
-import { FireMockError } from '@/errors';
-import { completeUserCredential, toUser } from '@/auth/util';
+import { FireMockError } from '../../errors';
+import { completeUserCredential, toUser } from '../../auth/util';
 import { createUser } from './createUser';
 
 export const implemented: (api: IMockAuthMgmt) => Partial<IClientAuth> = (
@@ -60,6 +61,7 @@ export const implemented: (api: IMockAuthMgmt) => Partial<IClientAuth> = (
     console.warn(
       `currently firemock accepts calls to setPersistence() but it doesn't support it.`
     );
+    return;
   },
 
   signInAnonymously: async (): Promise<UserCredential> => {

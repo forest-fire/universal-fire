@@ -2145,6 +2145,14 @@ brilliant-errors@^0.1.1:
   resolved "https://registry.npmjs.org/brilliant-errors/-/brilliant-errors-0.1.1.tgz#e01caaf6e71bf3b2d3b26590e3cdb0d71a997329"
   integrity sha512-wKJkCxhVtLa+f8MAlVeN6BA9p2WntCvxiHPKUOIYw3Gd+lBgKk9V81hfjm4wgbDW7vFTVi6lh5Fi+C9JuSmUWw==
 
+brilliant-errors@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/brilliant-errors/-/brilliant-errors-0.3.1.tgz#c3e59fa01f52069d6cd3f64da77436c0f75aea0f"
+  integrity sha512-oPUlFidgxs6HhTo1ksSoAAEG2nDXdR+73Za2t6s2Yem1MXJzq+tJy9zYs65TWt/suLA3bGE6PLUyS3+yysnbEQ==
+  dependencies:
+    callsites "^3.1.0"
+    common-types "^1.25.0"
+
 brorand@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
@@ -2359,6 +2367,11 @@ callsites@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-2.0.0.tgz#06eb84f00eea413da86affefacbffb36093b3c50"
   integrity sha1-BuuE8A7qQT2oav/vrL/7Ngk7PFA=
+
+callsites@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
+  integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
 camel-case@3.0.x:
   version "3.0.0"

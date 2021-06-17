@@ -1,4 +1,4 @@
-import { FireMockError } from '@/errors/FireMockError';
+import { FireMockError } from '../../errors/FireMockError';
 import { IDictionary } from 'common-types';
 
 /**
