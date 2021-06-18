@@ -1,7 +1,7 @@
 import { FireMockError } from '../../errors';
-import { IAdminApp, IMockStore, ISdk } from '@forest-fire/types';
+import {  IClientApp, IMockStore } from '@forest-fire/types';
 
-export const createAdminApp = <T extends IMockStore<TSdk>, TSdk extends ISdk>(store: T): IAdminApp => ({
+export const createAdminApp = <T extends IMockStore<"RealTimeAdmin">>(store: T): IClientApp => ({
   name: store.config.name,
   auth() {
     throw new FireMockError(
@@ -19,4 +19,4 @@ export const createAdminApp = <T extends IMockStore<TSdk>, TSdk extends ISdk>(st
     );
   },
   // TODO: the types here need attention
-}) as unknown as IAdminApp;
+} as unknown as IClientApp);

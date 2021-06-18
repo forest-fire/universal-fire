@@ -134,7 +134,7 @@ export const implemented: (api: IMockAuthMgmt) => Partial<IClientAuth> = (
       );
     }
 
-    if (!emailHasCorrectPassword(email, password)) {
+    if (!emailHasCorrectPassword(api)(email, password)) {
       throw new FireMockError(
         `Invalid password for ${email}`,
         'auth/wrong-password'

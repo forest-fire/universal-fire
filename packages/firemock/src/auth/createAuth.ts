@@ -8,7 +8,7 @@ import {
 import { createAuthManager } from './createAuthManager';
 import { createClientAuth } from './client-sdk/index';
 import { createAdminAuth } from './admin-sdk/createAdminAuth';
-import { AuthFrom } from '@forest-fire/types/src';
+import { AuthFrom } from '@forest-fire/types';
 
 /**
  * A factory function which generates the appropriate Auth API (for the

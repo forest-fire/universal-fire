@@ -23,9 +23,9 @@ import { toUser } from './util';
 import { networkDelay as delay } from '../util';
 
 export function createAuthManager(): IMockAuthMgmt {
-  let _anonymousUidQueue: string[] = [];
+  const _anonymousUidQueue: string[] = [];
   let _providers: AuthProviderName[];
-  let _authObservers: IAuthObserver[] = [];
+  const _authObservers: IAuthObserver[] = [];
   let _currentUser: string | null = null;
   let _knownUsers: IMockUserRecord[] = [];
   let _networkDelay: NetworkDelay | number | [number, number];
@@ -76,7 +76,6 @@ export function createAuthManager(): IMockAuthMgmt {
   const setCurrentUser = (
     user?: string | User | UserCredential | IMockUser
   ): IMockUserRecord => {
-    let uid: string | undefined;
     let lookingFor: string;
     if (typeof user === 'string') {
       lookingFor = user;
@@ -87,7 +86,7 @@ export function createAuthManager(): IMockAuthMgmt {
     }
 
     const u = findKnownUser('uid', lookingFor);
-    uid = u ? u.uid : undefined;
+    const uid = u ? u.uid : undefined;
 
     if (!uid) {
       throw new FireMockError(
@@ -98,6 +97,7 @@ export function createAuthManager(): IMockAuthMgmt {
 
     if (_currentUser !== uid) {
       _currentUser = uid;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       getAuthObservers().map((o) => o(toUser(getCurrentUser())));
     }
 

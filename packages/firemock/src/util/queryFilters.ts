@@ -1,6 +1,6 @@
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { IRtdbSdk, ISdk } from '@forest-fire/types/src';
+import { IRtdbSdk, ISdk } from '@forest-fire/types';
 
 export function startAt<T extends SerializedRealTimeQuery<IRtdbSdk>>(query: T) {
   const key = query.identity.startAtKey || query.identity.orderByKey;

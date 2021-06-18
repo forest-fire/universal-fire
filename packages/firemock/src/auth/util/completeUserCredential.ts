@@ -1,9 +1,8 @@
 import type { UserCredential, ConfirmationResult } from '@forest-fire/types';
+import { randomUUID } from 'crypto';
 import merge from 'deepmerge';
 
-import { clientApiUser } from '../client-sdk/api';
-import { getRandomMockUid } from '@/auth/util';
-import { IPartialUserCredential } from '@/@types';
+import { IPartialUserCredential } from '../../@types';
 
 export { UserCredential };
 
@@ -16,7 +15,8 @@ export function completeUserCredential(
 ): UserCredential {
   const fakeUserCredential: UserCredential = {
     user: {
-      ...clientApiUser,
+      // TODO: Implement
+      // ...clientApiUser,
       displayName: '',
       email: '',
       isAnonymous: true,
@@ -26,7 +26,8 @@ export function completeUserCredential(
       providerData: [],
       providerId: '',
       refreshToken: '',
-      uid: getRandomMockUid(),
+      // TODO: Check if this util method work as expected
+      uid: randomUUID()
     },
     additionalUserInfo: {
       isNewUser: false,
@@ -40,12 +41,14 @@ export function completeUserCredential(
       providerId: 'fake',
       toJSON: () => '', // added recently
     },
-  };
+    // TODO: Implement
+  } as unknown as UserCredential;
 
   return merge(fakeUserCredential, partial) as UserCredential;
 }
 
 export const fakeApplicationVerifier: ConfirmationResult = {
+  // eslint-disable-next-line @typescript-eslint/require-await
   async confirm(verificationCode: string) {
     return completeUserCredential({});
   },

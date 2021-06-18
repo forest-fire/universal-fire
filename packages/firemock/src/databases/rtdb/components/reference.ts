@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/require-await */
-import { IMockStore, ISerializedQuery } from '@forest-fire/types';
-import { IRtdbReference } from '@forest-fire/types';
+import { IMockStore, ISerializedQuery, IRtdbSdk,IRtdbReference } from '@forest-fire/types';
 import { query } from './query';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { onDisconnect } from './onDisconnect';
 import { FireMockError } from '@/errors';
-import { IRtdbSdk } from '@forest-fire/types/src';
 import { join } from '../../../util';
 
 

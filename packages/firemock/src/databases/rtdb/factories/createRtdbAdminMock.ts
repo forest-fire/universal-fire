@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import {
-  IMockStore,
-  IRtdbAdminReference,
-  DbFrom,
-} from '@forest-fire/types';
+import { DbFrom, IMockStore, IRtdbAdminReference } from '@forest-fire/types';
 import { url } from 'common-types';
-
 import { reference } from '..';
 import { createAdminApp } from '../../firebase-app';
 
-
-export const createRtdbAdminMock = <T extends IMockStore<"RealTimeAdmin">>(store: T) => {
-  const db: DbFrom<"RealTimeAdmin"> = {
+export function createRtdbAdminMock<T extends IMockStore<'RealTimeAdmin'>>(
+  store: T
+): DbFrom<'RealTimeAdmin'> {
+  return {
     app: createAdminApp(store),
     ref() {
       return reference(store, null) as IRtdbAdminReference;
@@ -27,10 +23,8 @@ export const createRtdbAdminMock = <T extends IMockStore<"RealTimeAdmin">>(store
     async getRulesJSON() {
       return store.rules;
     },
-    goOffline() { },
-    goOnline() { },
-    async setRules() { },
+    goOffline() {},
+    goOnline() {},
+    async setRules() {},
   };
-
-  return db;
-};
+}

@@ -827,7 +827,7 @@
   resolved "https://registry.npmjs.org/@firebase/app-types/-/app-types-0.6.1.tgz#dcbd23030a71c0c74fc95d4a3f75ba81653850e9"
   integrity sha512-L/ZnJRAq7F++utfuoTKX4CLBG5YR7tFO3PLzG1/oXXKEezJ0kRL3CMRoueBEmTCzVb/6SIs2Qlaw++uDgi5Xyg==
 
-"@firebase/app-types@^0.6.1":
+"@firebase/app-types@0.6.2", "@firebase/app-types@^0.6.1":
   version "0.6.2"
   resolved "https://registry.npmjs.org/@firebase/app-types/-/app-types-0.6.2.tgz#8578cb1061a83ced4570188be9e225d54e0f27fb"
   integrity sha512-2VXvq/K+n8XMdM4L2xy5bYp2ZXMawJXluUIDzUBvMthVR+lhxK4pfFiqr1mmDbv9ydXvEAuFsD+6DpcZuJcSSw==
@@ -856,6 +856,13 @@
   integrity sha512-ap2WQOS3LKmGuVFKUghFft7RxXTyZTDr0Xd8y2aqmWsbJVjgozi0huL/EUMgTjGFrATAjcf2A7aNs8AKKZ2a8g==
   dependencies:
     "@firebase/app-types" "0.6.1"
+
+"@firebase/database-types@^0.7.2":
+  version "0.7.2"
+  resolved "https://registry.npmjs.org/@firebase/database-types/-/database-types-0.7.2.tgz#449c4b36ec59a1ad9089797b540e2ba1c0d4fcbf"
+  integrity sha512-cdAd/dgwvC0r3oLEDUR+ULs1vBsEvy0b27nlzKhU6LQgm9fCDzgaH9nFGv8x+S9dly4B0egAXkONkVoWcOAisg==
+  dependencies:
+    "@firebase/app-types" "0.6.2"
 
 "@firebase/database@^0.6.10":
   version "0.6.13"
@@ -899,14 +906,14 @@
   optionalDependencies:
     firemock "^0.59.7"
 
-"@forest-fire/serialized-query@^0.59.7":
+"@forest-fire/serialized-query@^0.59.2", "@forest-fire/serialized-query@^0.59.7":
   version "0.59.7"
-  resolved "https://registry.yarnpkg.com/@forest-fire/serialized-query/-/serialized-query-0.59.7.tgz#a81449591d2bde82d940383a10bd10ec5bafe6c9"
+  resolved "https://registry.npmjs.org/@forest-fire/serialized-query/-/serialized-query-0.59.7.tgz#a81449591d2bde82d940383a10bd10ec5bafe6c9"
   integrity sha512-g95jy1XKU6ll0FFKpukv1QYnBu1FCxn+Bv34BYqT3mnwj+BaJVgF64WJvRA5ICGq0AtnJQiog8atDKvAYOxTZA==
 
-"@forest-fire/types@^0.59.7":
+"@forest-fire/types@^0.59.2", "@forest-fire/types@^0.59.7":
   version "0.59.7"
-  resolved "https://registry.yarnpkg.com/@forest-fire/types/-/types-0.59.7.tgz#0729dde174bc7c2b587107360b75e8bd635b4ad2"
+  resolved "https://registry.npmjs.org/@forest-fire/types/-/types-0.59.7.tgz#0729dde174bc7c2b587107360b75e8bd635b4ad2"
   integrity sha512-kWWNC1j2UDpR2+M1grvvpN86TxEUJrDkTpny9NwmksCzMt+bf+dj9ARkuZRPnQYlF4z2+F0itSJgdZsMRMJLmQ==
   dependencies:
     "@firebase/app-types" "^0.6.1"

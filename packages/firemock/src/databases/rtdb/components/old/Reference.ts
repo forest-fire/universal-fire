@@ -2,17 +2,16 @@ import { IDictionary } from 'common-types';
 import type {
   IRtdbReference,
   IRtdbDataSnapshot,
-  IRtdbThenableReference,
   IRtdbDbEvent,
   IRtdbQuery,
   IMockStore,
 } from '@forest-fire/types';
-import { IFirebaseEventHandler } from '@/@types';
-import { parts, join, slashNotation, networkDelay } from '@/util';
+import { IFirebaseEventHandler } from '../../../../@types';
+import { parts, join, slashNotation } from '../../../../util';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { Query } from './Query';
 import { SnapShot } from './SnapShot';
-import { ISerializedQuery } from '@forest-fire/types/src';
+import { ISerializedQuery } from '@forest-fire/types';
 
 function isMultiPath(data: IDictionary) {
   Object.keys(data).map((d: any) => {

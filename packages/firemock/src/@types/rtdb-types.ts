@@ -1,8 +1,12 @@
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { ISchemaHelper } from './mocking-types';
-import type { IRtdbDbEvent, IRtdbDataSnapshot, SnapshotFrom } from '@forest-fire/types';
-import { EventFrom, IRtdbSdk } from '@forest-fire/types/src';
+import type {
+  IRtdbDbEvent,
+  IRtdbDataSnapshot,
+  SnapshotFrom,
+} from '@forest-fire/types';
+import { EventFrom, IRtdbSdk } from '@forest-fire/types';
 
 export interface ISchema {
   id: string;

@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import { DbTypeFrom, IDatabaseApi, IDatabaseConfig, ISerializedQuery } from '../index';
+import { IDatabaseConfig, ISerializedQuery } from '../index';
 import { IFirestoreDbEvent, IRtdbDbEvent } from '../fire-proxies';
 import { ApiKind, Database, IDb, ISdk, SDK } from '../fire-types';
 import { IMockListener } from './IMockListener';

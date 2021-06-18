@@ -14,14 +14,10 @@ import copy from 'fast-copy';
 import { key as fbKey } from 'firebase-key';
 import {
   ApiKind,
-  DbTypeFrom,
   IDatabaseSdk,
-  IDb,
   IMockDelayedState,
   IMockListener,
   IMockStore,
-  IRtdbDataSnapshot,
-  IRtdbDbEvent,
   ISdk,
   isFirestoreDatabase,
   mockDataIsDelayed,
@@ -32,12 +28,11 @@ import {
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { FireMockError } from '../errors';
 //TODO: Check if implementation should change
-import { notify, removeAllListeners } from './rtdb/components/old';
+import { notify } from './rtdb/components/old';
 
 export function createStore<
   TDatabase extends IDatabaseSdk<TSdk>,
   TSdk extends ISdk,
-  TDbType extends DbTypeFrom<TSdk>
 >(
   container: TDatabase,
   initialState: IDictionary | IMockDelayedState<IDictionary>
@@ -269,7 +264,7 @@ export function createStore<
       return pushId;
     },
     reset() {
-      removeAllListeners();
+      _listeners = [];
       api.clearDb();
     },
   };

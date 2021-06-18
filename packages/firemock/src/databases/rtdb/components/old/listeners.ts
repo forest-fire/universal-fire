@@ -4,20 +4,23 @@ import {
   IListener,
   IMockWatcherGroupEvent,
 } from '@/@types';
-import type { IRtdbDbEvent, IRtdbDataSnapshot } from '@forest-fire/types';
+import type {
+  IRtdbDbEvent,
+  IRtdbDataSnapshot,
+  IMockStore,
+  ISdk,
+  IMockListener,
+} from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 import { join, stripLeadingDot, removeDots, dotify, get } from '@/util';
 
-import { hashToArray } from 'typed-conversions';
 import {
-  getDb,
   SnapShot,
-  Reference,
-  shouldSendEvents,
   groupEventsByWatcher,
 } from './index';
 
-let _listeners: IListener[] = [];
+// TODO: Removed because this state is going to hanlded in `createStore.ts`
+// let _listeners: IListener[] = [];
 
 /**
  * **addListener**
@@ -31,49 +34,50 @@ let _listeners: IListener[] = [];
  * interested in the _paths_ which are being watched
  * you can call `listenerPaths()`.
  */
-export async function addListener(
-  pathOrQuery: string | SerializedRealTimeQuery<any>,
-  eventType: IRtdbDbEvent,
-  callback: IFirebaseEventHandler,
-  cancelCallbackOrContext?: (err?: Error) => void,
-  context?: IDictionary
-): Promise<IRtdbDataSnapshot> {
-  const query = (typeof pathOrQuery === 'string'
-    ? new SerializedRealTimeQuery(join(pathOrQuery))
-    : pathOrQuery) as SerializedRealTimeQuery;
-  pathOrQuery = (typeof pathOrQuery === 'string'
-    ? join(pathOrQuery)
-    : query.path) as string;
+// TODO: the code below has been moved into `createStore.ts`
+// export async function addListener(
+//   pathOrQuery: string | SerializedRealTimeQuery<any>,
+//   eventType: IRtdbDbEvent,
+//   callback: IFirebaseEventHandler,
+//   cancelCallbackOrContext?: (err?: Error) => void,
+//   context?: IDictionary
+// ): Promise<IRtdbDataSnapshot> {
+//   const query = (typeof pathOrQuery === 'string'
+//     ? new SerializedRealTimeQuery(join(pathOrQuery))
+//     : pathOrQuery) as SerializedRealTimeQuery;
+//   pathOrQuery = (typeof pathOrQuery === 'string'
+//     ? join(pathOrQuery)
+//     : query.path) as string;
 
-  _listeners.push({
-    id: Math.random().toString(36).substr(2, 10),
-    query,
-    eventType,
-    callback,
-    cancelCallbackOrContext,
-    context,
-  });
+//   _listeners.push({
+//     id: Math.random().toString(36).substr(2, 10),
+//     query,
+//     eventType,
+//     callback,
+//     cancelCallbackOrContext,
+//     context,
+//   });
 
-  function ref(dbPath: string) {
-    return new Reference(dbPath);
-  }
-  const snapshot = await query
-    .deserialize({ ref })
-    .once(eventType === 'value' ? 'value' : 'child_added');
+//   function ref(dbPath: string) {
+//     return new Reference(dbPath);
+//   }
+//   const snapshot = await query
+//     .deserialize({ ref })
+//     .once(eventType === 'value' ? 'value' : 'child_added');
 
-  if (eventType === 'value') {
-    callback(snapshot);
-  } else {
-    const list = hashToArray(snapshot.val());
-    if (eventType === 'child_added') {
-      list.forEach((i: IDictionary) =>
-        callback(new SnapShot(join(query.path, i.id), i))
-      );
-    }
-  }
+//   if (eventType === 'value') {
+//     callback(snapshot);
+//   } else {
+//     const list = hashToArray(snapshot.val());
+//     if (eventType === 'child_added') {
+//       list.forEach((i: IDictionary) =>
+//         callback(new SnapShot(join(query.path, i.id), i))
+//       );
+//     }
+//   }
 
-  return snapshot;
-}
+//   return snapshot;
+// }
 
 /**
  * **removeListener**
@@ -85,70 +89,78 @@ export async function addListener(
  * the listener, if not then it will use `eventType` (if available) as
  * well as `callback` (if available) to identify the callback(s)
  */
-export function removeListener(
-  eventType?: IRtdbDbEvent,
-  callback?: (snap: IRtdbDataSnapshot, key?: string) => void,
-  context?: IDictionary
-): number {
-  if (!eventType) {
-    return removeAllListeners();
-  }
+// TODO: This has been moved into  `createStore.ts`
+// export function removeListener(
+//   eventType?: IRtdbDbEvent,
+//   callback?: (snap: IRtdbDataSnapshot, key?: string) => void,
+//   context?: IDictionary
+// ): number {
+//   if (!eventType) {
+//     return removeAllListeners();
+//   }
 
-  if (!callback) {
-    const removed = _listeners.filter((l) => l.eventType === eventType);
-    _listeners = _listeners.filter((l) => l.eventType !== eventType);
-    return cancelCallback(removed);
-  }
+//   if (!callback) {
+//     const removed = _listeners.filter((l) => l.eventType === eventType);
+//     _listeners = _listeners.filter((l) => l.eventType !== eventType);
+//     return cancelCallback(removed);
+//   }
 
-  if (!context) {
-    // use eventType and callback to identify
-    const removed = _listeners
-      .filter((l) => l.callback === callback)
-      .filter((l) => l.eventType === eventType);
+//   if (!context) {
+//     // use eventType and callback to identify
+//     const removed = _listeners
+//       .filter((l) => l.callback === callback)
+//       .filter((l) => l.eventType === eventType);
 
-    _listeners = _listeners.filter(
-      (l) => l.eventType !== eventType || l.callback !== callback
-    );
+//     _listeners = _listeners.filter(
+//       (l) => l.eventType !== eventType || l.callback !== callback
+//     );
 
-    return cancelCallback(removed);
-  } else {
-    // if we have context then we can ignore other params
-    const removed = _listeners
-      .filter((l) => l.callback === callback)
-      .filter((l) => l.eventType === eventType)
-      .filter((l) => l.context === context);
+//     return cancelCallback(removed);
+//   } else {
+//     // if we have context then we can ignore other params
+//     const removed = _listeners
+//       .filter((l) => l.callback === callback)
+//       .filter((l) => l.eventType === eventType)
+//       .filter((l) => l.context === context);
 
-    _listeners = _listeners.filter(
-      (l) =>
-        l.context !== context ||
-        l.callback !== callback ||
-        l.eventType !== eventType
-    );
+//     _listeners = _listeners.filter(
+//       (l) =>
+//         l.context !== context ||
+//         l.callback !== callback ||
+//         l.eventType !== eventType
+//     );
 
-    return cancelCallback(removed);
-  }
-}
+//     return cancelCallback(removed);
+//   }
+// }
 
 /**
  * internal function responsible for the actual removal of
  * a listener.
  */
-function cancelCallback(removed: IListener[]): number {
-  let count = 0;
-  removed.forEach((l) => {
-    if (typeof l.cancelCallbackOrContext === 'function') {
-      (l.cancelCallbackOrContext as () => any)();
-      count++;
-    }
-  });
-  return count;
-}
+// function cancelCallback<TSdk extends ISdk>(
+//   removed: IMockListener<TSdk>[]
+// ): number {
+//   let count = 0;
+//   removed.forEach((l) => {
+//     if (typeof l.cancelCallbackOrContext === 'function') {
+//       (l.cancelCallbackOrContext as () => any)();
+//       count++;
+//     }
+//   });
+//   return count;
+// }
 
-export function removeAllListeners(): number {
-  const howMany = cancelCallback(_listeners);
-  _listeners = [];
-  return howMany;
-}
+// TODO: This method should be rewritten or we have to write tests without depending of this method.
+/// Because it is only being used in tests
+// export function removeAllListeners<TSdk extends ISdk>(store: IMockStore<TSdk>) {
+//   const _listeners = store.getAllListeners();
+//   return (): number => {
+//     const howMany = cancelCallback(_listeners);
+//     _listeners = [];
+//     return howMany;
+//   };
+// }
 
 /**
  * **listenerCount**
@@ -157,11 +169,11 @@ export function removeAllListeners(): number {
  * Optionally you can state the `EventType` and get a count
  * of only this type of event.
  */
-export function listenerCount(type?: IRtdbDbEvent) {
-  return type
-    ? _listeners.filter((l) => l.eventType === type).length
-    : _listeners.length;
-}
+// export function listenerCount(type?: IRtdbDbEvent) {
+//   return type
+//     ? _listeners.filter((l) => l.eventType === type).length
+//     : _listeners.length;
+// }
 
 export type EventTypePlusChild = IRtdbDbEvent | 'child';
 
@@ -175,20 +187,21 @@ export type EventTypePlusChild = IRtdbDbEvent | 'child';
  * You can also just state "child" as the event and it will resolve to all child
  * events: `[ 'child_added', 'child_changed', 'child_removed', 'child_moved' ]`
  */
-export function listenerPaths(
-  lookFor?: EventTypePlusChild | EventTypePlusChild[]
-) {
-  if (lookFor && !Array.isArray(lookFor)) {
-    lookFor =
-      lookFor === 'child'
-        ? ['child_added', 'child_changed', 'child_removed', 'child_moved']
-        : [lookFor];
-  }
-  return lookFor
-    ? _listeners
-        .filter((l) => lookFor.includes(l.eventType))
-        .map((l) => l.query.path)
-    : _listeners.map((l) => l.query.path);
+export function listenerPaths<TSdk extends ISdk>(store: IMockStore<TSdk>) {
+  const _listeners = store.getAllListeners();
+  return (lookFor?: EventTypePlusChild | EventTypePlusChild[]) => {
+    if (lookFor && !Array.isArray(lookFor)) {
+      lookFor =
+        lookFor === 'child'
+          ? ['child_added', 'child_changed', 'child_removed', 'child_moved']
+          : [lookFor];
+    }
+    return lookFor
+      ? _listeners
+          .filter((l) => lookFor.includes(l.eventType))
+          .map((l) => l.query.path)
+      : _listeners.map((l) => l.query.path);
+  };
 }
 
 /**
@@ -200,23 +213,24 @@ export function listenerPaths(
  * You can also just state "child" as the event and it will resolve to all child
  * events: `[ 'child_added', 'child_changed', 'child_removed', 'child_moved' ]`
  */
-export function getListeners(
-  lookFor?: EventTypePlusChild | EventTypePlusChild[]
-) {
-  const childEvents = [
-    'child_added',
-    'child_changed',
-    'child_removed',
-    'child_moved',
-  ];
-  const allEvents = childEvents.concat(['value']);
-  const events = !lookFor
-    ? allEvents
-    : lookFor === 'child'
-    ? childEvents
-    : lookFor;
+export function getListeners<TSdk extends ISdk>(store: IMockStore<TSdk>) {
+  const _listeners = store.getAllListeners();
+  return (lookFor?: EventTypePlusChild | EventTypePlusChild[]): IMockListener<ISdk>[] => {
+    const childEvents = [
+      'child_added',
+      'child_changed',
+      'child_removed',
+      'child_moved',
+    ];
+    const allEvents = childEvents.concat(['value']);
+    const events = !lookFor
+      ? allEvents
+      : lookFor === 'child'
+      ? childEvents
+      : lookFor;
 
-  return _listeners.filter((l) => events.includes(l.eventType));
+    return _listeners.filter((l) => events.includes(l.eventType));
+  };
 }
 
 function keyDidNotPreviouslyExist(
@@ -262,7 +276,7 @@ export function notify<T = any>(data: IDictionary, dbSnapshot: IDictionary) {
           evt.callback(new SnapShot(evt.key, evt.value));
         }
         return;
-      case 'value':
+      case 'value': {
         const snapKey = new SnapShot(evt.listenerPath, evt.value).key;
 
         if (snapKey === evt.key) {
@@ -281,6 +295,7 @@ export function notify<T = any>(data: IDictionary, dbSnapshot: IDictionary) {
             evt.value === null ? getDb(evt.listenerPath) : evt.value;
           evt.callback(new SnapShot(evt.listenerPath, value));
         }
+      }
     } // end switch
   });
 }
@@ -301,7 +316,10 @@ function priorKey(path: string, id: string) {
     }
   }, null);
 }
-export type IListenerPlus = IListener & { id: string; changeIsAtRoot: boolean };
+export type IListenerPlus<TSdk extends ISdk> = IMockListener<TSdk> & {
+  id: string;
+  changeIsAtRoot: boolean;
+};
 
 /**
  * **findChildListeners**
@@ -312,36 +330,36 @@ export type IListenerPlus = IListener & { id: string; changeIsAtRoot: boolean };
  * @param changePath the _parent path_ that children are detected off of
  * @param eventTypes <optional> the specific child event (or events) to filter down to; if you have more than one then you should be aware that this property is destructured so the calling function should pass in an array of parameters rather than an array as the second parameter
  */
-export function findChildListeners(
-  changePath: string,
-  ...eventTypes: IRtdbDbEvent[]
-) {
-  changePath = stripLeadingDot(changePath.replace(/\//g, '.'));
-  eventTypes =
-    eventTypes.length !== 0
-      ? eventTypes
-      : ['child_added', 'child_changed', 'child_moved', 'child_removed'];
+export function findChildListeners<TSdk extends ISdk>(store: IMockStore<TSdk>) {
+  const _listeners = store.getAllListeners();
+  return (changePath: string, ...eventTypes: IRtdbDbEvent[]) => {
+    changePath = stripLeadingDot(changePath.replace(/\//g, '.'));
+    eventTypes =
+      eventTypes.length !== 0
+        ? eventTypes
+        : ['child_added', 'child_changed', 'child_moved', 'child_removed'];
 
-  const decendants = _listeners
-    .filter((l) => eventTypes.includes(l.eventType))
-    .filter((l) => changePath.startsWith(dotify(l.query.path)))
-    .reduce((acc: IListenerPlus[], listener) => {
-      const id = removeDots(
-        changePath
-          .replace(listener.query.path, '')
-          .split('.')
-          .filter((i) => i)[0]
-      );
-      const remainingPath = stripLeadingDot(
-        changePath.replace(stripLeadingDot(listener.query.path), '')
-      );
+    const decendants = _listeners
+      .filter((l) => eventTypes.includes(l.eventType))
+      .filter((l) => changePath.startsWith(dotify(l.query.path)))
+      .reduce((acc: IListenerPlus<ISdk>[], listener) => {
+        const id = removeDots(
+          changePath
+            .replace(listener.query.path, '')
+            .split('.')
+            .filter((i) => i)[0]
+        );
+        const remainingPath = stripLeadingDot(
+          changePath.replace(stripLeadingDot(listener.query.path), '')
+        );
 
-      const changeIsAtRoot = id === remainingPath;
-      acc.push({ ...listener, ...{ id, changeIsAtRoot } });
-      return acc;
-    }, []);
+        const changeIsAtRoot = id === remainingPath;
+        acc.push({ ...listener, ...{ id, changeIsAtRoot } });
+        return acc;
+      }, []);
 
-  return decendants;
+    return decendants;
+  };
 }
 
 /**
@@ -351,9 +369,13 @@ export function findChildListeners(
  *
  * @param path path to root listening point
  */
-export function findValueListeners(path: string) {
-  return _listeners.filter(
-    (l) =>
-      join(path).indexOf(join(l.query.path)) !== -1 && l.eventType === 'value'
-  );
+export function findValueListeners<TSdk extends ISdk>(store: IMockStore<TSdk>) {
+  const _listeners = store.getAllListeners();
+  return (path: string): IMockListener<ISdk>[] => {
+    // TODO: Fix this type issue
+    return _listeners.filter(
+      (l) =>
+        join(path).indexOf(join(l.query.path)) !== -1 && l.eventType === 'value'
+    );
+  };
 }

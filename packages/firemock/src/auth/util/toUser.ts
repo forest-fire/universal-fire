@@ -1,5 +1,4 @@
 import { IMockUserRecord, User } from '@forest-fire/types';
-import { clientApiUser } from '../client-sdk';
 
 /**
  * Converts a known user to the `User` format used in the Firebase client SDK
@@ -7,7 +6,6 @@ import { clientApiUser } from '../client-sdk';
 export function toUser(mockUser: IMockUserRecord): User {
   // TODO: implement
   const user: Omit<User, 'toJSON'> = {
-    ...clientApiUser,
     uid: mockUser.uid,
     email: mockUser.email,
     emailVerified: mockUser.emailVerified,
@@ -15,7 +13,8 @@ export function toUser(mockUser: IMockUserRecord): User {
     isAnonymous: mockUser.isAnonymous,
     providerId: mockUser.providerId,
     providerData: mockUser.providerData,
-  };
+    // TODO: implement
+  } as unknown as Omit<User, 'toJSON'>;
 
   return {
     ...user,

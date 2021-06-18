@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { IRtdbSdk } from '@forest-fire/types/src';
+import { IRtdbSdk } from '@forest-fire/types';
 
 /** an filter function for queries with a `limitToFirst` value */
 export function limitToFirst<T extends SerializedRealTimeQuery<TSdk>, TSdk extends IRtdbSdk>(query: T): any {
