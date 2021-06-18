@@ -9,9 +9,11 @@ import type {
   IModel,
   ISerializedIdentity,
   IFirestoreOrder,
-  IFirestoreApi,
   IGenericModel,
+  DbFrom,
   IFirebaseCollectionReference,
+  SnapshotFrom,
+  DeserializedQueryFrom
 } from '@forest-fire/types';
 import { SerializedError } from './SerializedError';
 
@@ -19,26 +21,29 @@ import { SerializedError } from './SerializedError';
  * Provides a way to serialize the full characteristics of a Firebase Firestore
  * Database query.
  */
-export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
-  implements ISerializedQuery<T, IFirestoreApi> {
-  protected _endAtKey?: keyof T & string;
+export class SerializedFirestoreQuery<
+  TSdk extends "FirestoreAdmin" | "FirestoreClient",
+  M extends IModel = IGenericModel
+  >
+  implements ISerializedQuery<TSdk, M> {
+  protected _endAtKey?: keyof M & string;
   protected _endAt?: string | number | boolean;
-  protected _equalToKey?: keyof T & string;
+  protected _equalToKey?: keyof M & string;
   protected _equalTo?: string | number | boolean;
   protected _limitToFirst?: number;
   protected _limitToLast?: number;
-  protected _orderKey?: keyof T & string;
+  protected _orderKey?: keyof M & string;
   protected _path: string;
-  protected _startAtKey?: keyof T & string;
+  protected _startAtKey?: keyof M & string;
   protected _startAt?: string | number | boolean;
-  protected _db?: IFirestoreDatabase;
+  protected _db?: DbFrom<TSdk>;
 
   /** Static initializer */
-  public static path<T extends IModel>(
-    path = '/'
-  ): SerializedFirestoreQuery<T> {
-    return new SerializedFirestoreQuery<T>(path);
-  }
+  // public static path<T extends IModel>(
+  //   path = '/'
+  // ): SerializedFirestoreQuery<T> {
+  //   return new SerializedFirestoreQuery<TSdk, M>(path);
+  // }
 
   /**
    * Constructor
@@ -49,7 +54,7 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
 
   protected _orderBy: IFirestoreOrder = 'orderBy';
 
-  public get identity(): ISerializedIdentity<T> {
+  public get identity(): ISerializedIdentity<M> {
     return {
       endAtKey: this._endAtKey,
       endAt: this._endAt,
@@ -65,7 +70,7 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
     };
   }
 
-  public get db(): IFirestoreDatabase {
+  public get db(): DbFrom<TSdk> {
     if (this._db) {
       return this._db;
     }
@@ -74,7 +79,7 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
     );
   }
 
-  public set db(value: IFirestoreDatabase) {
+  public set db(value: DbFrom<TSdk>) {
     this._db = value;
   }
 
@@ -82,63 +87,63 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
     return this._path;
   }
 
-  public orderBy(child: keyof T & string): SerializedFirestoreQuery<T> {
+  public orderBy(child: keyof M & string): SerializedFirestoreQuery<TSdk, M> {
     this._orderBy = 'orderBy';
     this._orderKey = child;
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
-  public limitToFirst(value: number): SerializedFirestoreQuery<T> {
+  public limitToFirst(value: number): SerializedFirestoreQuery<TSdk, M> {
     this._limitToFirst = value;
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
-  public limitToLast(value: number): SerializedFirestoreQuery<T> {
+  public limitToLast(value: number): SerializedFirestoreQuery<TSdk, M> {
     this._limitToLast = value;
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
-  public orderByChild(child: keyof T & string): SerializedFirestoreQuery<T> {
+  public orderByChild(child: keyof M & string): SerializedFirestoreQuery<TSdk, M> {
     this._orderBy = 'orderByChild';
     this._orderKey = child;
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
-  public orderByValue(): SerializedFirestoreQuery<T> {
+  public orderByValue(): SerializedFirestoreQuery<TSdk, M> {
     this._orderBy = 'orderByValue';
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
-  public orderByKey(): SerializedFirestoreQuery<T> {
+  public orderByKey(): SerializedFirestoreQuery<TSdk, M> {
     this._orderBy = 'orderByKey';
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
   public startAt(
     value: string | number | boolean,
-    key?: keyof T & string
-  ): SerializedFirestoreQuery<T> {
+    key?: keyof M & string
+  ): SerializedFirestoreQuery<TSdk, M> {
     this._startAt = value;
     this._startAtKey = key;
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
   public endAt(
     value: string | number | boolean,
-    key?: keyof T & string
-  ): SerializedFirestoreQuery<T> {
+    key?: keyof M & string
+  ): SerializedFirestoreQuery<TSdk, M> {
     this._endAt = value;
     this._endAtKey = key;
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
   public equalTo(
     value: string | number | boolean,
-    key?: keyof T & string
-  ): SerializedFirestoreQuery<T> {
+    key?: keyof M & string
+  ): SerializedFirestoreQuery<TSdk, M> {
     this._equalTo = value;
     this._equalToKey = key;
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
   /**
@@ -159,7 +164,7 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
     return hash;
   }
 
-  public deserialize(db?: IFirestoreDatabase): IFirebaseCollectionReference {
+  public deserialize(db?: DbFrom<TSdk>): DeserializedQueryFrom<TSdk> {
     const database = db || this.db;
     const q = database.collection(this.path);
 
@@ -196,25 +201,24 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
       q.where(this.path, '==', this.identity.equalTo);
     }
 
-    // TODO: look into what the typing problem is
-    return (q as unknown) as IFirebaseCollectionReference;
+    return q as DeserializedQueryFrom<TSdk>;
   }
 
   public async execute(
-    db?: IFirestoreDatabase
-  ): Promise<IFirestoreQuerySnapshot> {
+    db?: DbFrom<TSdk>
+  ): Promise<SnapshotFrom<TSdk>> {
     const database = db || this.db;
     const value = (await (this.deserialize(
       database
-    ).get() as unknown)) as IFirestoreQuerySnapshot;
+    ).get() as unknown)) as SnapshotFrom<TSdk>;
     return value;
   }
 
   public where(
     operation: IComparisonOperator,
     value: string | number | boolean,
-    key?: keyof T & string
-  ): SerializedFirestoreQuery<T> {
+    key?: keyof M & string
+  ): SerializedFirestoreQuery<TSdk, M> {
     switch (operation) {
       case '=':
         return this.equalTo(value, key);
@@ -234,17 +238,17 @@ export class SerializedFirestoreQuery<T extends IModel = IGenericModel>
    * Allows the DB interface to be setup early, allowing clients
    * to call execute without any params.
    */
-  public setDB(db: IFirestoreDatabase): SerializedFirestoreQuery<T> {
+  public setDB(db: DbFrom<TSdk>): SerializedFirestoreQuery<TSdk, M> {
     this._db = db;
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
-  public setPath(path: string): SerializedFirestoreQuery<T> {
+  public setPath(path: string): SerializedFirestoreQuery<TSdk, M> {
     this._path = slashNotation(path);
-    return this;
+    return this as SerializedFirestoreQuery<TSdk, M>;
   }
 
-  public toJSON(): ISerializedIdentity<T> {
+  public toJSON(): ISerializedIdentity<M> {
     return this.identity;
   }
 

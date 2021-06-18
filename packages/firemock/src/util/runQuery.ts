@@ -12,22 +12,20 @@ import { SortOrder } from '../@types/query-types';
 
 const orderByKey = (list: IDictionary) => {
   const keys = Object.keys(list).sort();
-  let hash: IDictionary = {};
+  const hash: IDictionary = {};
   keys.forEach((k) => {
     hash[k] = list[k];
   });
   return hash;
 };
 
-const orderByValue = (list: IDictionary, direction = SortOrder.asc) => {
-  const A = direction === SortOrder.asc ? 1 : -1;
-  const B = A * -1;
-  const values = hashToArray(list).sort((a, b) => (a.value > b.value ? 1 : -1));
+const orderByValue = <T extends IDictionary>(list: T, direction = SortOrder.asc): T => {
+  const values = hashToArray(list).sort((a, b) => (a.value > b.value ? direction === SortOrder.asc ? 1 : -1 : direction === SortOrder.asc ? -1 : 1));
 
   return values.reduce((agg: IDictionary, curr) => {
     agg[curr.id] = curr.value;
     return agg;
-  }, {} as IDictionary);
+  }, {}) as T;
 };
 
 const sortFn: (query: any) => sortFns.ISortFns = (query) =>

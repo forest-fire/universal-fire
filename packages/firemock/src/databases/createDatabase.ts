@@ -1,11 +1,20 @@
 import {
   IDatabaseSdk,
+  IDb,
   IFirestoreDatabase,
+  IFirestoreDbEvent,
+  IFirestoreQueryDocumentSnapshot,
   IMockDelayedState,
   IMockStore,
   IRtdbDatabase,
+  IRtdbDataSnapshot,
+  IRtdbDbEvent,
   isClientSdk,
+  ISdk,
+  isFirestoreDatabase,
+  ISnapshot,
 } from '@forest-fire/types';
+import { IDictionary } from 'common-types';
 import { FireMockError } from '../errors';
 import { createStore } from './createStore';
 import { FirestoreAdminMock, FirestoreClientMock } from './firestore';
@@ -19,18 +28,22 @@ import {
  * Firestore database as well as distinguishing between the minor variance between
  * admin and client SDK's
  */
-export function createDatabase<TState>(
-  container: IDatabaseSdk,
-  initialState: TState | IMockDelayedState<TState>
-): [IRtdbDatabase | IFirestoreDatabase, IMockStore<TState>] {
-  const store = createStore<TState>(container, initialState);
+export function createDatabase<
+  TDatabase extends IDatabaseSdk<TSdk, TDb>,
+  TSdk extends ISdk,
+  TDb extends IDb
+>(
+  container: TDatabase,
+  initialState: IDictionary | IMockDelayedState<IDictionary>
+): [TDatabase, IMockStore<TSdk>] {
+  const store = createStore(container, initialState);
 
-  // TODO: implement mock for Firestore!
-  if (isFirestoreBacked(container)) {
+  if (isFirestoreDatabase(container)) {
     throw new FireMockError(
       `Attempt to mock a Firestore database failed because this has not been implemented yet!`
     );
   }
+
   const rtdb = isClientSdk(container)
     ? createRtdbClientMock(store)
     : createRtdbAdminMock(store);
@@ -42,11 +55,9 @@ export function createDatabase<TState>(
   return isRtdbBacked(container) ? [rtdb, store] as any : [firestore, store] as any;
   // return rtdb;
 }
-function isFirestoreBacked(container: any): boolean {
-  throw new Error('Function not implemented.');
-}
 
-function isRtdbBacked(container: IDatabaseSdk): boolean {
-  throw new Error('Function not implemented.');
+
+function isRtdbBacked(container: IDatabaseSdk): {
+  return container.d
 }
 

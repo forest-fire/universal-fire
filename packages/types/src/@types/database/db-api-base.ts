@@ -3,7 +3,7 @@ import {
   IFirestoreDatabase,
   IRtdbDatabase,
 } from '../fire-proxies';
-import { Database } from '../fire-types';
+import { Database, IDb, ISdk } from '../fire-types';
 import { IGenericModel, IModel } from '../models';
 import { ISerializedQuery } from '../query';
 import { IDatabase } from './db';
@@ -17,15 +17,14 @@ import { IDatabase } from './db';
  * > functionality
  */
 export interface IDatabaseApi<
-  TType extends Database = Database,
-  TDb extends IDatabase = TType extends Database.RTDB
-    ? IRtdbDatabase
-    : IFirestoreDatabase
-> {
+  TDbType extends IDb,
+  TDb extends IDatabase = TDbType extends Database.RTDB ? IRtdbDatabase : IFirestoreDatabase,
+  TSdk extends ISdk = IDb extends "RTDB" ? "RealTimeClient" | "RealTimeAdmin" : "FirestoreAdmin" | "FirestoreClient"
+  > {
   /**
    * The underlying database which is being connected to
    */
-  dbType: Readonly<TType>;
+  dbType: Readonly<TDbType>;
   /**
    * Get a database _reference_ to the underlying database at a given path
    */
@@ -37,7 +36,7 @@ export interface IDatabaseApi<
    * of `id` (unless overriden by the `idProp` param)
    */
   getList: <T extends IModel = IGenericModel>(
-    path: string | ISerializedQuery<T>,
+    path: string | ISerializedQuery<TSdk, T>,
     idProp?: string
   ) => Promise<T[]>;
   /**
@@ -82,8 +81,8 @@ export interface IDatabaseApi<
   /**
    * Watch for Firebase events based on a DB path.
    */
-  watch: <T>(
-    target: string | ISerializedQuery<T, IDatabaseApi & { dbType: TDb }>,
+  watch: <T extends IModel>(
+    target: string | ISerializedQuery<TSdk, T>,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: unknown
   ) => void;

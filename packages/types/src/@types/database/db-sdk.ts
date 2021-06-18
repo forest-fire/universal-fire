@@ -13,10 +13,14 @@ import {
   IClientAuth,
   IClientAuthProviders,
 } from '../fire-proxies';
-import { ApiKind, Database, IDatabaseConfig, SDK } from '../fire-types';
+import { ApiKind, Database, IDatabaseConfig, IDb, ISdk, SDK } from '../fire-types';
 
-export type IAdminSdk<T extends IDatabaseSdk> = T & { isAdminApi: true };
-export type IClientSdk<T extends IDatabaseSdk> = T & { isAdminApi: false };
+export type IAdminSdk<
+  T extends IDatabaseSdk<S, D>,
+  S extends ISdk,
+  D extends IDb = S extends "FirestoreAdmin" | "FirestoreClient" ? "Firestore" : "RTDB"
+  > = T & { isAdminApi: true };
+
 
 export interface IRealTimeAdmin
   extends IDatabaseSdk<SDK.RealTimeAdmin, Database.RTDB> {
@@ -61,9 +65,9 @@ export interface IFirestoreAdmin
  * within the **Universal Fire** universe.
  */
 export interface IDatabaseSdk<
-  TSdk extends SDK = SDK,
-  TDb extends Database = Database
-> extends IDatabaseApi<TDb> {
+  TSdk extends ISdk,
+  TDb extends IDb
+  > extends IDatabaseApi<TDb> {
   /** the SDK which is being used (aka, "admin", "client", ...) */
   sdk: Readonly<TSdk>;
 
@@ -74,12 +78,12 @@ export interface IDatabaseSdk<
   isAdminApi: boolean;
 
   /** the Firebase App instance for this DB connection */
-  app: IClientApp | IAdminApp;
+  app: TSdk extends "FirestoreAdmin" | "RealTimeAdmin" ? IAdminApp : IClientApp;
   /**
    * The "auth providers" such as Github, Facebook, but also EmailAndPassword, etc.
    * Each provider then exposes their own API surface to interact with.
    */
-  authProviders: IClientAuthProviders;
+  authProviders: TSdk extends "FirestoreAdmin" | "RealTimeAdmin" ? undefined : IClientAuthProviders;
   /**
    * Connect to the database
    */
@@ -89,7 +93,7 @@ export interface IDatabaseSdk<
    */
   auth: () => Promise<IClientAuth | IAdminAuth>;
 
-  /**
+  /** 
    * Returns true if the database is connected, false otherwise.
    */
   isConnected: boolean;
@@ -107,5 +111,5 @@ export interface IDatabaseSdk<
    * The administrative interface for unknown package which will provide a _mocked_
    * database.
    */
-  mock: IMockDatabase;
+  mock: IMockDatabase<TSdk>;
 }

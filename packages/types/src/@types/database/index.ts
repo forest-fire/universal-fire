@@ -2,20 +2,20 @@
 
 // #region autoindexed files
 
-// index last changed at: 12th Dec, 2020, 11:00 PM ( GMT-8 )
+// index last changed at: 6th Jun, 2021, 10:08 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: db-api-base, db-api-derivatives, db-guards, db-sdk, db.
+// files: db-api-base, db-guards, db-sdk, db-util, db.
 
 // local file exports
 export * from "./db-api-base";
-export * from "./db-api-derivatives";
 export * from "./db-guards";
 export * from "./db-sdk";
+export * from "./db-util";
 export * from "./db";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

@@ -114,7 +114,7 @@ export interface IMockUserRecord extends UserRecord {
  * parts are un-implementated currently) as well as extending
  * to add an "administrative" API for mocking.
  */
-export interface IMockAuth extends IClientAuth, IAuthProviders {}
+export interface IMockAuth extends IClientAuth, IAuthProviders { }
 
 /**
  * A basic configuration for a user that allows default values to fill in some of
@@ -142,7 +142,7 @@ export type DebuggingCallback = (message: string) => void;
 /** an _async_ mock function which returns a dictionary data structure */
 export type AsyncMockData<
   T extends IDictionary = IDictionary
-> = () => Promise<T>;
+  > = () => Promise<T>;
 
 export interface IFirebaseBaseConfig {
   /** Flag to set debugging override from logging configuration. */
@@ -241,10 +241,17 @@ export enum SDK {
   RealTimeClient = 'RealTimeClient',
 }
 
+/**
+ * SDK's that Universal-Fire supports
+ */
+export type ISdk = keyof typeof SDK;
+
 export enum Database {
   Firestore = 'Firestore',
   RTDB = 'RTDB',
 }
+
+export type IDb = keyof typeof Database;
 
 export enum ApiKind {
   admin = 'admin',

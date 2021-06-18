@@ -4,20 +4,19 @@
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 09:29 AM ( GMT-7 )
+// index last changed at: 6th Jun, 2021, 10:08 PM ( GMT-7 )
 // export: named; exclusions: old, index, private.
-// files: onDisconnect, query, reference, serverValue, snapshot.
+// files: onDisconnect, query, reference, snapshot.
 
 // local file exports
 export * from "./onDisconnect";
 export * from "./query";
 export * from "./reference";
-export * from "./serverValue";
 export * from "./snapshot";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

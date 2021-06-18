@@ -17,16 +17,24 @@ import {
   IMockDelayedState,
   IMockListener,
   IMockStore,
+  IRtdbDataSnapshot,
+  IRtdbDbEvent,
+  isFirestoreDatabase,
   mockDataIsDelayed,
   NetworkDelay,
 } from '@forest-fire/types';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { FireMockError } from '../errors';
 
-export function createStore<TState extends IDictionary = IDictionary>(
-  container: IDatabaseSdk,
+export function createStore<TContainer extends IDatabaseSdk, TState extends IDictionary = IDictionary>(
+  container: TContainer,
   initialState: TState | IMockDelayedState<TState>
 ) {
+  if (isFirestoreDatabase(container)) {
+    throw new FireMockError("Currently Firemock is not implemented for the Firestore Database!");
+  }
+
   /**
    * The in-memory dictionary/hash mantained by the mock RTDB to represent
    * the state of the database
@@ -37,8 +45,9 @@ export function createStore<TState extends IDictionary = IDictionary>(
   /** the artificial time delay used to simulate a real DB's network latency */
   let _networkDelay: NetworkDelay | number | [number, number] =
     NetworkDelay.lazer;
-  /** event listeners setup to watch Firebase paths/queries */
-  let _listeners: IMockListener[] = [];
+
+  let _listeners: IMockListener<IRtdbDbEvent, IRtdbDataSnapshot>[];
+
 
   const networkDelay = async () => {
     await delay(_networkDelay);
@@ -64,7 +73,7 @@ export function createStore<TState extends IDictionary = IDictionary>(
     _state = data;
   };
 
-  const addListener: IMockStore<IDictionary>['addListener'] = async (
+  const addListener: IMockStore<IRtdbDbEvent, IRtdbDataSnapshot>['addListener'] = (
     pathOrQuery,
     eventType,
     callback,
@@ -114,8 +123,8 @@ export function createStore<TState extends IDictionary = IDictionary>(
     return _listeners;
   };
 
-  const api: IMockStore<TState> = {
-    api: container.apiKind,
+  const api: IMockStore<IRtdbDbEvent, IRtdbDataSnapshot> = {
+    api: container.sdk,
     db: container.dbType,
     config,
 
@@ -145,7 +154,7 @@ export function createStore<TState extends IDictionary = IDictionary>(
     getDb<T = any>(path?: string) {
       return (path ? get(_state, dotify(path)) : _state) as T;
     },
-    setDb(path: string, value: any, silent: boolean = false) {
+    setDb<V extends unknown>(path: string, value: V, silent = false) {
       const dotPath = join(path);
       const oldRef = get(_state, dotPath);
       const oldValue =

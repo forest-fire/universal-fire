@@ -29,7 +29,7 @@ import {
   Database,
   IModel,
   IMockDatabase,
-  IRealTimeApi,
+  IDatabaseApi
 } from '@forest-fire/types';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
@@ -41,7 +41,7 @@ import { IRealTimeDb } from './rtdb-types';
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
-export abstract class RealTimeDb implements IRealTimeApi {
+export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
   public readonly dbType: Database.RTDB = Database.RTDB;
 
   /**

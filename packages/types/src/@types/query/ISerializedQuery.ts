@@ -1,16 +1,13 @@
-import { IDatabase, IRealTimeApi } from '../database';
-import { IDatabaseApi } from '../database/db-api-base';
-import { IFirestoreDatabase, IRtdbDatabase } from '../fire-proxies';
+import { IDictionary } from 'common-types';
+import { DbFrom, DeserializedQueryFrom, SnapshotFrom } from '../database/db-util';
+import { ISdk } from '../fire-types';
 import {
   IModel,
   IComparisonOperator,
-  IFirebaseRtdbQuery,
   ISerializedIdentity,
-  IFirebaseCollectionReference,
 } from '../index';
 import { IGenericModel } from '../models';
-import { IRtdbSnapshot } from '../proxy-plus';
-import { IFirestoreQuerySnapshot } from '../snapshot';
+
 
 /**
  * Defines the public interface which any serializer must
@@ -22,39 +19,34 @@ import { IFirestoreQuerySnapshot } from '../snapshot';
  * to move away from classes's providing interfaces implicitly
  */
 export interface ISerializedQuery<
+  TSdk extends ISdk,
   /** the data model being serialized */
   TModel extends IModel = IGenericModel,
-  /** the type of database it is being serialized down to */
-  TApi extends IDatabaseApi = IDatabaseApi,
-  TDb extends IDatabase = TApi extends IRealTimeApi
-  ? IRtdbDatabase
-  : IFirestoreDatabase,
-  K = keyof TModel & string
   > {
-  db: TDb;
+  db: DbFrom<TSdk>;
   path: string;
   identity: ISerializedIdentity<TModel>;
-  setDB: (db: TDb) => ISerializedQuery<TModel, TApi>;
-  setPath: (path: string) => ISerializedQuery<TModel, TApi>;
+  setDB: (db: DbFrom<TSdk>) => ISerializedQuery<TSdk, TModel>;
+  setPath: (path: string) => ISerializedQuery<TSdk, TModel>;
   hashCode: () => number;
-  limitToFirst: (value: number) => ISerializedQuery<TModel, TApi>;
-  limitToLast: (value: number) => ISerializedQuery<TModel, TApi>;
-  orderByChild: (child: K) => ISerializedQuery<TModel, TApi>;
-  orderByValue: () => ISerializedQuery<TModel, TApi>;
-  orderByKey: () => ISerializedQuery<TModel, TApi>;
+  limitToFirst: (value: number) => ISerializedQuery<TSdk, TModel>;
+  limitToLast: (value: number) => ISerializedQuery<TSdk, TModel>;
+  orderByChild: (child: keyof TModel) => ISerializedQuery<TSdk, TModel>;
+  orderByValue: () => ISerializedQuery<TSdk, TModel>;
+  orderByKey: () => ISerializedQuery<TSdk, TModel>;
   startAt: (
     value: string | number | boolean,
     key?: keyof TModel & string
-  ) => ISerializedQuery<TModel, TApi>;
+  ) => ISerializedQuery<TSdk, TModel>;
   endAt: (
     value: string | number | boolean,
     key?: keyof TModel & string
-  ) => ISerializedQuery<TModel, TApi>;
+  ) => ISerializedQuery<TSdk, TModel>;
   /** Equality comparison */
   equalTo: (
     value: string | number | boolean,
     key?: keyof TModel & string
-  ) => ISerializedQuery<TModel, TApi>;
+  ) => ISerializedQuery<TSdk, TModel>;
   /**
    * Use the familiar "where" logical construct to build a query.
    * The _property_ being operated on is determined by which
@@ -64,7 +56,7 @@ export interface ISerializedQuery<
     operation: IComparisonOperator,
     value: unknown,
     key?: (keyof TModel & string) | undefined
-  ) => ISerializedQuery<TModel, TApi>;
+  ) => ISerializedQuery<TSdk, TModel>;
 
   toJSON: () => ISerializedIdentity<TModel>;
   toString: () => string;
@@ -74,14 +66,10 @@ export interface ISerializedQuery<
    * {@link @firebase/firestore-types/Query} or {@link @firebase/database-types/Query}.
    */
   deserialize: (
-    db?: TDb
-  ) => TDb extends IRtdbDatabase
-    ? IFirebaseRtdbQuery
-    : IFirebaseCollectionReference;
+    db?: DbFrom<TSdk>
+  ) => DeserializedQueryFrom<TSdk>
 
   execute: (
-    db?: TDb
-  ) => Promise<TDb extends IRtdbDatabase
-    ? IRtdbSnapshot
-    : IFirestoreQuerySnapshot>;
+    db?: DbFrom<TSdk>
+  ) => Promise<SnapshotFrom<TSdk>>;
 }

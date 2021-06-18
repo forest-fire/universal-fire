@@ -1,18 +1,22 @@
 import { IDictionary } from 'common-types';
 import { IDatabaseConfig, ISerializedQuery } from '../index';
 import { IFirestoreDbEvent, IRtdbDbEvent } from '../fire-proxies';
-import { ApiKind, Database } from '../fire-types';
+import { ApiKind, Database, IDb, ISdk, SDK } from '../fire-types';
 import { IMockListener } from './IMockListener';
 import { NetworkDelay } from './index';
-import { DataSnapshot, EventType } from '@firebase/database-types';
-import { QuerySnapshot } from '@firebase/firestore-types';
-import { ISnapshot } from '../snapshot';
+import { IFirestoreSnapshot, IRtdbDataSnapshot } from '../snapshot';
 
-export interface IMockStore<TState extends IDictionary> {
+export interface IMockStore<
+  TSdk extends ISdk,
+  TDb extends IDb = TSdk extends SDK.FirestoreAdmin | SDK.FirestoreClient ? Database.Firestore : Database.RTDB,
+  TEvent extends IRtdbDbEvent | IFirestoreDbEvent = TSdk extends "RTDB" ? IRtdbDbEvent : IFirestoreDbEvent,
+  TSnap extends IRtdbDataSnapshot | IFirestoreSnapshot = TSdk extends "RTDB" ? IRtdbDataSnapshot : IFirestoreSnapshot,
+  TState extends IDictionary = IDictionary> {
   /** the API exposed by the underlying SDK (e.g., admin, client, rest) which is being used */
   api: ApiKind;
+
   /** the underlying DB technology (e.g., RTDB, Firestore) */
-  db: Database;
+  db: TDb;
 
   /**
    * The in-memory state tree representing the mock database's state
@@ -33,10 +37,7 @@ export interface IMockStore<TState extends IDictionary> {
    * Adds a listener to the mock database based on a specified
    * event type.
    */
-  addListener<
-    TEvent extends IRtdbDbEvent | IFirestoreDbEvent,
-    TSnap extends ISnapshot
-  >(
+  addListener(
     /**
      * The query being used to represent the watcher.
      *
@@ -44,7 +45,7 @@ export interface IMockStore<TState extends IDictionary> {
      * queries even if they're just a string path. This just simplifies
      * the interface somewhat.
      */
-    query: ISerializedQuery,
+    query: ISerializedQuery<TSdk>,
     /**
      * The event type which this listener will respond to.
      */
@@ -63,7 +64,7 @@ export interface IMockStore<TState extends IDictionary> {
      * optionally provide any additional context needed to the primary event callback
      */
     context?: Record<string, unknown> | null
-  ): IMockListener<TEvent, TSnap>;
+  ): IMockListener<ISdk>;
 
   /**
    * removes a "watcher" from the mock database
@@ -71,7 +72,7 @@ export interface IMockStore<TState extends IDictionary> {
   removeListener(id: string): void;
 
   /** lists all the watchers currently operating on the mock database */
-  getAllListeners(): IMockListener<EventType, DataSnapshot | QuerySnapshot>[];
+  getAllListeners(): IMockListener<ISdk>[];
 
   /**
    * Sets the network delay characteristics to be used for DB functions
@@ -104,7 +105,7 @@ export interface IMockStore<TState extends IDictionary> {
   /**
    * Get the state at a given path in the mock database's state tree
    */
-  getDb<T extends IDictionary = IDictionary>(path?: string): T;
+  getDb(path?: string): TState;
   /**
    * Sets the state at a given path of the Mock DB's state tree
    */
