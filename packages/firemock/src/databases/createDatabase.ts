@@ -29,9 +29,8 @@ import {
  * admin and client SDK's
  */
 export function createDatabase<
-  TDatabase extends IDatabaseSdk<TSdk, TDb>,
-  TSdk extends ISdk,
-  TDb extends IDb
+  TDatabase extends IDatabaseSdk<TSdk>,
+  TSdk extends ISdk
 >(
   container: TDatabase,
   initialState: IDictionary | IMockDelayedState<IDictionary>
@@ -56,8 +55,4 @@ export function createDatabase<
   // return rtdb;
 }
 
-
-function isRtdbBacked(container: IDatabaseSdk): {
-  return container.d
-}
 

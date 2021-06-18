@@ -5,7 +5,7 @@ import * as sortFns from './sortFns';
 import { arrayToHash, hashToArray } from 'typed-conversions';
 
 import { IDictionary } from 'common-types';
-import { RtdbOrder } from '@forest-fire/types';
+import { ISdk, RtdbOrder } from '@forest-fire/types';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { SortOrder } from '../@types/query-types';
@@ -35,7 +35,7 @@ const sortFn: (query: any) => sortFns.ISortFns = (query) =>
       query.identity.orderBy as keyof typeof sortFns
     ] as sortFns.ISortFns);
 
-export function runQuery(query: SerializedRealTimeQuery, data: any) {
+export function runQuery<T extends SerializedRealTimeQuery<TSdk>, TSdk extends ISdk>(query: T, data: any) {
   /**
    * A boolean _flag_ to indicate whether the path is of the query points to a Dictionary
    * of Objects. This is indicative of a **Firemodel** list node.
@@ -116,7 +116,7 @@ export function runQuery(query: SerializedRealTimeQuery, data: any) {
       : list;
 }
 
-function _limitFilter(query: SerializedRealTimeQuery) {
+function _limitFilter(query: SerializedRealTimeQuery<TSdk>) {
   const first = limitFilters.limitToFirst(query);
   const last = limitFilters.limitToLast(query);
 
@@ -125,7 +125,7 @@ function _limitFilter(query: SerializedRealTimeQuery) {
   };
 }
 
-function _queryFilter(query: SerializedRealTimeQuery) {
+function _queryFilter(query: SerializedRealTimeQuery<TSdk>) {
   return (list: any[]) => {
     return list
       .filter(queryFilters.equalTo(query))

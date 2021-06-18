@@ -1,24 +1,16 @@
 import {
   IMockStore,
-  IAdminRtdbDatabase,
   IRtdbAdminReference,
+  DbFrom,
 } from '@forest-fire/types';
 import { url } from 'common-types';
 
-import { IDictionary } from 'native-dash';
 import { reference } from '..';
 import { createAdminApp } from '../../firebase-app';
 
-/**
- * Creates a mock Admin SDK for the RTDB which is able
- * to interact with the mock store
- */
-export type MockAdminFactory = (
-  store: IMockStore<IDictionary>
-) => IAdminRtdbDatabase;
 
-export const createRtdbAdminMock: MockAdminFactory = (store) => {
-  const db: IAdminRtdbDatabase = {
+export const createRtdbAdminMock = <T extends IMockStore<"RealTimeAdmin">>(store: T) => {
+  const db: DbFrom<TSdk> = {
     app: createAdminApp(store),
     ref() {
       return reference(store, null) as IRtdbAdminReference;
@@ -32,9 +24,9 @@ export const createRtdbAdminMock: MockAdminFactory = (store) => {
     async getRulesJSON() {
       return store.rules;
     },
-    goOffline() {},
-    goOnline() {},
-    async setRules() {},
+    goOffline() { },
+    goOnline() { },
+    async setRules() { },
   };
 
   return db;

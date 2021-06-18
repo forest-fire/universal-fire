@@ -4,14 +4,9 @@ import {
   ISerializedQuery,
 } from '@forest-fire/types';
 
-import { IDictionary } from 'common-types';
 
-export type IRtdbMockOnDisconnectFactory = (
-  store: IMockStore<IDictionary>,
-  query: ISerializedQuery
-) => IRtdbOnDisconnect;
 
-export const onDisconnect: IRtdbMockOnDisconnectFactory = (store, query) => {
+export const onDisconnect = <TStore extends IMockStore<TSdk>, TSdk extends ISdk,>(store: TStore, query: ISerializedQuery<TSdk>) => {
   const disconnect: IRtdbOnDisconnect = {
     cancel: async (cb) => {
       //

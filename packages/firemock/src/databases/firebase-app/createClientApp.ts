@@ -1,13 +1,9 @@
-import { IClientApp, IMockStore } from '@forest-fire/types';
-import { IDictionary } from 'common-types';
+import { IClientApp, IMockStore, ISdk } from '@forest-fire/types';
 
-export type FirebaseClientMockAppFactory = (
-  store: IMockStore<IDictionary>
-) => IClientApp;
 
-export const createClientApp: FirebaseClientMockAppFactory = (store) => ({
+export const createClientApp = <T extends IMockStore<TSdk>, TSdk extends ISdk>(store: T): IClientApp => ({
   name: store.config.name,
   options: {},
   automaticDataCollectionEnabled: false,
-  delete: async () => {},
+  delete: async () => { },
 });

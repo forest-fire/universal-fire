@@ -14,11 +14,13 @@ import copy from 'fast-copy';
 import { key as fbKey } from 'firebase-key';
 import {
   IDatabaseSdk,
+  IDb,
   IMockDelayedState,
   IMockListener,
   IMockStore,
   IRtdbDataSnapshot,
   IRtdbDbEvent,
+  ISdk,
   isFirestoreDatabase,
   mockDataIsDelayed,
   NetworkDelay,
@@ -26,11 +28,12 @@ import {
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { FireMockError } from '../errors';
+import { DbTypeFrom } from '@forest-fire/types/src';
 
-export function createStore<TContainer extends IDatabaseSdk, TState extends IDictionary = IDictionary>(
-  container: TContainer,
-  initialState: TState | IMockDelayedState<TState>
-) {
+export function createStore<TDatabase extends IDatabaseSdk<TSdk, TDb>, TSdk extends ISdk, TDb extends IDb>(
+  container: TDatabase,
+  initialState: IDictionary | IMockDelayedState<IDictionary>
+): IMockStore<TSdk> {
   if (isFirestoreDatabase(container)) {
     throw new FireMockError("Currently Firemock is not implemented for the Firestore Database!");
   }
@@ -39,14 +42,14 @@ export function createStore<TContainer extends IDatabaseSdk, TState extends IDic
    * The in-memory dictionary/hash mantained by the mock RTDB to represent
    * the state of the database
    */
-  let _state: TState;
+  let _state: IDictionary;
   /** flag to indicate whether dispatch events should be fired */
   let _silenceEvents = false;
   /** the artificial time delay used to simulate a real DB's network latency */
   let _networkDelay: NetworkDelay | number | [number, number] =
     NetworkDelay.lazer;
 
-  let _listeners: IMockListener<IRtdbDbEvent, IRtdbDataSnapshot>[];
+  let _listeners: IMockListener<ISdk>[];
 
 
   const networkDelay = async () => {
@@ -63,7 +66,7 @@ export function createStore<TContainer extends IDatabaseSdk, TState extends IDic
    * Connects the mock database via an asynch operation
    */
   const connect = async () => {
-    let data: TState;
+    let data: IDictionary;
     if (mockDataIsDelayed(initialState)) {
       data = await initialState.connect();
     } else {
@@ -73,7 +76,7 @@ export function createStore<TContainer extends IDatabaseSdk, TState extends IDic
     _state = data;
   };
 
-  const addListener: IMockStore<IRtdbDbEvent, IRtdbDataSnapshot>['addListener'] = (
+  const addListener: IMockStore<TSdk>['addListener'] = (
     pathOrQuery,
     eventType,
     callback,
@@ -93,7 +96,7 @@ export function createStore<TContainer extends IDatabaseSdk, TState extends IDic
       callback,
       cancelCallbackOrContext,
       context,
-    });
+    } as IMockListener<TSdk>);
 
     // function ref(dbPath: string) {
     //   return reference(api, dbPath);
@@ -123,8 +126,8 @@ export function createStore<TContainer extends IDatabaseSdk, TState extends IDic
     return _listeners;
   };
 
-  const api: IMockStore<IRtdbDbEvent, IRtdbDataSnapshot> = {
-    api: container.sdk,
+  const api: IMockStore<TSdk> = {
+    sdk: container.sdk,
     db: container.dbType,
     config,
 
@@ -151,8 +154,8 @@ export function createStore<TContainer extends IDatabaseSdk, TState extends IDic
       const keys = Object.keys(_state);
       keys.forEach((key) => delete _state[key]);
     },
-    getDb<T = any>(path?: string) {
-      return (path ? get(_state, dotify(path)) : _state) as T;
+    getDb(path?: string) {
+      return (path ? get(_state, dotify(path)) : _state);
     },
     setDb<V extends unknown>(path: string, value: V, silent = false) {
       const dotPath = join(path);

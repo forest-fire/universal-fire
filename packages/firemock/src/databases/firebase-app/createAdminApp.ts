@@ -1,12 +1,7 @@
 import { FireMockError } from '@/errors';
-import { IAdminApp, IMockStore } from '@forest-fire/types';
-import { IDictionary } from 'common-types';
+import { IAdminApp, IMockStore, ISdk } from '@forest-fire/types';
 
-export type FirebaseMockAppFactory = (
-  store: IMockStore<IDictionary>
-) => IAdminApp;
-
-export const createAdminApp: FirebaseMockAppFactory = (store) => ({
+export const createAdminApp = <T extends IMockStore<TSdk>, TSdk extends ISdk>(store: T): IAdminApp => ({
   name: store.config.name,
   auth() {
     throw new FireMockError(
@@ -23,4 +18,5 @@ export const createAdminApp: FirebaseMockAppFactory = (store) => ({
       `database.delete() does not have an implementation in Firemock`
     );
   },
-});
+  // TODO: the types here need attention
+}) as unknown as IAdminApp;

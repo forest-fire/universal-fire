@@ -246,6 +246,9 @@ export enum SDK {
  */
 export type ISdk = keyof typeof SDK;
 
+export type IFirestoreSdk = "FirestoreAdmin" | "FirestoreClient";
+export type IRtdbSdk = "RealTimeAdmin" | "RealTimeClient";
+
 export enum Database {
   Firestore = 'Firestore',
   RTDB = 'RTDB',

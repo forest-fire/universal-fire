@@ -1,12 +1,6 @@
 
-import { IMockStore, IMockAuthMgmt } from '../../index';
-import {
-  IAdminAuth,
-  IClientAuth,
-  IFirestoreDatabase,
-  IRtdbDatabase,
-} from '../fire-proxies';
-import { IDb, ISdk } from '../fire-types';
+import { IMockStore, IMockAuthMgmt, DbFrom, AuthFrom } from '../../index';
+import { ISdk } from '../fire-types';
 
 /**
  * This is the surface area returned by a Mock Database Factory (`IMockDbFactory`) and
@@ -20,7 +14,7 @@ import { IDb, ISdk } from '../fire-types';
  * > This contract will be honored by **Firemock** but any 3rd party library
  * can implement to this interface should they want to build a Firemock-_like_ library.
  */
-export interface IMockDatabase<TSdk extends ISdk, TDb extends IDb = TSdk extends "FirestoreAdmin" | "FirestoreClient" ? "Firestore" : "RTDB"> {
+export interface IMockDatabase<TSdk extends ISdk> {
   // /**
   //  * The SDK which this mock database will use to govern the
   //  * appropriate database and auth API's exposed by this mock database.
@@ -47,12 +41,12 @@ export interface IMockDatabase<TSdk extends ISdk, TDb extends IDb = TSdk extends
    * This should be a drop-in replacement for any "real database" and therefore must
    * directly implement the appropriate Firebase type definition provided.
    */
-  db: TDb extends "RTDB" ? IRtdbDatabase : IFirestoreDatabase;
+  db: DbFrom<TSdk>;
 
   /**
    * The main Auth API which will be tailored for the SDK you are using
    */
-  auth: TSdk extends "FirestoreAdmin" | "RealTimeAdmin" ? IAdminAuth : IClientAuth;
+  auth: AuthFrom<TSdk>;
   /**
    * **authManager**
    *
