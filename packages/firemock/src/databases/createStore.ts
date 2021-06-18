@@ -13,6 +13,8 @@ import { deepEqual } from 'fast-equals';
 import copy from 'fast-copy';
 import { key as fbKey } from 'firebase-key';
 import {
+  ApiKind,
+  DbTypeFrom,
   IDatabaseSdk,
   IDb,
   IMockDelayedState,
@@ -24,18 +26,26 @@ import {
   isFirestoreDatabase,
   mockDataIsDelayed,
   NetworkDelay,
+  SDK,
 } from '@forest-fire/types';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { FireMockError } from '../errors';
-import { DbTypeFrom } from '@forest-fire/types/src';
+//TODO: Check if implementation should change
+import { notify, removeAllListeners } from './rtdb/components/old';
 
-export function createStore<TDatabase extends IDatabaseSdk<TSdk, TDb>, TSdk extends ISdk, TDb extends IDb>(
+export function createStore<
+  TDatabase extends IDatabaseSdk<TSdk>,
+  TSdk extends ISdk,
+  TDbType extends DbTypeFrom<TSdk>
+>(
   container: TDatabase,
   initialState: IDictionary | IMockDelayedState<IDictionary>
 ): IMockStore<TSdk> {
   if (isFirestoreDatabase(container)) {
-    throw new FireMockError("Currently Firemock is not implemented for the Firestore Database!");
+    throw new FireMockError(
+      'Currently Firemock is not implemented for the Firestore Database!'
+    );
   }
 
   /**
@@ -50,7 +60,6 @@ export function createStore<TDatabase extends IDatabaseSdk<TSdk, TDb>, TSdk exte
     NetworkDelay.lazer;
 
   let _listeners: IMockListener<ISdk>[];
-
 
   const networkDelay = async () => {
     await delay(_networkDelay);
@@ -86,17 +95,20 @@ export function createStore<TDatabase extends IDatabaseSdk<TSdk, TDb>, TSdk exte
     const query =
       typeof pathOrQuery === 'string'
         ? // TODO: this needs to be generalized across RTDB and Firestore
-        new SerializedRealTimeQuery(pathOrQuery)
+          new SerializedRealTimeQuery(pathOrQuery)
         : pathOrQuery;
 
-    _listeners.push({
+    const listener = {
       id: Math.random().toString(36).substr(2, 10),
       query,
       eventType,
       callback,
       cancelCallbackOrContext,
       context,
-    } as IMockListener<TSdk>);
+    } as IMockListener<TSdk>;
+    _listeners.push(listener);
+
+    return listener;
 
     // function ref(dbPath: string) {
     //   return reference(api, dbPath);
@@ -127,8 +139,13 @@ export function createStore<TDatabase extends IDatabaseSdk<TSdk, TDb>, TSdk exte
   };
 
   const api: IMockStore<TSdk> = {
-    sdk: container.sdk,
-    db: container.dbType,
+    // TODO: Fix type issue
+    api: [SDK.FirestoreAdmin, SDK.RealTimeAdmin].includes(
+      container.sdk as Readonly<SDK>
+    )
+      ? ApiKind.admin
+      : ApiKind.client,
+    db: container.dbType as any,
     config,
 
     state: _state,
@@ -155,7 +172,7 @@ export function createStore<TDatabase extends IDatabaseSdk<TSdk, TDb>, TSdk exte
       keys.forEach((key) => delete _state[key]);
     },
     getDb(path?: string) {
-      return (path ? get(_state, dotify(path)) : _state);
+      return path ? get(_state, dotify(path)) : _state;
     },
     setDb<V extends unknown>(path: string, value: V, silent = false) {
       const dotPath = join(path);

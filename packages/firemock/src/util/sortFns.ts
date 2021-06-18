@@ -18,8 +18,8 @@ export const orderByValue = (a: IDictionary, b: IDictionary) => {
   return a.value > b.value ? -1 : a.value === b.value ? 0 : 1;
 };
 
-export function isOrderByChild(
-  query: SerializedRealTimeQuery,
+export function isOrderByChild<TSdk extends "RealTimeAdmin" | "RealTimeClient">(
+  query: SerializedRealTimeQuery<TSdk>,
   fn: typeof orderByChild | typeof orderByKey
 ): fn is typeof orderByChild {
   return query.identity.orderBy === RtdbOrder.orderByChild;

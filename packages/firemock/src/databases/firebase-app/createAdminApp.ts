@@ -1,4 +1,4 @@
-import { FireMockError } from '@/errors';
+import { FireMockError } from '../../errors';
 import { IAdminApp, IMockStore, ISdk } from '@forest-fire/types';
 
 export const createAdminApp = <T extends IMockStore<TSdk>, TSdk extends ISdk>(store: T): IAdminApp => ({

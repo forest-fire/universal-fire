@@ -7,7 +7,7 @@ import { IRtdbSdk } from '@forest-fire/types/src';
 export function limitToFirst<T extends SerializedRealTimeQuery<TSdk>, TSdk extends IRtdbSdk>(query: T): any {
   const value = query.identity.limitToFirst;
 
-  return (list: any[]) => {
+  return <D>(list: D[]) => {
     if (value === undefined) {
       return list;
     }
@@ -20,7 +20,7 @@ export function limitToFirst<T extends SerializedRealTimeQuery<TSdk>, TSdk exten
 export function limitToLast<T extends SerializedRealTimeQuery<TSdk>, TSdk extends IRtdbSdk>(query: T): any {
   const value = query.identity.limitToLast;
 
-  return (list: any[]) => {
+  return <D>(list: D[]) => {
     if (value === undefined) {
       return list;
     }

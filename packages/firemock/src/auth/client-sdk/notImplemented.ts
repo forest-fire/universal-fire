@@ -4,6 +4,7 @@ import type {
   ActionCodeSettings,
   IAuthObserver,
   IClientAuth,
+  User,
 } from '@forest-fire/types';
 import {createError} from 'brilliant-errors';
 

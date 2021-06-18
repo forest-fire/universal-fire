@@ -899,12 +899,12 @@
   optionalDependencies:
     firemock "^0.59.7"
 
-"@forest-fire/serialized-query@^0.59.2", "@forest-fire/serialized-query@^0.59.7":
+"@forest-fire/serialized-query@^0.59.7":
   version "0.59.7"
   resolved "https://registry.yarnpkg.com/@forest-fire/serialized-query/-/serialized-query-0.59.7.tgz#a81449591d2bde82d940383a10bd10ec5bafe6c9"
   integrity sha512-g95jy1XKU6ll0FFKpukv1QYnBu1FCxn+Bv34BYqT3mnwj+BaJVgF64WJvRA5ICGq0AtnJQiog8atDKvAYOxTZA==
 
-"@forest-fire/types@^0.59.2", "@forest-fire/types@^0.59.7":
+"@forest-fire/types@^0.59.7":
   version "0.59.7"
   resolved "https://registry.yarnpkg.com/@forest-fire/types/-/types-0.59.7.tgz#0729dde174bc7c2b587107360b75e8bd635b4ad2"
   integrity sha512-kWWNC1j2UDpR2+M1grvvpN86TxEUJrDkTpny9NwmksCzMt+bf+dj9ARkuZRPnQYlF4z2+F0itSJgdZsMRMJLmQ==

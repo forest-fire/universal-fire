@@ -5,11 +5,10 @@ import * as sortFns from './sortFns';
 import { arrayToHash, hashToArray } from 'typed-conversions';
 
 import { IDictionary } from 'common-types';
-import { ISdk, RtdbOrder } from '@forest-fire/types';
+import { RtdbOrder, IRtdbSdk } from '@forest-fire/types';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { SortOrder } from '../@types/query-types';
-import { IRtdbSdk } from '@forest-fire/types/src';
 
 const orderByKey = (list: IDictionary) => {
   const keys = Object.keys(list).sort();
@@ -20,8 +19,19 @@ const orderByKey = (list: IDictionary) => {
   return hash;
 };
 
-const orderByValue = <T extends IDictionary>(list: T, direction = SortOrder.asc): T => {
-  const values = hashToArray(list).sort((a, b) => (a.value > b.value ? direction === SortOrder.asc ? 1 : -1 : direction === SortOrder.asc ? -1 : 1));
+const orderByValue = <T extends IDictionary>(
+  list: T,
+  direction = SortOrder.asc
+): T => {
+  const values = hashToArray(list).sort((a, b) =>
+    a.value > b.value
+      ? direction === SortOrder.asc
+        ? 1
+        : -1
+      : direction === SortOrder.asc
+      ? -1
+      : 1
+  );
 
   return values.reduce((agg: IDictionary, curr) => {
     agg[curr.id] = curr.value;
@@ -33,17 +43,23 @@ const sortFn: (query: any) => sortFns.ISortFns = (query) =>
   query.identity.orderBy === RtdbOrder.orderByChild
     ? sortFns.orderByChild(query.identity.orderByKey)
     : (sortFns[
-      query.identity.orderBy as keyof typeof sortFns
-    ] as sortFns.ISortFns);
+        query.identity.orderBy as keyof typeof sortFns
+      ] as sortFns.ISortFns);
 
-export function runQuery<T extends SerializedRealTimeQuery<TSdk>, TSdk extends IRtdbSdk, D extends any>(query: T, data: D) {
+export function runQuery<
+  T extends SerializedRealTimeQuery<TSdk>,
+  TSdk extends IRtdbSdk,
+  D extends IDictionary<any>
+>(query: T, data: D) {
   /**
    * A boolean _flag_ to indicate whether the path is of the query points to a Dictionary
    * of Objects. This is indicative of a **Firemodel** list node.
    */
   const isListOfObjects =
     typeof data === 'object' &&
-    Object.keys(data).every((i) => typeof data[i as keyof typeof data] === 'object');
+    Object.keys(data).every(
+      (i) => typeof data[i as keyof typeof data] === 'object'
+    );
   const dataIsAScalar = ['string', 'boolean', 'number'].includes(typeof data);
 
   if (dataIsAScalar) {
@@ -57,15 +73,15 @@ export function runQuery<T extends SerializedRealTimeQuery<TSdk>, TSdk extends I
   if (dataIsAnObject && !isListOfObjects) {
     data =
       query.identity.orderBy === 'orderByKey'
-        ? orderByKey(data)
+        ? (orderByKey(data) as D)
         : orderByValue(data);
     // allows non-array data that can come from a 'value' listener
     // to pass through at this point
     const limitToKeys = query.identity.limitToFirst
       ? Object.keys(data).slice(0, query.identity.limitToFirst)
       : query.identity.limitToLast
-        ? Object.keys(data).slice(-1 * query.identity.limitToLast)
-        : false;
+      ? Object.keys(data).slice(-1 * query.identity.limitToLast)
+      : false;
 
     if (limitToKeys) {
       Object.keys(data).forEach((k) => {
@@ -89,13 +105,14 @@ export function runQuery<T extends SerializedRealTimeQuery<TSdk>, TSdk extends I
 
   const list = limitFilter(queryFilter(dataList.sort(sortFn(query))));
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return isListOfObjects
     ? // this is list of records to convert back to hash for Firebase compatability
-    arrayToHash(list)
+      arrayToHash(list)
     : dataIsAnObject
-      ? // if it was an Object but values weren't objects then this is probably
+    ? // if it was an Object but values weren't objects then this is probably
       // a key/value pairing
-      list.reduce((agg: IDictionary, curr) => {
+      list.reduce((agg: IDictionary, curr: IDictionary<any>) => {
         if (curr.id && curr.value) {
           // definitely looks like a id/value pairing
           agg[curr.id] = curr.value;
@@ -114,20 +131,24 @@ export function runQuery<T extends SerializedRealTimeQuery<TSdk>, TSdk extends I
 
         return agg;
       }, {})
-      : list;
+    : list;
 }
 
-function _limitFilter(query: SerializedRealTimeQuery<TSdk>) {
+function _limitFilter<TSdk extends IRtdbSdk>(
+  query: SerializedRealTimeQuery<TSdk>
+) {
   const first = limitFilters.limitToFirst(query);
   const last = limitFilters.limitToLast(query);
 
-  return (list: any[]) => {
+  return (list: unknown[]) => {
     return first(last(list));
   };
 }
 
-function _queryFilter(query: SerializedRealTimeQuery<TSdk>) {
-  return (list: any[]) => {
+function _queryFilter<TSdk extends IRtdbSdk>(
+  query: SerializedRealTimeQuery<TSdk>
+) {
+  return (list: unknown[]) => {
     return list
       .filter(queryFilters.equalTo(query))
       .filter(queryFilters.startAt(query))
