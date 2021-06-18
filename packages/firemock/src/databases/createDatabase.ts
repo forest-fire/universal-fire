@@ -14,6 +14,7 @@ import {
   isFirestoreDatabase,
   ISnapshot,
 } from '@forest-fire/types';
+import { isRealTimeDatabase } from '@forest-fire/types/src';
 import { IDictionary } from 'common-types';
 import { FireMockError } from '../errors';
 import { createStore } from './createStore';
@@ -43,16 +44,11 @@ export function createDatabase<
     );
   }
 
-  const rtdb = isClientSdk(container)
-    ? createRtdbClientMock(store)
-    : createRtdbAdminMock(store);
-  const firestore = isClientSdk(container)
-    ? new FirestoreClientMock(container.sdk, container.config, store)
-    : new FirestoreAdminMock(container.sdk, container.config, store);
+  // TODO: types are forced and need more investigation
+  return (isClientSdk(container)
+    ? [createRtdbClientMock(store), store]
+    : [createRtdbAdminMock(store), store]) as unknown as [TDatabase, IMockStore<TSdk>]
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return isRtdbBacked(container) ? [rtdb, store] as any : [firestore, store] as any;
-  // return rtdb;
 }
 
 

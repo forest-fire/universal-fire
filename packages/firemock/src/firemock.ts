@@ -3,7 +3,6 @@ import {
   IDb,
   IMockAuthConfig,
   IMockDatabase,
-  IMockDbFactory,
   IMockServerOptions,
   ISdk,
   NetworkDelay,
@@ -27,12 +26,13 @@ const firemock = async <TDatabase extends IDatabaseSdk<TSdk>, TSdk extends ISdk>
 
   authManager.setNetworkDelay(options.networkDelay || NetworkDelay.lazer);
 
+  // TODO: there are typing errors hiding here
   return {
     db,
     auth,
     authManager,
     store,
-  };
+  } as unknown as IMockDatabase<TSdk>;
 
 };
 

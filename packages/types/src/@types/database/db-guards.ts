@@ -9,8 +9,8 @@ export function isDatabase(db: unknown): db is IDatabaseApi<IDb> {
   return isNonNullObject(db) && (db as IDatabaseApi<IDb>).dbType !== undefined;
 }
 
-export function isSdk(sdk: unknown): sdk is IDatabaseSdk<ISdk, IDb> {
-  return isNonNullObject(sdk) && isDatabase(sdk) && (sdk as IDatabaseSdk<ISdk, IDb>).isAdminApi !== undefined;
+export function isSdk(sdk: unknown): sdk is IDatabaseSdk<ISdk> {
+  return isNonNullObject(sdk) && isDatabase(sdk) && (sdk as IDatabaseSdk<ISdk>).isAdminApi !== undefined;
 }
 
 /**
@@ -26,11 +26,11 @@ export function isFirestoreDatabase(db: unknown): db is IDatabaseApi<"Firestore"
 }
 
 /** The database connection was established using the Admin SDK */
-export function isAdminSdk(sdk: unknown): sdk is IDatabaseSdk<"FirestoreAdmin" | "RealTimeAdmin", IDb> {
+export function isAdminSdk(sdk: unknown): sdk is IDatabaseSdk<"FirestoreAdmin" | "RealTimeAdmin"> {
   return isSdk(sdk) && sdk.isAdminApi;
 }
 
 /** The database connection was established using a Client SDK */
-export function isClientSdk(sdk: unknown): sdk is IDatabaseSdk<"FirestoreClient" | "RealTimeClient", IDb> {
+export function isClientSdk(sdk: unknown): sdk is IDatabaseSdk<"FirestoreClient" | "RealTimeClient"> {
   return isSdk(sdk) && !sdk.isAdminApi;
 }

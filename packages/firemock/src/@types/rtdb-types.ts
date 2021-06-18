@@ -1,7 +1,8 @@
 import { IDictionary } from 'common-types';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { ISchemaHelper } from './mocking-types';
-import type { IRtdbDbEvent, IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IRtdbDbEvent, IRtdbDataSnapshot, SnapshotFrom } from '@forest-fire/types';
+import { EventFrom, IRtdbSdk } from '@forest-fire/types/src';
 
 export interface ISchema {
   id: string;
@@ -112,14 +113,14 @@ export type HandleChangeEvent = (
 
 export type QueryValue = number | string | boolean | null;
 
-export interface IListener {
+export interface IListener<TSdk extends IRtdbSdk> {
   /** random string */
   id: string;
   /** the _query_ the listener is based off of */
-  query: SerializedRealTimeQuery;
+  query: SerializedRealTimeQuery<TSdk>;
 
-  eventType: IRtdbDbEvent;
-  callback: (a: IRtdbDataSnapshot | null, b?: string) => any;
-  cancelCallbackOrContext?: object | null;
-  context?: object | null;
+  eventType: EventFrom<TSdk>;
+  callback: (a: SnapshotFrom<TSdk> | null, b?: string) => any;
+  cancelCallbackOrContext?: Record<string, unknown> | null;
+  context?: Record<string, unknown> | null;
 }

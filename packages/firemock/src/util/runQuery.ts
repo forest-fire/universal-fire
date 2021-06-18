@@ -9,6 +9,7 @@ import { ISdk, RtdbOrder } from '@forest-fire/types';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { SortOrder } from '../@types/query-types';
+import { IRtdbSdk } from '@forest-fire/types/src';
 
 const orderByKey = (list: IDictionary) => {
   const keys = Object.keys(list).sort();
@@ -35,14 +36,14 @@ const sortFn: (query: any) => sortFns.ISortFns = (query) =>
       query.identity.orderBy as keyof typeof sortFns
     ] as sortFns.ISortFns);
 
-export function runQuery<T extends SerializedRealTimeQuery<TSdk>, TSdk extends ISdk>(query: T, data: any) {
+export function runQuery<T extends SerializedRealTimeQuery<TSdk>, TSdk extends IRtdbSdk, D extends any>(query: T, data: D) {
   /**
    * A boolean _flag_ to indicate whether the path is of the query points to a Dictionary
    * of Objects. This is indicative of a **Firemodel** list node.
    */
   const isListOfObjects =
     typeof data === 'object' &&
-    Object.keys(data).every((i) => typeof data[i] === 'object');
+    Object.keys(data).every((i) => typeof data[i as keyof typeof data] === 'object');
   const dataIsAScalar = ['string', 'boolean', 'number'].includes(typeof data);
 
   if (dataIsAScalar) {
