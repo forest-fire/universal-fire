@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { IPartialUserCredential } from '../../@types/index';
-import { networkDelay } from '../../util/index';
-import { Omit } from 'common-types';
 
 import {
-  notImplemented,
   emailExistsAsUserInAuth,
   emailHasCorrectPassword,
   userUid,
@@ -15,7 +12,6 @@ import {
   ActionCodeSettings,
   UserCredential,
   AuthCredential,
-  User,
   IClientAuth,
   IAuthObserver,
   IMockAuthMgmt,

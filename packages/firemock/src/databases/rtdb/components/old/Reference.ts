@@ -5,6 +5,8 @@ import type {
   IRtdbDbEvent,
   IRtdbQuery,
   IMockStore,
+  ISdk,
+  SDK,
 } from '@forest-fire/types';
 import { IFirebaseEventHandler } from '../../../../@types';
 import { parts, join, slashNotation } from '../../../../util';
@@ -28,9 +30,14 @@ function isMultiPath(data: IDictionary) {
   return indexesAreStrings && indexesLookLikeAPath ? true : false;
 }
 
-export class Reference<T = any> extends Query<T>
-  implements IRtdbReference, IRtdbQuery {
-  constructor(path: string | ISerializedQuery, store: IMockStore<IDictionary>) {
+export class Reference<
+    TSdk extends SDK.RealTimeAdmin | SDK.RealTimeClient,
+    T = any
+  >
+  extends Query<T>
+  implements IRtdbReference, IRtdbQuery
+{
+  constructor(path: string | ISerializedQuery<TSdk>, store: IMockStore<TSdk>) {
     super(path, store);
   }
 
@@ -40,16 +47,16 @@ export class Reference<T = any> extends Query<T>
 
   public get parent(): IRtdbReference | null {
     const r = parts(this.path).slice(-1).join('.');
-    return new Reference(r, this._store.getDb(r));
+    return new Reference(r, this._store);
   }
 
-  public child<C = any>(path: string): Reference {
+  public child<C = any>(path: string): Reference<TSdk, C> {
     const r = parts(this.path).concat([path]).join('.');
-    return new Reference<C>(r, this._store.getDb(r));
+    return new Reference<TSdk, C>(r, this._store);
   }
 
-  public get root(): Reference {
-    return new Reference('/', this._store.getDb('/'));
+  public get root(): Reference<TSdk> {
+    return new Reference('/', this._store);
   }
 
   public async push(
@@ -146,15 +153,14 @@ export class Reference<T = any> extends Query<T>
   }
 
   protected addListener(
-    pathOrQuery: string | SerializedRealTimeQuery<any>,
+    pathOrQuery: string | SerializedRealTimeQuery<TSdk>,
     eventType: IRtdbDbEvent,
     callback: IFirebaseEventHandler,
     cancelCallbackOrContext?: (err?: Error) => void,
     context?: IDictionary
-  ): Promise<IRtdbDataSnapshot> {
+  ) {
     // TODO: get this plugged into store API
-    this._store.addListener();
-    return addListener(
+    return this._store.addListener(
       pathOrQuery,
       eventType,
       callback,

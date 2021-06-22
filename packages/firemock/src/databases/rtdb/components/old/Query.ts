@@ -1,48 +1,66 @@
-import { IFirebaseEventHandler, QueryValue } from '@/@types';
+import { IFirebaseEventHandler, QueryValue } from '../../../../@types';
 import {
   IMockStore,
-  IRtdbAdminQuery,
   IRtdbDataSnapshot,
   IRtdbDbEvent,
   IRtdbQuery,
   IRtdbReference,
-  ISdk,
   RtdbOrder,
+  SDK,
 } from '@forest-fire/types';
-import { leafNode, runQuery } from '@/util';
+import { leafNode, runQuery } from '../../../../util';
 
 import { IDictionary } from 'common-types';
 import { SnapShot } from './SnapShot';
 import { ISerializedQuery } from '@forest-fire/types';
-
-export abstract class Query<T, TSdk extends ISdk> implements IRtdbQuery, IRtdbAdminQuery {
+import { SerializedRealTimeQuery } from '../../../../../../serialized-query/dist/types';
+import { DataSnapshot } from '@firebase/database-types';
+export abstract class Query<T = any> implements IRtdbQuery {
   public path: string;
-  protected _store: IMockStore<TSdk>;
-  protected _query: ISerializedQuery<ISdk>;
+  protected _store: IMockStore<SDK.RealTimeAdmin | SDK.RealTimeClient>;
+  protected _query: ISerializedQuery<SDK.RealTimeAdmin | SDK.RealTimeClient>;
 
-  constructor(path: string | ISerializedQuery<TSdk>, store: IMockStore<TSdk>) {
+  constructor(
+    path: string | ISerializedQuery<SDK.RealTimeAdmin | SDK.RealTimeClient>,
+    store: IMockStore<SDK.RealTimeAdmin | SDK.RealTimeClient>
+  ) {
     this._store = store;
     this.path = typeof path === 'string' ? path : this._query.path;
     this._query = typeof path === 'string' ? this._query.setPath(path) : path;
   }
 
   public get ref(): IRtdbReference {
-    return (this as unknown) as IRtdbReference;
+    return this as unknown as IRtdbReference;
   }
 
-  public limitToLast(num: number): Query<T, ISdk> {
+  public get(): Promise<DataSnapshot> {
+    // TODO: Implement
+    return {} as Promise<DataSnapshot>;
+  }
+
+  public startAfter(value: QueryValue, key?: string): Query<T> {
+    // NOT implmented
+    return this;
+  }
+
+  public endBefore(value: QueryValue, key?: string): Query<T> {
+    // NOT implemented
+    return this;
+  }
+
+  public limitToLast(num: number): Query<T> {
     this._query.limitToLast(num);
 
-    return this as Query<T, ISdk>;
+    return this as Query<T>;
   }
 
-  public limitToFirst(num: number): Query<T, ISdk> {
+  public limitToFirst(num: number): Query<T> {
     this._query.limitToFirst(num);
 
     return this;
   }
 
-  public equalTo(value: QueryValue, key?: Extract<keyof T, string>): Query<T, ISdk> {
+  public equalTo(value: QueryValue, key?: Extract<keyof T, string>): Query<T> {
     if (key && this._query.identity.orderBy === RtdbOrder.orderByKey) {
       throw new Error(
         `You can not use "equalTo(val, key)" with a "key" property defined when using a key sort!`
@@ -50,16 +68,16 @@ export abstract class Query<T, TSdk extends ISdk> implements IRtdbQuery, IRtdbAd
     }
     this._query.equalTo(value, key);
 
-    return this as Query<T, ISdk>;
+    return this as Query<T>;
   }
   /** Creates a Query with the specified starting point. */
-  public startAt(value: QueryValue, key?: string): Query<T, ISdk> {
+  public startAt(value: QueryValue, key?: string): Query<T> {
     this._query.startAt(value, key);
 
-    return this as Query<T, ISdk>;
+    return this as Query<T>;
   }
 
-  public endAt(value: QueryValue, key?: string): Query<T, ISdk> {
+  public endAt(value: QueryValue, key?: string): Query<T> {
     this._query.endAt(value, key);
 
     return this;
@@ -68,20 +86,20 @@ export abstract class Query<T, TSdk extends ISdk> implements IRtdbQuery, IRtdbAd
   /**
    * Setup an event listener for a given eventType
    */
-  public async on(
+  public on(
     eventType: IRtdbDbEvent,
     callback: (a: IRtdbDataSnapshot, b?: null | string) => any,
     cancelCallbackOrContext?: (err?: Error) => void | null,
     context?: Record<string, unknown> | null
   ) {
-     await this.addListener(
+    this._store.addListener(
       this._query,
       eventType,
       callback,
       cancelCallbackOrContext,
       context
     );
-    
+    return callback;
   }
 
   public async once(eventType: 'value'): Promise<IRtdbDataSnapshot> {
@@ -106,7 +124,7 @@ export abstract class Query<T, TSdk extends ISdk> implements IRtdbQuery, IRtdbAd
    * specific property. Note: if this happens a lot then it's best to explicitly
    * index on this property in the database's config.
    */
-  public orderByChild(prop: string): Query<T, TSdk> {
+  public orderByChild(prop: string): Query<T> {
     this._query.orderByChild(prop);
 
     return this;
@@ -116,7 +134,7 @@ export abstract class Query<T, TSdk extends ISdk> implements IRtdbQuery, IRtdbAd
    * When the children of a query are all scalar values (string, number, boolean), you
    * can order the results by their (ascending) values
    */
-  public orderByValue(): Query<T, TSdk> {
+  public orderByValue(): Query<T> {
     this._query.orderByValue();
 
     return this;
@@ -129,14 +147,14 @@ export abstract class Query<T, TSdk extends ISdk> implements IRtdbQuery, IRtdbAd
    *
    * **Note:** this is the default sort if no sort is specified
    */
-  public orderByKey(): Query<T, TSdk> {
+  public orderByKey(): Query<T> {
     this._query.orderByKey();
 
     return this;
   }
 
   /** NOT IMPLEMENTED */
-  public orderByPriority(): Query<T, TSdk> {
+  public orderByPriority(): Query {
     return this;
   }
 
@@ -188,7 +206,7 @@ export abstract class Query<T, TSdk extends ISdk> implements IRtdbQuery, IRtdbAd
   private getQuerySnapShot() {
     const path = this._query.path || this.path;
     const data = this._store.getDb(path);
-    const results = runQuery(this._query, data);
+    const results = runQuery(this._query as SerializedRealTimeQuery<any>, data);
 
     return new SnapShot(leafNode(this._query.path), results ? results : null);
   }

@@ -9,8 +9,8 @@ import { IFirestoreSnapshot, IRtdbDataSnapshot } from '../snapshot';
 export interface IMockStore<
   TSdk extends ISdk,
   TDb extends IDb = TSdk extends SDK.FirestoreAdmin | SDK.FirestoreClient ? Database.Firestore : Database.RTDB,
-  TEvent extends IRtdbDbEvent | IFirestoreDbEvent = TSdk extends "RTDB" ? IRtdbDbEvent : IFirestoreDbEvent,
-  TSnap extends IRtdbDataSnapshot | IFirestoreSnapshot = TSdk extends "RTDB" ? IRtdbDataSnapshot : IFirestoreSnapshot,
+  TEvent extends IRtdbDbEvent | IFirestoreDbEvent = TDb extends "RTDB" ? IRtdbDbEvent : IFirestoreDbEvent,
+  TSnap extends IRtdbDataSnapshot | IFirestoreSnapshot = TDb extends "RTDB" ? IRtdbDataSnapshot : IFirestoreSnapshot,
   TState extends IDictionary = IDictionary> {
   /** the API exposed by the underlying SDK (e.g., admin, client, rest) which is being used */
   api: ApiKind;
@@ -45,7 +45,7 @@ export interface IMockStore<
      * queries even if they're just a string path. This just simplifies
      * the interface somewhat.
      */
-    query: ISerializedQuery<TSdk>,
+    query: string | ISerializedQuery<TSdk>,
     /**
      * The event type which this listener will respond to.
      */
