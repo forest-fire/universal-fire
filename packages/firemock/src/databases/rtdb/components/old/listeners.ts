@@ -1,23 +1,20 @@
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import {
-  IFirebaseEventHandler,
-  IListener,
-  IMockWatcherGroupEvent,
-} from '@/@types';
+import { IMockWatcherGroupEvent } from '../../../../@types';
 import type {
   IRtdbDbEvent,
-  IRtdbDataSnapshot,
   IMockStore,
   ISdk,
   IMockListener,
 } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
-import { join, stripLeadingDot, removeDots, dotify, get } from '@/util';
-
 import {
-  SnapShot,
-  groupEventsByWatcher,
-} from './index';
+  join,
+  stripLeadingDot,
+  removeDots,
+  dotify,
+  get,
+} from '../../../../util';
+
+import { SnapShot } from './index';
 
 // TODO: Removed because this state is going to hanlded in `createStore.ts`
 // let _listeners: IListener[] = [];
@@ -215,7 +212,9 @@ export function listenerPaths<TSdk extends ISdk>(store: IMockStore<TSdk>) {
  */
 export function getListeners<TSdk extends ISdk>(store: IMockStore<TSdk>) {
   const _listeners = store.getAllListeners();
-  return (lookFor?: EventTypePlusChild | EventTypePlusChild[]): IMockListener<ISdk>[] => {
+  return (
+    lookFor?: EventTypePlusChild | EventTypePlusChild[]
+  ): IMockListener<ISdk>[] => {
     const childEvents = [
       'child_added',
       'child_changed',
@@ -246,76 +245,57 @@ function keyDidNotPreviouslyExist(
  * Based on a dictionary of paths/values it reduces this to events to
  * send to zero or more listeners.
  */
-export function notify<T = any>(data: IDictionary, dbSnapshot: IDictionary) {
-  if (!shouldSendEvents()) {
-    return;
-  }
-  const events = groupEventsByWatcher(data, dbSnapshot);
+export function notify<TSdk extends ISdk>(api: IMockStore<TSdk>) {
+  return function (events: IMockWatcherGroupEvent[], dbSnapshot: IDictionary) {
+    events.forEach((evt) => {
+      const isDeleteEvent = evt.value === null || evt.value === undefined;
+      switch (evt.listenerEvent) {
+        case 'child_removed':
+          if (isDeleteEvent) {
+            evt.callback(new SnapShot(evt.key, evt.priorValue));
+          }
+          return;
+        case 'child_added':
+          if (!isDeleteEvent && keyDidNotPreviouslyExist(evt, dbSnapshot)) {
+            evt.callback(new SnapShot(evt.key, evt.value));
+          }
+          return;
+        case 'child_changed':
+          if (!isDeleteEvent) {
+            evt.callback(new SnapShot(evt.key, evt.value));
+          }
+          return;
+        case 'child_moved':
+          if (!isDeleteEvent && keyDidNotPreviouslyExist(evt, dbSnapshot)) {
+            // TODO: if we implement sorting then add the previousKey value
+            evt.callback(new SnapShot(evt.key, evt.value));
+          }
+          return;
+        case 'value': {
+          const snapKey = new SnapShot(evt.listenerPath, evt.value).key;
 
-  events.forEach((evt) => {
-    const isDeleteEvent = evt.value === null || evt.value === undefined;
-    switch (evt.listenerEvent) {
-      case 'child_removed':
-        if (isDeleteEvent) {
-          evt.callback(new SnapShot(evt.key, evt.priorValue));
+          if (snapKey === evt.key) {
+            // root set
+            evt.callback(
+              new SnapShot(
+                evt.listenerPath,
+                evt.value === null || evt.value === undefined
+                  ? undefined
+                  : { [evt.key]: evt.value }
+              )
+            );
+          } else {
+            // property set
+            const value =
+              evt.value === null ? api.getDb(evt.listenerPath) : evt.value;
+            evt.callback(new SnapShot(evt.listenerPath, value));
+          }
         }
-        return;
-      case 'child_added':
-        if (!isDeleteEvent && keyDidNotPreviouslyExist(evt, dbSnapshot)) {
-          evt.callback(new SnapShot(evt.key, evt.value));
-        }
-        return;
-      case 'child_changed':
-        if (!isDeleteEvent) {
-          evt.callback(new SnapShot(evt.key, evt.value));
-        }
-        return;
-      case 'child_moved':
-        if (!isDeleteEvent && keyDidNotPreviouslyExist(evt, dbSnapshot)) {
-          // TODO: if we implement sorting then add the previousKey value
-          evt.callback(new SnapShot(evt.key, evt.value));
-        }
-        return;
-      case 'value': {
-        const snapKey = new SnapShot(evt.listenerPath, evt.value).key;
-
-        if (snapKey === evt.key) {
-          // root set
-          evt.callback(
-            new SnapShot(
-              evt.listenerPath,
-              evt.value === null || evt.value === undefined
-                ? undefined
-                : { [evt.key]: evt.value }
-            )
-          );
-        } else {
-          // property set
-          const value =
-            evt.value === null ? getDb(evt.listenerPath) : evt.value;
-          evt.callback(new SnapShot(evt.listenerPath, value));
-        }
-      }
-    } // end switch
-  });
+      } // end switch
+    });
+  };
 }
 
-function priorKey(path: string, id: string) {
-  let previous: string;
-  const ids = getDb(path);
-  if (typeof ids === 'object') {
-    return null;
-  }
-
-  return Object.keys(ids).reduce((acc: string | null, curr: string) => {
-    if (previous === id) {
-      return id;
-    } else {
-      previous = id;
-      return acc;
-    }
-  }, null);
-}
 export type IListenerPlus<TSdk extends ISdk> = IMockListener<TSdk> & {
   id: string;
   changeIsAtRoot: boolean;

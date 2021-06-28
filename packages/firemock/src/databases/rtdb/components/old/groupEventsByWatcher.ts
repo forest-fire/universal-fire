@@ -14,7 +14,7 @@ export function groupEventsByWatcher(
 ): IMockWatcherGroupEvent[] {
   data = dotifyKeys(data);
 
-  const getFromSnapshot = (path: string) => get(dbSnapshot, dotify(path));
+  // const getFromSnapshot = (path: string) => get(dbSnapshot, dotify(path));
   const eventPaths = Object.keys(data).map((i) => dotify(i));
 
   const response: IMockWatcherGroupEvent[] = [];

@@ -103,7 +103,7 @@ export interface IAdminDatabaseApi {
 }
 /** the Admin SDK's typing for `Reference` */
 export type IRtdbAdminReference = admin.database.Reference;
-export type IRtdbAdminQuery = admin.database.Reference;
+// export type IRtdbAdminQuery = admin.database.Query;
 
 export interface IAdminAuthApi {
   ActionCodeSettings: admin.auth.ActionCodeSettings;

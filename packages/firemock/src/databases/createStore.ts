@@ -2,6 +2,7 @@ import { IDictionary } from 'common-types';
 import deepmerge from 'deepmerge';
 import {
   dotify,
+  dotifyKeys,
   get,
   getKey,
   getParent,
@@ -24,15 +25,18 @@ import {
   NetworkDelay,
   SDK,
 } from '@forest-fire/types';
-
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import {
+  SerializedRealTimeQuery,
+  slashNotation,
+} from '@forest-fire/serialized-query';
 import { FireMockError } from '../errors';
 //TODO: Check if implementation should change
 import { notify } from './rtdb/components/old';
+import { IMockWatcherGroupEvent } from '../@types';
 
 export function createStore<
   TDatabase extends IDatabaseSdk<TSdk>,
-  TSdk extends ISdk,
+  TSdk extends ISdk
 >(
   container: TDatabase,
   initialState: IDictionary | IMockDelayedState<IDictionary>
@@ -126,6 +130,82 @@ export function createStore<
     // return snapshot;
   };
 
+  const groupEventsByWatcher = (
+    data: IDictionary,
+    dbSnapshot: IDictionary
+  ): IMockWatcherGroupEvent[] => {
+    const _data = dotifyKeys(data);
+
+    const eventPaths = Object.keys(_data).map((i) => dotify(i));
+
+    const response: IMockWatcherGroupEvent[] = [];
+    const relativePath = (full: string, partial: string) => {
+      return full.replace(partial, '');
+    };
+
+    const justKey = (obj: IDictionary) => (obj ? Object.keys(obj)[0] : null);
+    const justValue = (obj: IDictionary): unknown =>
+      justKey(obj) ? obj[justKey(obj)] : null;
+
+    api.getAllListeners().forEach((listener) => {
+      const eventPathsUnderListener = eventPaths.filter((path) =>
+        path.includes(dotify(listener.query.path))
+      );
+
+      if (eventPathsUnderListener.length === 0) {
+        // if there are no listeners then there's nothing to do
+        return;
+      }
+
+      const paths: string[] = [];
+
+      const listenerPath = dotify(listener.query.path);
+      const changeObject = eventPathsUnderListener.reduce(
+        (changes: IDictionary<IMockWatcherGroupEvent>, path) => {
+          paths.push(path);
+          if (dotify(listener.query.path) === path) {
+            changes = _data[path];
+          } else {
+            set(changes, dotify(relativePath(path, listenerPath)), _data[path]);
+          }
+
+          return changes;
+        },
+        {}
+      );
+
+      const key: string =
+        listener.eventType === 'value'
+          ? changeObject
+            ? justKey(changeObject)
+            : listener.query.path.split('.').pop()
+          : dotify(
+              join(slashNotation(listener.query.path), justKey(changeObject))
+            );
+
+      const newResponse = {
+        listenerId: listener.id,
+        listenerPath,
+        listenerEvent: listener.eventType,
+        callback: listener.callback,
+        eventPaths: paths,
+        key,
+        changes: justValue(changeObject),
+        value:
+          listener.eventType === 'value'
+            ? api.getDb(listener.query.path)
+            : api.getDb(key),
+        priorValue:
+          listener.eventType === 'value'
+            ? get(dbSnapshot, listener.query.path)
+            : justValue(get(dbSnapshot, listener.query.path)),
+      };
+
+      response.push(newResponse);
+    });
+    return response;
+  };
+
   const removeListener = (id: string) => {
     _listeners = _listeners.filter((l) => l.id !== id);
   };
@@ -199,12 +279,13 @@ export function createStore<
       }
 
       if (!silent) {
-        notify({ [dotPath]: value }, dbSnapshot);
+        const events = groupEventsByWatcher({ [dotPath]: value }, dbSnapshot);
+        notify(this)(events, dbSnapshot);
       }
     },
     mergeDb<T = any>(path: string, value: T) {
       const old = get(_state, path);
-      api.setDb(path, deepmerge(old, value));
+      this.setDb(path, deepmerge(old, value));
     },
     updateDb<T = any>(path: string, value: T) {
       const dotPath = join(path);
@@ -232,7 +313,7 @@ export function createStore<
       const newValue: T =
         typeof oldValue === 'object' ? { ...oldValue, ...value } : value;
 
-      api.setDb(dotPath, newValue);
+      this.setDb(dotPath, newValue);
     },
     multiPathUpdate(data: IDictionary) {
       const snapshot = copy(_state);
@@ -242,17 +323,19 @@ export function createStore<
         const path = key;
         if (get(_state, path) !== value) {
           // silent set
-          api.setDb(path, value, true);
+          this.setDb(path, value, true);
         }
       });
 
-      notify(data, snapshot);
+      const events = groupEventsByWatcher(data, snapshot);
+
+      notify(this)(events, snapshot);
     },
     removeDb(path: string) {
-      if (!api.getDb(path)) {
+      if (!this.getDb(path)) {
         return;
       }
-      api.setDb(path, null);
+      this.setDb(path, null);
     },
     pushDb(path: string, value: any): string {
       const pushId = fbKey();
@@ -260,12 +343,12 @@ export function createStore<
       const valuePlusId =
         typeof value === 'object' ? { ...value, id: pushId } : value;
 
-      api.setDb(fullPath, valuePlusId);
+      this.setDb(fullPath, valuePlusId);
       return pushId;
     },
     reset() {
       _listeners = [];
-      api.clearDb();
+      this.clearDb();
     },
   };
 

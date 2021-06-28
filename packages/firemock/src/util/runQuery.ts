@@ -5,7 +5,7 @@ import * as sortFns from './sortFns';
 import { arrayToHash, hashToArray } from 'typed-conversions';
 
 import { IDictionary } from 'common-types';
-import { RtdbOrder, IRtdbSdk } from '@forest-fire/types';
+import { RtdbOrder, IRtdbSdk, ISerializedQuery } from '@forest-fire/types';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { SortOrder } from '../@types/query-types';
@@ -47,7 +47,7 @@ const sortFn: (query: any) => sortFns.ISortFns = (query) =>
       ] as sortFns.ISortFns);
 
 export function runQuery<
-  T extends SerializedRealTimeQuery<TSdk>,
+  T extends ISerializedQuery<TSdk>,
   TSdk extends IRtdbSdk,
   D extends IDictionary<any>
 >(query: T, data: D) {
@@ -100,7 +100,7 @@ export function runQuery<
     return undefined;
   }
 
-  const limitFilter = _limitFilter(query);
+  const limitFilter = _limitFilter<TSdk>(query);
   const queryFilter = _queryFilter(query);
 
   const list = limitFilter(queryFilter(dataList.sort(sortFn(query))));

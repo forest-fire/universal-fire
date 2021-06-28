@@ -3,10 +3,9 @@ import type {
   IRtdbReference,
   IRtdbDataSnapshot,
   IRtdbDbEvent,
-  IRtdbQuery,
   IMockStore,
-  ISdk,
   SDK,
+  IModel,
 } from '@forest-fire/types';
 import { IFirebaseEventHandler } from '../../../../@types';
 import { parts, join, slashNotation } from '../../../../util';
@@ -32,46 +31,40 @@ function isMultiPath(data: IDictionary) {
 
 export class Reference<
     TSdk extends SDK.RealTimeAdmin | SDK.RealTimeClient,
-    T = any
+    T extends IModel = IModel
   >
   extends Query<T>
-  implements IRtdbReference, IRtdbQuery
+  implements IRtdbReference
 {
+  protected getParent(): IRtdbReference {
+    const r = parts(this.path).slice(-1).join('.');
+    return new Reference<SDK.RealTimeAdmin | SDK.RealTimeClient, T>(r, this._store);
+  }
+  protected getRoot(): Query<T> {
+    throw new Error('Method not implemented.');
+  }
+  protected getKey(): string {
+    throw new Error('Method not implemented.');
+  }
+  public push(
+    value?: any,
+    onComplete?: (a: Error | null) => any
+  ): IRtdbReference & Pick<Promise<IRtdbReference>, 'then' | 'catch'> {
+    throw new Error('');
+  }
   constructor(path: string | ISerializedQuery<TSdk>, store: IMockStore<TSdk>) {
     super(path, store);
   }
+  public root: IRtdbReference;
+  public parent: IRtdbReference;
 
   public get key(): string | null {
     return this.path.split('.').pop();
   }
 
-  public get parent(): IRtdbReference | null {
-    const r = parts(this.path).slice(-1).join('.');
-    return new Reference(r, this._store);
-  }
-
-  public child<C = any>(path: string): Reference<TSdk, C> {
+  public child(path: string): IRtdbReference {
     const r = parts(this.path).concat([path]).join('.');
-    return new Reference<TSdk, C>(r, this._store);
-  }
-
-  public get root(): Reference<TSdk> {
-    return new Reference('/', this._store);
-  }
-
-  public async push(
-    value?: any,
-    onComplete?: (a: Error | null) => any
-  ): Promise<IRtdbReference> {
-    const id = this._store.pushDb(this.path, value);
-    this.path = join(this.path, id);
-    if (onComplete) {
-      onComplete(null);
-    }
-
-    await this._store.networkDelay();
-
-    return this as any;
+    return new Reference<SDK.RealTimeAdmin | SDK.RealTimeClient, T>(r, this._store);
   }
 
   public remove(onComplete?: (a: Error | null) => any): Promise<void> {

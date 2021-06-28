@@ -13,7 +13,6 @@ import { leafNode, runQuery } from '../../../../util';
 import { IDictionary } from 'common-types';
 import { SnapShot } from './SnapShot';
 import { ISerializedQuery } from '@forest-fire/types';
-import { SerializedRealTimeQuery } from '../../../../../../serialized-query/dist/types';
 import { DataSnapshot } from '@firebase/database-types';
 export abstract class Query<T = any> implements IRtdbQuery {
   public path: string;
@@ -27,6 +26,37 @@ export abstract class Query<T = any> implements IRtdbQuery {
     this._store = store;
     this.path = typeof path === 'string' ? path : this._query.path;
     this._query = typeof path === 'string' ? this._query.setPath(path) : path;
+  }
+
+  public onDisconnect(): any {
+    return {};
+  }
+
+  public remove(onComplete?: (a: Error) => any): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+
+  public set(value: any, onComplete?: (a: Error) => any): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+  setPriority(
+    priority: string | number,
+    onComplete: (a: Error) => any
+  ): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+  setWithPriority(
+    newVal: any,
+    newPriority: string | number,
+    onComplete?: (a: Error) => any
+  ): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
+  update(
+    values: Record<string, unknown>,
+    onComplete?: (a: Error) => any
+  ): Promise<any> {
+    throw new Error('Method not implemented.');
   }
 
   public get ref(): IRtdbReference {
@@ -58,6 +88,14 @@ export abstract class Query<T = any> implements IRtdbQuery {
     this._query.limitToFirst(num);
 
     return this;
+  }
+
+  public transaction(
+    transactionUpdate: (a: any) => any,
+    onComplete?: (a: Error | null, b: boolean, c: DataSnapshot | null) => any,
+    applyLocally?: boolean
+  ): Promise<any> {
+    throw new Error('not implemented');
   }
 
   public equalTo(value: QueryValue, key?: Extract<keyof T, string>): Query<T> {
@@ -173,26 +211,20 @@ export abstract class Query<T = any> implements IRtdbQuery {
    * This is an undocumented API endpoint that is within the
    * typing provided by Google
    */
-  protected getKey(): string | null {
-    return null;
-  }
+  protected abstract getKey(): string | null;
   /**
    * This is an undocumented API endpoint that is within the
    * typing provided by Google
    */
-  protected getParent(): IRtdbReference | null {
-    return null;
-  }
+  protected abstract getParent(): IRtdbQuery;
   /**
    * This is an undocumented API endpoint that is within the
    * typing provided by Google
    */
-  protected getRoot(): IRtdbReference {
-    return null;
-  }
+  protected abstract getRoot(): Query<T>;
 
   protected abstract addListener(
-    pathOrQuery: string | SerializedRealTimeQuery<any>,
+    pathOrQuery: string | ISerializedQuery<SDK.RealTimeAdmin | SDK.RealTimeClient>,
     eventType: IRtdbDbEvent,
     callback: IFirebaseEventHandler,
     cancelCallbackOrContext?: (err?: Error) => void,
@@ -206,7 +238,7 @@ export abstract class Query<T = any> implements IRtdbQuery {
   private getQuerySnapShot() {
     const path = this._query.path || this.path;
     const data = this._store.getDb(path);
-    const results = runQuery(this._query as SerializedRealTimeQuery<any>, data);
+    const results = runQuery(this._query, data);
 
     return new SnapShot(leafNode(this._query.path), results ? results : null);
   }
