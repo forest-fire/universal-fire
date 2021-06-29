@@ -1,11 +1,12 @@
 import { IDictionary } from 'common-types';
-import type {
+import {
   IRtdbReference,
   IRtdbDataSnapshot,
   IRtdbDbEvent,
   IMockStore,
   SDK,
   IModel,
+  IGenericModel,
 } from '@forest-fire/types';
 import { IFirebaseEventHandler } from '../../../../@types';
 import { parts, join, slashNotation } from '../../../../util';
@@ -36,9 +37,21 @@ export class Reference<
   extends Query<T>
   implements IRtdbReference
 {
+  protected addListener(
+    pathOrQuery: string | ISerializedQuery<TSdk, IGenericModel>,
+    eventType: IRtdbDbEvent,
+    callback: IFirebaseEventHandler,
+    cancelCallbackOrContext?: (err?: Error) => void,
+    context?: IDictionary<any>
+  ): Promise<IRtdbDataSnapshot> {
+    throw new Error('Method not implemented.');
+  }
   protected getParent(): IRtdbReference {
     const r = parts(this.path).slice(-1).join('.');
-    return new Reference<SDK.RealTimeAdmin | SDK.RealTimeClient, T>(r, this._store);
+    return new Reference<SDK.RealTimeAdmin | SDK.RealTimeClient, T>(
+      r,
+      this._store
+    );
   }
   protected getRoot(): Query<T> {
     throw new Error('Method not implemented.');
@@ -64,7 +77,10 @@ export class Reference<
 
   public child(path: string): IRtdbReference {
     const r = parts(this.path).concat([path]).join('.');
-    return new Reference<SDK.RealTimeAdmin | SDK.RealTimeClient, T>(r, this._store);
+    return new Reference<SDK.RealTimeAdmin | SDK.RealTimeClient, T>(
+      r,
+      this._store
+    );
   }
 
   public remove(onComplete?: (a: Error | null) => any): Promise<void> {
@@ -142,23 +158,6 @@ export class Reference<
   }
 
   protected getSnapshot<T extends IRtdbDataSnapshot>(key: string, value: any) {
-    return new SnapShot<T>(key, value);
-  }
-
-  protected addListener(
-    pathOrQuery: string | SerializedRealTimeQuery<TSdk>,
-    eventType: IRtdbDbEvent,
-    callback: IFirebaseEventHandler,
-    cancelCallbackOrContext?: (err?: Error) => void,
-    context?: IDictionary
-  ) {
-    // TODO: get this plugged into store API
-    return this._store.addListener(
-      pathOrQuery,
-      eventType,
-      callback,
-      cancelCallbackOrContext,
-      context
-    );
+    return new SnapShot<T>(this._store, key, value);
   }
 }

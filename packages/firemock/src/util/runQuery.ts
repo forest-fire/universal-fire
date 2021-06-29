@@ -124,7 +124,9 @@ export function runQuery<
           agg[curr.id] = hash;
         } else {
           console.log({
-            message: `Unsure what to do with part of a data structure resulting from the the query: ${query.identity}.\n\nThe item in question was: "${curr}".`,
+            message: `Unsure what to do with part of a data structure resulting from the the query: ${JSON.stringify(
+              query.identity
+            )}.\n\nThe item in question was: "${JSON.stringify(curr)}".`,
             severity: 0,
           });
         }
@@ -134,20 +136,17 @@ export function runQuery<
     : list;
 }
 
-function _limitFilter<TSdk extends IRtdbSdk>(
-  query: SerializedRealTimeQuery<TSdk>
-) {
+function _limitFilter<TSdk extends IRtdbSdk>(query: ISerializedQuery<TSdk>) {
   const first = limitFilters.limitToFirst(query);
   const last = limitFilters.limitToLast(query);
 
   return (list: unknown[]) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return first(last(list));
   };
 }
 
-function _queryFilter<TSdk extends IRtdbSdk>(
-  query: SerializedRealTimeQuery<TSdk>
-) {
+function _queryFilter<TSdk extends IRtdbSdk>(query: ISerializedQuery<TSdk>) {
   return (list: unknown[]) => {
     return list
       .filter(queryFilters.equalTo(query))

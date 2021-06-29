@@ -1,6 +1,6 @@
-import { FireMockError } from '@/errors/index';
-import { networkDelay } from '@/util/other';
-import { IMockAuthMgmt } from '@forest-fire/types';
+import { FireMockError } from '../../../errors/index';
+import { IMockAuthMgmt, NetworkDelay } from '@forest-fire/types';
+import { networkDelay } from '../../../util';
 
 /**
  * **updateEmail**
@@ -28,6 +28,6 @@ export const updateEmail = (api: IMockAuthMgmt) => async (
       'auth/requires-recent-login'
     );
   }
-  await networkDelay();
+  await networkDelay(NetworkDelay.wifi);
   api.updateUser(api.getCurrentUser(), { email: newEmail });
 };

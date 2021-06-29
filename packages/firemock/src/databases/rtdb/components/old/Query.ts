@@ -224,7 +224,9 @@ export abstract class Query<T = any> implements IRtdbQuery {
   protected abstract getRoot(): Query<T>;
 
   protected abstract addListener(
-    pathOrQuery: string | ISerializedQuery<SDK.RealTimeAdmin | SDK.RealTimeClient>,
+    pathOrQuery:
+      | string
+      | ISerializedQuery<SDK.RealTimeAdmin | SDK.RealTimeClient>,
     eventType: IRtdbDbEvent,
     callback: IFirebaseEventHandler,
     cancelCallbackOrContext?: (err?: Error) => void,
@@ -240,6 +242,10 @@ export abstract class Query<T = any> implements IRtdbQuery {
     const data = this._store.getDb(path);
     const results = runQuery(this._query, data);
 
-    return new SnapShot(leafNode(this._query.path), results ? results : null);
+    return new SnapShot(
+      this._store,
+      leafNode(this._query.path),
+      results ? results : null
+    );
   }
 }

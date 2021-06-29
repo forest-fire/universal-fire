@@ -1,9 +1,9 @@
 import { IDictionary, SortingFunction } from 'common-types';
-import type { IRtdbDataSnapshot } from '@forest-fire/types';
+import type { IMockStore, IRtdbDataSnapshot, ISdk } from '@forest-fire/types';
 
-import { Reference } from '@/databases/rtdb';
 import { arrayToHash } from 'typed-conversions';
-import { getKey, join, get } from '@/util';
+import { getKey, join, get } from '../../../../util';
+import { Reference } from '.';
 
 /**
  * Each record in the forEach iteration will be passed
@@ -14,14 +14,18 @@ export type Action = (record: SnapShot) => boolean | void;
 
 export class SnapShot<T = any> implements IRtdbDataSnapshot {
   private _sortingFunction: SortingFunction;
-  constructor(private _key: string, private _value: T[] | T) {}
+  constructor(
+    private _store: IMockStore<ISdk>,
+    private _key: string,
+    private _value: T[] | T
+  ) {}
 
   public get key() {
     return getKey(join(this._key));
   }
 
   public get ref() {
-    return new Reference<T>(this._key);
+    return new Reference(this._key, this._store);
   }
 
   public val(): T | IDictionary<T> {
@@ -34,7 +38,7 @@ export class SnapShot<T = any> implements IRtdbDataSnapshot {
 
   public child<TC = IDictionary>(path: string) {
     const value = get(this._value, path, null);
-    return value ? new SnapShot<TC>(path, value) : null;
+    return value ? new SnapShot<TC>(this._store, path, value) : null;
   }
 
   public hasChild(path: string): boolean {
@@ -69,9 +73,9 @@ export class SnapShot<T = any> implements IRtdbDataSnapshot {
     const cloned: any = (this._value as any).slice(0);
     const sorted = cloned.sort(this._sortingFunction);
     sorted.map((item: any) => {
-      const noId = { ...{}, ...(item as any) };
+      const noId = { ...{}, ...item };
       delete noId.id;
-      const halt = actionCb(new SnapShot(item.id, noId));
+      const halt = actionCb(new SnapShot(this._store, item.id, noId));
       if (halt) {
         return true;
       }

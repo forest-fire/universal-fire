@@ -12,7 +12,6 @@ export * from "./Disconnected";
 export * from "./Query";
 export * from "./Reference";
 export * from "./SnapShot";
-export * from "./groupEventsByWatcher";
 export * from "./listeners";
 
 // Note:

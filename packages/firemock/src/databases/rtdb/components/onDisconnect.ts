@@ -1,12 +1,17 @@
 import {
   IMockStore,
   IRtdbOnDisconnect,
+  ISdk,
   ISerializedQuery,
 } from '@forest-fire/types';
 
-
-
-export const onDisconnect = <TStore extends IMockStore<TSdk>, TSdk extends ISdk,>(store: TStore, query: ISerializedQuery<TSdk>) => {
+export const onDisconnect = <
+  TStore extends IMockStore<TSdk>,
+  TSdk extends ISdk
+>(
+  store: TStore,
+  query: ISerializedQuery<TSdk>
+) => {
   const disconnect: IRtdbOnDisconnect = {
     cancel: async (cb) => {
       //

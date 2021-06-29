@@ -4,18 +4,35 @@ import {
   IRtdbDbEvent,
   IRtdbQuery,
   IRtdbReference,
+  ISdk,
   ISerializedQuery,
 } from '@forest-fire/types';
-import { IDictionary } from 'common-types';
+import { leafNode, runQuery } from '../../..';
+import { reference } from './reference';
 import { snapshot } from './snapshot';
 
-export type IRtdbMockQueryFactory = (
-  store: IMockStore<IDictionary>,
-  query: ISerializedQuery
+export type IRtdbMockQueryFactory<TSdk extends ISdk> = (
+  store: IMockStore<TSdk>,
+  query: ISerializedQuery<TSdk>
 ) => IRtdbQuery;
 
-export const query: IRtdbMockQueryFactory = (store, query) => {
+export const query: IRtdbMockQueryFactory<ISdk> = (store, query) => {
+  const ref = reference(store, query);
   const q: IRtdbQuery = {
+    endBefore: (value, key) => {
+      throw new Error('not implemented');
+    },
+    startAfter: (value, key) => {
+      throw new Error('not implemented');
+    },
+    get: async () => {
+      await store.networkDelay();
+      const data = store.getDb(query.path);
+      const results = runQuery(query, data);
+
+      // TODO: See how this was implemented before
+      return snapshot(store, leafNode(query.path), results ? results : null);
+    },
     endAt: (value, key) => {
       query.endAt(value, key);
       return q;
@@ -39,14 +56,16 @@ export const query: IRtdbMockQueryFactory = (store, query) => {
     off: (
       eventType?: IRtdbDbEvent,
       callback?: (a: IRtdbDataSnapshot, b?: null | string) => any
-    ) => {},
+    ) => {
+      throw new Error('Not implemented. TODO');
+    },
     on: (
       eventType: IRtdbDbEvent,
       callback: (a: IRtdbDataSnapshot, b?: null | string) => any,
       cancelCallbackOrContext?: (err?: Error) => void | null,
-      context?: object | null
+      context?: Record<string, unknown> | null
     ): ((a: IRtdbDataSnapshot, b?: null | string) => Promise<null>) => {
-      store.addListener<IRtdbDbEvent, IRtdbDataSnapshot>(
+      store.addListener(
         query,
         eventType,
         callback,
@@ -57,7 +76,12 @@ export const query: IRtdbMockQueryFactory = (store, query) => {
     },
     once: async (eventType: 'value'): Promise<IRtdbDataSnapshot> => {
       await store.networkDelay();
-      return snapshot(store, query);
+
+      const data = store.getDb(query.path);
+      const results = runQuery(query, data);
+
+      // TODO: See how this was implemented before
+      return snapshot(store, leafNode(query.path), results ? results : null);
     },
     orderByChild: (prop: string) => {
       query.orderByChild(prop);

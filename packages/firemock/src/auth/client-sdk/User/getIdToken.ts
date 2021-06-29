@@ -1,10 +1,12 @@
-import { allUsers, currentUser, toUser } from '@/auth/util';
-import { IMockAuthMgmt } from '@forest-fire/types';
+import { IMockAuthMgmt, NetworkDelay } from '@forest-fire/types';
 import { atRandom } from 'native-dash';
+import { networkDelay } from '../../../util';
 
 export function getIdToken(api: IMockAuthMgmt) {
   return async (): Promise<string> => {
     const user = api.getCurrentUser();
+
+    await networkDelay(NetworkDelay.wifi);
 
     if (!user) {
       throw new Error('not logged in');

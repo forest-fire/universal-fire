@@ -1,17 +1,22 @@
 /* eslint-disable @typescript-eslint/require-await */
-import { IMockStore, ISerializedQuery, IRtdbSdk,IRtdbReference } from '@forest-fire/types';
+import {
+  IMockStore,
+  ISerializedQuery,
+  IRtdbSdk,
+  IRtdbReference,
+  IModel,
+} from '@forest-fire/types';
 import { query } from './query';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { onDisconnect } from './onDisconnect';
-import { FireMockError } from '@/errors';
+import { FireMockError } from '../../../errors';
 import { join } from '../../../util';
-
 
 export const reference = <T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
   store: T,
-  path: string | ISerializedQuery<TSdk, any> = ''
+  path: string | ISerializedQuery<TSdk> = ''
 ): IRtdbReference => {
-  const _query: ISerializedQuery<TSdk> =
+  const _query: ISerializedQuery<IRtdbSdk> =
     typeof path === 'string' ? new SerializedRealTimeQuery<TSdk>(path) : path;
 
   const ref: IRtdbReference = {
@@ -28,15 +33,17 @@ export const reference = <T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
       !_query.path || _query.path.split('/').length === 1
         ? null
         : _query.path
-          .split('/')
-          .slice(0, _query.path.split('/').length - 1)
-          .join('/')
+            .split('/')
+            .slice(0, _query.path.split('/').length - 1)
+            .join('/')
     ),
     push: (value, onComplete) => {
       try {
         const key = store.pushDb(_query.path, value);
         if (onComplete) onComplete(undefined);
-        return reference(store, join(_query.path, key));
+        const _ref = reference(store, join(_query.path, key));
+        const _refPromise = Promise.resolve(_ref);
+        return { ..._ref, ..._refPromise };
       } catch (e) {
         if (onComplete) onComplete(e);
       }

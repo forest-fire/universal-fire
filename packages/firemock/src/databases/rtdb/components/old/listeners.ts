@@ -14,7 +14,7 @@ import {
   get,
 } from '../../../../util';
 
-import { SnapShot } from './index';
+import { snapshot } from '..';
 
 // TODO: Removed because this state is going to hanlded in `createStore.ts`
 // let _listeners: IListener[] = [];
@@ -252,32 +252,33 @@ export function notify<TSdk extends ISdk>(api: IMockStore<TSdk>) {
       switch (evt.listenerEvent) {
         case 'child_removed':
           if (isDeleteEvent) {
-            evt.callback(new SnapShot(evt.key, evt.priorValue));
+            evt.callback(snapshot(api, evt.key, evt.priorValue));
           }
           return;
         case 'child_added':
           if (!isDeleteEvent && keyDidNotPreviouslyExist(evt, dbSnapshot)) {
-            evt.callback(new SnapShot(evt.key, evt.value));
+            evt.callback(snapshot(api, evt.key, evt.value));
           }
           return;
         case 'child_changed':
           if (!isDeleteEvent) {
-            evt.callback(new SnapShot(evt.key, evt.value));
+            evt.callback(snapshot(api, evt.key, evt.value));
           }
           return;
         case 'child_moved':
           if (!isDeleteEvent && keyDidNotPreviouslyExist(evt, dbSnapshot)) {
             // TODO: if we implement sorting then add the previousKey value
-            evt.callback(new SnapShot(evt.key, evt.value));
+            evt.callback(snapshot(api, evt.key, evt.value));
           }
           return;
         case 'value': {
-          const snapKey = new SnapShot(evt.listenerPath, evt.value).key;
+          const snapKey = snapshot(api, evt.listenerPath, evt.value).key;
 
           if (snapKey === evt.key) {
             // root set
             evt.callback(
-              new SnapShot(
+              snapshot(
+                api,
                 evt.listenerPath,
                 evt.value === null || evt.value === undefined
                   ? undefined
@@ -288,7 +289,7 @@ export function notify<TSdk extends ISdk>(api: IMockStore<TSdk>) {
             // property set
             const value =
               evt.value === null ? api.getDb(evt.listenerPath) : evt.value;
-            evt.callback(new SnapShot(evt.listenerPath, value));
+            evt.callback(snapshot(api, evt.listenerPath, value));
           }
         }
       } // end switch

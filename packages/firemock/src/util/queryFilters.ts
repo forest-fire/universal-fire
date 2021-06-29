@@ -1,8 +1,6 @@
+import { IRtdbSdk, ISerializedQuery } from '@forest-fire/types';
 
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { IRtdbSdk, ISdk } from '@forest-fire/types';
-
-export function startAt<T extends SerializedRealTimeQuery<IRtdbSdk>>(query: T) {
+export function startAt<T extends ISerializedQuery<IRtdbSdk>>(query: T) {
   const key = query.identity.startAtKey || query.identity.orderByKey;
   const value = query.identity.startAt;
 
@@ -15,7 +13,7 @@ export function startAt<T extends SerializedRealTimeQuery<IRtdbSdk>>(query: T) {
   };
 }
 
-export function endAt<T extends SerializedRealTimeQuery<IRtdbSdk>>(query: T) {
+export function endAt<T extends ISerializedQuery<IRtdbSdk>>(query: T) {
   const key = query.identity.endAtKey || query.identity.orderByKey;
   const value = query.identity.endAt;
 
@@ -29,7 +27,7 @@ export function endAt<T extends SerializedRealTimeQuery<IRtdbSdk>>(query: T) {
 }
 
 /** a filter function for queries with a `equalTo` value */
-export function equalTo<T extends SerializedRealTimeQuery<IRtdbSdk>>(query: T) {
+export function equalTo<T extends ISerializedQuery<IRtdbSdk>>(query: T) {
   const key = query.identity.equalToKey || query.identity.orderByKey;
   const value = query.identity.equalTo;
 

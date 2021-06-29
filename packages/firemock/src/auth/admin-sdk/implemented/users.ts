@@ -1,5 +1,5 @@
-import { isMockUserRecord, isUser } from '@/auth/type-guards';
-import { toUserRecord } from '@/auth/util';
+import { isMockUserRecord, isUser } from '../../../auth/type-guards';
+import { toUserRecord } from '../../../auth/util';
 import type {
   Auth,
   CreateRequest,
@@ -14,6 +14,7 @@ import type {
 
 export const users: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
   // https://firebase.google.com/docs/auth/admin/manage-users#create_a_user
+  // eslint-disable-next-line @typescript-eslint/require-await
   async createUser(properties: CreateRequest): Promise<UserRecord> {
     const UserRecord: UserRecord = {
       ...(properties as Required<CreateRequest>),
@@ -21,12 +22,12 @@ export const users: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
         lastSignInTime: null,
         creationTime: String(new Date()),
         toJSON() {
-          return JSON.stringify(properties);
+          return JSON.stringify(properties) as never;
         },
       },
-      multiFactor: null as any,
-      toJSON: () => null as any,
-      providerData: null as any,
+      multiFactor: null as never,
+      toJSON: () => null as never,
+      providerData: null as never,
     };
 
     api.addToUserPool(UserRecord);
@@ -40,14 +41,14 @@ export const users: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
     properties: UpdateRequest
   ): Promise<UserRecord> {
     let uid: uid;
-    if (isUser(user) || isMockUserRecord(user)) {
+    if (typeof user !== 'string' && (isUser(user) || isMockUserRecord(user))) {
       uid = user.uid;
     } else {
       uid = user;
     }
 
     api.updateUser(uid, properties);
-    return toUserRecord(api.getCurrentUser());
+    return Promise.resolve(toUserRecord(api.getCurrentUser()));
   },
   async deleteUser(uid: string): Promise<void> {
     await api.networkDelay();
@@ -58,7 +59,9 @@ export const users: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
     return toUserRecord(api.findKnownUser('email', email));
   },
   async getUserByPhoneNumber(phoneNumber: string): Promise<UserRecord> {
-    return toUserRecord(api.findKnownUser('phoneNumber', phoneNumber));
+    return Promise.resolve(
+      toUserRecord(api.findKnownUser('phoneNumber', phoneNumber))
+    );
   },
   async listUsers(
     maxResults?: undefined | number,
