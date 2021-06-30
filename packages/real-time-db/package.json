@@ -30,7 +30,6 @@
     "watch:cjs": "tsc -P tsconfig.es.json -w"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.59.2",
     "@forest-fire/serialized-query": "^0.59.2",
     "@forest-fire/types": "^0.59.2",
     "@forest-fire/utility": "^0.59.2",

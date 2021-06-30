@@ -29,11 +29,13 @@ import { RealTimeDb } from '@forest-fire/real-time-db';
 import { firebase } from '@firebase/app';
 import { IDictionary, wait } from 'common-types';
 
-export let MOCK_LOADING_TIMEOUT = 200;
+export const MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';
 
-export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
-  public readonly app: IClientApp;
+export class RealTimeClient
+  extends RealTimeDb<SDK.RealTimeClient>
+  implements IRealTimeClient
+{
   public readonly sdk: SDK.RealTimeClient = SDK.RealTimeClient;
   public readonly apiKind: ApiKind.client = ApiKind.client;
   public readonly dbType: Database.RTDB = Database.RTDB;
@@ -49,11 +51,11 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
   }
 
   /** lists the database names which are currently connected */
-  public static async connectedTo() {
+  public static connectedTo() {
     return Array.from(new Set(firebase.apps.map((i) => i.name)));
   }
 
-  public CONNECTION_TIMEOUT: number = 5000;
+  public CONNECTION_TIMEOUT = 5000;
   protected _eventManager: EventManager;
   protected _database?: IRtdbDatabase;
   protected _auth?: IClientAuth;
@@ -85,10 +87,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
       try {
         const runningApps = getRunningApps(firebase.apps);
         this._app = runningApps.includes(config.name)
-          ? (getRunningFirebaseApp<IClientApp>(
-              config.name,
-              firebase.apps
-            ) as IClientApp)
+          ? getRunningFirebaseApp(config.name, firebase.apps)
           : firebase.initializeApp(config, config.name);
       } catch (e) {
         if (e.message && e.message.indexOf('app/duplicate-app') !== -1) {
@@ -106,7 +105,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
     this._config = config;
   }
 
-  public async connect(): Promise<RealTimeClient> {
+  public async connect(): Promise<void> {
     if (isMockConfig(this._config)) {
       await this._connectMockDb(this._config);
     } else if (isClientConfig(this._config)) {
@@ -118,8 +117,6 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
         )}`
       );
     }
-
-    return this;
   }
 
   /**
@@ -154,7 +151,7 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
       return this._auth;
     }
     if (this.isMockDb) {
-      this._auth = this.mock.auth();
+      this._auth = this.mock.auth;
       return this._auth;
     } else {
       await this._loadAuthApi();
@@ -244,8 +241,9 @@ export class RealTimeClient extends RealTimeDb implements IRealTimeClient {
 
   protected async _detectConnection() {
     const connectionEvent = () => {
+      // eslint-disable-next-line no-useless-catch
       try {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
           this._eventManager.once('connection', (state: boolean) => {
             if (state) {
               resolve();

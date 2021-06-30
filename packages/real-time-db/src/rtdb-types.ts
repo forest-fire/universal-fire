@@ -1,6 +1,5 @@
 import type { IDictionary } from 'common-types';
 import type { RealTimeDb } from './index';
-import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
 import type {
   IRtdbReference,
   IRtdbDataSnapshot,
@@ -10,6 +9,7 @@ import type {
   IPathSetter,
   IAbstractedEvent,
   IRtdbDbEvent,
+  IRtdbSdk,
 } from '@forest-fire/types';
 
 export type IMockLoadingState =
@@ -20,14 +20,14 @@ export type IMockLoadingState =
 
 export type DebuggingCallback = (message: string) => void;
 
-export interface IFirebaseListener {
+export interface IFirebaseListener<TSdk extends IRtdbSdk> {
   id: string;
-  cb: IFirebaseConnectionCallback;
+  cb: IFirebaseConnectionCallback<TSdk>;
   ctx?: IDictionary;
 }
 
-export type IFirebaseConnectionCallback = (
-  db: IRealTimeDb,
+export type IFirebaseConnectionCallback<TSdk extends IRtdbSdk> = (
+  db: IRealTimeDb<TSdk>,
   ctx?: IDictionary
 ) => void;
 
@@ -132,7 +132,7 @@ export interface ITransactionResult<T = any> {
  * Because Typescript can't type a _chain_ of dependencies (aka., A => B => C),
  * we have created this type represents the full typing of `RealTimeDb`
  */
-export type IRealTimeDb = RealTimeDb & AbstractedDatabase;
+export type IRealTimeDb<TSdk extends IRtdbSdk> = RealTimeDb<TSdk>;
 
 export const VALID_REAL_TIME_EVENTS = [
   'value',

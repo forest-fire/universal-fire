@@ -18,8 +18,6 @@ import {
   IAdminFirebaseNamespace,
   IRealTimeAdmin,
   ApiKind,
-  IAbstractedDatabase,
-  IBaseAbstractedDatabase,
 } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 
@@ -27,7 +25,7 @@ import { EventManager } from './EventManager';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { debug } from './util';
 
-export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
+export class RealTimeAdmin extends RealTimeDb<SDK.RealTimeAdmin> implements IRealTimeAdmin {
   public readonly sdk: SDK.RealTimeAdmin = SDK.RealTimeAdmin;
   public readonly apiKind: ApiKind.admin = ApiKind.admin;
   public readonly isAdminApi = true;

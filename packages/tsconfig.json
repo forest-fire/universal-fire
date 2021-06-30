@@ -1,7 +1,6 @@
 {
   "files": [],
   "references": [
-    { "path": "abstracted-database" },
     { "path": "docs" },
     { "path": "firemock" },
     { "path": "firestore-admin" },

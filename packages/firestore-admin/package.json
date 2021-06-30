@@ -32,7 +32,6 @@
     "firebase-admin": ">= 8.13.0"
   },
   "dependencies": {
-    "@forest-fire/abstracted-database": "^0.59.2",
     "@forest-fire/firestore-db": "^0.59.2",
     "@forest-fire/types": "^0.59.2",
     "@forest-fire/utility": "^0.59.2"

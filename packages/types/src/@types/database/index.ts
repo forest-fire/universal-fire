@@ -7,7 +7,6 @@
 // files: db-api-base, db-guards, db-sdk, db-util, db.
 
 // local file exports
-export * from "./db-api-base";
 export * from "./db-guards";
 export * from "./db-sdk";
 export * from "./db-util";

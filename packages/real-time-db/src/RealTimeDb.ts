@@ -23,42 +23,65 @@ import {
   IRtdbDataSnapshot,
   IRtdbDatabase,
   IRtdbDbEvent,
-  IFirebaseRtdbReference,
   ISerializedQuery,
   IAbstractedEvent,
-  Database,
   IModel,
   IMockDatabase,
-  IDatabaseApi
+  IRtdbSdk,
+  IDatabaseSdk,
+  DbFrom,
+  IRtdbReference,
+  SDK,
+  IClientAuth,
+  IAdminAuth,
+  DbTypeFrom,
 } from '@forest-fire/types';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-
-import { IDictionary } from 'common-types';
+import { createError, IDictionary } from 'common-types';
 import { FireError, slashNotation } from '@forest-fire/utility';
-import { IRealTimeDb } from './rtdb-types';
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
-export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
-  public readonly dbType: Database.RTDB = Database.RTDB;
+export abstract class RealTimeDb<TSdk extends IRtdbSdk>
+  implements IDatabaseSdk<TSdk>
+{
+  dbType: DbTypeFrom<TSdk>;
+  sdk: TSdk;
+  isAdminApi: TSdk extends SDK.RealTimeAdmin ? true : false;
+  abstract connect(): Promise<void>;
+  abstract auth(): Promise<IClientAuth | IAdminAuth>;
+  public get app(): any {
+    if (!this._app) {
+      throw createError(
+        'not-ready',
+        `Failed to return the Firebase "app" as this has not yet been asynchronously loaded yet`
+      );
+    }
+    return this._app;
+  }
+
+  public get isConnected(): boolean {
+    return this._isConnected;
+  }
 
   /**
    * **getPushKey**
    *
-   * Get's a push-key from the server at a given path. This ensures that multiple
+   * Gets a push-key from the server at a given path. This ensures that multiple
    * client's who are writing to the database will use the server's time rather than
    * their own local time.
    *
    * @param path the path in the database where the push-key will be pushed to
    */
+  // eslint-disable-next-line @typescript-eslint/require-await
   public async getPushKey(path: string): Promise<string> {
-    const node = await this.ref(path).push();
+    const node = this.ref(path).push();
     return node.key;
   }
 
-  /** how many miliseconds before the attempt to connect to DB is timed out */
+  /** how many milliseconds before the attempt to connect to DB is timed out */
   public CONNECTION_TIMEOUT = 5000;
   /** Logs debugging information to the console */
   public enableDatabaseLogging: (
@@ -76,10 +99,10 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
   protected _mocking = false;
   protected _allowMocking = false;
   protected _app: IClientApp | IAdminApp;
-  protected _mock?: IMockDatabase;
+  protected _mock?: IMockDatabase<TSdk>;
   protected _database?: IRtdbDatabase;
-  protected _onConnected: IFirebaseListener[] = [];
-  protected _onDisconnected: IFirebaseListener[] = [];
+  protected _onConnected: IFirebaseListener<TSdk>[] = [];
+  protected _onDisconnected: IFirebaseListener<TSdk>[] = [];
   protected _config: IDatabaseConfig;
 
   protected get database(): IRtdbDatabase {
@@ -103,7 +126,7 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
     return this._config;
   }
 
-  public get mock(): IMockDatabase {
+  public get mock(): IMockDatabase<IRtdbSdk> {
     if (!this.isMockDb) {
       throw new FireError(
         `Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`,
@@ -128,7 +151,7 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
    * @param cb the callback function to call when event triggered
    */
   public watch<T extends IModel>(
-    target: string | ISerializedQuery<T, IRealTimeApi>,
+    target: string | ISerializedQuery<TSdk>,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: IFirebaseWatchHandler
   ): void {
@@ -157,7 +180,10 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
         if (typeof target === 'string') {
           this.ref(slashNotation(target)).on(evt, dispatch);
         } else {
-          target.setDB(this).deserialize(this).on(evt, dispatch);
+          target
+            .setDB(this as unknown as DbFrom<TSdk>)
+            .deserialize(this as unknown as DbFrom<TSdk>)
+            .on(evt, dispatch);
         }
       });
     } catch (e) {
@@ -213,13 +239,15 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
    */
   public query<T extends IModel = Record<string, unknown> & IModel>(
     path: string
-  ): ISerializedQuery<T, IRealTimeDb> {
-    return SerializedRealTimeQuery.path<T>(path) as ISerializedQuery<T>;
+  ): ISerializedQuery<IRtdbSdk, T> {
+    return new SerializedRealTimeQuery<IRtdbSdk, T>(path);
   }
 
   /** Get a DB reference for a given path in Firebase */
-  public ref(path = '/'): IFirebaseRtdbReference {
-    return this.isMockDb ? this.mock.ref(path) : this._database.ref(path);
+  public ref(path = '/'): IRtdbReference {
+    return this.isMockDb
+      ? (this.mock.db.ref(path) as IRtdbReference)
+      : (this._database.ref(path) as IRtdbReference);
   }
 
   /**
@@ -234,7 +262,7 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
    * callback will get a parameter passed back with this context available.
    */
   public notifyWhenConnected(
-    cb: IFirebaseConnectionCallback,
+    cb: IFirebaseConnectionCallback<TSdk>,
     id?: string,
     /**
      * additional context/pointers for your callback to use when activated
@@ -266,11 +294,11 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
   }
 
   /** set a "value" in the database at a given path */
-  public async set<T = any>(path: string, value: T): Promise<void> {
+  public async set<T extends unknown>(path: string, value: T): Promise<void> {
     // return new Promise((resolve, reject))
     try {
-      const results = await this.ref(path).set(value);
-      return results;
+      await this.ref(path).set(value);
+      return;
     } catch (e) {
       if (e.code === 'PERMISSION_DENIED') {
         throw new PermissionDenied(
@@ -389,8 +417,8 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
   public async remove<T = any>(path: string, ignoreMissing = false) {
     const ref = this.ref(path);
     try {
-      const result = await ref.remove();
-      return result;
+      await ref.remove();
+      return;
     } catch (e) {
       if (e.code === 'PERMISSION_DENIED') {
         throw new PermissionDenied(
@@ -413,12 +441,12 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
    * returns the Firebase snapshot at a given path in the database
    */
   public async getSnapshot<T = any>(
-    path: string | ISerializedQuery<T>
+    path: string | ISerializedQuery<TSdk>
   ): Promise<IRtdbDataSnapshot> {
     try {
       const response = await (typeof path === 'string'
-        ? this.ref(slashNotation(path as string)).once('value')
-        : (path as ISerializedQuery<T>).setDB(this).execute());
+        ? this.ref(slashNotation(path)).once('value')
+        : path.setDB(this as unknown as DbFrom<TSdk>).execute());
       return response;
     } catch (e) {
       console.warn(
@@ -461,7 +489,7 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
         object = { value: snap.val() };
       }
 
-      return { ...object, ...{ [idProp]: snap.key } };
+      return { ...object, ...{ [idProp]: snap.key } } as T;
     } catch (e) {
       throw new AbstractedProxyError(e);
     }
@@ -477,8 +505,8 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
    * @param path the path in the database to
    * @param idProp
    */
-  public async getList<T = any>(
-    path: string | ISerializedQuery<T>,
+  public async getList<T extends IModel = any>(
+    path: string | ISerializedQuery<TSdk>,
     idProp = 'id'
   ): Promise<T[]> {
     try {
@@ -502,9 +530,10 @@ export abstract class RealTimeDb implements IDatabaseApi<Database.RTDB> {
    * UUID is precise time-based information so you _can_ count on
    * the keys to have a natural time based sort order.
    */
-  public async push<T = any>(path: string, value: T) {
+  // eslint-disable-next-line @typescript-eslint/require-await
+  public async push<T extends unknown>(path: string, value: T) {
     try {
-      this.ref(path).push(value);
+      await this.ref(path).push(value);
     } catch (e) {
       if (e.code === 'PERMISSION_DENIED') {
         throw new PermissionDenied(

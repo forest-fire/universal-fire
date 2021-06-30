@@ -28,7 +28,6 @@
     "test": "scripty"
   },
   "devDependencies": {
-    "@forest-fire/abstracted-database": "^0.59.7",
     "@types/deepmerge": "^2.2.0",
     "@vuepress/plugin-back-to-top": "^1.7.1",
     "@vuepress/plugin-last-updated": "^1.7.1",
@@ -52,7 +51,6 @@
     "fast-equals": "^2.0.0"
   },
   "optionalDependencies": {
-    "@forest-fire/abstracted-database": "^0.59.7",
     "faker": "^4.1.0",
     "firebase-key": "^2.0.2",
     "native-dash": "~1.2.7",

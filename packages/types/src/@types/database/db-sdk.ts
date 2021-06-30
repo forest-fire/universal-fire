@@ -1,4 +1,3 @@
-import { DbTypeFrom, IDatabaseApi } from '../database/index';
 import {
   IAdminFirestoreMock,
   IAdminRtdbMock,
@@ -14,6 +13,7 @@ import {
   IClientAuthProviders,
 } from '../fire-proxies';
 import { ApiKind, IDatabaseConfig, ISdk, SDK } from '../fire-types';
+import { DbTypeFrom } from './db-util';
 
 export type IAdminSdk<T extends IDatabaseSdk<S>, S extends ISdk> = T & { isAdminApi: true };
 
@@ -61,7 +61,11 @@ export interface IFirestoreAdmin
  */
 export interface IDatabaseSdk<
   TSdk extends ISdk,
-  > extends IDatabaseApi<DbTypeFrom<TSdk>> {
+  > {
+  /**
+   * The underlying database which is being connected to
+   */
+  dbType: Readonly<DbTypeFrom<TSdk>>;
   /** the SDK which is being used (aka, "admin", "client", ...) */
   sdk: Readonly<TSdk>;
 
@@ -72,12 +76,12 @@ export interface IDatabaseSdk<
   isAdminApi: boolean;
 
   /** the Firebase App instance for this DB connection */
-  app: TSdk extends "FirestoreAdmin" | "RealTimeAdmin" ? IAdminApp : IClientApp;
+  app: TSdk extends SDK.FirestoreAdmin | SDK.RealTimeAdmin ? IAdminApp : IClientApp;
   /**
    * The "auth providers" such as Github, Facebook, but also EmailAndPassword, etc.
    * Each provider then exposes their own API surface to interact with.
    */
-  authProviders: TSdk extends "FirestoreAdmin" | "RealTimeAdmin" ? undefined : IClientAuthProviders;
+  authProviders: TSdk extends SDK.FirestoreAdmin | SDK.RealTimeAdmin ? undefined : IClientAuthProviders;
   /**
    * Connect to the database
    */

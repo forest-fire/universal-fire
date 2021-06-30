@@ -17,10 +17,6 @@
       "path": "packages/docs"
     },
     {
-      "name": "📦 @forest-fire/abstracted-database",
-      "path": "packages/abstracted-database"
-    },
-    {
       "name": "📦 @forest-fire/firestore-db",
       "path": "packages/firestore-db"
     },

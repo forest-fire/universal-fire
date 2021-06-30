@@ -31,7 +31,7 @@ import { ISdkFactory } from './ISdkFactory';
  * You may also optionally install the `firemock` library if you want to use the mock database
  * capabilities that `universal-fire` provides. */
 export const FirestoreClient: ISdkFactory<
-  IAbstractedDatabase,
+  IFirestoreClient,
   IClientConfig
 > = {
   create(config) {
@@ -58,7 +58,7 @@ export const FirestoreClient: ISdkFactory<
  * - `@firebase/database-types`
  * - `@firebase/auth-types`
  */
-export const RealTimeClient: ISdkFactory<IAbstractedDatabase, IClientConfig> = {
+export const RealTimeClient: ISdkFactory<IRealTimeClient, IClientConfig> = {
   create(config) {
     return new RTC(config);
   },
@@ -79,13 +79,14 @@ export const RealTimeClient: ISdkFactory<IAbstractedDatabase, IClientConfig> = {
  * You may also optionally install the `firemock` library if you want to use the mock database
  * capabilities that `universal-fire` provides.
  */
-export const FirestoreAdmin: ISdkFactory<IAbstractedDatabase, IAdminConfig> = {
+export const FirestoreAdmin: ISdkFactory<IFirestoreAdmin, IAdminConfig> = {
   create(config) {
     throw new Error(
       'You are using the client/browser entry point for universal-fire; use RealTimeClient instead.'
     );
   },
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async connect(config) {
     throw new Error(
       'You are using the client/browser entry point for universal-fire; use RealTimeClient instead.'
@@ -104,13 +105,14 @@ export const FirestoreAdmin: ISdkFactory<IAbstractedDatabase, IAdminConfig> = {
  * You may also optionally install the `firemock` library if you want to use the mock database
  * capabilities that `universal-fire` provides.
  */
-export const RealTimeAdmin: ISdkFactory<IAbstractedDatabase, IAdminConfig> = {
+export const RealTimeAdmin: ISdkFactory<IRealTimeAdmin, IAdminConfig> = {
   create(config) {
     throw new Error(
       'You are using the client/browser entry point for universal-fire; use RealTimeClient instead.'
     );
   },
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async connect(config) {
     throw new Error(
       'You are using the client/browser entry point for universal-fire; use RealTimeClient instead.'

@@ -9,13 +9,15 @@ export const WatcherEventWrapper = (context: IFirebaseWatchContext) => (
     const key = snapshot.key;
     const kind = 'server-event';
     const fullEvent: IFirebaseWatchEvent = {
-      ...context,
+      // TODO: fix union type
+      ...(context as any),
       value,
       key,
       kind,
       previousChildKey,
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return handler(fullEvent);
   };
 };
