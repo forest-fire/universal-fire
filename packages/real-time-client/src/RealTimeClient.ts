@@ -21,13 +21,12 @@ import {
   IRealTimeClient,
   ApiKind,
   Database,
-  IMockDatabase,
-  IMockDbFactory,
+  DebuggingCallback,
 } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 
 import { firebase } from '@firebase/app';
-import { IDictionary, wait } from 'common-types';
+import { wait } from 'common-types';
 
 export const MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';
@@ -44,14 +43,14 @@ export class RealTimeClient
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
    * and then returns a promise which is resolved once the _connection_ is established.
    */
-  public static async connect(config?: IClientConfig | IMockConfig) {
+  public static async connect(config?: IClientConfig | IMockConfig): Promise<IRealTimeClient> {
     const obj = new RealTimeClient(config);
     await obj.connect();
     return obj;
   }
 
   /** lists the database names which are currently connected */
-  public static connectedTo() {
+  public static connectedTo(): string[] {
     return Array.from(new Set(firebase.apps.map((i) => i.name)));
   }
 
@@ -151,7 +150,7 @@ export class RealTimeClient
       return this._auth;
     }
     if (this.isMockDb) {
-      this._auth = this.mock.auth;
+      this._auth = this.mock.auth as unknown as IClientAuth;
       return this._auth;
     } else {
       await this._loadAuthApi();
@@ -165,35 +164,34 @@ export class RealTimeClient
    * The steps needed to connect a database to a Firemock
    * mocked DB.
    */
-  protected async _connectMockDb(config: IMockConfig) {
-    // await this.getFiremock({
-    //   db: config.mockData || {},
-    //   auth: { providers: [], users: [], ...config.mockAuth },
-    // });
-    const firemock: IMockDbFactory = await this._loadFiremock();
-    const mock: IMockDatabase = await firemock<IDictionary, IClientAuth>(
+  protected async _connectMockDb(config: IMockConfig): Promise<void> {
+    const firemock = await this._loadFiremock();
+    const mock = await firemock<RealTimeClient, SDK.RealTimeClient>(
       this,
       config.mockData,
       config.mockAuth
     );
+    this._mock = mock;
     this._authProviders = mock.authProviders;
     await this._listenForConnectionStatus();
   }
 
-  protected async _loadAuthApi() {
+  protected async _loadAuthApi(): Promise<void> {
     await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   protected async _loadFiremock() {
-    const fm = await import(/* webpackChunkName: "firebase-auth" */ 'firemock');
+    const fm = await import(/* webpackChunkName: "firemock" */ 'firemock');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return fm.default;
   }
 
-  protected async _loadDatabaseApi() {
+  protected async _loadDatabaseApi(): Promise<void> {
     await import(/* webpackChunkName: "firebase-db" */ '@firebase/database');
   }
 
-  protected async _connectRealDb(config: IClientConfig) {
+  protected async _connectRealDb(config: IClientConfig): Promise<void> {
     if (!this._isConnected) {
       await this._loadDatabaseApi();
       this._database = firebase.database(this._app);
@@ -205,11 +203,12 @@ export class RealTimeClient
     } else {
       console.info(`Database ${config.name} already connected`);
     }
-    // TODO: relook at debugging func
+    // TODO: re-look at debugging func
     if (config.debugging) {
       this.enableDatabaseLogging(
-        typeof config.debugging === 'function'
-          ? (message: string) => (config.debugging as any)(message)
+        typeof config.debugging !== 'function'
+          ? (message: string) =>
+              (config.debugging as DebuggingCallback)(message)
           : (message: string) => console.log('[FIREBASE]', message)
       );
     }
@@ -221,14 +220,14 @@ export class RealTimeClient
    * In addition, will return a promise which resolves at the point
    * the database connects for the first time.
    */
-  protected async _listenForConnectionStatus() {
+  protected async _listenForConnectionStatus(): Promise<void> {
     this._setupConnectionListener();
     if (!this.isMockDb) {
       // setup ongoing listener
       this.database
         .ref('.info/connected')
         .on('value', (snap: IRtdbDataSnapshot) =>
-          this._monitorConnection.bind(this)(snap)
+          this._monitorConnection(snap)
         );
       // detect connection
       if (!this._isConnected) await this._detectConnection();
@@ -239,7 +238,7 @@ export class RealTimeClient
     this._isConnected = true;
   }
 
-  protected async _detectConnection() {
+  protected async _detectConnection(): Promise<void> {
     const connectionEvent = () => {
       // eslint-disable-next-line no-useless-catch
       try {

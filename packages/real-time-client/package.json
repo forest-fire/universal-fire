@@ -29,11 +29,13 @@
     "test": "scripty"
   },
   "devDependencies": {
-    "@types/events": "^3.0.0"
+    "@types/events": "^3.0.0",
+    "firemock": "^0.59.2"
+
   },
   "dependencies": {
     "@forest-fire/serialized-query": "^0.59.2",
-    "@firebase/app": "^0.6.13",
+    "@firebase/app": "^0.6.11",
     "@forest-fire/real-time-db": "^0.59.2",
     "@forest-fire/types": "^0.59.2",
     "@forest-fire/utility": "^0.59.2",
@@ -41,6 +43,9 @@
     "lodash.first": "^3.0.0",
     "lodash.last": "^3.0.0",
     "typed-conversions": "^0.11.1"
+  },
+  "optionalDependencies": {
+    "firemock": "^0.59.2"
   },
   "engines": {
     "node": ">=8.13.0"

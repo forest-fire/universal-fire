@@ -25,7 +25,10 @@ import { EventManager } from './EventManager';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { debug } from './util';
 
-export class RealTimeAdmin extends RealTimeDb<SDK.RealTimeAdmin> implements IRealTimeAdmin {
+export class RealTimeAdmin
+  extends RealTimeDb<SDK.RealTimeAdmin>
+  implements IRealTimeAdmin
+{
   public readonly sdk: SDK.RealTimeAdmin = SDK.RealTimeAdmin;
   public readonly apiKind: ApiKind.admin = ApiKind.admin;
   public readonly isAdminApi = true;
@@ -105,7 +108,7 @@ export class RealTimeAdmin extends RealTimeDb<SDK.RealTimeAdmin> implements IRea
     if (this._config.mocking) {
       // TODO: Fix Firemock to export just the admin API; auth management should be done through a different
       // entry point. Also the name should be something more like `adminAuth` not `adminSdk`
-      return (this._mock.adminSdk as unknown) as IAdminAuth;
+      return this._mock.auth;
     }
 
     if (!this._admin) {
@@ -152,7 +155,7 @@ export class RealTimeAdmin extends RealTimeDb<SDK.RealTimeAdmin> implements IRea
     );
   }
 
-  public async connect(): Promise<RealTimeAdmin> {
+  public async connect(): Promise<void> {
     if (isMockConfig(this._config)) {
       await this._connectMockDb(this._config);
     } else if (isAdminConfig(this._config)) {
@@ -163,24 +166,19 @@ export class RealTimeAdmin extends RealTimeDb<SDK.RealTimeAdmin> implements IRea
         'invalid-configuration'
       );
     }
-
-    return this;
   }
 
   protected async _connectMockDb(config: IMockConfig) {
-    await this.getFiremock({
-      db: config.mockData || {},
-      auth: { providers: [], ...config.mockAuth },
-    });
+    await this.getFiremock(config);
     this._isConnected = true;
     return this;
   }
 
   protected async _loadAdminApi() {
     try {
-      const api = ((await import(
+      const api = (await import(
         'firebase-admin'
-      )) as unknown) as IAdminFirebaseNamespace;
+      )) as unknown as IAdminFirebaseNamespace;
       return api;
     } catch (e) {
       throw new FireError(

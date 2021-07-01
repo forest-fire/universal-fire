@@ -13,12 +13,13 @@ import {
   IClientAuthProviders,
 } from '../fire-proxies';
 import { ApiKind, IDatabaseConfig, ISdk, SDK } from '../fire-types';
-import { DbTypeFrom } from './db-util';
+import { AuthFrom, DbTypeFrom } from './db-util';
 
-export type IAdminSdk<T extends IDatabaseSdk<S>, S extends ISdk> = T & { isAdminApi: true };
+export type IAdminSdk<T extends IDatabaseSdk<S>, S extends ISdk> = T & {
+  isAdminApi: true;
+};
 
-export interface IRealTimeAdmin
-  extends IDatabaseSdk<SDK.RealTimeAdmin> {
+export interface IRealTimeAdmin extends IDatabaseSdk<SDK.RealTimeAdmin> {
   app: IAdminApp;
   apiKind: Readonly<ApiKind.admin>;
   isAdminApi: true;
@@ -27,8 +28,7 @@ export interface IRealTimeAdmin
   CONNECTION_TIMEOUT: number;
 }
 
-export interface IRealTimeClient
-  extends IDatabaseSdk<SDK.RealTimeClient> {
+export interface IRealTimeClient extends IDatabaseSdk<SDK.RealTimeClient> {
   app: IClientApp;
   apiKind: Readonly<ApiKind.client>;
   isAdminApi: false;
@@ -37,8 +37,7 @@ export interface IRealTimeClient
   CONNECTION_TIMEOUT: number;
 }
 
-export interface IFirestoreClient
-  extends IDatabaseSdk<SDK.FirestoreClient> {
+export interface IFirestoreClient extends IDatabaseSdk<SDK.FirestoreClient> {
   app: IClientApp;
   apiKind: Readonly<ApiKind.client>;
   isAdminApi: false;
@@ -46,8 +45,7 @@ export interface IFirestoreClient
   mock: IClientFirestoreMock;
 }
 
-export interface IFirestoreAdmin
-  extends IDatabaseSdk<SDK.FirestoreAdmin> {
+export interface IFirestoreAdmin extends IDatabaseSdk<SDK.FirestoreAdmin> {
   app: IAdminApp;
   apiKind: ApiKind.admin;
   isAdminApi: true;
@@ -59,9 +57,7 @@ export interface IFirestoreAdmin
  * The basic contract required to be considered a "database"
  * within the **Universal Fire** universe.
  */
-export interface IDatabaseSdk<
-  TSdk extends ISdk,
-  > {
+export interface IDatabaseSdk<TSdk extends ISdk> {
   /**
    * The underlying database which is being connected to
    */
@@ -76,12 +72,16 @@ export interface IDatabaseSdk<
   isAdminApi: boolean;
 
   /** the Firebase App instance for this DB connection */
-  app: TSdk extends SDK.FirestoreAdmin | SDK.RealTimeAdmin ? IAdminApp : IClientApp;
+  app: TSdk extends SDK.FirestoreAdmin | SDK.RealTimeAdmin
+    ? IAdminApp
+    : IClientApp;
   /**
    * The "auth providers" such as Github, Facebook, but also EmailAndPassword, etc.
    * Each provider then exposes their own API surface to interact with.
    */
-  authProviders: TSdk extends SDK.FirestoreAdmin | SDK.RealTimeAdmin ? undefined : IClientAuthProviders;
+  authProviders: TSdk extends SDK.FirestoreAdmin | SDK.RealTimeAdmin
+    ? undefined
+    : IClientAuthProviders;
   /**
    * Connect to the database
    */
@@ -89,9 +89,9 @@ export interface IDatabaseSdk<
   /**
    * Get access to the Firebase Auth API
    */
-  auth: () => Promise<IClientAuth | IAdminAuth>;
+  auth: () => Promise<AuthFrom<TSdk>>;
 
-  /** 
+  /**
    * Returns true if the database is connected, false otherwise.
    */
   isConnected: boolean;

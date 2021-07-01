@@ -1,7 +1,5 @@
 //#autoindex
 
-
-
 // #region autoindexed files
 
 // index last changed at: 10th Oct, 2020, 09:29 AM ( GMT-7 )
@@ -10,12 +8,12 @@
 // directories: @types, errors, util.
 
 // local file exports
-export * from "./firemock";
+export { default } from './firemock';
 
 // directory exports
-export * from "./@types/index";
-export * from "./errors/index";
-export * from "./util/index";
+export * from './@types/index';
+export * from './errors/index';
+export * from './util/index';
 
 // Note:
 // -----

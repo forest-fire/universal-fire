@@ -35,6 +35,9 @@ import {
   IClientAuth,
   IAdminAuth,
   DbTypeFrom,
+  AuthFrom,
+  IMockConfigOptions,
+  IMockConfig,
 } from '@forest-fire/types';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
@@ -51,8 +54,10 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
   sdk: TSdk;
   isAdminApi: TSdk extends SDK.RealTimeAdmin ? true : false;
   abstract connect(): Promise<void>;
-  abstract auth(): Promise<IClientAuth | IAdminAuth>;
-  public get app(): any {
+  abstract auth(): Promise<AuthFrom<TSdk>>;
+  public get app(): TSdk extends SDK.RealTimeAdmin | SDK.FirestoreAdmin
+    ? IAdminApp
+    : IClientApp {
     if (!this._app) {
       throw createError(
         'not-ready',
@@ -98,7 +103,9 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
   protected _debugging = false;
   protected _mocking = false;
   protected _allowMocking = false;
-  protected _app: IClientApp | IAdminApp;
+  protected _app: TSdk extends SDK.RealTimeAdmin | SDK.FirestoreAdmin
+    ? IAdminApp
+    : IClientApp;
   protected _mock?: IMockDatabase<TSdk>;
   protected _database?: IRtdbDatabase;
   protected _onConnected: IFirebaseListener<TSdk>[] = [];
@@ -606,5 +613,41 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
       `The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`,
       'missing-auth-providers'
     );
+  }
+
+  /**
+   * **getFiremock**
+   *
+   * Asynchronously imports the `firemock` library and _prepares_ it
+   * for use. When the promise resolves from this method the class's
+   * `_mock` property will be setup with a proper mock API.
+   *
+   * > because this is an optional requirement for consumers it will
+   * wrap with a try/catch and produce a graceful error message
+   * if an error is encountered.
+   */
+  protected async getFiremock(config: IMockConfig) {
+    let Firemock;
+    try {
+      Firemock = await import(/* webpackChunkName: "firemock" */ 'firemock');
+    } catch (e) {
+      throw new FireError(
+        `To use mocking functions you must ensure that "firemock" is installed in your repo. Typically this would be installed as a "devDep" assuming that this mocking functionality is used as part of your tests but if you are shipping this mocking functionality then you will need to add it as full dependency.\n\n${e.message}`,
+        'missing-dependency'
+      );
+    }
+
+    try {
+      this._mock = await Firemock.default(
+        this,
+        config.mockData,
+        config.mockAuth
+      );
+    } catch (e) {
+      throw new FireError(
+        `The firemock library was imported successfully but in trying to "prepare" it there was a failure: ${e.message}`,
+        'failed-mock-prep'
+      );
+    }
   }
 }

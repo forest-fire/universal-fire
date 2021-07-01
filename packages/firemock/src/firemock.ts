@@ -1,6 +1,5 @@
 import {
   IDatabaseSdk,
-  IDb,
   IMockAuthConfig,
   IMockDatabase,
   IMockServerOptions,
