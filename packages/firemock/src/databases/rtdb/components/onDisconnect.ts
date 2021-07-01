@@ -5,13 +5,10 @@ import {
   ISerializedQuery,
 } from '@forest-fire/types';
 
-export const onDisconnect = <
+export function onDisconnect<
   TStore extends IMockStore<TSdk>,
   TSdk extends ISdk
->(
-  store: TStore,
-  query: ISerializedQuery<TSdk>
-) => {
+>(store: TStore, query: ISerializedQuery<TSdk>) {
   const disconnect: IRtdbOnDisconnect = {
     cancel: async (cb) => {
       //
@@ -31,4 +28,4 @@ export const onDisconnect = <
   };
 
   return disconnect;
-};
+}

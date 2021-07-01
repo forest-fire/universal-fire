@@ -31,8 +31,8 @@ import {
 } from '@forest-fire/serialized-query';
 import { FireMockError } from '../errors';
 //TODO: Check if implementation should change
-import { notify } from './rtdb/components/old';
 import { IMockWatcherGroupEvent } from '../@types';
+import { notify } from './rtdb';
 
 export function createStore<
   TDatabase extends IDatabaseSdk<TSdk>,

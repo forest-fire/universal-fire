@@ -12,10 +12,10 @@ import { onDisconnect } from './onDisconnect';
 import { FireMockError } from '../../../errors';
 import { join } from '../../../util';
 
-export const reference = <T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
+export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
   store: T,
   path: string | ISerializedQuery<TSdk> = ''
-): IRtdbReference => {
+): IRtdbReference {
   const _query: ISerializedQuery<IRtdbSdk> =
     typeof path === 'string' ? new SerializedRealTimeQuery<TSdk>(path) : path;
 
@@ -100,4 +100,4 @@ export const reference = <T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
   };
 
   return ref;
-};
+}

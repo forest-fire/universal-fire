@@ -4,9 +4,9 @@ import { url } from 'common-types';
 import { reference } from '../index';
 import { createClientApp } from '../../firebase-app';
 
-export const createRtdbClientMock = <T extends IMockStore<'RealTimeClient'>>(
+export function createRtdbClientMock<T extends IMockStore<'RealTimeClient'>>(
   store: T
-): DbFrom<'RealTimeClient'> => {
+): DbFrom<'RealTimeClient'> {
   const db = {
     useEmulator() {},
     app: createClientApp(store),
@@ -21,4 +21,4 @@ export const createRtdbClientMock = <T extends IMockStore<'RealTimeClient'>>(
   };
 
   return db;
-};
+}

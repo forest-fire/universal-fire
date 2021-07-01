@@ -1,9 +1,14 @@
 import { IClientApp, IMockStore, ISdk } from '@forest-fire/types';
 
-
-export const createClientApp = <T extends IMockStore<TSdk>, TSdk extends ISdk>(store: T): IClientApp => ({
-  name: store.config.name,
-  options: {},
-  automaticDataCollectionEnabled: false,
-  delete: async () => { },
-});
+export function createClientApp<T extends IMockStore<TSdk>, TSdk extends ISdk>(
+  store: T
+): IClientApp {
+  return {
+    name: store.config.name,
+    options: {},
+    automaticDataCollectionEnabled: false,
+    // TODO:
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    delete: async () => {},
+  };
+}

@@ -1,4 +1,4 @@
-import { IMockWatcherGroupEvent } from '../../../../@types';
+import { IMockWatcherGroupEvent } from '../../../@types';
 import type {
   IRtdbDbEvent,
   IMockStore,
@@ -12,7 +12,7 @@ import {
   removeDots,
   dotify,
   get,
-} from '../../../../util';
+} from '../../../util';
 
 import { snapshot } from '..';
 

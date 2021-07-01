@@ -32,16 +32,15 @@ import {
   DbFrom,
   IRtdbReference,
   SDK,
-  IClientAuth,
-  IAdminAuth,
   DbTypeFrom,
   AuthFrom,
-  IMockConfigOptions,
   IMockConfig,
 } from '@forest-fire/types';
 
+import { createError } from 'brilliant-errors';
+
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { createError, IDictionary } from 'common-types';
+import { IDictionary } from 'common-types';
 import { FireError, slashNotation } from '@forest-fire/utility';
 
 /** time by which the dynamically loaded mock library should be loaded */
@@ -145,6 +144,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
         `Attempt to access the "mock" property on a configuration which IS a mock database but the Mock API has not been initialized yet!`
       );
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._mock;
   }
 
@@ -454,6 +454,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
       const response = await (typeof path === 'string'
         ? this.ref(slashNotation(path)).once('value')
         : path.setDB(this as unknown as DbFrom<TSdk>).execute());
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return response;
     } catch (e) {
       console.warn(
@@ -540,6 +541,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
   // eslint-disable-next-line @typescript-eslint/require-await
   public async push<T extends unknown>(path: string, value: T) {
     try {
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       await this.ref(path).push(value);
     } catch (e) {
       if (e.code === 'PERMISSION_DENIED') {

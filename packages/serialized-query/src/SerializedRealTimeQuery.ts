@@ -12,18 +12,21 @@ import {
   IRtdbDatabase,
   IAdminRtdbDatabase,
   IClientRtdbDatabase,
+  IFirebaseRtdbReference,
 } from '@forest-fire/types';
-
 
 /**
  * Provides a way to serialize the full characteristics of a Firebase Realtime
  * Database query.
  */
 export class SerializedRealTimeQuery<
-  TSdk extends "RealTimeAdmin" | "RealTimeClient",
+  TSdk extends 'RealTimeAdmin' | 'RealTimeClient',
   M extends IModel = IModel,
-  TDatabase extends IRtdbDatabase = TSdk extends "RealTimeAdmin" ? IAdminRtdbDatabase : IClientRtdbDatabase
-  > implements ISerializedQuery<"RealTimeAdmin" | "RealTimeClient", M> {
+  TDatabase extends IRtdbDatabase = TSdk extends 'RealTimeAdmin'
+    ? IAdminRtdbDatabase
+    : IClientRtdbDatabase
+> implements ISerializedQuery<'RealTimeAdmin' | 'RealTimeClient', M>
+{
   protected _endAtKey?: keyof M & string;
   protected _endAt?: string | number | boolean;
   protected _equalToKey?: keyof M & string;
@@ -43,7 +46,6 @@ export class SerializedRealTimeQuery<
   constructor(path = '/') {
     this._path = slashNotation(path);
   }
-
 
   // static create<S extends "RealTimeAdmin" | "RealTimeClient", M extends IModel = IModel, D extends IRtdbDatabase = S extends "RealTimeAdmin" ? IAdminRtdbDatabase : IClientRtdbDatabase>(db: D, path = "/") {
   //   const q = new SerializedRealTimeQuery<S, M>(path)
@@ -109,7 +111,9 @@ export class SerializedRealTimeQuery<
     return this as SerializedRealTimeQuery<TSdk, M>;
   }
 
-  public orderByChild(child: keyof M & string): SerializedRealTimeQuery<TSdk, M> {
+  public orderByChild(
+    child: keyof M & string
+  ): SerializedRealTimeQuery<TSdk, M> {
     this._orderBy = 'orderByChild';
     this._orderKey = child;
     return this as SerializedRealTimeQuery<TSdk, M>;
@@ -170,9 +174,9 @@ export class SerializedRealTimeQuery<
     return hash;
   }
 
-  public deserialize(db?: IRtdbDatabase): IFirebaseRtdbQuery {
+  public deserialize(db?: IRtdbDatabase): IFirebaseRtdbReference {
     const database = db || this.db;
-    let q = database.ref(this.path) as IFirebaseRtdbQuery;
+    let q = database.ref(this.path) as unknown as IFirebaseRtdbQuery;
 
     switch (this._orderBy) {
       case 'orderByKey':
@@ -203,7 +207,7 @@ export class SerializedRealTimeQuery<
         : q.equalTo(this.identity.equalTo);
     }
 
-    return q;
+    return q as IFirebaseRtdbReference;
   }
 
   public async execute(db?: IRtdbDatabase): Promise<IRtdbDataSnapshot> {

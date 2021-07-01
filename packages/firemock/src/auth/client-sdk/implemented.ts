@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { IPartialUserCredential } from '../../@types/index';
-
 import {
   emailExistsAsUserInAuth,
   emailHasCorrectPassword,

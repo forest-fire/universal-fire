@@ -13,6 +13,7 @@ export * from "./onDisconnect";
 export * from "./query";
 export * from "./reference";
 export * from "./snapshot";
+export * from "./notify";
 
 // Note:
 // -----

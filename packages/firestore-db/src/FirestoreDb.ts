@@ -11,6 +11,7 @@ import type {
   IClientAuth,
   IAdminAuth,
   IDatabaseConfig,
+  AuthFrom,
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
 import {
@@ -27,7 +28,7 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
   abstract sdk: TSdk;
   abstract isAdminApi: TSdk extends SDK ? true : false;
   abstract connect(): Promise<void>;
-  abstract auth(): Promise<IClientAuth | IAdminAuth>;
+  abstract auth(): Promise<AuthFrom<TSdk>>;
   public get app(): any {
     if (!this._app) {
       throw new Error(
