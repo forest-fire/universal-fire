@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { snapshotToArray } from 'typed-conversions';
 
 import {
@@ -35,6 +36,8 @@ import {
   DbTypeFrom,
   AuthFrom,
   IMockConfig,
+  AppFrom,
+  IsAdminSdk,
 } from '@forest-fire/types';
 
 import { createError } from 'brilliant-errors';
@@ -51,12 +54,10 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
 {
   dbType: DbTypeFrom<TSdk>;
   sdk: TSdk;
-  isAdminApi: TSdk extends SDK.RealTimeAdmin ? true : false;
+  isAdminApi: IsAdminSdk<TSdk>;
   abstract connect(): Promise<void>;
   abstract auth(): Promise<AuthFrom<TSdk>>;
-  public get app(): TSdk extends SDK.RealTimeAdmin | SDK.FirestoreAdmin
-    ? IAdminApp
-    : IClientApp {
+  public get app(): AppFrom<TSdk> {
     if (!this._app) {
       throw createError(
         'not-ready',
@@ -102,9 +103,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
   protected _debugging = false;
   protected _mocking = false;
   protected _allowMocking = false;
-  protected _app: TSdk extends SDK.RealTimeAdmin | SDK.FirestoreAdmin
-    ? IAdminApp
-    : IClientApp;
+  protected _app: AppFrom<TSdk>;
   protected _mock?: IMockDatabase<TSdk>;
   protected _database?: IRtdbDatabase;
   protected _onConnected: IFirebaseListener<TSdk>[] = [];
@@ -294,7 +293,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
   /**
    * removes a callback notification previously registered
    */
-  public removeNotificationOnConnection(id: string) {
+  public removeNotificationOnConnection(id: string): RealTimeDb<TSdk> {
     this._onConnected = this._onConnected.filter((i) => i.id !== id);
 
     return this;
@@ -367,7 +366,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    * **Note:** because _dot notation_ for paths is not uncommon you can notate
    * the paths with `.` instead of `/`
    */
-  public async multiPathSet(updates: IDictionary) {
+  public async multiPathSet(updates: IDictionary): Promise<void> {
     const fixed: IDictionary = Object.keys(updates).reduce((acc, path) => {
       const slashPath =
         path.replace(/\./g, '/').slice(0, 1) === '/'
@@ -421,7 +420,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    *
    * [API  Docs](https://firebase.google.com/docs/reference/js/firebase.database.Reference#remove)
    */
-  public async remove<T = any>(path: string, ignoreMissing = false) {
+  public async remove(path: string, _ignoreMissing = false): Promise<void> {
     const ref = this.ref(path);
     try {
       await ref.remove();

@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import type {
-  IAdminApp,
-  IClientApp,
   IFirestoreDatabase,
   ISerializedQuery,
   IAbstractedEvent,
   IDatabaseSdk,
   IFirestoreSdk,
   DbTypeFrom,
-  SDK,
-  IClientAuth,
-  IAdminAuth,
   IDatabaseConfig,
   AuthFrom,
+  AppFrom,
+  AuthProviders,
+  IsAdminSdk,
+  IMockDatabase,
+  EventFrom
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
 import {
@@ -24,18 +25,24 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
   implements IDatabaseSdk<TSdk>
 {
   abstract dbType: DbTypeFrom<TSdk>;
-  abstract get authProviders(): any;
   abstract sdk: TSdk;
-  abstract isAdminApi: TSdk extends SDK ? true : false;
+  abstract isAdminApi: IsAdminSdk<TSdk>;
   abstract connect(): Promise<void>;
   abstract auth(): Promise<AuthFrom<TSdk>>;
-  public get app(): any {
+  public get app(): AppFrom<TSdk> {
     if (!this._app) {
       throw new Error(
         `[not-ready] - Failed to return the Firebase "app" as this has not yet been asynchronously loaded yet`
       );
     }
     return this._app;
+  }
+
+  public get authProviders(): AuthProviders<TSdk> {
+    throw new FireError(
+      `The authProviders getter is intended to provide access to various auth providers but it is NOT implemented in the connection library you are using!`,
+      'missing-auth-providers'
+    );
   }
 
   public get config(): IDatabaseConfig {
@@ -47,39 +54,40 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
   }
 
   protected _database?: IFirestoreDatabase;
-  protected _app!: IClientApp | IAdminApp;
+  protected _app!: AppFrom<TSdk>;
   protected _isConnected = false;
   protected _config: IDatabaseConfig
   public isMockDb = false;
 
-  protected get database() {
-    if (this._database) {
-      return this._database;
+  protected get database(): IFirestoreDatabase {
+    if (!this._database) {
+      throw new FireError(
+        'Attempt to use Firestore without having instantiated it',
+        'not-ready'
+      );
     }
-    throw new FireError(
-      'Attempt to use Firestore without having instantiated it',
-      'not-ready'
-    );
+
+    return this._database;
   }
 
   protected set database(value: IFirestoreDatabase) {
     this._database = value;
   }
 
-  protected _isCollection(path: string | ISerializedQuery<TSdk>) {
+  protected _isCollection(path: string | ISerializedQuery<TSdk>): boolean {
     path = typeof path !== 'string' ? path.path : path;
     return path.split('/').length % 2 === 0;
   }
 
-  protected _isDocument(path: string | ISerializedQuery<TSdk>) {
+  protected _isDocument(path: string | ISerializedQuery<TSdk>): boolean {
     return this._isCollection(path) === false;
   }
 
-  public get mock(): any {
+  public get mock(): IMockDatabase<TSdk> {
     throw new Error('Not implemented');
   }
 
-  public async getList<T = any>(
+  public async getList<T = unknown>(
     path: string | ISerializedQuery<TSdk>,
     idProp = 'id'
   ): Promise<T[]> {
@@ -93,11 +101,11 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     }) as T[];
   }
 
-  public getPushKey(path: string) {
+  public getPushKey(path: string): string {
     return this.database.collection(path).doc().id;
   }
 
-  public async getRecord<T = any>(path: string, idProp = 'id') {
+  public async getRecord<T = unknown>(path: string, idProp = 'id'): Promise<T> {
     const documentSnapshot = await this.database.doc(path).get();
     return {
       ...documentSnapshot.data(),
@@ -133,12 +141,12 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
    *
    * @param target a database path or a SerializedQuery
    * @param events an event type or an array of event types (e.g., "value", "child_added")
-   * @param cb the callback function to call when event triggered
+   * @param _cb the callback function to call when event triggered
    */
-  public watch(
+  public watch<C extends Function>(
     target: string | ISerializedQuery<TSdk>,
-    events: IAbstractedEvent | IAbstractedEvent[],
-    cb: any
+    events: EventFrom<TSdk> | EventFrom<TSdk>[],
+    _cb: C
   ): void {
     if (events && !isFirestoreEvent(events)) {
       throw new FirestoreDbError(
@@ -154,7 +162,7 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     throw new Error('Not implemented');
   }
 
-  public unWatch(events?: IAbstractedEvent | IAbstractedEvent[], cb?: any) {
+  public unWatch(events?: IAbstractedEvent | IAbstractedEvent[], _cb?: any): void {
     if (events && !isFirestoreEvent(events)) {
       throw new FirestoreDbError(
         `An attempt was made to unwatch an event type which is not valid for the Firestore database. Events passed in were: ${JSON.stringify(

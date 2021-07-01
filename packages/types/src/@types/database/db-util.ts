@@ -1,8 +1,11 @@
 import {
+  IAdminApp,
   IAdminAuth,
   IAdminFirestoreDatabase,
   IAdminRtdbDatabase,
+  IClientApp,
   IClientAuth,
+  IClientAuthProviders,
   IClientFirestoreDatabase,
   IClientRtdbDatabase,
   IFirestoreDbEvent,
@@ -56,3 +59,21 @@ export type AuthFrom<T extends ISdk> = T extends
   | 'RealTimeAdmin'
   ? IAdminAuth
   : IClientAuth;
+
+export type AuthProviders<T extends ISdk> = T extends
+  | 'FirestoreAdmin'
+  | 'RealTimeAdmin'
+  ? undefined
+  : IClientAuthProviders;
+
+/**
+ * Returns either an _admin_ or _client_ `app` API from firebase
+ * (based on the SDK being used).
+ */
+export type AppFrom<T extends ISdk> = T extends "FirestoreAdmin" | "RealTimeAdmin" ? IAdminApp : IClientApp;
+
+/**
+ * Typescript utility type which takes the SDK as a generic parameter and returns a
+ * true or false value indicating whether the SDK is an _admin_ SDK
+ */
+export type IsAdminSdk<T extends ISdk> = T extends "FirestoreAdmin" | "RealTimeAdmin" ? true : false;

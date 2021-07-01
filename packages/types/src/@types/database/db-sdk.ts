@@ -10,10 +10,9 @@ import {
   IAdminAuth,
   IClientApp,
   IClientAuth,
-  IClientAuthProviders,
 } from '../fire-proxies';
 import { ApiKind, IDatabaseConfig, ISdk, SDK } from '../fire-types';
-import { AuthFrom, DbTypeFrom } from './db-util';
+import { AppFrom, AuthFrom, AuthProviders, DbTypeFrom, IsAdminSdk } from './db-util';
 
 export type IAdminSdk<T extends IDatabaseSdk<S>, S extends ISdk> = T & {
   isAdminApi: true;
@@ -69,19 +68,15 @@ export interface IDatabaseSdk<TSdk extends ISdk> {
    * Boolean flag indicating whether the underlying database connection is using
    * an Admin SDK.
    */
-  isAdminApi: boolean;
+  isAdminApi: Readonly<IsAdminSdk<TSdk>>;
 
   /** the Firebase App instance for this DB connection */
-  app: TSdk extends SDK.FirestoreAdmin | SDK.RealTimeAdmin
-    ? IAdminApp
-    : IClientApp;
+  app: AppFrom<TSdk>;
   /**
    * The "auth providers" such as Github, Facebook, but also EmailAndPassword, etc.
    * Each provider then exposes their own API surface to interact with.
    */
-  authProviders: TSdk extends SDK.FirestoreAdmin | SDK.RealTimeAdmin
-    ? undefined
-    : IClientAuthProviders;
+  authProviders: AuthProviders<TSdk>;
   /**
    * Connect to the database
    */
