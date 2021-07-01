@@ -11,7 +11,7 @@ import {
   IFirestoreDbEvent,
   IRtdbDbEvent,
 } from '../fire-proxies';
-import { AdminSdk, IFirestoreSdk, ISdk } from '../fire-types';
+import { AdminSdk, IAdminConfig, IClientConfig, IFirestoreSdk, IMockConfig, ISdk } from '../fire-types';
 import { IRtdbSnapshot } from '../proxy-plus';
 import { IFirebaseCollectionReference, IFirebaseRtdbQuery } from '../query';
 import { IFirestoreQuerySnapshot } from '../snapshot';
@@ -66,3 +66,7 @@ export type AppFrom<T extends ISdk> = T extends AdminSdk ? IAdminApp : IClientAp
  * true or false value indicating whether the SDK is an _admin_ SDK
  */
 export type IsAdminSdk<T extends ISdk> = T extends AdminSdk ? true : false;
+
+export type DbConfigFrom<T extends ISdk> = T extends AdminSdk
+  ? IAdminConfig | IMockConfig
+  : IClientConfig | IMockConfig;

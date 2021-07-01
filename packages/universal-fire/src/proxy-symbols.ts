@@ -22,11 +22,9 @@ export type {
   IComparisonOperator,
   ISerializedQuery,
   ISerializedIdentity,
-  IAbstractedDatabase,
-  IFirestoreAdmin,
-  IFirestoreClient,
-  IRealTimeAdmin,
-  IRealTimeClient,
+  DbFrom,
+  DbTypeFrom,
+  AppFrom
 } from '@forest-fire/types';
 
 import type { Mock as IMockApi } from 'firemock';

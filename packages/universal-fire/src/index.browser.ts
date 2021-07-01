@@ -2,15 +2,7 @@ export * from './proxy-symbols';
 
 import { FirestoreClient as FC } from '@forest-fire/firestore-client';
 import { RealTimeClient as RTC } from '@forest-fire/real-time-client';
-import {
-  IClientConfig,
-  IAdminConfig,
-  IFirestoreClient,
-  IFirestoreAdmin,
-  IRealTimeAdmin,
-  IRealTimeClient,
-  IAbstractedDatabase,
-} from '@forest-fire/types';
+
 import { ISdkFactory } from './ISdkFactory';
 
 /**
@@ -30,10 +22,7 @@ import { ISdkFactory } from './ISdkFactory';
  *
  * You may also optionally install the `firemock` library if you want to use the mock database
  * capabilities that `universal-fire` provides. */
-export const FirestoreClient: ISdkFactory<
-  IFirestoreClient,
-  IClientConfig
-> = {
+export const FirestoreClient: ISdkFactory<"FirestoreClient"> = {
   create(config) {
     return new FC(config);
   },
@@ -58,7 +47,7 @@ export const FirestoreClient: ISdkFactory<
  * - `@firebase/database-types`
  * - `@firebase/auth-types`
  */
-export const RealTimeClient: ISdkFactory<IRealTimeClient, IClientConfig> = {
+export const RealTimeClient: ISdkFactory<"RealTimeClient"> = {
   create(config) {
     return new RTC(config);
   },
@@ -79,15 +68,15 @@ export const RealTimeClient: ISdkFactory<IRealTimeClient, IClientConfig> = {
  * You may also optionally install the `firemock` library if you want to use the mock database
  * capabilities that `universal-fire` provides.
  */
-export const FirestoreAdmin: ISdkFactory<IFirestoreAdmin, IAdminConfig> = {
-  create(config) {
+export const FirestoreAdmin: ISdkFactory<"FirestoreAdmin"> = {
+  create() {
     throw new Error(
       'You are using the client/browser entry point for universal-fire; use RealTimeClient instead.'
     );
   },
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  async connect(config) {
+  async connect() {
     throw new Error(
       'You are using the client/browser entry point for universal-fire; use RealTimeClient instead.'
     );
@@ -105,15 +94,15 @@ export const FirestoreAdmin: ISdkFactory<IFirestoreAdmin, IAdminConfig> = {
  * You may also optionally install the `firemock` library if you want to use the mock database
  * capabilities that `universal-fire` provides.
  */
-export const RealTimeAdmin: ISdkFactory<IRealTimeAdmin, IAdminConfig> = {
-  create(config) {
+export const RealTimeAdmin: ISdkFactory<"RealTimeAdmin"> = {
+  create() {
     throw new Error(
       'You are using the client/browser entry point for universal-fire; use RealTimeClient instead.'
     );
   },
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  async connect(config) {
+  async connect() {
     throw new Error(
       'You are using the client/browser entry point for universal-fire; use RealTimeClient instead.'
     );

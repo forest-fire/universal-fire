@@ -43,3 +43,4 @@ export function isClientSdk<T extends IDatabaseSdk<ClientSdk>>(
 ): sdk is T {
   return isSdk(sdk) && !(sdk as IDictionary)?.isAdminApi;
 }
+

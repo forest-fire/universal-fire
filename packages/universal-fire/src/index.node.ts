@@ -1,12 +1,8 @@
+/* eslint-disable @typescript-eslint/require-await */
 export * from './proxy-symbols';
 
 import { FirestoreAdmin as FSA } from '@forest-fire/firestore-admin';
 import { RealTimeAdmin as RTA } from '@forest-fire/real-time-admin';
-import {
-  IClientConfig,
-  IAdminConfig,
-  IAbstractedDatabase,
-} from '@forest-fire/types';
 import { ISdkFactory } from './ISdkFactory';
 
 /**
@@ -27,17 +23,14 @@ import { ISdkFactory } from './ISdkFactory';
  * You may also optionally install the `firemock` library if you want to use the mock database
  * capabilities that `universal-fire` provides.
  */
-export const FirestoreClient: ISdkFactory<
-  IAbstractedDatabase,
-  IClientConfig
-> = {
-  create(config) {
+export const FirestoreClient: ISdkFactory<"FirestoreClient"> = {
+  create() {
     throw new Error(
       'You are using the node entry point for universal-fire; use FirestoreAdmin instead.'
     );
   },
 
-  async connect(config) {
+  async connect() {
     throw new Error(
       'You are using the node entry point for universal-fire; use FirestoreAdmin instead.'
     );
@@ -61,14 +54,14 @@ export const FirestoreClient: ISdkFactory<
  * You may also optionally install the `firemock` library if you want to use the mock database
  * capabilities that `universal-fire` provides.
  */
-export const RealTimeClient: ISdkFactory<IAbstractedDatabase, IClientConfig> = {
-  create(config) {
+export const RealTimeClient: ISdkFactory<"RealTimeClient"> = {
+  create() {
     throw new Error(
       'You are using the node entry point for universal-fire; use RealTimeAdmin instead.'
     );
   },
 
-  async connect(config) {
+  async connect() {
     throw new Error(
       'You are using the node entry point for universal-fire; use RealTimeAdmin instead.'
     );
@@ -86,7 +79,7 @@ export const RealTimeClient: ISdkFactory<IAbstractedDatabase, IClientConfig> = {
  * You may also optionally install the `firemock` library if you want to use the mock database
  * capabilities that `universal-fire` provides.
  */
-export const FirestoreAdmin: ISdkFactory<IAbstractedDatabase, IAdminConfig> = {
+export const FirestoreAdmin: ISdkFactory<"FirestoreAdmin"> = {
   create(config) {
     return new FSA(config);
   },
@@ -107,7 +100,7 @@ export const FirestoreAdmin: ISdkFactory<IAbstractedDatabase, IAdminConfig> = {
  * You may also optionally install the `firemock` library if you want to use the mock database
  * capabilities that `universal-fire` provides.
  */
-export const RealTimeAdmin: ISdkFactory<IAbstractedDatabase, IAdminConfig> = {
+export const RealTimeAdmin: ISdkFactory<"RealTimeAdmin"> = {
   create(config) {
     return new RTA(config);
   },
