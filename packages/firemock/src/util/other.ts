@@ -1,5 +1,5 @@
 import { firstKey, lastKey } from 'native-dash';
-import { IDictionary} from 'common-types';
+import { IDictionary } from 'common-types';
 import type { IRtdbDataSnapshot } from '@forest-fire/types';
 
 export function normalizeRef(r: string): string {
@@ -27,14 +27,14 @@ export function getRandomInt(min: number, max: number) {
 }
 
 export function firstProp<T = IDictionary>(listOf: IDictionary<any>) {
-  return listOf ? listOf[firstKey(listOf)] : {};
+  return (listOf ? listOf[firstKey(listOf) || 0] : {}) as T;
 }
 
 export function lastProp<T = IDictionary>(listOf: IDictionary<any>) {
-  return listOf[lastKey(listOf)] as T;
+  return listOf[lastKey(listOf) || 0] as T;
 }
 
-export function objectIndex(obj: IDictionary, index: number) {
+export function objectIndex(obj: IDictionary<unknown>, index: number) {
   const keys = Object.keys(obj);
   return keys ? obj[keys[index - 1]] : null;
 }
@@ -55,7 +55,7 @@ export function removeKeys(obj: IDictionary, remove: string[]) {
 export function join(...paths: string[]) {
   return paths
     .map((p) => {
-      return p.replace(/[\/\\]/gm, '.');
+      return p.replace(/[/\\]/gm, '.');
     })
     .map((p) => (p.slice(-1) === '.' ? p.slice(0, p.length - 1) : p))
     .map((p) => (p.slice(0, 1) === '.' ? p.slice(1) : p))

@@ -82,7 +82,7 @@ export class FirestoreClient extends FirestoreDb<"FirestoreClient">  {
     if (!this._app.auth) {
       await this.loadAuthApi();
     }
-    this._auth = this._app.auth();
+    this._auth = this._app.auth() as IClientAuth;
     return this._auth;
   }
 

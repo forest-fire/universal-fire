@@ -36,6 +36,7 @@ import {
   IMockConfig,
   AppFrom,
   IsAdminSdk,
+  IFirestoreSdk,
 } from '@forest-fire/types';
 
 import { createError } from 'brilliant-errors';
@@ -86,7 +87,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
   }
 
   /** how many milliseconds before the attempt to connect to DB is timed out */
-  public CONNECTION_TIMEOUT = 5000;
+  public CONNECTION_TIMEOUT: TSdk extends IFirestoreSdk ? undefined : number;
   /** Logs debugging information to the console */
   public enableDatabaseLogging: (
     logger?: boolean | ((a: string) => unknown),

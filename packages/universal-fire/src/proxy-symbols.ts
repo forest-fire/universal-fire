@@ -26,6 +26,6 @@ export type {
   DbTypeFrom,
   AppFrom
 } from '@forest-fire/types';
-
-import type { Mock as IMockApi } from 'firemock';
-export type { IMockApi };
+// TODO:
+// import type { Mock as IMockApi } from 'firemock';
+// export type { IMockApi };

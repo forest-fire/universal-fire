@@ -171,7 +171,8 @@ export class RealTimeClient
       config.mockAuth
     );
     this._mock = mock;
-    this._authProviders = mock.authProviders;
+    //TODO:
+    // this._authProviders = mock.authProviders;
     await this._listenForConnectionStatus();
   }
 
