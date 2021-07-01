@@ -5438,10 +5438,10 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-native-dash@~1.2.7:
-  version "1.2.7"
-  resolved "https://registry.npmjs.org/native-dash/-/native-dash-1.2.7.tgz#3f944664a0762fef04c0444be9b14b23cac8d198"
-  integrity sha512-rycsimn+9uIiDepQOpsRfhNx0psXpiOn70GWxjyQeEtuH+lO+5I+NQfMjo7coGhK0/jdlrA1aweDGLHnzaRxaQ==
+native-dash@~1.15.1:
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.15.1.tgz#1844975783b958e4b072aa5978f0f95b79aa7218"
+  integrity sha512-fAlm/L7JmQzI8+nMs4dDpx4IPYQJyqvmr/HlCr9fyk2gcwYkLt/uIrnRdVkVnRSV3dSSGMBmfniFR+a7Zz4dCw==
 
 negotiator@0.6.2:
   version "0.6.2"

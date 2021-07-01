@@ -19,7 +19,7 @@
   "scripts": {
     "clean": "rimraf dist *.tsbuildinfo",
     "build": "scripty",
-    "lint": "eslint src --ext js,ts && eslint test --ext ts",
+    "lint": "scripty",
     "test": "scripty"
   },
   "devDependencies": {

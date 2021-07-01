@@ -39,4 +39,4 @@ export interface IPartialUserCredential {
  * parts are un-implementated currently) as well as extending
  * to add an "administrative" API for mocking
  */
-export interface IMockAuth extends IClientAuth {}
+export type IMockAuth = IClientAuth

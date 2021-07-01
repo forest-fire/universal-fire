@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ -z "$1" ]]; then 
-  echo "┏━━━ 🕵️‍♀️ LINT: eslint src only (with fix) ━━━━━━━"
+  echo "┏━━━ 🕵️‍♀️ LINT: lint all repos SRC folders ━━━━━━━"
   yarn lerna run lint --stream --concurrency 1
 else
   cd "./packages/$1"

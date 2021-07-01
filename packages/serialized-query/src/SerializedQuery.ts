@@ -1,7 +1,6 @@
 
 import {
   IDatabaseSdk,
-  IDb,
   ISdk,
   IGenericModel,
   isRealTimeDatabase,
@@ -9,7 +8,7 @@ import {
 } from '@forest-fire/types';
 import { SerializedRealTimeQuery, SerializedFirestoreQuery } from './index';
 
-export class SerializedQuery<TModel extends IGenericModel, TDatabase extends IDatabaseSdk<TSdk>, TSdk extends ISdk, TDb extends IDb> {
+export class SerializedQuery<TModel extends IGenericModel, TDatabase extends IDatabaseSdk<TSdk>, TSdk extends ISdk> {
 
   constructor(db: TDatabase, path = "/") {
     if (isRealTimeDatabase(db)) {

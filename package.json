@@ -11,7 +11,7 @@
     "autoindex": "scripty",
     "clean": "scripty",
     "lint": "scripty",
-    "lint-src": "scripty",
+    "lint:src": "scripty",
     "lintp": "scripty",
     "build": "scripty",
     "publish": "lerna publish --conventional-commits",
