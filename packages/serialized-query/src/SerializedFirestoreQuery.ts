@@ -3,15 +3,12 @@
 import { slashNotation } from './slashNotation';
 import type {
   IComparisonOperator,
-  IFirestoreQuerySnapshot,
   ISerializedQuery,
-  IFirestoreDatabase,
   IModel,
   ISerializedIdentity,
   IFirestoreOrder,
   IGenericModel,
   DbFrom,
-  IFirebaseCollectionReference,
   SnapshotFrom,
   DeserializedQueryFrom
 } from '@forest-fire/types';

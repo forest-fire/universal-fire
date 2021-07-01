@@ -53,7 +53,7 @@ export class RealTimeAdmin
   protected _admin?: IAdminFirebaseNamespace;
   protected _eventManager: EventManager;
   protected _clientType = 'admin';
-  protected _isAuthorized: boolean = true;
+  protected _isAuthorized = true;
   protected _auth?: IAdminAuth;
   protected _config: IAdminConfig | IMockConfig;
   protected _app!: IAdminApp;
@@ -187,7 +187,7 @@ export class RealTimeAdmin
 
   protected async _connectRealDb(config: IAdminConfig) {
     if (!this._admin) {
-      this._admin = (await this._loadAdminApi()) as IAdminFirebaseNamespace;
+      this._admin = (await this._loadAdminApi());
     }
     if (this.isConnected && this._database) {
       return;

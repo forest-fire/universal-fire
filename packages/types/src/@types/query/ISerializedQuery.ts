@@ -1,4 +1,4 @@
-import { IDictionary } from 'common-types';
+
 import { DbFrom, DeserializedQueryFrom, SnapshotFrom } from '../database/db-util';
 import { ISdk } from '../fire-types';
 import {

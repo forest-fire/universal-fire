@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { IMockDatabase } from '../db-mocking';
 
-import { IDatabaseConfig, IFirestoreSdk, IRtdbSdk, ISdk } from '../fire-types';
+import { IDatabaseConfig, IFirestoreSdk, ISdk } from '../fire-types';
 import { AppFrom, AuthFrom, AuthProviders, DbTypeFrom, IsAdminSdk } from './db-util';
 
 

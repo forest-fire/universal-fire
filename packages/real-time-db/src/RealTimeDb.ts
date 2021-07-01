@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { snapshotToArray } from 'typed-conversions';
 
@@ -18,8 +19,6 @@ import {
   VALID_REAL_TIME_EVENTS,
 } from './index';
 import {
-  IAdminApp,
-  IClientApp,
   IDatabaseConfig,
   IRtdbDataSnapshot,
   IRtdbDatabase,
@@ -32,7 +31,6 @@ import {
   IDatabaseSdk,
   DbFrom,
   IRtdbReference,
-  SDK,
   DbTypeFrom,
   AuthFrom,
   IMockConfig,
@@ -64,6 +62,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
         `Failed to return the Firebase "app" as this has not yet been asynchronously loaded yet`
       );
     }
+
     return this._app;
   }
 

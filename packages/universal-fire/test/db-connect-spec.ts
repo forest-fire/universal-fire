@@ -1,7 +1,6 @@
 // import { RealTimeAdmin } from '../src';
 import { FirestoreClient, RealTimeClient } from '../dist/es/index';
 
-import { expect } from 'chai';
 
 describe('DB class provides ability to instantiate and connect to SDKs', async () => {
   it.skip('RealTimeAdmin can be instantiated', async () => {
