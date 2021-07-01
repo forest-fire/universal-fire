@@ -18,7 +18,6 @@ import {
   isClientConfig,
   isMockConfig,
   IRtdbDatabase,
-  IRealTimeClient,
   ApiKind,
   Database,
   DebuggingCallback,
@@ -27,14 +26,13 @@ import { RealTimeDb } from '@forest-fire/real-time-db';
 
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
+import { IDictionary } from 'brilliant-errors';
 
 export const MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';
 
 export class RealTimeClient
-  extends RealTimeDb<SDK.RealTimeClient>
-  implements IRealTimeClient
-{
+  extends RealTimeDb<SDK.RealTimeClient> {
   public readonly sdk: SDK.RealTimeClient = SDK.RealTimeClient;
   public readonly apiKind: ApiKind.client = ApiKind.client;
   public readonly dbType: Database.RTDB = Database.RTDB;
@@ -43,7 +41,7 @@ export class RealTimeClient
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
    * and then returns a promise which is resolved once the _connection_ is established.
    */
-  public static async connect(config?: IClientConfig | IMockConfig): Promise<IRealTimeClient> {
+  public static async connect(config?: IClientConfig | IMockConfig): Promise<RealTimeClient> {
     const obj = new RealTimeClient(config);
     await obj.connect();
     return obj;
@@ -136,7 +134,8 @@ export class RealTimeClient
           'missing-auth'
         );
       }
-      this._authProviders = firebase.auth;
+      const providers = (firebase as IDictionary)?.auth ? (firebase as IDictionary)?.auth : undefined;
+      this._authProviders = providers;
     }
 
     return this._authProviders;
@@ -208,7 +207,7 @@ export class RealTimeClient
       this.enableDatabaseLogging(
         typeof config.debugging !== 'function'
           ? (message: string) =>
-              (config.debugging as DebuggingCallback)(message)
+            (config.debugging as DebuggingCallback)(message)
           : (message: string) => console.log('[FIREBASE]', message)
       );
     }

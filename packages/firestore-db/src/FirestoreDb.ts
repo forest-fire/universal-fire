@@ -35,8 +35,11 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
         `[not-ready] - Failed to return the Firebase "app" as this has not yet been asynchronously loaded yet`
       );
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._app;
   }
+
+  public CONNECTION_TIMEOUT: undefined;
 
   public get authProviders(): AuthProviders<TSdk> {
     throw new FireError(

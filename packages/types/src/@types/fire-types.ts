@@ -248,6 +248,12 @@ export type ISdk = keyof typeof SDK;
 
 export type IFirestoreSdk = "FirestoreAdmin" | "FirestoreClient";
 export type IRtdbSdk = "RealTimeAdmin" | "RealTimeClient";
+/**
+ * The SDK types which support a _admin_ API connection to the
+ * underlying database.
+ */
+export type AdminSdk = "FirestoreAdmin" | "RealTimeAdmin";
+export type ClientSdk = "FirestoreClient" | "RealTimeClient";
 
 export enum Database {
   Firestore = 'Firestore',

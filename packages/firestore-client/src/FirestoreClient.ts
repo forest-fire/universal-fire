@@ -15,12 +15,11 @@ import {
   isMockConfig,
   FirebaseNamespace,
   IClientFirestoreDatabase,
-  IFirestoreClient,
   ApiKind,
   DbTypeFrom,
 } from '@forest-fire/types';
 
-export class FirestoreClient extends FirestoreDb<"FirestoreClient"> implements IFirestoreClient {
+export class FirestoreClient extends FirestoreDb<"FirestoreClient">  {
   public readonly sdk: SDK.FirestoreClient = SDK.FirestoreClient;
   public readonly apiKind: ApiKind.client = ApiKind.client;
   public readonly isAdminApi = false;
@@ -120,11 +119,11 @@ export class FirestoreClient extends FirestoreDb<"FirestoreClient"> implements I
    * mocked DB.
    */
   // eslint-disable-next-line @typescript-eslint/require-await
-  protected async _connectMockDb(config: IMockConfig): Promise<unknown> {
+  protected async _connectMockDb(_config: IMockConfig): Promise<unknown> {
     throw new FireError("The mock database is not currently available for Firestore!", "FirestoreClient/not-implemented")
   }
 
-  protected async _connectRealDb(config: IClientConfig) {
+  protected async _connectRealDb(config: IClientConfig): Promise<void> {
     if (!this._isConnected) {
       await this._loadFirestoreApi();
       let firebase: FirebaseNamespace & {
@@ -148,7 +147,7 @@ export class FirestoreClient extends FirestoreDb<"FirestoreClient"> implements I
         ? (getRunningFirebaseApp<IClientApp>(
           config.name,
           firebase.apps
-        ) as IClientApp)
+        ))
         : firebase.initializeApp(config, config.name);
       this._database = firebase.firestore(this._app);
     } else {

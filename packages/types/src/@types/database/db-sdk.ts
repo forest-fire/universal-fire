@@ -1,56 +1,9 @@
-import {
-  IAdminFirestoreMock,
-  IAdminRtdbMock,
-  IClientFirestoreMock,
-  IClientRtdbMock,
-  IMockDatabase,
-} from '../db-mocking';
-import {
-  IAdminApp,
-  IAdminAuth,
-  IClientApp,
-  IClientAuth,
-} from '../fire-proxies';
-import { ApiKind, IDatabaseConfig, ISdk, SDK } from '../fire-types';
+/* eslint-disable @typescript-eslint/ban-types */
+import { IMockDatabase } from '../db-mocking';
+
+import { IDatabaseConfig, IFirestoreSdk, IRtdbSdk, ISdk } from '../fire-types';
 import { AppFrom, AuthFrom, AuthProviders, DbTypeFrom, IsAdminSdk } from './db-util';
 
-export type IAdminSdk<T extends IDatabaseSdk<S>, S extends ISdk> = T & {
-  isAdminApi: true;
-};
-
-export interface IRealTimeAdmin extends IDatabaseSdk<SDK.RealTimeAdmin> {
-  app: IAdminApp;
-  apiKind: Readonly<ApiKind.admin>;
-  isAdminApi: true;
-  auth: () => Promise<IAdminAuth>;
-  mock: IAdminRtdbMock;
-  CONNECTION_TIMEOUT: number;
-}
-
-export interface IRealTimeClient extends IDatabaseSdk<SDK.RealTimeClient> {
-  app: IClientApp;
-  apiKind: Readonly<ApiKind.client>;
-  isAdminApi: false;
-  auth: () => Promise<IClientAuth>;
-  mock: IClientRtdbMock;
-  CONNECTION_TIMEOUT: number;
-}
-
-export interface IFirestoreClient extends IDatabaseSdk<SDK.FirestoreClient> {
-  app: IClientApp;
-  apiKind: Readonly<ApiKind.client>;
-  isAdminApi: false;
-  auth: () => Promise<IClientAuth>;
-  mock: IClientFirestoreMock;
-}
-
-export interface IFirestoreAdmin extends IDatabaseSdk<SDK.FirestoreAdmin> {
-  app: IAdminApp;
-  apiKind: ApiKind.admin;
-  isAdminApi: true;
-  auth: () => Promise<IAdminAuth>;
-  mock: IAdminFirestoreMock;
-}
 
 /**
  * The basic contract required to be considered a "database"
@@ -105,4 +58,10 @@ export interface IDatabaseSdk<TSdk extends ISdk> {
    * database.
    */
   mock: IMockDatabase<TSdk>;
+  /**
+ * How long should try to connect before timing out.
+ * 
+ * Note: this is only implemented in Real Time database
+ */
+  CONNECTION_TIMEOUT: TSdk extends IFirestoreSdk ? undefined : number;
 }

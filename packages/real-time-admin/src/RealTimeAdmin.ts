@@ -16,7 +16,6 @@ import {
   isAdminConfig,
   isMockConfig,
   IAdminFirebaseNamespace,
-  IRealTimeAdmin,
   ApiKind,
 } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
@@ -26,9 +25,7 @@ import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { debug } from './util';
 
 export class RealTimeAdmin
-  extends RealTimeDb<SDK.RealTimeAdmin>
-  implements IRealTimeAdmin
-{
+  extends RealTimeDb<SDK.RealTimeAdmin>{
   public readonly sdk: SDK.RealTimeAdmin = SDK.RealTimeAdmin;
   public readonly apiKind: ApiKind.admin = ApiKind.admin;
   public readonly isAdminApi = true;
