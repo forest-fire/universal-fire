@@ -7,15 +7,15 @@ export class RecaptchaVerifier
   implements RecaptchaVerifier_Instance, GoogleRecaptchaVerifier {
   public type: string;
 
-  public clear() {
-    //
+  public clear(): void {
+    // TODO:
   }
 
-  public async render(): Promise<number> {
+  public render(): Promise<number> {
     throw new Error('not-implemented');
   }
 
-  public async verify(): Promise<string> {
+  public verify(): Promise<string> {
     throw new Error('not-implemented');
   }
 }

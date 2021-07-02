@@ -24,8 +24,7 @@ import { EventManager } from './EventManager';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { debug } from './util';
 
-export class RealTimeAdmin
-  extends RealTimeDb<SDK.RealTimeAdmin>{
+export class RealTimeAdmin extends RealTimeDb<SDK.RealTimeAdmin> {
   public readonly sdk: SDK.RealTimeAdmin = SDK.RealTimeAdmin;
   public readonly apiKind: ApiKind.admin = ApiKind.admin;
   public readonly isAdminApi = true;
@@ -120,7 +119,7 @@ export class RealTimeAdmin
       try {
         this._database.goOnline();
       } catch (e) {
-        debug('There was an error going online:' + e);
+        debug(`There was an error going online: ${JSON.stringify(e)}`);
       }
     } else {
       console.warn(
@@ -179,7 +178,9 @@ export class RealTimeAdmin
       return api;
     } catch (e) {
       throw new FireError(
-        `Attempt to instantiate Firebase's admin SDK failed. This is likely because you have not installed the "firebase-admin" npm package as a dependency of your project. The precise error received when trying to instantiate was:\n\n${e.message}`,
+        `Attempt to instantiate Firebase's admin SDK failed. This is likely because you have not installed the "firebase-admin" npm package as a dependency of your project. The precise error received when trying to instantiate was:\n\n${
+          (e as Error).message
+        }`,
         'invalid-import'
       );
     }
@@ -187,7 +188,7 @@ export class RealTimeAdmin
 
   protected async _connectRealDb(config: IAdminConfig) {
     if (!this._admin) {
-      this._admin = (await this._loadAdminApi());
+      this._admin = await this._loadAdminApi();
     }
     if (this.isConnected && this._database) {
       return;
@@ -210,7 +211,9 @@ export class RealTimeAdmin
         throw e;
       }
       throw new FireError(
-        `An unexpected error was encountered while trying to setup Firebase's database API!\n\n${e.message}`,
+        `An unexpected error was encountered while trying to setup Firebase's database API!\n\n${
+          (e as Error).message
+        }`,
         'no-database-api'
       );
     }
@@ -227,8 +230,9 @@ export class RealTimeAdmin
    * we remain connected; this is unlike the client API
    * which provides an endpoint to lookup
    */
-  protected async _listenForConnectionStatus() {
+  protected _listenForConnectionStatus(): Promise<void> {
     this._setupConnectionListener();
     this._eventManager.connection(true);
+    return;
   }
 }

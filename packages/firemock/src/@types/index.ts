@@ -8,7 +8,6 @@
 // files: IMockStoreManagedState, auth-types, config-types, mocking-types, query-types, rtdb-types.
 
 // local file exports
-export * from "./IMockStoreManagedState";
 export * from "./auth-types";
 export * from "./config-types";
 export * from "./mocking-types";

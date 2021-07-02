@@ -51,7 +51,7 @@ export interface IQueue {
 }
 
 /** A Schema's mock callback generator must conform to this type signature */
-export type SchemaCallback<T = any> = (helper: ISchemaHelper<T>) => () => T;
+export type SchemaCallback<T extends unknown> = (helper: ISchemaHelper<T>) => () => T;
 
 /**
  * Captures a CRUD event
@@ -70,11 +70,11 @@ export interface IMockWatcherGroupEvent {
   /** the "key" of the event; this applied to value AND child events */
   key: string;
   /** changes between value and priorValue */
-  changes: any;
+  changes: unknown;
   /** the new value which has been set */
-  value: any;
+  value: unknown;
   /** the prior value that this property held previous to the event */
-  priorValue: any;
+  priorValue: unknown;
 }
 
 /**

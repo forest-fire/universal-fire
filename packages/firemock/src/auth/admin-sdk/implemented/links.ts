@@ -6,10 +6,10 @@ import type {
 
 export const links: (api: IMockAuthMgmt) => Partial<IAdminAuth> = (api) => ({
   // https://firebase.google.com/docs/reference/admin/node/admin.auth.Auth#generate-email-verification-link
-  async generateEmailVerificationLink(
-    email: string,
-    actionCodeSetting?: ActionCodeSettings
+  generateEmailVerificationLink(
+    _email: string,
+    _actionCodeSetting?: ActionCodeSettings
   ): Promise<string> {
-    return '';
+    throw new Error('not implemented');
   },
 });

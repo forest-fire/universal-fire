@@ -7,13 +7,13 @@ import { IDictionary } from 'common-types';
  * @param dotPath the path to the object, using "." as a delimiter
  * @param defaultValue optionally you may state a default value if the operation results in `undefined`
  */
-export function get<T = any>(
+export function get<T extends unknown>(
   obj: IDictionary,
   dotPath: string,
-  defaultValue?: any
+  defaultValue?: unknown
 ): T {
   const parts = dotPath.split('.');
-  let value: any = obj;
+  let value: IDictionary = obj;
 
   parts.forEach((p) => {
     value =
@@ -22,5 +22,5 @@ export function get<T = any>(
         : undefined;
   });
 
-  return value ? value : defaultValue;
+  return (value ? value : defaultValue) as T;
 }

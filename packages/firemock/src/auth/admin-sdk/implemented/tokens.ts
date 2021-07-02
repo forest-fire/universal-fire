@@ -11,10 +11,10 @@ export const tokens: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
    * extra request to the Firebase Auth backend to check the tokensValidAfterTime time
    * for the corresponding user. When not specified, this additional check is not applied.
    */
-  async verifyIdToken(
+  verifyIdToken(
     idToken: string,
     checkRevoked?: undefined | boolean
   ): Promise<DecodedIdToken> {
-    return;
+    throw new Error('not implemented');
   },
 });

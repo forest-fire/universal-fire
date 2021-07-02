@@ -1,10 +1,7 @@
-import { FireMockError } from '@/errors';
 import {
-  ApiKind,
   IDatabaseConfig,
   SDK,
   IMockStore,
-  IAdminRtdbDatabase,
   IAdminApp,
   IAdminFirestoreDatabase,
 } from '@forest-fire/types';
@@ -16,13 +13,48 @@ import {
 export class FirestoreAdminMock<TState> implements IAdminFirestoreDatabase {
   private _dbConfig: IDatabaseConfig;
   private _sdk: SDK;
-  private _store: IMockStore<TState>;
+  private _store: IMockStore<SDK.FirestoreAdmin>;
 
-  constructor(sdk: SDK, config: IDatabaseConfig, store: IMockStore<TState>) {
+  constructor(sdk: SDK, config: IDatabaseConfig, store: IMockStore<SDK.FirestoreAdmin>) {
     this._sdk = sdk;
     this._dbConfig = config;
-    const kind = sdk === SDK.RealTimeAdmin ? ApiKind.admin : ApiKind.client;
     this._store = store;
+  }
+  settings(settings: FirebaseFirestore.Settings): void {
+    throw new Error('Method not implemented.');
+  }
+  collection(collectionPath: string): FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData> {
+    throw new Error('Method not implemented.');
+  }
+  doc(documentPath: string): FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> {
+    throw new Error('Method not implemented.');
+  }
+  collectionGroup(collectionId: string): FirebaseFirestore.CollectionGroup<FirebaseFirestore.DocumentData> {
+    throw new Error('Method not implemented.');
+  }
+  getAll(...documentRefsOrReadOptions: (FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> | FirebaseFirestore.ReadOptions)[]): Promise<FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>[]> {
+    throw new Error('Method not implemented.');
+  }
+  recursiveDelete(ref: FirebaseFirestore.CollectionReference<unknown> | FirebaseFirestore.DocumentReference<unknown>, bulkWriter?: FirebaseFirestore.BulkWriter): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  terminate(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  listCollections(): Promise<FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>[]> {
+    throw new Error('Method not implemented.');
+  }
+  runTransaction<T>(updateFunction: (transaction: FirebaseFirestore.Transaction) => Promise<T>, transactionOptions?: FirebaseFirestore.ReadWriteTransactionOptions | FirebaseFirestore.ReadOnlyTransactionOptions): Promise<T> {
+    throw new Error('Method not implemented.');
+  }
+  batch(): FirebaseFirestore.WriteBatch {
+    throw new Error('Method not implemented.');
+  }
+  bulkWriter(options?: FirebaseFirestore.BulkWriterOptions): FirebaseFirestore.BulkWriter {
+    throw new Error('Method not implemented.');
+  }
+  bundle(bundleId?: string): FirebaseFirestore.BundleBuilder {
+    throw new Error('Method not implemented.');
   }
 
   public app: IAdminApp;
@@ -36,18 +68,6 @@ export class FirestoreAdminMock<TState> implements IAdminFirestoreDatabase {
   public goOnline() {
     console.log(
       `The mock database [ ${this._sdk} / ${this._dbConfig.databaseURL} ] has gone online, triggered by call to goOnline()`
-    );
-  }
-
-  public ref(path?: string | Reference) {
-    return typeof path === 'string' ? new Reference(path) : path;
-  }
-
-  public refFromURL(path: string): Reference {
-    // TODO: look into how best to implement this
-    throw new FireMockError(
-      `refFromURL() is not yet supported on Admin API for RTDB.`,
-      'not-implemented'
     );
   }
 }

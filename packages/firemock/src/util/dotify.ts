@@ -1,7 +1,7 @@
 import { IDictionary } from 'common-types';
 
 export const dotify = (path: string) => {
-  const dotPath = path.replace(/[\\\/]/g, '.');
+  const dotPath = path.replace(/[\\/]/g, '.');
   return removeDotsAtExtremes(
     dotPath.slice(0, 1) === '.' ? dotPath.slice(1) : dotPath
   );

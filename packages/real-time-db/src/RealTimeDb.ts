@@ -633,7 +633,9 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
       Firemock = await import(/* webpackChunkName: "firemock" */ 'firemock');
     } catch (e) {
       throw new FireError(
-        `To use mocking functions you must ensure that "firemock" is installed in your repo. Typically this would be installed as a "devDep" assuming that this mocking functionality is used as part of your tests but if you are shipping this mocking functionality then you will need to add it as full dependency.\n\n${e.message}`,
+        `To use mocking functions you must ensure that "firemock" is installed in your repo. Typically this would be installed as a "devDep" assuming that this mocking functionality is used as part of your tests but if you are shipping this mocking functionality then you will need to add it as full dependency.\n\n${
+          (e as Error).message
+        }`,
         'missing-dependency'
       );
     }
@@ -646,7 +648,9 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
       );
     } catch (e) {
       throw new FireError(
-        `The firemock library was imported successfully but in trying to "prepare" it there was a failure: ${e.message}`,
+        `The firemock library was imported successfully but in trying to "prepare" it there was a failure: ${
+          (e as Error).message
+        }`,
         'failed-mock-prep'
       );
     }
