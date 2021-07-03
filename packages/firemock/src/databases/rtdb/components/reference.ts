@@ -4,13 +4,28 @@ import {
   ISerializedQuery,
   IRtdbSdk,
   IRtdbReference,
-  IModel,
 } from '@forest-fire/types';
 import { query } from './query';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { onDisconnect } from './onDisconnect';
 import { FireMockError } from '../../../errors';
 import { join } from '../../../util';
+import { IDictionary } from 'common-types';
+
+function isMultiPath(data: IDictionary) {
+  Object.keys(data).map((d: never) => {
+    if (!d) {
+      data[d] = '/';
+    }
+  });
+  const indexesAreStrings = Object.keys(data).every(
+    (i) => typeof i === 'string'
+  );
+  const indexesLookLikeAPath = Object.keys(data).every(
+    (i) => i.indexOf('/') !== -1
+  );
+  return indexesAreStrings && indexesLookLikeAPath ? true : false;
+}
 
 export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
   store: T,
@@ -60,7 +75,8 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
     set: async (value, onComplete) => {
       try {
         store.setDb(_query.path, value);
-        if (onComplete) onComplete(undefined);
+        if (onComplete) onComplete(null);
+        return store.networkDelay();
       } catch (e) {
         if (onComplete) onComplete(e);
       }
@@ -87,11 +103,22 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
       return `FireMock::Query@${process.env.FIREBASE_DATA_ROOT_URL}/${_query.path}`;
     },
     transaction: async (_transaction) => {
-      // TODO: lookup how this was being handled
+      return Promise.resolve({
+        committed: true,
+        snapshot: null,
+        toJSON() {
+          return {};
+        },
+      });
     },
     update: async (values, onComplete) => {
       try {
-        store.updateDb(_query.path, values);
+        if (isMultiPath(values)) {
+          store.multiPathUpdate(values);
+        } else {
+          store.updateDb(_query.path, values);
+        }
+
         if (onComplete) onComplete(undefined);
       } catch (e) {
         if (onComplete) onComplete(e);

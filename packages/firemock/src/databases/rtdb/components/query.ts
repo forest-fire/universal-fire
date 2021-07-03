@@ -4,25 +4,28 @@ import {
   IRtdbDbEvent,
   IRtdbQuery,
   IRtdbReference,
+  IRtdbSdk,
   ISdk,
   ISerializedQuery,
+  RtdbOrder,
 } from '@forest-fire/types';
 import { leafNode, runQuery } from '../../..';
 import { reference } from './reference';
 import { snapshot } from './snapshot';
 
-export type IRtdbMockQueryFactory<TSdk extends ISdk> = (
+export type IRtdbMockQueryFactory<TSdk extends IRtdbSdk> = (
   store: IMockStore<TSdk>,
   query: ISerializedQuery<TSdk>
 ) => IRtdbQuery;
 
-export const query: IRtdbMockQueryFactory<ISdk> = (store, query) => {
+export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, query) => {
   const ref = reference(store, query);
+  query.hashCode;
   const q: IRtdbQuery = {
-    endBefore: (value, key) => {
+    endBefore: (_value, _key) => {
       throw new Error('not implemented');
     },
-    startAfter: (value, key) => {
+    startAfter: (_value, _key) => {
       throw new Error('not implemented');
     },
     get: async () => {
@@ -39,11 +42,17 @@ export const query: IRtdbMockQueryFactory<ISdk> = (store, query) => {
     },
     equalTo: (value, key) => {
       query.equalTo(value, key);
-      return q;
+      if (key && query.identity.orderBy === RtdbOrder.orderByKey) {
+        throw new Error(
+          `You can not use "equalTo(val, key)" with a "key" property defined when using a key sort!`
+        );
+      }
+      query.equalTo(value, key);
+
+      return this;
     },
-    isEqual: (other: IRtdbQuery) => {
-      // TODO: look into implementation approach
-      return false;
+    isEqual: (other: IRtdbQuery & { _query: ISerializedQuery<IRtdbSdk> }) => {
+      return query.hashCode() === other._query.hashCode();
     },
     limitToFirst: (limit: number) => {
       query.limitToFirst(limit);
@@ -54,17 +63,17 @@ export const query: IRtdbMockQueryFactory<ISdk> = (store, query) => {
       return q;
     },
     off: (
-      eventType?: IRtdbDbEvent,
-      callback?: (a: IRtdbDataSnapshot, b?: null | string) => any
+      _eventType?: IRtdbDbEvent,
+      _callback?: (a: IRtdbDataSnapshot, b?: null | string) => any
     ) => {
-      throw new Error('Not implemented. TODO');
+      console.log('off() not implemented yet on Firemock');
     },
     on: (
       eventType: IRtdbDbEvent,
       callback: (a: IRtdbDataSnapshot, b?: null | string) => any,
       cancelCallbackOrContext?: (err?: Error) => void | null,
       context?: Record<string, unknown> | null
-    ): ((a: IRtdbDataSnapshot, b?: null | string) => Promise<null>) => {
+    ): ((a: IRtdbDataSnapshot, b?: null | string) => unknown) => {
       store.addListener(
         query,
         eventType,
@@ -72,9 +81,9 @@ export const query: IRtdbMockQueryFactory<ISdk> = (store, query) => {
         cancelCallbackOrContext,
         context
       );
-      return null;
+      return callback;
     },
-    once: async (eventType: 'value'): Promise<IRtdbDataSnapshot> => {
+    once: async (_eventType: 'value'): Promise<IRtdbDataSnapshot> => {
       await store.networkDelay();
 
       const data = store.getDb(query.path);
@@ -111,5 +120,5 @@ export const query: IRtdbMockQueryFactory<ISdk> = (store, query) => {
     }),
   };
 
-  return q;
+  return { _query: query, ...q };
 };
