@@ -2,22 +2,23 @@
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 09:29 AM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 12:07 PM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: firemock.
-// directories: @types, errors, util.
+// directories: @types, errors, fixtures, util.
 
 // local file exports
-export { default } from './firemock';
+export * from "./firemock";
 
 // directory exports
-export * from './@types/index';
-export * from './errors/index';
-export * from './util/index';
+export * from "./@types/index";
+export * from "./errors/index";
+export * from "./fixtures/index";
+export * from "./util/index";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

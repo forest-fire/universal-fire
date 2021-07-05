@@ -4,6 +4,7 @@
     "lib": ["esnext.asynciterable", "es2015.reflect"],
     "composite": true,
     "baseUrl": ".",
+    "rootDir": "src",
     "paths": {
       "~/*": ["src/*"]
     },

@@ -37,11 +37,12 @@ function toPlugins(dir) {
     require('@rollup/plugin-node-resolve').default(),
     require('rollup-plugin-typescript2')({
       include: ['../**/src/**/*.ts'],
-      tsconfig: 'tsconfig.bundle.json',
+      tsconfig: 'tsconfig.json',
       typescript: require('ttypescript'),
       useTsconfigDeclarationDir: true, //~> "dist/types"
       tsconfigOverride: {
         compilerOptions: {
+          module: 'ESNext',
           declaration: true,
           declarationDir: join(dir, 'dist', 'types'),
           sourceMap: false,
