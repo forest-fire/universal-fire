@@ -44,8 +44,10 @@ function toPlugins(dir) {
         compilerOptions: {
           declaration: true,
           declarationDir: join(dir, 'dist', 'types'),
+          sourceMap: false,
         },
-        include: ["src"],
+        include: ['src'],
+        exclude: ['test'],
       },
     }),
   ];
