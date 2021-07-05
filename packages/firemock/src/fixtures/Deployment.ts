@@ -1,12 +1,12 @@
 import * as fbKey from 'firebase-key';
 
-import { IQueue, IRelationship, ISchema } from '@/@types';
-import { dotNotation, getRandomInt, pluralize } from '@/util';
-import { first, get, set } from '@/util';
-import { getDb, setDB } from '@/databases/rtdb';
+import { IQueue, IRelationship, ISchema } from '~/@types';
+import { dotNotation, getRandomInt, pluralize } from '~/util';
+import { first, get, set } from '~/util';
+import { getDb, setDB } from '~/databases/rtdb';
 
 import { IDictionary } from 'common-types';
-import { Queue } from '@/fixtures/mocking/index';
+import { Queue } from '~/fixtures/mocking/index';
 
 export class Deployment {
   private schemaId: string;
@@ -133,8 +133,8 @@ export class Deployment {
       typeof mock === 'object'
         ? { ...mock, ...overrides }
         : overrides && typeof overrides !== 'object'
-        ? overrides
-        : mock;
+          ? overrides
+          : mock;
 
     // set(db, dbPath, payload);
     setDB(dbPath, payload);

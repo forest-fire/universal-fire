@@ -4,7 +4,6 @@
     "lib": ["esnext.asynciterable", "es2015.reflect"],
     "composite": true,
     "baseUrl": ".",
-    "rootDir": "src",
     "paths": {
       "~/*": ["src/*"]
     },
@@ -16,6 +15,5 @@
       { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
   },
-
   "include": ["src", "test"]
 }

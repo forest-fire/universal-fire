@@ -2,9 +2,9 @@
 
 // #region autoindexed files
 
-// index last changed at: 6th Jun, 2021, 10:08 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 11:57 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: db-api-base, db-guards, db-sdk, db-util, db.
+// files: db-guards, db-sdk, db-util, db.
 
 // local file exports
 export * from "./db-guards";

@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
-echo "┏━━━ 🎯 TEST: $(pwd) ━━━━━━━━━━━━━━━━━━━"
-yarn lerna run test --stream --concurrency 1
+
+
+
+if [[ -z "$1" ]]; then 
+  echo "┏━━━ 🎯 TEST: $(1) ━━━━━━━"
+  yarn lerna run test --stream --filter $1
+else
+  echo "┏━━━ 🎯 TEST: all packages ━━━━━━━━━━━━━━━━━━━"
+  yarn lerna run test --stream --concurrency 4

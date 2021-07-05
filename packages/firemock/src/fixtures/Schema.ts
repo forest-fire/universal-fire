@@ -1,6 +1,6 @@
-import { IRelationship, ISchema, SchemaCallback } from '@/@types';
-import { Queue, SchemaHelper } from '@/fixtures/mocking';
-import { addException, pluralize } from '@/util';
+import { IRelationship, ISchema, SchemaCallback } from '~/@types';
+import { Queue, SchemaHelper } from '~/fixtures/mocking';
+import { addException, pluralize } from '~/util';
 
 import { getFakerLibrary } from './fakerInitialiation';
 

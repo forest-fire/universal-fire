@@ -5,7 +5,7 @@ import {
   Deployment,
   getFakerLibrary,
   importFakerLibrary,
-} from '@/fixtures/mocking';
+} from '~/fixtures';
 import {
   Reference,
   clearDatabase,
@@ -13,19 +13,19 @@ import {
   restoreEvents,
   silenceEvents,
   getDb,
-} from '@/databases/rtdb';
-import { networkDelay, setNetworkDelay } from '@/util';
-import { DelayType } from '@/@types';
-import { clearAuthUsers, initializeAuth } from '@/auth/util';
-import { FireMockError } from '@/errors';
+} from '~/databases';
+import { networkDelay, setNetworkDelay } from '~/util';
+import { DelayType } from '~/@types';
+import { clearAuthUsers, initializeAuth } from '~/auth/util';
+import { FireMockError } from '~/errors';
 import {
   IRelationship,
   ISchema,
   IQueue,
   SchemaCallback,
   IMockSetup,
-} from '@/@types';
-import AuthProviders from '@/auth/client-sdk/api/AuthProviders';
+} from '~/@types';
+import AuthProviders from '~/auth/client-sdk/api/AuthProviders';
 import {
   FirebaseNamespace,
   IMockAuthConfig,
@@ -36,8 +36,8 @@ import {
   IClientAuth,
 } from '@forest-fire/types';
 
-import { clientAuthSdk } from '@/auth/client-sdk';
-import { adminAuthSdk } from '@/auth/admin-sdk';
+import { clientAuthSdk } from '~/auth/client-sdk';
+import { adminAuthSdk } from '~/auth/admin-sdk';
 
 export { SDK };
 

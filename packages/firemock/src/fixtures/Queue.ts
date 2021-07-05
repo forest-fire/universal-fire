@@ -1,7 +1,7 @@
 import * as fbKey from 'firebase-key';
 
 import { IDictionary } from 'common-types';
-import { first } from '@/util';
+import { first } from '~/util';
 
 export type Key = string | number;
 
@@ -142,17 +142,17 @@ export class Queue<T = any> {
 
     return typeof first(queue) === 'object'
       ? queue.reduce((obj: IDictionary, item: any) => {
-          const pk: string = item[this.pkProperty];
-          // tslint:disable-next-line
-          const o = Object.assign({}, item);
-          delete o[this.pkProperty];
-          return { ...obj, ...{ [pk]: o } };
-        }, new Object())
+        const pk: string = item[this.pkProperty];
+        // tslint:disable-next-line
+        const o = Object.assign({}, item);
+        delete o[this.pkProperty];
+        return { ...obj, ...{ [pk]: o } };
+      }, new Object())
       : queue.reduce(
-          (obj: IDictionary, item: any) =>
-            (obj = { ...obj, ...{ [item]: true } }),
-          new Object()
-        );
+        (obj: IDictionary, item: any) =>
+          (obj = { ...obj, ...{ [item]: true } }),
+        new Object()
+      );
   }
 
   public map(fn: (f: any) => any): T[] {

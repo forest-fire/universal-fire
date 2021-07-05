@@ -1,9 +1,9 @@
 import { IDictionary, createError } from 'common-types';
 
-import { getFakerLibrary } from '@/fixtures/mocking';
+import { getFakerLibrary } from '~/fixtures/mocking';
 
 export class MockHelper {
-  constructor(public context?: IDictionary) {}
+  constructor(public context?: IDictionary) { }
   public get faker() {
     const faker = getFakerLibrary();
     if (!faker) {

@@ -1,5 +1,5 @@
 import './test-console'; // TS declaration
-// import '@/global.d.ts';
+// import '~/global.d.ts';
 
 import * as fs from 'fs';
 import * as process from 'process';

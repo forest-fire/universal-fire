@@ -4,16 +4,16 @@
 
 // #region autoindexed files
 
-// index last changed at: 6th Jun, 2021, 10:08 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 11:57 AM ( GMT-7 )
 // export: named; exclusions: old, index, private.
-// files: onDisconnect, query, reference, snapshot.
+// files: notify, onDisconnect, query, reference, snapshot.
 
 // local file exports
+export * from "./notify";
 export * from "./onDisconnect";
 export * from "./query";
 export * from "./reference";
 export * from "./snapshot";
-export * from "./notify";
 
 // Note:
 // -----
