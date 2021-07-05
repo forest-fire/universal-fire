@@ -16,6 +16,7 @@ import {
   SDK,
   IClientAuth,
 } from '@forest-fire/types';
+import { IQueue, IRelationship, ISchema } from './@types';
 
 export { SDK };
 
@@ -52,9 +53,9 @@ export class Fixture<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
       sdk
     );
 
-    if (options.auth) {
-      await initializeAuth(options.auth);
-    }
+    // if (options.auth) {
+    //   await initializeAuth(options.auth);
+    // }
 
     if (typeof options.db === 'function') {
       obj.updateDB(await (options.db as AsyncMockData)(obj));
@@ -71,7 +72,6 @@ export class Fixture<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
     return new Deployment();
   }
 
-  // TODO: should these attributes be removed?
   private _schemas = new Queue<ISchema>('schemas').clear();
   private _relationships = new Queue<IRelationship>('relationships').clear();
   private _queues = new Queue<IQueue>('queues').clear();
