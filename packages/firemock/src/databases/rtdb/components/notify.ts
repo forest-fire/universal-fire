@@ -4,6 +4,7 @@ import type {
   IMockStore,
   ISdk,
   IMockListener,
+  IRtdbSdk,
 } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 import {
@@ -245,7 +246,7 @@ function keyDidNotPreviouslyExist(
  * Based on a dictionary of paths/values it reduces this to events to
  * send to zero or more listeners.
  */
-export function notify<TSdk extends ISdk>(api: IMockStore<TSdk>) {
+export function notify<TSdk extends IRtdbSdk>(api: IMockStore<TSdk>) {
   return function (events: IMockWatcherGroupEvent[], dbSnapshot: IDictionary) {
     events.forEach((evt) => {
       const isDeleteEvent = evt.value === null || evt.value === undefined;

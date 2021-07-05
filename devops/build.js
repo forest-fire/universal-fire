@@ -45,6 +45,7 @@ function toPlugins(dir) {
           declaration: true,
           declarationDir: join(dir, 'dist', 'types'),
         },
+        include: ["src"],
       },
     }),
   ];

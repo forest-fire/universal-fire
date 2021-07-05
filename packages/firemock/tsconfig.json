@@ -3,7 +3,18 @@
   "compilerOptions": {
     "lib": ["esnext.asynciterable", "es2015.reflect"],
     "composite": true,
-    "rootDir": "src"
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    },
+    "plugins": [
+      // Transform paths in output .js files
+      { "transform": "typescript-transform-paths" },
+
+      // Transform paths in output .d.ts files (Include this line if you output declarations files)
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ]
   },
+
   "include": ["src", "test"]
 }
