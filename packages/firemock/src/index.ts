@@ -2,10 +2,10 @@
 
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 12:07 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 12:49 PM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: firemock.
-// directories: @types, errors, fixtures, util.
+// directories: @types, errors, util.
 
 // local file exports
 export * from "./firemock";
@@ -13,7 +13,6 @@ export * from "./firemock";
 // directory exports
 export * from "./@types/index";
 export * from "./errors/index";
-export * from "./fixtures/index";
 export * from "./util/index";
 
 // Note:

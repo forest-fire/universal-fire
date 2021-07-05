@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-
-
 if [[ -z "$1" ]]; then 
   echo "┏━━━ 🎯 TEST: $(1) ━━━━━━━"
   yarn lerna run test --stream --filter $1

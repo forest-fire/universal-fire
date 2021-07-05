@@ -1,7 +1,7 @@
 import * as fbKey from 'firebase-key';
 
 import { IDictionary } from 'common-types';
-import { first } from '~/util';
+import { firstKey } from 'native-dash';
 
 export type Key = string | number;
 
@@ -68,7 +68,7 @@ export class Queue<T = any> {
     }
 
     Queue._queues[this._name] =
-      typeof first(queue) === 'object'
+      typeof firstKey(queue) === 'object'
         ? queue.filter((item: any) => item[this.pkProperty] !== key)
         : queue.filter((item: any) => item !== key);
 
@@ -140,7 +140,7 @@ export class Queue<T = any> {
       return new Object();
     }
 
-    return typeof first(queue) === 'object'
+    return typeof firstKey(queue) === 'object'
       ? queue.reduce((obj: IDictionary, item: any) => {
         const pk: string = item[this.pkProperty];
         // tslint:disable-next-line
@@ -175,7 +175,7 @@ export class Queue<T = any> {
 
   private _find(key: string | number) {
     const queue = Queue._queues[this._name];
-    const objectPayload = typeof first(queue) === 'object';
+    const objectPayload = typeof firstKey(queue) === 'object';
 
     let index = 0;
     let result: any[] = [null, -1];

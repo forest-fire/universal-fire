@@ -13,8 +13,8 @@
       "path": "packages/firemock"
     },
     {
-      "name": "📔 Documentation",
-      "path": "packages/docs"
+      "name": "🗳 @forest-fire/fixture",
+      "path": "packages/fixture"
     },
     {
       "name": "📦 @forest-fire/firestore-db",
@@ -42,16 +42,21 @@
       "path": "packages/real-time-client"
     },
     {
+      "name": "🏷 @forest-fire/types",
+      "path": "packages/types"
+    },
+
+    {
       "name": "⚙️ @forest-fire/serialized-query",
       "path": "packages/serialized-query"
     },
     {
-      "name": "⚙️ @forest-fire/types",
-      "path": "packages/types"
-    },
-    {
       "name": "⚙️ @forest-fire/utility",
       "path": "packages/utility"
+    },
+    {
+      "name": "📔 Documentation",
+      "path": "packages/docs"
     }
   ],
   "settings": {

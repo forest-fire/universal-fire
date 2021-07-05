@@ -5,27 +5,8 @@ import {
   Deployment,
   getFakerLibrary,
   importFakerLibrary,
-} from '~/fixtures';
-import {
-  Reference,
-  clearDatabase,
-  updateDatabase,
-  restoreEvents,
-  silenceEvents,
-  getDb,
-} from '~/databases';
-import { networkDelay, setNetworkDelay } from '~/util';
-import { DelayType } from '~/@types';
-import { clearAuthUsers, initializeAuth } from '~/auth/util';
-import { FireMockError } from '~/errors';
-import {
-  IRelationship,
-  ISchema,
-  IQueue,
-  SchemaCallback,
-  IMockSetup,
-} from '~/@types';
-import AuthProviders from '~/auth/client-sdk/api/AuthProviders';
+} from '~/index';
+
 import {
   FirebaseNamespace,
   IMockAuthConfig,
@@ -36,12 +17,9 @@ import {
   IClientAuth,
 } from '@forest-fire/types';
 
-import { clientAuthSdk } from '~/auth/client-sdk';
-import { adminAuthSdk } from '~/auth/admin-sdk';
-
 export { SDK };
 
-export class Mock<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
+export class Fixture<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
   /**
    * returns a Mock object while also ensuring that the
    * Faker library has been asynchronously imported.
@@ -64,7 +42,7 @@ export class Mock<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
     const defaultDbConfig = {};
     await importFakerLibrary();
 
-    const obj = new Mock<TAuth>(
+    const obj = new Fixture<TAuth>(
       options.db
         ? typeof options.db === 'function'
           ? {}

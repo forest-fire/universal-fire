@@ -1,7 +1,6 @@
 import { IRelationship, ISchema, SchemaCallback } from '~/@types';
-import { Queue, SchemaHelper } from '~/fixtures/mocking';
-import { addException, pluralize } from '~/util';
-
+import { Queue, SchemaHelper } from '~/index';
+import { pluralize } from 'native-dash';
 import { getFakerLibrary } from './fakerInitialiation';
 
 /**
@@ -14,7 +13,7 @@ export class Schema<T = any> {
   private _schemas = new Queue<ISchema>('schemas');
   private _relationships = new Queue<IRelationship>('relationships');
 
-  constructor(public schemaId: string, mockFn?: SchemaCallback) {
+  constructor(public schemaId: string, mockFn?: SchemaCallback<T>) {
     if (mockFn) {
       this.mock(mockFn);
     }
@@ -23,10 +22,10 @@ export class Schema<T = any> {
   /**
    * Add a mocking function to be used to generate the schema in mock DB
    */
-  public mock(cb: SchemaCallback) {
+  public mock(cb: SchemaCallback<T>) {
     this._schemas.enqueue({
       id: this.schemaId,
-      fn: cb(new SchemaHelper({}, getFakerLibrary())), // TODO: pass in support for DB lookups
+      fn: cb(new SchemaHelper<T>({} as T, getFakerLibrary())), // TODO: pass in support for DB lookups
       path: () => {
         const schema: ISchema = this._schemas.find(this.schemaId);
         return [

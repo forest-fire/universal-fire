@@ -1,0 +1,44 @@
+{
+  "name": "@forest-fire/fixture",
+  "version": "0.59.2",
+  "description": "Build fixtures files/data for your firebase database",
+  "license": "MIT",
+  "author": "Ken Snyder<ken@ken.net>",
+  "keywords": [
+    "typescript",
+    "firebase",
+    "mocking",
+    "testing"
+  ],
+  "files": [
+    "dist"
+  ],
+  "module": "dist/es/index.js",
+  "types": "dist/types/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "sideEffects": false,
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
+  "scripts": {
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty",
+    "test": "scripty"
+  },
+  "devDependencies": {
+    "@types/faker": "5.5.6",
+    "firemock": "0.59.2",
+    "native-dash": "1.15.1",
+    "@forest-fire/types": "0.59.2"
+  },
+  "peerDependencies": {
+    "firemock": "0.59.2",
+    "native-dash": "1.15.1",
+    "@forest-fire/types": "0.59.2"
+  },
+  "dependencies": {
+    "firebase-key": "2.0.2",
+    "faker": "5.5.3"
+  }
+}
