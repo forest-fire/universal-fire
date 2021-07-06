@@ -1,5 +1,5 @@
 import { IRelationship, ISchema, SchemaCallback } from '~/@types';
-import { Queue, SchemaHelper } from '~/index';
+import { addException, Queue, SchemaHelper } from '~/index';
 import { pluralize } from 'native-dash';
 import { getFakerLibrary } from './fakerInitialiation';
 
@@ -105,7 +105,7 @@ export class Schema<T = any> {
   }
 
   /** Add another schema */
-  public addSchema<D>(schema: string, mock?: SchemaCallback) {
+  public addSchema<D>(schema: string, mock?: SchemaCallback<any>) {
     const s = new Schema<D>(schema);
     if (mock) {
       s.mock(mock);

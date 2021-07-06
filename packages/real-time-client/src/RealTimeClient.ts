@@ -184,7 +184,7 @@ export class RealTimeClient
   protected async _loadFiremock() {
     const fm = await import(/* webpackChunkName: "firemock" */ 'firemock');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return fm.default;
+    return fm.firemock;
   }
 
   protected async _loadDatabaseApi(): Promise<void> {

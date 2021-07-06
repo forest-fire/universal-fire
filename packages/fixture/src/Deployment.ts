@@ -1,12 +1,11 @@
 import * as fbKey from 'firebase-key';
 
 import { IQueue, IRelationship, ISchema } from '~/@types';
-import { dotNotation, getRandomInt, pluralize } from '~/util';
-import { first, get, set } from '~/util';
-import { getDb, setDB } from '~/databases/rtdb';
 
 import { IDictionary } from 'common-types';
-import { Queue } from '~/fixtures/mocking/index';
+import { Queue } from './Queue';
+import { dotNotation, getRandomInt, pluralize, set } from './utils';
+import { first, get } from 'native-dash';
 
 export class Deployment {
   private schemaId: string;
@@ -14,6 +13,8 @@ export class Deployment {
   private _queue = new Queue<IQueue>('queue');
   private _schemas = new Queue<ISchema>('schemas');
   private _relationships = new Queue<IRelationship>('relationships');
+
+  constructor(private db: IDictionary) { }
 
   /**
    * Queue a schema for deployment to the mock DB
@@ -137,7 +138,7 @@ export class Deployment {
           : mock;
 
     // set(db, dbPath, payload);
-    setDB(dbPath, payload);
+    // setDB(dbPath, payload);
 
     return key;
   }
@@ -148,7 +149,6 @@ export class Deployment {
     );
     const belongsTo = relationships.filter((r) => r.type === 'belongsTo');
     const hasMany = relationships.filter((r) => r.type === 'hasMany');
-    const db = getDb();
 
     belongsTo.forEach((r) => {
       const fulfill =
@@ -161,10 +161,10 @@ export class Deployment {
 
       if (fulfill) {
         const mockAvailable = this._schemas.find(r.target) ? true : false;
-        const available = Object.keys(db[pluralize(r.target)] || {});
+        const available = Object.keys(this.db[pluralize(r.target)] || {});
         const generatedAvailable = available.length > 0;
 
-        const numChoices = (db[r.target] || []).length;
+        const numChoices = (this.db[r.target] || []).length;
         const choice = () =>
           generatedAvailable
             ? available[getRandomInt(0, available.length - 1)]
@@ -182,10 +182,10 @@ export class Deployment {
 
       const property = r.sourceProperty;
       const path = source.path();
-      const recordList: IDictionary = get(db, dotNotation(source.path()), {});
+      const recordList: IDictionary = get(this.db, dotNotation(source.path()), {});
 
       Object.keys(recordList).forEach((key) => {
-        set(db, `${dotNotation(source.path())}.${key}.${property}`, getID());
+        set(this.db, `${dotNotation(source.path())}.${key}.${property}`, getID());
       });
     });
 
@@ -200,10 +200,10 @@ export class Deployment {
 
       if (fulfill) {
         const mockAvailable = this._schemas.find(r.target) ? true : false;
-        const available = Object.keys(db[pluralize(r.target)] || {});
+        const available = Object.keys(this.db[pluralize(r.target)] || {});
         const used: string[] = [];
         const generatedAvailable = available.length > 0;
-        const numChoices = (db[pluralize(r.target)] || []).length;
+        const numChoices = (this.db[pluralize(r.target)] || []).length;
 
         const choice = (pool: string[]) => {
           if (pool.length > 0) {
@@ -227,7 +227,7 @@ export class Deployment {
 
       const path = source.path();
       const sourceRecords: IDictionary = get(
-        db,
+        this.db,
         dotNotation(source.path()),
         {}
       );
@@ -235,7 +235,7 @@ export class Deployment {
       Object.keys(sourceRecords).forEach((key) => {
         for (let i = 1; i <= howMany; i++) {
           set(
-            db,
+            this.db,
             `${dotNotation(source.path())}.${key}.${property}.${getID()}`,
             true
           );

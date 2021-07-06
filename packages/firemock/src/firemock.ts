@@ -14,7 +14,7 @@ import { createDatabase } from './databases/createDatabase';
  * Provides an asynchronous factory function which will setup both the mock
  * database and mock auth service.
  */
-const firemock = async <TDatabase extends IDatabaseSdk<TSdk>, TSdk extends ISdk>(
+export const firemock = async <TDatabase extends IDatabaseSdk<TSdk>, TSdk extends ISdk>(
   container: TDatabase,
   mockData: IDictionary,
   mockAuth: IMockAuthConfig = { providers: [], users: [] },
@@ -34,5 +34,3 @@ const firemock = async <TDatabase extends IDatabaseSdk<TSdk>, TSdk extends ISdk>
   } as unknown as IMockDatabase<TSdk>;
 
 };
-
-export default firemock;

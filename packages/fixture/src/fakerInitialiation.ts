@@ -1,6 +1,5 @@
 import type { FakerStatic } from '@forest-fire/types';
-import { MockHelper } from '~/fixtures/mocking/index';
-import { FireMockError } from '~/errors';
+import { FixtureError } from './errors/FixtureError';
 
 let faker: FakerStatic;
 
@@ -25,24 +24,11 @@ export async function importFakerLibrary() {
  */
 export function getFakerLibrary() {
   if (!faker) {
-    throw new FireMockError(
-      `The faker library has not been loaded yet! Use the importFakerLibrary() directly to ensure this happens first;or altnernatively you can use Mock.prepare().`,
+    throw new FixtureError(
+      `The faker library has not been loaded yet! Use the importFakerLibrary() directly to ensure this happens first; or alternatively you can use Mock.prepare().`,
       'not-ready'
     );
   }
 
   return faker;
-}
-
-/**
- * Returns a Mock Helper object which includes the faker library.
- *
- * **Note:** calling this function will asynchronously load the faker library
- * so that the MockHelper is "made whole". This dependency has some heft to it
- * so should be avoided unless needed.
- */
-export async function getMockHelper(db: any) {
-  faker = await importFakerLibrary();
-  const obj = new MockHelper();
-  return obj;
 }

@@ -641,7 +641,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
     }
 
     try {
-      this._mock = await Firemock.default(
+      this._mock = await Firemock.firemock(
         this,
         config.mockData,
         config.mockAuth
