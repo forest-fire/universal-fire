@@ -1,4 +1,5 @@
 import type { FakerStatic } from '@forest-fire/types';
+import { ISchemaHelper } from './@types';
 import { FixtureError } from './errors/FixtureError';
 
 let faker: FakerStatic;
@@ -31,4 +32,19 @@ export function getFakerLibrary() {
   }
 
   return faker;
+}
+
+/**
+ * Returns a Mock Helper object which includes the faker library.
+ *
+ * **Note:** calling this function will asynchronously load the faker library
+ * so that the MockHelper is "made whole". This dependency has some heft to it
+ * so should be avoided unless needed.
+ */
+export async function getMockHelper<T extends unknown = any>(
+  db: T
+): Promise<ISchemaHelper<T>> {
+  faker = await importFakerLibrary();
+
+  return { context: db, faker };
 }

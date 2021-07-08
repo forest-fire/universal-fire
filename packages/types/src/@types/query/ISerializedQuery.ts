@@ -1,13 +1,11 @@
-
-import { DbFrom, DeserializedQueryFrom, SnapshotFrom } from '../database/db-util';
-import { ISdk } from '../fire-types';
 import {
-  IModel,
-  IComparisonOperator,
-  ISerializedIdentity,
-} from '../index';
+  DbFrom,
+  DeserializedQueryFrom,
+  SnapshotFrom,
+} from '../database/db-util';
+import { ISdk } from '../fire-types';
+import { IModel, IComparisonOperator, ISerializedIdentity } from '../index';
 import { IGenericModel } from '../models';
-
 
 /**
  * Defines the public interface which any serializer must
@@ -21,8 +19,8 @@ import { IGenericModel } from '../models';
 export interface ISerializedQuery<
   TSdk extends ISdk,
   /** the data model being serialized */
-  TModel extends IModel = IGenericModel,
-  > {
+  TModel extends IModel | Record<string, unknown> = IGenericModel
+> {
   db: DbFrom<TSdk>;
   path: string;
   identity: ISerializedIdentity<TModel>;
@@ -65,11 +63,7 @@ export interface ISerializedQuery<
    * Deserialize a `SerializedQuery` into a specific DB's query type:
    * {@link @firebase/firestore-types/Query} or {@link @firebase/database-types/Query}.
    */
-  deserialize: (
-    db?: DbFrom<TSdk>
-  ) => DeserializedQueryFrom<TSdk>
+  deserialize: (db?: DbFrom<TSdk>) => DeserializedQueryFrom<TSdk>;
 
-  execute: (
-    db?: DbFrom<TSdk>
-  ) => Promise<SnapshotFrom<TSdk>>;
+  execute: (db?: DbFrom<TSdk>) => Promise<SnapshotFrom<TSdk>>;
 }

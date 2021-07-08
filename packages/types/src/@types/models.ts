@@ -8,7 +8,7 @@ export interface IModel {
   id?: string;
   lastUpdated?: epochWithMilliseconds;
   createdAt?: epochWithMilliseconds;
-  META?: Record<string, unknown>;
+  META?: any;
 }
 
 export type IGenericModel = Record<string, unknown> & IModel;

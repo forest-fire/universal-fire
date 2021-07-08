@@ -1,35 +1,46 @@
-
 import {
   IDatabaseSdk,
   ISdk,
-  IGenericModel,
   isRealTimeDatabase,
   isAdminSdk,
+  IModel,
+  ISerializedQuery,
+  SDK,
 } from '@forest-fire/types';
 import { SerializedRealTimeQuery, SerializedFirestoreQuery } from './index';
 
-export class SerializedQuery<TModel extends IGenericModel, TDatabase extends IDatabaseSdk<TSdk>, TSdk extends ISdk> {
-
-  constructor(db: TDatabase, path = "/") {
+export class SerializedQuery<
+  TModel extends IModel | Record<string, unknown>,
+  TSdk extends ISdk
+> {
+  constructor(db: IDatabaseSdk<TSdk>, path = '/') {
     if (isRealTimeDatabase(db)) {
       return isAdminSdk(db)
-        ? new SerializedRealTimeQuery<"RealTimeClient", TModel>(path)
-        : new SerializedRealTimeQuery<"RealTimeAdmin", TModel>(path);
+        ? new SerializedRealTimeQuery<'RealTimeClient', TModel>(path)
+        : new SerializedRealTimeQuery<'RealTimeAdmin', TModel>(path);
     } else {
       return isAdminSdk(db)
-        ? new SerializedFirestoreQuery<"FirestoreAdmin", TModel>(path)
-        : new SerializedFirestoreQuery<"FirestoreClient", TModel>(path)
+        ? new SerializedFirestoreQuery<'FirestoreAdmin', TModel>(path)
+        : new SerializedFirestoreQuery<'FirestoreClient', TModel>(path);
     }
   }
 
-  // static create<TModel extends IModel = IGenericModel, TSdk extends IDatabaseSdk<TSdk, TDb>, TSdk extends ISdk, TDb extends IDb>(
-  //   db: TSdk,
-  //   path = '/'
-  // ): SerializedRealTimeQuery<TModel> | SerializedFirestoreQuery<TModel> {
-  //   if (isRealTimeDatabase(db)) {
-  //     return SerializedRealTimeQuery.path<TModel>(path);
-  //   } else {
-  //     return SerializedFirestoreQuery.path<TModel>(path);
-  //   }
-  // }
+  static create<TModel extends IModel, TSdk extends ISdk>(
+    db: IDatabaseSdk<TSdk>,
+    path = '/'
+  ): ISerializedQuery<TSdk, TModel> {
+    if (isRealTimeDatabase(db)) {
+      return (isAdminSdk(db)
+        ? new SerializedRealTimeQuery<SDK.RealTimeClient, TModel>(path)
+        : new SerializedRealTimeQuery<SDK.RealTimeAdmin, TModel>(
+            path
+          )) as unknown as ISerializedQuery<TSdk, TModel>;
+    } else {
+      return (isAdminSdk(db)
+        ? new SerializedFirestoreQuery<'FirestoreAdmin', TModel>(path)
+        : new SerializedFirestoreQuery<'FirestoreClient', TModel>(
+            path
+          )) as unknown as ISerializedQuery<TSdk, TModel>;
+    }
+  }
 }

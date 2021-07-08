@@ -157,7 +157,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    * @param cb the callback function to call when event triggered
    */
   public watch<T extends IModel>(
-    target: string | ISerializedQuery<TSdk>,
+    target: string | ISerializedQuery<TSdk, T>,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: IFirebaseWatchHandler
   ): void {
@@ -447,7 +447,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    * returns the Firebase snapshot at a given path in the database
    */
   public async getSnapshot<T = any>(
-    path: string | ISerializedQuery<TSdk>
+    path: string | ISerializedQuery<TSdk, T>
   ): Promise<IRtdbDataSnapshot> {
     try {
       const response = await (typeof path === 'string'
@@ -513,7 +513,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    * @param idProp
    */
   public async getList<T extends IModel = any>(
-    path: string | ISerializedQuery<TSdk>,
+    path: string | ISerializedQuery<TSdk, T>,
     idProp = 'id'
   ): Promise<T[]> {
     try {

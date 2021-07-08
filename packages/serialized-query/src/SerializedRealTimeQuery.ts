@@ -13,6 +13,8 @@ import {
   IAdminRtdbDatabase,
   IClientRtdbDatabase,
   IFirebaseRtdbReference,
+  IRtdbSdk,
+  SDK,
 } from '@forest-fire/types';
 
 /**
@@ -20,12 +22,12 @@ import {
  * Database query.
  */
 export class SerializedRealTimeQuery<
-  TSdk extends 'RealTimeAdmin' | 'RealTimeClient',
+  TSdk extends IRtdbSdk,
   M extends IModel = IModel,
-  TDatabase extends IRtdbDatabase = TSdk extends 'RealTimeAdmin'
+  TDatabase extends IRtdbDatabase = TSdk extends SDK.RealTimeAdmin
     ? IAdminRtdbDatabase
     : IClientRtdbDatabase
-> implements ISerializedQuery<'RealTimeAdmin' | 'RealTimeClient', M>
+> implements ISerializedQuery<IRtdbSdk, M>
 {
   protected _endAtKey?: keyof M & string;
   protected _endAt?: string | number | boolean;

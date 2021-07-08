@@ -10,7 +10,8 @@ import type {
   IGenericModel,
   DbFrom,
   SnapshotFrom,
-  DeserializedQueryFrom
+  DeserializedQueryFrom,
+  IFirestoreSdk
 } from '@forest-fire/types';
 import { SerializedError } from './SerializedError';
 
@@ -19,7 +20,7 @@ import { SerializedError } from './SerializedError';
  * Database query.
  */
 export class SerializedFirestoreQuery<
-  TSdk extends "FirestoreAdmin" | "FirestoreClient",
+  TSdk extends IFirestoreSdk,
   M extends IModel = IGenericModel
   >
   implements ISerializedQuery<TSdk, M> {

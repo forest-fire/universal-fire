@@ -36,7 +36,6 @@
     "@forest-fire/real-time-admin": "^0.59.2",
     "@forest-fire/real-time-client": "^0.59.2",
     "@forest-fire/serialized-query": "^0.59.2",
-    "@forest-fire/serializer-factory": "^0.59.2",
     "@forest-fire/types": "^0.59.2"
   },
   "license": "MIT"

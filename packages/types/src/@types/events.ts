@@ -20,7 +20,7 @@ export interface IPathSetter<T = unknown> {
 export interface IValueBasedWatchEvent extends IFirebaseWatchContext {
   targetType: 'query';
   key: string;
-  value: unknown;
+  value: Record<string, unknown>;
   previousChildKey?: string;
 }
 /**

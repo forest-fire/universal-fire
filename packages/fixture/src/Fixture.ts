@@ -106,15 +106,6 @@ export class Fixture<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
   }
 
   /**
-   * silences the database from sending events;
-   * this is not typically done but can be done
-   * as part of the Mocking process to reduce noise
-   */
-  public silenceEvents() {
-    // silenceEvents();
-  }
-
-  /**
    * returns an instance static FakerJS libraray
    */
   public get faker() {

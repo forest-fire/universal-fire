@@ -12,7 +12,8 @@ import type {
   AuthProviders,
   IsAdminSdk,
   IMockDatabase,
-  EventFrom
+  EventFrom,
+  IRtdbReference
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
 import {
@@ -91,7 +92,7 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
   }
 
   public async getList<T = unknown>(
-    path: string | ISerializedQuery<TSdk>,
+    path: string | ISerializedQuery<TSdk, T>,
     idProp = 'id'
   ): Promise<T[]> {
     path = typeof path !== 'string' ? path.path : path;
@@ -104,8 +105,8 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     }) as T[];
   }
 
-  public getPushKey(path: string): string {
-    return this.database.collection(path).doc().id;
+  public getPushKey(path: string): Promise<string> {
+    return Promise.resolve(this.database.collection(path).doc().id);
   }
 
   public async getRecord<T = unknown>(path: string, idProp = 'id'): Promise<T> {
@@ -116,7 +117,7 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     } as T;
   }
 
-  public getValue<T = any>(path: string) {
+  public getValue<T = any>(path: string): Promise<T> {
     throw new Error('Not implemented');
   }
 
@@ -146,11 +147,11 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
    * @param events an event type or an array of event types (e.g., "value", "child_added")
    * @param _cb the callback function to call when event triggered
    */
-  public watch<C extends Function>(
-    target: string | ISerializedQuery<TSdk>,
+  public watch<C extends any>(
+    target: string | ISerializedQuery<TSdk, C>,
     events: EventFrom<TSdk> | EventFrom<TSdk>[],
     _cb: C
-  ): void {
+  ) {
     if (events && !isFirestoreEvent(events)) {
       throw new FirestoreDbError(
         `An attempt to watch an event which is not valid for the Firestore database (but likely is for the Real Time database). Events passed in were: ${JSON.stringify(
@@ -180,7 +181,7 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     throw new Error('Not implemented');
   }
 
-  public ref(path = '/') {
+  public ref(path = '/'): IRtdbReference {
     throw new Error('Not implemented');
   }
 
