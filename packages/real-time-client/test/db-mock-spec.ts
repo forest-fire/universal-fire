@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 // tslint:disable:no-implicit-dependencies
 import { IDictionary } from 'common-types';
 import type { IMockConfig } from '@forest-fire/types';
@@ -11,7 +12,7 @@ const config: IMockConfig = {
 
 helpers.setupEnv();
 describe('Connecting to MOCK Database', () => {
-  it('can instantiate', async () => {
+  it('can instantiate', () => {
     const db = new RealTimeClient(config);
     expect(db).toBeInstanceOf(Object);
     expect(db).toBeInstanceOf(RealTimeClient);
@@ -55,7 +56,9 @@ describe('Read operations: ', () => {
   // tslint:disable-next-line:one-variable-per-declaration
   let db: RealTimeClient;
   const personMockGenerator = (h: any) => () => ({
-    name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
+    name: `${h.faker.name.firstName() as string} ${
+      h.faker.name.lastName() as string
+    }`,
     age: h.faker.random.number({ min: 10, max: 99 }),
   });
   beforeAll(async () => {
@@ -116,9 +119,7 @@ describe('Write Operations', () => {
   let db: RealTimeClient;
   beforeEach(async () => {
     db = await RealTimeClient.connect(config);
-    try {
-      await db.remove('client-test-data/pushed');
-    } catch (e) {}
+    await db.remove('client-test-data/pushed');
   });
 
   interface INameAndAge {

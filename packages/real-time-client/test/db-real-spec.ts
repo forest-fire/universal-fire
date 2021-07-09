@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import * as helpers from './testing/helpers';
 
 import { IDictionary } from 'common-types';
@@ -14,7 +15,7 @@ const config = {
 
 helpers.setupEnv();
 describe('Connecting to Database', () => {
-  it('can instantiate', async () => {
+  it('can instantiate', () => {
     const db = new RealTimeClient(config);
     expect(db).toBeInstanceOf(Object);
     expect(db).toBeInstanceOf(RealTimeClient);
@@ -56,7 +57,9 @@ describe('Read operations: ', () => {
   let db: RealTimeClient;
   let dbMock: RealTimeClient;
   const personMockGenerator = (h: any) => () => ({
-    name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
+    name: `${h.faker.name.firstName() as string} ${
+      h.faker.name.lastName() as string
+    }`,
     age: h.faker.random.number({ min: 10, max: 99 }),
   });
   beforeAll(async () => {

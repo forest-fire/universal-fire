@@ -4,6 +4,8 @@ import * as helpers from './testing/helpers';
 
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
+import { Fixture, SDK } from '@forest-fire/fixture';
+import { AuthProviderName } from '../../types/dist/types';
 
 helpers.setupEnv();
 const config = {
@@ -32,16 +34,20 @@ describe('Mocking', () => {
   });
 
   it('getSnapshot() returns a mock snapshot', async () => {
-    addAnimals(mockDb, 10);
+    const fixture1 = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+    addAnimals(fixture1, 10);
     const animals = await mockDb.getSnapshot('/animals');
     expect(animals.numChildren()).toBe(10);
-    mockDb.mock.queueSchema('animal', 5).generate();
+
+    const fixture2 = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+    fixture2.queueSchema('animal', 5).generate();
     const moreAnimals = await mockDb.getSnapshot('/animals');
     expect(moreAnimals.numChildren()).toBe(15);
   });
 
   it('getValue() returns a value from mock DB', async () => {
-    addAnimals(mockDb, 10);
+    const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+    addAnimals(fixture, 10);
     const animals = await mockDb.getValue('/animals');
     expect(animals).toBeInstanceOf(Object);
     expect(helpers.length(animals)).toBe(10);
@@ -51,8 +57,9 @@ describe('Mocking', () => {
   });
 
   it('getRecord() returns a record from mock DB', async () => {
-    addAnimals(mockDb, 10);
-    const firstKey = helpers.firstKey(mockDb.mock.db.animals);
+    const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+    addAnimals(fixture, 10);
+    const firstKey: string = helpers.firstKey((mockDb.mock.db as any).animals);
     const animal = await mockDb.getRecord(`/animals/${firstKey}`);
     expect(animal).toBeInstanceOf(Object);
     expect(animal.id).toBe(firstKey);
@@ -61,8 +68,10 @@ describe('Mocking', () => {
   });
 
   it('getRecord() returns a record from mock DB with bespoke id prop', async () => {
-    addAnimals(mockDb, 10);
-    const firstKey = helpers.firstKey(mockDb.mock.db.animals);
+    const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+
+    addAnimals(fixture, 10);
+    const firstKey: string = helpers.firstKey((mockDb.mock.db as any).animals);
     const animal = await mockDb.getRecord(`/animals/${firstKey}`, 'key');
 
     expect(animal).toBeInstanceOf(Object);
@@ -72,7 +81,9 @@ describe('Mocking', () => {
   });
 
   it('getList() returns an array of records', async () => {
-    addAnimals(mockDb, 10);
+    const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+
+    addAnimals(fixture, 10);
     const animals = await mockDb.getList('/animals');
     expect(animals).toBeArray();
     expect(animals).toHaveLength(10);
@@ -82,7 +93,9 @@ describe('Mocking', () => {
   });
 
   it('getList() returns an array of records, with bespoke "id" property', async () => {
-    addAnimals(mockDb, 10);
+    const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+
+    addAnimals(fixture, 10);
     const animals = await mockDb.getList('/animals', 'key');
     expect(animals).toBeArray();
     expect(animals).toHaveLength(10);
@@ -92,7 +105,7 @@ describe('Mocking', () => {
   });
 
   it('set() sets to the mock DB', async () => {
-    mockDb.set('/people/abcd', {
+    await mockDb.set('/people/abcd', {
       name: 'Frank Black',
       age: 45,
     });
@@ -103,15 +116,13 @@ describe('Mocking', () => {
   });
 
   it('update() updates the mock DB', async () => {
-    mockDb.mock.updateDB({
-      people: {
-        abcd: {
-          name: 'Frank Black',
-          age: 45,
-        },
+    await mockDb.update('/people', {
+      abcd: {
+        name: 'Frank Black',
+        age: 45,
       },
     });
-    mockDb.update('/people/abcd', { age: 14 });
+    await mockDb.update('/people/abcd', { age: 14 });
     const people = await mockDb.getRecord('/people/abcd');
     expect(people).toBeInstanceOf(Object);
     expect(people).toHaveProperty('id');
@@ -122,7 +133,7 @@ describe('Mocking', () => {
   });
 
   it('push() pushes records into the mock DB', async () => {
-    mockDb.push('/people', {
+    await mockDb.push('/people', {
       name: 'Frank Black',
       age: 45,
     });
@@ -136,17 +147,18 @@ describe('Mocking', () => {
   });
 
   it('read operations on mock with a schema prefix are offset correctly', async () => {
-    mockDb.mock
+    const fixture = await Fixture.prepare({db: mockDb});
+    fixture
       .addSchema('meal', (h: any) => () => ({
         name: h.faker.random.arrayElement(['breakfast', 'lunch', 'dinner']),
         datetime: h.faker.date.recent(),
       }))
       .pathPrefix('authenticated');
-    mockDb.mock.queueSchema('meal', 10);
-    mockDb.mock.generate();
+    fixture.queueSchema('meal', 10);
+    fixture.generate();
 
-    expect(mockDb.mock.db.authenticated).toBeInstanceOf(Object);
-    expect(mockDb.mock.db.authenticated.meals).toBeInstanceOf(Object);
+    expect(mockDb.mock.store.state.authenticated).toBeInstanceOf(Object);
+    expect(mockDb.mock.store.state.authenticated.meals).toBeInstanceOf(Object);
     const list = await mockDb.getList('/authenticated/meals');
     expect(list.length).toBe(10);
   });
@@ -159,14 +171,14 @@ describe('Mocking', () => {
       },
     });
     await db2.connect();
-    expect(db2.mock.db.foo).toBe('bar');
+    expect(db2.mock.store.state.foo).toBe('bar');
   });
 
   it('setting auth() to accept anonymous works', async () => {
     const db3 = await RealTimeClient.connect({
       mocking: true,
       mockAuth: {
-        providers: ['anonymous'],
+        providers: [AuthProviderName.anonymous],
       },
     });
     const auth = await db3.auth();
@@ -175,8 +187,8 @@ describe('Mocking', () => {
   });
 });
 
-function addAnimals(db: RealTimeClient, count: number) {
-  db.mock.addSchema('animal', animalMocker);
-  db.mock.queueSchema('animal', count);
-  db.mock.generate();
+function addAnimals(fixture: Fixture, count: number) {
+  fixture.addSchema('animal', animalMocker);
+  fixture.queueSchema('animal', count);
+  fixture.generate();
 }
