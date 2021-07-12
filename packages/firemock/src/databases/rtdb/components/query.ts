@@ -34,7 +34,7 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
     },
     endAt: (value, key) => {
       serializedQuery.endAt(value, key);
-      return query(store, serializedQuery);
+      return this;
     },
     equalTo: (value, key) => {
       serializedQuery.equalTo(value, key);
@@ -45,18 +45,18 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
       }
       serializedQuery.equalTo(value, key);
 
-      return query(store, serializedQuery);
+      return this;
     },
     isEqual: (other: IRtdbQuery & { _query: ISerializedQuery<IRtdbSdk> }) => {
       return serializedQuery.hashCode() === other._query.hashCode();
     },
     limitToFirst: (limit: number) => {
       serializedQuery.limitToFirst(limit);
-      return query(store, serializedQuery);
+      return this;
     },
     limitToLast: (limit: number) => {
       serializedQuery.limitToLast(limit);
-      return query(store, serializedQuery);
+      return this;
     },
     off: (
       _eventType?: IRtdbDbEvent,
@@ -83,7 +83,7 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
       await store.networkDelay();
 
       const data = store.getDb(serializedQuery.path);
-      console.warn("once", { path: serializedQuery.path, data})
+      // console.warn("once", { path: serializedQuery.path, data})
 
       const results = runQuery(serializedQuery, data);
 
@@ -92,27 +92,27 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
     },
     orderByChild: (prop: string) => {
       serializedQuery.orderByChild(prop);
-      return query(store, serializedQuery);
+      return this;
     },
     orderByKey: () => {
       serializedQuery.orderByKey();
-      return query(store, serializedQuery);
+      return this;
     },
     orderByPriority: () => {
       // TODO: should we implement? this idea of Priority is code smell these days
       // _query.order();
-      return query(store, serializedQuery);
+      return this;
     },
     orderByValue: () => {
       serializedQuery.orderByValue();
-      return query(store, serializedQuery);
+      return this;
     },
     get ref() {
       return reference(store, serializedQuery)
     },
     startAt: (value) => {
       serializedQuery.startAt(value);
-      return query(store, serializedQuery);
+      return this;
     },
     toJSON: () => ({
       url: reference(store, serializedQuery).toString(),

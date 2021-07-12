@@ -51,7 +51,7 @@ export function createStore<
    * The in-memory dictionary/hash mantained by the mock RTDB to represent
    * the state of the database
    */
-  let _state: IDictionary;
+  let _state: IDictionary = {};
   /** flag to indicate whether dispatch events should be fired */
   let _silenceEvents = false;
   /** the artificial time delay used to simulate a real DB's network latency */
@@ -246,7 +246,6 @@ export function createStore<
       keys.forEach((key) => delete _state[key]);
     },
     getDb(path?: string) {
-      console.warn('getDb', { state: _state });
       return path ? get(_state, dotify(path)) : _state;
     },
     setDb<V extends unknown>(path: string, value: V, silent = false) {
@@ -256,6 +255,14 @@ export function createStore<
         typeof oldRef === 'object' ? { ...oldRef, ...{} } : oldRef;
       const isReference = ['object', 'array'].includes(typeof value);
       const dbSnapshot = copy({ ..._state });
+      // console.warn('setDb', {
+      //   path,
+      //   value,
+      //   isReference,
+      //   dbSnapshot,
+      //   oldValue,
+      //   val: value,
+      // });
 
       // ignore if no change
       if (

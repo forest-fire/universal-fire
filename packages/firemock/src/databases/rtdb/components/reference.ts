@@ -104,7 +104,6 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
     },
     set: async (value, onComplete) => {
       try {
-        console.warn('set value', { q: serializedQuery.path, val: value });
         store.setDb(serializedQuery.path, value);
         if (onComplete) onComplete(null);
         return store.networkDelay();
