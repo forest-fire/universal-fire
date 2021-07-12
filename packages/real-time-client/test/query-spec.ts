@@ -34,23 +34,23 @@ describe('Query based Read ops:', () => {
     let data = await db.getSnapshot('people');
     expect(data.numChildren()).toBe(33); // baseline check
     // TODO: refactor the class definition in order to fix the type errors
-    const q = new SerializedRealTimeQuery('people')
-      .orderByChild('age' as any)
+    const q = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>('people')
+      .orderByChild('age')
       .limitToFirst(5);
     data = await db.getSnapshot(q);
     expect(data.numChildren()).toBe(5);
     // data.val().map(x => x.age).map(age => expect(age).to.equal(5));
     expect(helpers.firstRecord(data.val()).age).toBe(100);
     expect(helpers.lastRecord(data.val()).age).toBe(100);
-    const q2 = new SerializedRealTimeQuery('people')
-      .orderByChild('age' as any)
+    const q2 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>('people')
+      .orderByChild('age')
       .limitToLast(5);
     data = await db.getSnapshot(q2);
     expect(data.numChildren()).toBe(5);
     expect(helpers.firstRecord(data.val()).age).toBe(1);
     expect(helpers.lastRecord(data.val()).age).toBe(1);
-    const q3 = new SerializedRealTimeQuery('people')
-      .orderByChild('age' as any)
+    const q3 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>('people')
+      .orderByChild('age')
       .equalTo(3);
     data = await db.getSnapshot(q3);
     expect(data.numChildren()).toBe(3);
@@ -62,22 +62,22 @@ describe('Query based Read ops:', () => {
     let data = await db.getList<IPerson>('people');
     expect(data.length).toBe(33); // baseline check
 
-    const q = new SerializedRealTimeQuery('people')
-      .orderByChild('age' as any)
+    const q = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>('people')
+      .orderByChild('age')
       .limitToFirst(5);
     data = await db.getList<IPerson>(q);
     expect(data.length).toBe(5);
     data.map((d) => d.age).map((age) => expect(age).toBe(100));
 
-    const q2 = new SerializedRealTimeQuery('people')
-      .orderByChild('age' as any)
+    const q2 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>('people')
+      .orderByChild('age')
       .limitToLast(5);
     data = await db.getList<IPerson>(q2);
     expect(data.length).toBe(5);
     data.map((d) => d.age).map((age) => expect(age).toBe(1));
 
-    const q3 = new SerializedRealTimeQuery('people')
-      .orderByChild('age' as any)
+    const q3 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>('people')
+      .orderByChild('age')
       .equalTo(3);
     data = await db.getList<IPerson>(q3);
     expect(data.length).toBe(3);

@@ -1,10 +1,5 @@
-import {
-  IMockStore,
-  IRtdbDataSnapshot,
-  IRtdbSdk,
-  ISdk,
-} from '@forest-fire/types';
-import { IDictionary, SortingFunction } from 'common-types';
+import { IMockStore, IRtdbDataSnapshot, IRtdbSdk } from '@forest-fire/types';
+import { SortingFunction } from 'common-types';
 import { arrayToHash } from 'typed-conversions';
 import { get, getKey, join } from '../../../util';
 import { reference } from './reference';
@@ -22,11 +17,15 @@ export const snapshot: IRtdbMockSnapshotFactory<IRtdbSdk> = (
   const val = () => (Array.isArray(value) ? arrayToHash(value) : value);
   let sortingFunction: SortingFunction;
 
-  const snapshopt: IRtdbDataSnapshot = {
-    key: getKey(join(key)),
+  const snapshotKey = getKey(join(key));
+
+  const partialSnapshot: IRtdbDataSnapshot = {
+    get key() {
+      return snapshotKey;
+    },
     val,
     get ref() {
-      return reference(store, key);
+      return reference(store, snapshotKey);
     },
 
     toJSON() {
@@ -94,6 +93,6 @@ export const snapshot: IRtdbMockSnapshotFactory<IRtdbSdk> = (
     sortingFunction(fn: SortingFunction) {
       sortingFunction = fn;
     },
-    ...snapshopt,
+    ...partialSnapshot,
   };
 };

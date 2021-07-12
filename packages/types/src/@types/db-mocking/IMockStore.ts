@@ -15,9 +15,6 @@ export interface IMockStore<
   /** the API exposed by the underlying SDK (e.g., admin, client, rest) which is being used */
   api: ApiKind;
 
-  /** the underlying DB technology (e.g., RTDB, Firestore) */
-  db: TDb;
-
   /**
    * The in-memory state tree representing the mock database's state
    */

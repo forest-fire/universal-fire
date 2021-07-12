@@ -29,13 +29,25 @@
     "test": "scripty"
   },
   "devDependencies": {
-    "@types/events": "^3.0.0",
     "@firebase/auth": "^0.16.7",
     "@firebase/database": "^0.10.5",
-    "firemock": "^0.59.2"
+    "@types/events": "^3.0.0",
+    "@types/js-yaml": "^4.0.2",
+    "@types/lodash": "^4.14.171",
+    "@types/test-console": "^1.1.1",
+    "firemock": "^0.59.2",
+    "jest": "^27.0.6",
+    "jest-extended": "^0.11.5",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
+    "test-console": "^2.0.0",
+    "ts-jest": "^27.0.3",
+    "ttypescript": "^1.5.12",
+    "typescript-transform-paths": "^1.1.14"
   },
   "dependencies": {
     "@firebase/app": "^0.6.11",
+    "@forest-fire/fixture": "link:../fixture",
     "@forest-fire/real-time-db": "^0.59.2",
     "@forest-fire/serialized-query": "^0.59.2",
     "@forest-fire/types": "^0.59.2",

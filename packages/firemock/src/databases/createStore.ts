@@ -220,7 +220,6 @@ export function createStore<
     )
       ? ApiKind.admin
       : ApiKind.client,
-    db: container.dbType as any,
     config,
 
     state: _state,

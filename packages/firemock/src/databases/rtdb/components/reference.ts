@@ -31,32 +31,55 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
   store: T,
   path: string | ISerializedQuery<TSdk> = ''
 ): IRtdbReference {
-  const _query: ISerializedQuery<IRtdbSdk> =
+  const serializedQuery: ISerializedQuery<IRtdbSdk> =
     typeof path === 'string' ? new SerializedRealTimeQuery<TSdk>(path) : path;
 
+  const query_ = query(store, serializedQuery);
   const ref: IRtdbReference = {
-    ...query(store, _query),
-    key: _query.path ? _query.path.split('/').pop() : null,
+    orderByKey: query_.orderByKey,
+    endAt: query_.endAt,
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    endBefore: query_.endBefore,
+    equalTo: query_.equalTo,
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    get: query_.get,
+    isEqual: query_.isEqual,
+    limitToFirst: query_.limitToFirst,
+    limitToLast: query_.limitToLast,
+    off: query_.off,
+    on: query_.on,
+    once: query_.once,
+    orderByChild: query_.orderByChild,
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    orderByPriority: query_.orderByPriority,
+    orderByValue: query_.orderByValue,
+    get ref() { return query_.ref },
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    startAfter: query_.startAfter,
+    startAt: query_.startAt,
+    get key()  { return serializedQuery.path ? serializedQuery.path.split('/').pop() : null },
     child: (path) => {
       return reference(store, path);
     },
     onDisconnect: () => {
-      return onDisconnect(store, _query);
+      return onDisconnect(store, serializedQuery);
     },
-    parent: reference(
-      store,
-      !_query.path || _query.path.split('/').length === 1
-        ? null
-        : _query.path
-            .split('/')
-            .slice(0, _query.path.split('/').length - 1)
-            .join('/')
-    ),
+    get parent() {
+      return reference(
+        store,
+        !serializedQuery.path || serializedQuery.path.split('/').length === 1
+          ? null
+          : serializedQuery.path
+              .split('/')
+              .slice(0, serializedQuery.path.split('/').length - 1)
+              .join('/')
+      );
+    },
     push: (value, onComplete) => {
       try {
-        const key = store.pushDb(_query.path, value);
+        const key = store.pushDb(serializedQuery.path, value);
         if (onComplete) onComplete(undefined);
-        const _ref = reference(store, join(_query.path, key));
+        const _ref = reference(store, join(serializedQuery.path, key));
         const _refPromise = Promise.resolve(_ref);
         return { ..._ref, ..._refPromise };
       } catch (e) {
@@ -65,16 +88,18 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
     },
     remove: async (onComplete) => {
       try {
-        store.removeDb(_query.path);
+        store.removeDb(serializedQuery.path);
         if (onComplete) onComplete(undefined);
       } catch (e) {
         if (onComplete) onComplete(e);
       }
     },
-    root: reference(store, null),
+    get root() {
+      return reference(store, null);
+    },
     set: async (value, onComplete) => {
       try {
-        store.setDb(_query.path, value);
+        store.setDb(serializedQuery.path, value);
         if (onComplete) onComplete(null);
         return store.networkDelay();
       } catch (e) {
@@ -96,11 +121,11 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
     toJSON: () => {
       return {
         identity: ref.toString(),
-        query: _query.identity,
+        query: serializedQuery.identity,
       };
     },
     toString: () => {
-      return `FireMock::Query@${process.env.FIREBASE_DATA_ROOT_URL}/${_query.path}`;
+      return `FireMock::Query@${process.env.FIREBASE_DATA_ROOT_URL}/${serializedQuery.path}`;
     },
     transaction: async (_transaction) => {
       return Promise.resolve({
@@ -116,7 +141,7 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
         if (isMultiPath(values)) {
           store.multiPathUpdate(values);
         } else {
-          store.updateDb(_query.path, values);
+          store.updateDb(serializedQuery.path, values);
         }
 
         if (onComplete) onComplete(undefined);

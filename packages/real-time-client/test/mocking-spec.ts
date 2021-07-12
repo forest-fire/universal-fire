@@ -59,7 +59,7 @@ describe('Mocking', () => {
   it('getRecord() returns a record from mock DB', async () => {
     const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
     addAnimals(fixture, 10);
-    const firstKey: string = helpers.firstKey((mockDb.mock.db as any).animals);
+    const firstKey: string = helpers.firstKey(mockDb.mock.store.state.animals);
     const animal = await mockDb.getRecord(`/animals/${firstKey}`);
     expect(animal).toBeInstanceOf(Object);
     expect(animal.id).toBe(firstKey);
@@ -71,7 +71,7 @@ describe('Mocking', () => {
     const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
 
     addAnimals(fixture, 10);
-    const firstKey: string = helpers.firstKey((mockDb.mock.db as any).animals);
+    const firstKey: string = helpers.firstKey(mockDb.mock.store.state.animals);
     const animal = await mockDb.getRecord(`/animals/${firstKey}`, 'key');
 
     expect(animal).toBeInstanceOf(Object);
@@ -116,10 +116,12 @@ describe('Mocking', () => {
   });
 
   it('update() updates the mock DB', async () => {
-    await mockDb.update('/people', {
-      abcd: {
-        name: 'Frank Black',
-        age: 45,
+    mockDb.mock.store.updateDb('/people', {
+      people: {
+        abcd: {
+          name: 'Frank Black',
+          age: 45,
+        },
       },
     });
     await mockDb.update('/people/abcd', { age: 14 });
@@ -147,7 +149,7 @@ describe('Mocking', () => {
   });
 
   it('read operations on mock with a schema prefix are offset correctly', async () => {
-    const fixture = await Fixture.prepare({db: mockDb});
+    const fixture = await Fixture.prepare({ db: mockDb });
     fixture
       .addSchema('meal', (h: any) => () => ({
         name: h.faker.random.arrayElement(['breakfast', 'lunch', 'dinner']),

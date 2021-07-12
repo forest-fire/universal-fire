@@ -9,9 +9,11 @@ export function createRtdbClientMock<T extends IMockStore<'RealTimeClient'>>(
 ): DbFrom<'RealTimeClient'> {
   const db = {
     useEmulator() {},
-    app: createClientApp(store),
+    get app() {
+      return createClientApp(store);
+    },
     ref: () => {
-      return reference(store, null);
+      return reference(store);
     },
     refFromURL(url: url) {
       return reference(store, url);

@@ -12,7 +12,7 @@ describe('Basics: ', () => {
     const db = new RealTimeClient({ mocking: true, mockData: { foo: 'bar' } });
     await db.connect();
     expect(db.mock.db).toBeInstanceOf(Object);
-    expect((db.mock.db as any).foo).toBe('bar');
+    expect(db.mock.store.state.foo).toBe('bar');
     expect(db.isConnected).toBe(true);
   });
   it('Can connect to a real Firebase DB', async () => {
