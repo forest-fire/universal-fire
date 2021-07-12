@@ -51,7 +51,7 @@ export function createStore<
    * The in-memory dictionary/hash mantained by the mock RTDB to represent
    * the state of the database
    */
-  let _state: IDictionary = {};
+  let _state: IDictionary = initialState;
   /** flag to indicate whether dispatch events should be fired */
   let _silenceEvents = false;
   /** the artificial time delay used to simulate a real DB's network latency */
@@ -73,16 +73,16 @@ export function createStore<
   /**
    * Connects the mock database via an asynch operation
    */
-  const connect = async () => {
-    let data: IDictionary;
-    if (mockDataIsDelayed(initialState)) {
-      data = await initialState.connect();
-    } else {
-      await networkDelay();
-      data = initialState;
-    }
-    _state = data;
-  };
+  // const connect = async () => {
+  //   let data: IDictionary;
+  //   if (mockDataIsDelayed(initialState)) {
+  //     data = await initialState.connect();
+  //   } else {
+  //     await networkDelay();
+  //     data = initialState;
+  //   }
+  //   _state = data;
+  // };
 
   const addListener: IMockStore<TSdk>['addListener'] = (
     pathOrQuery,
