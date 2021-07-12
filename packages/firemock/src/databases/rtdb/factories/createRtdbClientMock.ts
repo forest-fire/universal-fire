@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { DbFrom, IMockStore } from '@forest-fire/types';
+import { IClientRtdbDatabase, IMockStore } from '@forest-fire/types';
 import { url } from 'common-types';
 import { reference } from '../index';
 import { createClientApp } from '../../firebase-app';
 
 export function createRtdbClientMock<T extends IMockStore<'RealTimeClient'>>(
   store: T
-): DbFrom<'RealTimeClient'> {
-  const db = {
+): IClientRtdbDatabase {
+  const db: IClientRtdbDatabase = {
     useEmulator() {},
     get app() {
       return createClientApp(store);
     },
-    ref: () => {
-      return reference(store);
+    ref(path?: string) {
+      return reference(store, path);
     },
     refFromURL(url: url) {
       return reference(store, url);

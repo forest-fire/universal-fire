@@ -54,7 +54,7 @@ export const snapshot: IRtdbMockSnapshotFactory<IRtdbSdk> = (
     },
 
     numChildren(): number {
-      if (typeof value === 'object') {
+      if (typeof value === 'object' && value) {
         return Object.keys(value).length;
       }
 

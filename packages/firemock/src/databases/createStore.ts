@@ -246,6 +246,7 @@ export function createStore<
       keys.forEach((key) => delete _state[key]);
     },
     getDb(path?: string) {
+      console.warn('getDb', { state: _state });
       return path ? get(_state, dotify(path)) : _state;
     },
     setDb<V extends unknown>(path: string, value: V, silent = false) {

@@ -82,7 +82,11 @@ describe('Read operations: ', () => {
 
   it('getSnapshot() gets statically set data in test DB', async () => {
     console.log('starting snapshot', db.isConnected);
-
+    await db.set('client-test-data', {
+      one: 'foo',
+      two: 'bar',
+      three: 'baz',
+    });
     const data = await db.getSnapshot('client-test-data');
     expect(data.val()).toBeInstanceOf(Object);
     expect(data.val().one).toBe('foo');

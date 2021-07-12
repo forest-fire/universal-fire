@@ -33,7 +33,6 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
 ): IRtdbReference {
   const serializedQuery: ISerializedQuery<IRtdbSdk> =
     typeof path === 'string' ? new SerializedRealTimeQuery<TSdk>(path) : path;
-
   const query_ = query(store, serializedQuery);
   const ref: IRtdbReference = {
     orderByKey: query_.orderByKey,
@@ -53,11 +52,17 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
     // eslint-disable-next-line @typescript-eslint/unbound-method
     orderByPriority: query_.orderByPriority,
     orderByValue: query_.orderByValue,
-    get ref() { return query_.ref },
+    get ref() {
+      return query_.ref;
+    },
     // eslint-disable-next-line @typescript-eslint/unbound-method
     startAfter: query_.startAfter,
     startAt: query_.startAt,
-    get key()  { return serializedQuery.path ? serializedQuery.path.split('/').pop() : null },
+    get key() {
+      return serializedQuery.path
+        ? serializedQuery.path.split('/').pop()
+        : null;
+    },
     child: (path) => {
       return reference(store, path);
     },
@@ -99,6 +104,7 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
     },
     set: async (value, onComplete) => {
       try {
+        console.warn('set value', { q: serializedQuery.path, val: value });
         store.setDb(serializedQuery.path, value);
         if (onComplete) onComplete(null);
         return store.networkDelay();

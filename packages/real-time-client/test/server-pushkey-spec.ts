@@ -1,3 +1,4 @@
+import 'jest-extended';
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
 
