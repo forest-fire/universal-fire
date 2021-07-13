@@ -4,8 +4,8 @@ import * as helpers from './testing/helpers';
 
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
-import { Fixture, SDK } from '@forest-fire/fixture';
-import { AuthProviderName } from '../../types/dist/types';
+import { Fixture, SchemaHelper } from '@forest-fire/fixture';
+import { AuthProviderName, SDK } from '@forest-fire/types';
 
 helpers.setupEnv();
 const config = {
@@ -34,19 +34,18 @@ describe('Mocking', () => {
   });
 
   it('getSnapshot() returns a mock snapshot', async () => {
-    const fixture1 = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+    const fixture1 = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
     addAnimals(fixture1, 10);
     const animals = await mockDb.getSnapshot('/animals');
     expect(animals.numChildren()).toBe(10);
 
-    const fixture2 = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
-    fixture2.queueSchema('animal', 5).generate();
+    fixture1.queueSchema('animal', 5).generate();
     const moreAnimals = await mockDb.getSnapshot('/animals');
     expect(moreAnimals.numChildren()).toBe(15);
   });
 
   it('getValue() returns a value from mock DB', async () => {
-    const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
     addAnimals(fixture, 10);
     const animals = await mockDb.getValue('/animals');
     expect(animals).toBeInstanceOf(Object);
@@ -57,7 +56,7 @@ describe('Mocking', () => {
   });
 
   it('getRecord() returns a record from mock DB', async () => {
-    const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
     addAnimals(fixture, 10);
     const firstKey: string = helpers.firstKey(mockDb.mock.store.state.animals);
     const animal = await mockDb.getRecord(`/animals/${firstKey}`);
@@ -68,7 +67,7 @@ describe('Mocking', () => {
   });
 
   it('getRecord() returns a record from mock DB with bespoke id prop', async () => {
-    const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
 
     addAnimals(fixture, 10);
     const firstKey: string = helpers.firstKey(mockDb.mock.store.state.animals);
@@ -81,7 +80,7 @@ describe('Mocking', () => {
   });
 
   it('getList() returns an array of records', async () => {
-    const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
 
     addAnimals(fixture, 10);
     const animals = await mockDb.getList('/animals');
@@ -93,7 +92,7 @@ describe('Mocking', () => {
   });
 
   it('getList() returns an array of records, with bespoke "id" property', async () => {
-    const fixture = await Fixture.prepare({ db: mockDb }, SDK.RealTimeClient);
+    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
 
     addAnimals(fixture, 10);
     const animals = await mockDb.getList('/animals', 'key');
@@ -117,12 +116,10 @@ describe('Mocking', () => {
 
   it('update() updates the mock DB', async () => {
     mockDb.mock.store.updateDb('/people', {
-      people: {
         abcd: {
           name: 'Frank Black',
           age: 45,
         },
-      },
     });
     await mockDb.update('/people/abcd', { age: 14 });
     const people = await mockDb.getRecord('/people/abcd');
@@ -148,17 +145,16 @@ describe('Mocking', () => {
     expect(helpers.firstRecord(people).age).toBe(45);
   });
 
-  it('read operations on mock with a schema prefix are offset correctly', async () => {
-    const fixture = await Fixture.prepare({ db: mockDb });
+  it.only('read operations on mock with a schema prefix are offset correctly', async () => {
+    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
     fixture
-      .addSchema('meal', (h: any) => () => ({
+      .addSchema('meal', (h: SchemaHelper<any>) => () => ({
         name: h.faker.random.arrayElement(['breakfast', 'lunch', 'dinner']),
         datetime: h.faker.date.recent(),
       }))
       .pathPrefix('authenticated');
     fixture.queueSchema('meal', 10);
     fixture.generate();
-
     expect(mockDb.mock.store.state.authenticated).toBeInstanceOf(Object);
     expect(mockDb.mock.store.state.authenticated.meals).toBeInstanceOf(Object);
     const list = await mockDb.getList('/authenticated/meals');

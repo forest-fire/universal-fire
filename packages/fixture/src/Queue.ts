@@ -49,6 +49,7 @@ export class Queue<T = any> {
    */
   public push(queueItem: any) {
     const id = fbKey.key();
+
     if (typeof queueItem !== 'object') {
       throw new Error('Using push() requires that the payload is an object');
     }
@@ -68,7 +69,7 @@ export class Queue<T = any> {
     }
 
     Queue._queues[this._name] =
-      typeof firstKey(queue) === 'object'
+      typeof queue[0] === 'object'
         ? queue.filter((item: any) => item[this.pkProperty] !== key)
         : queue.filter((item: any) => item !== key);
 
@@ -113,6 +114,7 @@ export class Queue<T = any> {
     }
     if (typeof currently === 'object' && typeof value === 'object') {
       value[this.pkProperty] = key;
+
       const updated = { ...(currently as any), ...(value as any) };
       this.enqueue(updated as T);
     } else {

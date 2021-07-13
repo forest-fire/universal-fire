@@ -23,11 +23,13 @@ export class Schema<T = any> {
    * Add a mocking function to be used to generate the schema in mock DB
    */
   public mock(cb: SchemaCallback<T>, newSchemaId?: string) {
+    const schemaId = newSchemaId || this.schemaId;
     this._schemas.enqueue({
-      id: newSchemaId || this.schemaId,
+      id: schemaId,
       fn: cb(new SchemaHelper<T>({} as T, getFakerLibrary())), // TODO: pass in support for DB lookups
       path: () => {
-        const schema: ISchema = this._schemas.find(newSchemaId || this.schemaId);
+        const schema: ISchema = this._schemas.find(schemaId);
+
         return [
           schema.prefix,
           schema.modelName
@@ -36,6 +38,7 @@ export class Schema<T = any> {
         ].join('/');
       },
     });
+
     return this;
   }
 
@@ -55,9 +58,7 @@ export class Schema<T = any> {
     prefix = prefix.replace(/\./g, '/'); // slash reference preferred over dot
     prefix =
       prefix.slice(-1) === '/' ? prefix.slice(0, prefix.length - 1) : prefix;
-
     this._schemas.update(this.schemaId, { prefix });
-
     return this;
   }
 

@@ -32,7 +32,6 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
     this.schemaId = schemaId;
     this.queueId = fbKey.key();
     const schema = this.schemas.find(schemaId);
-
     if (!schema) {
       console.log(`Schema "${schema}" does not exist; will SKIP.`);
     } else {

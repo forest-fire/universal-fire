@@ -96,7 +96,7 @@ export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
     } else {
       this._schema.addSchema(schema, mock);
     }
-    return this;
+    return this._schema;
   }
 
   public queueSchema<T = any>(
