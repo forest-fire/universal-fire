@@ -13,45 +13,32 @@ import {
   SDK,
   IClientAuth,
   AuthProviderName,
+  IMockDatabase,
+  IRtdbSdk,
 } from '@forest-fire/types';
 import { SchemaCallback } from './@types';
 import { FixtureError } from './errors/FixtureError';
 
-export { SDK };
-
-export class Fixture<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
-  db: IDictionary<any>;
+export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
+  db: IMockDatabase<TSdk>;
+  schema: Schema;
   /**
    * returns a Mock object while also ensuring that the
    * Faker library has been asynchronously imported.
    */
-  public static async prepare<
-    TAuth extends IClientAuth | IAdminAuth = IClientAuth
-  >(
+  public static async prepare<TSdk extends SDK = SDK.RealTimeClient>(
     /**
      * allows publishing of raw data into the database as the databases
      * initial state or alternatively to assign a callback function which
      * will be executed when the Mock DB is "connecting" and allows the
      * DB to be setup via mocking.
      */
-    options: IMockConfigOptions = {},
-    /**
-     * The Firebase SDK which invoked this Mock DB
-     */
-    sdk: SDK = SDK.RealTimeClient
+    options: IMockConfigOptions<TSdk> = {}
   ) {
     const defaultDbConfig = {};
     await importFakerLibrary();
 
-    const obj = new Fixture<TAuth>(
-      options.db
-        ? typeof options.db === 'function'
-          ? {}
-          : options.db || defaultDbConfig
-        : defaultDbConfig,
-      options.auth,
-      sdk
-    );
+    const obj = new Fixture(options.db, options.auth);
 
     // if (options.auth) {
     //   await initializeAuth(options.auth);
@@ -69,6 +56,7 @@ export class Fixture<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
   }
 
   constructor(
+    db: IMockDatabase<TSdk>,
     /**
      * Allows the initial **state** of the database to be specified. Either
      * _synchronously_ as a dictionary passed in or as function returning
@@ -82,7 +70,7 @@ export class Fixture<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
      * will be executed when the Mock DB is "connecting" and allows the
      * DB to be setup via mocking.
      */
-    mockData?: IDictionary,
+    // mockData?: IDictionary,
     /**
      * Provides configuration for the AUTH mocking.
      */
@@ -94,15 +82,15 @@ export class Fixture<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
      * indicates which database and SDK (aka, client/admin) that has requested
      * this mock db.
      */
-    protected sdk: SDK = SDK.RealTimeClient
   ) {
     // Queue.clearAll();
     // clearDatabase();
     // clearAuthUsers();
-    if (mockData && typeof mockData === 'object') {
-      this.db = mockData;
-    }
+    // if (mockData && typeof mockData === 'object') {
+    //   this.db = mockData;
+    // }
     // initializeAuth(mockAuth);
+    this.db = db;
   }
 
   /**
@@ -113,7 +101,8 @@ export class Fixture<TAuth extends IClientAuth | IAdminAuth = IClientAuth> {
   }
 
   public addSchema<S = any>(schema: string, mock?: SchemaCallback<S>) {
-    return new Schema<S>(schema, mock);
+    this.schema.addSchema(schema, mock);
+    return this;
   }
 
   public queueSchema<T = any>(

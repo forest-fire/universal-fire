@@ -6,15 +6,16 @@ import { IDictionary } from 'common-types';
 import { Queue } from './Queue';
 import { dotNotation, getRandomInt, pluralize, set } from './utils';
 import { first, get } from 'native-dash';
+import { IMockDatabase, SDK } from '@forest-fire/types';
 
-export class Deployment {
+export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
   private schemaId: string;
   private queueId: string;
   private _queue = new Queue<IQueue>('queue');
   private _schemas = new Queue<ISchema>('schemas');
   private _relationships = new Queue<IRelationship>('relationships');
 
-  constructor(private db: IDictionary) { }
+  constructor(private db: IMockDatabase<TSdk>) { }
 
   /**
    * Queue a schema for deployment to the mock DB
@@ -138,7 +139,8 @@ export class Deployment {
           : mock;
 
     // set(db, dbPath, payload);
-    // setDB(dbPath, payload);
+    
+    this.db.store.setDb(dbPath, payload);
 
     return key;
   }

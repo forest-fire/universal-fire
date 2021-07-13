@@ -6,7 +6,7 @@ import type {
   IEmailAuthProvider,
   IClientAuth,
 } from '../index';
-import { IMockDelayedState, IMockServerOptions } from './db-mocking/index';
+import { IMockDatabase, IMockDelayedState, IMockServerOptions } from './db-mocking/index';
 
 export type FakerStatic = typeof import('faker');
 
@@ -54,14 +54,14 @@ export interface IMockAuthConfig {
   options?: IMockServerOptions;
 }
 
-export interface IMockConfigOptions {
+export interface IMockConfigOptions<TSdk extends SDK> {
   auth?: IMockAuthConfig;
   /**
    * Sets the initial state of the mock database, or optionally you can
    * pass in an async function which will resolve into the state of the
    * database.
    */
-  db?: IDictionary | AsyncMockData;
+  db?: IMockDatabase<TSdk>;
 }
 
 /**

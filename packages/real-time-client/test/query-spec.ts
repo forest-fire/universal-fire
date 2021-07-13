@@ -3,7 +3,7 @@ import * as helpers from './testing/helpers';
 import { RealTimeClient } from '../src';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { Fixture } from '@forest-fire/fixture';
-import { IModel, SDK } from '@forest-fire/types';
+import { IModel, IRtdbSdk, SDK } from '@forest-fire/types';
 
 interface IPerson extends IModel {
   name: string;
@@ -21,7 +21,7 @@ describe('Query based Read ops:', () => {
   });
   beforeEach(async () => {
     db = await RealTimeClient.connect({ mocking: true });
-    const fixture = await Fixture.prepare({ db }, SDK.RealTimeClient);
+    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: db.mock });
     fixture.addSchema('person', personMockGenerator);
     fixture.queueSchema('person', 20);
     fixture.queueSchema('person', 5, { age: 100 });
@@ -31,6 +31,7 @@ describe('Query based Read ops:', () => {
   });
 
   it('getSnapshot() works with query passed in', async () => {
+    console.warn(db.mock.store.state);
     let data = await db.getSnapshot('people');
     expect(data.numChildren()).toBe(33); // baseline check
     // TODO: refactor the class definition in order to fix the type errors

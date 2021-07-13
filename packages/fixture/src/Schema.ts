@@ -110,6 +110,6 @@ export class Schema<T = any> {
     if (mock) {
       s.mock(mock);
     }
-    return new Schema<D>(schema);
+    return this;
   }
 }
