@@ -59,7 +59,7 @@ describe('Read operations: ', () => {
     name: `${h.faker.name.firstName() as string} ${
       h.faker.name.lastName() as string
     }`,
-    age: h.faker.random.number({ min: 10, max: 99 }),
+    age: h.faker.datatype.number({ min: 10, max: 99 }),
   });
   beforeAll(async () => {
     db = await RealTimeClient.connect(config);

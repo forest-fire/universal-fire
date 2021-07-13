@@ -2,8 +2,8 @@ import * as helpers from './testing/helpers';
 
 import { RealTimeClient } from '../src';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import { Fixture } from '@forest-fire/fixture';
-import { IModel, IRtdbSdk, SDK } from '@forest-fire/types';
+import { Fixture, ISchemaHelper } from '@forest-fire/fixture';
+import { IModel, SDK } from '@forest-fire/types';
 
 interface IPerson extends IModel {
   name: string;
@@ -13,11 +13,9 @@ interface IPerson extends IModel {
 describe('Query based Read ops:', () => {
   helpers.setupEnv();
   let db: RealTimeClient;
-  const personMockGenerator = (h: any) => () => ({
-    name: `${h.faker.name.firstName() as string} ${
-      h.faker.name.lastName() as string
-    }`,
-    age: h.faker.random.number({ min: 10, max: 99 }),
+  const personMockGenerator = (h: ISchemaHelper<any>) => () => ({
+    name: `${h.faker.name.firstName()} ${h.faker.name.lastName()}`,
+    age: h.faker.datatype.number({ min: 10, max: 99 }),
   });
   beforeEach(async () => {
     db = await RealTimeClient.connect({ mocking: true });
@@ -31,7 +29,6 @@ describe('Query based Read ops:', () => {
   });
 
   it('getSnapshot() works with query passed in', async () => {
-    console.warn(db.mock.store.state);
     let data = await db.getSnapshot('people');
     expect(data.numChildren()).toBe(33); // baseline check
     // TODO: refactor the class definition in order to fix the type errors
@@ -43,14 +40,18 @@ describe('Query based Read ops:', () => {
     // data.val().map(x => x.age).map(age => expect(age).to.equal(5));
     expect(helpers.firstRecord(data.val()).age).toBe(100);
     expect(helpers.lastRecord(data.val()).age).toBe(100);
-    const q2 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>('people')
+    const q2 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>(
+      'people'
+    )
       .orderByChild('age')
       .limitToLast(5);
     data = await db.getSnapshot(q2);
     expect(data.numChildren()).toBe(5);
     expect(helpers.firstRecord(data.val()).age).toBe(1);
     expect(helpers.lastRecord(data.val()).age).toBe(1);
-    const q3 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>('people')
+    const q3 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>(
+      'people'
+    )
       .orderByChild('age')
       .equalTo(3);
     data = await db.getSnapshot(q3);
@@ -70,14 +71,18 @@ describe('Query based Read ops:', () => {
     expect(data.length).toBe(5);
     data.map((d) => d.age).map((age) => expect(age).toBe(100));
 
-    const q2 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>('people')
+    const q2 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>(
+      'people'
+    )
       .orderByChild('age')
       .limitToLast(5);
     data = await db.getList<IPerson>(q2);
     expect(data.length).toBe(5);
     data.map((d) => d.age).map((age) => expect(age).toBe(1));
 
-    const q3 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>('people')
+    const q3 = new SerializedRealTimeQuery<SDK.RealTimeClient, IPerson>(
+      'people'
+    )
       .orderByChild('age')
       .equalTo(3);
     data = await db.getList<IPerson>(q3);

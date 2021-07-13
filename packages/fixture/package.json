@@ -27,7 +27,7 @@
     "test": "scripty"
   },
   "devDependencies": {
-    "@types/faker": "5.5.6",
+    "@types/faker": "5.5.7",
     "firemock": "0.59.2",
     "native-dash": "1.15.1",
     "@forest-fire/types": "0.59.2"

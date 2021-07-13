@@ -4,6 +4,7 @@ import {
   Deployment,
   getFakerLibrary,
   importFakerLibrary,
+  Queue,
 } from '~/index';
 
 import {
@@ -11,17 +12,15 @@ import {
   IAdminAuth,
   IMockConfigOptions,
   SDK,
-  IClientAuth,
   AuthProviderName,
   IMockDatabase,
-  IRtdbSdk,
 } from '@forest-fire/types';
 import { SchemaCallback } from './@types';
 import { FixtureError } from './errors/FixtureError';
 
 export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
-  db: IMockDatabase<TSdk>;
-  schema: Schema;
+  private _db: IMockDatabase<TSdk>;
+  private _schema: Schema;
   /**
    * returns a Mock object while also ensuring that the
    * Faker library has been asynchronously imported.
@@ -35,24 +34,15 @@ export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
      */
     options: IMockConfigOptions<TSdk> = {}
   ) {
-    const defaultDbConfig = {};
     await importFakerLibrary();
 
     const obj = new Fixture(options.db, options.auth);
-
-    // if (options.auth) {
-    //   await initializeAuth(options.auth);
-    // }
-
-    // if (typeof options.db === 'function') {
-    //   obj.updateDB(await (options.db as AsyncMockData)());
-    // }
 
     return obj;
   }
 
   public get deploy() {
-    return new Deployment(this.db);
+    return new Deployment(this._db);
   }
 
   constructor(
@@ -77,20 +67,20 @@ export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
     mockAuth: IMockAuthConfig = {
       providers: [AuthProviderName.anonymous],
       users: [],
-    },
+    }
     /**
      * indicates which database and SDK (aka, client/admin) that has requested
      * this mock db.
      */
   ) {
-    // Queue.clearAll();
+    Queue.clearAll();
     // clearDatabase();
     // clearAuthUsers();
     // if (mockData && typeof mockData === 'object') {
     //   this.db = mockData;
     // }
     // initializeAuth(mockAuth);
-    this.db = db;
+    this._db = db;
   }
 
   /**
@@ -101,7 +91,11 @@ export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
   }
 
   public addSchema<S = any>(schema: string, mock?: SchemaCallback<S>) {
-    this.schema.addSchema(schema, mock);
+    if (!this._schema) {
+      this._schema = new Schema(schema, mock);
+    } else {
+      this._schema.addSchema(schema, mock);
+    }
     return this;
   }
 
@@ -110,9 +104,12 @@ export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
     quantity: number = 1,
     overrides: IDictionary = {}
   ) {
-    const d = new Deployment(this.db);
-    d.queueSchema(schemaId, quantity, overrides);
-    return d;
+    new Deployment(this._db).queueSchema(
+      schemaId,
+      quantity,
+      overrides
+    );
+    return this;
   }
 
   public generate() {
@@ -123,7 +120,6 @@ export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
         'firemock/faker-not-ready'
       );
     }
-
-    return new Deployment(this.db).generate();
+    return new Deployment(this._db).generate();
   }
 }

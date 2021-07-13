@@ -179,7 +179,6 @@ export class SerializedRealTimeQuery<
   public deserialize(db?: IRtdbDatabase): IFirebaseRtdbReference {
     const database = db || this.db;
     let q = database.ref(this.path) as unknown as IFirebaseRtdbQuery;
-
     switch (this._orderBy) {
       case 'orderByKey':
         q = q.orderByKey();

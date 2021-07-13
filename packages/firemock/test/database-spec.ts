@@ -35,7 +35,7 @@ interface IPerson {
 }
 const personMock: SchemaCallback<IPerson> = (h) => () => ({
   name: h.faker.name.firstName(),
-  age: h.faker.random.number({ min: 1, max: 70 }),
+  age: h.faker.datatype.number({ min: 1, max: 70 }),
   foo: 'bar',
   baz: 'baz',
 });

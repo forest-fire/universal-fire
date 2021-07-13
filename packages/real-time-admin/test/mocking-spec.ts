@@ -8,7 +8,7 @@ type SchemaCallback = import('firemock').SchemaCallback;
 const animalMocker: SchemaCallback = (h) => () => ({
   type: h.faker.random.arrayElement(['cat', 'dog', 'parrot']),
   name: h.faker.name.firstName(),
-  age: h.faker.random.number({ min: 1, max: 15 }),
+  age: h.faker.datatype.number({ min: 1, max: 15 }),
 });
 
 const config: IMockConfig = {

@@ -11,11 +11,12 @@ import { IMockDatabase, SDK } from '@forest-fire/types';
 export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
   private schemaId: string;
   private queueId: string;
-  private _queue = new Queue<IQueue>('queue');
-  private _schemas = new Queue<ISchema>('schemas');
-  private _relationships = new Queue<IRelationship>('relationships');
+  private queue: Queue<IQueue> = new Queue('queue');
+  private schemas: Queue<ISchema> = new Queue("schemas");
+  private relationships: Queue<IRelationship> = new Queue('relationships');
 
-  constructor(private db: IMockDatabase<TSdk>) { }
+  constructor(private db: IMockDatabase<TSdk>) {
+  }
 
   /**
    * Queue a schema for deployment to the mock DB
@@ -30,7 +31,7 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
   ) {
     this.schemaId = schemaId;
     this.queueId = fbKey.key();
-    const schema = this._schemas.find(schemaId);
+    const schema = this.schemas.find(schemaId);
 
     if (!schema) {
       console.log(`Schema "${schema}" does not exist; will SKIP.`);
@@ -42,7 +43,7 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
         quantity,
         overrides,
       };
-      this._queue.enqueue(newQueueItem);
+      this.queue.enqueue(newQueueItem);
     }
 
     return this;
@@ -54,7 +55,7 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
    * the schema currently being queued.
    */
   public quantifyHasMany(targetSchema: string, quantity: number) {
-    const hasMany = this._relationships.filter(
+    const hasMany = this.relationships.filter(
       (r) => r.type === 'hasMany' && r.source === this.schemaId
     );
     const targetted = hasMany.filter((r) => r.target === targetSchema);
@@ -68,8 +69,8 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
         `The "${targetSchema}" schema does not have a "hasMany" relationship with the "${this.schemaId}" model`
       );
     } else {
-      const queue = this._queue.find(this.queueId);
-      this._queue.update(this.queueId, {
+      const queue = this.queue.find(this.queueId);
+      this.queue.update(this.queueId, {
         hasMany: {
           ...queue.hasMany,
           ...{ [pluralize(targetSchema)]: quantity },
@@ -85,16 +86,16 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
    * valid FK reference when this queue is generated.
    */
   public fulfillBelongsTo(targetSchema: string) {
-    const schema = this._schemas.find(this.schemaId);
+    const schema = this.schemas.find(this.schemaId);
     const relationship = first(
-      this._relationships
+      this.relationships
         .filter((r) => r.source === this.schemaId)
         .filter((r) => r.target === targetSchema)
     );
 
     const sourceProperty = schema.path();
-    const queue = this._queue.find(this.queueId);
-    this._queue.update(this.queueId, {
+    const queue = this.queue.find(this.queueId);
+    this.queue.update(this.queueId, {
       belongsTo: {
         ...queue.belongsTo,
         ...{ [`${targetSchema}Id`]: true },
@@ -107,26 +108,26 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
   public generate() {
     // iterate over each schema that has been queued
     // for generation
-    this._queue.map((q: IQueue) => {
+    this.queue.map((q: IQueue) => {
       for (let i = q.quantity; i > 0; i--) {
         this.insertMockIntoDB(q.schema, q.overrides);
       }
     });
 
-    this._queue.map((q: IQueue) => {
+    this.queue.map((q: IQueue) => {
       for (let i = q.quantity; i > 0; i--) {
         this.insertRelationshipLinks(q);
       }
     });
 
-    this._queue.clear();
+    this.queue.clear();
   }
 
   /**
    * Adds in a given record/mock into the mock database
    */
   private insertMockIntoDB(schemaId: string, overrides: IDictionary) {
-    const schema: ISchema = this._schemas.find(schemaId);
+    const schema: ISchema = this.schemas.find(schemaId);
     const mock = schema.fn();
     const path = schema.path();
     const key = overrides.id || fbKey.key();
@@ -135,18 +136,17 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
       typeof mock === 'object'
         ? { ...mock, ...overrides }
         : overrides && typeof overrides !== 'object'
-          ? overrides
-          : mock;
+        ? overrides
+        : mock;
 
     // set(db, dbPath, payload);
-    
     this.db.store.setDb(dbPath, payload);
 
     return key;
   }
 
   private insertRelationshipLinks(queue: IQueue) {
-    const relationships = this._relationships.filter(
+    const relationships = this.relationships.filter(
       (r) => r.source === queue.schema
     );
     const belongsTo = relationships.filter((r) => r.type === 'belongsTo');
@@ -157,12 +157,12 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
         Object.keys(queue.belongsTo || {})
           .filter((v) => queue.belongsTo[v] === true)
           .indexOf(r.sourceProperty) !== -1;
-      const source = this._schemas.find(r.source);
-      const target = this._schemas.find(r.target);
+      const source = this.schemas.find(r.source);
+      const target = this.schemas.find(r.target);
       let getID: () => string;
 
       if (fulfill) {
-        const mockAvailable = this._schemas.find(r.target) ? true : false;
+        const mockAvailable = this.schemas.find(r.target) ? true : false;
         const available = Object.keys(this.db[pluralize(r.target)] || {});
         const generatedAvailable = available.length > 0;
 
@@ -184,10 +184,18 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
 
       const property = r.sourceProperty;
       const path = source.path();
-      const recordList: IDictionary = get(this.db, dotNotation(source.path()), {});
+      const recordList: IDictionary = get(
+        this.db,
+        dotNotation(source.path()),
+        {}
+      );
 
       Object.keys(recordList).forEach((key) => {
-        set(this.db, `${dotNotation(source.path())}.${key}.${property}`, getID());
+        set(
+          this.db,
+          `${dotNotation(source.path())}.${key}.${property}`,
+          getID()
+        );
       });
     });
 
@@ -196,12 +204,12 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
         Object.keys(queue.hasMany || {}).indexOf(r.sourceProperty) !== -1;
       const howMany = fulfill ? queue.hasMany[r.sourceProperty] : 0;
 
-      const source = this._schemas.find(r.source);
-      const target = this._schemas.find(r.target);
+      const source = this.schemas.find(r.source);
+      const target = this.schemas.find(r.target);
       let getID: () => string;
 
       if (fulfill) {
-        const mockAvailable = this._schemas.find(r.target) ? true : false;
+        const mockAvailable = this.schemas.find(r.target) ? true : false;
         const available = Object.keys(this.db[pluralize(r.target)] || {});
         const used: string[] = [];
         const generatedAvailable = available.length > 0;

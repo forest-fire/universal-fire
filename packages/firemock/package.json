@@ -34,7 +34,7 @@
     "@vuepress/plugin-medium-zoom": "^1.7.1",
     "@vuepress/plugin-pwa": "^1.7.1",
     "eledoc": "^0.2.1",
-    "faker": "^4.1.0",
+    "faker": "^5.5.3",
     "firebase-key": "^2.0.2",
     "native-dash": "~1.15.1",
     "scripty": "^2.0.0",

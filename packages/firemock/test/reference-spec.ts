@@ -14,7 +14,7 @@ describe('Reference functions', () => {
   const mocker: SchemaCallback = (h) => () => ({
     name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
     gender: h.faker.helpers.randomize(['male', 'female']),
-    age: h.faker.random.number({ min: 1, max: 10 }),
+    age: h.faker.datatype.number({ min: 1, max: 10 }),
   });
   interface IMocker {
     name: string;
@@ -362,7 +362,7 @@ describe('Reference functions', () => {
 
     const personMock = (h: SchemaHelper) => () => ({
       name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
-      age: h.faker.random.number({ min: 1, max: 80 }),
+      age: h.faker.datatype.number({ min: 1, max: 80 }),
       inUSA: h.faker.random.boolean(),
     });
 
@@ -437,10 +437,10 @@ describe('Reference functions', () => {
     it('orderByValue() sorts on server correctly', async () => {
       const m = await Mock.prepare();
       m.addSchema('number', (h) => () =>
-        h.faker.random.number({ min: 0, max: 10 })
+        h.faker.datatype.number({ min: 0, max: 10 })
       );
       m.addSchema('number2', (h) => () =>
-        h.faker.random.number({ min: 20, max: 30 })
+        h.faker.datatype.number({ min: 20, max: 30 })
       ).modelName('number');
       m.queueSchema('number', 10);
       m.queueSchema('number2', 10);

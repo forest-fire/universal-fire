@@ -146,8 +146,7 @@ export function createStore<
     const justKey = (obj: IDictionary) => (obj ? Object.keys(obj)[0] : null);
     const justValue = (obj: IDictionary): unknown =>
       justKey(obj) ? obj[justKey(obj)] : null;
-
-    api.getAllListeners().forEach((listener) => {
+    api.getAllListeners()?.forEach((listener) => {
       const eventPathsUnderListener = eventPaths.filter((path) =>
         path.includes(dotify(listener.query.path))
       );

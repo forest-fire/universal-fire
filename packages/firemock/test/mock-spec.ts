@@ -157,7 +157,7 @@ describe('Mock class()', () => {
     it('Mocking function that returns a scalar works as intended', async () => {
       const m = await Mock.prepare();
       m.addSchema('number', (h) => () =>
-        h.faker.random.number({ min: 0, max: 1000 })
+        h.faker.datatype.number({ min: 0, max: 1000 })
       );
       m.addSchema('string', (h) => () => h.faker.random.words(3));
       m.queueSchema('number', 10);

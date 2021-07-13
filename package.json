@@ -24,6 +24,7 @@
     "build:sdk:rtdb:client": "lerna exec --scope @forest-fire/real-time-client yarn build",
     "build:sdk:rtdb:admin": "lerna exec --scope @forest-fire/real-time-admin yarn build",
     "build:firemock": "lerna exec --scope firemock yarn build",
+    "build:fixture": "lerna exec --scope @forest-fire/fixture yarn build",
     "build:docs": "yarn docs:build",
     "test": "lerna run test --concurrency 4 --stream",
     "test:serial": "lerna run test --concurrency 1 --stream",

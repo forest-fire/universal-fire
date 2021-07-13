@@ -34,7 +34,7 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
     },
     endAt: (value, key) => {
       serializedQuery.endAt(value, key);
-      return this;
+      return query(store, serializedQuery);
     },
     equalTo: (value, key) => {
       serializedQuery.equalTo(value, key);
@@ -45,18 +45,18 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
       }
       serializedQuery.equalTo(value, key);
 
-      return this;
+      return query(store, serializedQuery);
     },
     isEqual: (other: IRtdbQuery & { _query: ISerializedQuery<IRtdbSdk> }) => {
       return serializedQuery.hashCode() === other._query.hashCode();
     },
     limitToFirst: (limit: number) => {
       serializedQuery.limitToFirst(limit);
-      return this;
+      return query(store, serializedQuery);
     },
     limitToLast: (limit: number) => {
       serializedQuery.limitToLast(limit);
-      return this;
+      return query(store, serializedQuery);
     },
     off: (
       _eventType?: IRtdbDbEvent,
@@ -92,27 +92,27 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
     },
     orderByChild: (prop: string) => {
       serializedQuery.orderByChild(prop);
-      return this;
+      return query(store, serializedQuery);
     },
     orderByKey: () => {
       serializedQuery.orderByKey();
-      return this;
+      return query(store, serializedQuery);
     },
     orderByPriority: () => {
       // TODO: should we implement? this idea of Priority is code smell these days
       // _query.order();
-      return this;
+      return query(store, serializedQuery);
     },
     orderByValue: () => {
       serializedQuery.orderByValue();
-      return this;
+      return query(store, serializedQuery);
     },
     get ref() {
       return reference(store, serializedQuery)
     },
     startAt: (value) => {
       serializedQuery.startAt(value);
-      return this;
+      return query(store, serializedQuery);
     },
     toJSON: () => ({
       url: reference(store, serializedQuery).toString(),

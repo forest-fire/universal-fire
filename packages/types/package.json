@@ -27,8 +27,8 @@
     "@firebase/app-types": "^0.6.2",
     "@firebase/auth-types": "^0.10.1",
     "@firebase/database-types": "^0.7.2",
-    "@types/faker": "^4.1.12",
-    "faker": "^4.1.0",
+    "@types/faker": "^5.5.7",
+    "faker": "^5.5.3",
     "firebase-admin": "9.4.1"
   },
   "devDependencies": {

@@ -18,7 +18,7 @@ describe('Query based Read ops:', async () => {
     const personMockGenerator: SchemaCallback = h => () => {
       return {
         name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
-        age: h.faker.random.number({ min: 10, max: 99 })
+        age: h.faker.datatype.number({ min: 10, max: 99 })
       };
     };
     db.mock.addSchema('person', personMockGenerator);

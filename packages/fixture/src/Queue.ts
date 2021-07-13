@@ -142,17 +142,17 @@ export class Queue<T = any> {
 
     return typeof firstKey(queue) === 'object'
       ? queue.reduce((obj: IDictionary, item: any) => {
-        const pk: string = item[this.pkProperty];
-        // tslint:disable-next-line
-        const o = Object.assign({}, item);
-        delete o[this.pkProperty];
-        return { ...obj, ...{ [pk]: o } };
-      }, new Object())
+          const pk: string = item[this.pkProperty];
+          // tslint:disable-next-line
+          const o = Object.assign({}, item);
+          delete o[this.pkProperty];
+          return { ...obj, ...{ [pk]: o } };
+        }, new Object())
       : queue.reduce(
-        (obj: IDictionary, item: any) =>
-          (obj = { ...obj, ...{ [item]: true } }),
-        new Object()
-      );
+          (obj: IDictionary, item: any) =>
+            (obj = { ...obj, ...{ [item]: true } }),
+          new Object()
+        );
   }
 
   public map(fn: (f: any) => any): T[] {
@@ -175,7 +175,8 @@ export class Queue<T = any> {
 
   private _find(key: string | number) {
     const queue = Queue._queues[this._name];
-    const objectPayload = typeof firstKey(queue) === 'object';
+
+    const objectPayload = typeof queue[0] === 'object';
 
     let index = 0;
     let result: any[] = [null, -1];

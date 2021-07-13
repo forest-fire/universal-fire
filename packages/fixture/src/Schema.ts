@@ -22,21 +22,20 @@ export class Schema<T = any> {
   /**
    * Add a mocking function to be used to generate the schema in mock DB
    */
-  public mock(cb: SchemaCallback<T>) {
+  public mock(cb: SchemaCallback<T>, newSchemaId?: string) {
     this._schemas.enqueue({
-      id: this.schemaId,
+      id: newSchemaId || this.schemaId,
       fn: cb(new SchemaHelper<T>({} as T, getFakerLibrary())), // TODO: pass in support for DB lookups
       path: () => {
-        const schema: ISchema = this._schemas.find(this.schemaId);
+        const schema: ISchema = this._schemas.find(newSchemaId || this.schemaId);
         return [
           schema.prefix,
           schema.modelName
             ? pluralize(schema.modelName)
-            : pluralize(this.schemaId),
+            : pluralize(newSchemaId || this.schemaId),
         ].join('/');
       },
     });
-
     return this;
   }
 
@@ -106,10 +105,10 @@ export class Schema<T = any> {
 
   /** Add another schema */
   public addSchema<D>(schema: string, mock?: SchemaCallback<any>) {
-    const s = new Schema<D>(schema);
     if (mock) {
-      s.mock(mock);
+      this.mock(mock, schema);
     }
+
     return this;
   }
 }
