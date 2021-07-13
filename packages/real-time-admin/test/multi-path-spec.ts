@@ -4,7 +4,7 @@ import { RealTimeAdmin } from '../src/RealTimeAdmin';
 
 describe('CRUD Testing > ', () => {
   let db: RealTimeAdmin;
-  beforeEach(async () => {
+  beforeAll(async () => {
     db = new RealTimeAdmin({ mocking: true });
     await db.connect();
   });
@@ -17,10 +17,10 @@ describe('CRUD Testing > ', () => {
         foobaz: 'baz'
       });
 
-      expect(Object.keys(db.mock.db).length).toBe(3);
-      expect(Object.keys(db.mock.db)).toEqual(expect.arrayContaining(['foofoo']));
-      expect(Object.keys(db.mock.db)).toEqual(expect.arrayContaining(['foobar']));
-      expect(Object.keys(db.mock.db)).toEqual(expect.arrayContaining(['foobaz']));
+      expect(Object.keys(db.mock.store.state).length).toBe(3);
+      expect(Object.keys(db.mock.store.state)).toEqual(expect.arrayContaining(['foofoo']));
+      expect(Object.keys(db.mock.store.state)).toEqual(expect.arrayContaining(['foobar']));
+      expect(Object.keys(db.mock.store.state)).toEqual(expect.arrayContaining(['foobaz']));
     });
 
     it('sets value at all paths using mock DB', async () => {

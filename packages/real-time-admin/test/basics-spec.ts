@@ -12,7 +12,7 @@ describe('Basics: ', () => {
 
   it('Can connect to real DB', async () => {
     const db = await RealTimeAdmin.connect();
-    expect(db.isConnected).toBeInstanceOf('boolean');
+    expect(typeof db.isConnected === "boolean").toBeTruthy();
     expect(db.isConnected).toBe(true);
   });
 

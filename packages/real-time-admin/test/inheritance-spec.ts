@@ -1,4 +1,4 @@
-import { RealTimeDb } from '../../real-time-db/dist/types';
+import { RealTimeDb } from '@forest-fire/real-time-db';
 import { RealTimeAdmin } from '../src';
 
 describe('RealTimeAdmin => Inheritance => ', () => {

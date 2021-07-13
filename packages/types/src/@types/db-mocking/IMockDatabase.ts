@@ -1,4 +1,5 @@
 
+import { IDictionary } from 'brilliant-errors';
 import { IMockStore, IMockAuthMgmt, DbFrom, AuthFrom } from '../../index';
 import { ISdk } from '../fire-types';
 
@@ -24,7 +25,7 @@ export interface IMockDatabase<TSdk extends ISdk> {
   // /**
   //  * The in-memory representation of _state_ in the mock database
   //  */
-  // state: TState;
+  // state: IDictionary<any>;
 
   /**
    * An API surface which allows direct synchronous changes to the database's state.

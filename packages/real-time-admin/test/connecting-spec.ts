@@ -43,7 +43,7 @@ describe(`Connect to the database but don't re-connect`, () => {
         serviceAccount: process.env.FIREBASE_SERVICE_ACCOUNT,
         databaseURL: process.env.FIREBASE_DATABASE_URL,
       });
-      expect(RealTimeAdmin.connections).lengthOf.toBe(1);
+      expect(RealTimeAdmin.connections).toHaveLength(1);
     });
 
     it.skip('Going offline disconnects', async () => {
@@ -58,8 +58,8 @@ describe(`Connect to the database but don't re-connect`, () => {
       const db2 = await RealTimeAdmin.connect();
       const testData2 = await db.getValue('/test-data');
       expect(RealTimeAdmin.connections).toHaveLength(1);
-      expect(testData).toBeInstanceOf('object');
-      expect(testData2).toBeInstanceOf('object');
+      expect(typeof testData === "object").toBeTruthy();
+      expect(typeof testData2 === "object").toBeTruthy();
       const keys = Object.keys(testData);
       keys.forEach((key) => expect(testData[key]).toBe(testData2[key]));
     });

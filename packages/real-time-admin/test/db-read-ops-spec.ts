@@ -33,7 +33,7 @@ describe('DB Read operations: ', () => {
 
   it('getSnapshot() gets statically set data in test DB', async () => {
     const data = await db.getSnapshot('test-data');
-    expect(data.val()).toBeInstanceOf('object');
+    expect(typeof data.val() === "object").toBeTruthy();
     expect(data.val().one).toBe('foo');
     expect(data.val().two).toBe('bar');
     expect(data.val().three).toBe('baz');
@@ -42,7 +42,7 @@ describe('DB Read operations: ', () => {
 
   it('getValue() gets statically set data in test DB', async () => {
     const data = await db.getValue('test-data');
-    expect(data).toBeInstanceOf('object');
+    expect(typeof data === "object").toBeTruthy();
     expect(data.one).toBe('foo');
     expect(data.two).toBe('bar');
     expect(data.three).toBe('baz');
@@ -57,7 +57,7 @@ describe('DB Read operations: ', () => {
 
     const record = await db.getRecord<ITest>('/test-records/123456');
 
-    expect(record).toBeInstanceOf('object');
+    expect(typeof record === "object").toBeTruthy();
     expect(record.id).toBe('123456');
     expect(record.name).toBe('Chris');
     expect(record.age).toBe(50);
