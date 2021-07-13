@@ -23,15 +23,16 @@
     "test": "scripty"
   },
   "devDependencies": {
-    "brilliant-errors": "^0.3.1",
     "@forest-fire/types": "^0.59.2",
-    "scripty": "2.0.0",
+    "brilliant-errors": "^0.3.1",
     "eslint": "7.28.0",
-    "rimraf": "3.0.2"
+    "jest": "^27.0.6",
+    "rimraf": "3.0.2",
+    "scripty": "2.0.0"
   },
   "license": "MIT",
   "peerDependencies": {
-    "brilliant-errors": "^0.3.1",
-    "@forest-fire/types": "^0.59.2"
+    "@forest-fire/types": "^0.59.2",
+    "brilliant-errors": "^0.3.1"
   }
 }

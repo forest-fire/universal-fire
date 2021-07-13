@@ -27,5 +27,8 @@
     "@forest-fire/types": "^0.59.2",
     "@forest-fire/utility": "^0.59.2"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^27.0.6"
+  }
 }
