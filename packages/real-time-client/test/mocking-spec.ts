@@ -145,7 +145,7 @@ describe('Mocking', () => {
     expect(helpers.firstRecord(people).age).toBe(45);
   });
 
-  it.only('read operations on mock with a schema prefix are offset correctly', async () => {
+  it('read operations on mock with a schema prefix are offset correctly', async () => {
     const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
     fixture
       .addSchema('meal', (h: SchemaHelper<any>) => () => ({

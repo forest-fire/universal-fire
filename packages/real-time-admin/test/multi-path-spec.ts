@@ -1,6 +1,6 @@
 // tslint:disable:no-implicit-dependencies
 import { RealTimeAdmin } from '../src/RealTimeAdmin';
-import { expect } from 'chai';
+
 
 describe('CRUD Testing > ', () => {
   let db: RealTimeAdmin;

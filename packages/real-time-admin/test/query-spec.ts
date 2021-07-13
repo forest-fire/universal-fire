@@ -1,5 +1,5 @@
 // tslint:disable-next-line:no-implicit-dependencies
-import { expect } from 'chai';
+
 import { RealTimeAdmin } from '../src/index';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import * as helpers from './testing/helpers';

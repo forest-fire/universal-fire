@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+
 import { RealTimeAdmin } from '../src';
 import { setupEnv } from './testing/helpers';
 

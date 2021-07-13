@@ -1,5 +1,5 @@
 import { RealTimeAdmin } from '../src/index';
-import { expect } from 'chai';
+
 import * as helpers from './testing/helpers';
 import type { IMockConfig } from '@forest-fire/types';
 helpers.setupEnv();

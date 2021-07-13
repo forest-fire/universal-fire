@@ -1,5 +1,5 @@
 import { RealTimeAdmin } from '../src';
-import { expect } from 'chai';
+
 import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 
 describe('RealTimeAdmin => Inheritance => ', () => {

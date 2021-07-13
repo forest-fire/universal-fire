@@ -143,7 +143,7 @@ describe('Write Operations', () => {
       expect.arrayContaining(['Charlie'])
     );
     expect(helpers.valuesOf(users, 'name')).toEqual(
-      expect.arrayContaining(['Sandy'])
+      expect.arrayContaining(['Sandyx'])
     );
   });
 

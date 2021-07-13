@@ -1,6 +1,6 @@
 import { RealTimeAdmin } from '../src/index';
 // tslint:disable-next-line:no-implicit-dependencies
-import { expect } from 'chai';
+
 import * as helpers from './testing/helpers';
 
 helpers.setupEnv();

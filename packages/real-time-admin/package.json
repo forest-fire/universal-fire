@@ -30,9 +30,18 @@
     "docs": "vuepress docs"
   },
   "devDependencies": {
+    "@types/test-console": "^1.1.1",
+    "@types/js-yaml": "^4.0.2",
+    "@types/lodash": "^4.14.171",
     "@firebase/app": "^0.6.13",
     "firebase-admin": "^8.13.0",
-    "firemock": "^0.55.4"
+    "firemock": "^0.59.2",
+    "jest": "^27.0.6",
+    "jest-extended": "^0.11.5",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
+    "test-console": "^2.0.0",
+    "ts-jest": "^27.0.3"
   },
   "peerDependencies": {
     "firebase-admin": "^8.13.0"

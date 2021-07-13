@@ -1,6 +1,3 @@
-import './test-console'; // TS declaration
-// import '~/global.d.ts';
-
 import * as fs from 'fs';
 import * as process from 'process';
 import * as yaml from 'js-yaml';
@@ -9,8 +6,7 @@ import { stderr, stdout } from 'test-console';
 
 // tslint:disable:no-implicit-dependencies
 import { IDictionary } from 'common-types';
-import first from 'lodash.first';
-import last from 'lodash.last';
+import {first, last} from 'lodash';
 
 // tslint:disable-next-line
 interface Console {
@@ -49,7 +45,7 @@ export function setupEnv() {
   process.env.NODE_ENV = stage;
 
   const current = process.env;
-  const yamlConfig = yaml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
+  const yamlConfig = yaml.load(fs.readFileSync('./env.yml', 'utf8')) as IDictionary<any>;
   const combined = {
     ...yamlConfig[stage],
     ...process.env,

@@ -1,7 +1,7 @@
 // tslint:disable:no-implicit-dependencies
 import { RealTimeAdmin } from '../src/';
 import * as helpers from './testing/helpers';
-import { expect } from 'chai';
+
 import { auth } from 'firebase-admin';
 helpers.setupEnv();
 

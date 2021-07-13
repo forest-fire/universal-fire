@@ -1,5 +1,5 @@
 // tslint:disable-next-line:no-implicit-dependencies
-import { expect } from 'chai';
+
 import * as helpers from './testing/helpers';
 
 describe('Events', () => {
