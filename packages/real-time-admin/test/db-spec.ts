@@ -16,7 +16,7 @@ describe('Connecting to Database', () => {
 
 describe('Write Operations', () => {
   let db: RealTimeAdmin;
-  before(async () => {
+  beforeAll(async () => {
     db = await RealTimeAdmin.connect();
   });
   afterEach(async () => {
@@ -100,12 +100,12 @@ describe('Write Operations', () => {
     await db.remove('scratch/removal/user');
     user = await db.getValue<INameAndAge>('scratch/removal/user');
     expect(user).toBe(null);
-  }).timeout(5000);
+  }, 5000);
 });
 
 describe('Other Operations', () => {
   let db: RealTimeAdmin;
-  before(async () => {
+  beforeAll(async () => {
     db = await RealTimeAdmin.connect();
   });
   afterEach(async () => {

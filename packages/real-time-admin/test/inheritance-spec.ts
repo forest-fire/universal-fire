@@ -1,6 +1,5 @@
+import { RealTimeDb } from '../../real-time-db/dist/types';
 import { RealTimeAdmin } from '../src';
-
-import { AbstractedDatabase } from '@forest-fire/abstracted-database';
 
 describe('RealTimeAdmin => Inheritance => ', () => {
   it('RealTimeAdmin inherits from RealTimeDb', async () => {
@@ -8,8 +7,8 @@ describe('RealTimeAdmin => Inheritance => ', () => {
     expect(db).toBeInstanceOf(RealTimeAdmin);
   });
 
-  it('RealTimeAdmin inherits from AbstractedDatabase', async () => {
+  it('RealTimeAdmin inherits from RealTimeDb', async () => {
     const db = new RealTimeAdmin({ mocking: true });
-    expect(db).toBeInstanceOf(AbstractedDatabase);
+    expect(db).toBeInstanceOf(RealTimeDb);
   });
 });

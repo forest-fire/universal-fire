@@ -9,7 +9,7 @@ describe('DB Read operations: ', () => {
   let db: RealTimeAdmin;
   let dbMock: RealTimeAdmin;
 
-  before(async () => {
+  beforeAll(async () => {
     db = await RealTimeAdmin.connect();
     dbMock = await RealTimeAdmin.connect({ mocking: true });
 
