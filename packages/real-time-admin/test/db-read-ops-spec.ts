@@ -33,19 +33,19 @@ describe('DB Read operations: ', () => {
 
   it('getSnapshot() gets statically set data in test DB', async () => {
     const data = await db.getSnapshot('test-data');
-    expect(data.val()).to.be.an('object');
-    expect(data.val().one).to.be.equal('foo');
-    expect(data.val().two).to.be.equal('bar');
-    expect(data.val().three).to.be.equal('baz');
-    expect(data.key).to.equal('test-data');
+    expect(data.val()).toBeInstanceOf('object');
+    expect(data.val().one).toBe('foo');
+    expect(data.val().two).toBe('bar');
+    expect(data.val().three).toBe('baz');
+    expect(data.key).toBe('test-data');
   });
 
   it('getValue() gets statically set data in test DB', async () => {
     const data = await db.getValue('test-data');
-    expect(data).to.be.an('object');
-    expect(data.one).to.be.equal('foo');
-    expect(data.two).to.be.equal('bar');
-    expect(data.three).to.be.equal('baz');
+    expect(data).toBeInstanceOf('object');
+    expect(data.one).toBe('foo');
+    expect(data.two).toBe('bar');
+    expect(data.three).toBe('baz');
   });
 
   it('getRecord() gets statically set data in test DB', async () => {
@@ -57,9 +57,9 @@ describe('DB Read operations: ', () => {
 
     const record = await db.getRecord<ITest>('/test-records/123456');
 
-    expect(record).to.be.an('object');
-    expect(record.id).to.be.equal('123456');
-    expect(record.name).to.be.equal('Chris');
-    expect(record.age).to.be.equal(50);
+    expect(record).toBeInstanceOf('object');
+    expect(record.id).toBe('123456');
+    expect(record.name).toBe('Chris');
+    expect(record.age).toBe(50);
   });
 });

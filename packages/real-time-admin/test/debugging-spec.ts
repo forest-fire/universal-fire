@@ -11,19 +11,17 @@ describe.skip('Debugging: ', () => {
     const db = await RealTimeAdmin.connect({ debugging: true, mocking: true });
     await db.getValue('foo');
     const output: string[] = restore();
-    expect(output).to.be.an('array');
+    expect(output).toBeInstanceOf('array');
 
-    expect(
-      output.some(el => el.indexOf('FIREBASE') !== -1),
-      'expected FIREBASE to be in stdout'
-    ).to.equal(true);
+    // 'expected FIREBASE to be in stdout'
+    expect(output.some(el => el.indexOf('FIREBASE') !== -1)).toBe(true);
   });
 
   it.skip('debugging callback sends results to callback', async () => {
     const restore = helpers.captureStdout();
     let count = 0;
     const callback = (message: string) => {
-      expect(message).to.be.a('string');
+      expect(message).toBeInstanceOf('string');
       count++;
     };
     const db = await RealTimeAdmin.connect({
@@ -33,7 +31,7 @@ describe.skip('Debugging: ', () => {
     db.getValue('foo');
     db.set('foo2', 'happy happy');
     const output: string[] = restore();
-    expect(output.some(el => el.indexOf('FIREBASE') !== -1)).to.equal(false);
-    expect(count).to.greaterThan(0);
+    expect(output.some(el => el.indexOf('FIREBASE') !== -1)).toBe(false);
+    expect(count).toBeGreaterThan(0);
   });
 });

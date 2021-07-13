@@ -17,10 +17,10 @@ describe('CRUD Testing > ', () => {
         foobaz: 'baz'
       });
 
-      expect(Object.keys(db.mock.db).length).to.equal(3);
-      expect(Object.keys(db.mock.db)).contains('foofoo');
-      expect(Object.keys(db.mock.db)).contains('foobar');
-      expect(Object.keys(db.mock.db)).contains('foobaz');
+      expect(Object.keys(db.mock.db).length).toBe(3);
+      expect(Object.keys(db.mock.db)).toEqual(expect.arrayContaining(['foofoo']));
+      expect(Object.keys(db.mock.db)).toEqual(expect.arrayContaining(['foobar']));
+      expect(Object.keys(db.mock.db)).toEqual(expect.arrayContaining(['foobaz']));
     });
 
     it('sets value at all paths using mock DB', async () => {
@@ -36,9 +36,9 @@ describe('CRUD Testing > ', () => {
       const foobar = await db.getValue('/foobar');
       const foobar2 = await db.getValue('/foo/bar');
 
-      expect(foofoo).to.equal(1);
-      expect(foobar).to.equal(2);
-      expect(foobar2).to.equal(25);
+      expect(foofoo).toBe(1);
+      expect(foobar).toBe(2);
+      expect(foobar2).toBe(25);
     });
   });
 });

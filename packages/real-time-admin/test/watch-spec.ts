@@ -21,6 +21,6 @@ describe('Watch →', () => {
     });
     await db.remove('/foo2/bar4');
 
-    expect(events).to.have.lengthOf(3);
+    expect(events).toHaveLength(3);
   });
 });

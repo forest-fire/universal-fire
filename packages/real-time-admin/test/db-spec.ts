@@ -8,9 +8,9 @@ helpers.setupEnv();
 describe('Connecting to Database', () => {
   it('can get a value from database once connected', async () => {
     const db = await RealTimeAdmin.connect();
-    expect(db.isConnected).to.equal(true);
+    expect(db.isConnected).toBe(true);
     const root = await db.getValue('/');
-    expect(root).to.be.an('object');
+    expect(root).toBeInstanceOf('object');
   });
 });
 
@@ -42,9 +42,9 @@ describe('Write Operations', () => {
       age: 32
     });
     const users = await db.getValue('scratch/pushed');
-    expect(Object.keys(users).length).to.equal(2);
-    expect(helpers.valuesOf(users, 'name')).to.include('Charlie');
-    expect(helpers.valuesOf(users, 'name')).to.include('Sandy');
+    expect(Object.keys(users).length).toBe(2);
+    expect(helpers.valuesOf(users, 'name')).toEqual(expect.arrayContaining(['Charlie']));
+    expect(helpers.valuesOf(users, 'name')).toEqual(expect.arrayContaining(['Sandy']));
   });
 
   it('set() sets data at a given path in DB', async () => {
@@ -53,8 +53,8 @@ describe('Write Operations', () => {
       age: 25
     });
     const user = await db.getValue<INameAndAge>('scratch/set/user');
-    expect(user.name).to.equal('Charlie');
-    expect(user.age).to.equal(25);
+    expect(user.name).toBe('Charlie');
+    expect(user.age).toBe(25);
   });
 
   it('update() can "set" and then "update" contents', async () => {
@@ -63,15 +63,15 @@ describe('Write Operations', () => {
       age: 25
     });
     let user = await db.getValue<INameAndAge>('scratch/update/user');
-    expect(user.name).to.equal('Charlie');
-    expect(user.age).to.equal(25);
+    expect(user.name).toBe('Charlie');
+    expect(user.age).toBe(25);
     await db.update('scratch/update/user', {
       name: 'Charles',
       age: 34
     });
     user = await db.getValue<INameAndAge>('scratch/update/user');
-    expect(user.name).to.equal('Charles');
-    expect(user.age).to.equal(34);
+    expect(user.name).toBe('Charles');
+    expect(user.age).toBe(34);
   });
 
   it('update() leaves unchanged attributes as they were', async () => {
@@ -80,14 +80,14 @@ describe('Write Operations', () => {
       age: 25
     });
     let user = await db.getValue<INameAndAge>('scratch/update/user');
-    expect(user.name).to.equal('Rodney');
-    expect(user.age).to.equal(25);
+    expect(user.name).toBe('Rodney');
+    expect(user.age).toBe(25);
     await db.update('scratch/update/user', {
       age: 34
     });
     user = await db.getValue<INameAndAge>('scratch/update/user');
-    expect(user.name).to.equal('Rodney');
-    expect(user.age).to.equal(34);
+    expect(user.name).toBe('Rodney');
+    expect(user.age).toBe(34);
   });
 
   it('remove() eliminates a path -- and all children -- in DB', async () => {
@@ -96,10 +96,10 @@ describe('Write Operations', () => {
       age: 25
     });
     let user = await db.getValue<INameAndAge>('scratch/removal/user');
-    expect(user.name).to.equal('Rodney');
+    expect(user.name).toBe('Rodney');
     await db.remove('scratch/removal/user');
     user = await db.getValue<INameAndAge>('scratch/removal/user');
-    expect(user).to.equal(null);
+    expect(user).toBe(null);
   }).timeout(5000);
 });
 
@@ -115,9 +115,9 @@ describe('Other Operations', () => {
   it('exists() tests to true/false based on existance of data', async () => {
     await db.set('/scratch/existance', 'foobar');
     let exists = await db.exists('/scratch/existance');
-    expect(exists).to.equal(true, 'existance proven true after setting value');
+    expect(exists).toBe(true);
     await db.remove('/scratch/existance');
     exists = await db.exists('/scratch/existance');
-    expect(exists).to.equal(false, 'existance disproven after removal');
+    expect(exists).toBe(false);
   });
 });
