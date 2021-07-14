@@ -9,11 +9,11 @@ export function createRtdbAdminMock<T extends IMockStore<'RealTimeAdmin'>>(
 ): DbFrom<'RealTimeAdmin'> {
   return {
     app: createAdminApp(store),
-    ref() {
-      return reference(store, null) as IRtdbAdminReference;
+    ref(path?: string) {
+      return reference(store, path) as IRtdbAdminReference;
     },
     refFromURL(url: url) {
-      return reference(store, null) as IRtdbAdminReference;
+      return reference(store, url) as IRtdbAdminReference;
     },
     // eslint-disable-next-line @typescript-eslint/require-await
     async getRules() {
