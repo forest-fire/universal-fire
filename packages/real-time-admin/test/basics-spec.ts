@@ -19,6 +19,6 @@ describe('Basics: ', () => {
   it('Connecting provides access to all API endpoints that are expected', async () => {
     const db = await RealTimeAdmin.connect();
     const root = await db.getRecord('/');
-    expect(root).toBeInstanceOf('object');
+    expect(typeof root === "object").toBeTruthy();
   });
 });

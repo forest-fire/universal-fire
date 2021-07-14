@@ -106,7 +106,7 @@ describe('Query based Read ops:', () => {
 
     const list = await db.getList('hash');
     expect(list).toHaveLength(5);
-    expect(list[0]).toBeInstanceOf('object');
+    expect(typeof list[0] === "object").toBeTruthy();
   });
 
   it('getList() brings back a simple array when presented with a hashArray', async () => {
@@ -120,6 +120,6 @@ describe('Query based Read ops:', () => {
 
     const list = await db.getList('hash');
     expect(list).toHaveLength(5);
-    expect(list[0]).toBeInstanceOf('string');
+    expect(typeof list[0] === "string").toBeTruthy();
   });
 });

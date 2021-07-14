@@ -10,7 +10,7 @@ describe('Connecting to Database', () => {
     const db = await RealTimeAdmin.connect();
     expect(db.isConnected).toBe(true);
     const root = await db.getValue('/');
-    expect(root).toBeInstanceOf('object');
+    expect(typeof root === "object").toBeTruthy();
   });
 });
 
@@ -42,7 +42,7 @@ describe('Write Operations', () => {
       age: 32
     });
     const users = await db.getValue('scratch/pushed');
-    expect(Object.keys(users).length).toBe(2);
+    expect(Object.keys(users)).toHaveLength(2);
     expect(helpers.valuesOf(users, 'name')).toEqual(expect.arrayContaining(['Charlie']));
     expect(helpers.valuesOf(users, 'name')).toEqual(expect.arrayContaining(['Sandy']));
   });
