@@ -83,7 +83,6 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
       await store.networkDelay();
 
       const data = store.getDb(serializedQuery.path);
-      // console.warn("once", { path: serializedQuery.path, data})
 
       const results = runQuery(serializedQuery, data);
 

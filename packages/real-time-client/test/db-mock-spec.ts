@@ -142,9 +142,7 @@ describe('Write Operations', () => {
     expect(helpers.valuesOf(users, 'name')).toEqual(
       expect.arrayContaining(['Charlie'])
     );
-    expect(helpers.valuesOf(users, 'name')).toEqual(
-      expect.arrayContaining(['Sandyx'])
-    );
+    expect(helpers.valuesOf(users, "name")).toContain('Sandy');
   });
 
   it('set() sets data at a given path in DB', async () => {

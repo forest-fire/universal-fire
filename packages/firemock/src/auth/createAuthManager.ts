@@ -210,7 +210,7 @@ export function createAuthManager(): IMockAuthMgmt {
     const users =
       typeof config.users === 'function' ? await config.users() : config.users;
     _knownUsers = [];
-    users.forEach((u) => {
+    users?.forEach((u) => {
       addToUserPool(u);
     });
   };

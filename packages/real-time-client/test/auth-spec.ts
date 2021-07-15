@@ -15,9 +15,9 @@ describe('Authentication', () => {
     const db = await RealTimeClient.connect(config);
     const auth = await db.auth();
 
-    expect(auth).toBeInstanceOf(Object);
-    expect(auth.signInAnonymously).toBeInstanceOf(Function);
-    expect(auth.signInWithEmailAndPassword).toBeInstanceOf(Function);
-    expect(auth.onAuthStateChanged).toBeInstanceOf(Function);
+    expect(typeof auth === 'object').toBeTrue();
+    expect(typeof auth.signInAnonymously === 'function').toBeTrue();
+    expect(typeof auth.signInWithEmailAndPassword === 'function').toBeTrue();
+    expect(typeof auth.onAuthStateChanged === 'function').toBeTrue();
   });
 });
