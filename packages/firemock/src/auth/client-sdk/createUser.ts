@@ -1,4 +1,4 @@
-import { IMockAuthMgmt, User } from '@forest-fire/types';
+import { IMockAuthMgmt, ISdk, User } from '@forest-fire/types';
 import {
   getIdToken,
   getIdTokenResult,
@@ -13,7 +13,7 @@ import {
  * the API aspects are provided access to the `IMockAuthMgmt` api to
  * ensure function calls effect the correct AUTH instance.
  */
-export function createUser(api: IMockAuthMgmt, user: Partial<User>): User {
+export function createUser(api: IMockAuthMgmt<ISdk>, user: Partial<User>): User {
   const fns = {
     ...(notImplemented as Required<typeof notImplemented>),
     getIdToken,

@@ -1,4 +1,6 @@
 import {
+  AdminSdk,
+  ClientSdk,
   IDatabaseSdk,
   IMockAuthConfig,
   IMockAuthMgmt,
@@ -9,6 +11,7 @@ import { createAuthManager } from './createAuthManager';
 import { createClientAuth } from './client-sdk/index';
 import { createAdminAuth } from './admin-sdk/createAdminAuth';
 import { AuthFrom } from '@forest-fire/types';
+import { AuthProviderName } from '@forest-fire/types';
 
 /**
  * A factory function which generates the appropriate Auth API (for the
@@ -18,14 +21,14 @@ import { AuthFrom } from '@forest-fire/types';
 export async function createAuth<TDatabase extends IDatabaseSdk<TSdk>, TSdk extends ISdk>(
   container: TDatabase,
   mockAuth: IMockAuthConfig
-): Promise<[AuthFrom<TSdk>, IMockAuthMgmt]> {
-  const authManager = createAuthManager();
+): Promise<[AuthFrom<TSdk>, IMockAuthMgmt<TSdk>]> {
+  const authManager = createAuthManager<TSdk>();
   authManager.initializeAuth(mockAuth);
 
   return Promise.resolve([
     (isAdminSdk(container)
-      ? createAdminAuth(authManager)
-      : createClientAuth(authManager)) as AuthFrom<TSdk>,
+      ? createAdminAuth(createAuthManager() )
+      : createClientAuth(createAuthManager(AuthProviderName) ,
     authManager,
   ]);
 }

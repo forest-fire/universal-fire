@@ -1,7 +1,8 @@
 import type { IdTokenResult, IMockAuthMgmt } from '@forest-fire/types';
+import { ClientSdk } from '@forest-fire/types';
 import { getIdToken } from './getIdToken';
 
-export function getIdTokenResult(api: IMockAuthMgmt) {
+export function getIdTokenResult(api: IMockAuthMgmt<ClientSdk>) {
   return (forceRefresh?: boolean) => {
     return async (): Promise<IdTokenResult> => ({
       authTime: '',

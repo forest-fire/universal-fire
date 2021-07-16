@@ -1,5 +1,5 @@
 import { FireMockError } from '../../../errors/FireMockError';
-import { IMockAuthMgmt, NetworkDelay } from '@forest-fire/types';
+import { IMockAuthMgmt, NetworkDelay,ClientSdk} from '@forest-fire/types';
 import { networkDelay } from '../../../util';
 
 /**
@@ -18,7 +18,7 @@ import { networkDelay } from '../../../util';
  *
  * [Docs](https://firebase.google.com/docs/reference/js/firebase.User#updatepassword)
  */
-export const updatePassword = (api: IMockAuthMgmt) => async (
+export const updatePassword = (api: IMockAuthMgmt<ClientSdk>) => async (
   newPassword: string,
   notRecentLogin?: boolean
 ): Promise<void> => {

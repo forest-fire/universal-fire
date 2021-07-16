@@ -1,8 +1,8 @@
-import { IMockAuthMgmt, NetworkDelay } from '@forest-fire/types';
+import { IMockAuthMgmt, NetworkDelay, ClientSdk } from '@forest-fire/types';
 import { atRandom } from 'native-dash';
 import { networkDelay } from '../../../util';
 
-export function getIdToken(api: IMockAuthMgmt) {
+export function getIdToken(api: IMockAuthMgmt<ClientSdk>) {
   return async (): Promise<string> => {
     const user = api.getCurrentUser();
 

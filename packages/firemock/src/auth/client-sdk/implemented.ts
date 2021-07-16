@@ -17,13 +17,14 @@ import {
   AuthProviderName,
   Unsubscribe,
   UpdateRequest,
+  ClientSdk,
 } from '@forest-fire/types';
 
 import { FireMockError } from '../../errors';
 import { completeUserCredential, toUser } from '../../auth/util';
 import { createUser } from './createUser';
 
-export const implemented: (api: IMockAuthMgmt) => Partial<IClientAuth> = (
+export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth> = (
   api
 ) => ({
   tenantId: '',

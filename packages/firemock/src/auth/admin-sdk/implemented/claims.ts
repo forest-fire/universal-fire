@@ -1,7 +1,7 @@
 import { IDictionary } from 'common-types';
-import type { Auth, IMockAuthMgmt } from '@forest-fire/types';
+import type { AdminSdk, Auth, IMockAuthMgmt } from '@forest-fire/types';
 
-export const claims: (api: IMockAuthMgmt) => Partial<Auth> = (api) => ({
+export const claims: (api: IMockAuthMgmt<AdminSdk>) => Partial<Auth> = (api) => ({
   /**
    * Sets additional developer claims on an existing user identified by the provided uid,
    * typically used to define user roles and levels of access.
