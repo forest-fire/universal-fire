@@ -62,7 +62,7 @@ export interface IMockDatabase<TSdk extends ISdk> {
    * **Note:** hopefully for obvious reasons, consumers of this API should only use it for testing
    * use-cases as it _will not_ work with a real database!
    */
-  authManager: IMockAuthMgmt;
+  authManager: IMockAuthMgmt<TSdk>;
 }
 
 export type IClientRtdbMock = IMockDatabase<"RealTimeClient">;

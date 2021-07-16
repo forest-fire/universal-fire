@@ -1,11 +1,26 @@
-import { Mock } from '../src';
 import 'jest-extended';
+import {
+  IDatabaseSdk,
+  SDK,
+  IMockStore,
+  IMockData,
+  IMockDatabase,
+} from '@forest-fire/types';
+import {RealTimeClient} from "@forest-fire/real-time-client"
+import { firemock } from '../src';
 
 describe('EmailAuthProvider =>', () => {
+  let mockingDatabase: IDatabaseSdk<SDK.RealTimeClient>;
+
+  beforeAll(async () => {
+    mockingDatabase =  await RealTimeClient.connect(
+      { mocking: true } 
+    );
+  });
+
   it('EmailAuthProvider exists and has appropriate props', async () => {
-    const m = new Mock();
-    expect(m.authProviders).toBeInstanceOf(Object);
-    expect(m.authProviders.EmailAuthProvider.credential).toBeFunction();
+    expect(mockingDatabase.).toBeInstanceOf(Object);
+    expect(mockingDatabase.authManager.authProviders.EmailAuthProvider.credential).toBeFunction();
   });
 
   it('calling credential() gives back a valid AuthCredential', () => {

@@ -6,9 +6,10 @@ import {
   IMockAuthConfig,
   IMockUser,
   uid,
+  AuthProviders,
 } from '../../index';
 import { UpdateRequest } from '../fire-proxies';
-import { AuthProviderName } from '../fire-types';
+import { AuthProviderName, ISdk } from '../fire-types';
 import { NetworkDelay } from './network';
 
 export type IAuthObserver = (user: User | null) => unknown;
@@ -21,7 +22,7 @@ export type IAuthObserver = (user: User | null) => unknown;
  * advanced testing use cases but is -- of course -- not portable
  * to be used in a "real database".
  */
-export interface IMockAuthMgmt {
+export interface IMockAuthMgmt<TSdk extends ISdk>  {
   /**
    * initializes the state of the mock Auth system to it's starting state
    */
@@ -131,6 +132,8 @@ export interface IMockAuthMgmt {
 
   /** produces a network delay based on configured settings for Auth service */
   networkDelay(): Promise<void>;
+
+  authProviders: AuthProviders<TSdk>;
 
   /**
    * **findKnownUser**

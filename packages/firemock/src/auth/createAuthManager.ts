@@ -21,8 +21,10 @@ import {
 } from './type-guards/index';
 import { toUser } from './util';
 import { networkDelay as delay } from '../util';
+import { SDK } from "@forest-fire/types";
+import AuthProviders from "./client-sdk/AuthProviders";
 
-export function createAuthManager(): IMockAuthMgmt {
+export function createAuthManager<TSdk extends SDK>(): IMockAuthMgmt<TSdk> {
   const _anonymousUidQueue: string[] = [];
   let _providers: AuthProviderName[];
   const _authObservers: IAuthObserver[] = [];
@@ -263,6 +265,10 @@ export function createAuthManager(): IMockAuthMgmt {
     //
   };
 
+  const authProviders = () => { 
+    return AuthProviders;
+  }
+
   const networkDelay = async () => {
     await delay(_networkDelay);
   };
@@ -292,5 +298,6 @@ export function createAuthManager(): IMockAuthMgmt {
     networkDelay,
     removeFromUserPool,
     setNetworkDelay,
+    authProviders
   };
 }
