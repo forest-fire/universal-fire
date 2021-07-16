@@ -51,14 +51,14 @@ export function createStore<
    * The in-memory dictionary/hash mantained by the mock RTDB to represent
    * the state of the database
    */
-  let _state: IDictionary = initialState || {};
+  const _state: IDictionary = initialState || {};
   /** flag to indicate whether dispatch events should be fired */
   let _silenceEvents = false;
   /** the artificial time delay used to simulate a real DB's network latency */
   let _networkDelay: NetworkDelay | number | [number, number] =
     NetworkDelay.lazer;
 
-  let _listeners: IMockListener<ISdk>[];
+  let _listeners: IMockListener<ISdk>[] = [];
 
   const networkDelay = async () => {
     await delay(_networkDelay);
@@ -205,8 +205,9 @@ export function createStore<
     return response;
   };
 
-  const removeListener = (id: string) => {
-    _listeners = _listeners.filter((l) => l.id !== id);
+  const removeListener = (eventType: string) => {
+    _listeners = _listeners.filter((l) => l.eventType !== eventType);
+
   };
   const getAllListeners = () => {
     return _listeners;
@@ -228,6 +229,9 @@ export function createStore<
 
     addListener,
     removeListener,
+    removeAllListeners() {
+      _listeners = [];
+    },
     getAllListeners,
 
     silenceEvents: () => {

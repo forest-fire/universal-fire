@@ -68,6 +68,9 @@ export interface IMockStore<
    */
   removeListener(id: string): void;
 
+  removeAllListeners(): void;
+
+
   /** lists all the watchers currently operating on the mock database */
   getAllListeners(): IMockListener<ISdk>[];
 
