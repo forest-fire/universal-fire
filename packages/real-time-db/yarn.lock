@@ -2,6 +2,26 @@
 # yarn lockfile v1
 
 
+"@types/js-yaml@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.npmjs.org/@types/js-yaml/-/js-yaml-4.0.2.tgz#4117a7a378593a218e9d6f0ef44ce6d5d9edf7fa"
+  integrity sha512-KbeHS/Y4R+k+5sWXEYzAZKuB1yQlZtEghuhRxrVRLaqhtoG5+26JwQsa4HyS3AWX8v1Uwukma5HheduUDskasA==
+
+"@types/lodash@^4.14.171":
+  version "4.14.171"
+  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.171.tgz#f01b3a5fe3499e34b622c362a46a609fdb23573b"
+  integrity sha512-7eQ2xYLLI/LsicL2nejW9Wyko3lcpN6O/z0ZLHrEQsg280zIdCv1t/0m6UtBjUHokCGBQ3gYTbHzDkZ1xOBwwg==
+
+"@types/test-console@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/@types/test-console/-/test-console-1.1.1.tgz#2144fc6c82c9056393be40d48f1fcda20fde480e"
+  integrity sha512-atBsHbk4ToQrUi5Hep4a8iXXSxPJPj3Me8MKhLOsUW5tULIQlQFse6TJt9SYVm/1iPo4GlbGGBJA/X/yQ8TEIQ==
+
+argparse@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
+  integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
+
 brilliant-errors@^0.3.1:
   version "0.3.1"
   resolved "https://registry.npmjs.org/brilliant-errors/-/brilliant-errors-0.3.1.tgz#c3e59fa01f52069d6cd3f64da77436c0f75aea0f"
@@ -20,10 +40,27 @@ common-types@^1.15.6, common-types@^1.25.0:
   resolved "https://registry.npmjs.org/common-types/-/common-types-1.26.0.tgz#e2ab2a40aec9999cae1729b27336e89303655db3"
   integrity sha512-qrjJc8td9XsfScJqGYLDvrBpIiKsy0F8pekCRsZAUYlbnz1k9xiIf2J24iFTjcMnLiUyS/GQS8Il+dA6NgH9wQ==
 
+js-yaml@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.0.tgz#c1fb65f8f5017901cdd2c951864ba18458a10602"
+  integrity sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
+  dependencies:
+    argparse "^2.0.1"
+
 lodash-es@^4.17.15:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
   integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
+
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
+test-console@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/test-console/-/test-console-2.0.0.tgz#a279f7e2e148815224d8446ffa5208f0077d68fb"
+  integrity sha512-ciILzfCQCny8zy1+HEw2yBLKus7LNMsAHymsp2fhvGTVh5pWE5v2EB7V+5ag3WM9aO2ULtgsXVQePWYE+fb7pA==
 
 typed-conversions@^0.11.1:
   version "0.11.1"

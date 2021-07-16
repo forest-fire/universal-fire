@@ -1,13 +1,13 @@
 import { AbstractedProxyError, PermissionDenied } from '../src/errors';
-import { expect } from 'chai';
 
 describe('Errors => ', () => {
-  it('AbstractedErrorProxy works', async () => {
+  it('AbstractedErrorProxy works',  () => {
     const e = new Error('this is an abstracted error proxy');
     const e2 = new AbstractedProxyError(e, `test/msg`);
-    expect(e2.code).to.equal('msg');
-    expect(e2.name).to.equal('test/msg');
-    expect(e2.stackFrames).to.be.an('array');
+    expect(e2.code).toBe('msg');
+    expect(e2.name).toBe('test/msg');
+    console.log(e2);
+    expect(Array.isArray(e2.stackFrames)).toBeTruthy();
   });
 
   it('Permission Denied', async () => {
@@ -23,7 +23,7 @@ describe('Errors => ', () => {
       e,
       'Firebase Database - permission denied'
     );
-    expect(err.name).to.equal('RealTimeDb/permission-denied');
-    expect(err.code).to.equal('permission-denied');
+    expect(err.name).toBe('RealTimeDb/permission-denied');
+    expect(err.code).toBe('permission-denied');
   });
 });

@@ -55,5 +55,14 @@
     ],
     "reporter": [],
     "all": true
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.2",
+    "@types/lodash": "^4.14.171",
+    "@types/test-console": "^1.1.1",
+    "jest": "^27.0.6",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
+    "test-console": "^2.0.0"
   }
 }

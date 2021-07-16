@@ -4,29 +4,27 @@ import {
   GenericEventHandler,
   HandleValueEvent,
   IFirebaseEventHandler,
-  Mock,
-  SchemaCallback,
 } from '../src';
-import {
-  addListener,
-  findChildListeners,
-  findValueListeners,
-  listenerCount,
-  listenerPaths,
-  removeAllListeners,
-  removeListener,
-} from '../src/rtdb/listeners';
-import {
-  clearDatabase,
-  getDb,
-  pushDB,
-  removeDB,
-  reset,
-  setDB,
-  updateDB,
-} from '../src/rtdb/store';
+// import {
+//   addListener,
+//   findChildListeners,
+//   findValueListeners,
+//   listenerCount,
+//   listenerPaths,
+//   removeAllListeners,
+//   removeListener,
+// } from '../src/databases/rtdb';
+// import {
+//   clearDatabase,
+//   getDb,
+//   pushDB,
+//   removeDB,
+//   reset,
+//   setDB,
+//   updateDB,
+// } from '../src/rtdb/store';
 import { firstKey } from 'native-dash';
-
+import {SchemaCallback, Fixture} from "@forest-fire/fixture"
 import { wait } from 'common-types';
 
 interface IPerson {

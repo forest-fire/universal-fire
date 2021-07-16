@@ -25,6 +25,7 @@ export class AbstractedProxyError extends Error {
       });
     } catch (e) {
       // ignore if there was an error parsing
+      this.stackFrames = [];
     }
     const shortStack = this.stackFrames
       ? this.stackFrames

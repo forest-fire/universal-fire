@@ -1,9 +1,8 @@
-import { Mock, SchemaCallback } from '../src';
+import { SchemaCallback, Fixture } from "../src"
 
-import { length } from './testing/helpers';
 
 describe('Deployment', () => {
-  const animalMock: SchemaCallback = (h) => () => ({
+  const animalMock: SchemaCallback<any> = (h) => () => ({
     name: h.faker.name.firstName(),
     age: h.faker.helpers.randomize([1, 2, 4]),
     home: h.faker.address.streetAddress(),
