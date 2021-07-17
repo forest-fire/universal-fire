@@ -6,10 +6,9 @@ import {
 import { addRelationships, mockProperties } from "./index";
 
 import { FireModelError } from "@/errors";
-import { IAbstractedDatabase } from "universal-fire";
 import { IDictionary } from "common-types";
-import { Mock } from "firemock";
 import { Record } from "@/core";
+import { IDatabaseSdk, SDK } from "universal-fire";
 
 let mockPrepared = false;
 
@@ -27,13 +26,13 @@ export class MockApi<T> {
   };
 
   constructor(
-    db: IAbstractedDatabase,
+    db: IDatabaseSdk<SDK.RealTimeAdmin>,
     modelConstructor: FmModelConstructor<T>
   ) {
     this._db = db;
     this._modelConstructor = modelConstructor;
   }
-  private _db: IAbstractedDatabase;
+  private _db: IDatabaseSdk<SDK.RealTimeAdmin>;
   private _modelConstructor: FmModelConstructor<T>;
 
   /**
@@ -49,7 +48,7 @@ export class MockApi<T> {
     exceptions: Partial<T> = {}
   ): Promise<Array<IMockResponse<T>>> {
     if (!mockPrepared) {
-      await Mock.prepare();
+      await Fixture.prepare();
       mockPrepared = true;
     }
 
@@ -84,12 +83,10 @@ export class MockApi<T> {
           (typeof mock !== "function" && !validMocks.includes(mock as string))
         ) {
           throw new FireModelError(
-            `The mock for the "${
-              record.modelName
+            `The mock for the "${record.modelName
             }" model has dynamic segments and "${key}" was neither set as a fixed value in the exception parameter [ ${Object.keys(
               exceptions || {}
-            )} ] of generate() nor was the model constrained by a @mock type ${
-              mock ? `[ ${mock} ]` : ""
+            )} ] of generate() nor was the model constrained by a @mock type ${mock ? `[ ${mock} ]` : ""
             } which is deemed valid. Valid named mocks are ${JSON.stringify(
               validMocks
             )}; all bespoke mocks are accepted as valid.`,

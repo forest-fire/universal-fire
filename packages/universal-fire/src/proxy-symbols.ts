@@ -14,11 +14,8 @@ export type {
   IClientConfig,
   IClientAuth,
   IAdminAuth,
-} from '@forest-fire/types';
-export { SDK } from '@forest-fire/types';
-
-export { SerializedQuery } from '@forest-fire/serialized-query';
-export type {
+  SDK,
+  IDatabaseSdk,
   IComparisonOperator,
   ISerializedQuery,
   ISerializedIdentity,
@@ -26,6 +23,6 @@ export type {
   DbTypeFrom,
   AppFrom
 } from '@forest-fire/types';
-// TODO:
-// import type { Mock as IMockApi } from 'firemock';
-// export type { IMockApi };
+
+export { SerializedQuery } from '@forest-fire/serialized-query';
+

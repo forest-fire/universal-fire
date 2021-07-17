@@ -39,8 +39,6 @@ import {
   IFirestoreSdk,
 } from '@forest-fire/types';
 
-import type * as Firemock from "firemock";
-
 import { createError } from 'brilliant-errors';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
@@ -622,35 +620,18 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
   /**
    * **getFiremock**
    *
-   * Asynchronously imports the `firemock` library and _prepares_ it
-   * for use. When the promise resolves from this method the class's
-   * `_mock` property will be setup with a proper mock API.
-   *
-   * > because this is an optional requirement for consumers it will
-   * wrap with a try/catch and produce a graceful error message
-   * if an error is encountered.
+   * Establishes a mock database using the `firemock` repo
    */
-  protected async getFiremock(config: IMockConfig): Promise<void> {
-    let Firemock;
+  protected getFiremock(config: IMockConfig): void {
     try {
-      Firemock = await import(/* webpackChunkName: "firemock" */ 'firemock');
-    } catch (e) {
-      throw new FireError(
-        `To use mocking functions you must ensure that "firemock" is installed in your repo. Typically this would be installed as a "devDep" assuming that this mocking functionality is used as part of your tests but if you are shipping this mocking functionality then you will need to add it as full dependency.\n\n${(e as Error).message
-        }`,
-        'missing-dependency'
-      );
-    }
-
-    try {
-      this._mock = Firemock.createDatabase(
+      createDatabase(
         this.sdk,
-        { auth: config.mockAuth },
-        config.mockData,
+        { ...(config.mockAuth ? { auth: config.mockAuth } : {}), db: { mocking: true } },
+        config.mockData || {},
       );
     } catch (e) {
       throw new FireError(
-        `The firemock library was imported successfully but in trying to "prepare" it there was a failure: ${(e as Error).message
+        `A problem was encountered while trying to setup the mock database: ${(e as Error).message
         }`,
         'failed-mock-prep'
       );

@@ -37,7 +37,6 @@
     "@vuepress/plugin-medium-zoom": "^1.7.1",
     "@vuepress/plugin-pwa": "^1.7.1",
     "eledoc": "^0.2.1",
-    "faker": "^5.5.3",
     "firebase-key": "^2.0.2",
     "jest": "^27.0.6",
     "native-dash": "~1.15.1",
@@ -60,7 +59,6 @@
     "fast-equals": "^2.0.0"
   },
   "peerDependencies": {
-    "faker": "^4.1.0",
     "firebase-key": "^2.0.2",
     "native-dash": "~1.15.1",
     "typed-conversions": "~0.11.1"
