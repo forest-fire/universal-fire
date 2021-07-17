@@ -3936,7 +3936,7 @@ common-tags@^1.8.0:
   resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz"
   integrity sha512-6P6g0uetGpW/sdyUy/iQQCbFF0kWVMSIVSyYz7Zgjcgh8mgw8PQzDNZeyZ5DQ2gM7LBoZPHmnjz8rUthkBG5tw==
 
-"common-types@> 1.15.0", "common-types@> 1.15.8", common-types@^1.14.3, common-types@^1.15.6, common-types@^1.15.7, common-types@^1.15.8, common-types@^1.8.16, common-types@^1.9.6, common-types@^1.9.7:
+"common-types@> 1.15.0", "common-types@> 1.15.8", common-types@^1.14.3, common-types@^1.15.6, common-types@^1.15.7, common-types@^1.15.8, common-types@^1.8.16:
   version "1.18.4"
   resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.18.4.tgz"
   integrity sha512-ou6N8fYsDyFKy48kVr3PMuMGk2zk7qIEwzjKhxvppt4G7wEXA/ij6b3tfFzqS90h2IEPkZb5T7coFWRS3MTDIA==
@@ -4453,7 +4453,7 @@ date-and-time@^0.13.0:
   resolved "https://registry.yarnpkg.com/date-and-time/-/date-and-time-0.13.1.tgz"
   integrity sha512-/Uge9DJAT+s+oAcDxtBhyR8+sKjUnZbYmyhbmWjTHNtX7B7oWD8YyYdeXcBRbwSj6hVvj+IQegJam7m7czhbFw==
 
-date-fns@^2.14.0, date-fns@^2.15.0:
+date-fns@^2.14.0:
   version "2.16.1"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.16.1.tgz"
   integrity sha512-sAJVKx/FqrLYHAQeN7VpJrPhagZc9R4ImZIWYRFZaaohR3KzmuK88touwsSwSVT8Qcbd4zoDsnGfX4GFB4imyQ==
@@ -4760,11 +4760,6 @@ detective-typescript@^6.0.0:
     ast-module-types "^2.7.1"
     node-source-walk "^4.2.0"
     typescript "^3.9.7"
-
-dexie@^3.0.2:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/dexie/-/dexie-3.0.3.tgz"
-  integrity sha512-BSFhGpngnCl1DOr+8YNwBDobRMH0ziJs2vts69VilwetHYOtEDcLqo7d/XiIphM0tJZ2rPPyAGd31lgH2Ln3nw==
 
 dicer@^0.3.0:
   version "0.3.0"
@@ -5673,17 +5668,12 @@ faker@^4.1.0:
   resolved "https://registry.yarnpkg.com/faker/-/faker-4.1.0.tgz"
   integrity sha1-HkW7vsxndLPBlfrSg1EJxtdIzD8=
 
-fast-copy@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/fast-copy/-/fast-copy-2.1.0.tgz"
-  integrity sha512-j4VxAVJsu9NHveYrIj0+nJxXe2lOlibKTlyy0jH8DBwcuV6QyXTy0zTqZhmMKo7EYvuaUk/BFj/o6NU6grE5ag==
-
 fast-copy@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/fast-copy/-/fast-copy-2.1.1.tgz"
   integrity sha512-Qod3DdRgFZ8GUIM6ygeoZYpQ0QLW9cf/FS9KhhjlYggcSZXWAemAw8BOCO5LuYCrR3Uj3qXDVTUzOUwG8C7beQ==
 
-fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
+fast-deep-equal@^3.1.1:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
@@ -5917,7 +5907,7 @@ firebase-key@^2.0.2:
   resolved "https://registry.yarnpkg.com/firebase-key/-/firebase-key-2.0.2.tgz"
   integrity sha512-gH0u6apANQsqHUqcf+Yd49VaUQyKNCLxofwYx0gqUGcymeLs5HWg/3tXroGheYYH8+ynxbrnP/Z4F/FEqNy9Ow==
 
-firemock@^0.58.1, firemock@^0.58.4, firemock@~0.58.1:
+firemock@^0.58.1, firemock@^0.58.4:
   version "0.58.4"
   resolved "https://registry.yarnpkg.com/firemock/-/firemock-0.58.4.tgz"
   integrity sha512-t3XX+s8bmznWDylZ0TfVABjbUYjkohiVqXjpIypUoOym9xBAJ5AbqssiJbZGV0ahwPXP/f1Bd5rjR8ErWm4Z4A==
@@ -5934,24 +5924,6 @@ firemock@^0.58.1, firemock@^0.58.4, firemock@~0.58.1:
     firebase-key "^2.0.2"
     native-dash "~1.2.7"
     typed-conversions "~0.11.1"
-
-firemodel@^0.58.3:
-  version "0.58.3"
-  resolved "https://registry.yarnpkg.com/firemodel/-/firemodel-0.58.3.tgz"
-  integrity sha512-aEQhUZ1vJT4TWyybKX2DqeVD4PL5dY1bwxTGZh18sLTgXZCwVUWy5dhUWYuNJ47xRAx3asawUxdcskoBtZjqUQ==
-  dependencies:
-    fast-copy "2.1.0"
-    fast-deep-equal "^3.1.3"
-    wait-in-parallel "^1.2.6"
-  optionalDependencies:
-    common-types "^1.15.8"
-    date-fns "^2.15.0"
-    dexie "^3.0.2"
-    firebase-key "^2.0.2"
-    firemock "~0.58.1"
-    pluralize "^8.0.0"
-    reflect-metadata "^0.1.13"
-    typed-conversions "^0.11.1"
 
 flat-cache@^3.0.4:
   version "3.0.4"
@@ -8379,7 +8351,7 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash-es@^4.17.11, lodash-es@^4.17.15:
+lodash-es@^4.17.15:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.20.tgz"
   integrity sha512-JD1COMZsq8maT6mnuz1UMV0jvYD0E0aUsSOdrr1/nAG3dhqQXwRRgeW0cSqH1U43INKcqxaiVIQNOUDld7gRDA==
@@ -9032,10 +9004,10 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-native-dash@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.7.0.tgz"
-  integrity sha512-g7aoRs0h0+89gIsmw4tsSc8ORqe8/dmjGC+Ww/tuvETax5jAfMRwxCtjLHxwmgIRsAYvIgV1HpN+J5UBGaZmjQ==
+native-dash@^1.7.1:
+  version "1.16.2"
+  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.16.2.tgz#7f5db5e9e20ad0dfba36ce060121050db104d35f"
+  integrity sha512-uNZ4o4HjJPQXwdT+w1VqsGXXLQPvnvDrHTBIvRCuSD4Ix24IkpqDOrJxK5TjTr42p3zEcXRPl+uA4zfNntPSfA==
 
 native-dash@~1.2.7:
   version "1.2.7"
@@ -10616,11 +10588,6 @@ reduce@^1.0.1:
   dependencies:
     object-keys "^1.1.0"
 
-reflect-metadata@^0.1.13:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz"
-  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
-
 regenerate-unicode-properties@^8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-8.2.0.tgz"
@@ -10960,11 +10927,6 @@ rollup-plugin-analyzer@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/rollup-plugin-analyzer/-/rollup-plugin-analyzer-4.0.0.tgz"
   integrity sha512-LL9GEt3bkXp6Wa19SNR5MWcvHNMvuTFYg+eYBZN2OIFhSWN+pEJUQXEKu5BsOeABob3x9PDaLKW7w5iOJnsESQ==
-
-rollup-plugin-typescript-paths@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-typescript-paths/-/rollup-plugin-typescript-paths-1.2.2.tgz#325b9af1522b3f11b2cc6c3890ff15ace214a3fd"
-  integrity sha512-MMdnzx4Qbj3kZnPivNTlfnCYTvFKvl2Ac+tlVyq3EUK90mmaY5wCz6oEofxwUAF0YTwp8jI5AsasqJmDUwhDXQ==
 
 rollup-plugin-typescript2@^0.29.0:
   version "0.29.0"
@@ -12340,14 +12302,6 @@ typed-conversions@^0.11.1, typed-conversions@~0.11.1:
     common-types "^1.15.6"
     lodash-es "^4.17.15"
 
-typed-conversions@^0.9.6:
-  version "0.9.7"
-  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.9.7.tgz"
-  integrity sha512-CyT59BbWhE970/jf5lJ3yLELJEtd+LVk6QNjY+Q35Pq6rLbejZ2YxTah3gxgjND3JV7ad/8ApG6trHXBslGzjQ==
-  dependencies:
-    common-types "^1.9.7"
-    lodash-es "^4.17.11"
-
 typed-mapper@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/typed-mapper/-/typed-mapper-0.2.0.tgz"
@@ -12876,15 +12830,6 @@ w3c-xmlserializer@^2.0.0:
   integrity sha512-4tzD0mF8iSiMiNs30BiLO3EpfGLZUT2MSX/G+o7ZywDzliWQ3OPtTZ0PTC3B3ca1UAf4cJMHB+2Bf56EriJuRA==
   dependencies:
     xml-name-validator "^3.0.0"
-
-wait-in-parallel@^1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/wait-in-parallel/-/wait-in-parallel-1.2.6.tgz"
-  integrity sha512-j6qS3IT1cVDV9ATMvMuCN77OVsex9/knEDxFkYaGqAo21UQlGH5J0qJzkUt5AIrN2E3jcEVeuboalHkouJUxuQ==
-  dependencies:
-    common-types "^1.9.6"
-    lodash.first "^3.0.0"
-    typed-conversions "^0.9.6"
 
 walkdir@^0.4.0, walkdir@^0.4.1:
   version "0.4.1"

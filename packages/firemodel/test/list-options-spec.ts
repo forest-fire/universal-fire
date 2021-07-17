@@ -1,9 +1,10 @@
-import { IAbstractedDatabase, IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
+import { RealTimeAdmin } from "universal-fire";
 import { Car } from "./testing/Car";
 import { FireModel, List, Mock } from "@/core/index";
+import { IDatabaseSdk, SDK } from "../../types/dist/types";
 
 describe("List Options: ", () => {
-  let db: IAbstractedDatabase;
+  let db: IDatabaseSdk<SDK.RealTimeAdmin>;
   beforeEach(async () => {
     db = await RealTimeAdmin.connect({ mocking: true });
     await Mock(Car, db).generate(12, { model: "Mustang" });

@@ -23,7 +23,6 @@ import {
   isAdminSdk,
   ISdk,
   isFirestoreDatabase,
-  isRealTimeDatabase,
   NetworkDelay,
 } from '@forest-fire/types';
 import {

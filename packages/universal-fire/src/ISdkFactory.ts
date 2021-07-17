@@ -1,4 +1,5 @@
 import { DbConfigFrom, IDatabaseSdk, ISdk } from '@forest-fire/types';
+export { IDatabaseSdk, ISdk }
 
 /**
  * Provides a simple factory API surface:

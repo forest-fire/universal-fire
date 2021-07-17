@@ -1,7 +1,5 @@
 import { IFnToModelConstructor, IModel, NamedFakes } from "@/types";
 
-import { MockHelper } from "firemock";
-
 export type FmRelationshipType = "hasMany" | "hasOne";
 /**
  * **IFmModelMeta**

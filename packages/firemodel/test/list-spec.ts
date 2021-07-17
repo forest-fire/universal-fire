@@ -3,7 +3,8 @@ import "reflect-metadata";
 import * as helpers from "./testing/helpers";
 
 import { IFmWatchEvent, List, Record } from "@/index";
-import { IAbstractedDatabase, IMockApi, RealTimeAdmin, SerializedQuery } from "universal-fire";
+import { RealTimeAdmin, SDK, SerializedQuery } from "universal-fire";
+import { IDatabaseSdk } from "@forest-fire/types";
 
 import { Car } from "./testing/Car";
 import Company from "./testing/dynamicPaths/Company";
@@ -13,7 +14,7 @@ import { Mock } from "@/index";
 import { Person } from "./testing/Person";
 
 describe("List class: ", () => {
-  let db: IAbstractedDatabase;
+  let db: IDatabaseSdk<SDK.RealTimeAdmin>;
   beforeEach(async () => {
     db = await RealTimeAdmin.connect({ mocking: true });
     FireModel.defaultDb = db;
@@ -116,13 +117,13 @@ describe("List class: ", () => {
     expect(youngFolks.length).toBe(10);
   });
 
-  it("can instantiate with first() and last() methods", async () => { 
-      (db.mock as IMockApi).addSchema<Person>("person", (h) => () => ({
-        name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 50 }),
-        createdAt: h.faker.date.past().valueOf(),
-        lastUpdated: h.faker.date.recent().valueOf(),
-      }))
+  it("can instantiate with first() and last() methods", async () => {
+    (db.mock as IMockApi).addSchema<Person>("person", (h) => () => ({
+      name: h.faker.name.firstName(),
+      age: h.faker.random.number({ min: 1, max: 50 }),
+      createdAt: h.faker.date.past().valueOf(),
+      lastUpdated: h.faker.date.recent().valueOf(),
+    }))
       .pathPrefix("authenticated");
     db.mock.queueSchema("person", 30).generate();
     const first = await List.first(Person, 5);
