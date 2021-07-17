@@ -1,5 +1,4 @@
-import { SchemaCallback, Fixture } from "../src"
-
+import { SchemaCallback, Fixture } from "~/index""
 
 describe('Deployment', () => {
   const animalMock: SchemaCallback<any> = (h) => () => ({
@@ -9,15 +8,16 @@ describe('Deployment', () => {
   });
 
   it('Overriding the mock at deployment works', async () => {
-    const m = await Fixture.prepare();
-    m.addSchema('animal', animalMock);
-    m.queueSchema('animal', 2, { age: 12 });
-    m.queueSchema('animal', 2, { age: 14 });
-    m.queueSchema('animal', 2, { age: 16 });
-    m.generate();
+    const f = await Fixture.prepare();
+    f.addSchema('animal', animalMock);
+    f.queueSchema('animal', 2, { age: 12 });
+    f.queueSchema('animal', 2, { age: 14 });
+    f.queueSchema('animal', 2, { age: 16 });
+    const fixtures = f.generate() as Record<string, { age: number }>;
+    const m = createDatabase(SDK.RealTimeAdmin, {}, fixtures);
 
-    const results = await m.ref('/animals').once('value');
-    const filtered = await m
+    const results = await f.ref('/animals').once('value');
+    const filtered = await f
       .ref('/animals')
       .orderByChild('age')
       .equalTo(12, 'age')
@@ -100,9 +100,9 @@ describe('Deployment', () => {
     m.queueSchema('cat', 10);
     m.queueSchema('dog', 10);
     m.generate();
-    expect(length(m.db.cats)).toBe(10);
-    expect(length(m.db.dogs)).toBe(0);
-    expect(length(m.db.animals)).toBe(10);
+    expect((m.db.cats)).toHaveLength(10);
+    expect((m.db.dogs)).toHaveLength(0);
+    expect((m.db.animals)).toHaveLength(10);
   });
 
   it('offset property is incorporated into DB path', async () => {
@@ -118,11 +118,11 @@ describe('Deployment', () => {
     m.queueSchema('dog', 10, { kind: 'dog' });
     m.generate();
 
-    expect(length(m.db.dogs)).toBe(0);
-    expect(length(m.db.cats)).toBe(0);
-    expect(length(m.db.animals)).toBe(0);
-    expect(length(m.db.auth)).toBe(1);
-    expect(length(m.db.auth.anonymous)).toBe(1);
-    expect(length(m.db.auth.anonymous.animals)).toBe(20);
+    expect((m.db.dogs)).toHaveLength(0);
+    expect((m.db.cats)).toHaveLength(0);
+    expect((m.db.animals)).toHaveLength(0);
+    expect((m.db.auth)).toHaveLength(1);
+    expect((m.db.auth.anonymous)).toHaveLength(1);
+    expect((m.db.auth.anonymous.animals)).toHaveLength(20);
   });
 });
