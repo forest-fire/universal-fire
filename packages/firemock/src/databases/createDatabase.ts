@@ -1,18 +1,22 @@
 import {
-  IDatabaseSdk,
+  DbFrom,
+  IMockDatabase,
   IMockDelayedState,
-  IMockStore,
-  isClientSdk,
-  ISdk,
+  IRtdbAdminReference,
+  IRtdbReference,
   isFirestoreDatabase,
+  IMockConfigOptions,
+  ISdk,
+  AdminSdk,
+  IMockStore,
+  IRtdbSdk
 } from '@forest-fire/types';
-import { IDictionary } from 'common-types';
+import { IDictionary, url } from 'common-types';
+import { createAuth } from '~/auth/createAuth';
 import { FireMockError } from '../errors';
 import { createStore } from './createStore';
-import {
-  createRtdbClientMock,
-  createRtdbAdminMock,
-} from './rtdb/factories/index';
+import { createFirebaseApp } from './firebase-app';
+import { reference } from './rtdb';
 
 /**
  * A factory object which returns an implementation to handle either RTDB or
@@ -20,25 +24,62 @@ import {
  * admin and client SDK's
  */
 export function createDatabase<
-  TDatabase extends IDatabaseSdk<TSdk>,
-  TSdk extends ISdk
->(
-  container: TDatabase,
-  initialState: IDictionary | IMockDelayedState<IDictionary>
-): [TDatabase, IMockStore<TSdk>] {
-  const store = createStore(container, initialState);
+  TSdk extends ISdk,
+  >(
+    sdk: TSdk,
+    /**
+     * DB and Auth configuration for mock firebase
+     */
+    config: IMockConfigOptions = {},
+    /**
+     * The initial state of the database
+     */
+    initialState: IDictionary | IMockDelayedState<IDictionary> = {},
+): IMockDatabase<TSdk> {
 
-  if (isFirestoreDatabase(container)) {
+  const store = createStore(sdk, config.db, initialState);
+
+  if (isFirestoreDatabase(sdk)) {
     throw new FireMockError(
       `Attempt to mock a Firestore database failed because this has not been implemented yet!`
     );
   }
 
-  // TODO: types are forced and need more investigation
-  return (isClientSdk(container)
-    ? [createRtdbClientMock(store), store]
-    : [createRtdbAdminMock(store), store]) as unknown as [TDatabase, IMockStore<TSdk>]
+  const db = {
+    app: createFirebaseApp(sdk, store),
+    ref(path?: string): TSdk extends AdminSdk ? IRtdbAdminReference : IRtdbReference {
+      return reference(store as IMockStore<IRtdbSdk>, path) as TSdk extends AdminSdk ? IRtdbAdminReference : IRtdbReference;
+    },
+    refFromURL(url: url) {
+      return reference(store as IMockStore<IRtdbSdk>, url) as IRtdbAdminReference;
+    },
+    // eslint-disable-next-line @typescript-eslint/require-await
+    async getRules() {
+      return JSON.stringify(store.rules);
+    },
+    // eslint-disable-next-line @typescript-eslint/require-await
+    async getRulesJSON() {
+      return store.rules;
+    },
+    goOffline() {
+      throw new Error("goOffline() is not implemented")
+    },
+    goOnline() {
+      throw new Error("goOnline() is not implemented")
+    },
+    setRules() {
+      throw new Error("setRules() is not implemented")
+    },
+  } as unknown as DbFrom<TSdk>;
+  const [auth, authManager] = createAuth(sdk, config.auth);
 
+  return {
+    db,
+    auth,
+    authManager,
+    sdk,
+    store
+  }
 }
 
 

@@ -1,4 +1,4 @@
-import { FakerStatic } from "@forest-fire/types";
+import { EventFrom, FakerStatic, ISdk, SnapshotFrom } from "@forest-fire/types";
 import { IDictionary } from 'common-types';
 
 import type {
@@ -54,46 +54,9 @@ export interface IQueue {
 }
 
 /** A Schema's mock callback generator must conform to this type signature */
-export type SchemaCallback<T extends unknown> = (helper: ISchemaHelper<T>) => () => T;
+export type SchemaCallback<T extends unknown = unknown> = (helper: ISchemaHelper<T>) => () => T;
 
-/**
- * Captures a CRUD event
- */
-export interface IMockWatcherGroupEvent {
-  /** the unique identifier of the listener */
-  listenerId: string;
-  /** the path that the listener is listening at */
-  listenerPath: string;
-  /** the event which is being listened to */
-  listenerEvent: IRtdbDbEvent;
-  /** the dispatch function for this listener */
-  callback: IFirebaseEventHandler;
-  /** the path where the event took place */
-  eventPaths: string[];
-  /** the "key" of the event; this applied to value AND child events */
-  key: string;
-  /** changes between value and priorValue */
-  changes: unknown;
-  /** the new value which has been set */
-  value: unknown;
-  /** the prior value that this property held previous to the event */
-  priorValue: unknown;
-}
 
-/**
- * A change event which is fired from Firebase; the specific signature
- * of the event depends on the event type being fired.
- *
- * events: [API Spec](https://firebase.google.com/docs/reference/node/firebase.database.Reference#on)
- *
- * @param snap the DBRtdbDataSnapshot which provides access to the root of the `on` event;
- * in the case of a _removal_ you will get snapshot of the prior value
- * @param prevChildKey provided on `child_changed`, `child_moved`, and `child_added`; gives the
- * name of the key which directly _preceeds_ the event key in Firebase's stored order
- */
-export interface IFirebaseEventHandler {
-  (snap: IRtdbDataSnapshot, prevChildKey?: string): void;
-}
 
 export type EventHandler =
   | HandleValueEvent

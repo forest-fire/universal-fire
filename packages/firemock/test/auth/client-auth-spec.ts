@@ -10,7 +10,7 @@ import {
 
 describe('Firebase Auth →', () => {
   it('Calling auth() gives you API', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     const auth = await m.auth();
     expect(auth).toHaveProperty('signInAnonymously');
     expect(auth).toHaveProperty('signInWithEmailAndPassword');
@@ -18,19 +18,19 @@ describe('Firebase Auth →', () => {
   });
 
   it('Signing in anonymously is defaulted to true', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     const auth = await m.auth();
     expect(authProviders().includes('anonymous')).toEqual(true);
   });
 
   it('Signing in with email is defaulted to false', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     const auth = await m.auth();
     expect(authProviders().includes('emailPassword')).toEqual(false);
   });
 
   it('signInAnonymously returns uid of default anonymous user (when set)', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     const auth = await m.auth();
     setDefaultAnonymousUid('1234');
     const user = await auth.signInAnonymously();
@@ -39,7 +39,7 @@ describe('Firebase Auth →', () => {
   });
 
   it('signInWithEmail with valid email returns a valid user', async () => {
-    const m = await Mock.prepare({
+    const m = await Fixture.prepare({
       auth: {
         users: [
           { email: 'test@test.com', password: 'foobar', emailVerified: true },
@@ -58,7 +58,7 @@ describe('Firebase Auth →', () => {
   });
 
   it(`signInWithEmail when user's configuration is passed in asynchronously`, async () => {
-    const m = await Mock.prepare({
+    const m = await Fixture.prepare({
       auth: {
         users: () =>
           Promise.resolve([
@@ -78,7 +78,7 @@ describe('Firebase Auth →', () => {
   });
 
   it('signInWithEmail with valid email but invalid password fails', async () => {
-    const m = await Mock.prepare({
+    const m = await Fixture.prepare({
       auth: {
         users: [
           { email: 'test@test.com', password: 'foobar', emailVerified: true },
@@ -100,7 +100,7 @@ describe('Firebase Auth →', () => {
   });
 
   it('createUserWithEmailAndPassword created unverified user', async () => {
-    const m = await Mock.prepare({
+    const m = await Fixture.prepare({
       auth: {
         providers: ['emailPassword'],
         users: [],
@@ -112,7 +112,7 @@ describe('Firebase Auth →', () => {
   });
 
   it('once user is created, it can be used to login with', async () => {
-    const m = await Mock.prepare({
+    const m = await Fixture.prepare({
       auth: {
         providers: ['emailPassword'],
         users: [],
@@ -127,7 +127,7 @@ describe('Firebase Auth →', () => {
   });
 
   it('userCredential passed back from creation allows password reset', async () => {
-    const m = await Mock.prepare({
+    const m = await Fixture.prepare({
       auth: {
         providers: ['emailPassword'],
         users: [],
@@ -147,7 +147,7 @@ describe('Firebase Auth →', () => {
 
   it('calls to getIdToken() respond with value configured when available', async () => {
     const expectedToken = '123456789';
-    const m = await Mock.prepare({
+    const m = await Fixture.prepare({
       auth: {
         providers: ['emailPassword'],
         users: [
@@ -172,7 +172,7 @@ describe('Firebase Auth →', () => {
 
   it('signInWithEmailAndPassword should notify authObservers', async () => {
     const user = { email: 'test@test.com', password: 'foobar' };
-    const m = await Mock.prepare({
+    const m = await Fixture.prepare({
       auth: {
         providers: ['emailPassword'],
         users: [user],
@@ -190,7 +190,7 @@ describe('Firebase Auth →', () => {
 
   it('signOut should notify authObservers', async () => {
     const user = { email: 'test@test.com', password: 'foobar' };
-    const m = await Mock.prepare({
+    const m = await Fixture.prepare({
       auth: {
         providers: ['emailPassword'],
         users: [user],

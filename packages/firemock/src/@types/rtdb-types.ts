@@ -3,6 +3,7 @@ import type {
   IRtdbDbEvent,
   IRtdbDataSnapshot,
   SnapshotFrom,
+  ISdk,
 } from '@forest-fire/types';
 import { EventFrom, IRtdbSdk } from '@forest-fire/types';
 
@@ -10,15 +11,15 @@ import { EventFrom, IRtdbSdk } from '@forest-fire/types';
 /**
  * Captures a CRUD event
  */
-export interface IMockWatcherGroupEvent {
+export interface IMockWatcherGroupEvent<TSdk extends ISdk> {
   /** the unique identifier of the listener */
   listenerId: string;
   /** the path that the listener is listening at */
   listenerPath: string;
   /** the event which is being listened to */
-  listenerEvent: IRtdbDbEvent;
+  listenerEvent: EventFrom<TSdk>;
   /** the dispatch function for this listener */
-  callback: IFirebaseEventHandler;
+  callback: IFirebaseEventHandler<TSdk>;
   /** the path where the event took place */
   eventPaths: string[];
   /** the "key" of the event; this applied to value AND child events */
@@ -42,8 +43,8 @@ export interface IMockWatcherGroupEvent {
  * @param prevChildKey provided on `child_changed`, `child_moved`, and `child_added`; gives the
  * name of the key which directly _preceeds_ the event key in Firebase's stored order
  */
-export interface IFirebaseEventHandler {
-  (snap: IRtdbDataSnapshot, prevChildKey?: string): void;
+export interface IFirebaseEventHandler<TSdk extends ISdk> {
+  (snap: SnapshotFrom<TSdk>, prevChildKey?: string): void;
 }
 
 export type EventHandler =

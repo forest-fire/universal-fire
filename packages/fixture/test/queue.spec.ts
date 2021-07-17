@@ -1,4 +1,4 @@
-import { Queue } from '../src/mocking';
+import { Queue } from '~/index';
 
 describe('Queue Class', () => {
   it('can instantiate', () => {

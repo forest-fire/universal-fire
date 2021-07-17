@@ -1,6 +1,5 @@
 import { FireMockError } from "../errors";
 import {
-  IMockAuthMgmt,
   IMockUser,
   IMockUserRecord,
   User,
@@ -12,7 +11,13 @@ import {
   IAuthObserver,
   NetworkDelay,
   AuthProviders,
-  SDK,
+  IClientAuthProviders,
+  ClientSdk,
+  AdminSdk,
+  IMockAuthMgmt,
+  ISdk,
+  AuthProviderFrom,
+  isAdminSdk,
 } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 import {
@@ -24,9 +29,15 @@ import {
 import { toUser } from './util';
 import { networkDelay as delay } from '../util';
 import _authProviders from "./client-sdk/AuthProviders";
-import { ISdk } from "@forest-fire/types";
 
-export function createAuthManager<TSdk extends ISdk>(): IMockAuthMgmt<TSdk> {
+export type SdkFromProviders<T extends IClientAuthProviders | undefined> = T extends IClientAuthProviders ? ClientSdk : AdminSdk;
+
+/**
+ * Creates an Auth Admin Manager API which can be used for advanced
+ * test use cases. This API will be appropriately adjusted based on 
+ * whether this is an Admin or Client SDK.
+ */
+export function createAuthManager<TSdk extends ISdk>(sdk: TSdk): IMockAuthMgmt<TSdk> {
   const _anonymousUidQueue: string[] = [];
   let _providers: AuthProviderName[];
   const _authObservers: IAuthObserver[] = [];
@@ -267,7 +278,7 @@ export function createAuthManager<TSdk extends ISdk>(): IMockAuthMgmt<TSdk> {
     //
   };
 
-  const authProviders: AuthProviders<TSdk> = _authProviders;
+  const authProviders: AuthProviderFrom<TSdk> = isAdminSdk(sdk) ? undefined : _authProviders as AuthProviderFrom<TSdk>;
 
   const networkDelay = async () => {
     await delay(_networkDelay);

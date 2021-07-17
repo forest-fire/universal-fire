@@ -3,45 +3,45 @@ import deepmerge from 'deepmerge';
 import {
   dotify,
   dotifyKeys,
-  get,
   getKey,
   getParent,
   join,
   networkDelay as delay,
-  set,
 } from '../util';
+
+import { get, set } from 'native-dash';
 import { deepEqual } from 'fast-equals';
 import copy from 'fast-copy';
 import { key as fbKey } from 'firebase-key';
 import {
   ApiKind,
-  IDatabaseSdk,
+  IDatabaseConfig,
   IMockDelayedState,
   IMockListener,
   IMockStore,
+  IRtdbSdk,
+  isAdminSdk,
   ISdk,
   isFirestoreDatabase,
-  mockDataIsDelayed,
+  isRealTimeDatabase,
   NetworkDelay,
-  SDK,
 } from '@forest-fire/types';
 import {
   SerializedRealTimeQuery,
   slashNotation,
 } from '@forest-fire/serialized-query';
 import { FireMockError } from '../errors';
-//TODO: Check if implementation should change
 import { IMockWatcherGroupEvent } from '../@types';
 import { notify } from './rtdb';
 
 export function createStore<
-  TDatabase extends IDatabaseSdk<TSdk>,
   TSdk extends ISdk
 >(
-  container: TDatabase,
+  sdk: TSdk,
+  config: IDatabaseConfig,
   initialState: IDictionary | IMockDelayedState<IDictionary>
 ): IMockStore<TSdk> {
-  if (isFirestoreDatabase(container)) {
+  if (isFirestoreDatabase(sdk)) {
     throw new FireMockError(
       'Currently Firemock is not implemented for the Firestore Database!'
     );
@@ -68,22 +68,6 @@ export function createStore<
     _networkDelay = delay;
   };
 
-  const config = container.config;
-
-  /**
-   * Connects the mock database via an asynch operation
-   */
-  // const connect = async () => {
-  //   let data: IDictionary;
-  //   if (mockDataIsDelayed(initialState)) {
-  //     data = await initialState.connect();
-  //   } else {
-  //     await networkDelay();
-  //     data = initialState;
-  //   }
-  //   _state = data;
-  // };
-
   const addListener: IMockStore<TSdk>['addListener'] = (
     pathOrQuery,
     eventType,
@@ -94,7 +78,7 @@ export function createStore<
     const query =
       typeof pathOrQuery === 'string'
         ? // TODO: this needs to be generalized across RTDB and Firestore
-          new SerializedRealTimeQuery(pathOrQuery)
+        new SerializedRealTimeQuery(pathOrQuery)
         : pathOrQuery;
 
     const listener = {
@@ -109,36 +93,17 @@ export function createStore<
 
     return listener;
 
-    // function ref(dbPath: string) {
-    //   return reference(api, dbPath);
-    // }
-    // const snapshot = await query
-    //   .deserialize({ ref })
-    //   .once(eventType === 'value' ? 'value' : 'child_added');
-
-    // if (eventType === 'value') {
-    //   callback(snapshot);
-    // } else {
-    //   const list = hashToArray(snapshot.val());
-    //   if (eventType === 'child_added') {
-    //     list.forEach((i: IDictionary) =>
-    //       callback(new SnapShot(join(query.path, i.id), i))
-    //     );
-    //   }
-    // }
-
-    // return snapshot;
   };
 
   const groupEventsByWatcher = (
     data: IDictionary,
     dbSnapshot: IDictionary
-  ): IMockWatcherGroupEvent[] => {
+  ): IMockWatcherGroupEvent<TSdk>[] => {
     const _data = dotifyKeys(data);
 
     const eventPaths = Object.keys(_data).map((i) => dotify(i));
 
-    const response: IMockWatcherGroupEvent[] = [];
+    const response: IMockWatcherGroupEvent<TSdk>[] = [];
     const relativePath = (full: string, partial: string) => {
       return full.replace(partial, '');
     };
@@ -160,7 +125,7 @@ export function createStore<
 
       const listenerPath = dotify(listener.query.path);
       const changeObject = eventPathsUnderListener.reduce(
-        (changes: IDictionary<IMockWatcherGroupEvent>, path) => {
+        (changes: IDictionary<IMockWatcherGroupEvent<TSdk>>, path) => {
           paths.push(path);
           if (dotify(listener.query.path) === path) {
             changes = _data[path];
@@ -179,8 +144,8 @@ export function createStore<
             ? justKey(changeObject)
             : listener.query.path.split('.').pop()
           : dotify(
-              join(slashNotation(listener.query.path), justKey(changeObject))
-            );
+            join(slashNotation(listener.query.path), justKey(changeObject))
+          );
 
       const newResponse = {
         listenerId: listener.id,
@@ -214,14 +179,11 @@ export function createStore<
   };
 
   const api: IMockStore<TSdk> = {
-    // TODO: Fix type issue
-    api: [SDK.FirestoreAdmin, SDK.RealTimeAdmin].includes(
-      container.sdk as Readonly<SDK>
-    )
-      ? ApiKind.admin
-      : ApiKind.client,
-    config,
+    api: isAdminSdk(sdk)
+      ? ApiKind.admin as IMockStore<TSdk>["api"]
+      : ApiKind.client as IMockStore<TSdk>["api"],
 
+    config,
     state: _state,
 
     networkDelay,
@@ -282,14 +244,14 @@ export function createStore<
 
       if (!silent) {
         const events = groupEventsByWatcher({ [dotPath]: value }, dbSnapshot);
-        notify(this)(events, dbSnapshot);
+        notify(this)(events as IMockWatcherGroupEvent<IRtdbSdk>[], dbSnapshot);
       }
     },
-    mergeDb<T = any>(path: string, value: T) {
+    mergeDb<T extends unknown>(path: string, value: T) {
       const old = get(_state, path);
       this.setDb(path, deepmerge(old, value));
     },
-    updateDb<T = any>(path: string, value: T) {
+    updateDb<T extends unknown>(path: string, value: T) {
       const dotPath = join(path);
       const oldValue: T = get(_state, dotPath);
       let changed = true;
@@ -312,8 +274,8 @@ export function createStore<
         return;
       }
 
-      const newValue: T =
-        typeof oldValue === 'object' ? { ...oldValue, ...value } : value;
+      const newValue =
+        typeof oldValue === 'object' ? { ...(oldValue as IDictionary), ...(value as IDictionary) } : value;
 
       this.setDb(dotPath, newValue);
     },
@@ -331,7 +293,7 @@ export function createStore<
 
       const events = groupEventsByWatcher(data, snapshot);
 
-      notify(this)(events, snapshot);
+      notify(this)(events as IMockWatcherGroupEvent<IRtdbSdk>[], snapshot);
     },
     removeDb(path: string) {
       if (!this.getDb(path)) {
@@ -339,7 +301,7 @@ export function createStore<
       }
       this.setDb(path, null);
     },
-    pushDb(path: string, value: any): string {
+    pushDb(path: string, value: unknown): string {
       const pushId = fbKey();
       const fullPath = join(path, pushId);
       const valuePlusId =

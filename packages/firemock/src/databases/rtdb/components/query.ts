@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   IMockStore,
   IRtdbDataSnapshot,
   IRtdbDbEvent,
   IRtdbQuery,
   IRtdbSdk,
+  ISdk,
   ISerializedQuery,
   RtdbOrder,
 } from '@forest-fire/types';
@@ -11,17 +14,17 @@ import { leafNode, runQuery } from '../../..';
 import { reference } from './reference';
 import { snapshot } from './snapshot';
 
-export type IRtdbMockQueryFactory<TSdk extends IRtdbSdk> = (
+export type IRtdbMockQueryFactory<TSdk extends ISdk> = (
   store: IMockStore<TSdk>,
   query: ISerializedQuery<TSdk>
 ) => IRtdbQuery;
 
 export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) => {
   const partialQuery: IRtdbQuery = {
-    endBefore: (_value, _key) => {
+    endBefore: () => {
       throw new Error('not implemented');
     },
-    startAfter: (_value, _key) => {
+    startAfter: () => {
       throw new Error('not implemented');
     },
     get: async () => {

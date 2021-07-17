@@ -6,17 +6,14 @@ import { IDictionary } from 'common-types';
 import { Queue } from './Queue';
 import { dotNotation, getRandomInt, pluralize, set } from './utils';
 import { first, get } from 'native-dash';
-import { IMockDatabase, SDK } from '@forest-fire/types';
 
-export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
+export class Deployment<T extends IDictionary = IDictionary> {
   private schemaId: string;
   private queueId: string;
   private queue: Queue<IQueue> = new Queue('queue');
   private schemas: Queue<ISchema> = new Queue("schemas");
   private relationships: Queue<IRelationship> = new Queue('relationships');
-
-  constructor(private db: IMockDatabase<TSdk>) {
-  }
+  private store: T;
 
   /**
    * Queue a schema for deployment to the mock DB
@@ -104,12 +101,12 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
     return this;
   }
 
-  public generate() {
+  public generate<T extends any>(): T {
     // iterate over each schema that has been queued
     // for generation
     this.queue.map((q: IQueue) => {
       for (let i = q.quantity; i > 0; i--) {
-        this.insertMockIntoDB(q.schema, q.overrides);
+        this.insertDataIntoStore(q.schema, q.overrides);
       }
     });
 
@@ -120,12 +117,13 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
     });
 
     this.queue.clear();
+    return this.store as T;
   }
 
   /**
    * Adds in a given record/mock into the mock database
    */
-  private insertMockIntoDB(schemaId: string, overrides: IDictionary) {
+  private insertDataIntoStore(schemaId: string, overrides: IDictionary) {
     const schema: ISchema = this.schemas.find(schemaId);
     const mock = schema.fn();
     const path = schema.path();
@@ -135,11 +133,10 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
       typeof mock === 'object'
         ? { ...mock, ...overrides }
         : overrides && typeof overrides !== 'object'
-        ? overrides
-        : mock;
+          ? overrides
+          : mock;
 
-    // set(db, dbPath, payload);
-    this.db.store.setDb(dbPath, payload);
+    set(this.store, dbPath, payload);
 
     return key;
   }
@@ -162,20 +159,20 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
 
       if (fulfill) {
         const mockAvailable = this.schemas.find(r.target) ? true : false;
-        const available = Object.keys(this.db[pluralize(r.target)] || {});
+        const available = Object.keys(this.store[pluralize(r.target)] || {});
         const generatedAvailable = available.length > 0;
 
-        const numChoices = (this.db[r.target] || []).length;
+        const numChoices = (this.store[r.target] || []).length;
         const choice = () =>
           generatedAvailable
             ? available[getRandomInt(0, available.length - 1)]
-            : this.insertMockIntoDB(r.target, {});
+            : this.insertDataIntoStore(r.target, {});
 
         getID = () =>
           mockAvailable
             ? generatedAvailable
               ? choice()
-              : this.insertMockIntoDB(r.target, {})
+              : this.insertDataIntoStore(r.target, {})
             : fbKey.key();
       } else {
         getID = () => '';
@@ -184,14 +181,14 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
       const property = r.sourceProperty;
       const path = source.path();
       const recordList: IDictionary = get(
-        this.db,
+        this.store,
         dotNotation(source.path()),
         {}
       );
 
       Object.keys(recordList).forEach((key) => {
         set(
-          this.db,
+          this.store,
           `${dotNotation(source.path())}.${key}.${property}`,
           getID()
         );
@@ -209,10 +206,10 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
 
       if (fulfill) {
         const mockAvailable = this.schemas.find(r.target) ? true : false;
-        const available = Object.keys(this.db[pluralize(r.target)] || {});
+        const available = Object.keys(this.store[pluralize(r.target)] || {});
         const used: string[] = [];
         const generatedAvailable = available.length > 0;
-        const numChoices = (this.db[pluralize(r.target)] || []).length;
+        const numChoices = (this.store[pluralize(r.target)] || []).length;
 
         const choice = (pool: string[]) => {
           if (pool.length > 0) {
@@ -221,7 +218,7 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
             return chosen;
           }
 
-          return this.insertMockIntoDB(r.target, {});
+          return this.insertDataIntoStore(r.target, {});
         };
 
         getID = () =>
@@ -236,7 +233,7 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
 
       const path = source.path();
       const sourceRecords: IDictionary = get(
-        this.db,
+        this.store,
         dotNotation(source.path()),
         {}
       );
@@ -244,7 +241,7 @@ export class Deployment<TSdk extends SDK = SDK.RealTimeClient> {
       Object.keys(sourceRecords).forEach((key) => {
         for (let i = 1; i <= howMany; i++) {
           set(
-            this.db,
+            this.store,
             `${dotNotation(source.path())}.${key}.${property}.${getID()}`,
             true
           );

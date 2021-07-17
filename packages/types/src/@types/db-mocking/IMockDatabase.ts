@@ -1,6 +1,5 @@
 
-import { IDictionary } from 'brilliant-errors';
-import { IMockStore, IMockAuthMgmt, DbFrom, AuthFrom } from '../../index';
+import { IMockStore, IMockAuthMgmt, DbFrom, AuthFrom, AuthProviderFrom } from '../../index';
 import { ISdk } from '../fire-types';
 
 /**
@@ -16,16 +15,13 @@ import { ISdk } from '../fire-types';
  * can implement to this interface should they want to build a Firemock-_like_ library.
  */
 export interface IMockDatabase<TSdk extends ISdk> {
-  // /**
-  //  * The SDK which this mock database will use to govern the
-  //  * appropriate database and auth API's exposed by this mock database.
-  //  */
-  // sdk: SDK;
-
-  // /**
-  //  * The in-memory representation of _state_ in the mock database
-  //  */
-  // state: IDictionary<any>;
+  sdk: TSdk;
+  /**
+ * This is the main API surface which mimics/mocks the interface exposed by a Firebase SDK.
+ * This should be a drop-in replacement for any "real database" and therefore must
+ * directly implement the appropriate Firebase type definition provided.
+ */
+  db: DbFrom<TSdk>;
 
   /**
    * An API surface which allows direct synchronous changes to the database's state.
@@ -36,13 +32,6 @@ export interface IMockDatabase<TSdk extends ISdk> {
    * like **Firemodel**, etc. will be unaware of this API.
    */
   store: IMockStore<TSdk>;
-
-  /**
-   * This is the main API surface which mimics/mocks the interface exposed by a Firebase SDK.
-   * This should be a drop-in replacement for any "real database" and therefore must
-   * directly implement the appropriate Firebase type definition provided.
-   */
-  db: DbFrom<TSdk>;
 
   /**
    * The main Auth API which will be tailored for the SDK you are using

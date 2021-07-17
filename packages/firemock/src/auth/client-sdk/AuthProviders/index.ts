@@ -10,9 +10,11 @@ import { OAuthProvider } from './OAuthProvider';
 import { PhoneAuthProvider } from './PhoneAuthProvider';
 import { RecaptchaVerifier } from './RecaptchaVerifier';
 
-// tslint:disable-next-line: no-object-literal-type-assertion
-const AuthProviders: Partial<FirebaseNamespace['auth']> = {
-  Auth: Auth as any,
+/**
+ * The mocked Auth API for a Client SDK
+ */
+const authProviders: Partial<FirebaseNamespace['auth']> = {
+  Auth: Auth as unknown as FirebaseNamespace['auth']['Auth'],
   EmailAuthProvider,
   FacebookAuthProvider,
   GithubAuthProvider,
@@ -28,4 +30,4 @@ const fn = (): IClientAuth => {
   throw new Error('not allowed');
 };
 
-export default (AuthProviders || fn) as FirebaseNamespace['auth'];
+export default (authProviders || fn) as FirebaseNamespace['auth'];

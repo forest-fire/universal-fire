@@ -1,24 +1,18 @@
-import * as helpers from './testing/helpers';
-import { SchemaHelper, Mock } from '../src/mocking';
-import {
-  updateDB,
-  removeDB,
-  pushDB,
-  setDB,
-  multiPathUpdateDB,
-  clearDatabase,
-  Reference,
-  Query,
-  reset,
-} from '../src/rtdb';
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+
+import { SchemaHelper } from '@forest-fire/fixture';
+
 import { IDictionary } from 'common-types';
-import type { IRtdbDataSnapshot, IRtdbReference } from '@forest-fire/types';
+import { IRtdbDataSnapshot, IRtdbReference, SDK } from '@forest-fire/types';
 import 'jest-extended';
 import { firstKey } from 'native-dash';
+import { createDatabase } from '~/databases/createDatabase';
 
 describe('Listener events ->', () => {
-  it('listening on "on_child" events', async () => {
-    reset();
+  it('listening on "on_child" events', () => {
+    const m = createDatabase(SDK.RealTimeAdmin);
+    const { store } = m;
+    // reset();
     const queryRef = (Reference.createQuery(
       'userProfile',
       10
@@ -26,7 +20,7 @@ describe('Listener events ->', () => {
     let events: IDictionary[] = [];
     const cb = (eventType: string) => (
       snap: IRtdbDataSnapshot,
-      prevKey?: any
+      prevKey?: string
     ) => {
       events.push({ eventType, val: snap.val(), key: snap.key, prevKey, snap });
     };
@@ -35,7 +29,7 @@ describe('Listener events ->', () => {
     queryRef.on('child_changed', cb('child_changed'));
     queryRef.on('child_removed', cb('child_removed'));
 
-    updateDB('userProfile/abcd/name', 'Bob Marley');
+    store.updateDb('userProfile/abcd/name', 'Bob Marley');
     events.map((e) => expect(e.key).toBe('abcd'));
     expect(events.map((e) => e.eventType)).toEqual(
       expect.arrayContaining(['child_added'])
@@ -51,7 +45,7 @@ describe('Listener events ->', () => {
     );
     events = [];
 
-    pushDB('userProfile', { name: 'Jane Doe' });
+    store.pushDb('userProfile', { name: 'Jane Doe' });
     events.map((e) => {
       expect(e.key).toBeString();
       expect(e.key.slice(0, 1)).toBe('-');
@@ -70,7 +64,7 @@ describe('Listener events ->', () => {
     );
     events = [];
 
-    setDB('userProfile/jjohnson', { name: 'Jack Johnson', age: 45 });
+    store.setDb('userProfile/jjohnson', { name: 'Jack Johnson', age: 45 });
     events.map((e) => expect(e.key).toBe('jjohnson'));
     expect(events.map((e) => e.eventType)).toEqual(
       expect.arrayContaining(['child_added'])
@@ -86,7 +80,7 @@ describe('Listener events ->', () => {
     );
     events = [];
 
-    updateDB('userProfile/jjohnson/age', 99);
+    store.updateDb('userProfile/jjohnson/age', 99);
     events.map((e) => expect(e.key).toBe('jjohnson'));
     expect(events.map((e) => e.eventType)).toEqual(
       expect.not.arrayContaining(['child_added'])
@@ -102,7 +96,7 @@ describe('Listener events ->', () => {
     );
     events = [];
 
-    pushDB('userProfile', { name: 'Chris Christy' });
+    store.pushDb('userProfile', { name: 'Chris Christy' });
     events.map((e) => {
       expect(e.key).toBeString();
       expect(e.key.slice(0, 1)).toBe('-');
@@ -115,7 +109,7 @@ describe('Listener events ->', () => {
     );
     events = [];
 
-    setDB('userProfile/jjohnson/age', { name: 'Jack Johnson', age: 88 });
+    store.setDb('userProfile/jjohnson/age', { name: 'Jack Johnson', age: 88 });
     events.map((e) => expect(e.key).toBe('jjohnson'));
     expect(events.map((e) => e.eventType)).toEqual(
       expect.arrayContaining(['child_changed'])
@@ -125,8 +119,8 @@ describe('Listener events ->', () => {
     );
   });
 
-  it('removing a record that exists sends child_removed event', async () => {
-    reset();
+  it('removing a record that exists sends child_removed event', () => {
+    // reset();
     const queryRef = Reference.createQuery('userProfile', 10);
     let events: IDictionary[] = [];
     const cb = (eventType: string) => (
@@ -169,8 +163,8 @@ describe('Listener events ->', () => {
     events = [];
   });
 
-  it('removing a record that was not there; results in no events', async () => {
-    reset();
+  it('removing a record that was not there; results in no events', () => {
+    // reset();
     const queryRef = Reference.createQuery('userProfile', 10);
     const events: IDictionary[] = [];
     const cb = (eventType: string) => (
@@ -187,8 +181,8 @@ describe('Listener events ->', () => {
     expect(events).toHaveLength(0);
   });
 
-  it('updating DB in a watcher path does not return child_added, does return child_changed', async () => {
-    clearDatabase();
+  it('updating DB in a watcher path does not return child_added, does return child_changed', () => {
+    // clearDatabase();s
     const queryRef = Reference.createQuery('userProfile', 10);
     let events: IDictionary[] = [];
     const cb = (eventType: string) => (
@@ -223,7 +217,7 @@ describe('Listener events ->', () => {
 
   it('dispatch works for a MPS', async () => {
     clearDatabase();
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     m.addSchema('company')
       .mock((h: SchemaHelper) => () => {
         return { name: h.faker.company.companyName() };

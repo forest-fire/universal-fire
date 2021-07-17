@@ -9,7 +9,7 @@ describe('Deployment', () => {
   });
 
   it('Overriding the mock at deployment works', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     m.addSchema('animal', animalMock);
     m.queueSchema('animal', 2, { age: 12 });
     m.queueSchema('animal', 2, { age: 14 });
@@ -32,7 +32,7 @@ describe('Deployment', () => {
     // as the sorting is all done on the server and then the filtering is applied
     // the actually returned resultset may not be sorted by the stated criteria.
     // This test is meant to represent this.
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     m.addSchema('animal', animalMock);
     m.queueSchema('animal', 10, { age: 16 });
     m.queueSchema('animal', 10, { age: 14 });
@@ -65,7 +65,7 @@ describe('Deployment', () => {
     // as the sorting is all done on the server and then the filtering is applied
     // the actually returned resultset may not be sorted by the stated criteria.
     // This test is meant to represent this.
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     m.addSchema('animal', animalMock);
     m.queueSchema('animal', 10, { age: 16 });
     m.queueSchema('animal', 10, { age: 14 });
@@ -94,7 +94,7 @@ describe('Deployment', () => {
   });
 
   it('using modelName() changes path in DB', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     m.addSchema('cat', animalMock);
     m.addSchema('dog', animalMock).modelName('animal');
     m.queueSchema('cat', 10);
@@ -106,7 +106,7 @@ describe('Deployment', () => {
   });
 
   it('offset property is incorporated into DB path', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     m.addSchema('cat', animalMock)
       .modelName('animal')
       .pathPrefix('auth/anonymous');

@@ -71,3 +71,10 @@ export type IsAdminSdk<T extends ISdk> = T extends AdminSdk ? true : false;
 export type DbConfigFrom<T extends ISdk> = T extends AdminSdk
   ? IAdminConfig | IMockConfig
   : IClientConfig | IMockConfig;
+
+/**
+ * Converts an SDK to the appropriate type for Auth Providers
+ */
+export type AuthProviderFrom<T extends ISdk> = T extends AdminSdk
+  ? undefined
+  : IClientAuthProviders

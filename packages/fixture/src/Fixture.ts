@@ -5,82 +5,32 @@ import {
   getFakerLibrary,
   importFakerLibrary,
   Queue,
+  SchemaCallback,
 } from '~/index';
-
-import {
-  IMockAuthConfig,
-  IAdminAuth,
-  IMockConfigOptions,
-  SDK,
-  AuthProviderName,
-  IMockDatabase,
-} from '@forest-fire/types';
-import { SchemaCallback } from './@types';
 import { FixtureError } from './errors/FixtureError';
 
-export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
-  private _db: IMockDatabase<TSdk>;
+export class Fixture<T extends IDictionary> {
   private _schema: Schema;
+  private store: Partial<T>;
+
   /**
-   * returns a Mock object while also ensuring that the
-   * Faker library has been asynchronously imported.
+   * Static initializer
    */
-  public static async prepare<TSdk extends SDK = SDK.RealTimeClient>(
-    /**
-     * allows publishing of raw data into the database as the databases
-     * initial state or alternatively to assign a callback function which
-     * will be executed when the Mock DB is "connecting" and allows the
-     * DB to be setup via mocking.
-     */
-    options: IMockConfigOptions<TSdk> = {}
-  ) {
+  public static async prepare<T extends IDictionary = IDictionary>() {
     await importFakerLibrary();
 
-    const obj = new Fixture(options.db, options.auth);
+    const obj = new Fixture<T>();
 
     return obj;
   }
 
   public get deploy() {
-    return new Deployment(this._db);
+    return new Deployment();
   }
 
-  constructor(
-    db: IMockDatabase<TSdk>,
-    /**
-     * Allows the initial **state** of the database to be specified. Either
-     * _synchronously_ as a dictionary passed in or as function returning
-     * a Promise to the database's state.
-     *
-     * When choosing the _asynchronous_ approach the function will be passed
-     * an instance of
-     *
-     * allows publishing of raw data into the database as the databases
-     * initial state or alternatively to assign a callback function which
-     * will be executed when the Mock DB is "connecting" and allows the
-     * DB to be setup via mocking.
-     */
-    // mockData?: IDictionary,
-    /**
-     * Provides configuration for the AUTH mocking.
-     */
-    mockAuth: IMockAuthConfig = {
-      providers: [AuthProviderName.anonymous],
-      users: [],
-    }
-    /**
-     * indicates which database and SDK (aka, client/admin) that has requested
-     * this mock db.
-     */
-  ) {
+  constructor() {
     Queue.clearAll();
-    // clearDatabase();
-    // clearAuthUsers();
-    // if (mockData && typeof mockData === 'object') {
-    //   this.db = mockData;
-    // }
-    // initializeAuth(mockAuth);
-    this._db = db;
+    this.store = {};
   }
 
   /**
@@ -90,7 +40,7 @@ export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
     return getFakerLibrary();
   }
 
-  public addSchema<S = any>(schema: string, mock?: SchemaCallback<S>) {
+  public addSchema(schema: string, mock?: SchemaCallback<T>) {
     if (!this._schema) {
       this._schema = new Schema(schema, mock);
     } else {
@@ -99,12 +49,12 @@ export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
     return this._schema;
   }
 
-  public queueSchema<T = any>(
+  public queueSchema(
     schemaId: string,
     quantity: number = 1,
     overrides: IDictionary = {}
   ) {
-    new Deployment(this._db).queueSchema(
+    new Deployment<T>().queueSchema(
       schemaId,
       quantity,
       overrides
@@ -112,7 +62,7 @@ export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
     return this;
   }
 
-  public generate() {
+  public generate<T extends any>(): T {
     const faker = getFakerLibrary();
     if (!faker && !faker.address) {
       throw new FixtureError(
@@ -120,6 +70,6 @@ export class Fixture<TSdk extends SDK = SDK.RealTimeClient> {
         'firemock/faker-not-ready'
       );
     }
-    return new Deployment(this._db).generate();
+    return new Deployment().generate<T>();
   }
 }

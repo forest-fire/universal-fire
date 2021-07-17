@@ -1,4 +1,4 @@
-import { Mock, SchemaCallback } from '../src';
+import { Fixture, SchemaCallback } from '@forest-fire/fixture';
 
 const animalMock: SchemaCallback = (h) => () => ({
   name: h.faker.name.firstName(),
@@ -8,7 +8,7 @@ const animalMock: SchemaCallback = (h) => () => ({
 
 describe('Setting null to db path →', () => {
   it('when set() to null path should be removed', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     m.addSchema('animal', animalMock);
     m.queueSchema('animal', 1, { id: '1234' });
     m.queueSchema('animal', 2, { age: 12 });

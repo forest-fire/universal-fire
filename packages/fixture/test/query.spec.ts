@@ -1,4 +1,4 @@
-import { Mock } from '../src/mocking';
+import { Fixture } from '~/index';
 
 const ages = () => ({
   asdfasdfas1: 13,
@@ -29,7 +29,7 @@ const MyPony = () => ({
 
 describe('Query →', () => {
   it('limit queries with orderByKey() on scalar valued dictionary', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     m.updateDB({ ages: ages() });
     const result = await m
       .ref('ages')
@@ -45,7 +45,7 @@ describe('Query →', () => {
   });
 
   it('limit queries with orderByChild() on Firemodel model', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
 
     m.updateDB({ ponies: MyPony() });
     const result = await m
@@ -59,7 +59,7 @@ describe('Query →', () => {
   });
 
   it('limit queries with orderByValue() on scalar valued dictionary', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     m.updateDB({ ages: ages() });
 
     const result = await m
@@ -82,7 +82,7 @@ describe('Query →', () => {
   });
 
   it('getValue() of a scalar returns a scalar', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     m.updateDB({
       foo: 5,
       bar: 10,

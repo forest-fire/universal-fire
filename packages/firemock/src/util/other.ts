@@ -9,7 +9,7 @@ export function normalizeRef(r: string): string {
   return r;
 }
 
-export function parts(r: string) {
+export function parts(r: string): string[] {
   return normalizeRef(r).split('.');
 }
 
@@ -18,24 +18,24 @@ export function parts(r: string) {
  * which typically would represent the 'id'
  * of a list-node
  */
-export function leafNode(r: string) {
+export function leafNode(r: string): string {
   return parts(r).pop();
 }
 
-export function firstProp<T = IDictionary>(listOf: IDictionary<any>) {
+export function firstProp<T = IDictionary>(listOf: IDictionary): T {
   return (listOf ? listOf[firstKey(listOf) || 0] : {}) as T;
 }
 
-export function lastProp<T = IDictionary>(listOf: IDictionary<any>) {
+export function lastProp<T = IDictionary>(listOf: IDictionary): T {
   return listOf[lastKey(listOf) || 0] as T;
 }
 
-export function objectIndex(obj: IDictionary<unknown>, index: number) {
+export function objectIndex(obj: IDictionary, index: number): unknown {
   const keys = Object.keys(obj);
   return keys ? obj[keys[index - 1]] : null;
 }
 
-export function removeKeys(obj: IDictionary, remove: string[]) {
+export function removeKeys(obj: IDictionary, remove: string[]): IDictionary {
   return Object.keys(obj).reduce((agg: IDictionary, v: any) => {
     if (remove.indexOf(v) === -1) {
       agg[v] = obj[v];
@@ -48,7 +48,7 @@ export function removeKeys(obj: IDictionary, remove: string[]) {
  * Joins a set of paths together and converts into
  * correctly formatted "dot notation" directory path
  */
-export function join(...paths: string[]) {
+export function join(...paths: string[]): string {
   return paths
     .map((p) => {
       return p.replace(/[/\\]/gm, '.');
@@ -73,7 +73,7 @@ export function pathDiff(longPath: string, pathSubset: string) {
     : long.slice(subset.length - long.length).join('.');
 }
 
-export function orderedSnapToJS<T = any>(snap: IRtdbDataSnapshot) {
+export function orderedSnapToJS<T = any>(snap: IRtdbDataSnapshot): IDictionary<T> {
   const jsObject: IDictionary<T> = {};
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   snap.forEach((record: any) => (jsObject[record.key] = record.val()));
@@ -84,7 +84,7 @@ export function orderedSnapToJS<T = any>(snap: IRtdbDataSnapshot) {
 /**
  * Given a path, returns the parent path and child key
  */
-export function keyAndParent(dotPath: string) {
+export function keyAndParent(dotPath: string): { parent: string; key: string } {
   const sections = dotPath.split('.');
   const changeKey = sections.pop();
   const parent = sections.join('.');
@@ -93,24 +93,24 @@ export function keyAndParent(dotPath: string) {
 
 
 
-export function slashNotation(path: string) {
+export function slashNotation(path: string): string {
   return path.replace(/\./g, '/');
 }
 
 /** Get the parent DB path */
-export function getParent(dotPath: string) {
+export function getParent(dotPath: string): string {
   return keyAndParent(dotPath).parent;
 }
 
 /** Get the Key from the end of a path string */
-export function getKey(dotPath: string) {
+export function getKey(dotPath: string): string {
   return keyAndParent(dotPath).key;
 }
 
-export function stripLeadingDot(str: string) {
+export function stripLeadingDot(str: string): string {
   return str.slice(0, 1) === '.' ? str.slice(1) : str;
 }
 
-export function removeDots(str?: string) {
+export function removeDots(str?: string): string {
   return str ? str.replace(/\./g, '') : undefined;
 }

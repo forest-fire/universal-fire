@@ -1,10 +1,13 @@
-import { IMockWatcherGroupEvent } from '../../../@types';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { IMockWatcherGroupEvent } from '~/@types';
 import type {
   IRtdbDbEvent,
   IMockStore,
   ISdk,
   IMockListener,
   IRtdbSdk,
+  SnapshotFrom,
+  EventFrom,
 } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 import {
@@ -12,10 +15,11 @@ import {
   stripLeadingDot,
   removeDots,
   dotify,
-  get,
-} from '../../../util';
+} from '~/util';
+import { get } from 'native-dash';
 
 import { snapshot } from '..';
+import { EventType } from '@firebase/database-types';
 
 // TODO: Removed because this state is going to hanlded in `createStore.ts`
 // let _listeners: IListener[] = [];
@@ -185,6 +189,7 @@ export type EventTypePlusChild = IRtdbDbEvent | 'child';
  * You can also just state "child" as the event and it will resolve to all child
  * events: `[ 'child_added', 'child_changed', 'child_removed', 'child_moved' ]`
  */
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function listenerPaths<TSdk extends ISdk>(store: IMockStore<TSdk>) {
   const _listeners = store.getAllListeners();
   return (lookFor?: EventTypePlusChild | EventTypePlusChild[]) => {
@@ -196,8 +201,8 @@ export function listenerPaths<TSdk extends ISdk>(store: IMockStore<TSdk>) {
     }
     return lookFor
       ? _listeners
-          .filter((l) => lookFor.includes(l.eventType))
-          .map((l) => l.query.path)
+        .filter((l) => lookFor.includes(l.eventType as IRtdbDbEvent))
+        .map((l) => l.query.path)
       : _listeners.map((l) => l.query.path);
   };
 }
@@ -211,30 +216,30 @@ export function listenerPaths<TSdk extends ISdk>(store: IMockStore<TSdk>) {
  * You can also just state "child" as the event and it will resolve to all child
  * events: `[ 'child_added', 'child_changed', 'child_removed', 'child_moved' ]`
  */
-export function getListeners<TSdk extends ISdk>(store: IMockStore<TSdk>) {
+export function getListeners<TSdk extends IRtdbSdk>(store: IMockStore<TSdk>) {
   const _listeners = store.getAllListeners();
   return (
-    lookFor?: EventTypePlusChild | EventTypePlusChild[]
-  ): IMockListener<ISdk>[] => {
-    const childEvents = [
+    ...lookFor: EventTypePlusChild[]
+  ): IMockListener<TSdk>[] => {
+    const childEvents: Omit<EventType, "child">[] = [
       'child_added',
       'child_changed',
       'child_removed',
       'child_moved',
     ];
     const allEvents = childEvents.concat(['value']);
-    const events = !lookFor
+    const events = lookFor.length === 0
       ? allEvents
-      : lookFor === 'child'
-      ? childEvents
-      : lookFor;
+      : lookFor.length === 1 && lookFor[0] === 'child'
+        ? childEvents
+        : lookFor;
 
     return _listeners.filter((l) => events.includes(l.eventType));
   };
 }
 
-function keyDidNotPreviouslyExist(
-  e: IMockWatcherGroupEvent,
+function keyDidNotPreviouslyExist<TSdk extends ISdk>(
+  e: IMockWatcherGroupEvent<TSdk>,
   dbSnapshot: IDictionary
 ) {
   return get(dbSnapshot, e.key) === undefined ? true : false;
@@ -247,29 +252,29 @@ function keyDidNotPreviouslyExist(
  * send to zero or more listeners.
  */
 export function notify<TSdk extends IRtdbSdk>(api: IMockStore<TSdk>) {
-  return function (events: IMockWatcherGroupEvent[], dbSnapshot: IDictionary) {
+  return function (events: IMockWatcherGroupEvent<TSdk>[], dbSnapshot: IDictionary): void {
     events.forEach((evt) => {
       const isDeleteEvent = evt.value === null || evt.value === undefined;
       switch (evt.listenerEvent) {
         case 'child_removed':
           if (isDeleteEvent) {
-            evt.callback(snapshot(api, evt.key, evt.priorValue));
+            evt.callback(snapshot(api, evt.key, evt.priorValue) as SnapshotFrom<TSdk>);
           }
           return;
         case 'child_added':
-          if (!isDeleteEvent && keyDidNotPreviouslyExist(evt, dbSnapshot)) {
-            evt.callback(snapshot(api, evt.key, evt.value));
+          if (!isDeleteEvent && keyDidNotPreviouslyExist<TSdk>(evt, dbSnapshot)) {
+            evt.callback(snapshot(api, evt.key, evt.value) as SnapshotFrom<TSdk>);
           }
           return;
         case 'child_changed':
           if (!isDeleteEvent) {
-            evt.callback(snapshot(api, evt.key, evt.value));
+            evt.callback(snapshot(api, evt.key, evt.value) as SnapshotFrom<TSdk>);
           }
           return;
         case 'child_moved':
-          if (!isDeleteEvent && keyDidNotPreviouslyExist(evt, dbSnapshot)) {
+          if (!isDeleteEvent && keyDidNotPreviouslyExist<TSdk>(evt, dbSnapshot)) {
             // TODO: if we implement sorting then add the previousKey value
-            evt.callback(snapshot(api, evt.key, evt.value));
+            evt.callback(snapshot(api, evt.key, evt.value) as SnapshotFrom<TSdk>);
           }
           return;
         case 'value': {
@@ -284,13 +289,13 @@ export function notify<TSdk extends IRtdbSdk>(api: IMockStore<TSdk>) {
                 evt.value === null || evt.value === undefined
                   ? undefined
                   : { [evt.key]: evt.value }
-              )
+              ) as SnapshotFrom<TSdk>
             );
           } else {
             // property set
             const value =
               evt.value === null ? api.getDb(evt.listenerPath) : evt.value;
-            evt.callback(snapshot(api, evt.listenerPath, value));
+            evt.callback(snapshot(api, evt.listenerPath, value) as SnapshotFrom<TSdk>);
           }
         }
       } // end switch
@@ -322,7 +327,7 @@ export function findChildListeners<TSdk extends ISdk>(store: IMockStore<TSdk>) {
         : ['child_added', 'child_changed', 'child_moved', 'child_removed'];
 
     const decendants = _listeners
-      .filter((l) => eventTypes.includes(l.eventType))
+      .filter((l) => eventTypes.includes(l.eventType as IRtdbDbEvent))
       .filter((l) => changePath.startsWith(dotify(l.query.path)))
       .reduce((acc: IListenerPlus<ISdk>[], listener) => {
         const id = removeDots(

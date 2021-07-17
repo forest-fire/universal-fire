@@ -14,7 +14,7 @@ describe('Admin Auth => ', () => {
   });
 
   it('returned UserRecord has correct props when calling createUser', async () => {
-    const m = await Mock.prepare();
+    const m = await Fixture.prepare();
     const auth = await m.auth();
     const admin = adminAuthSdk;
     const response = await admin.createUser({
@@ -34,7 +34,7 @@ describe('Admin Auth => ', () => {
   });
 
   it('creating a User allows the client API to use that user to login', async () => {
-    const m = await Mock.prepare({ auth: { providers: ['emailPassword'] } });
+    const m = await Fixture.prepare({ auth: { providers: ['emailPassword'] } });
     const auth = await m.auth();
     const admin = adminAuthSdk;
     await admin.createUser({

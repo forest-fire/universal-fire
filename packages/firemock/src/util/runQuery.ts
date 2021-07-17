@@ -29,8 +29,8 @@ const orderByValue = <T extends IDictionary>(
         ? 1
         : -1
       : direction === SortOrder.asc
-      ? -1
-      : 1
+        ? -1
+        : 1
   );
 
   return values.reduce((agg: IDictionary, curr) => {
@@ -43,14 +43,14 @@ const sortFn: (query: any) => sortFns.ISortFns = (query) =>
   query.identity.orderBy === RtdbOrder.orderByChild
     ? sortFns.orderByChild(query.identity.orderByKey)
     : (sortFns[
-        query.identity.orderBy as keyof typeof sortFns
-      ] as sortFns.ISortFns);
+      query.identity.orderBy as keyof typeof sortFns
+    ] as sortFns.ISortFns);
 
 export function runQuery<
   T extends ISerializedQuery<TSdk>,
   TSdk extends IRtdbSdk,
   D extends IDictionary<any> | any[]
->(query: T, data: D) {
+>(query: T, data: D): any {
   /**
    * A boolean _flag_ to indicate whether the path is of the query points to a Dictionary
    * of Objects. This is indicative of a **Firemodel** list node.
@@ -78,8 +78,8 @@ export function runQuery<
     const limitToKeys = query.identity.limitToFirst
       ? Object.keys(data).slice(0, query.identity.limitToFirst)
       : query.identity.limitToLast
-      ? Object.keys(data).slice(-1 * query.identity.limitToLast)
-      : false;
+        ? Object.keys(data).slice(-1 * query.identity.limitToLast)
+        : false;
 
     if (limitToKeys) {
       keys(data).forEach((k) => {
@@ -106,9 +106,9 @@ export function runQuery<
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return isListOfObjects
     ? // this is list of records to convert back to hash for Firebase compatability
-      arrayToHash(list)
+    arrayToHash(list)
     : dataIsAnObject
-    ? // if it was an Object but values weren't objects then this is probably
+      ? // if it was an Object but values weren't objects then this is probably
       // a key/value pairing
       list.reduce((agg: IDictionary, curr: IDictionary<any>) => {
         if (curr.id && curr.value) {
@@ -131,7 +131,7 @@ export function runQuery<
 
         return agg;
       }, {})
-    : list;
+      : list;
 }
 
 function _limitFilter<TSdk extends IRtdbSdk>(query: ISerializedQuery<TSdk>) {

@@ -1,19 +1,15 @@
 import { IDictionary } from 'common-types';
 import { IDatabaseConfig, ISerializedQuery } from '../index';
-import { IFirestoreDbEvent, IRtdbDbEvent } from '../fire-proxies';
-import { ApiKind, Database, IDb, ISdk, SDK } from '../fire-types';
+import { AdminSdk, ApiKind, ISdk } from '../fire-types';
 import { IMockListener } from './IMockListener';
 import { NetworkDelay } from './index';
-import { IFirestoreSnapshot, IRtdbDataSnapshot } from '../snapshot';
+import { EventFrom, SnapshotFrom } from '../database';
 
 export interface IMockStore<
   TSdk extends ISdk,
-  TDb extends IDb = TSdk extends SDK.FirestoreAdmin | SDK.FirestoreClient ? Database.Firestore : Database.RTDB,
-  TEvent extends IRtdbDbEvent | IFirestoreDbEvent = TDb extends "RTDB" ? IRtdbDbEvent : IFirestoreDbEvent,
-  TSnap extends IRtdbDataSnapshot | IFirestoreSnapshot = TDb extends "RTDB" ? IRtdbDataSnapshot : IFirestoreSnapshot,
   TState extends IDictionary = IDictionary> {
   /** the API exposed by the underlying SDK (e.g., admin, client, rest) which is being used */
-  api: ApiKind;
+  api: TSdk extends AdminSdk ? ApiKind.admin : ApiKind.client;
 
   /**
    * The in-memory state tree representing the mock database's state
@@ -46,13 +42,13 @@ export interface IMockStore<
     /**
      * The event type which this listener will respond to.
      */
-    eventType: TEvent,
+    eventType: EventFrom<TSdk>,
     //TODO: make this generalized across RTDB and Firestore
     /**
      * A callback which is called when a change is detected on the passed in `query`
      * and the `eventType` matches.
      */
-    callback: (snap: TSnap, b?: null | string) => unknown,
+    callback: (snap: SnapshotFrom<TSdk>, b?: null | string) => unknown,
     /**
      * conditionally cancel the callback with _another_ callback function that responds to errors
      */
@@ -72,7 +68,7 @@ export interface IMockStore<
 
 
   /** lists all the watchers currently operating on the mock database */
-  getAllListeners(): IMockListener<ISdk>[];
+  getAllListeners(): IMockListener<TSdk>[];
 
   /**
    * Sets the network delay characteristics to be used for DB functions
@@ -116,7 +112,7 @@ export interface IMockStore<
    * non-destructive to props unchanged but it _sets_ the new value in replace
    * of the old where new props are provided.
    */
-  updateDb<T extends IDictionary = IDictionary>(path: string, value: T): void;
+  updateDb<T extends any>(path: string, value: T): void;
   /**
    * merges the passed in value with the existing state non-destructively
    */

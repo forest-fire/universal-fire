@@ -1,16 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { IClientRtdbDatabase, IMockStore } from '@forest-fire/types';
+import { DbFrom, IMockDatabase, IMockStore, SDK, IMockAuthConfig } from '@forest-fire/types';
 import { url } from 'common-types';
 import { reference } from '../index';
-import { createClientApp } from '../../firebase-app';
+import { createAuth } from '~/auth/createAuth';
+import { createFirebaseApp } from '~/databases/firebase-app';
 
 export function createRtdbClientMock<T extends IMockStore<'RealTimeClient'>>(
-  store: T
-): IClientRtdbDatabase {
-  const db: IClientRtdbDatabase = {
-    useEmulator() {},
+  store: T,
+  config: IMockAuthConfig
+): IMockDatabase<SDK.RealTimeClient> {
+  const db: DbFrom<SDK.RealTimeClient> = {
+    useEmulator() { },
     get app() {
-      return createClientApp(store);
+      return createFirebaseApp(SDK.RealTimeClient, store);
     },
     ref(path?: string) {
       return reference(store, path);
@@ -18,9 +21,17 @@ export function createRtdbClientMock<T extends IMockStore<'RealTimeClient'>>(
     refFromURL(url: url) {
       return reference(store, url);
     },
-    goOffline() {},
-    goOnline() {},
+    goOffline() { },
+    goOnline() { },
   };
 
-  return db;
+  const [auth, authManager] = createAuth(SDK.RealTimeClient, config);
+
+  return {
+    sdk: SDK.RealTimeClient,
+    db,
+    store,
+    auth,
+    authManager
+  };
 }

@@ -1,13 +1,14 @@
 import { IMockStore, IRtdbDataSnapshot, IRtdbSdk } from '@forest-fire/types';
 import { SortingFunction } from 'common-types';
 import { arrayToHash } from 'typed-conversions';
-import { get, getKey, join } from '../../../util';
+import { getKey, join } from '../../../util';
+import { get } from "native-dash";
 import { reference } from './reference';
 
 export type IRtdbMockSnapshotFactory<
   TSdk extends IRtdbSdk,
   T extends any = unknown
-> = (store: IMockStore<TSdk>, key: string, value: T[] | T) => IRtdbDataSnapshot;
+  > = (store: IMockStore<TSdk>, key: string, value: T[] | T) => IRtdbDataSnapshot;
 
 export const snapshot: IRtdbMockSnapshotFactory<IRtdbSdk> = (
   store,

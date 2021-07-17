@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   IDatabaseConfig,
   SDK,
@@ -12,7 +13,7 @@ import { createError } from 'brilliant-errors';
  * A class representing the Firestore Client SDK's API surface which interacts with the mock
  * database rather than a real DB.
  */
-export class FirestoreClientMock<TState> implements IAdminFirestoreDatabase {
+export class FirestoreClientMock implements IAdminFirestoreDatabase {
   private _dbConfig: IDatabaseConfig;
   private _sdk: SDK;
   private _store: IMockStore<SDK.FirestoreClient>;
@@ -26,21 +27,21 @@ export class FirestoreClientMock<TState> implements IAdminFirestoreDatabase {
     this._dbConfig = config;
     this._store = store;
   }
-  settings(settings: FirebaseFirestore.Settings): void {
+  settings(): void {
     throw new Error('Method not implemented.');
   }
   collection(
-    collectionPath: string
+    _collectionPath: string
   ): FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData> {
     throw new Error('Method not implemented.');
   }
   doc(
-    documentPath: string
+    _documentPath: string
   ): FirebaseFirestore.DocumentReference<FirebaseFirestore.DocumentData> {
     throw new Error('Method not implemented.');
   }
   collectionGroup(
-    collectionId: string
+    _collectionId: string
   ): FirebaseFirestore.CollectionGroup<FirebaseFirestore.DocumentData> {
     throw new Error('Method not implemented.');
   }
@@ -92,13 +93,13 @@ export class FirestoreClientMock<TState> implements IAdminFirestoreDatabase {
 
   public app: IClientApp;
 
-  public goOffline() {
+  public goOffline(): void {
     console.log(
       `The mock database [ ${this._sdk} / ${this._dbConfig.databaseURL} ] has gone offline, triggered by call to goOffline()`
     );
   }
 
-  public goOnline() {
+  public goOnline(): void {
     console.log(
       `The mock database [ ${this._sdk} / ${this._dbConfig.databaseURL} ] has gone online, triggered by call to goOnline()`
     );

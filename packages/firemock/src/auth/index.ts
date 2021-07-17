@@ -1,16 +1,17 @@
-//#autoindex
-
+// #autoindex, exclude: admin-sdk, client-sdk
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 08:59 PM ( GMT-7 )
-// export: named; exclusions: index, private.
-// directories: @types, auth, databases, errors, util.
+// index last changed at: 7th Jul, 2021, 09:00 PM ( GMT-7 )
+// export: named; exclusions: admin-sdk, client-sdk, index, private.
+// files: createAuth, createAuthManager.
+// directories: type-guards, util.
+
+// local file exports
+export * from "./createAuth";
+export * from "./createAuthManager";
 
 // directory exports
-export * from "./@types/index";
-export * from "./auth/index";
-export * from "./databases/index";
-export * from "./errors/index";
+export * from "./type-guards/index";
 export * from "./util/index";
 
 // Note:

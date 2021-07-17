@@ -6,9 +6,9 @@ import {
 } from '@forest-fire/types';
 
 export function onDisconnect<
-  TStore extends IMockStore<TSdk>,
+  TStore extends IMockStore<TSdk, any>,
   TSdk extends ISdk
->(store: TStore, query: ISerializedQuery<TSdk>) {
+>(_store: TStore, _query: ISerializedQuery<TSdk>): IRtdbOnDisconnect {
   const disconnect: IRtdbOnDisconnect = {
     cancel: async (_cb) => {
       return Promise.resolve();

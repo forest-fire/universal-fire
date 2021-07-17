@@ -1,31 +1,24 @@
 import 'jest-extended';
 import {
-  IDatabaseSdk,
-  SDK,
-  IMockStore,
-  IMockData,
   IMockDatabase,
+  SDK,
 } from '@forest-fire/types';
-import {RealTimeClient} from "@forest-fire/real-time-client"
-import { firemock } from '../src';
+import { createDatabase } from '~/databases/createDatabase';
 
 describe('EmailAuthProvider =>', () => {
-  let mockingDatabase: IDatabaseSdk<SDK.RealTimeClient>;
+  let mock: IMockDatabase<SDK.RealTimeClient>;
 
-  beforeAll(async () => {
-    mockingDatabase =  await RealTimeClient.connect(
-      { mocking: true } 
-    );
+  beforeAll(() => {
+    mock = createDatabase(SDK.RealTimeClient);
+  }
+
+  it('EmailAuthProvider exists on client API', () => {
+    const credential = mock.authManager.authProviders.EmailAuthProvider.credential;
+    expect(credential).toBeFunction();
   });
 
-  it('EmailAuthProvider exists and has appropriate props', async () => {
-    expect(mockingDatabase.).toBeInstanceOf(Object);
-    expect(mockingDatabase.authManager.authProviders.EmailAuthProvider.credential).toBeFunction();
-  });
-
-  it('calling credential() gives back a valid AuthCredential', () => {
-    const m = new Mock();
-    const provider = m.authProviders.EmailAuthProvider;
+  it('calling EmailAuthProvider.credential() gives back a valid AuthCredential', () => {
+    const provider = mock.authManager.authProviders.EmailAuthProvider;
     const response = provider.credential(
       'me@somewhere.com',
       "i'm a little teacup"

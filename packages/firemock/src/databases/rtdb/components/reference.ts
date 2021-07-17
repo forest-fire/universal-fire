@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/require-await */
 import {
   IMockStore,
   ISerializedQuery,
-  IRtdbSdk,
   IRtdbReference,
+  ISdk,
+  IRtdbSdk,
 } from '@forest-fire/types';
 import { query } from './query';
-import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { SerializedQuery, SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { onDisconnect } from './onDisconnect';
 import { FireMockError } from '../../../errors';
 import { join } from '../../../util';
@@ -27,12 +29,11 @@ function isMultiPath(data: IDictionary) {
   return indexesAreStrings && indexesLookLikeAPath ? true : false;
 }
 
-export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
-  store: T,
+export function reference<TStore extends IMockStore<TSdk, IDictionary>, TSdk extends IRtdbSdk>(
+  store: TStore,
   path: string | ISerializedQuery<TSdk> = ''
 ): IRtdbReference {
-  const serializedQuery: ISerializedQuery<IRtdbSdk> =
-    typeof path === 'string' ? new SerializedRealTimeQuery<TSdk>(path) : path;
+  const serializedQuery = typeof path === "string" ? new SerializedRealTimeQuery(path) : path;
   const query_ = query(store, serializedQuery);
   const ref: IRtdbReference = {
     orderByKey: query_.orderByKey,
@@ -67,7 +68,7 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
       return reference(store, path);
     },
     onDisconnect: () => {
-      return onDisconnect(store, serializedQuery);
+      return onDisconnect(store, serializedQuery as ISerializedQuery<TSdk>);
     },
     get parent() {
       return reference(
@@ -75,9 +76,9 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
         !serializedQuery.path || serializedQuery.path.split('/').length === 1
           ? null
           : serializedQuery.path
-              .split('/')
-              .slice(0, serializedQuery.path.split('/').length - 1)
-              .join('/')
+            .split('/')
+            .slice(0, serializedQuery.path.split('/').length - 1)
+            .join('/')
       );
     },
     push: (value, onComplete) => {
@@ -130,9 +131,9 @@ export function reference<T extends IMockStore<TSdk>, TSdk extends IRtdbSdk>(
       };
     },
     toString: () => {
-      return `FireMock::Query@${process.env.FIREBASE_DATA_ROOT_URL}/${serializedQuery.path}`;
+      return `FireMock::Query@${process.env.FIREBASE_DATA_ROOT_URL}/${serializedQuery}`;
     },
-    transaction: async (_transaction) => {
+    transaction: async () => {
       return Promise.resolve({
         committed: true,
         snapshot: null,

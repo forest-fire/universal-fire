@@ -1,21 +1,23 @@
-//#autoindex
-
-
+// #autoindex
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 09:29 AM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 08:59 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: first, get, last, set.
+// files: createDatabase, createStore.
+// directories: firebase-app, firestore, rtdb.
 
 // local file exports
-export * from "./first";
-export * from "./get";
-export * from "./last";
-export * from "./set";
+export * from "./createDatabase";
+export * from "./createStore";
+
+// directory exports
+export * from "./firebase-app/index";
+export * from "./firestore/index";
+export * from "./rtdb/index";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

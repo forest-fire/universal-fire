@@ -26,7 +26,7 @@ export async function importFakerLibrary() {
 export function getFakerLibrary() {
   if (!faker) {
     throw new FixtureError(
-      `The faker library has not been loaded yet! Use the importFakerLibrary() directly to ensure this happens first; or alternatively you can use Mock.prepare().`,
+      `The faker library has not been loaded yet! Use the importFakerLibrary() directly to ensure this happens first; or alternatively you can use Fixture.prepare().`,
       'not-ready'
     );
   }

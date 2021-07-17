@@ -1,5 +1,5 @@
 import { IDictionary, isNonNullObject } from 'common-types';
-import { AdminSdk, ClientSdk, Database, IFirestoreSdk, IRtdbSdk, ISdk } from '../fire-types';
+import { AdminSdk, ClientSdk, Database, IFirestoreSdk, IRtdbSdk, ISdk, SDK } from '../fire-types';
 import { IDatabaseSdk } from './db-sdk';
 
 /**
@@ -10,10 +10,11 @@ export function isDatabase<T extends IDatabaseSdk<ISdk>>(db: unknown): db is T {
   return isNonNullObject(db) && (db as IDictionary).dbType !== undefined;
 }
 
-export function isSdk<T extends IDatabaseSdk<ISdk>>(sdk: unknown): sdk is T {
-  return (
-    isNonNullObject(sdk) && isDatabase(sdk) && (sdk as IDictionary)?.isAdminApi !== undefined
-  );
+/**
+ * Tests whether the given input is a valid SDK string
+ */
+export function isSdk(sdk: unknown): sdk is SDK {
+  return typeof sdk === "string" && [SDK.FirestoreAdmin, SDK.FirestoreClient, SDK.RealTimeAdmin, SDK.RealTimeClient].includes(sdk as SDK);
 }
 
 /**
@@ -24,23 +25,28 @@ export function isRealTimeDatabase<T extends IDatabaseSdk<IRtdbSdk>>(db: unknown
   return isDatabase(db) && (db as IDictionary)?.dbType === Database.RTDB;
 }
 
-export function isFirestoreDatabase<T extends IDatabaseSdk<IFirestoreSdk>>(
-  db: unknown
-): db is T {
-  return isDatabase(db) && (db as IDictionary)?.dbType === Database.Firestore;
+/**
+ * Type guard that checks that a given SDK is for the Firestore Database
+ */
+export function isFirestoreDatabase(
+  sdk: unknown
+): sdk is IFirestoreSdk {
+  return isSdk(sdk) && [SDK.FirestoreAdmin, SDK.FirestoreClient].includes(sdk);
 }
 
 /** The database connection was established using the Admin SDK */
-export function isAdminSdk<T extends IDatabaseSdk<AdminSdk>>(
+export function isAdminSdk(
   sdk: unknown
-): sdk is T {
-  return isSdk(sdk) && (sdk as IDictionary)?.isAdminApi ? true : false;
+): sdk is AdminSdk {
+  return isSdk(sdk) && [SDK.RealTimeAdmin, SDK.FirestoreAdmin].includes(sdk);
 }
 
-/** The database connection was established using a Client SDK */
-export function isClientSdk<T extends IDatabaseSdk<ClientSdk>>(
+/** 
+ * Based on the SDK, this is a _client_ API
+ */
+export function isClientSdk(
   sdk: unknown
-): sdk is T {
-  return isSdk(sdk) && !(sdk as IDictionary)?.isAdminApi;
+): sdk is ClientSdk {
+  return isSdk(sdk) && [SDK.FirestoreClient, SDK.RealTimeClient].includes(sdk);
 }
 

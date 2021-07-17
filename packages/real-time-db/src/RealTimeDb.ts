@@ -39,6 +39,8 @@ import {
   IFirestoreSdk,
 } from '@forest-fire/types';
 
+import type * as Firemock from "firemock";
+
 import { createError } from 'brilliant-errors';
 
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
@@ -131,7 +133,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
     return this._config;
   }
 
-  public get mock(): IMockDatabase<IRtdbSdk> {
+  public get mock(): IMockDatabase<TSdk> {
     if (!this.isMockDb) {
       throw new FireError(
         `Attempt to access the "mock" property on an abstracted is not allowed unless the database is configured as a Mock database!`,
@@ -538,7 +540,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    * the keys to have a natural time based sort order.
    */
   // eslint-disable-next-line @typescript-eslint/require-await
-  public async push<T extends unknown>(path: string, value: T) {
+  public async push<T extends unknown>(path: string, value: T): Promise<void> {
     try {
       // eslint-disable-next-line @typescript-eslint/await-thenable
       await this.ref(path).push(value);
@@ -627,14 +629,13 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    * wrap with a try/catch and produce a graceful error message
    * if an error is encountered.
    */
-  protected async getFiremock(config: IMockConfig) {
+  protected async getFiremock(config: IMockConfig): Promise<void> {
     let Firemock;
     try {
       Firemock = await import(/* webpackChunkName: "firemock" */ 'firemock');
     } catch (e) {
       throw new FireError(
-        `To use mocking functions you must ensure that "firemock" is installed in your repo. Typically this would be installed as a "devDep" assuming that this mocking functionality is used as part of your tests but if you are shipping this mocking functionality then you will need to add it as full dependency.\n\n${
-          (e as Error).message
+        `To use mocking functions you must ensure that "firemock" is installed in your repo. Typically this would be installed as a "devDep" assuming that this mocking functionality is used as part of your tests but if you are shipping this mocking functionality then you will need to add it as full dependency.\n\n${(e as Error).message
         }`,
         'missing-dependency'
       );
@@ -648,8 +649,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
       );
     } catch (e) {
       throw new FireError(
-        `The firemock library was imported successfully but in trying to "prepare" it there was a failure: ${
-          (e as Error).message
+        `The firemock library was imported successfully but in trying to "prepare" it there was a failure: ${(e as Error).message
         }`,
         'failed-mock-prep'
       );
