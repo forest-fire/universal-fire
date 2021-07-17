@@ -1,0 +1,71 @@
+{
+  "version": "2.0.0",
+  "command": "npm",
+  "args": [
+    "run"
+  ],
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "npm",
+      "args": [
+        "run",
+        "build"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "clean",
+      "type": "shell",
+      "command": "npm",
+      "args": [
+        "run",
+        "clean"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "lint",
+      "type": "shell",
+      "command": "npm",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "prettier",
+      "type": "shell",
+      "command": "npm",
+      "args": [
+        "run",
+        "prettier"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "coverage",
+      "type": "shell",
+      "command": "npm",
+      "args": [
+        "run",
+        "coverage"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "test",
+      "type": "shell",
+      "command": "npm",
+      "args": [
+        "run",
+        "test"
+      ],
+      "problemMatcher": [],
+      "group": "test"
+    }
+  ]
+}
