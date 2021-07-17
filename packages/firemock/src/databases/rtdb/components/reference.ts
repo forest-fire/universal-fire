@@ -4,11 +4,10 @@ import {
   IMockStore,
   ISerializedQuery,
   IRtdbReference,
-  ISdk,
   IRtdbSdk,
 } from '@forest-fire/types';
 import { query } from './query';
-import { SerializedQuery, SerializedRealTimeQuery } from '@forest-fire/serialized-query';
+import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { onDisconnect } from './onDisconnect';
 import { FireMockError } from '../../../errors';
 import { join } from '../../../util';
@@ -112,13 +111,13 @@ export function reference<TStore extends IMockStore<TSdk, IDictionary>, TSdk ext
         if (onComplete) onComplete(e);
       }
     },
-    setPriority: async (_priority, _onComplete) => {
+    setPriority: async () => {
       throw new FireMockError(
         `Setting priorities with setPriority() is not supported in Firemock and in general isn't a good idea with the Real Time Database.`,
         'not-supported'
       );
     },
-    setWithPriority: async (_val, _priority, _onComplete) => {
+    setWithPriority: async () => {
       throw new FireMockError(
         `Setting priorities with setWithPriority() is not supported in Firemock and in general isn't a good idea with the Real Time Database.`,
         'not-supported'
@@ -131,7 +130,7 @@ export function reference<TStore extends IMockStore<TSdk, IDictionary>, TSdk ext
       };
     },
     toString: () => {
-      return `FireMock::Query@${process.env.FIREBASE_DATA_ROOT_URL}/${serializedQuery}`;
+      return `FireMock::Query@${process.env.FIREBASE_DATA_ROOT_URL}/${JSON.stringify(serializedQuery.identity)}`;
     },
     transaction: async () => {
       return Promise.resolve({

@@ -3,6 +3,7 @@ import {
   GenericEventHandler,
   HandleValueEvent,
   IFirebaseEventHandler,
+  listenerPaths,
 } from '~/index';
 import { IMockDatabase, SDK } from '@forest-fire/types';
 
@@ -115,8 +116,8 @@ describe('Database', () => {
         null,
         context
       );
-      db.store.addListener('/path/to/value3', 'value', callback2, null, context2);
-      db.store.addListener(
+      const cb2 = db.store.addListener('/path/to/value3', 'value', callback2, null, context2);
+      const cb = db.store.addListener(
         '/path/to/moved',
         'child_moved',
         callback,
@@ -124,7 +125,7 @@ describe('Database', () => {
         context
       );
       expect(db.store.getAllListeners()).toHaveLength(5);
-      db.store.removeListener('value', callback2);
+      db.store.removeListener(cb2.id);
       expect(db.store.getAllListeners()).toHaveLength(4);
       expect(listenerPaths('value')).toHaveLength(2);
     });
@@ -280,7 +281,7 @@ describe('Database', () => {
   });
 
   describe('Handle Events', () => {
-    it('"value" responds to NEW child', async () => {
+    it('"value" responds to NEW child', () => {
       db.store.reset();
       const callback: HandleValueEvent = (snap) => {
         if (snap.val()) {
@@ -327,7 +328,7 @@ describe('Database', () => {
       db.store.updateDb(`/people/${firstKey}`, { age: firstRecord.age + 1 });
     });
 
-    it('"value" responds to deeply nested CHANGE', async () => {
+    it('"value" responds to deeply nested CHANGE', () => {
       db.store.reset();
       const callback: HandleValueEvent = (snap) => {
         const record = snap.val();
@@ -391,7 +392,7 @@ describe('Database', () => {
   });
 
   describe('Initialing DB state', () => {
-    it('passing in dictionary for db config initializes the DB', async () => {
+    it('passing in dictionary for db config initializes the DB', () => {
       db.store.reset();
       const m = createDatabase(SDK.RealTimeAdmin, {}, {
         db: { foo: { bar: true, baz: true } },
@@ -423,10 +424,10 @@ describe('Database', () => {
   });
 
   describe('Other', () => {
-    it('"value" responds to scalar value set', async () => {
+    it('"value" responds to scalar value set', () => {
       db.store.reset();
       let status = 'no-listener';
-      const callback: IFirebaseEventHandler = (snap) => {
+      const callback: IFirebaseEventHandler<SDK.RealTimeAdmin> = (snap) => {
         if (status === 'listener') {
           const scalar = snap.val();
           expect(scalar).toBe(53);
@@ -437,7 +438,7 @@ describe('Database', () => {
       db.store.setDb('/scalar', 53);
     });
 
-    it('"child_added" responds to NEW child', async () => {
+    it('"child_added" responds to NEW child', () => {
       let ready = false;
       const callback: HandleValueEvent = (snap) => {
         if (ready) {
@@ -454,11 +455,11 @@ describe('Database', () => {
       });
     });
 
-    it('"child_added" ignores changed child', async () => {
+    it('"child_added" ignores changed child', () => {
       db.store.reset();
       db.store.setDb('people.abcd', { name: 'Chris Chisty', age: 100 });
       let ready = false;
-      const callback: HandleValueEvent = (snap) => {
+      const callback: HandleValueEvent = () => {
         if (ready) {
           throw new Error('Should NOT have called callback!');
         }
@@ -470,7 +471,7 @@ describe('Database', () => {
       });
     });
 
-    it('"child_added" ignores removed child', async () => {
+    it('"child_added" ignores removed child', () => {
       db.store.reset();
       db.store.setDb('people.abcd', {
         name: 'Chris Chisty',
@@ -487,14 +488,14 @@ describe('Database', () => {
       db.store.removeDb(`/people/abcd`);
     });
 
-    it('"child_removed" responds to removed child', async () => {
+    it('"child_removed" responds to removed child', () => {
       db.store.reset();
       db.store.setDb('people.abcd', {
         name: 'Chris Chisty',
         age: 100,
       });
       let ready = false;
-      const callback: HandleValueEvent = (snap) => {
+      const callback: HandleValueEvent = () => {
         if (ready) {
           expect(db.store.getDb().people).toBeInstanceOf(Object);
           expect(Object.keys(db.store.getDb().people)).toHaveLength(0);
@@ -507,7 +508,7 @@ describe('Database', () => {
       db.store.removeDb(`/people/abcd`);
     });
 
-    it('"child_removed" ignores added child', async () => {
+    it('"child_removed" ignores added child', () => {
       db.store.reset();
       let ready = false;
       const callback: HandleValueEvent = () => {
@@ -524,7 +525,7 @@ describe('Database', () => {
       });
     });
 
-    it('"child_removed" ignores removal of non-existing child', async () => {
+    it('"child_removed" ignores removal of non-existing child', () => {
       db.store.reset();
       let ready = false;
       const callback: HandleValueEvent = (snap) => {

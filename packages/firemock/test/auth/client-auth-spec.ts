@@ -7,6 +7,8 @@ import {
   setCurrentUser,
   setDefaultAnonymousUid,
 } from '../../src/auth/user-mgmt/index';
+import { createDatabase } from '~/databases';
+import { SDK } from '~/auth/admin-sdk';
 
 describe('Firebase Auth →', () => {
   it('Calling auth() gives you API', async () => {
@@ -24,9 +26,8 @@ describe('Firebase Auth →', () => {
   });
 
   it('Signing in with email is defaulted to false', async () => {
-    const m = await Fixture.prepare();
-    const auth = await m.auth();
-    expect(authProviders().includes('emailPassword')).toEqual(false);
+    const m = createDatabase(SDK.RealTimeClient);
+    expect(Object.keys(m.authManager).includes('emailPassword')).toEqual(false);
   });
 
   it('signInAnonymously returns uid of default anonymous user (when set)', async () => {

@@ -10,19 +10,19 @@ export function onDisconnect<
   TSdk extends ISdk
 >(_store: TStore, _query: ISerializedQuery<TSdk>): IRtdbOnDisconnect {
   const disconnect: IRtdbOnDisconnect = {
-    cancel: async (_cb) => {
+    cancel: async () => {
       return Promise.resolve();
     },
-    remove: async (_cb) => {
+    remove: async () => {
       return Promise.resolve();
     },
-    set: async (_cb) => {
+    set: async () => {
       return Promise.resolve();
     },
-    setWithPriority: async (_cb) => {
+    setWithPriority: async () => {
       return Promise.resolve();
     },
-    update: async (_cb) => {
+    update: async () => {
       return Promise.resolve();
     },
   };

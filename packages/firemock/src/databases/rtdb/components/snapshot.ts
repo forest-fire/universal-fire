@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IMockStore, IRtdbDataSnapshot, IRtdbSdk } from '@forest-fire/types';
 import { SortingFunction } from 'common-types';
 import { arrayToHash } from 'typed-conversions';
@@ -7,7 +8,7 @@ import { reference } from './reference';
 
 export type IRtdbMockSnapshotFactory<
   TSdk extends IRtdbSdk,
-  T extends any = unknown
+  T extends unknown = unknown
   > = (store: IMockStore<TSdk>, key: string, value: T[] | T) => IRtdbDataSnapshot;
 
 export const snapshot: IRtdbMockSnapshotFactory<IRtdbSdk> = (

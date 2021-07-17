@@ -16,6 +16,5 @@
       { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
   },
-  "include": ["src"],
-  "exclude": ["test"]
+  "include": ["src", "test"]
 }
