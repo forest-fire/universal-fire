@@ -1,0 +1,8 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.formatOnSave": true,
+  "prettier.packageManager": "yarn",
+  "prettier.printWidth": 120,
+  "prettier.proseWrap": "always",
+  "prettier.semi": true
+}

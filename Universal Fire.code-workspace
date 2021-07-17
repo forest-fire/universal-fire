@@ -9,6 +9,14 @@
       "path": "packages/universal-fire"
     },
     {
+      "name": "🚀 firemodel",
+      "path": "packages/firemodel"
+    },
+    {
+      "name": "🚀 firemodel-vuex-plugin",
+      "path": "packages/vuex-plugin"
+    },
+    {
       "name": "🤖 firemock",
       "path": "packages/firemock"
     },

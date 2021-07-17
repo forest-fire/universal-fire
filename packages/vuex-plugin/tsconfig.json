@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "declaration": false,
+    "module": "commonjs",
+    "target": "es2018",
+    "lib": ["es2015.reflect", "DOM"],
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noEmit": true,
+    "removeComments": false,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "plugins": [
+      { "transform": "typescript-transform-paths" },
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ]
+  },
+
+  "include": ["src", "test"]
+}
