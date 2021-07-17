@@ -21,7 +21,10 @@ export type {
   ISerializedIdentity,
   DbFrom,
   DbTypeFrom,
-  AppFrom
+  AppFrom,
+  ISdk,
+  IRtdbSdk,
+  IModel
 } from '@forest-fire/types';
 
 export { SerializedQuery } from '@forest-fire/serialized-query';

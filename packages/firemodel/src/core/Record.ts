@@ -57,7 +57,7 @@ import {
   withoutMetaOrPrivate,
 } from "@/util";
 
-import { IAbstractedDatabase } from "universal-fire";
+import { IDatabaseSdk } from "universal-fire";
 import { UnwatchedLocalEvent } from "@/state-mgmt";
 import { default as copy } from "fast-copy";
 import { key as fbKey } from "firebase-key";
@@ -67,7 +67,7 @@ import { writeAudit } from "@/audit";
 
 export class Record<T extends IModel> extends FireModel<T> implements IRecord {
   //#region STATIC INTERFACE
-  public static set defaultDb(db: IAbstractedDatabase) {
+  public static set defaultDb(db: IDatabaseSdk) {
     FireModel.defaultDb = db;
   }
   public static get defaultDb() {
@@ -389,7 +389,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
 
     const r = Record.create(model);
     const pathParts = path.replace(/\//gs, ".").split(".");
-    
+
     const compositeKey: IDictionary = {};
     const segments = r.dbOffset.replace(/\//gs, ".").split(".");
     if (
@@ -412,8 +412,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
           throw new FireModelError(
             `The attempt to build a composite key for the model ${capitalize(
               r.modelName
-            )} failed because the static parts of the path did not match up. Specifically where the "dbOffset" states the segment "${segment}" the path passed in had "${
-              pathParts[idx]
+            )} failed because the static parts of the path did not match up. Specifically where the "dbOffset" states the segment "${segment}" the path passed in had "${pathParts[idx]
             }" instead.`
           );
         }
@@ -680,8 +679,8 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
       this.META.localModelName !== this.modelName
         ? this.META.localModelName
         : this.options.pluralizeLocalPath
-        ? this.pluralName
-        : this.modelName
+          ? this.pluralName
+          : this.modelName
     );
   }
 
@@ -747,13 +746,13 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
       this.META.relationship(property).relType === `hasMany` ? "M" : "1";
     const fkCardinality =
       pkHasInverse &&
-      fkRec.META.relationship(fkInverseProperty).relType === `hasMany`
+        fkRec.META.relationship(fkInverseProperty).relType === `hasMany`
         ? "M"
         : "1";
     const cardinality = `${pkCardinality}:${fkCardinality}`;
     const inversePointsToWrongModel = pkHasInverse
       ? fkRec.META.relationship(fkInverseProperty).fkModelName !==
-        this.modelName
+      this.modelName
       : false;
     const fkReciprocalInverseProperty =
       pkHasInverse && fkRec.META.relationship(property).hasInverse
@@ -761,8 +760,8 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
         : undefined;
     const fkHasInvalidInverse =
       pkHasInverse &&
-      fkRec.META.relationship(property).hasInverse &&
-      fkRec.META.relationship(property).inverseProperty !== property
+        fkRec.META.relationship(property).hasInverse &&
+        fkRec.META.relationship(property).inverseProperty !== property
         ? true
         : false;
 
@@ -871,8 +870,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
       throw new FireModelError(
         `There is a problem with this record's META information [ model: ${capitalize(
           this.modelName
-        )}, id: ${
-          this.id
+        )}, id: ${this.id
         } ]. The property() method -- used to dig into properties on any given model appears to be missing!`,
         "firemodel/meta-missing"
       );
@@ -885,8 +883,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
         const rootProperties = meta.property(root);
         if (!rootProperties) {
           throw new FireModelError(
-            `While this record [ model: ${capitalize(this.modelName)}, id: ${
-              this.id
+            `While this record [ model: ${capitalize(this.modelName)}, id: ${this.id
             } ] does return a "META.property" function, looking up the property "${root}" has resulted in an invalid response [${typeof rootProperties}]`
           );
         }
@@ -1162,8 +1159,8 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
           ? Object.keys(this.get(property))
           : []
         : this._data[property]
-        ? [(this.get(property) as unknown) as string]
-        : [];
+          ? [(this.get(property) as unknown) as string]
+          : [];
 
     let paths: IFmPathValuePair[] = [];
     const now = new Date().getTime();
@@ -1494,8 +1491,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
               e,
               `The attempt to "remove" the ${capitalize(
                 this.modelName
-              )} with ID of "${
-                this.id
+              )} with ID of "${this.id
               }" has been aborted. This is often because you don't have the right properties set for the dynamic path. This model requires the following dynamic properties to uniquely define (and remove) it: ${this.dynamicPathComponents.join(
                 ", "
               )}`
@@ -1521,18 +1517,13 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
             } catch (e) {
               throw new FireModelProxyError(
                 e,
-                `While trying to remove ${capitalize(this.modelName)}.${
-                  this.id
-                } from the database, problems were encountered removing the relationship defined by the "${
-                  rel.property
-                } property (which relates to the model ${
-                  rel.fkModelName
-                }). This relationship has a cardinality of "${
-                  rel.relType
-                }" and the value(s) were: ${
-                  rel.relType === "hasOne"
-                    ? Object.keys(this.get(rel.property))
-                    : this.get(rel.property)
+                `While trying to remove ${capitalize(this.modelName)}.${this.id
+                } from the database, problems were encountered removing the relationship defined by the "${rel.property
+                } property (which relates to the model ${rel.fkModelName
+                }). This relationship has a cardinality of "${rel.relType
+                }" and the value(s) were: ${rel.relType === "hasOne"
+                  ? Object.keys(this.get(rel.property))
+                  : this.get(rel.property)
                 }`
               );
             }
@@ -1634,8 +1625,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
 
       if (value ? false : true) {
         throw new FireModelError(
-          `You can not ask for the ${forProp} on a model like "${
-            this.modelName
+          `You can not ask for the ${forProp} on a model like "${this.modelName
           }" which has a dynamic property of "${prop}" before setting that property [ data: ${JSON.stringify(
             this.data
           )} ].`,
@@ -1644,8 +1634,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
       }
       if (!["string", "number"].includes(typeof value)) {
         throw new FireModelError(
-          `The path is using the property "${prop}" on ${
-            this.modelName
+          `The path is using the property "${prop}" on ${this.modelName
           } as a part of the route path but that property must be either a string or a number and instead was a ${typeof prop}`,
           "record/not-allowed"
         );
@@ -1677,8 +1666,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
       await this._initialize(data);
     } else {
       throw new FireModelError(
-        `Failed to load the Record "${this.modelName}::${
-          this.id
+        `Failed to load the Record "${this.modelName}::${this.id
         }" with composite key of:\n ${JSON.stringify(keys, null, 2)}`,
         "firebase/no-record-found"
       );
@@ -1753,8 +1741,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
     } catch (e) {
       throw new FireModelProxyError(
         e,
-        `An ${capitalize(this.modelName)} [${
-          this.id
+        `An ${capitalize(this.modelName)} [${this.id
         }] model was being added but when attempting to add in the relationships which were inferred by the record payload it ran into problems. The relationship(s) which had properties defined -- and which had a bi-lateral FK relationship (e.g., both models will track the relationship versus just the ${capitalize(
           this.modelName
         )} [${this.id} model) --  were: ${relationshipsTouched.join(", ")}`

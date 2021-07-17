@@ -2,7 +2,7 @@ import type { IFiremodelConfig, IFiremodelState } from '@/types';
 import { addNamespace, setInitialState, storeDatabase, storePluginConfig } from '@/util';
 
 import { FireModel } from 'firemodel';
-import type { IAbstractedDatabase, IRealTimeClient, IFirestoreClient } from 'universal-fire';
+import type { IDatabaseSdk, IRealTimeClient, IFirestoreClient } from 'universal-fire';
 import type { Store } from 'vuex';
 import copy from 'fast-copy';
 import { preserveStore } from '@/util';
@@ -25,13 +25,13 @@ export const FiremodelPlugin = <T>(
    * Provide a connection to the database with one of the SDK's provided
    * by the `universal-fire` library.
    */
-  db: IRealTimeClient | IFirestoreClient | IAbstractedDatabase,
+  db: IRealTimeClient | IFirestoreClient | IDatabaseSdk,
   /**
    * Specify the configuration of the "core services" this plugin provides
    */
   config: IFiremodelConfig<T & IFiremodelVuexModule<T>>
 ) => {
-  storeDatabase(db as IAbstractedDatabase);
+  storeDatabase(db as IDatabaseSdk);
   storePluginConfig(config);
   type IRootState = T & { '@firemodel': IFiremodelState<T> };
   return (store: Store<IRootState>) => {

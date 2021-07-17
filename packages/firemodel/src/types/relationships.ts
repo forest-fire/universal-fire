@@ -1,6 +1,6 @@
 import { FireModelError } from "@/errors";
 import { IDictionary } from "common-types";
-import { IAbstractedDatabase } from "universal-fire";
+import { IDatabaseSdk, ISdk } from "universal-fire";
 
 /**
  * **IFmRelationshipOperation**
@@ -18,13 +18,14 @@ export type IFmRelationshipOperation =
   | "add"
   /** can be either a hasOne or hasMany relationship where props have been removed */
   | "remove";
+
 /**
  * **IFmRelationshipOptions**
  *
  * The options that each of the `Record` relationship API endpoints provides
  * as an optional parameter
  */
-export interface IFmRelationshipOptions {
+export interface IFmRelationshipOptions<S extends ISdk> {
   /**
    * Ensure that FK being referenced actually exists; throw error if not.
    * Default is false.
@@ -60,14 +61,14 @@ export interface IFmRelationshipOptions {
   /**
    * Provide an explicit reference to the database for the relationship operations
    */
-  db?: IAbstractedDatabase;
+  db?: IDatabaseSdk<S>;
 }
 
 /**
  * The options that each of the `hasMany` transactional API endpoints must expose
  */
-export interface IFmRelationshipOptionsForHasMany
-  extends IFmRelationshipOptions {
+export interface IFmRelationshipOptionsForHasMany<S extends ISdk>
+  extends IFmRelationshipOptions<S> {
   /**
    * the default behaviour is to add the value `true` but you can optionally
    * add some additional piece of information here instead.

@@ -1,9 +1,10 @@
 import { IDictionary, datetime } from "common-types";
 
-// import { IAbstractedDatabase } from "universal-fire";
-import { IAbstractedDatabase } from "universal-fire";
+// import { IDatabaseSdk } from "universal-fire";
+import { IDatabaseSdk } from "universal-fire";
 import { IModel, IPrimaryKey } from "@/types";
 import type { FireModelError } from "@/errors";
+import { ISdk } from "../../../types/dist/types";
 
 export interface IUnderlyingError<T> {
   /** an identifying characteristic of the individual error */
@@ -18,9 +19,9 @@ export type PropertyOf<T> = keyof T & string;
 export type FmModelConstructor<T extends IModel> = new () => T;
 
 /** _options_ allowed to modify the behavior/configuration of a `Model` */
-export interface IModelOptions {
+export interface IModelOptions<T extends ISdk = ISdk> {
   logger?: ILogger;
-  db?: IAbstractedDatabase;
+  db?: IDatabaseSdk<T>;
 }
 
 export enum SortOrder {
@@ -36,7 +37,7 @@ export enum SortOrder {
  * provides options to configure `Watch` triggered listeners
  * on Firebase databases.
  */
-export interface IWatchOptions<T> extends Omit<IListOptions<T>, "paginate"> {
+export interface IWatchOptions<T> extends Omit<IListOptions<any, T>, "paginate"> {
   /**
    * Filters the results returned by the watched query prior to _dispatch_
    * which allows a way to only send a subset of records to the state management
@@ -62,14 +63,14 @@ export interface IWatchOptions<T> extends Omit<IListOptions<T>, "paginate"> {
  *
  * provides options to configure `List` based queries
  */
-export interface IListOptions<T, K extends keyof T = keyof T>
+export interface IListOptions<S extends ISdk, T extends IModel>
   extends IModelOptions {
   offsets?: Partial<T>;
   /**
    * optionally use an _explicit_ database connection rather than the
    * _default_ connection located at `FireModel.defaultDb`.
    */
-  db?: IAbstractedDatabase;
+  db?: IDatabaseSdk<S>;
 
   /**
    * Specifies which property in the Model should be used to order the query
@@ -85,7 +86,7 @@ export interface IListOptions<T, K extends keyof T = keyof T>
    * layers like **IndexedDB** you will need to explicit articulation
    * of indexes anyway.
    */
-  orderBy?: K & string;
+  orderBy?: keyof T & string;
   /**
    * **limitToFirst**
    *
@@ -139,8 +140,8 @@ export interface IListOptions<T, K extends keyof T = keyof T>
   paginate?: number;
 }
 
-export type IListQueryOptions<T> = Omit<
-  IListOptions<T>,
+export type IListQueryOptions<S extends ISdk, T extends IModel> = Omit<
+  IListOptions<S, T>,
   "orderBy" | "limitToFirst" | "limitToLast" | "startAt" | "endAt"
 >;
 

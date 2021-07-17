@@ -1,3 +1,5 @@
+import type { ISdk } from "universal-fire";
+
 import {
   FmEvents,
   ICompositeKey,
@@ -25,11 +27,11 @@ export interface IFmWatcherStopped {
  * This represents the payload which **Firemodel** will dispatch when
  * _watcher context_ is available.
  */
-export type IFmWatchEvent<T extends IModel = IModel> = IFmServerOrLocalEvent<
+export type IFmWatchEvent<S extends ISdk, T extends IModel = IModel> = IFmServerOrLocalEvent<
   T
 > &
   IEventTimeContext<T> &
-  IWatcherEventContext<T>;
+  IWatcherEventContext<S, T>;
 
 /**
  * **IFmWatchEventLocalRecord**
@@ -38,8 +40,9 @@ export type IFmWatchEvent<T extends IModel = IModel> = IFmServerOrLocalEvent<
  * the payload you will get.
  */
 export type IFmWatchEventLocalRecord<
+  S extends ISdk,
   T extends IModel = IModel
-> = IFmLocalRecordEvent<T> & IEventTimeContext<T> & IWatcherEventContext<T>;
+  > = IFmLocalRecordEvent<T> & IEventTimeContext<T> & IWatcherEventContext<S, T>;
 
 /**
  * **IFmWatchEventLocalRelationship**
@@ -54,14 +57,15 @@ export type IFmWatchEventLocalRecord<
  * `IFmLocalRelationshipEvent` and not worry about whether the event was watched or not.
  */
 export type IFmWatchEventLocalRelationship<
+  S extends ISdk,
   T extends IModel = IModel
-> = IFmLocalRelationshipEvent<T> &
+  > = IFmLocalRelationshipEvent<T> &
   IEventTimeContext<T> &
-  IWatcherEventContext<T>;
+  IWatcherEventContext<S, T>;
 
-export type IFmWatchEventLocal<T> =
-  | IFmWatchEventLocalRecord<T>
-  | IFmWatchEventLocalRelationship<T>;
+export type IFmWatchEventLocal<S extends ISdk, T extends IModel> =
+  | IFmWatchEventLocalRecord<S, T>
+  | IFmWatchEventLocalRelationship<S, T>;
 
 export interface IFmRecordMeta<T extends IModel> {
   /**

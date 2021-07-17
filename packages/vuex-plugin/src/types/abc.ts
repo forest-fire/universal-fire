@@ -1,5 +1,5 @@
 import type { Model, IPrimaryKey } from 'firemodel';
-import type { IAbstractedDatabase, ISerializedQuery } from 'universal-fire';
+import type { IDatabaseSdk, ISerializedQuery } from 'universal-fire';
 import type { epochWithMilliseconds, IDictionary } from 'common-types';
 import type { AbcApi, AbcResult } from '@/abc';
 import type { AbcMutation, DbSyncOperation, AbcStrategy, QueryType } from '@/enums';
@@ -29,7 +29,7 @@ export interface IAbcApiConfig<T extends Model> {
    * option then it will rely on **Firemodel**'s _defaultDb_ being
    * set.
    */
-  db?: IAbstractedDatabase;
+  db?: IDatabaseSdk;
 
   /**
    * Firemodel typically determines the local path for you but

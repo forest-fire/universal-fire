@@ -31,11 +31,13 @@
     "native-dash": "1.15.1",
     "scripty": "2.0.0",
     "jest": "^27.0.6",
-    "@forest-fire/types": "*"
+    "@forest-fire/types": "*",
+    "firemodel": "*"
   },
   "peerDependencies": {
     "native-dash": "1.15.1",
-    "@forest-fire/types": "*"
+    "@forest-fire/types": "*",
+    "firemodel": "*"
   },
   "dependencies": {
     "firebase-key": "2.0.2",

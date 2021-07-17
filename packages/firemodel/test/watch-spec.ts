@@ -11,7 +11,7 @@ import {
   getWatcherPool,
 } from "@/index";
 import { IDictionary, wait } from "common-types";
-import { IAbstractedDatabase, RealTimeAdmin } from "universal-fire";
+import { IDatabaseSdk, RealTimeAdmin } from "universal-fire";
 
 import { BaseSerializer } from "@forest-fire/serialized-query";
 import { DeeperPerson } from "./testing/dynamicPaths/DeeperPerson";
@@ -22,7 +22,7 @@ import { setupEnv } from "./testing/helpers";
 setupEnv();
 
 describe("Watch →", () => {
-  let realDB: IAbstractedDatabase;
+  let realDB: IDatabaseSdk;
   beforeAll(async () => {
     realDB = await RealTimeAdmin.connect();
     FireModel.defaultDb = realDB;
@@ -158,8 +158,7 @@ describe("Watch →", () => {
 
     events.forEach((evt) => {
       expect(evt.localPath).toBe(
-        `${person.META.localPrefix}/${
-          person.META.localModelName || person.pluralName
+        `${person.META.localPrefix}/${person.META.localModelName || person.pluralName
         }`
       );
     });

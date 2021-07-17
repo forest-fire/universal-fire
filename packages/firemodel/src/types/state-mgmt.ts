@@ -11,6 +11,7 @@ import {
 import {
   IPathBasedWatchEvent,
   IRtdbDbEvent,
+  ISdk,
   ISerializedQuery,
   IValueBasedWatchEvent,
 } from "universal-fire";
@@ -138,7 +139,7 @@ export interface IFmLocalEventBase<T> {
 export interface IFmLocalRelationshipEvent<
   F extends IModel = IModel,
   T extends IModel = IModel
-> extends IFmLocalEventBase<F> {
+  > extends IFmLocalEventBase<F> {
   kind: "relationship";
   operation: IFmRelationshipOperation;
   /** the property on the `from` model which has a FK ref to `to` model */
@@ -228,7 +229,7 @@ export type IFmLocalEvent<T> =
   | IFmLocalRecordEvent<T>
   | IFmLocalRelationshipEvent<T>;
 
-export interface IWatcherEventContextBase<T extends IModel = IModel>
+export interface IWatcherEventContextBase<S extends ISdk, T extends IModel = IModel>
   extends IFmRecordMeta<T> {
   watcherId: string;
   /** if defined, pass along the string name off the watcher */
@@ -242,7 +243,7 @@ export interface IWatcherEventContextBase<T extends IModel = IModel>
    * Indicates the **Firebase** event type/family; either `value` or `child`
    */
   eventFamily: IWatchEventClassification;
-  query: ISerializedQuery<T> | Array<ISerializedQuery<T>>;
+  query: ISerializedQuery<S, T> | Array<ISerializedQuery<S, T>>;
   /**
    * The date/time when this watcher was started.
    */
@@ -263,34 +264,34 @@ export interface IWatcherEventContextBase<T extends IModel = IModel>
  * When watching a "list-of-records" you are really watching
  * a basket/array of underlying record watchers.
  */
-export interface IWatcherEventContextListofRecords<T extends IModel = IModel>
-  extends IWatcherEventContextBase<T> {
+export interface IWatcherEventContextListofRecords<S extends ISdk, T extends IModel = IModel>
+  extends IWatcherEventContextBase<S, T> {
   watcherSource: "list-of-records";
   /**
    * The underlying _record queries_ used to achieve
    * the `list-of-records` watcher.
    */
-  query: Array<ISerializedQuery<T>>;
+  query: Array<ISerializedQuery<S, T>>;
   eventFamily: "child";
 }
 
-export interface IWatcherEventContextList<T extends IModel = IModel>
-  extends IWatcherEventContextBase<T> {
+export interface IWatcherEventContextList<S extends ISdk, T extends IModel = IModel>
+  extends IWatcherEventContextBase<S, T> {
   watcherSource: "list";
   /**
    * The query setup to watch a `List`
    */
-  query: ISerializedQuery<T>;
+  query: ISerializedQuery<S, T>;
   eventFamily: "child";
 }
 
-export interface IWatcherEventContextRecord<T extends IModel = IModel>
-  extends IWatcherEventContextBase<T> {
+export interface IWatcherEventContextRecord<S extends ISdk, T extends IModel = IModel>
+  extends IWatcherEventContextBase<S, T> {
   watcherSource: "record";
   /**
    * The query setup to watch a `Record`
    */
-  query: ISerializedQuery<T>;
+  query: ISerializedQuery<S, T>;
   eventFamily: "value";
 }
 
@@ -298,10 +299,10 @@ export interface IWatcherEventContextRecord<T extends IModel = IModel>
  * The meta information provided when a watcher is started;
  * it is also added to events when they have watcher context.
  */
-export type IWatcherEventContext<T extends IModel = IModel> =
-  | IWatcherEventContextList<T>
-  | IWatcherEventContextRecord<T>
-  | IWatcherEventContextListofRecords<T>;
+export type IWatcherEventContext<S extends ISdk, T extends IModel = IModel> =
+  | IWatcherEventContextList<S, T>
+  | IWatcherEventContextRecord<S, T>
+  | IWatcherEventContextListofRecords<S, T>;
 
 /**
  * The Vuex equivalent of a Redux dispatch call

@@ -1,11 +1,11 @@
 import { IFmModelPropertyMeta, IModel, NamedFakes } from "@/types";
 import { PropertyNamePatterns, fakeIt } from "./index";
 
-import { IAbstractedDatabase } from "universal-fire";
+import { IDatabaseSdk } from "universal-fire";
 import { MockHelper } from "firemock";
 
 export function mockValue<T extends IModel>(
-  db: IAbstractedDatabase,
+  db: IDatabaseSdk,
   propMeta: IFmModelPropertyMeta<T>,
   mockHelper: MockHelper,
   ...rest: any[]
@@ -18,10 +18,10 @@ export function mockValue<T extends IModel>(
     return typeof mockType === "function"
       ? mockType(mockHelper)
       : fakeIt(
-          mockHelper,
-          mockType as keyof typeof NamedFakes,
-          ...(mockParameters || [])
-        );
+        mockHelper,
+        mockType as keyof typeof NamedFakes,
+        ...(mockParameters || [])
+      );
   } else {
     // MOCK is undefined
     const fakedMockType = (Object.keys(NamedFakes).includes(propMeta.property)

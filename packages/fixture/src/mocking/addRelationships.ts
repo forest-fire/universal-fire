@@ -1,21 +1,21 @@
-import { IMockRelationshipConfig, IMockResponse, IModel } from "@/types";
+import { Record } from "firemodel";
+import { IDatabaseSdk, SDK, IModel } from "@forest-fire/types";
+import { IMockRelationshipConfig, IMockResponse } from "~/mocking/index"
 import { processHasMany, processHasOne } from "./index";
 
-import { IAbstractedDatabase } from "universal-fire";
 import { IDictionary } from "common-types";
-import { Record } from "@/core";
 
 /**
  * Adds relationships to mocked records
  */
-export function addRelationships<T extends IModel>(
-  db: IAbstractedDatabase,
+export function addRelationships<M extends IModel, D extends IDatabaseSdk<any>>(
+  db: D,
   config: IMockRelationshipConfig,
   exceptions: IDictionary = {}
 ) {
-  return async (record: Record<T>): Promise<Array<IMockResponse<T>>> => {
+  return async (record: Record<M>): Promise<Array<IMockResponse<M>>> => {
     const relns = record.META.relationships;
-    const relnResults: Array<IMockResponse<T>> = [];
+    const relnResults: Array<IMockResponse<M>> = [];
 
     if (config.relationshipBehavior !== "ignore") {
       for (const rel of relns) {
@@ -24,7 +24,7 @@ export function addRelationships<T extends IModel>(
           Object.keys(config.cardinality).includes(rel.property)
         ) {
           if (rel.relType === "hasOne") {
-            const fkRec = await processHasOne<T>(record, rel, config, db);
+            const fkRec = await processHasOne<M>(record, rel, config, db);
             if (config.relationshipBehavior === "follow") {
               relnResults.push(fkRec);
             }
@@ -35,7 +35,7 @@ export function addRelationships<T extends IModel>(
                 : NumberBetween(config.cardinality[rel.property] as any)
               : 2;
             for (const i of Array(cardinality)) {
-              const fkRec = await processHasMany<T>(record, rel, config, db);
+              const fkRec = await processHasMany<M>(record, rel, config, db);
               if (config.relationshipBehavior === "follow") {
                 relnResults.push(fkRec);
               }

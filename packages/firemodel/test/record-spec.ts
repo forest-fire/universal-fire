@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import { IFmLocalEvent, IFmWatchEvent, List, Record } from "../src";
-import { IAbstractedDatabase, IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
+import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
 
 import { FireModel } from "@/index";
 import { FmEvents } from "@/index";
@@ -10,7 +10,7 @@ import { Person as Peeps } from "./testing/PersonAsPeeps";
 import { Person } from "./testing/Person";
 
 describe("Record > ", () => {
-  let db: IAbstractedDatabase;
+  let db: IDatabaseSdk;
   beforeEach(async () => {
     db = await RealTimeAdmin.connect({ mocking: true });
     FireModel.defaultDb = db;

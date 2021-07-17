@@ -1,7 +1,9 @@
 import {
-  IAbstractedDatabase,
+  IDatabaseSdk,
   IAdminConfig,
   IClientConfig,
+  ISdk,
+  IDatabaseApi
 } from "universal-fire";
 import { IDictionary } from "common-types";
 import {
@@ -28,21 +30,21 @@ const defaultDispatch: IReduxDispatch<any, any> = async (context) => "";
 
 const registeredModules: IDictionary<new () => any> = {};
 
-export class FireModel<T extends IModel> {
+export class FireModel<S extends ISdk, T extends IModel> {
   public static get defaultDb() {
     return FireModel._defaultDb;
   }
 
   /**
    * Any FireModel transaction needs to connect to the database
-   * via a passed-in reference to "abstracted-client" or "abstracted-admin"
-   * database. These references can be done with any/every transaction via
+   * via a passed-in reference to an SDK provided by `universal-fire`. 
+   * These references can be done with any/every transaction via
    * the options hash but it is often more convient to set a "fallback" or
    * "default" database to use should a given transaction not state a DB
    * connection explicitly.
    */
-  public static set defaultDb(db: IAbstractedDatabase) {
-    this._defaultDb = db;
+  public static set defaultDb(db: IDatabaseApi<any>) {
+    FireModel._defaultDb = db;
   }
 
   /**
@@ -136,7 +138,7 @@ export class FireModel<T extends IModel> {
   }
 
   /** the connected real-time database */
-  public get db(): IAbstractedDatabase {
+  public get db(): IDatabaseSdk {
     if (!this._db) {
       this._db = FireModel.defaultDb;
     }
@@ -175,7 +177,7 @@ const db = await FireModel.connect(DB, options);
    * databases) but the vast majority of projects only have ONE firebase
    * database so this just makes the whole process much easier.
    */
-  public static async connect<T extends IAbstractedDatabase>(
+  public static async connect<T extends IDatabaseSdk>(
     RTDB: {
       connect: (options: Partial<IAdminConfig> & IClientConfig) => T;
     },
@@ -204,7 +206,7 @@ const db = await FireModel.connect(DB, options);
     // TODO: implement this!
     return false;
   }
-  private static _defaultDb: IAbstractedDatabase;
+  private static _defaultDb: IDatabaseSdk<any>;
   private static _dispatchActive: boolean = false;
   /** the dispatch function used to interact with frontend frameworks */
   private static _dispatch: IReduxDispatch = defaultDispatch;
@@ -216,7 +218,7 @@ const db = await FireModel.connect(DB, options);
   /** the data structure/model that this class operates around */
   protected _model: T;
   protected _modelConstructor: new () => T;
-  protected _db: IAbstractedDatabase;
+  protected _db: IDatabaseSdk<S>;
 
   //#endregion
 

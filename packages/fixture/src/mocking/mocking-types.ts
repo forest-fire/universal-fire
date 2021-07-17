@@ -1,4 +1,4 @@
-import { ICompositeKey } from "@/types";
+import { ICompositeKey } from "firemodel";
 import { IDictionary } from "common-types";
 
 export type ICardinalityConfig<T> = {

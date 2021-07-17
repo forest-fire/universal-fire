@@ -1,5 +1,5 @@
 import { IDictionary, epoch } from 'common-types';
-import type { IClientAuth, IAbstractedDatabase } from 'universal-fire';
+import type { IClientAuth, IDatabaseSdk } from 'universal-fire';
 import { Watch, Record, List, Model, IModelOptions } from 'firemodel';
 import { Commit, Dispatch } from 'vuex';
 import type { IAuthPersistenceStrategy, IFiremodelState } from '@/types';
@@ -46,14 +46,14 @@ export interface IFmConnectedContext<T> extends IFmEventBase<T> {
   /** the database configuration that was used */
   config: IFiremodelConfig<T>;
   /** the connection to the DB via `universal-fire` */
-  db: IAbstractedDatabase;
+  db: IDatabaseSdk;
 }
 
 /** Context provided to a _logged in_ user */
 export interface IFmLoginEventContext<T>
   extends IFmEventBase<T>,
-    IFmConnectedContext<T>,
-    IFmAuthenticatatedContext<T> {
+  IFmConnectedContext<T>,
+  IFmAuthenticatatedContext<T> {
   /** the logged in user's `uid` */
   uid: string;
 
@@ -68,8 +68,8 @@ export interface IFmLoginEventContext<T>
 
 export interface IFmLogoutEventContext<T>
   extends IFmEventBase<T>,
-    IFmConnectedContext<T>,
-    IFmAuthenticatatedContext<T> {
+  IFmConnectedContext<T>,
+  IFmAuthenticatatedContext<T> {
   uid: undefined;
   email: null;
   emailVerified: false;
@@ -81,7 +81,7 @@ export interface IFmLogoutEventContext<T>
  * Context provided to a user who is _connected_ but not _logged into_ the
  * Firebase database
  */
-export interface IFmLogoutEventContext<T> extends IFmConnectedContext<T>, IFmEventBase<T> {}
+export interface IFmLogoutEventContext<T> extends IFmConnectedContext<T>, IFmEventBase<T> { }
 
 /**
  * When a Firebase user changes due to _abandonment_ of an anonymous user
@@ -128,7 +128,7 @@ export type IFmRouteChanged<T> = (ctx: IFmRouteEventContext<T>) => Promise<void>
  */
 export interface IFiremodelConfig<T>
   extends IFiremodelLifecycleHooks<T>,
-    IFiremodelPluginCoreServices {}
+  IFiremodelPluginCoreServices { }
 
 export interface IFiremodelPluginCoreServices {
   /**

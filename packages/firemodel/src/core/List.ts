@@ -1,9 +1,10 @@
 import { FireModel, Record } from "@/core";
 import {
-  IAbstractedDatabase,
+  IDatabaseSdk,
   IComparisonOperator,
   ISerializedQuery,
   SerializedQuery,
+  ISdk,
 } from "universal-fire";
 import {
   IDictionary,
@@ -41,14 +42,14 @@ function addTimestamps<T extends IModel>(obj: IDictionary) {
 
   return output as T;
 }
-export class List<T extends IModel> extends FireModel<T> {
+export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   //#region STATIC Interfaces
 
   /**
    * Sets the default database to be used by all FireModel classes
    * unless explicitly told otherwise
    */
-  public static set defaultDb(db: IAbstractedDatabase) {
+  public static set defaultDb(db: IDatabaseSdk<any>) {
     FireModel.defaultDb = db;
   }
 
@@ -510,12 +511,10 @@ export class List<T extends IModel> extends FireModel<T> {
         throw new FireModelError(
           `While calling List.ids(${capitalize(
             model.name
-          )}, ...) there were some successful results but there were error(s) on ${
-            realErrors.length
-          } of the ${fks.length} requested records.${
-            emptyResults.length > 0
-              ? `There were also ${emptyResults.length} records which came back with empty results (which may be fine). Structured versions of these errors can be found in the "errors" properoty but here is a summary of the error messages recieved:\n\n${errorOverview}`
-              : ""
+          )}, ...) there were some successful results but there were error(s) on ${realErrors.length
+          } of the ${fks.length} requested records.${emptyResults.length > 0
+            ? `There were also ${emptyResults.length} records which came back with empty results (which may be fine). Structured versions of these errors can be found in the "errors" properoty but here is a summary of the error messages recieved:\n\n${errorOverview}`
+            : ""
           }`,
           "errors-in-list-ids"
         );
@@ -818,8 +817,7 @@ export class List<T extends IModel> extends FireModel<T> {
         const value = this._offsets[prop as keyof T];
         if (!["string", "number"].includes(typeof value)) {
           throw new FireModelError(
-            `The dynamic dbOffset is using the property "${prop}" on ${
-              this.modelName
+            `The dynamic dbOffset is using the property "${prop}" on ${this.modelName
             } as a part of the route path but that property must be either a string or a number and instead was a ${typeof value}`,
             "record/not-allowed"
           );

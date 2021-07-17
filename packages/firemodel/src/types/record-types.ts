@@ -7,7 +7,7 @@ import {
 } from "@/types";
 import { IReduxAction, IReduxDispatch } from "./state-mgmt";
 
-import { IAbstractedDatabase } from "universal-fire";
+import { IDatabaseSdk, ISdk } from "universal-fire";
 import { IFmFunctionToConstructor } from "./decorator-types";
 import { IModel } from "./model-types";
 
@@ -16,7 +16,7 @@ import { IModel } from "./model-types";
  * in reasonable fidelity so that functions that only need this
  * fidelity can use this internally.
  */
-export interface IRecord<T extends IModel = IModel> {
+export interface IRecord<S extends ISdk, T extends IModel = IModel> {
   META: IFmModelMeta;
   localPath: string;
   localPrefix: string;
@@ -27,7 +27,7 @@ export interface IRecord<T extends IModel = IModel> {
   properties: IFmModelPropertyMeta[];
   relationships: IFmModelRelationshipMeta[];
   dispatch: IReduxDispatch<IReduxAction, any>;
-  db: IAbstractedDatabase;
+  db: IDatabaseSdk<S>;
   pushKeys: string[];
   data: T;
   hasDynamicPath: boolean;
@@ -109,7 +109,7 @@ export type ICompositeKey<T = ICompositeKeyGeneric> = IFmHasId & Partial<T>;
 export type IFkReference<T = ICompositeKeyGeneric> = fk | ICompositeKey<T>;
 export type IPrimaryKey<T> = pk | ICompositeKey<T>;
 
-export interface IFmBuildRelationshipOptions {
+export interface IFmBuildRelationshipOptions<S extends ISdk> {
   /**
    * optionally send in a epoch timestamp; alternative it will be created
    * automatically. The ability to send a value allows for hasMany operations which
@@ -130,11 +130,11 @@ export interface IFmBuildRelationshipOptions {
   /**
    * Optionally pass in an explicit database connection
    */
-  db?: IAbstractedDatabase;
+  db?: IDatabaseSdk<S>;
 }
 
-export interface IRecordOptions {
-  db?: IAbstractedDatabase;
+export interface IRecordOptions<S extends ISdk> {
+  db?: IDatabaseSdk<S>;
   logging?: any;
   id?: string;
   /** if you're working off of a mocking database, there are situations where adding a record silently (aka., not triggering any listener events) is desirable and should be allowed */

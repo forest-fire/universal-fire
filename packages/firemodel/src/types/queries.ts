@@ -1,4 +1,4 @@
-import { ISerializedQuery } from "universal-fire";
+import { ISerializedQuery, ISdk, IModel } from "universal-fire";
 
 /**
  * **IFmQueryDefn**
@@ -15,10 +15,10 @@ import { ISerializedQuery } from "universal-fire";
  * properties of pagination. If pagination has not been
  * configured, these two props will be `undefined`.
  */
-export interface IFmQueryDefn<T> {
+export interface IFmQueryDefn<S extends ISdk, T extends IModel> {
   (
-    q: ISerializedQuery<T>,
+    q: ISerializedQuery<S, T>,
     offset?: number,
     pageSize?: number
-  ): ISerializedQuery<T>;
+  ): ISerializedQuery<S, T>;
 }

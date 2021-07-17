@@ -1,5 +1,5 @@
 import { FireModel, Record } from "@/core";
-import { IAbstractedDatabase, ISerializedQuery } from "universal-fire";
+import { IDatabaseSdk, ISerializedQuery } from "universal-fire";
 import { IModel, IModelOptions } from "@/types";
 
 import { pathJoin } from "@/util";
@@ -7,13 +7,13 @@ import { pathJoin } from "@/util";
 export class AuditBase<T extends IModel = IModel> {
   protected _modelKlass: new () => T;
   protected _record: Record<T>;
-  protected _db: IAbstractedDatabase;
+  protected _db: IDatabaseSdk;
   protected _query: ISerializedQuery;
   // index searchs (future)
   protected _recordId: string;
   protected _property: string;
 
-  protected get db(): IAbstractedDatabase {
+  protected get db(): IDatabaseSdk {
     return this._db;
   }
 

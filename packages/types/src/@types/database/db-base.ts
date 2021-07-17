@@ -17,9 +17,12 @@ import { DbFrom } from './db-util';
  * > functionality
  */
 export interface IDatabaseApi<
-  TSdk extends ISdk,
-  TDb extends IDatabase = DbFrom<TSdk>
-> {
+  TSdk extends ISdk
+  > {
+  /**
+   * The SDK being used when interacting with the database
+   */
+  sdk: TSdk;
   /**
    * Get a database _reference_ to the underlying database at a given path
    */

@@ -8,7 +8,7 @@ For a library author, creating a `universal-fire` DB SDK, you would do something
 
 ```ts
 import firemock from 'firemock';
-export class MyConnection extends IAbstractedDatabase {
+export class MyConnection extends IDatabaseSdk {
   public async connectMockDb(mockData: IMockData, mockAuth: IMockAuthConfig) {
     await firemock.connect<IClientAuth>(this, mockData, mockAuth);
   }
