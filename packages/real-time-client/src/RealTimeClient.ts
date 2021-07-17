@@ -165,10 +165,10 @@ export class RealTimeClient
    */
   protected async _connectMockDb(config: IMockConfig): Promise<void> {
     const firemock = await this._loadFiremock();
-    const mock = await firemock<RealTimeClient, SDK.RealTimeClient>(
-      this,
-      config.mockData,
-      config.mockAuth
+    const mock = firemock(
+      this.sdk,
+      { auth: config.mockAuth },
+      config.mockData
     );
     this._mock = mock;
     //TODO:
@@ -182,9 +182,9 @@ export class RealTimeClient
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   protected async _loadFiremock() {
-    const fm = await import(/* webpackChunkName: "firemock" */ 'firemock');
+    const fm = (await import(/* webpackChunkName: "firemock" */ 'firemock')).default;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return fm.firemock;
+    return fm.createDatabase;
   }
 
   protected async _loadDatabaseApi(): Promise<void> {

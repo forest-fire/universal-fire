@@ -6,7 +6,7 @@ import type {
   IEmailAuthProvider,
   IClientAuth,
 } from '../index';
-import { IMockDatabase, IMockDelayedState, IMockServerOptions } from './db-mocking/index';
+import { IMockDelayedState, IMockServerOptions } from './db-mocking/index';
 
 export type FakerStatic = typeof import('faker');
 

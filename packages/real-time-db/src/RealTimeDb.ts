@@ -46,6 +46,7 @@ import { createError } from 'brilliant-errors';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { IDictionary } from 'common-types';
 import { FireError, slashNotation } from '@forest-fire/utility';
+import { createDatabase } from 'firemock';
 
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
@@ -642,10 +643,10 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
     }
 
     try {
-      this._mock = await Firemock.firemock(
-        this,
+      this._mock = Firemock.createDatabase(
+        this.sdk,
+        { auth: config.mockAuth },
         config.mockData,
-        config.mockAuth
       );
     } catch (e) {
       throw new FireError(
