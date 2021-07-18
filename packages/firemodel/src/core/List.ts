@@ -1,10 +1,12 @@
-import { FireModel, Record } from "@/core";
+import { DefaultDbCache, FireModel, Record } from "@/core";
 import {
-  IDatabaseSdk,
   IComparisonOperator,
   ISerializedQuery,
   SerializedQuery,
   ISdk,
+  IDatabaseSdk,
+  isClientSdk,
+  IModel
 } from "universal-fire";
 import {
   IDictionary,
@@ -17,7 +19,6 @@ import {
   IFmQueryDefn,
   IListOptions,
   IListQueryOptions,
-  IModel,
   IPrimaryKey,
   IReduxDispatch,
 } from "@/types";
@@ -49,12 +50,12 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Sets the default database to be used by all FireModel classes
    * unless explicitly told otherwise
    */
-  public static set defaultDb(db: IDatabaseSdk<any>) {
-    FireModel.defaultDb = db;
+  public static set defaultDb(db: IDatabaseSdk<ISdk>) {
+    DefaultDbCache().set<IDatabaseSdk<typeof db.sdk>>(db);
   }
 
   public static get defaultDb() {
-    return FireModel.defaultDb;
+    return DefaultDbCache().get();
   }
 
   // TODO: should `set` be removed?
@@ -65,10 +66,10 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * a destructive operation ... any other records of the
    * same type that existed beforehand are removed.
    */
-  public static async set<T extends IModel>(
+  public static async set<S extends ISdk = ISdk, T extends IModel = IModel>(
     model: ConstructorFor<T>,
     payload: IDictionary<T>,
-    options: IListOptions<T> = {}
+    options: IListOptions<S, T> = {}
   ) {
     try {
       const m = Record.create(model, options);
@@ -110,9 +111,11 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
 
   public static create<T extends IModel>(
     model: ConstructorFor<T>,
-    options?: IListOptions<T>
+    options?: IListOptions<any, T>
   ) {
-    return new List<T>(model, options);
+    const defaultSdk = DefaultDbCache().sdk;
+    type SDK = typeof defaultSdk extends ISdk ? typeof defaultSdk : ISdk;
+    return new List<SDK, T>(model, options);
   }
 
   /**
@@ -122,21 +125,23 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param query the serialized query; note that this LIST will override the path of the query
    * @param options model options
    */
-  public static async fromQuery<T extends IModel>(
+  public static async fromQuery<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
-    query: ISerializedQuery<T>,
-    options: IListOptions<T> = {}
-  ): Promise<List<T>> {
+    query: ISerializedQuery<S, T>,
+    options: IListOptions<S, T> = {}
+  ) {
+    const defaultSdk = DefaultDbCache().sdk;
+    type SDK = typeof defaultSdk extends ISdk ? typeof defaultSdk : S extends ISdk ? S : ISdk;
     const list = List.create(model, options);
 
     const path =
       options && options.offsets
-        ? List.dbPath(model, options.offsets)
-        : List.dbPath(model);
+        ? List.dbPath<SDK, T>(model, options.offsets)
+        : List.dbPath<SDK, T>(model);
 
     query.setPath(path);
 
-    return list._loadQuery(query);
+    return list._loadQuery(query) as unknown as List<SDK, T>;
   }
 
   /**
@@ -144,12 +149,13 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    *
    * Allow connecting any valid Firebase query to the List object
    */
-  public static async query<T extends IModel>(
+  public static async query<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
-    query: IFmQueryDefn<T>,
-    options: IListQueryOptions<T> = {}
-  ) {
-    const db = options.db || FireModel.defaultDb;
+    query: IFmQueryDefn<S, T>,
+    options: IListQueryOptions<S, T> = {}
+  ): Promise<List<S, T>> {
+    const db: IDatabaseSdk<S> = options.db || DefaultDbCache().get() as IDatabaseSdk<S>;
+
     if (!db) {
       throw new FireModelError(
         `Attempt to query database with List before setting a database connection! Either set a default database or explicitly add the DB connection to queries.`,
@@ -161,13 +167,13 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       options && options.offsets
         ? List.dbPath(model, options.offsets)
         : List.dbPath(model);
-    const q = SerializedQuery.create<T>(db, path);
+    const q = SerializedQuery.create(db, path);
     const list = List.create(model, options);
     if (options.paginate) {
       list._pageSize = options.paginate;
     }
 
-    return list._loadQuery(query(q));
+    return list._loadQuery(query(q)) as unknown as List<S, T>;
   }
 
   /**
@@ -176,11 +182,11 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * **Note:** will order results by `lastUpdated` unless
    * an `orderBy` property is passed into the options hash.
    */
-  public static async all<T extends IModel>(
+  public static async all<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
-    options: IListOptions<T> = {}
-  ): Promise<List<T>> {
-    return List.query<T>(
+    options: IListOptions<S, T> = {}
+  ): Promise<List<S, T>> {
+    return List.query<S, T>(
       model,
       (q) => {
         q.orderByChild(options.orderBy || "lastUpdated");
@@ -191,7 +197,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
 
         return q;
       },
-      reduceOptionsForQuery<T>(options)
+      reduceOptionsForQuery<S, T>(options)
     );
   }
 
@@ -203,15 +209,15 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param howMany the number of records to bring back
    * @param options model options
    */
-  public static async first<T extends IModel>(
+  public static async first<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
     howMany: number,
     options: Omit<
-      IListOptions<T>,
+      IListOptions<S, T>,
       "limitToFirst" | "limitToLast" | "startAt" | "orderBy"
     > = {}
-  ): Promise<List<T>> {
-    return List.query<T>(
+  ): Promise<List<S, T>> {
+    return List.query<S, T>(
       model,
       (q) => {
         q.orderByChild("createdAt").limitToLast(howMany);
@@ -226,8 +232,8 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
 
         return q;
       },
-      reduceOptionsForQuery<T>(options)
-    );
+      reduceOptionsForQuery<S, T>(options)
+    ) as unknown as List<S, T>;
   }
 
   /**
@@ -236,15 +242,15 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Get a discrete number of records which represent the most _recently_
    * updated records (uses the `lastUpdated` property on the model).
    */
-  public static async recent<T extends IModel>(
+  public static async recent<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
     howMany: number,
     options: Omit<
-      IListOptions<T>,
+      IListOptions<S, T>,
       "limitToFirst" | "limitToLast" | "orderBy" | "endAt"
     > = {}
-  ): Promise<List<T>> {
-    return List.query<T>(
+  ) {
+    return List.query<S, T>(
       model,
       (q) => {
         q.orderByChild("lastUpdated").limitToFirst(howMany);
@@ -260,7 +266,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
 
         return q;
       },
-      reduceOptionsForQuery<T>(options)
+      reduceOptionsForQuery<S, T>(options)
     );
   }
 
@@ -270,11 +276,11 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Brings back all records that have changed since a given date
    * (using `lastUpdated` field)
    */
-  public static async since<T extends IModel>(
+  public static async since<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
-    since: epochWithMilliseconds | datetime | datestring | Date,
-    options: Omit<IListOptions<T>, "startAt" | "endAt" | "orderBy"> = {}
-  ): Promise<List<T>> {
+    since: epochWithMilliseconds | datetime | Date,
+    options: Omit<IListOptions<S, T>, "startAt" | "endAt" | "orderBy"> = {}
+  ) {
     switch (typeof since) {
       case "string":
         since = new Date(since).getTime();
@@ -302,15 +308,15 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
         );
     }
 
-    return List.query<T>(
+    return List.query<S, T>(
       model,
       (q) => {
-        q.orderByChild("lastUpdated").startAt(since);
+        q.orderByChild("lastUpdated").startAt(since as string | number);
         if (options.limitToFirst) q.startAt(options.limitToFirst);
 
         return q;
       },
-      reduceOptionsForQuery<T>(options)
+      reduceOptionsForQuery<S, T>(options)
     );
   }
 
@@ -321,15 +327,15 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * "least active" means that their `lastUpdated` property has gone
    * without any update for the longest.
    */
-  public static async inactive<T extends IModel>(
+  public static async inactive<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
     howMany: number,
     options: Omit<
-      IListOptions<T>,
+      IListOptions<S, T>,
       "limitToLast" | "limitToFirst" | "orderBy"
     > = {}
-  ): Promise<List<T>> {
-    return List.query<T>(
+  ) {
+    return List.query<S, T>(
       model,
       (q) => {
         q.orderByChild("lastUpdated").limitToLast(howMany);
@@ -338,7 +344,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
 
         return q;
       },
-      reduceOptionsForQuery<T>(options)
+      reduceOptionsForQuery<S, T>(options)
     );
   }
 
@@ -348,12 +354,12 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Lists the last _x_ items of a given model where "last" refers to the datetime
    * that the record was **created**.
    */
-  public static async last<T extends IModel>(
+  public static async last<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
     howMany: number,
-    options: Omit<IListOptions<T>, "orderBy"> = {}
-  ): Promise<List<T>> {
-    return List.query<T>(
+    options: Omit<IListOptions<S, T>, "orderBy"> = {}
+  ): Promise<List<S, T>> {
+    return List.query<S, T>(
       model,
       (q) => {
         q.orderByChild("createdAt").limitToFirst(howMany);
@@ -363,7 +369,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
 
         return q;
       },
-      reduceOptionsForQuery<T>(options)
+      reduceOptionsForQuery<S, T>(options)
     );
   }
 
@@ -373,11 +379,11 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Runs a `List.where()` search and returns the first result as a _model_
    * of type `T`. If no results were found it returns `undefined`.
    */
-  public static async findWhere<T extends IModel, K extends keyof T>(
+  public static async findWhere<S extends ISdk, T extends IModel, K extends keyof T>(
     model: ConstructorFor<T>,
     property: K & string,
     value: T[K] | [IComparisonOperator, T[K]],
-    options: IListOptions<T> = {}
+    options: IListOptions<S, T> = {}
   ) {
     if (property === "id" && !Array.isArray(value)) {
       const modelName = capitalize(model.constructor.name);
@@ -394,12 +400,12 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Puts an array of records into Firemodel as one operation; this operation
    * is only available to those who are using the Admin SDK/API.
    */
-  public static async bulkPut<T extends IModel>(
+  public static async bulkPut<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
     records: T[] | IDictionary<T>,
-    options: IListOptions<T> = {}
+    options: IListOptions<S, T> = {}
   ) {
-    if (!FireModel.defaultDb.isAdminApi) {
+    if (isClientSdk(DefaultDbCache().get().sdk)) {
       throw new FireModelError(
         `You must use the Admin SDK/API to use the bulkPut feature. This may change in the future but in part because the dispatch functionality is not yet set it is restricted to the Admin API for now.`
       );
@@ -426,11 +432,11 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * override this default by adding a _tuple_ to the `value` where the first
    * array item is the operator, the second the value you are comparing against.
    */
-  public static async where<T extends IModel, K extends keyof T>(
+  public static async where<S extends ISdk, T extends IModel, K extends keyof T>(
     model: ConstructorFor<T>,
     property: K & string,
     value: T[K] | [IComparisonOperator, T[K]],
-    options: Omit<IListOptions<T>, "orderBy" | "startAt" | "endAt"> = {}
+    options: Omit<IListOptions<S, T>, "orderBy" | "startAt" | "endAt"> = {}
   ) {
     let operation: IComparisonOperator = "=";
     let val = value;
@@ -439,7 +445,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       operation = value[0];
     }
 
-    return List.query<T>(
+    return List.query<S, T>(
       model,
       (q) => {
         q.orderByChild(property);
@@ -450,7 +456,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
 
         return q;
       },
-      reduceOptionsForQuery<T>(options)
+      reduceOptionsForQuery<S, T>(options)
     );
   }
 
@@ -535,7 +541,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * **Note:** the optional second parameter lets you pass in any
    * dynamic path segments if that is needed for the given model.
    */
-  public static dbPath<T extends IModel, K extends keyof T>(
+  public static dbPath<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
     offsets?: Partial<T>
   ) {
@@ -549,15 +555,15 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   //#endregion
 
   private _data: T[] = [];
-  private _query: ISerializedQuery<T>;
-  private _options: IListOptions<T>;
+  private _query: ISerializedQuery<S, T>;
+  private _options: IListOptions<S, T>;
   /** the pagination page size; 0 indicates that pagination is not turned on */
   private _pageSize: number = 0;
   private _page: number = 0;
   /** flag indicating if all records have now been retrieved */
   private _paginationComplete: boolean = false;
 
-  constructor(model: ConstructorFor<T>, options: IListOptions<T> = {}) {
+  constructor(model: ConstructorFor<T>, options: IListOptions<S, T> = {}) {
     super();
     this._modelConstructor = model;
     this._model = new model();
@@ -578,7 +584,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   /**
    * The query used in this List instance
    */
-  public get query(): ISerializedQuery<T> {
+  public get query(): ISerializedQuery<S, T> {
     return this._query;
   }
 
@@ -716,7 +722,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    *
    * If you just want the Model's data then use `getData` instead.
    */
-  public getRecord(id: string) {
+  public getRecord(id: string): Record<S, T> {
     const found = this.filter((f) => f.id === id);
     if (found.length === 0) {
       throw new FireModelError(
@@ -725,15 +731,15 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       );
     }
 
-    return Record.createWith(this._modelConstructor, found.data[0]);
+    return Record.createWith(this._modelConstructor, found.data[0]) as Record<S, T>;
   }
 
   /**
    * Deprecated: use `List.getRecord()`
    */
-  public findById(id: string): Record<T> {
+  public findById(id: string): Record<S, T> {
     console.warn("List.findById() is deprecated. Use List.get() instead.");
-    return this.getRecord(id);
+    return this.getRecord(id) as Record<S, T>;
   }
 
   /**
@@ -787,7 +793,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   /**
    * Loads data from a query into the `List` object
    */
-  protected async _loadQuery(query: ISerializedQuery<T>) {
+  protected async _loadQuery(query: ISerializedQuery<S, T>) {
     if (!this.db) {
       const e = new Error(
         `The attempt to load data into a List requires that the DB property be initialized first!`

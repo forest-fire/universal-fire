@@ -1,10 +1,9 @@
-import { IDictionary, Omit } from "common-types";
+import { ConstructorFor, IDictionary, Omit } from "common-types";
 import {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
-  IFnToModelConstructor,
-  IModelConstructor,
-} from "@/types";
+  IModel,
+} from "universal-fire";
 import { modelConstructorLookup, modelNameLookup } from "@/util";
 
 import { DecoratorProblem } from "@/errors";
@@ -13,7 +12,7 @@ import { relationshipsByModel } from "@/util";
 
 export type IFmHasMany<T = true> = IDictionary<T>;
 
-export function hasMany(
+export function hasMany<T extends IModel>(
   /**
    * either a _string_ representing the Model's class name
    * or a _constructor_ for the Model class
@@ -22,11 +21,11 @@ export function hasMany(
    * possibility that a user of this API will pass in a _function_
    * to a _constructor_. This approach is now deprecated.
    */
-  fkClass: IFnToModelConstructor | IModelConstructor | string,
+  fkClass: () => ConstructorFor<T> | ConstructorFor<T> | string,
   inverse?: string | [string, IFmRelationshipDirectionality]
 ) {
   try {
-    const fkConstructor: IFnToModelConstructor =
+    const fkConstructor: () => ConstructorFor<T> =
       typeof fkClass === "string"
         ? modelNameLookup(fkClass)
         : modelConstructorLookup(fkClass);

@@ -1,5 +1,6 @@
 import { IListOptions, IListQueryOptions } from "@/types";
-import { FireModel } from "../FireModel";
+import { ISdk, IModel, IDatabaseSdk } from "universal-fire";
+import { DefaultDbCache } from "../DefaultDbCache";
 
 /**
  * List.query() has a naturally more limited scope of options
@@ -7,11 +8,11 @@ import { FireModel } from "../FireModel";
  * narrows the options that these query shorthands have received
  * to just those options which are
  */
-export function reduceOptionsForQuery<T>(
-  o: IListOptions<T>
-): IListQueryOptions<T> {
+export function reduceOptionsForQuery<S extends ISdk, T extends IModel>(
+  o: IListOptions<S, T>
+): IListQueryOptions<S, T> {
   return {
-    db: o.db || FireModel.defaultDb,
+    db: o.db || DefaultDbCache().get() as IDatabaseSdk<S>,
     logger: o.logger,
     offsets: o.offsets,
     paginate: o.paginate,

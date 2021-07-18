@@ -2,11 +2,9 @@ import {
   IAbstractedEvent,
 } from '../fire-proxies';
 import { ISdk } from '../fire-types';
-import { IGenericModel, IModel } from '../models';
+import { IGenericModel, IModel } from '../firemodel/models';
 import { IRtdbReference } from '../proxy-plus';
 import { ISerializedQuery } from '../query';
-import { IDatabase } from './db';
-import { DbFrom } from './db-util';
 
 /**
  * The commands which `universal-fire` exposes to interact with the database

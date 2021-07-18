@@ -1,23 +1,21 @@
-// #autoindex:named,
-
+// #autoindex
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 04:02 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 07:14 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: DefaultDbCache, FireModel, List, Record, Watch.
-// directories: lists, records, watchers.
+// files: FmPropertyType, IFmAttributeBase, IFmModelMeta, IFmPropertyMeta, IFmRelationshipMeta, IModelIndexMeta, constants, model-relationships, models, other.
 
 // local file exports
-export * from "./DefaultDbCache";
-export * from "./FireModel";
-export * from "./List";
-export * from "./Record";
-export * from "./Watch";
-
-// directory exports
-export * from "./lists/index";
-export * from "./records/index";
-export * from "./watchers/index";
+export * from "./FmPropertyType";
+export * from "./IFmAttributeBase";
+export * from "./IFmModelMeta";
+export * from "./IFmPropertyMeta";
+export * from "./IFmRelationshipMeta";
+export * from "./IModelIndexMeta";
+export * from "./constants";
+export * from "./model-relationships";
+export * from "./models";
+export * from "./other";
 
 // Note:
 // -----

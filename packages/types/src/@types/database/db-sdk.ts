@@ -11,12 +11,13 @@ import { AppFrom, AuthFrom, AuthProviders, DbTypeFrom, IsAdminSdk } from './db-u
  * within the **Universal Fire** universe.
  */
 export interface IDatabaseSdk<TSdk extends ISdk> extends IDatabaseApi<TSdk> {
+  /** the SDK which is being used (aka, "admin", "client", ...) */
+  sdk: Readonly<TSdk>;
+
   /**
    * The underlying database which is being connected to
    */
   dbType: Readonly<DbTypeFrom<TSdk>>;
-  /** the SDK which is being used (aka, "admin", "client", ...) */
-  sdk: Readonly<TSdk>;
 
   /**
    * Boolean flag indicating whether the underlying database connection is using
@@ -64,5 +65,5 @@ export interface IDatabaseSdk<TSdk extends ISdk> extends IDatabaseApi<TSdk> {
  * 
  * Note: this is only implemented in Real Time database
  */
-  CONNECTION_TIMEOUT: TSdk extends IFirestoreSdk ? undefined : number;
+  CONNECTION_TIMEOUT: TSdk extends IFirestoreSdk ? never : number;
 }

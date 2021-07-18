@@ -1,15 +1,14 @@
 import { IDictionary, epoch, fk, pk } from "common-types";
 import {
-  IFmHasId,
   IFmModelMeta,
   IFmModelPropertyMeta,
   IFmModelRelationshipMeta,
-} from "@/types";
+  IModel,
+} from "universal-fire";
 import { IReduxAction, IReduxDispatch } from "./state-mgmt";
 
-import { IDatabaseSdk, ISdk } from "universal-fire";
-import { IFmFunctionToConstructor } from "./decorator-types";
-import { IModel } from "./model-types";
+import { IDatabaseSdk, ISdk, IFmFunctionToConstructor } from "universal-fire";
+import { IFmHasId } from "./general";
 
 /**
  * A simplified interface that represents a `Record`'s shape
@@ -17,7 +16,7 @@ import { IModel } from "./model-types";
  * fidelity can use this internally.
  */
 export interface IRecord<S extends ISdk, T extends IModel = IModel> {
-  META: IFmModelMeta;
+  META: IFmModelMeta<T>;
   localPath: string;
   localPrefix: string;
   dbPath: string;
@@ -101,13 +100,18 @@ export type IIdWithDynamicPrefix = IDictionary<number | string> & {
 
 export type ICompositeKeyGeneric = IDictionary<string | number | boolean>;
 
-export type ICompositeKey<T = ICompositeKeyGeneric> = IFmHasId & Partial<T>;
+export type ICompositeKey<T extends IModel> = IFmHasId & Partial<T>;
 /**
  * A Foreign Key (FK) reference where both object and string notation of simple
  * or composite keys is valid.
  */
-export type IFkReference<T = ICompositeKeyGeneric> = fk | ICompositeKey<T>;
-export type IPrimaryKey<T> = pk | ICompositeKey<T>;
+export type IFkReference<T extends IModel> = fk | ICompositeKey<T>;
+
+export type IPrimaryKey<T extends IModel> = pk | ICompositeKey<T>;
+
+export function isCompositeKey<T extends IModel>(ref: unknown): ref is ICompositeKey<T> {
+  return typeof ref === "object" && typeof (ref as IDictionary)?.id === "string";
+}
 
 export interface IFmBuildRelationshipOptions<S extends ISdk> {
   /**

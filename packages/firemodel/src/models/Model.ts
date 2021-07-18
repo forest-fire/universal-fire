@@ -4,7 +4,7 @@ export type NonProperties<T> = {
 }[keyof T];
 export type Properties<T> = Pick<T, NonProperties<T>>;
 
-import { IFmModelMeta, IModel } from "@/types";
+import { IFmModelMeta, IModel } from "universal-fire";
 import { index, mock, model, property } from "@/decorators";
 
 import { epochWithMilliseconds } from "common-types";
@@ -22,5 +22,5 @@ export class Model implements IModel {
   /** The datetime at which this record was first created */
   @property @mock("datePastMiliseconds") @index public createdAt?: epochWithMilliseconds;
   /** Metadata properties of the given schema */
-  public META?: IFmModelMeta;
+  public META?: IFmModelMeta<Model>;
 }

@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import { IDictionary } from "common-types";
-import { IModelIndexMeta } from "@/types";
+import { IModelIndexMeta } from "universal-fire";
 import { hashToArray } from "typed-conversions";
 import { propertyReflector } from "@/decorators";
 
@@ -17,8 +17,8 @@ export function getDbIndexes<T>(modelKlass: object): IModelIndexMeta[] {
   return modelName === "Model"
     ? hashToArray<IModelIndexMeta>(indexesForModel[modelName])
     : (hashToArray<IModelIndexMeta>(indexesForModel[modelName]) || []).concat(
-        hashToArray<IModelIndexMeta>(indexesForModel.Model)
-      );
+      hashToArray<IModelIndexMeta>(indexesForModel.Model)
+    );
 }
 
 export const index = propertyReflector<IModelIndexMeta>(

@@ -70,4 +70,4 @@ export const NamedFakes = {
   distribution: true,
   placeImage: true,
   placeHolder: true,
-};
+} as const;

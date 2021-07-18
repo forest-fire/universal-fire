@@ -1,4 +1,4 @@
-import type { ISdk } from "universal-fire";
+import type { IModel, ISdk } from "universal-fire";
 
 import {
   FmEvents,
@@ -6,7 +6,6 @@ import {
   IFmLocalRecordEvent,
   IFmLocalRelationshipEvent,
   IFmServerOrLocalEvent,
-  IModel,
   IWatcherEventContext,
 } from "@/types";
 

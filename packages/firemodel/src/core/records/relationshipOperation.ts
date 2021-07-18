@@ -14,7 +14,7 @@ import { createCompositeRef, locallyUpdateFkOnRecord } from "./index";
 import { IDictionary } from "common-types";
 import { IModel } from "@/types";
 import { Record } from "@/core";
-import { Reference } from "firemock";
+import { ISdk } from "universal-fire";
 
 /**
  * **relationshipOperation**
@@ -23,10 +23,11 @@ import { Reference } from "firemock";
  * with the `dispatch()` function; looking to associate with watchers wherever possible
  */
 export async function relationshipOperation<
+  S extends ISdk,
   F extends IModel,
   T extends IModel = IModel
 >(
-  rec: Record<F>,
+  rec: Record<S, F>,
   /**
    * **operation**
    *
@@ -50,7 +51,7 @@ export async function relationshipOperation<
    * and the value is the value to set.
    */
   paths: IFmPathValuePair[],
-  options: IFmRelationshipOptions | IFmRelationshipOptionsForHasMany = {}
+  options: IFmRelationshipOptions<S> | IFmRelationshipOptionsForHasMany<S> = {}
 ) {
   // make sure all FK's are strings
   const fks = fkRefs.map((fk) => {
@@ -88,7 +89,7 @@ export async function relationshipOperation<
     const [localEvent, confirmEvent, rollbackEvent] = dispatchEvents[operation];
     const fkConstructor = rec.META.relationship(property).fkConstructor;
     // TODO: fix the typing here to make sure fkConstructor knows it's type
-    const fkRecord: Record<T> = new Record<T>(fkConstructor() as any);
+    const fkRecord: Record<S, T> = new Record<S, T>(fkConstructor() as any);
     const fkMeta = getModelMeta(fkRecord.data);
     const transactionId: string =
       "t-reln-" +
@@ -125,10 +126,8 @@ export async function relationshipOperation<
       await relnRollback(rec, event, rollbackEvent);
       throw new FireModelProxyError(
         e,
-        `Encountered an error executing a relationship operation between the "${
-          event.from
-        }" model and "${
-          event.to
+        `Encountered an error executing a relationship operation between the "${event.from
+        }" model and "${event.to
         }". The paths that were being modified were: ${event.paths
           .map((i) => i.path)
           .join("- \n")}\n A dispatch for a rollback event has been issued.`
@@ -143,8 +142,8 @@ export async function relationshipOperation<
   }
 }
 
-export async function localRelnOp<F extends IModel, T extends IModel>(
-  rec: Record<F>,
+export async function localRelnOp<S extends ISdk, F extends IModel, T extends IModel>(
+  rec: Record<S, F>,
   event: Omit<IFmLocalRelationshipEvent<F, T>, "type">,
   type: FmEvents
 ) {
@@ -157,8 +156,7 @@ export async function localRelnOp<F extends IModel, T extends IModel>(
     // local optimistic dispatch
     rec.dispatch({ ...event, type });
     const ref = rec.db.ref("/");
-    // TODO: replace with multiPathSet/transaction
-    await (ref as Reference).update(
+    await (ref).update(
       event.paths.reduce((acc: IDictionary, curr) => {
         acc[curr.path] = curr.value;
         return acc;
@@ -174,16 +172,16 @@ export async function localRelnOp<F extends IModel, T extends IModel>(
   }
 }
 
-export async function relnConfirmation<F extends IModel, T extends IModel>(
-  rec: Record<F>,
+export async function relnConfirmation<S extends ISdk, F extends IModel, T extends IModel>(
+  rec: Record<S, F>,
   event: Omit<IFmLocalRelationshipEvent<F, T>, "type">,
   type: FmEvents
 ) {
   rec.dispatch({ ...event, type });
 }
 
-export async function relnRollback<F extends IModel, T extends IModel>(
-  rec: Record<F>,
+export async function relnRollback<S extends ISdk, F extends IModel, T extends IModel>(
+  rec: Record<S, F>,
   event: Omit<IFmLocalRelationshipEvent<F, T>, "type">,
   type: FmEvents
 ) {

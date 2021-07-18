@@ -2,28 +2,28 @@
 
 // #region autoindexed files
 
-// index last changed at: 12th Dec, 2020, 09:00 PM ( GMT-8 )
+// index last changed at: 7th Jul, 2021, 06:50 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: auth, events, fire-proxies, fire-types, models.
-// directories: database, db-mocking, proxy-plus, query, snapshot.
+// files: auth, events, fire-proxies, fire-types.
+// directories: database, db-mocking, firemodel, proxy-plus, query, snapshot.
 
 // local file exports
 export * from "./auth";
 export * from "./events";
 export * from "./fire-proxies";
 export * from "./fire-types";
-export * from "./models";
 
 // directory exports
 export * from "./database/index";
 export * from "./db-mocking/index";
+export * from "./firemodel/index";
 export * from "./proxy-plus/index";
 export * from "./query/index";
 export * from "./snapshot/index";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

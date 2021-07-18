@@ -1,6 +1,6 @@
 import { IDictionary } from "common-types";
 
-import type { ISerializedQuery, IDatabaseSdk } from "universal-fire";
+import type { ISerializedQuery, IDatabaseSdk, ISdk } from "universal-fire";
 
 import {
   WatchRecord,
@@ -25,8 +25,8 @@ import { FireModelError, FireModelProxyError } from "@/errors";
 /**
  * The base class which both `WatchList` and `WatchRecord` derive.
  */
-export class WatchBase<T extends IModel> {
-  protected _query: ISerializedQuery<T>;
+export class WatchBase<S extends ISdk, T extends IModel> {
+  protected _query: ISerializedQuery<S, T>;
   protected _modelConstructor: FmModelConstructor<T>;
   protected _eventType: IWatchEventClassification;
   protected _dispatcher: IReduxDispatch;

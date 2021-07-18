@@ -6,13 +6,12 @@ import {
   IModel,
   ISerializedQuery,
   SDK,
-  IRtdbSdk,
 } from '@forest-fire/types';
 import { SerializedRealTimeQuery, SerializedFirestoreQuery } from './index';
 
 export class SerializedQuery<
-  TModel extends IModel | Record<string, unknown>,
-  TSdk extends ISdk
+  TSdk extends ISdk,
+  TModel extends IModel,
   > {
   constructor(db: IDatabaseSdk<TSdk>, path = '/') {
     if (isRealTimeDatabase(db)) {
@@ -26,7 +25,7 @@ export class SerializedQuery<
     }
   }
 
-  static create<TModel extends IModel, TSdk extends ISdk>(
+  static create<TSdk extends ISdk, TModel extends IModel,>(
     db: IDatabaseSdk<TSdk>,
     path = '/'
   ): ISerializedQuery<TSdk, TModel> {

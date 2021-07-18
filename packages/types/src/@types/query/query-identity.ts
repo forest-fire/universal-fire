@@ -1,4 +1,4 @@
-import { IModel } from '../models';
+import { IModel } from '../firemodel/models';
 import { IFirestoreOrder, IRtdbOrder } from './query-order';
 
 export interface ISerializedIdentity<T>
@@ -8,7 +8,7 @@ export interface ISerializedIdentity<T>
 
 export interface ISerializedRealTimeIdentity<
   T extends IModel = Record<string, unknown> & IModel
-> {
+  > {
   orderBy: IRtdbOrder;
   orderByKey?: keyof T & string;
   limitToFirst?: number;

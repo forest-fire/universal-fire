@@ -6,7 +6,7 @@ import {
   IReduxDispatch,
   IWatcherEventContext,
 } from "@/types";
-import { IDatabaseSdk, IRtdbDbEvent } from "universal-fire";
+import { IDatabaseSdk, IRtdbDbEvent, ISdk, IModel } from "universal-fire";
 import {
   WatchList,
   WatchRecord,
@@ -16,9 +16,8 @@ import {
   removeFromWatcherPool,
 } from "./watchers";
 
-import { FireModel } from "@/core";
+import { DefaultDbCache, FireModel } from "@/core";
 import { FireModelError } from "@/errors";
-import { IModel } from "@/types";
 import { firstKey } from "@/util";
 
 /**
@@ -26,13 +25,17 @@ import { firstKey } from "@/util";
  * provides the entry point into the watcher API and then
  * hands off to either `WatchList` or `WatchRecord`.
  */
-export class Watch<T extends IModel = IModel> {
+export class Watch<S extends ISdk, T extends IModel = IModel> {
   /**
    * Sets the default database for all Firemodel
    * classes such as `FireModel`, `Record`, and `List`
    */
-  public static set defaultDb(db: IDatabaseSdk) {
-    FireModel.defaultDb = db;
+  public static set defaultDb(db: IDatabaseSdk<ISdk>) {
+    DefaultDbCache().set<IDatabaseSdk<typeof db.sdk>>(db);
+  }
+
+  public static get defaultDb() {
+    return DefaultDbCache().get();
   }
 
   /**
@@ -62,7 +65,7 @@ export class Watch<T extends IModel = IModel> {
    *
    * @param hashCode the unique hashcode given for each watcher
    */
-  public static lookup(hashCode: string): IWatcherEventContext {
+  public static lookup(hashCode: string): IWatcherEventContext<any, any> {
     const codes = new Set(Object.keys(getWatcherPool()));
     if (!codes.has(hashCode)) {
       const e = new Error(
@@ -94,7 +97,7 @@ export class Watch<T extends IModel = IModel> {
   /**
    * stops watching either a specific watcher or ALL if no hash code is provided
    */
-  public static stop(hashCode?: string, oneOffDB?: IDatabaseSdk) {
+  public static stop(hashCode?: string, oneOffDB?: IDatabaseSdk<any>) {
     const codes = new Set(Object.keys(getWatcherPool()));
     const db = oneOffDB || FireModel.defaultDb;
     if (!db) {
@@ -173,6 +176,6 @@ export class Watch<T extends IModel = IModel> {
      */
     offsets?: Partial<T>
   ) {
-    return WatchList.list<T>(modelConstructor, { offsets });
+    return WatchList.list<ISdk, T>(modelConstructor, { offsets });
   }
 }

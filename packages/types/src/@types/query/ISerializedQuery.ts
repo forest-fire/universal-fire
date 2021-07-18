@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import {
   DbFrom,
   DeserializedQueryFrom,
@@ -5,7 +6,6 @@ import {
 } from '../database/db-util';
 import { ISdk } from '../fire-types';
 import { IModel, IComparisonOperator, ISerializedIdentity } from '../index';
-import { IGenericModel } from '../models';
 
 /**
  * Defines the public interface which any serializer must
@@ -19,8 +19,8 @@ import { IGenericModel } from '../models';
 export interface ISerializedQuery<
   TSdk extends ISdk,
   /** the data model being serialized */
-  TModel extends IModel | Record<string, unknown> = IGenericModel
-> {
+  TModel extends IModel = {}
+  > {
   db: DbFrom<TSdk>;
   path: string;
   identity: ISerializedIdentity<TModel>;

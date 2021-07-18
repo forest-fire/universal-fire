@@ -2,15 +2,15 @@ import Dexie, { IndexableType } from "dexie";
 import {
   IDexieListOptions,
   IDexieModelMeta,
-  IModel,
-  IModelConstructor,
-  PropType,
+  PropType
 } from "@/types";
 
 import { DexieError } from "@/errors";
-import { IComparisonOperator } from "universal-fire";
+import {
+  IComparisonOperator, IModel,
+} from "universal-fire";
 import { capitalize } from "@/util";
-import { epoch } from "common-types";
+import { ConstructorFor, epoch } from "common-types";
 
 /**
  * Provides a simple API for list based queries that resembles the Firemodel `List` API
@@ -18,10 +18,10 @@ import { epoch } from "common-types";
  */
 export class DexieList<T extends IModel> {
   constructor(
-    private modelConstructor: IModelConstructor<T>,
+    private modelConstructor: ConstructorFor<T>,
     private table: Dexie.Table<T, any>,
-    private meta: IDexieModelMeta
-  ) {}
+    private meta: IDexieModelMeta<T>
+  ) { }
 
   /**
    * Get a full list of _all_ records of a given model type
@@ -81,8 +81,8 @@ export class DexieList<T extends IModel> {
       op === "="
         ? this.table.where(prop).equals(val as IndexableType)
         : op === ">"
-        ? this.table.where(prop).above(val as IndexableType)
-        : this.table.where(prop).below(val as IndexableType);
+          ? this.table.where(prop).above(val as IndexableType)
+          : this.table.where(prop).below(val as IndexableType);
 
     if (options.limit) {
       query = query.limit(options.limit);
@@ -148,8 +148,7 @@ export class DexieList<T extends IModel> {
         return [];
       } else {
         throw new DexieError(
-          `list.last(${limit}${
-            skip ? `, skip: ${skip}` : ""
+          `list.last(${limit}${skip ? `, skip: ${skip}` : ""
           }) failed to execute: ${e.message}`,
           `dexie/${e.code || e.name || "list.last"}`
         );
@@ -173,8 +172,7 @@ export class DexieList<T extends IModel> {
         return [];
       } else {
         throw new DexieError(
-          `list.first(${limit}${
-            skip ? `, skip: ${skip}` : ""
+          `list.first(${limit}${skip ? `, skip: ${skip}` : ""
           }) failed to execute: ${e.message}`,
           `dexie/${e.code || e.name || "list.first"}`
         );

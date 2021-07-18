@@ -3,6 +3,7 @@ import {
   IFkReference,
   IFmBuildRelationshipOptions,
   IFmPathValuePair,
+  isCompositeKey,
 } from "@/types";
 import {
   IncorrectReciprocalInverse,
@@ -14,6 +15,8 @@ import {
 import { Record } from "@/core";
 import { createCompositeKeyRefFromRecord } from "./index";
 import { getModelMeta, pathJoin } from "@/util";
+import { IModel, ISdk } from "universal-fire";
+import { ConstructorFor, fk } from "common-types";
 
 /**
  * Builds all the DB paths needed to update a pairing of a PK:FK. It is intended
@@ -28,20 +31,20 @@ import { getModelMeta, pathJoin } from "@/util";
  * @param property the _property_ on the `Record` which holds the FK id
  * @param fkRef the "id" for the FK which is being worked on
  */
-export function buildRelationshipPaths<T>(
-  rec: Record<T>,
+export function buildRelationshipPaths<S extends ISdk, T extends IModel>(
+  rec: Record<S, T>,
   property: keyof T & string,
-  fkRef: IFkReference,
-  options: IFmBuildRelationshipOptions = {}
+  fkRef: IFkReference<T>,
+  options: IFmBuildRelationshipOptions<S> = {}
 ): IFmPathValuePair[] {
   try {
     const meta = getModelMeta(rec);
     const now = options.now || new Date().getTime();
     const operation = options.operation || "add";
     const altHasManyValue = options.altHasManyValue || true;
-    const fkModelConstructor = meta.relationship(property).fkConstructor();
+    const fkModelConstructor = meta.relationship(property).fkConstructor() as ConstructorFor<T, any>;
     const inverseProperty = meta.relationship(property).inverseProperty;
-    const fkRecord = Record.createWith(fkModelConstructor, fkRef, {
+    const fkRecord = Record.createWith(fkModelConstructor, fkRef as Partial<T>, {
       db: options.db || rec.db,
     });
     const results: IFmPathValuePair[] = [];
@@ -49,7 +52,7 @@ export function buildRelationshipPaths<T>(
     /**
      * Normalize to a composite key format
      */
-    const fkCompositeKey: ICompositeKey =
+    const fkCompositeKey: ICompositeKey<T> =
       typeof fkRef === "object" ? fkRef : fkRecord.compositeKey;
 
     const fkId: string = createCompositeKeyRefFromRecord(fkRecord);
@@ -84,20 +87,20 @@ export function buildRelationshipPaths<T>(
       const inverseReln = fkMeta.relationship(inverseProperty);
 
       if (!inverseReln) {
-        throw new MissingInverseProperty(rec, property);
+        throw new MissingInverseProperty<S, T>(rec, property);
       }
 
       if (
         !inverseReln.inverseProperty &&
         inverseReln.directionality === "bi-directional"
       ) {
-        throw new MissingReciprocalInverse(rec, property);
+        throw new MissingReciprocalInverse<S, T>(rec, property);
       }
       if (
         inverseReln.inverseProperty !== property &&
         inverseReln.directionality === "bi-directional"
       ) {
-        throw new IncorrectReciprocalInverse(rec, property);
+        throw new IncorrectReciprocalInverse<S, T>(rec, property);
       }
 
       const fkInverseIsHasManyReln = inverseProperty
@@ -114,8 +117,8 @@ export function buildRelationshipPaths<T>(
           operation === "remove"
             ? null
             : fkInverseIsHasManyReln
-            ? altHasManyValue
-            : rec.compositeKeyRef,
+              ? altHasManyValue
+              : rec.compositeKeyRef,
       });
       results.push({
         path: pathJoin(fkRecord.dbPath, "lastUpdated"),

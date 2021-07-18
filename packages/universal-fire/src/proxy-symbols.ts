@@ -15,7 +15,6 @@ export type {
   IClientAuth,
   IAdminAuth,
   SDK,
-  IDatabaseSdk,
   IComparisonOperator,
   ISerializedQuery,
   ISerializedIdentity,
@@ -24,8 +23,23 @@ export type {
   AppFrom,
   ISdk,
   IRtdbSdk,
-  IModel
+  IModel,
+  IDatabaseSdk,
+  IDatabaseApi,
+  FakerStatic,
+  IFmModelMeta,
+  IFmModelPropertyMeta,
+  IFmModelRelationshipMeta,
+  IFmFunctionToConstructor,
+  IFmRelationshipDirectionality,
+  IModelIndexMeta,
+  FmMockType
 } from '@forest-fire/types';
+
+export {
+  isClientSdk,
+  isAdminSdk
+} from "@forest-fire/types"
 
 export { SerializedQuery } from '@forest-fire/serialized-query';
 

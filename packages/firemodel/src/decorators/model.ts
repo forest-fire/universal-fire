@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { FmModelConstructor, IFmModelMeta, IModel } from "@/types";
+import { FmModelConstructor } from "@/types";
 import {
   addModelMeta,
   getModelProperty,
@@ -14,8 +14,9 @@ import { getPushKeys, modelRegister } from "@/util";
 
 import { IDictionary } from "common-types";
 import { getDbIndexes } from "@/decorators";
+import { IFmModelMeta, IModel } from "universal-fire";
 
-export function model(options: Partial<IFmModelMeta> = {}) {
+export function model<T extends IModel = IModel>(options: Partial<IFmModelMeta<T>> = {}) {
   let isDirty: boolean = false;
 
   return function decorateModel<T extends IModel>(
@@ -41,7 +42,7 @@ export function model(options: Partial<IFmModelMeta> = {}) {
         options.audit = false;
       }
 
-      const meta: IFmModelMeta = {
+      const meta: IFmModelMeta<T> = {
         ...options,
         ...{ isProperty: isProperty(modelOfObject) },
         ...{ property: getModelProperty(modelOfObject) },
@@ -68,7 +69,7 @@ export function model(options: Partial<IFmModelMeta> = {}) {
           localModelName:
             options.localModelName === undefined
               ? modelOfObject.constructor.name.slice(0, 1).toLowerCase() +
-                modelOfObject.constructor.name.slice(1)
+              modelOfObject.constructor.name.slice(1)
               : options.localModelName,
         },
         ...{ isDirty },
@@ -77,7 +78,7 @@ export function model(options: Partial<IFmModelMeta> = {}) {
       addModelMeta(target.constructor.name.toLowerCase(), meta);
 
       Object.defineProperty(target.prototype, "META", {
-        get(): IFmModelMeta {
+        get(): IFmModelMeta<T> {
           return meta;
         },
         set(prop: IDictionary) {

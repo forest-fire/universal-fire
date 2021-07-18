@@ -1,10 +1,7 @@
 import { IDictionary, datetime } from "common-types";
-
-// import { IDatabaseSdk } from "universal-fire";
-import { IDatabaseSdk } from "universal-fire";
-import { IModel, IPrimaryKey } from "@/types";
+import { IPrimaryKey } from "@/types";
 import type { FireModelError } from "@/errors";
-import { ISdk } from "../../../types/dist/types";
+import { IModel, ISdk, IDatabaseSdk } from "universal-fire";
 
 export interface IUnderlyingError<T> {
   /** an identifying characteristic of the individual error */
@@ -214,8 +211,11 @@ export interface IFmPathValuePair {
   path: string;
   /** the value at the given path */
   value: any;
-}
 
+}
+/**
+ * A record which _does_ have the `id` property set
+ */
 export interface IFmHasId {
   id: string;
 }

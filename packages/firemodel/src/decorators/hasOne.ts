@@ -1,9 +1,8 @@
 import {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
-  IFnToModelConstructor,
-  IModelConstructor,
-} from "@/types";
+  IModel,
+} from "universal-fire";
 import {
   modelConstructorLookup,
   modelNameLookup,
@@ -11,10 +10,10 @@ import {
 } from "@/util";
 
 import { DecoratorProblem } from "@/errors";
-import { Omit } from "common-types";
+import { ConstructorFor, Omit } from "common-types";
 import { propertyReflector } from "@/decorators";
 
-export function belongsTo(
+export function belongsTo<T extends IModel = IModel>(
   /**
    * either a _string_ representing the Model's class name
    * or a _constructor_ for the Model class.
@@ -23,11 +22,11 @@ export function belongsTo(
    * possibility that a user of this API will pass in a _function_
    * to a _constructor_. This approach is now deprecated.
    */
-  fkClass: IFnToModelConstructor | IModelConstructor | string,
+  fkClass: ConstructorFor<T> | (() => ConstructorFor<T>) | string,
   inverse?: string | [string, IFmRelationshipDirectionality]
 ) {
   try {
-    const fkConstructor: IFnToModelConstructor =
+    const fkConstructor: () => ConstructorFor<T> =
       typeof fkClass === "string"
         ? modelNameLookup(fkClass)
         : modelConstructorLookup(fkClass);

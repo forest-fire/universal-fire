@@ -3,12 +3,12 @@ import {
   IFmPathValuePair,
   IFmRecordMeta,
   IFmRelationshipOperation,
-  IModel,
   IMultiPathUpdates,
   IWatchEventClassification,
   IWatcherSource,
 } from "@/types";
 import {
+  IModel,
   IPathBasedWatchEvent,
   IRtdbDbEvent,
   ISdk,
@@ -50,9 +50,9 @@ export type IReduxDispatch<T extends IReduxAction = IReduxAction, O = any> = (
  * The structure of a Redux action message (aka, a dictionary with
  * at least the `type` attribute)
  */
-export interface IReduxAction extends IDictionary {
+export type IReduxAction = {
   type: string;
-}
+} & IDictionary;
 
 export type IFmEventType =
   | "value"

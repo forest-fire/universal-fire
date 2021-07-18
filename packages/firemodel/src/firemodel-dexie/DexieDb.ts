@@ -5,20 +5,19 @@ import {
   ICompositeKey,
   IDexieModelMeta,
   IDexiePriorVersion,
-  IModel,
-  IModelConstructor,
   IPrimaryKey,
 } from "@/types";
-import { IDictionary, pk } from "common-types";
+import { ConstructorFor, IDictionary, pk } from "common-types";
 
 import { Record } from "@/core";
 import { capitalize } from "@/util";
+import { IModel } from "universal-fire";
 
 /**
  * Provides a simple API to convert to/work with **Dexie** models
  * from a **Firemodel** model definition.
  */
-export class DexieDb {
+export class DexieDb<T extends IModel> {
   //#region STATIC
   /**
    * Takes a _deconstructed_ array of **Firemodel** `Model` constructors and converts
@@ -26,7 +25,7 @@ export class DexieDb {
    * the dictionary is the plural name of the model
    */
   public static modelConversion<T extends IModel>(
-    ...modelConstructors: Array<IModelConstructor<T>>
+    ...modelConstructors: Array<ConstructorFor<T>>
   ) {
     if (modelConstructors.length === 0) {
       throw new FireModelError(
@@ -36,7 +35,7 @@ export class DexieDb {
     }
 
     return modelConstructors.reduce(
-      (agg: IDictionary<string>, curr: IModelConstructor<T>) => {
+      (agg: IDictionary<string>, curr: ConstructorFor<T>) => {
         const dexieModel: string[] = [];
         const r = Record.createWith(curr, new curr());
 
@@ -68,9 +67,9 @@ export class DexieDb {
           .concat(
             r.hasDynamicPath
               ? r.dynamicPathComponents.filter(
-                  (i) =>
-                    !r.META.dbIndexes.map((idx) => idx.property).includes(i)
-                )
+                (i) =>
+                  !r.META.dbIndexes.map((idx) => idx.property).includes(i)
+              )
               : []
           )
           .forEach((i) => dexieModel.push(i));
@@ -174,11 +173,11 @@ export class DexieDb {
 
   /** simple dictionary of Dixie model defn's for indexation */
   private _models: IDictionary<string> = {};
-  private _constructors: IDictionary<IModelConstructor<any>> = {};
+  private _constructors: IDictionary<ConstructorFor<any>> = {};
   /** the core **Dexie** API surface */
   private _db: Dexie;
   /** META information for each of the `Model`'s */
-  private _meta: IDictionary<IDexieModelMeta> = {};
+  private _meta: IDictionary<IDexieModelMeta<T>> = {};
   /** maps `Model`'s singular name to a plural */
   private _singularToPlural: IDictionary<string> = {};
   /** the current version number for the indexDB database */
@@ -189,7 +188,7 @@ export class DexieDb {
 
   private _status: string = "initialized";
 
-  constructor(private _name: string, ...models: Array<IModelConstructor<any>>) {
+  constructor(private _name: string, ...models: Array<ConstructorFor<T>>) {
     this._models = DexieDb.modelConversion(...models);
 
     this._db = DexieDb._indexedDb
@@ -244,7 +243,7 @@ export class DexieDb {
    *
    * @param model the `Model` in question
    */
-  public modelIsManagedByDexie<T extends IModel>(model: IModelConstructor<T>) {
+  public modelIsManagedByDexie<T extends IModel>(model: ConstructorFor<T>) {
     const r = Record.create(model);
     return this.modelNames.includes(r.modelName);
   }
@@ -253,7 +252,7 @@ export class DexieDb {
    * Returns a typed **Dexie** `Table` object for a given model class
    */
   public table<T extends IModel>(
-    model: IModelConstructor<T>
+    model: ConstructorFor<T>
   ): Dexie.Table<T, IPrimaryKey<T>> {
     const r = Record.create(model);
 
@@ -287,15 +286,14 @@ export class DexieDb {
    *
    * @param model the **Firemodel** model (aka, the constructor)
    */
-  public record<T extends IModel>(model: IModelConstructor<T>) {
+  public record<T extends IModel>(model: ConstructorFor<T>) {
     const r = Record.create(model);
     if (!this.modelNames.includes(r.modelName)) {
       const isPlural = this.pluralNames.includes(r.modelName);
       throw new DexieError(
-        `Attempt to reach the record API via DexieDb.record("${model}") failed as there is no known Firemodel model of that name. ${
-          isPlural
-            ? "It looks like you may have accidentally used the plural name instead"
-            : ""
+        `Attempt to reach the record API via DexieDb.record("${model}") failed as there is no known Firemodel model of that name. ${isPlural
+          ? "It looks like you may have accidentally used the plural name instead"
+          : ""
         }. Known model types are: ${this.modelNames.join(", ")}`,
         "dexie/model-does-not-exist"
       );
@@ -317,7 +315,7 @@ export class DexieDb {
    *
    * @param model the **Firemodel** `Model` name
    */
-  public list<T extends IModel>(model: IModelConstructor<T>) {
+  public list<T extends IModel>(model: ConstructorFor<T>) {
     const r = Record.create(model);
     if (!this.isOpen()) {
       this.open();
@@ -345,7 +343,7 @@ export class DexieDb {
    * @param name either the _plural_ or _singular_ name of a model
    * managed by the `DexieModel` instance
    */
-  public modelConstructor(name: string): IModelConstructor<any> {
+  public modelConstructor(name: string): ConstructorFor<any> {
     return this._checkPluralThenSingular(
       this._constructors,
       name,

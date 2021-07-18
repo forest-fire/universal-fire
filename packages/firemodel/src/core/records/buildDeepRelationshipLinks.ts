@@ -1,6 +1,6 @@
-import { IFkReference, IModel } from "@/types";
-
+import { ISdk } from "universal-fire";
 import { IDictionary } from "common-types";
+import { IFkReference, IModel } from "@/types";
 import { Record } from "@/core";
 import { getModelMeta } from "@/util";
 
@@ -9,8 +9,8 @@ import { getModelMeta } from "@/util";
  * the "payload" of FK's instead of just the FK. This function facilitates
  * that.
  */
-export async function buildDeepRelationshipLinks<T extends IModel>(
-  rec: Record<T>,
+export async function buildDeepRelationshipLinks<S extends ISdk, T extends IModel>(
+  rec: Record<S, T>,
   property: keyof T & string
 ) {
   const meta = getModelMeta(rec).property(property);
@@ -19,8 +19,8 @@ export async function buildDeepRelationshipLinks<T extends IModel>(
     : processBelongsTo(rec, property);
 }
 
-async function processHasMany<T extends IModel>(
-  rec: Record<T>,
+async function processHasMany<S extends ISdk, T extends IModel>(
+  rec: Record<S, T>,
   property: keyof T & string
 ) {
   const meta = getModelMeta(rec).property(property);
@@ -55,8 +55,8 @@ async function processHasMany<T extends IModel>(
   return;
 }
 
-async function processBelongsTo<T extends IModel>(
-  rec: Record<T>,
+async function processBelongsTo<S extends ISdk, T extends IModel>(
+  rec: Record<S, T>,
   property: keyof T & string
 ) {
   const fk: IFkReference<T> = rec.get(property) as any;

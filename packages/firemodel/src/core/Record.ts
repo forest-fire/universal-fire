@@ -1,5 +1,5 @@
 //#region imports
-import { FireModel, List } from "@/core";
+import { DefaultDbCache, FireModel, List } from "@/core";
 import {
   FireModelError,
   FireModelProxyError,
@@ -17,11 +17,9 @@ import {
   IFmCrudOperations,
   IFmDispatchOptions,
   IFmLocalRecordEvent,
-  IFmModelPropertyMeta,
   IFmPathValuePair,
   IFmRelationshipOptions,
   IFmRelationshipOptionsForHasMany,
-  IModel,
   IRecord,
   IRecordOptions,
   IRecordRelationshipMeta,
@@ -57,7 +55,7 @@ import {
   withoutMetaOrPrivate,
 } from "@/util";
 
-import { IDatabaseSdk } from "universal-fire";
+import { IDatabaseSdk, IFmModelPropertyMeta, IModel, ISdk } from "universal-fire";
 import { UnwatchedLocalEvent } from "@/state-mgmt";
 import { default as copy } from "fast-copy";
 import { key as fbKey } from "firebase-key";
@@ -65,13 +63,14 @@ import { writeAudit } from "@/audit";
 
 //#endregion
 
-export class Record<T extends IModel> extends FireModel<T> implements IRecord {
+export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> implements IRecord<S, T> {
   //#region STATIC INTERFACE
-  public static set defaultDb(db: IDatabaseSdk) {
-    FireModel.defaultDb = db;
+  public static set defaultDb(db: IDatabaseSdk<ISdk>) {
+    DefaultDbCache().set<IDatabaseSdk<typeof db.sdk>>(db);
   }
+
   public static get defaultDb() {
-    return FireModel.defaultDb;
+    return DefaultDbCache().get();
   }
 
   public static set dispatch(fn: IReduxDispatch) {
@@ -101,9 +100,11 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    */
   public static create<T extends IModel>(
     model: new () => T,
-    options: IRecordOptions = {}
+    options: IRecordOptions<any> = {}
   ) {
-    const r = new Record<T>(model, options);
+    const defaultSdk = DefaultDbCache().sdk;
+    type SDK = typeof defaultSdk extends ISdk ? typeof defaultSdk : ISdk;
+    const r = new Record<SDK, T>(model, options);
     if (options.silent && !r.db.isMockDb) {
       throw new FireModelError(
         `You can only add new records to the DB silently when using a Mock database!`,
@@ -118,12 +119,12 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    * Creates an empty record and then inserts all values
    * provided along with default values provided in META.
    */
-  public static local<T extends IModel>(
+  public static local<T extends IModel, O extends IRecordOptions<any>>(
     model: new () => T,
     values: Partial<T>,
-    options: IRecordOptions & { ignoreEmptyValues?: boolean } = {}
+    options: O & { ignoreEmptyValues?: boolean } = {} as O
   ) {
-    const rec = Record.create(model, options as IRecordOptions);
+    const rec = Record.create(model, options as O);
     if (
       !options.ignoreEmptyValues &&
       (!values || Object.keys(values).length === 0)
@@ -159,12 +160,14 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    * @param payload the data for the new record; this optionally can include the "id" but if left off the new record will use a firebase pushkey
    * @param options
    */
-  public static async add<T extends IModel>(
+  public static async add<T extends IModel, O extends IRecordOptions<any>>(
     model: (new () => T) | string,
     payload: T,
-    options: IRecordOptions = {}
+    options: O = {} as O
   ) {
-    let r: Record<T>;
+    const defaultSdk = DefaultDbCache().sdk;
+    type SDK = typeof defaultSdk extends ISdk ? typeof defaultSdk : ISdk;
+    let r: Record<SDK, T>;
     if (typeof model === "string") {
       model = FireModel.lookupModel(model);
     }
@@ -227,11 +230,11 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    * @param updates properties to update; this is a non-destructive operation so properties not expressed will remain unchanged. Also, because values are _nullable_ you can set a property to `null` to REMOVE it from the database.
    * @param options
    */
-  public static async update<T extends IModel>(
+  public static async update<T extends IModel, O extends IRecordOptions<any>>(
     model: new () => T,
     pk: IPrimaryKey<T>,
     updates: Nullable<Partial<T>>,
-    options: IRecordOptions = {}
+    options: O = {} as O
   ) {
     let r;
     try {
@@ -254,12 +257,12 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    * @param property the property on the record
    * @param payload the new payload you want to push into the array
    */
-  public static async pushKey<T extends IModel>(
+  public static async pushKey<T extends IModel, O extends IRecordOptions<any>>(
     model: new () => T,
     pk: IPrimaryKey<T>,
     property: keyof T & string,
     payload: any,
-    options: IRecordOptions = {}
+    options: O = {} as O
   ) {
     const obj = await Record.get(model, pk, options);
     return obj.pushKey(property, payload);
@@ -287,11 +290,11 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    * @payload either a string representing an `id` or Composite Key or alternatively
    * a hash/dictionary of attributes that are to be set as a starting point
    */
-  public static createWith<T extends IModel>(
+  public static createWith<S extends ISdk, T extends IModel, O extends IRecordOptions<S>>(
     model: new () => T,
-    payload: Partial<T> | string,
-    options: IRecordOptions = {}
-  ) {
+    payload: Partial<T>,
+    options: O = {} as O
+  ): Record<S, T> {
     const defaultDb = FireModel.defaultDb;
     if (options.db) {
       FireModel.defaultDb = options.db;
@@ -314,8 +317,8 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
     // the async possibilites of this method (only if `options.setDeepRelationships`)
     // are not negatively impacting this method
     rec._initialize(properties, options);
-    FireModel.defaultDb = defaultDb;
-    return rec;
+    DefaultDbCache().set(defaultDb);
+    return rec as Record<S, T>;
   }
 
   /**
@@ -328,21 +331,21 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    * @param id either just an "id" string or in the case of models with dynamic path prefixes you can pass in an object with the id and all dynamic prefixes
    * @param options
    */
-  public static async get<T extends IModel>(
+  public static async get<T extends IModel, O extends IRecordOptions<any>>(
     model: new () => T,
     pk: IPrimaryKey<T>,
-    options: IRecordOptions = {}
+    options: O = {} as O
   ) {
     const record = Record.create(model, options);
     await record._getFromDB(pk);
     return record;
   }
 
-  public static async remove<T extends IModel>(
+  public static async remove<S extends ISdk, T extends IModel>(
     model: new () => T,
     pk: IPrimaryKey<T>,
     /** if there is a known current state of this model you can avoid a DB call to get it */
-    currentState?: Record<T>
+    currentState?: Record<S, T>
   ) {
     // TODO: add lookup in local state to see if we can avoid DB call
     const record = currentState ? currentState : await Record.get(model, pk);
@@ -361,12 +364,12 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    * @param property the _property_ on the primary model which relates to another model(s)
    * @param refs one or more FK references
    */
-  public static async associate<T extends IModel>(
+  public static async associate<S extends ISdk, T extends IModel>(
     model: ConstructorFor<T>,
     pk: IPrimaryKey<T>,
     property: PropertyOf<T>,
     refs: IFkReference<any> | IFkReference<any>[],
-    options: IFmRelationshipOptions = {}
+    options: IFmRelationshipOptions<S> = {}
   ) {
     const obj = await Record.get(model, pk);
     await obj.associate(property, refs, options);
@@ -518,7 +521,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
   private _writeOperations: IWriteOperation[] = [];
   private _data?: Partial<T> = {};
 
-  constructor(model: new () => T, protected options: IRecordOptions = {}) {
+  constructor(model: new () => T, protected options: IRecordOptions<S> = {}) {
     super();
     if (!model) {
       throw new FireModelError(
@@ -565,7 +568,8 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
     if (!this._data.META) {
       this._data.META = { isDirty: value };
     }
-    this._data.META.isDirty = value;
+    // TODO: can we remove isDirty functionality?
+    // this.data.META.isDirty = value;
   }
 
   /**
@@ -620,7 +624,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    * the composite key of a model.
    */
   public get compositeKey(): ICompositeKey<T> {
-    return createCompositeKey<T>(this);
+    return createCompositeKey<S, T>(this);
   }
 
   /**
@@ -628,7 +632,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    * a composite string (aka, a model which has a dynamic dbOffset)
    */
   public get compositeKeyRef() {
-    return createCompositeKeyRefFromRecord<T>(this);
+    return createCompositeKeyRefFromRecord<S, T>(this);
   }
 
   /**
@@ -799,7 +803,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    *
    * @param payload the payload of the new record
    */
-  public async addAnother(payload: T, options: IRecordOptions = {}) {
+  public async addAnother(payload: T, options: IRecordOptions<S> = {}) {
     const newRecord = await Record.add(
       this._modelConstructor,
       payload,
@@ -986,7 +990,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
     property: keyof T & string,
     // TODO: ideally stronger typing
     refs: IFkReference<any> | IFkReference<any>[],
-    options: IFmRelationshipOptions = {}
+    options: IFmRelationshipOptions<S> = {}
   ) {
     const meta = getModelMeta(this);
     if (!meta.relationship(property)) {
@@ -1039,7 +1043,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
     property: keyof T & string,
     // TODO: ideally stronger typing below
     refs: IFkReference<any> | IFkReference<any>[],
-    options: IFmRelationshipOptions = {}
+    options: IFmRelationshipOptions<S> = {}
   ) {
     const relType = this.META.relationship(property).relType;
     if (relType === "hasMany") {
@@ -1065,7 +1069,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
   public async addToRelationship(
     property: keyof T & string,
     fkRefs: IFkReference<any> | IFkReference<any>[],
-    options: IFmRelationshipOptionsForHasMany = {}
+    options: IFmRelationshipOptionsForHasMany<S> = {}
   ) {
     const altHasManyValue = options.altHasManyValue || true;
 
@@ -1081,7 +1085,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
     let paths: IFmPathValuePair[] = [];
 
     const now = new Date().getTime();
-    fkRefs.map((ref: IFkReference) => {
+    fkRefs.map((ref: IFkReference<T>) => {
       paths = [
         ...buildRelationshipPaths(this, property, ref, {
           now,
@@ -1105,7 +1109,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
   public async removeFromRelationship(
     property: keyof T & string,
     fkRefs: IFkReference<any> | IFkReference<any>[],
-    options: IFmRelationshipOptionsForHasMany = {}
+    options: IFmRelationshipOptionsForHasMany<S> = {}
   ) {
     if (!isHasManyRelationship(this, property)) {
       throw new NotHasManyRelationship(
@@ -1119,7 +1123,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
     let paths: IFmPathValuePair[] = [];
 
     const now = new Date().getTime();
-    fkRefs.map((ref: IFkReference) => {
+    fkRefs.map((ref: IFkReference<T>) => {
       paths = [
         ...buildRelationshipPaths(this, property, ref, {
           now,
@@ -1150,7 +1154,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    */
   public async clearRelationship(
     property: keyof T & string,
-    options: IFmRelationshipOptions = {}
+    options: IFmRelationshipOptions<S> = {}
   ) {
     const relType = this.META.relationship(property).relType;
     const fkRefs: string[] =
@@ -1196,7 +1200,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
   public async setRelationship(
     property: keyof T & string,
     fkId: IFkReference<any>,
-    options: IFmRelationshipOptions = {}
+    options: IFmRelationshipOptions<S> = {}
   ) {
     if (!fkId) {
       throw new FireModelError(
@@ -1252,7 +1256,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
    */
   public async _initialize(
     data: Partial<T>,
-    options: IRecordOptions = {}
+    options: IRecordOptions<S> = {}
   ): Promise<void> {
     const defaultDb = FireModel.defaultDb;
     if (options.db) {
@@ -1431,7 +1435,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
       withoutMetaOrPrivate<T>(priorValue)
     );
 
-    const watchers: Array<IWatcherEventContext<T>> = findWatchers(
+    const watchers: Array<IWatcherEventContext<S, T>> = findWatchers(
       this.dbPath
     ) as any;
     const event: Omit<IFmLocalRecordEvent<T>, "type"> = {
@@ -1466,7 +1470,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
       }
     } else {
       // For each watcher watching this DB path ...
-      const dispatch = WatchDispatcher<T>(this.dispatch);
+      const dispatch = WatchDispatcher<S, T>(this.dispatch);
       for (const watcher of watchers) {
         if (!options.silent) {
           await dispatch(watcher)({ type: actionTypeStart, ...event });
@@ -1477,7 +1481,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
     // Send CRUD to Firebase
     try {
       if (this.db.isMockDb && this.db.mock && options.silent) {
-        this.db.mock.silenceEvents();
+        // this.db.mock.silenceEvents();
       }
       this._data.lastUpdated = new Date().getTime();
       const path = this.dbPath;
@@ -1559,16 +1563,15 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
       // send confirm event
       if (!options.silent && !options.silentAcceptance) {
         if (watchers.length === 0) {
-          await this.dispatch(
-            UnwatchedLocalEvent(this, {
-              type: actionTypeEnd,
-              ...event,
-              transactionId,
-              value: withoutMetaOrPrivate(this.data),
-            })
-          );
+          const evt = {
+            type: actionTypeEnd,
+            ...event,
+            transactionId,
+            value: withoutMetaOrPrivate(this.data),
+          };
+          await this.dispatch(UnwatchedLocalEvent(this, evt));
         } else {
-          const dispatch = WatchDispatcher<T>(this.dispatch);
+          const dispatch = WatchDispatcher<S, T>(this.dispatch);
           for (const watcher of watchers) {
             if (!options.silent) {
               await dispatch(watcher)({ type: actionTypeEnd, ...event });
@@ -1577,12 +1580,12 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
         }
       }
       if (this.db.isMockDb && this.db.mock && options.silent) {
-        this.db.mock.restoreEvents();
+        // this.db.mock.restoreEvents();
       }
     } catch (e) {
       // send failure event
       await this.dispatch(
-        UnwatchedLocalEvent(this, {
+        UnwatchedLocalEvent<S, T>(this, {
           type: actionTypeFailure,
           ...event,
           transactionId,
@@ -1678,7 +1681,7 @@ export class Record<T extends IModel> extends FireModel<T> implements IRecord {
   /**
    * Allows for the static "add" method to add a record
    */
-  private async _adding(options: IRecordOptions) {
+  private async _adding(options: IRecordOptions<S>) {
     let defaultDb = FireModel.defaultDb;
     if (options.db) {
       FireModel.defaultDb = options.db;

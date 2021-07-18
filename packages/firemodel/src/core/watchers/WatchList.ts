@@ -1,5 +1,6 @@
 import {
   IComparisonOperator,
+  ISdk,
   ISerializedQuery,
   SerializedQuery,
 } from "universal-fire";
@@ -11,8 +12,8 @@ import { WatchBase } from "./WatchBase";
 import { epochWithMilliseconds } from "common-types";
 import { getAllPropertiesFromClassStructure } from "@/util";
 
-export class WatchList<T extends IModel> extends WatchBase<T> {
-  public static list<T extends IModel>(
+export class WatchList<S extends ISdk, T extends IModel> extends WatchBase<S, T> {
+  public static list<S extends ISdk, T extends IModel>(
     /**
      * The `Model` underlying the **List**
      */
@@ -20,20 +21,20 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
     /**
      * optionally state the _dynamic path_ properties which offset the **dbPath**
      */
-    options: IListOptions<T> = {}
-  ): WatchList<T> {
-    const obj = new WatchList<T>();
+    options: IListOptions<S, T> = {}
+  ): WatchList<S, T> {
+    const obj = new WatchList<S, T>();
     obj.list(modelConstructor, options);
     return obj;
   }
 
   protected _offsets: Partial<T> = {};
-  protected _options: IListOptions<T> = {};
+  protected _options: IListOptions<S, T> = {};
 
   public list(
     modelConstructor: new () => T,
-    options: IListOptions<T> = {}
-  ): WatchList<T> {
+    options: IListOptions<S, T> = {}
+  ): WatchList<S, T> {
     this._watcherSource = "list";
     this._eventType = "child";
     this._options = options;
@@ -91,9 +92,9 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
       this._underlyingRecordWatchers.push(
         this._options.offsets
           ? Watch.record<T>(this._modelConstructor, {
-              ...(typeof id === "string" ? { id } : id),
-              ...this._options.offsets,
-            })
+            ...(typeof id === "string" ? { id } : id),
+            ...this._options.offsets,
+          })
           : Watch.record<T>(this._modelConstructor, id)
       );
     }
@@ -114,7 +115,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
   public since(
     when: epochWithMilliseconds | string,
     limit?: number
-  ): WatchList<T> {
+  ): WatchList<S, T> {
     this._query = this._query.orderByChild("lastUpdated").startAt(when);
     if (limit) {
       this._query = this._query.limitToFirst(limit);
@@ -134,7 +135,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
   public dormantSince(
     when: epochWithMilliseconds | string,
     limit?: number
-  ): WatchList<T> {
+  ): WatchList<S, T> {
     this._query = this._query.orderByChild("lastUpdated").endAt(when);
     if (limit) {
       this._query = this._query.limitToFirst(limit);
@@ -154,7 +155,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
   public after(
     when: epochWithMilliseconds | string,
     limit?: number
-  ): WatchList<T> {
+  ): WatchList<S, T> {
     this._query = this._query.orderByChild("createdAt").startAt(when);
     if (limit) {
       this._query = this._query.limitToFirst(limit);
@@ -174,7 +175,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
   public before(
     when: epochWithMilliseconds | string,
     limit?: number
-  ): WatchList<T> {
+  ): WatchList<S, T> {
     this._query = this._query.orderByChild("createdAt").endAt(when);
     if (limit) {
       this._query = this._query.limitToFirst(limit);
@@ -193,7 +194,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
    * @param howMany  the datetime in milliseconds or a string format that works with new Date(x)
    * @param startAt  the ID reference to a record in the list (if used for pagination, add the last record in the list to this value)
    */
-  public first(howMany: number, startAt?: string): WatchList<T> {
+  public first(howMany: number, startAt?: string): WatchList<S, T> {
     this._query = this._query.orderByChild("createdAt").limitToFirst(howMany);
     if (startAt) {
       this._query = this._query.startAt(startAt);
@@ -212,7 +213,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
    * @param howMany  the datetime in milliseconds or a string format that works with new Date(x)
    * @param startAt  the ID reference to a record in the list (if used for pagination, add the last record in the list to this value)
    */
-  public last(howMany: number, startAt?: string): WatchList<T> {
+  public last(howMany: number, startAt?: string): WatchList<S, T> {
     this._query = this._query.orderByChild("createdAt").limitToLast(howMany);
     if (startAt) {
       this._query = this._query.endAt(startAt);
@@ -231,7 +232,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
    * @param howMany  the datetime in milliseconds or a string format that works with new Date(x)
    * @param startAt  the ID reference to a record in the list (if used for pagination, add the recent record in the list to this value)
    */
-  public recent(howMany: number, startAt?: string): WatchList<T> {
+  public recent(howMany: number, startAt?: string): WatchList<S, T> {
     this._query = this._query.orderByChild("lastUpdated").limitToFirst(howMany);
     if (startAt) {
       this._query = this._query.startAt(startAt);
@@ -250,7 +251,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
    * @param howMany  the datetime in milliseconds or a string format that works with new Date(x)
    * @param startAt  the ID reference to a record in the list (if used for pagination, add the inactive record in the list to this value)
    */
-  public inactive(howMany: number, startAt?: string): WatchList<T> {
+  public inactive(howMany: number, startAt?: string): WatchList<S, T> {
     this._query = this._query.orderByChild("lastUpdated").limitToLast(howMany);
     if (startAt) {
       this._query = this._query.endAt(startAt);
@@ -266,7 +267,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
    *
    * @param query
    */
-  public fromQuery(inputQuery: ISerializedQuery<T>): WatchList<T> {
+  public fromQuery(inputQuery: ISerializedQuery<S, T>): WatchList<S, T> {
     this._query = inputQuery;
 
     return this;
@@ -279,7 +280,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
    *
    * @param limit it you want to limit the results a max number of records
    */
-  public all(limit?: number): WatchList<T> {
+  public all(limit?: number): WatchList<S, T> {
     if (limit) {
       this._query = this._query.limitToLast(limit);
     }
@@ -295,10 +296,10 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
    * @param property the property which the comparison operater is being compared to
    * @param value either just a value (in which case "equality" is the operator), or a tuple with operator followed by value (e.g., [">", 34])
    */
-  public where<K extends keyof T>(
-    property: K & string,
+  public where<K extends keyof T & string>(
+    property: K,
     value: T[K] | [IComparisonOperator, T[K]]
-  ): WatchList<T> {
+  ): WatchList<S, T> {
     let operation: IComparisonOperator = "=";
     let val;
     if (Array.isArray(value)) {
@@ -307,11 +308,11 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
     } else {
       val = value;
     }
-    this._query = SerializedQuery.create<T>(this.db, this._query.path)
+    this._query = SerializedQuery.create(this.db, this._query.path)
       .orderByChild(property)
       // TODO: fix typing issue here.
       // @ts-ignore
-      .where(operation, val);
+      .where(operation, val) as ISerializedQuery<S, T>;
     return this;
   }
 
@@ -328,7 +329,7 @@ export class WatchList<T extends IModel> extends WatchBase<T> {
         offsets: this._offsets,
       });
 
-      this._query = SerializedQuery.create<T>(this.db, lst.dbPath);
+      this._query = SerializedQuery.create(this.db, lst.dbPath);
       this._modelName = lst.modelName;
       this._pluralName = lst.pluralName;
       this._localPath = lst.localPath;

@@ -4,7 +4,7 @@ import {
   IFmModelPropertyMeta,
   IFmModelRelationshipMeta,
   IModel,
-} from "@/types";
+} from "universal-fire";
 import { addPropertyToModelMeta, addRelationshipToModelMeta } from "@/util";
 
 import { IDictionary } from "common-types";

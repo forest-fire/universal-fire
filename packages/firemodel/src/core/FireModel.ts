@@ -3,16 +3,15 @@ import {
   IAdminConfig,
   IClientConfig,
   ISdk,
-  IDatabaseApi
+  IModel,
+  IFmModelMeta,
+  IFmModelPropertyMeta,
+  IFmModelRelationshipMeta,
 } from "universal-fire";
 import { IDictionary } from "common-types";
 import {
   IFmChangedProperties,
-  IFmModelMeta,
-  IFmModelPropertyMeta,
-  IFmModelRelationshipMeta,
-  IReduxDispatch,
-  IModel,
+  IReduxDispatch
 } from "@/types";
 
 import {
@@ -22,7 +21,7 @@ import {
   modelRegistryLookup,
 } from "@/util";
 
-import type { Record } from "@/core";
+import { Record, DefaultDbCache } from "@/core";
 
 // tslint:disable-next-line:no-var-requires
 const pluralize = require("pluralize");
@@ -43,8 +42,8 @@ export class FireModel<S extends ISdk, T extends IModel> {
    * "default" database to use should a given transaction not state a DB
    * connection explicitly.
    */
-  public static set defaultDb(db: IDatabaseApi<any>) {
-    FireModel._defaultDb = db;
+  public static set defaultDb(db: IDatabaseSdk<ISdk>) {
+    DefaultDbCache().set<IDatabaseSdk<typeof db.sdk>>(db);
   }
 
   /**
@@ -138,9 +137,9 @@ export class FireModel<S extends ISdk, T extends IModel> {
   }
 
   /** the connected real-time database */
-  public get db(): IDatabaseSdk {
+  public get db(): IDatabaseSdk<S> {
     if (!this._db) {
-      this._db = FireModel.defaultDb;
+      this._db = DefaultDbCache().get() as IDatabaseSdk<S>;
     }
     if (!this._db) {
       const e = new Error(
@@ -177,14 +176,14 @@ const db = await FireModel.connect(DB, options);
    * databases) but the vast majority of projects only have ONE firebase
    * database so this just makes the whole process much easier.
    */
-  public static async connect<T extends IDatabaseSdk>(
+  public static async connect<S extends ISdk, T extends IDatabaseSdk<S>>(
     RTDB: {
       connect: (options: Partial<IAdminConfig> & IClientConfig) => T;
     },
     options: Partial<IAdminConfig> & IClientConfig
   ) {
-    const db = await RTDB.connect(options);
-    FireModel.defaultDb = db;
+    const db = RTDB.connect(options);
+    DefaultDbCache().set(db);
     return db;
   }
 
@@ -225,7 +224,7 @@ const db = await FireModel.connect(DB, options);
   //#region PROTECTED INTERFACE
 
   protected _getPaths(
-    rec: Record<T>,
+    rec: Record<S, T>,
     deltas: IFmChangedProperties<T>
   ): IDictionary {
     const added = (deltas.added || []).reduce((agg: IDictionary, curr) => {
