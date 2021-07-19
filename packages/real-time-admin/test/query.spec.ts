@@ -21,14 +21,14 @@ describe('Query based Read ops:', () => {
     };
   };
   beforeAll(async () => {
-    db = await RealTimeAdmin.connect({ mocking: true });
-    const fixture = await Fixture.prepare<SDK.RealTimeAdmin>({ db: db.mock });
-    fixture.addSchema('person', personMockGenerator);
-    fixture.queueSchema('person', 20);
-    fixture.queueSchema('person', 5, { age: 100 });
-    fixture.queueSchema('person', 5, { age: 1 });
-    fixture.queueSchema('person', 3, { age: 3 });
-    fixture.generate();
+    const f = new Fixture();
+    f.addSchema('person', personMockGenerator);
+    f.queueSchema('person', 20);
+    f.queueSchema('person', 5, { age: 100 });
+    f.queueSchema('person', 5, { age: 1 });
+    f.queueSchema('person', 3, { age: 3 });
+    const fixture = f.generate();
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData: fixture });
   });
 
   it('getSnapshot() works with query passed in', async () => {
@@ -111,11 +111,11 @@ describe('Query based Read ops:', () => {
 
   it('getList() brings back a simple array when presented with a hashArray', async () => {
     db.mock.store.updateDb('hash', {
-        '-LFsnvrP4aDu3wcbxfVk': true,
-        '-LFsnvrvoavTDlWzdoPL': true,
-        '-LFsnvsq2FDo48xxRzmO': true,
-        '-LFsnvswzAKs8hgu6B7R': true,
-        '-LFsnvt2hq28zZHeddyn': true,
+      '-LFsnvrP4aDu3wcbxfVk': true,
+      '-LFsnvrvoavTDlWzdoPL': true,
+      '-LFsnvsq2FDo48xxRzmO': true,
+      '-LFsnvswzAKs8hgu6B7R': true,
+      '-LFsnvt2hq28zZHeddyn': true,
     });
 
     const list = await db.getList('hash');

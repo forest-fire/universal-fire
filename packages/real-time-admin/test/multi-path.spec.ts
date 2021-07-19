@@ -5,8 +5,7 @@ import { RealTimeAdmin } from '../src/RealTimeAdmin';
 describe('CRUD Testing > ', () => {
   let db: RealTimeAdmin;
   beforeAll(async () => {
-    db = new RealTimeAdmin({ mocking: true });
-    await db.connect();
+    db = await RealTimeAdmin.connect({ mocking: true });
   });
 
   describe('Multi-path operations', () => {

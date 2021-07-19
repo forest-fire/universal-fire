@@ -17,7 +17,7 @@ describe('Connecting to Database', () => {
 describe('Write Operations', () => {
   let db: RealTimeAdmin;
   beforeAll(async () => {
-    db = await RealTimeAdmin.connect();
+    db = await RealTimeAdmin.connect({ mocking: true });
   });
   afterEach(async () => {
     try {
@@ -106,7 +106,7 @@ describe('Write Operations', () => {
 describe('Other Operations', () => {
   let db: RealTimeAdmin;
   beforeAll(async () => {
-    db = await RealTimeAdmin.connect();
+    db = await RealTimeAdmin.connect({ mocking: true });
   });
   afterEach(async () => {
     await db.remove('scratch');
