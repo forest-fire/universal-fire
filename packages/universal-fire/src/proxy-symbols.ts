@@ -25,7 +25,6 @@ export type {
   IRtdbSdk,
   IModel,
   IDbModel,
-  IModelProps,
   ModelManagedProps,
   IDatabaseSdk,
   IDatabaseApi,
