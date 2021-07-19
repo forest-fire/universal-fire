@@ -26,11 +26,8 @@ describe('Mocking', () => {
   });
 
   it('getSnapshot() returns a mock snapshot', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true });
-    await db.connect();
-    const fixture = await Fixture.prepare<SDK.RealTimeAdmin>({ db: db.mock });
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
 
-    await addAnimals(fixture, 10);
     const animals = await db.getSnapshot('/animals');
     expect(animals.numChildren()).toBe(10);
     fixture.queueSchema('animal', 5).generate();
@@ -39,10 +36,8 @@ describe('Mocking', () => {
   });
 
   it('getValue() returns a value from mock DB', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true });
-    await db.connect();
-    const fixture = await Fixture.prepare<SDK.RealTimeAdmin>({ db: db.mock });
-    addAnimals(fixture, 10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
+
     const animals = await db.getValue('/animals');
     expect(typeof animals === 'object').toBeTruthy();
     expect(helpers.length(animals)).toBe(10);
@@ -52,9 +47,8 @@ describe('Mocking', () => {
   });
 
   it('getRecord() returns a record from mock DB', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true });
-    const fixture = await Fixture.prepare<SDK.RealTimeAdmin>({ db: db.mock });
-    addAnimals(fixture, 10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
+
     const firstKey = helpers.firstKey(db.mock.store.state.animals);
     const animal = await db.getRecord(`/animals/${firstKey}`);
     expect(typeof animal === 'object').toBeTruthy();
@@ -64,9 +58,8 @@ describe('Mocking', () => {
   });
 
   it('getRecord() returns a record from mock DB with bespoke id prop', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true });
-    const fixture = await Fixture.prepare<SDK.RealTimeAdmin>({ db: db.mock });
-    addAnimals(fixture, 10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
+
     const firstKey = helpers.firstKey(db.mock.store.state.animals);
     const animal = await db.getRecord(`/animals/${firstKey}`, 'key');
 
@@ -77,9 +70,7 @@ describe('Mocking', () => {
   });
 
   it('getList() returns an array of records', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true });
-    const fixture = await Fixture.prepare<SDK.RealTimeAdmin>({ db: db.mock });
-    addAnimals(fixture, 10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
     const animals = await db.getList('/animals');
     expect(Array.isArray(animals)).toBeTruthy();
     expect(animals).toHaveLength(10);
@@ -89,10 +80,7 @@ describe('Mocking', () => {
   });
 
   it('getList() returns an array of records, with bespoke "id" property', async () => {
-    const db = new RealTimeAdmin({ mocking: true });
-    await db.connect();
-    const fixture = await Fixture.prepare<SDK.RealTimeAdmin>({ db: db.mock });
-    addAnimals(fixture, 10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
     const animals = await db.getList('/animals', 'key');
     expect(Array.isArray(animals)).toBeTruthy();
     expect(animals).toHaveLength(10);
@@ -101,17 +89,18 @@ describe('Mocking', () => {
     expect(animals[0]).toHaveProperty('age');
   });
 
-  it('set() sets to the mock DB', async () => {
+  it.only('set() sets to the mock DB', async () => {
     const db = new RealTimeAdmin({ mocking: true });
     await db.connect();
     db.set('/people/abcd', {
       name: 'Frank Black',
       age: 45,
     });
-    const people = await db.getRecord('/people/abcd');
-    expect(people).toHaveProperty('id');
-    expect(people).toHaveProperty('name');
-    expect(people).toHaveProperty('age');
+    const person = await db.getRecord<{ name: string; age: number; id: any }>('/people/abcd');
+    expect(person).toHaveProperty('id');
+    expect(person).toHaveProperty('name');
+    expect(person).toHaveProperty('age');
+    expect(person.id).toBe("abcd");
   });
 
   it('update() updates the mock DB', async () => {
@@ -150,18 +139,15 @@ describe('Mocking', () => {
   });
 
   it('read operations on mock with a schema prefix are offset correctly', async () => {
-    const db = new RealTimeAdmin({ mocking: true });
-    await db.connect();
-    const fixture = await Fixture.prepare<SDK.RealTimeAdmin>({ db: db.mock });
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
 
-    fixture
+    const fixture = new Fixture()
       .addSchema('meal', (h) => () => ({
         name: h.faker.random.arrayElement(['breakfast', 'lunch', 'dinner']),
         datetime: h.faker.date.recent(),
-      }))
-      .pathPrefix('authenticated');
-    fixture.queueSchema('meal', 10);
-    fixture.generate();
+      })).pathPrefix('authenticated')
+      .queueSchema('meal', 10)
+      .generate();
 
     expect(typeof db.mock.store.state.authenticated === 'object').toBeTruthy();
     expect(typeof db.mock.store.state.authenticated.meals === 'object').toBeTruthy();
@@ -170,8 +156,9 @@ describe('Mocking', () => {
   });
 });
 
-async function addAnimals(fixture: Fixture<SDK.RealTimeAdmin>, count: number) {
+async function addAnimals(count: number) {
+  const fixture = new Fixture();
   fixture.addSchema('animal', animalMocker);
   fixture.queueSchema('animal', count);
-  fixture.generate();
+  return fixture.generate();
 }

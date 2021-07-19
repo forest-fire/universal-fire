@@ -337,13 +337,14 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * @param id either just an "id" string or in the case of models with dynamic path prefixes you can pass in an object with the id and all dynamic prefixes
    * @param options
    */
-  public static async get<T extends IModel, O extends IRecordOptions<any>>(
+  public static async get<T extends IModel, O extends IRecordOptions<ISdk>>(
     model: new () => T,
     pk: IPrimaryKey<T>,
     options: O = {} as O
   ) {
     const record = Record.create(model, options);
-    await record._getFromDB(pk);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (record as any)._getFromDB(pk);
     return record;
   }
 
