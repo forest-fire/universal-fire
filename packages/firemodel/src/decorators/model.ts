@@ -14,12 +14,12 @@ import { getPushKeys, modelRegister } from "@/util";
 
 import { ConstructorFor, IDictionary } from "common-types";
 import { getDbIndexes } from "@/decorators";
-import { IFmModelMeta, IModel, IModelProps } from "universal-fire";
+import { IFmModelMeta, IModel } from "universal-fire";
 
-export function model(options: IFmModelMeta<IModel> = {} as IFmModelMeta<IModel>) {
+export function model<T>(options: IFmModelMeta<T> = {} as IFmModelMeta<T>) {
   let isDirty = false;
 
-  return function decorateModel<M extends IModel<T>, T extends IModelProps>(
+  return function decorateModel<M extends IModel>(
     target: ConstructorFor<M>
   ) {
     // Function to add META to the model

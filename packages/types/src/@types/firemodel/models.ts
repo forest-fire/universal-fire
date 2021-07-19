@@ -24,7 +24,7 @@ export type ModelManagedProps = keyof IModelManaged<never>;
  * 
  * - the generic `<T>` allows extending the props beyond the managed props like `id`, `lastUpdated`, etc.
  */
-export type IModel<T extends {} = {}> = T & IModelManaged<T>;
+export type IModel<T extends Record<string, unknown> = {}> = T & IModelManaged<T>;
 
 /**
  * **ModelInput**
