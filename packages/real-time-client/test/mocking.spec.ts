@@ -5,7 +5,9 @@ import * as helpers from './testing/helpers';
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
 import { Fixture, SchemaHelper } from '@forest-fire/fixture';
-import { AuthProviderName, SDK } from '@forest-fire/types';
+import {
+  AuthProviderName,
+} from '@forest-fire/types';
 
 helpers.setupEnv();
 const config = {
@@ -34,19 +36,21 @@ describe('Mocking', () => {
   });
 
   it('getSnapshot() returns a mock snapshot', async () => {
-    const fixture1 = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb });
-    addAnimals(fixture1, 10);
+    const mockData = addAnimals(10);
+     mockDb.mock.store.updateDb("/animals", mockData.animals);
+
     const animals = await mockDb.getSnapshot('/animals');
     expect(animals.numChildren()).toBe(10);
 
-    fixture1.queueSchema('animal', 5).generate();
+    const mockData2 = addAnimals(5);
+    mockDb.mock.store.updateDb('/animals', mockData2.animals);
     const moreAnimals = await mockDb.getSnapshot('/animals');
     expect(moreAnimals.numChildren()).toBe(15);
   });
 
   it('getValue() returns a value from mock DB', async () => {
-    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
-    addAnimals(fixture, 10);
+    const mockData = addAnimals(10);
+    mockDb.mock.store.updateDb('/animals', mockData.animals);
     const animals = await mockDb.getValue('/animals');
     expect(animals).toBeInstanceOf(Object);
     expect(helpers.length(animals)).toBe(10);
@@ -56,8 +60,8 @@ describe('Mocking', () => {
   });
 
   it('getRecord() returns a record from mock DB', async () => {
-    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
-    addAnimals(fixture, 10);
+    const mockData = addAnimals(10);
+    mockDb.mock.store.updateDb('/animals', mockData.animals);
     const firstKey: string = helpers.firstKey(mockDb.mock.store.state.animals);
     const animal = await mockDb.getRecord(`/animals/${firstKey}`);
     expect(animal).toBeInstanceOf(Object);
@@ -67,9 +71,8 @@ describe('Mocking', () => {
   });
 
   it('getRecord() returns a record from mock DB with bespoke id prop', async () => {
-    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
-
-    addAnimals(fixture, 10);
+    const mockData = addAnimals(10);
+    mockDb.mock.store.updateDb('/animals', mockData.animals);
     const firstKey: string = helpers.firstKey(mockDb.mock.store.state.animals);
     const animal = await mockDb.getRecord(`/animals/${firstKey}`, 'key');
 
@@ -80,9 +83,9 @@ describe('Mocking', () => {
   });
 
   it('getList() returns an array of records', async () => {
-    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
+    const mockData = addAnimals(10);
+    mockDb.mock.store.updateDb('/animals', mockData.animals);
 
-    addAnimals(fixture, 10);
     const animals = await mockDb.getList('/animals');
     expect(animals).toBeArray();
     expect(animals).toHaveLength(10);
@@ -92,9 +95,8 @@ describe('Mocking', () => {
   });
 
   it('getList() returns an array of records, with bespoke "id" property', async () => {
-    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
-
-    addAnimals(fixture, 10);
+    const mockData = addAnimals(10);
+    mockDb.mock.store.updateDb('/animals', mockData.animals);
     const animals = await mockDb.getList('/animals', 'key');
     expect(animals).toBeArray();
     expect(animals).toHaveLength(10);
@@ -146,7 +148,7 @@ describe('Mocking', () => {
   });
 
   it('read operations on mock with a schema prefix are offset correctly', async () => {
-    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
+    const fixture = Fixture.prepare();
     fixture
       .addSchema('meal', (h: SchemaHelper<any>) => () => ({
         name: h.faker.random.arrayElement(['breakfast', 'lunch', 'dinner']),
@@ -154,7 +156,8 @@ describe('Mocking', () => {
       }))
       .pathPrefix('authenticated');
     fixture.queueSchema('meal', 10);
-    fixture.generate();
+    const mockData = fixture.generate() as any;
+    mockDb.mock.store.setDb('/authenticated', mockData.authenticated);
     expect(mockDb.mock.store.state.authenticated).toBeInstanceOf(Object);
     expect(mockDb.mock.store.state.authenticated.meals).toBeInstanceOf(Object);
     const list = await mockDb.getList('/authenticated/meals');
@@ -185,8 +188,10 @@ describe('Mocking', () => {
   });
 });
 
-function addAnimals(fixture: Fixture, count: number) {
+function addAnimals(count: number): any {
+  const fixture = Fixture.prepare();
   fixture.addSchema('animal', animalMocker);
   fixture.queueSchema('animal', count);
-  fixture.generate();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return fixture.generate();
 }

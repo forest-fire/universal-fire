@@ -222,12 +222,17 @@ export function createAuthManager<TSdk extends ISdk>(
     config = {
       providers: [AuthProviderName.anonymous],
       users: [],
+      options: {
+        networkDelay: NetworkDelay.wifi,
+      },
       ...config,
     };
     _providers =
       typeof config.providers === 'function'
         ? await config.providers()
         : config.providers;
+
+    setNetworkDelay(config.options.networkDelay);
 
     const users =
       typeof config.users === 'function' ? await config.users() : config.users;
