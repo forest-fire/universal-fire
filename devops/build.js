@@ -12,13 +12,7 @@ const sequence = [
   { name: 'types', packages: ['types'] },
   {
     name: 'shared libraries',
-    packages: [
-      'utility',
-      'serialized-query',
-      'serializer-factory',
-      'abstracted-database',
-      'fixture',
-    ],
+    packages: ['utility', 'serialized-query', 'fixture'],
   },
   { name: 'databases', packages: ['firemock', 'real-time-db', 'firestore-db'] },
   {
@@ -46,7 +40,7 @@ function toPlugins(dir) {
     require('@rollup/plugin-node-resolve').default(),
     require('rollup-plugin-typescript2')({
       include: ['../**/src/**/*.ts'],
-      tsconfig: 'tsconfig.json',
+      tsconfig: join(dir, 'tsconfig.json'),
       typescript: require('ttypescript'),
       useTsconfigDeclarationDir: true, //~> "dist/types"
       tsconfigOverride: {
@@ -70,6 +64,7 @@ async function build(name, opts) {
     : process.cwd();
 
   let pkg = require(join(workingDir, 'package.json'));
+  const tsconfig = join(workingDir, 'tsconfig.json');
   if (pkg.private) {
     return console.log('~> skipping "%s" package (private)\n', name);
   }
@@ -97,14 +92,14 @@ async function build(name, opts) {
   for (const config of bundles) {
     const entryPoint = join(workingDir, 'src', config.opts.input);
     console.log(
-      chalk`~> building "%s" package [{grey  %s }]\n`,
+      chalk`~> building "%s" package [{grey  %s }]`,
       name,
       entryPoint
     );
     let start = Date.now();
     let bundle = await rollup({
       input: entryPoint,
-      plugins: toPlugins(process.cwd()),
+      plugins: toPlugins(workingDir),
       external: [
         ...builtinModules,
         ...Object.keys(pkg.dependencies || {}),
@@ -124,7 +119,7 @@ async function build(name, opts) {
         sourcemap: false,
       }),
     ]);
-    console.log('~> finished "%s" in %dms\n', name, Date.now() - start);
+    console.log('~> finished "%s" in %dms', name, Date.now() - start);
   }
 }
 
@@ -136,13 +131,13 @@ const defaultOpts = {
 async function fullBuild() {
   for (const tier of sequence) {
     const { name, packages } = tier;
-    console.log(chalk`- {yellow Starting build group} {bold "${name}"}}`);
+    console.log(chalk`- {yellow Starting build group {bold "${name}"}}`);
     const promises = [];
     for (const pkg of packages) {
       promises.push(
         build(pkg, defaultOpts).catch((e) => {
           console.log(
-            chalk`- {red Failure building package "${pkg}" in the ${name} build group}`
+            chalk`- {red Failure building package "${pkg}" in the ${name} build group}:\n{dim ${e.message}}\n`
           );
           process.exit(1);
         })
@@ -152,26 +147,28 @@ async function fullBuild() {
       console.log(chalk`- {red Failure in build group {bold "${name}"}}\n${e}`);
       process.exit(1);
     });
-    console.log(chalk`- {green Completed build group {bold "${name}"}}`);
+    console.log(chalk`- {green Completed build group {bold "${name}"}}\n`);
   }
 }
 
 // MAIN EXECUTION
 (async function () {
-  const pkg = process.cwd().includes('/packages/')
-    ? process.cwd().split('/').pop()
-    : undefined;
-
-  const argv = process.argv.slice(1);
-  if (argv.length === 0 && !pkg) {
+  const argv = process.argv.slice(2);
+  if (argv.length === 1 && argv[0] === 'full') {
+    console.log('Full Build');
     await fullBuild();
   } else {
+    console.log('Package Build');
+    const pkg = process.cwd().includes('/packages/')
+      ? process.cwd().split('/').pop()
+      : undefined;
     if (pkg)
       build(pkg).catch((e) => {
         throw e;
       });
     else {
       for (const namedPkg of argv) {
+        console.log({ namedPkg, argv });
         await build.pkg(namedPkg).catch((e) => {
           console.log(
             `Build of package {red ${namedPkg}} failed to build!\n${e}\n`

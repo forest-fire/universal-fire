@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import Dexie, { TableSchema } from "dexie";
+import Dexie from "dexie";
 import { DexieError, FireModelError } from "@/errors";
 import { DexieList, DexieRecord } from "@/firemodel-dexie/index";
 import {
@@ -7,13 +7,12 @@ import {
   IDexieModelMeta,
   IDexiePriorVersion,
   IPrimaryKey,
-  IRecord,
 } from "@/types";
 import { ConstructorFor, IDictionary, pk } from "common-types";
 
 import { Record } from "@/core";
 import { capitalize } from "@/util";
-import { IModel, ISdk } from "universal-fire";
+import { IModel } from "universal-fire";
 
 /**
  * Provides a simple API to convert to/work with **Dexie** models
@@ -211,13 +210,14 @@ export class DexieDb<T extends IModel> {
     models.forEach((m) => {
       const r = Record.create(m);
       this._constructors[r.pluralName] = m;
-      this._meta[r.pluralName] = {
+      const meta: IDexieModelMeta<T> = {
         ...r.META,
         modelName: r.modelName,
         hasDynamicPath: r.hasDynamicPath,
         dynamicPathComponents: r.dynamicPathComponents,
         pluralName: r.pluralName,
-      };
+      } as unknown as IDexieModelMeta<T>;
+      this._meta[r.pluralName] = meta;
       this._singularToPlural[r.modelName] = r.pluralName;
     });
   }

@@ -16,7 +16,7 @@ import { snapshot } from './snapshot';
 
 export type IRtdbMockQueryFactory<TSdk extends ISdk> = (
   store: IMockStore<TSdk>,
-  query: ISerializedQuery<TSdk>
+  query: ISerializedQuery<TSdk, Record<string, unknown>>
 ) => IRtdbQuery;
 
 export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) => {

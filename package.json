@@ -14,6 +14,7 @@
     "lint:src": "scripty",
     "lintp": "scripty",
     "build": "scripty",
+    "build:group": "node devops/build.js full",
     "publish": "lerna publish --conventional-commits",
     "changed": "yarn lerna changed",
     "release": "yarn lerna publish",

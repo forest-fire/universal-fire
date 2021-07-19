@@ -19,6 +19,7 @@ import {
   IListOptions,
   IListQueryOptions,
   IPrimaryKey,
+  IRecord,
   IReduxDispatch,
 } from "@/types";
 import { capitalize, getModelMeta } from "@/util";
@@ -608,10 +609,9 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
     return this.usingPagination ? this._pageSize : undefined;
   }
 
-  public get dbPath() {
-    const dbOffset = getModelMeta(this._model).dbOffset;
-
-    return [this._injectDynamicDbOffsets(dbOffset), this.pluralName].join("/");
+  public get dbPath(): string {
+    const r = Record.create(this._modelConstructor) as IRecord<S, T>;
+    return [this._injectDynamicDbOffsets(r.META.dbOffset), r.pluralName].join("/");
   }
 
   /**
@@ -620,13 +620,15 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    *
    * Includes `localPrefix` and `pluralName`, but does not include `localPostfix`
    */
-  public get localPath() {
-    const meta = this._model.META || getModelMeta(this._model);
+  public get localPath(): string {
+    const r = Record.create(this._modelConstructor) as IRecord<S, T>;
+    const meta = r.META;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return pathJoin(
-      meta.localPrefix,
+      meta.localPrefix || "",
       meta.localModelName !== this.modelName
-        ? meta.localModelName
-        : this.pluralName
+        ? meta.localModelName || ""
+        : r.pluralName || ""
     );
   }
 
@@ -637,9 +639,9 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * e.g. If the model is called `Tree` then your records will be stored at `trees/all`
    * (assuming the default `all` postfix)
    */
-  public get localPostfix() {
-    const meta = this._model.META || getModelMeta(this._model);
-    return meta.localPostfix;
+  public get localPostfix(): string {
+    const r = Record.create(this._modelConstructor) as IRecord<S, T>;
+    return r.META.localPostfix;
   }
 
   //#endregion Getters
@@ -652,7 +654,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * This function returns an error if the List object is not setup
    * for pagination.
    */
-  public async next() {
+  public async next(): Promise<void> {
     if (!this.usingPagination) {
       throw new FireModelError(
         `Attempt to call "List.next()" on a list that is _not_ paginated [ ${capitalize(
@@ -677,8 +679,8 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   }
 
   /** Returns another List with data filtered down by passed in filter function */
-  public filter(f: ListFilterFunction<T>) {
-    const list = List.create(this._modelConstructor);
+  public filter(f: ListFilterFunction<T>): List<S, T> {
+    const list = List.create(this._modelConstructor) as List<S, T>;
     list._data = this._data.filter(f);
     return list;
   }
@@ -687,14 +689,14 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * provides a `map` function over the records managed by the List; there
    * will be no mutations to the data managed by the list
    */
-  public map<K = any>(f: ListMapFunction<T, K>) {
+  public map<K = any>(f: ListMapFunction<T, K>): K[] {
     return this.data.map(f);
   }
 
   /**
    * provides a `forEach` function to iterate over the records managed by the List
    */
-  public forEach<K = any>(f: ListMapFunction<T, K>) {
+  public forEach<K = any>(f: ListMapFunction<T, K>): void {
     this.data.forEach(f);
   }
 
@@ -713,8 +715,12 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   /**
    * Gives access to the List's array of records
    */
-  public get data() {
+  public get data(): T[] {
     return this._data;
+  }
+
+  public get pluralName(): string {
+    return Record.create(this._modelConstructor).pluralName;
   }
 
   /**
@@ -731,7 +737,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       );
     }
 
-    return Record.createWith(this._modelConstructor, found.data[0]);
+    return Record.createWith(this._modelConstructor, found.data[0]) as Record<S, T>;
   }
 
   /**

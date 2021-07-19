@@ -62,7 +62,7 @@ export function modelRegistryLookup<T extends IModel>(name: string): Constructor
  * on one another.
  */
 export const modelNameLookup = <T extends IModel>(name: string) => (): ConstructorFor<T> => {
-  return modelRegistryLookup(name) as ConstructorFor<T>;
+  return modelRegistryLookup<T>(name);
 };
 
 /**
@@ -79,7 +79,7 @@ export const modelConstructorLookup = <T extends IModel>(
 
 export function isConstructable<T extends IModel>(fn: ConstructorFor<T> | (() => ConstructorFor<T>)): fn is ConstructorFor<T> {
   try {
-    const f = new (fn as ConstructorFor<T>)();
+    new (fn as ConstructorFor<T>)();
     return true;
   } catch (e) {
     return false;

@@ -2,7 +2,7 @@
 
 if [[ -z "$1" ]]; then 
   echo "┏━━━ 🕵️‍♀️ LINT: lint all repos SRC folders ━━━━━━━"
-  yarn lerna run lint --stream --concurrency 1
+  yarn lerna run lint --stream --concurrency 1 --fix
 else
   cd "./packages/$1"
   echo "┏━━━ 🕵️‍♀️ LINT SRC ($1): eslint src --ext ts,js,tsx,jsx ━━━━━━━"

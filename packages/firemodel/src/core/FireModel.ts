@@ -162,15 +162,15 @@ export class FireModel<S extends ISdk, T extends IModel> {
     deltas: IFmChangedProperties<T>
   ): IDictionary {
     const added = (deltas.added || []).reduce((agg: IDictionary, curr) => {
-      agg[`${this.dbPath}/${curr}`.replace(/\/{2,3}/, '/')] = rec.get(curr);
+      agg[`${rec.dbPath}/${curr}`.replace(/\/{2,3}/, '/')] = rec.get(curr);
       return agg;
     }, {});
     const removed = (deltas.removed || []).reduce((agg: IDictionary, curr) => {
-      agg[`${this.dbPath}/${curr}`.replace(/\/{2,3}/, '/')] = null;
+      agg[`${rec.dbPath}/${curr}`.replace(/\/{2,3}/, '/')] = null;
       return agg;
     }, {});
     const updated = (deltas.changed || []).reduce((agg: IDictionary, curr) => {
-      agg[`${this.dbPath}/${curr}`.replace(/\/{2,3}/, '/')] = rec.get(curr);
+      agg[`${rec.dbPath}/${curr}`.replace(/\/{2,3}/, '/')] = rec.get(curr);
       return agg;
     }, {});
 

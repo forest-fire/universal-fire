@@ -108,8 +108,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     options: IRecordOptions<ISdk> = {}
   ) {
     const defaultSdk = DefaultDbCache().sdk;
-    type SDK = typeof defaultSdk extends ISdk ? typeof defaultSdk : ISdk;
-    const r = new Record<SDK, T>(model, options);
+    const r = new Record<typeof defaultSdk, T>(model, options);
     if (options.silent && !r.db.isMockDb) {
       throw new FireModelError(
         `You can only add new records to the DB silently when using a Mock database!`,
@@ -117,7 +116,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
       );
     }
 
-    return r;
+    return r as IRecord<typeof defaultSdk, T>;
   }
 
   /**

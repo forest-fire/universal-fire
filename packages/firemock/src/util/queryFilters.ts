@@ -10,7 +10,7 @@ export function startAt<T extends ISerializedQuery<IRtdbSdk>>(query: T): QueryFu
       return true;
     }
 
-    return key ? record[key] >= value : record >= value;
+    return key ? record[key as keyof typeof record] >= value : record >= value;
   };
 }
 
@@ -23,7 +23,7 @@ export function endAt<T extends ISerializedQuery<IRtdbSdk>>(query: T): QueryFunc
       return true;
     }
 
-    return key ? record[key] <= value : record <= value;
+    return key ? record[key as keyof typeof record] <= value : record <= value;
   };
 }
 
@@ -37,6 +37,6 @@ export function equalTo<T extends ISerializedQuery<IRtdbSdk>>(query: T): QueryFu
       return true;
     }
 
-    return key ? record[key] === value : record === value;
+    return key ? record[key as keyof typeof record] === value : record === value;
   };
 }
