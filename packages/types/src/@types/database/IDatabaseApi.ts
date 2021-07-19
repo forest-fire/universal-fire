@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import {
   IAbstractedEvent,
 } from '../fire-proxies';
 import { ISdk } from '../fire-types';
-import { IModel, IModelProps } from '../firemodel/models';
+import { IModel } from '../firemodel/models';
 import { IRtdbReference } from '../proxy-plus';
 import { ISerializedQuery } from '../query';
 
@@ -47,7 +48,7 @@ export interface IDatabaseApi<
    * Gets a record from a given path in the Firebase DB and converts it to an
    * object where the record's key is included as part of the record.
    */
-  getRecord: <T extends IModelProps = IModelProps>(
+  getRecord: <T extends {} = {}> (
     path: string,
     idProp?: string
   ) => Promise<T>;
@@ -77,7 +78,7 @@ export interface IDatabaseApi<
   /**
    * Watch for Firebase events based on a DB path.
    */
-  watch: <T extends IModelProps = IModelProps>(
+  watch: <T extends {} = {}>(
     target: string | ISerializedQuery<TSdk, T>,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: unknown

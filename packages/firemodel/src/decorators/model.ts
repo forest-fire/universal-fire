@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import "reflect-metadata";
 
-import { FmModelConstructor } from "@/types";
 import {
   addModelMeta,
   getModelProperty,
@@ -13,15 +12,15 @@ import {
 } from "@/util";
 import { getPushKeys, modelRegister } from "@/util";
 
-import { IDictionary } from "common-types";
+import { ConstructorFor, IDictionary } from "common-types";
 import { getDbIndexes } from "@/decorators";
-import { IFmModelMeta, IModel } from "universal-fire";
+import { IFmModelMeta, IModel, IModelProps } from "universal-fire";
 
-export function model<T extends IModel>(options: IFmModelMeta<T> = {} as IFmModelMeta<T>) {
+export function model(options: IFmModelMeta<IModel> = {} as IFmModelMeta<IModel>) {
   let isDirty = false;
 
-  return function decorateModel(
-    target: FmModelConstructor<IModel>
+  return function decorateModel<M extends IModel<T>, T extends IModelProps>(
+    target: ConstructorFor<M>
   ) {
     // Function to add META to the model
     function addMetaProperty() {
