@@ -1,11 +1,13 @@
-import { IFnToModelConstructor, IModel, IModelConstructor } from "@/types";
+import { IModel } from "universal-fire";
 
 // TODO: this is necessitated by the use of `Record` in some error classes
 // which sets up a whole dependency chain
 import { FireModelError } from "@/errors/FireModelError";
-import { IDictionary } from "common-types";
+import { ConstructorFor, IDictionary } from "common-types";
 
-const registeredModels: IDictionary<new () => any> = {};
+const registeredModels: IDictionary<ConstructorFor<IModel>> = {};
+
+
 
 /**
  * Registers a model's constructor so that it can be used by name. This
@@ -13,21 +15,20 @@ const registeredModels: IDictionary<new () => any> = {};
  *
  * @param model a class constructor derived from `Model`
  */
-export function modelRegister(...models: IModelConstructor[]) {
+export function modelRegister(...models: ConstructorFor<IModel>[]): void {
   models.forEach((model) => {
     if (!model) {
       throw new FireModelError(
-        `An attempt was made to register a Model subclass but the passed in constructor was undefined!${
-          models.length > 0
-            ? ` [ ${models.length} models being registed during this call ]`
-            : ""
+        `An attempt was made to register a Model subclass but the passed in constructor was undefined!${models.length > 0
+          ? ` [ ${models.length} models being registed during this call ]`
+          : ""
         }`,
         "firemodel/not-allowed"
       );
     }
     if (typeof model !== "function" || !model.constructor) {
       throw new FireModelError(
-        `An attempt was made to register a Model subclass but the passed in constructor was the wrong type [ ${typeof model} ]!\nmodel passed was: ${model}`,
+        `An attempt was made to register a Model but the passed in constructor was the wrong type [ ${typeof model} ]!\n`,
         "firemodel/not-allowed"
       );
     }
@@ -37,20 +38,20 @@ export function modelRegister(...models: IModelConstructor[]) {
   });
 }
 
-export function listRegisteredModels() {
+export function listRegisteredModels(): string[] {
   return Object.keys(registeredModels);
 }
 
-export function modelRegistryLookup(name: string) {
+export function modelRegistryLookup<T extends IModel>(name: string): ConstructorFor<T> {
   const model = registeredModels[name];
-  if (!name) {
+  if (!model) {
     throw new FireModelError(
       `Look failed because the model ${name} was not registered!`,
       "firemodel/not-allowed"
     );
   }
 
-  return model;
+  return model as ConstructorFor<T>;
 }
 
 /**
@@ -60,8 +61,8 @@ export function modelRegistryLookup(name: string) {
  * that occur when you try to pass in class constructors which depend
  * on one another.
  */
-export const modelNameLookup = (name: string) => (): IModelConstructor => {
-  return modelRegistryLookup(name);
+export const modelNameLookup = <T extends IModel>(name: string) => (): ConstructorFor<T> => {
+  return modelRegistryLookup(name) as ConstructorFor<T>;
 };
 
 /**
@@ -73,17 +74,12 @@ export const modelNameLookup = (name: string) => (): IModelConstructor => {
  * "registered" separately whereas with a string name it would have to be.
  */
 export const modelConstructorLookup = <T extends IModel>(
-  constructor: IModelConstructor<T> | IFnToModelConstructor<T>
-) => (): IModelConstructor => {
-  // TODO: remove the "any"
-  return isConstructable(constructor) ? constructor : (constructor as any)();
-};
+  constructor: ConstructorFor<T> | (() => ConstructorFor<T>)
+): () => ConstructorFor<T> => isConstructable(constructor) ? () => constructor : constructor;
 
-// tslint:disable-next-line: ban-types
-export function isConstructable(fn: IModelConstructor | IFnToModelConstructor) {
+export function isConstructable<T extends IModel>(fn: ConstructorFor<T> | (() => ConstructorFor<T>)): fn is ConstructorFor<T> {
   try {
-    const f = new (fn as IModelConstructor)();
-
+    const f = new (fn as ConstructorFor<T>)();
     return true;
   } catch (e) {
     return false;

@@ -1,5 +1,4 @@
 import { ISerializedQuery, ISdk, IModel } from "universal-fire";
-import { IGenericModel } from "@forest-fire/types";
 
 /**
  * **IFmQueryDefn**
@@ -16,7 +15,7 @@ import { IGenericModel } from "@forest-fire/types";
  * properties of pagination. If pagination has not been
  * configured, these two props will be `undefined`.
  */
-export interface IFmQueryDefn<S extends ISdk, T extends IModel = IGenericModel> {
+export interface IFmQueryDefn<S extends ISdk, T extends IModel> {
   (
     q: ISerializedQuery<S, T>,
     offset?: number,

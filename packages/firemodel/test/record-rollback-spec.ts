@@ -4,7 +4,7 @@ import { FireModel } from "@/index";
 
 describe("Rolling back a record => ", () => {
   beforeEach(async () => {
-    FireModel.defaultDb = await RealTimeAdmin.connect({ mocking: true });;
+    FireModel.defaultDb = await RealTimeAdmin.connect({ mocking: true });
   });
 
   // TODO: write test

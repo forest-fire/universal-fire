@@ -447,7 +447,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    *
    * returns the Firebase snapshot at a given path in the database
    */
-  public async getSnapshot<T = any>(
+  public async getSnapshot<T extends IModel = IModel>(
     path: string | ISerializedQuery<TSdk, T>
   ): Promise<IRtdbDataSnapshot> {
     try {
@@ -489,7 +489,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    * and converts it to a JS object where the snapshot's key
    * is included as part of the record (as `id` by default)
    */
-  public async getRecord<T = any>(path: string, idProp = 'id'): Promise<T> {
+  public async getRecord<T extends IModel = IModel>(path: string, idProp = 'id'): Promise<T> {
     try {
       const snap = await this.getSnapshot<T>(path);
       let object = snap.val();

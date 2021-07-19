@@ -1,9 +1,9 @@
-import { ICompositeKey, IModel } from "@/types";
+import { ICompositeKey } from "@/types";
 
 import { FireModelError } from "@/errors";
 import { Record } from "@/core";
 import { capitalize } from "@/util";
-import { ISdk } from "universal-fire";
+import { ISdk, IModel } from "universal-fire";
 
 /**
  * Given a `Record` which defines all properties in it's

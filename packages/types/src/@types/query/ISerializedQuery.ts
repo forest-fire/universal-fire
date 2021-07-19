@@ -5,7 +5,8 @@ import {
   SnapshotFrom,
 } from '../database/db-util';
 import { ISdk } from '../fire-types';
-import { IModel, IComparisonOperator, ISerializedIdentity } from '../index';
+import { IModel } from '../firemodel';
+import { IComparisonOperator, ISerializedIdentity } from '../index';
 
 /**
  * Defines the public interface which any serializer must
@@ -19,7 +20,7 @@ import { IModel, IComparisonOperator, ISerializedIdentity } from '../index';
 export interface ISerializedQuery<
   TSdk extends ISdk,
   /** the data model being serialized */
-  TModel extends IModel = {}
+  TModel extends IModel = IModel
   > {
   db: DbFrom<TSdk>;
   path: string;

@@ -2,7 +2,7 @@
 import { IMockDatabase } from '../db-mocking';
 
 import { IDatabaseConfig, IFirestoreSdk, ISdk } from '../fire-types';
-import { IDatabaseApi } from './db-base';
+import { IDatabaseApi } from './IDatabaseApi';
 import { AppFrom, AuthFrom, AuthProviders, DbTypeFrom, IsAdminSdk } from './db-util';
 
 
@@ -10,7 +10,7 @@ import { AppFrom, AuthFrom, AuthProviders, DbTypeFrom, IsAdminSdk } from './db-u
  * The basic contract required to be considered a "database"
  * within the **Universal Fire** universe.
  */
-export interface IDatabaseSdk<TSdk extends ISdk> extends IDatabaseApi<TSdk> {
+export type IDatabaseSdk<TSdk extends ISdk> = IDatabaseApi<TSdk> & {
   /** the SDK which is being used (aka, "admin", "client", ...) */
   sdk: Readonly<TSdk>;
 
@@ -65,5 +65,5 @@ export interface IDatabaseSdk<TSdk extends ISdk> extends IDatabaseApi<TSdk> {
  * 
  * Note: this is only implemented in Real Time database
  */
-  CONNECTION_TIMEOUT: TSdk extends IFirestoreSdk ? never : number;
+  CONNECTION_TIMEOUT: number;
 }

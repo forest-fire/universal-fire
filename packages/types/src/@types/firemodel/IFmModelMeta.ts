@@ -1,10 +1,11 @@
-import { IFmModelRelationshipMeta, IFmModelPropertyMeta, IModelIndexMeta } from "./index";
-import { IModel } from "./models";
+import { IFmModelRelationshipMeta, IFmModelPropertyMeta, IModelIndexMeta, IModel } from "./index";
 
 /**
  * **IFmModelMeta**
  *
- * The meta properties that describe the **Model** definition
+ * The meta properties that describe the **Model** definition and are
+ * passed in as part of the `@model()` decorator call in the model 
+ * definition
  */
 export interface IFmModelMeta<T extends IModel> {
   /** Optionally specify a root path to store this schema under */

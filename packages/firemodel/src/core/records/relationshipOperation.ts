@@ -12,7 +12,7 @@ import { capitalize, getModelMeta } from "@/util";
 import { createCompositeRef, locallyUpdateFkOnRecord } from "./index";
 
 import { IDictionary } from "common-types";
-import { IModel } from "@/types";
+import { IModel } from "universal-fire";
 import { Record } from "@/core";
 import { ISdk } from "universal-fire";
 
@@ -89,8 +89,8 @@ export async function relationshipOperation<
     const [localEvent, confirmEvent, rollbackEvent] = dispatchEvents[operation];
     const fkConstructor = rec.META.relationship(property).fkConstructor;
     // TODO: fix the typing here to make sure fkConstructor knows it's type
-    const fkRecord: Record<S, T> = new Record<S, T>(fkConstructor() as any);
-    const fkMeta = getModelMeta(fkRecord.data);
+    const fkRecord: Record<S, T> = new Record<S, T>(fkConstructor());
+    const fkMeta = getModelMeta(fkRecord);
     const transactionId: string =
       "t-reln-" +
       Math.random().toString(36).substr(2, 5) +

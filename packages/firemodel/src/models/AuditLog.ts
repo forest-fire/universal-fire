@@ -1,10 +1,8 @@
 import { IAuditChange, IAuditOperations } from "@/types";
 import { index, model, property } from "@/decorators";
 
-import { Model } from "@/models";
-
 @model({ dbOffset: "_auditing" })
-export class AuditLog extends Model {
+export class AuditLog {
   /** the `Model` which has been changed */
   @property @index modelName: string;
   /** the `id` of the record changing */

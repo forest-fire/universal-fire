@@ -34,7 +34,7 @@ describe('Mocking', () => {
   });
 
   it('getSnapshot() returns a mock snapshot', async () => {
-    const fixture1 = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb.mock });
+    const fixture1 = await Fixture.prepare<SDK.RealTimeClient>({ db: mockDb });
     addAnimals(fixture1, 10);
     const animals = await mockDb.getSnapshot('/animals');
     expect(animals.numChildren()).toBe(10);
@@ -116,10 +116,10 @@ describe('Mocking', () => {
 
   it('update() updates the mock DB', async () => {
     mockDb.mock.store.updateDb('/people', {
-        abcd: {
-          name: 'Frank Black',
-          age: 45,
-        },
+      abcd: {
+        name: 'Frank Black',
+        age: 45,
+      },
     });
     await mockDb.update('/people/abcd', { age: 14 });
     const people = await mockDb.getRecord('/people/abcd');

@@ -2,7 +2,10 @@
 import type { FMPropertyType, FmRelationshipType, IModel } from "./index";
 import { FmMockType, IFmFunctionToConstructor } from "./other";
 
-export interface IFmModelAttributeBase<T extends IModel, P extends any[]> {
+/**
+ * The attributes assigned to all properties on a Model
+ */
+export interface IFmModelAttributeBase<T extends IModel> {
   /** the property name */
   property: Extract<keyof T, string>;
   /** the property's "typed value" */
@@ -24,9 +27,9 @@ export interface IFmModelAttributeBase<T extends IModel, P extends any[]> {
    * in a more complete way than just it's stict "type". Examples
    * would include "telephone", "name", etc.
    */
-  mockType?: FmMockType;
+  mockType?: FmMockType<T>;
   /** a named mock can optionally recieve a set of parameters as additional input */
-  mockParameters?: P;
+  mockParameters?: any[];
   /** what kind of relationship does this foreign key contain */
   relType?: FmRelationshipType;
   /** if the property is a relationship ... a constructor for the FK's Model */

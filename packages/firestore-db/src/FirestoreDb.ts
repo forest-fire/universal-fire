@@ -13,7 +13,8 @@ import type {
   IsAdminSdk,
   IMockDatabase,
   EventFrom,
-  IRtdbReference
+  IRtdbReference,
+  IModel
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
 import {
@@ -30,6 +31,7 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
   abstract isAdminApi: IsAdminSdk<TSdk>;
   abstract connect(): Promise<void>;
   abstract auth(): Promise<AuthFrom<TSdk>>;
+  public CONNECTION_TIMEOUT: number;
   public get app(): AppFrom<TSdk> {
     if (!this._app) {
       throw new Error(
@@ -39,8 +41,6 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._app;
   }
-
-  public CONNECTION_TIMEOUT: undefined;
 
   public get authProviders(): AuthProviders<TSdk> {
     throw new FireError(
@@ -91,7 +91,7 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     throw new Error('Not implemented');
   }
 
-  public async getList<T = unknown>(
+  public async getList<T extends IModel>(
     path: string | ISerializedQuery<TSdk, T>,
     idProp = 'id'
   ): Promise<T[]> {
@@ -117,19 +117,19 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     } as T;
   }
 
-  public getValue<T = any>(path: string): Promise<T> {
+  public getValue<T extends unknown = unknown>(_path: string): Promise<T> {
     throw new Error('Not implemented');
   }
 
-  public async update<T = any>(path: string, value: Partial<T>) {
+  public async update<T extends unknown = unknown>(path: string, value: T): Promise<void> {
     await this.database.doc(path).update(value);
   }
 
-  public async set<T = any>(path: string, value: T) {
-    await this.database.doc(path).set({ ...value });
+  public async set<T extends unknown>(path: string, value: T): Promise<void> {
+    await this.database.doc(path).set(value);
   }
 
-  public async remove(path: string) {
+  public async remove(path: string): Promise<void> {
     const pathIsCollection = this._isCollection(path);
     if (pathIsCollection) {
       await this._removeCollection(path);
@@ -147,11 +147,11 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
    * @param events an event type or an array of event types (e.g., "value", "child_added")
    * @param _cb the callback function to call when event triggered
    */
-  public watch<C extends any>(
+  public watch<C extends IModel>(
     target: string | ISerializedQuery<TSdk, C>,
     events: EventFrom<TSdk> | EventFrom<TSdk>[],
     _cb: C
-  ) {
+  ): void {
     if (events && !isFirestoreEvent(events)) {
       throw new FirestoreDbError(
         `An attempt to watch an event which is not valid for the Firestore database (but likely is for the Real Time database). Events passed in were: ${JSON.stringify(

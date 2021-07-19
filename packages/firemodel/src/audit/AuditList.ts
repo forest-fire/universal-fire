@@ -3,7 +3,7 @@ import { IAuditLogItem, IModel, IModelOptions } from "@/types";
 import { AuditBase } from "@/audit";
 import { SerializedQuery } from "universal-fire";
 import { epochWithMilliseconds } from "common-types";
-import { pathJoin } from "@/util";
+import { pathJoin } from "native-dash";
 
 export class AuditList<T extends IModel> extends AuditBase<T> {
   constructor(modelKlass: new () => T, options: IModelOptions = {}) {
@@ -13,7 +13,7 @@ export class AuditList<T extends IModel> extends AuditBase<T> {
 
   public async first(
     howMany: number,
-    offset: number = 0
+    offset = 0
   ): Promise<IAuditLogItem[]> {
     this._query = this._query.limitToFirst(howMany).startAt(offset);
     const log = await this.db.getList<IAuditLogItem>(this._query);
@@ -22,7 +22,7 @@ export class AuditList<T extends IModel> extends AuditBase<T> {
 
   public async last(
     howMany: number,
-    offset: number = 0
+    offset = 0
   ): Promise<IAuditLogItem[]> {
     this._query = this._query.limitToLast(howMany).startAt(offset);
     const log = await this.db.getList<IAuditLogItem>(this._query);

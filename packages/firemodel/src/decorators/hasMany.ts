@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ConstructorFor, IDictionary, Omit } from "common-types";
 import {
   IFmModelRelationshipMeta,
@@ -21,14 +22,13 @@ export function hasMany<T extends IModel>(
    * possibility that a user of this API will pass in a _function_
    * to a _constructor_. This approach is now deprecated.
    */
-  fkClass: () => ConstructorFor<T> | ConstructorFor<T> | string,
+  fkClass: () => ConstructorFor<T> | (() => ConstructorFor<T>) | string,
   inverse?: string | [string, IFmRelationshipDirectionality]
 ) {
   try {
-    const fkConstructor: () => ConstructorFor<T> =
-      typeof fkClass === "string"
-        ? modelNameLookup(fkClass)
-        : modelConstructorLookup(fkClass);
+    const fkConstructor: () => ConstructorFor<T> = typeof fkClass === "string"
+      ? modelNameLookup(fkClass)
+      : modelConstructorLookup(fkClass as ConstructorFor<T> | (() => ConstructorFor<T>));
 
     let inverseProperty: string | undefined;
     let directionality: IFmRelationshipDirectionality;
@@ -38,7 +38,7 @@ export function hasMany<T extends IModel>(
       inverseProperty = inverse;
       directionality = inverse ? "bi-directional" : "one-way";
     }
-    const payload: Omit<IFmModelRelationshipMeta, "type" | "property"> = {
+    const payload: Omit<IFmModelRelationshipMeta<T>, "type" | "property"> = {
       isRelationship: true,
       isProperty: false,
       relType: "hasMany",

@@ -1,9 +1,9 @@
-import { IFmModelPropertyMeta, IModel } from "@/types";
+import { IFmModelPropertyMeta, IModel } from "universal-fire";
 
 import { IDictionary } from "common-types";
 import { hashToArray } from "typed-conversions";
 
-export function isProperty(modelKlass: IDictionary) {
+export function isProperty<T extends {}>(modelKlass: T) {
   return (prop: string) => {
     return getModelProperty(modelKlass)(prop) ? true : false;
   };
@@ -29,7 +29,7 @@ export function addPropertyToModelMeta<T extends IModel = IModel>(
 }
 
 /** lookup meta data for schema properties */
-export function getModelProperty<T extends IModel = IModel>(model: T) {
+export function getModelProperty<T extends IModel>(model: T) {
   const className = model.constructor.name;
   const propsForModel = getProperties(model);
 

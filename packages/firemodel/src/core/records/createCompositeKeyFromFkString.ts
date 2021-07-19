@@ -1,9 +1,10 @@
-import { ICompositeKey, IModel } from "@/types";
-
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+import { ICompositeKey } from "@/types";
+import { IModel } from "universal-fire";
 import { FireModelError } from "@/errors";
 import { capitalize } from "@/util";
 
-export function createCompositeKeyFromFkString<T = ICompositeKey>(
+export function createCompositeKeyFromFkString<T extends IModel>(
   fkCompositeRef: string,
   modelConstructor?: new () => T
 ): ICompositeKey<T> {
@@ -30,13 +31,14 @@ export function createCompositeKeyFromFkString<T = ICompositeKey>(
  * pairs but type information is lost in this format and must be returned
  * to full fidelity.
  */
-function setWithType<T extends IModel>(
-  prop: keyof T & string,
+function setWithType<T extends {}>(
+  prop: keyof T,
   value: string,
-  model: T
+  model: IModel<T>
 ) {
   const isProp = model.META.isProperty(prop);
   const isRel = model.META.isRelationship(prop);
+
   if (!isProp && !isRel) {
     throw new FireModelError(
       `Failed to identify the type for property "${prop}" on a model because this property is neither a value or a relationship property on this model!`,

@@ -1,9 +1,9 @@
-import { IDictionary, datetime } from "common-types";
+import { IDictionary, datetime, ConstructorFor } from "common-types";
 import { IPrimaryKey } from "@/types";
 import type { FireModelError } from "@/errors";
 import { IModel, ISdk, IDatabaseSdk } from "universal-fire";
 
-export interface IUnderlyingError<T> {
+export interface IUnderlyingError<T extends IModel> {
   /** an identifying characteristic of the individual error */
   id: string | IPrimaryKey<T>;
   /** the error itself */
@@ -11,9 +11,9 @@ export interface IUnderlyingError<T> {
 }
 
 /** A property of a record */
-export type PropertyOf<T> = keyof T & string;
+export type PropertyOf<T extends IModel> = keyof T & string;
 
-export type FmModelConstructor<T extends IModel> = new () => T;
+export type FmModelConstructor<T extends IModel> = ConstructorFor<T>;
 
 /** _options_ allowed to modify the behavior/configuration of a `Model` */
 export interface IModelOptions<T extends ISdk = ISdk> {
@@ -34,7 +34,7 @@ export enum SortOrder {
  * provides options to configure `Watch` triggered listeners
  * on Firebase databases.
  */
-export interface IWatchOptions<T> extends Omit<IListOptions<any, T>, "paginate"> {
+export interface IWatchOptions<T extends IModel> extends Omit<IListOptions<ISdk, T>, "paginate"> {
   /**
    * Filters the results returned by the watched query prior to _dispatch_
    * which allows a way to only send a subset of records to the state management

@@ -1,10 +1,10 @@
 import { FireModelError } from "@/errors";
-import { IModel } from "@/types";
+import { IModel } from "universal-fire";
 
 export class FkDoesNotExist<
   P extends IModel,
   F extends IModel
-> extends FireModelError {
+  > extends FireModelError {
   constructor(pk: P, property: string, fkId: string) {
     // TODO: is this typing right for constructor?
     const fkConstructor = pk.META.relationship("property").fkConstructor();

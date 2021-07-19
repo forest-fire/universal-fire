@@ -1,10 +1,11 @@
 import { IUnderlyingError } from "@/types";
+import { IModel } from "universal-fire";
 
 /**
  * Base **Error** for **FireModel**. Takes _message_ and _type/subtype_ as
  * parameters. The code will be the `subtype`; the name is both.
  */
-export class FireModelError<T = any> extends Error {
+export class FireModelError<T extends IModel = IModel> extends Error {
   public firemodel = true;
   public code: string;
   /**
@@ -14,7 +15,7 @@ export class FireModelError<T = any> extends Error {
   public errors?: IUnderlyingError<T>[];
   constructor(
     message: string,
-    classification: string = "firemodel/error",
+    classification = "firemodel/error",
     underlyingErrors?: IUnderlyingError<T>[]
   ) {
     super(message);

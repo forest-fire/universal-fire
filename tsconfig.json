@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [],
+    "lib": ["es2015.reflect", "esnext.asynciterable"],
     "target": "es2018",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -11,8 +11,21 @@
     "removeComments": false,
     "noImplicitAny": true,
     "sourceMap": false,
-    "noEmit": true
+    "noEmit": true,
+
+    "composite": true,
+    "baseUrl": ".",
+    "rootDir": "src",
+    "paths": {
+      "~/*": ["src/*"]
+    },
+    "plugins": [
+      // Transform paths in output .js files
+      { "transform": "typescript-transform-paths" },
+
+      // Transform paths in output .d.ts files (Include this line if you output declarations files)
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ]
   },
-  "include": ["packages/**/src", "packages/**/test/*.ts"],
   "exclude": ["**/node_modules/**", "packages/*/dist"]
 }

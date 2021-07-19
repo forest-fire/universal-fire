@@ -6,8 +6,8 @@ export class FireModelProxyError extends FireModelError {
   public originalError: Error | FireModelError;
   constructor(
     e: Error | FireModelError,
-    context: string = "",
-    name: string = ""
+    context = "",
+    name = ""
   ) {
     super("", !name ? `firemodel/${e.name}` : name);
 

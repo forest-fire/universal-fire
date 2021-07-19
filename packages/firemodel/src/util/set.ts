@@ -14,7 +14,7 @@ export function set(
   obj: IDictionary,
   dotPath: string,
   value: any,
-  createIfNonExistant: boolean = true
+  createIfNonExistant = true
 ) {
   if (!dotPath) {
     throw new FmUtilityError(

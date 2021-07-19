@@ -1,7 +1,7 @@
 import { IModel } from '../firemodel/models';
 import { IFirestoreOrder, IRtdbOrder } from './query-order';
 
-export interface ISerializedIdentity<T>
+export interface ISerializedIdentity<T extends IModel>
   extends Omit<ISerializedRealTimeIdentity<T>, 'orderBy'> {
   orderBy: IRtdbOrder | IFirestoreOrder;
 }

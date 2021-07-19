@@ -7,7 +7,6 @@ import type {
   IModel,
   ISerializedIdentity,
   IFirestoreOrder,
-  IGenericModel,
   DbFrom,
   SnapshotFrom,
   DeserializedQueryFrom,
@@ -21,7 +20,7 @@ import { SerializedError } from './SerializedError';
  */
 export class SerializedFirestoreQuery<
   TSdk extends IFirestoreSdk,
-  M extends IModel = IGenericModel
+  M extends IModel = IModel
   >
   implements ISerializedQuery<TSdk, M> {
   protected _endAtKey?: keyof M & string;

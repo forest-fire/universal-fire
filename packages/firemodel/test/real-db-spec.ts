@@ -16,7 +16,7 @@ import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
 import { FancyPerson } from "./testing/FancyPerson";
 import { FireModel } from "@/index";
 import { Person } from "./testing/Person";
-import { pathJoin } from "@/util";
+import { pathJoin } from "native-dash";
 
 helpers.setupEnv();
 

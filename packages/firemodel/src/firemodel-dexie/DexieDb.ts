@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import Dexie, { TableSchema } from "dexie";
 import { DexieError, FireModelError } from "@/errors";
 import { DexieList, DexieRecord } from "@/firemodel-dexie/index";
@@ -6,12 +7,13 @@ import {
   IDexieModelMeta,
   IDexiePriorVersion,
   IPrimaryKey,
+  IRecord,
 } from "@/types";
 import { ConstructorFor, IDictionary, pk } from "common-types";
 
 import { Record } from "@/core";
 import { capitalize } from "@/util";
-import { IModel } from "universal-fire";
+import { IModel, ISdk } from "universal-fire";
 
 /**
  * Provides a simple API to convert to/work with **Dexie** models
@@ -24,6 +26,7 @@ export class DexieDb<T extends IModel> {
    * them into a dictionary of Dexie-compatible model definitions where the _key_ to
    * the dictionary is the plural name of the model
    */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public static modelConversion<T extends IModel>(
     ...modelConstructors: Array<ConstructorFor<T>>
   ) {
@@ -37,7 +40,7 @@ export class DexieDb<T extends IModel> {
     return modelConstructors.reduce(
       (agg: IDictionary<string>, curr: ConstructorFor<T>) => {
         const dexieModel: string[] = [];
-        const r = Record.createWith(curr, new curr());
+        const r = Record.createWith(curr, {});
 
         const compoundIndex = r.hasDynamicPath
           ? ["id"].concat(r.dynamicPathComponents)
@@ -167,7 +170,7 @@ export class DexieDb<T extends IModel> {
   public get dexieTables() {
     return this.db.tables.map((t) => ({
       name: t.name,
-      schema: t.schema as TableSchema,
+      schema: t.schema,
     }));
   }
 
@@ -181,12 +184,12 @@ export class DexieDb<T extends IModel> {
   /** maps `Model`'s singular name to a plural */
   private _singularToPlural: IDictionary<string> = {};
   /** the current version number for the indexDB database */
-  private _currentVersion: number = 1;
+  private _currentVersion = 1;
   private _priors: IDexiePriorVersion[] = [];
   /** flag to indicate whether the Dexie DB has begun the initialization */
-  private _isMapped: boolean = false;
+  private _isMapped = false;
 
-  private _status: string = "initialized";
+  private _status = "initialized";
 
   constructor(private _name: string, ...models: Array<ConstructorFor<T>>) {
     this._models = DexieDb.modelConversion(...models);
@@ -333,7 +336,7 @@ export class DexieDb<T extends IModel> {
    * Returns the META for a given `Model` identified by
    * the model's _plural_ (checked first) or _singular_ name.
    */
-  public meta(name: string, _originated: string = "meta") {
+  public meta(name: string, _originated = "meta") {
     return this._checkPluralThenSingular(this._meta, name, _originated);
   }
 

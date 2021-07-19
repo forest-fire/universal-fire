@@ -13,7 +13,6 @@ import {
   epochWithMilliseconds,
   ConstructorFor,
   datetime,
-  datestring,
 } from "common-types";
 import {
   IFmQueryDefn,
@@ -22,7 +21,8 @@ import {
   IPrimaryKey,
   IReduxDispatch,
 } from "@/types";
-import { capitalize, getModelMeta, pathJoin } from "@/util";
+import { capitalize, getModelMeta } from "@/util";
+import { pathJoin } from "native-dash";
 
 import { FireModelError } from "@/errors";
 import { arrayToHash } from "typed-conversions";
@@ -558,10 +558,10 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   private _query: ISerializedQuery<S, T>;
   private _options: IListOptions<S, T>;
   /** the pagination page size; 0 indicates that pagination is not turned on */
-  private _pageSize: number = 0;
-  private _page: number = 0;
+  private _pageSize = 0;
+  private _page = 0;
   /** flag indicating if all records have now been retrieved */
-  private _paginationComplete: boolean = false;
+  private _paginationComplete = false;
 
   constructor(model: ConstructorFor<T>, options: IListOptions<S, T> = {}) {
     super();
@@ -731,7 +731,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       );
     }
 
-    return Record.createWith(this._modelConstructor, found.data[0]) as Record<S, T>;
+    return Record.createWith(this._modelConstructor, found.data[0]);
   }
 
   /**
@@ -739,14 +739,14 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    */
   public findById(id: string): Record<S, T> {
     console.warn("List.findById() is deprecated. Use List.get() instead.");
-    return this.getRecord(id) as Record<S, T>;
+    return this.getRecord(id);
   }
 
   /**
    * Allows for records managed by this **List** to be removed from the
    * database.
    */
-  public async remove(id: string, ignoreOnNotFound: boolean = false) {
+  public async remove(id: string, ignoreOnNotFound = false) {
     try {
       const rec = this.getRecord(id);
       await rec.remove();
@@ -766,7 +766,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   }
 
   /** deprecated ... use List.remove() instead */
-  public async removeById(id: string, ignoreOnNotFound: boolean = false) {
+  public async removeById(id: string, ignoreOnNotFound = false) {
     console.log(`List.removeById() is deprecated; use List.remove() instead`);
     return this.remove(id, ignoreOnNotFound);
   }

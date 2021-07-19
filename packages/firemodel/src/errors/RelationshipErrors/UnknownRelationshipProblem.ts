@@ -1,6 +1,6 @@
 import { FireModelError } from "@/errors";
 import { IFmRelationshipOperation } from "@/types";
-import { IModel } from "@/types";
+import { IModel } from "universal-fire";
 import { Record } from "@/core";
 import { ISdk } from "universal-fire";
 

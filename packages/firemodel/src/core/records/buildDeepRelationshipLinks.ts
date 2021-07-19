@@ -1,6 +1,6 @@
-import { ISdk } from "universal-fire";
+import { ISdk, IModel } from "universal-fire";
 import { IDictionary } from "common-types";
-import { IFkReference, IModel } from "@/types";
+import { IFkReference } from "@/types";
 import { Record } from "@/core";
 import { getModelMeta } from "@/util";
 

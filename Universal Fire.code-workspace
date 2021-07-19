@@ -13,7 +13,7 @@
       "path": "packages/firemodel"
     },
     {
-      "name": "🚀 firemodel-vuex-plugin",
+      "name": "🚀 vuex-plugin-firemodel",
       "path": "packages/vuex-plugin"
     },
     {

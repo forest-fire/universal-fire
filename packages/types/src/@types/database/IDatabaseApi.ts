@@ -2,7 +2,7 @@ import {
   IAbstractedEvent,
 } from '../fire-proxies';
 import { ISdk } from '../fire-types';
-import { IGenericModel, IModel } from '../firemodel/models';
+import { IModel, IModelProps } from '../firemodel/models';
 import { IRtdbReference } from '../proxy-plus';
 import { ISerializedQuery } from '../query';
 
@@ -31,8 +31,8 @@ export interface IDatabaseApi<
    * an array of dictionaries where the _key_ for the record will be assigned the property value
    * of `id` (unless overriden by the `idProp` param)
    */
-  getList: <T extends IModel | Record<string, unknown> = IGenericModel>(
-    path: string | ISerializedQuery<TSdk, any>,
+  getList: <T extends IModel, P extends string | ISerializedQuery<TSdk, T> = string | ISerializedQuery<TSdk, T>>(
+    path: P,
     idProp?: string
   ) => Promise<T[]>;
   /**
@@ -47,7 +47,7 @@ export interface IDatabaseApi<
    * Gets a record from a given path in the Firebase DB and converts it to an
    * object where the record's key is included as part of the record.
    */
-  getRecord: <T extends IModel | Record<string, unknown> = IGenericModel>(
+  getRecord: <T extends IModelProps = IModelProps>(
     path: string,
     idProp?: string
   ) => Promise<T>;
@@ -77,7 +77,7 @@ export interface IDatabaseApi<
   /**
    * Watch for Firebase events based on a DB path.
    */
-  watch: <T extends IModel | Record<string, unknown> = any>(
+  watch: <T extends IModelProps = IModelProps>(
     target: string | ISerializedQuery<TSdk, T>,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: unknown

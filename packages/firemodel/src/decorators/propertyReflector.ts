@@ -29,7 +29,7 @@ export const propertyReflector = <R>(
 
   const meta: IDictionary = {
     ...(Reflect.getMetadata(key, modelKlass) || {}),
-    type: lowercase(reflect.name) as string,
+    type: lowercase(reflect.name) ,
     ...context,
     property: key,
   };

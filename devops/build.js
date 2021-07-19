@@ -17,6 +17,7 @@ const sequence = [
       'serialized-query',
       'serializer-factory',
       'abstracted-database',
+      'fixture',
     ],
   },
   { name: 'databases', packages: ['firemock', 'real-time-db', 'firestore-db'] },
@@ -30,6 +31,14 @@ const sequence = [
     ],
   },
   { name: 'universal-fire', packages: ['universal-fire'] },
+  {
+    name: 'firemodel',
+    packages: ['firemodel'],
+  },
+  {
+    name: 'vuex-plugin',
+    package: ['vuex-plugin-firemodel'],
+  },
 ];
 
 function toPlugins(dir) {

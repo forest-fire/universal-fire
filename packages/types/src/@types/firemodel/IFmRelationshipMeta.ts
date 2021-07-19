@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IFmModelAttributeBase, IModel, IFmRelationshipDirectionality } from "./index";
+import { IFmModelAttributeBase, IFmRelationshipDirectionality, IModel } from "./index";
 import { IFnToModelConstructor } from "./model-relationships";
 
 export type FmRelationshipType = "hasMany" | "hasOne";
 
-export interface IFmModelRelationshipMeta<T extends IModel = IModel, P extends any[] = []>
-  extends IFmModelAttributeBase<T, P> {
+export interface IFmModelRelationshipMeta<T extends IModel>
+  extends IFmModelAttributeBase<T> {
   isRelationship: true;
   isProperty: false;
   /** the general cardinality type of the relationship (aka, hasMany, hasOne) */

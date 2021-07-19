@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 //#region imports
 import { DefaultDbCache, FireModel, List } from "@/core";
 import {
@@ -34,7 +36,6 @@ import {
   Nullable,
   Omit,
   fk,
-  pk,
   ConstructorFor,
 } from "common-types";
 import { WatchDispatcher, findWatchers } from "./watchers";
@@ -55,7 +56,9 @@ import {
   withoutMetaOrPrivate,
 } from "@/util";
 
-import { IDatabaseSdk, IFmModelPropertyMeta, IModel, ISdk } from "universal-fire";
+import { pluralize } from "native-dash";
+
+import { IDatabaseSdk, IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel, ISdk } from "universal-fire";
 import { UnwatchedLocalEvent } from "@/state-mgmt";
 import { default as copy } from "fast-copy";
 import { key as fbKey } from "firebase-key";
@@ -69,8 +72,10 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     DefaultDbCache().set<IDatabaseSdk<typeof db.sdk>>(db);
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public static get defaultDb() {
-    return DefaultDbCache().get();
+    const db = DefaultDbCache().get();
+    return db as unknown as IDatabaseSdk<typeof db.sdk>
   }
 
   public static set dispatch(fn: IReduxDispatch) {
@@ -100,7 +105,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    */
   public static create<T extends IModel>(
     model: new () => T,
-    options: IRecordOptions<any> = {}
+    options: IRecordOptions<ISdk> = {}
   ) {
     const defaultSdk = DefaultDbCache().sdk;
     type SDK = typeof defaultSdk extends ISdk ? typeof defaultSdk : ISdk;
@@ -119,7 +124,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * Creates an empty record and then inserts all values
    * provided along with default values provided in META.
    */
-  public static local<T extends IModel, O extends IRecordOptions<any>>(
+  public static local<T extends IModel, O extends IRecordOptions<ISdk>>(
     model: new () => T,
     values: Partial<T>,
     options: O & { ignoreEmptyValues?: boolean } = {} as O
@@ -141,8 +146,9 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
       );
 
       // also include "default values"
-      defaultValues.forEach((i: IFmModelPropertyMeta<T>) => {
+      defaultValues.forEach((i: IFmModelPropertyMeta<T>["defaultValue"]) => {
         if (rec.get(i.property) === undefined) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           rec.set(i.property, i.defaultValue, true);
         }
       });
@@ -160,7 +166,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * @param payload the data for the new record; this optionally can include the "id" but if left off the new record will use a firebase pushkey
    * @param options
    */
-  public static async add<T extends IModel, O extends IRecordOptions<any>>(
+  public static async add<T extends IModel, O extends IRecordOptions<ISdk>>(
     model: (new () => T) | string,
     payload: T,
     options: O = {} as O
@@ -188,7 +194,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
         payload.id = await r.db.getPushKey(path);
       }
 
-      await r._initialize(payload as T, options);
+      await r._initialize(payload, options);
       const defaultValues = r.META.properties.filter(
         (i) => i.defaultValue !== undefined
       );
@@ -241,7 +247,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
       r = await Record.get(model, pk, options);
       await r.update(updates);
     } catch (e) {
-      const err = new Error(`Problem adding new Record: ${e.message}`);
+      const err = new Error(`Problem adding new Record: ${(e as Error).message}`);
       err.name = e.name !== "Error" ? e.name : "FireModel";
       throw e;
     }
@@ -257,7 +263,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * @param property the property on the record
    * @param payload the new payload you want to push into the array
    */
-  public static async pushKey<T extends IModel, O extends IRecordOptions<any>>(
+  public static async pushKey<T extends IModel, O extends IRecordOptions<ISdk>>(
     model: new () => T,
     pk: IPrimaryKey<T>,
     property: keyof T & string,
@@ -290,11 +296,11 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * @payload either a string representing an `id` or Composite Key or alternatively
    * a hash/dictionary of attributes that are to be set as a starting point
    */
-  public static createWith<S extends ISdk, T extends IModel, O extends IRecordOptions<S>>(
-    model: new () => T,
+  public static createWith<T extends IModel, O extends IRecordOptions<ISdk>>(
+    model: ConstructorFor<T>,
     payload: Partial<T>,
     options: O = {} as O
-  ): Record<S, T> {
+  ): Record<ISdk, T> {
     const defaultDb = FireModel.defaultDb;
     if (options.db) {
       FireModel.defaultDb = options.db;
@@ -316,6 +322,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     // TODO: build some tests to ensure that ...
     // the async possibilites of this method (only if `options.setDeepRelationships`)
     // are not negatively impacting this method
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     rec._initialize(properties, options);
     DefaultDbCache().set(defaultDb);
     return rec as Record<S, T>;
@@ -368,7 +375,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     model: ConstructorFor<T>,
     pk: IPrimaryKey<T>,
     property: PropertyOf<T>,
-    refs: IFkReference<any> | IFkReference<any>[],
+    refs: IFkReference<unknown> | IFkReference<unknown>[],
     options: IFmRelationshipOptions<S> = {}
   ) {
     const obj = await Record.get(model, pk);
@@ -405,7 +412,8 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
       );
     }
 
-    segments.forEach((segment, idx) => {
+    // TODO: come back and replace "any" with better typing
+    segments.forEach((segment: any, idx: any) => {
       if (segment.slice(0, 1) === ":") {
         const name = segment.slice(1);
         const value = pathParts[idx];
@@ -415,7 +423,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
           throw new FireModelError(
             `The attempt to build a composite key for the model ${capitalize(
               r.modelName
-            )} failed because the static parts of the path did not match up. Specifically where the "dbOffset" states the segment "${segment}" the path passed in had "${pathParts[idx]
+            )} failed because the static parts of the path did not match up. Specifically where the "dbOffset" states the segment "${JSON.stringify(segment)}" the path passed in had "${pathParts[idx]
             }" instead.`
           );
         }
@@ -497,7 +505,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     );
 
     return `${compositeKey.id}::${nonIdKeys
-      .map((tuple) => `${tuple.prop}:${tuple.value}`)
+      .map((tuple) => `${tuple.prop}:${String(tuple.value)}`)
       .join("::")}`;
   }
 
@@ -517,59 +525,54 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
   //#endregion
 
   //#region INSTANCE DEFINITION
-  private _existsOnDB: boolean = false;
+  private _existsOnDB = false;
   private _writeOperations: IWriteOperation[] = [];
   private _data?: Partial<T> = {};
 
   constructor(model: new () => T, protected options: IRecordOptions<S> = {}) {
     super();
-    if (!model) {
-      throw new FireModelError(
-        `You are trying to instantiate a Record but the "model constructor" passed in is empty!`,
-        `firemodel/not-allowed`
-      );
-    }
 
-    if (!model.constructor) {
-      console.log(
-        `The "model" property passed into the Record constructor is NOT a Model constructor! It is of type "${typeof model}": `,
-        model
-      );
-      if (typeof model === "string") {
-        model = FireModel.lookupModel(model);
-        if (!model) {
-          throw new FireModelError(
-            `Attempted to lookup the model in the registry but it was not found!`
-          );
-        }
-      } else {
-        throw new FireModelError(
-          `Can not instantiate a Record without a valid Model constructor`
-        );
-      }
-    }
     this._modelConstructor = model;
     this._model = new model();
     this._data = new model();
   }
 
-  public get data() {
+  public get data(): Readonly<T> {
     return this._data as Readonly<T>;
   }
 
-  public get isDirty() {
-    return this.META.isDirty ? true : false;
+  public get META(): T["META"] {
+    return this._data.META;
   }
 
   /**
-   * deprecated
+   * The plural name of the model
+   */
+  public get pluralName(): string {
+    return this.META.plural || pluralize(this.modelName);
+  }
+
+  public get properties(): IFmModelPropertyMeta<T>[] {
+    return this.META.properties as unknown as IFmModelPropertyMeta<T>[];
+  }
+
+
+  public get relationships(): IFmModelRelationshipMeta<T>[] {
+    return this.META.relationships as unknown as IFmModelRelationshipMeta<T>[];
+  }
+
+  /**
+   * @deprecated
+   */
+  public get isDirty(): boolean {
+    throw new FireModelError("Call to isDirty() should be avoided; this functionality is deprecated", "firemodel/invalid");
+  }
+
+  /**
+   * @deprecated
    */
   public set isDirty(value: boolean) {
-    if (!this._data.META) {
-      this._data.META = { isDirty: value };
-    }
-    // TODO: can we remove isDirty functionality?
-    // this.data.META.isDirty = value;
+    throw new FireModelError("Call to isDirty() should be avoided; this functionality is deprecated", "firemodel/invalid");
   }
 
   /**
@@ -577,7 +580,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * this of course includes the record id so if that's not set yet calling
    * this getter will result in an error
    */
-  public get dbPath() {
+  public get dbPath(): string {
     if (this.data.id ? false : true) {
       throw new FireModelError(
         `you can not ask for the dbPath before setting an "id" property [ ${this.modelName} ]`,
@@ -597,7 +600,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * model has a "dynamic path" which ultimately comes from a dynamic
    * component in the "dbOffset" property defined in the model decorator
    */
-  public get hasDynamicPath() {
+  public get hasDynamicPath(): boolean {
     return this.META.dbOffset.includes(":");
   }
 
@@ -676,7 +679,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     let prefix = this.localPrefix;
     this.localDynamicComponents.forEach((prop) => {
       // TODO: another example of impossible typing coming off of a get()
-      prefix = prefix.replace(`:${prop}`, this.get(prop) as any);
+      prefix = prefix.replace(`:${prop}`, String(this.get(prop)));
     });
     return pathJoin(
       prefix,
@@ -812,17 +815,17 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     return newRecord;
   }
 
-  public isSameModelAs(model: new () => any) {
-    return this._modelConstructor === model;
+  public isSameModelAs<M extends IModel>(model: new () => M): boolean {
+    return this._modelConstructor.name === model.name;
   }
 
   /**
    * Pushes new values onto properties on the record
    * which have been stated to be a "pushKey"
    */
-  public async pushKey<K extends keyof T & string, Object>(
+  public async pushKey<K extends keyof T & string>(
     property: K,
-    value: T[K][keyof T[K]] | any
+    value: T[K][keyof T[K]] | unknown
   ): Promise<fk> {
     if (this.META.pushKeys.indexOf(property as any) === -1) {
       throw new FireModelError(
@@ -927,10 +930,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * FE State Mgmt.
    */
   public async remove() {
-    this.isDirty = true;
     await this._localCrudOperation(IFmCrudOperations.remove, copy(this.data));
-    this.isDirty = false;
-    // TODO: handle dynamic paths and also consider removing relationships
   }
 
   /**
@@ -944,7 +944,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
   public async set<K extends keyof T>(
     prop: K & string,
     value: T[K],
-    silent: boolean = false
+    silent = false
   ) {
     const rollback = copy(this.data);
     const meta = this.META.property(prop);
@@ -1068,13 +1068,13 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    */
   public async addToRelationship(
     property: keyof T & string,
-    fkRefs: IFkReference<any> | IFkReference<any>[],
+    fkRefs: IFkReference<unknown> | IFkReference<unknown>[],
     options: IFmRelationshipOptionsForHasMany<S> = {}
-  ) {
+  ): Promise<void> {
     const altHasManyValue = options.altHasManyValue || true;
 
-    if (!isHasManyRelationship(this, property)) {
-      throw new NotHasManyRelationship(
+    if (!isHasManyRelationship<S, T>(this, property)) {
+      throw new NotHasManyRelationship<S, T>(
         this,
         property as string,
         "addToRelationship"
@@ -1108,9 +1108,9 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    */
   public async removeFromRelationship(
     property: keyof T & string,
-    fkRefs: IFkReference<any> | IFkReference<any>[],
+    fkRefs: IFkReference<unknown> | IFkReference<unknown>[],
     options: IFmRelationshipOptionsForHasMany<S> = {}
-  ) {
+  ): Promise<void> {
     if (!isHasManyRelationship(this, property)) {
       throw new NotHasManyRelationship(
         this,
@@ -1155,7 +1155,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
   public async clearRelationship(
     property: keyof T & string,
     options: IFmRelationshipOptions<S> = {}
-  ) {
+  ): Promise<void> {
     const relType = this.META.relationship(property).relType;
     const fkRefs: string[] =
       relType === "hasMany"
@@ -1199,9 +1199,9 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    */
   public async setRelationship(
     property: keyof T & string,
-    fkId: IFkReference<any>,
+    fkId: IFkReference<unknown>,
     options: IFmRelationshipOptions<S> = {}
-  ) {
+  ): Promise<void> {
     if (!fkId) {
       throw new FireModelError(
         `Failed to set the relationship ${this.modelName}.${property} because no FK was passed in!`,
@@ -1209,10 +1209,10 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
       );
     }
 
-    if (isHasManyRelationship(this, property)) {
-      throw new NotHasOneRelationship(this, property, "setRelationship");
+    if (isHasManyRelationship<S, T>(this, property)) {
+      throw new NotHasOneRelationship<S, T>(this, property, "setRelationship");
     }
-    const paths = buildRelationshipPaths(this, property, fkId, options);
+    const paths = buildRelationshipPaths<S, T>(this, property, fkId, options);
     await relationshipOperation(this, "set", property, [fkId], paths, options);
   }
 
@@ -1223,8 +1223,8 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    *
    * @param prop the property being retrieved
    */
-  public get<K extends keyof T & string>(prop: K) {
-    return this.data[prop];
+  public get<K extends keyof T & string>(prop: K): Readonly<T[K]> {
+    return this.data[prop] as Readonly<T[K]>;
   }
 
   public toString() {
@@ -1268,11 +1268,12 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
       });
     }
 
-    const relationships = getModelMeta(this).relationships;
-    const hasOneRels: Array<keyof T> = (relationships || [])
+    const relationships = getModelMeta(this).relationships as unknown as IFmModelRelationshipMeta<T>[];
+    const hasOneRels = relationships
       .filter((r) => r.relType === "hasOne")
-      .map((r) => r.property) as Array<keyof T>;
-    const hasManyRels: Array<keyof T & string> = (relationships || [])
+      .map((r) => r.property);
+
+    const hasManyRels = relationships
       .filter((r) => r.relType === "hasMany")
       .map((r) => r.property) as Array<keyof T & string>;
 
@@ -1450,7 +1451,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     };
 
     if (crudAction === "update") {
-      event.priorValue = priorValue as T;
+      event.priorValue = priorValue;
       event.added = added;
       event.changed = changed;
       event.removed = removed;
@@ -1597,7 +1598,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     }
   }
 
-  private _findDynamicComponents(path: string = "") {
+  private _findDynamicComponents(path = "") {
     if (!path.includes(":")) {
       return [];
     }
@@ -1682,7 +1683,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * Allows for the static "add" method to add a record
    */
   private async _adding(options: IRecordOptions<S>) {
-    let defaultDb = FireModel.defaultDb;
+    const defaultDb = FireModel.defaultDb;
     if (options.db) {
       FireModel.defaultDb = options.db;
     }

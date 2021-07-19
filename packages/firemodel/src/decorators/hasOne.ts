@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
@@ -39,7 +40,7 @@ export function belongsTo<T extends IModel = IModel>(
       inverseProperty = inverse;
       directionality = inverse ? "bi-directional" : "one-way";
     }
-    const payload: Omit<IFmModelRelationshipMeta, "type" | "property"> = {
+    const payload: Omit<IFmModelRelationshipMeta<T>, "type" | "property"> = {
       isRelationship: true,
       isProperty: false,
       relType: "hasOne",

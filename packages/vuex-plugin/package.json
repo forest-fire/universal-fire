@@ -51,20 +51,20 @@
     "common-types": "> 1.15.8",
     "fast-copy": "^2.1.0",
     "fast-equals": "^2.0.0",
-    "firemock": "^0.58.1",
-    "native-dash": "^1.7.1",
+    "firemock": "*",
+    "native-dash": "^1.16.2",
     "typed-conversions": "^0.11.1"
   },
   "peerDependencies": {
-    "firemodel": "^0.58.3",
+    "firemodel": "*",
     "js-cookie": "^3.0.0-rc.0",
     "universal-fire": "^0.58.1",
     "vue": "^2.6.11",
     "vuex": "^3.5.1"
   },
   "optionalDependencies": {
-    "common-types": "> 1.15.8",
-    "firemock": "^0.58.1",
+    "common-types": "> 1.27.0",
+    "firemock": "*",
     "typed-conversions": "^0.11.1"
   },
   "devDependencies": {
@@ -96,7 +96,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-vue": "^7.4.1",
     "fake-indexeddb": "^3.0.0",
-    "firemodel": "^0.58.3",
+    "firemodel": "*",
     "jest": "^26.1.0",
     "jest-extended": "^0.11.5",
     "js-cookie": "^3.0.0-rc.0",
@@ -114,9 +114,9 @@
     "tslint": "^6.1.2",
     "ttypescript": "^1.5.12",
     "typed-conversions": "^0.11.1",
-    "typescript": "^4.1.3",
+    "typescript": "^4.3.5",
     "typescript-transform-paths": "^2.2.0",
-    "universal-fire": "^0.58.1",
+    "universal-fire": "*",
     "vuepress": "^1.5.2",
     "vuepress-plugin-container": "^2.1.4",
     "vuex": "^3.5.1"

@@ -42,7 +42,7 @@ export interface IFmDispatchOptions {
 /**
  * the normal call signature of a **Redux** `dispatch()` call
  */
-export type IReduxDispatch<T extends IReduxAction = IReduxAction, O = any> = (
+export type IReduxDispatch<T extends IReduxAction = IReduxAction, O extends any = any> = (
   payload: T
 ) => Promise<O>;
 
@@ -83,7 +83,7 @@ export type IFmServerEvent =
  * Allows either a server event (aka, Firebase originated) or a locally
  * sourced event
  */
-export type IFmServerOrLocalEvent<T> =
+export type IFmServerOrLocalEvent<T extends IModel> =
   | IFmServerEvent
   | IFmLocalEvent<T>
   | IFmWatcherEvent<T>;
@@ -225,7 +225,7 @@ export interface IFmLocalRecordEvent<T extends IModel = IModel>
  * Meta information for events that are originated from **Firemodel**. This event
  * type is then extended with _watcher context_
  */
-export type IFmLocalEvent<T> =
+export type IFmLocalEvent<T extends IModel> =
   | IFmLocalRecordEvent<T>
   | IFmLocalRelationshipEvent<T>;
 

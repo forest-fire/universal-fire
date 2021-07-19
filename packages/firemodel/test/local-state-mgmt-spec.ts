@@ -4,11 +4,11 @@ import { IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
 import { DynamicPerson } from "./testing/localStateMgmt/DynamicPerson";
 import { Person } from "./testing/localStateMgmt/Person";
 import { PostfixPerson } from "./testing/localStateMgmt/PostfixPerson";
-import { pathJoin } from "@/util";
+import { pathJoin } from "native-dash";
 
 describe("Client state management", () => {
   beforeAll(async () => {
-    FireModel.defaultDb =  await RealTimeAdmin.connect({ mocking: true });
+    FireModel.defaultDb = await RealTimeAdmin.connect({ mocking: true });
   });
 
   it("when using a RECORD, the localPath is equal to the prefix plus 'localModelName' if there are no dynamic components", async () => {

@@ -6,7 +6,7 @@
 export class DexieError extends Error {
   public firemodel = true;
   public code: string;
-  constructor(message: string, classification: string = "firemodel/dexie") {
+  constructor(message: string, classification = "firemodel/dexie") {
     super(message);
     const parts = classification.split("/");
     const [type, subType] =

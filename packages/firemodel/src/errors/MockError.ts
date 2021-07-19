@@ -4,7 +4,7 @@
 export class MockError extends Error {
   public firemodel = true;
   public code: string;
-  constructor(message: string, classification: string = "firemodel/error") {
+  constructor(message: string, classification = "firemodel/error") {
     super(message);
     const parts = classification.split("/");
     const [type, subType] =

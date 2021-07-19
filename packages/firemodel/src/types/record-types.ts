@@ -5,7 +5,7 @@ import {
   IFmModelRelationshipMeta,
   IModel,
 } from "universal-fire";
-import { IReduxAction, IReduxDispatch } from "./state-mgmt";
+import { IReduxDispatch } from "./state-mgmt";
 
 import { IDatabaseSdk, ISdk, IFmFunctionToConstructor } from "universal-fire";
 import { IFmHasId } from "./general";
@@ -15,17 +15,23 @@ import { IFmHasId } from "./general";
  * in reasonable fidelity so that functions that only need this
  * fidelity can use this internally.
  */
-export interface IRecord<S extends ISdk, T extends IModel = IModel> {
-  META: IFmModelMeta<T>;
+export interface IRecord<S extends ISdk, T extends IModel> {
+  get META(): T["META"];
   localPath: string;
   localPrefix: string;
   dbPath: string;
   dbOffset: string;
   modelName: string;
   pluralName: string;
-  properties: IFmModelPropertyMeta[];
-  relationships: IFmModelRelationshipMeta[];
-  dispatch: IReduxDispatch<IReduxAction, any>;
+  /**
+   * An array of _non-relationship_ properties on the given record
+   */
+  properties: IFmModelPropertyMeta<T>[];
+  /**
+   * An array of relationship properties on the given record
+   */
+  relationships: IFmModelRelationshipMeta<T>[];
+  dispatch: IReduxDispatch;
   db: IDatabaseSdk<S>;
   pushKeys: string[];
   data: T;

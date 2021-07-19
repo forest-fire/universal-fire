@@ -1,6 +1,6 @@
 import { IDictionary, isNonNullObject } from 'common-types';
 import { AdminSdk, ClientSdk, Database, IFirestoreSdk, IRtdbSdk, ISdk, SDK } from '../fire-types';
-import { IDatabaseSdk } from './db-sdk';
+import { IDatabaseSdk } from '~/@types/database';
 
 /**
  * Type guard to validate that the passed in variable is in fact

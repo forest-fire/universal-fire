@@ -1,6 +1,6 @@
-import { IAuditChange, IModel } from "@/types";
-
+import { IAuditChange } from "@/types";
 import { IDictionary } from "common-types";
+import { IModel } from "universal-fire";
 
 export function normalized(...args: string[]) {
   return args

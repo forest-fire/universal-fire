@@ -22,20 +22,30 @@
       "internalConsoleOptions": "openOnSessionStart"
     },
     {
-      "name": "Current TS Test File",
       "type": "node",
       "request": "launch",
-      "protocol": "inspector",
-      "program": "${workspaceRoot}/node_modules/.bin/_mocha",
-      "args": [
-        "--no-timeouts",
-        "--require",
-        "ts-node/register",
-        "${relativeFile}"
-      ],
-
-      "cwd": "${workspaceRoot}"
+      "name": "Current Jest Test File",
+      "program": "${workspaceRoot}/node_modules/.bin/jest",
+      "args": ["--runTestsByPath", "${relativeFile}"],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true
     },
+    {
+      "name": "Debug all Jest Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/jest/bin/jest",
+        "--runInBand"
+      ],
+      "port": 9229,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+
     {
       "type": "node",
       "request": "launch",

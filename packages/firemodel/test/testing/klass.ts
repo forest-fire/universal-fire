@@ -11,12 +11,13 @@ import {
 } from "../../src";
 import { IDictionary } from "common-types";
 import { pushKey } from "../../src/decorators/constraints";
+import { IModelProps } from "../../../types/dist/types";
 
 /* tslint:disable:max-classes-per-file */
 export type Callback = (m: string) => boolean;
 
-export class SubKlass extends Model {
-  @property public sub: string = "subklass";
+export class SubKlass extends Model<IModelProps> {
+  @property public sub = "subklass";
 }
 
 export class ContainedKlass {
@@ -32,9 +33,9 @@ export class Klass extends SubKlass {
   @desc("who doesn't love a foobar?") @property @length(15) public foobar: string;
   @property public foo: string;
   // prettier-ignore
-  @desc("the bar is a numeric property that holds no real meaning") @property @constrain("min", 2) public bar: number = 8;
+  @desc("the bar is a numeric property that holds no real meaning") @property @constrain("min", 2) public bar = 8;
   // prettier-ignore
-  @constrainedProperty({ min: 1, max: 20 }) public bar2: number = 12;
+  @constrainedProperty({ min: 1, max: 20 }) public bar2 = 12;
   // prettier-ignore
   @property @min(5) @max(10) public bar3: number;
   @property public cb: Callback;

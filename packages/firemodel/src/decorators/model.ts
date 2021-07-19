@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import "reflect-metadata";
 
 import { FmModelConstructor } from "@/types";
@@ -16,15 +17,15 @@ import { IDictionary } from "common-types";
 import { getDbIndexes } from "@/decorators";
 import { IFmModelMeta, IModel } from "universal-fire";
 
-export function model<T extends IModel = IModel>(options: Partial<IFmModelMeta<T>> = {}) {
-  let isDirty: boolean = false;
+export function model<T extends IModel>(options: IFmModelMeta<T> = {} as IFmModelMeta<T>) {
+  let isDirty = false;
 
-  return function decorateModel<T extends IModel>(
-    target: FmModelConstructor<T>
+  return function decorateModel(
+    target: FmModelConstructor<IModel>
   ) {
     // Function to add META to the model
     function addMetaProperty() {
-      const modelOfObject = new target();
+      const instance = new target();
 
       if (options.audit === undefined) {
         options.audit = false;
@@ -37,28 +38,28 @@ export function model<T extends IModel = IModel>(options: Partial<IFmModelMeta<T
         )
       ) {
         console.log(
-          `You set the audit property to "${options.audit}" which is invalid. Valid properties are true, false, and "server". The audit property will be set to false for now.`
+          `The audit property was set as "${JSON.stringify(options.audit)}" which is invalid. Valid properties are true, false, and "server". The audit property will be set to false for now.`
         );
         options.audit = false;
       }
 
-      const meta: IFmModelMeta<T> = {
+      const meta: IFmModelMeta<unknown> = {
         ...options,
-        ...{ isProperty: isProperty(modelOfObject) },
-        ...{ property: getModelProperty(modelOfObject) },
-        ...{ properties: getProperties(modelOfObject) },
-        ...{ isRelationship: isRelationship(modelOfObject) },
-        ...{ relationship: getModelRelationship(modelOfObject) },
-        ...{ relationships: getRelationships(modelOfObject) },
-        ...{ dbIndexes: getDbIndexes(modelOfObject) },
-        ...{ pushKeys: getPushKeys(modelOfObject) },
+        ...{ isProperty: isProperty(instance) },
+        ...{ property: getModelProperty(instance) },
+        ...{ properties: getProperties(instance) },
+        ...{ isRelationship: isRelationship(instance) },
+        ...{ relationship: getModelRelationship(instance) },
+        ...{ relationships: getRelationships(instance) },
+        ...{ dbIndexes: getDbIndexes(instance) },
+        ...{ pushKeys: getPushKeys(instance) },
         ...{ dbOffset: options.dbOffset ? options.dbOffset : "" },
         ...{ audit: options.audit ? options.audit : false },
         ...{ plural: options.plural },
         ...{
           allProperties: [
-            ...getProperties(modelOfObject).map((p) => p.property),
-            ...getRelationships(modelOfObject).map((p) => p.property),
+            ...getProperties(instance),
+            ...getRelationships(instance),
           ],
         },
         ...{
@@ -68,8 +69,8 @@ export function model<T extends IModel = IModel>(options: Partial<IFmModelMeta<T
         ...{
           localModelName:
             options.localModelName === undefined
-              ? modelOfObject.constructor.name.slice(0, 1).toLowerCase() +
-              modelOfObject.constructor.name.slice(1)
+              ? instance.constructor.name.slice(0, 1).toLowerCase() +
+              instance.constructor.name.slice(1)
               : options.localModelName,
         },
         ...{ isDirty },
@@ -78,7 +79,7 @@ export function model<T extends IModel = IModel>(options: Partial<IFmModelMeta<T
       addModelMeta(target.constructor.name.toLowerCase(), meta);
 
       Object.defineProperty(target.prototype, "META", {
-        get(): IFmModelMeta<T> {
+        get(): IFmModelMeta<unknown> {
           return meta;
         },
         set(prop: IDictionary) {

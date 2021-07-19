@@ -1,16 +1,10 @@
-// tslint:disable:no-unused-expression
-export type NonProperties<T> = {
-  [P in keyof T]: T[P] extends () => any ? never : P;
-}[keyof T];
-export type Properties<T> = Pick<T, NonProperties<T>>;
-
-import { IFmModelMeta, IModel } from "universal-fire";
+import { IFmModelMeta } from "universal-fire";
 import { index, mock, model, property } from "@/decorators";
-
 import { epochWithMilliseconds } from "common-types";
+import { IModel, IModelProps } from "@forest-fire/types";
 
 @model()
-export class Model implements IModel {
+export class Model<T extends IModelProps> implements IModel<T> {
   // prettier-ignore
   // TODO: This should be made required and the API updated to make it optional where appropriate
   /** The primary-key for the record */
@@ -22,5 +16,5 @@ export class Model implements IModel {
   /** The datetime at which this record was first created */
   @property @mock("datePastMiliseconds") @index public createdAt?: epochWithMilliseconds;
   /** Metadata properties of the given schema */
-  public META?: IFmModelMeta<Model>;
+  public META?: IFmModelMeta<T>;
 }

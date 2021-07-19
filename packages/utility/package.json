@@ -20,12 +20,16 @@
     "clean": "rimraf dist/**/*",
     "build": "scripty"
   },
-  "dependencies": {
-    "@forest-fire/types": "^0.59.2",
-    "is-gzip": "^2.0.0"
+  "peerDependencies": {
+    "@forest-fire/types": "*",
+    "is-gzip": "^2.0.0",
+    "reflect-metadata": "0.1.13"
   },
   "devDependencies": {
     "jest": "^27.0.6",
+    "@forest-fire/types": "*",
+    "is-gzip": "^2.0.0",
+    "reflect-metadata": "0.1.13",
     "typescript": "^4.1.3"
   },
   "license": "MIT"

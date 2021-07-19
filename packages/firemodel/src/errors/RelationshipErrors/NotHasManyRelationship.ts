@@ -1,5 +1,5 @@
-import { IModel, IRecord } from "@/types";
-import { ISdk } from "universal-fire";
+import { IRecord } from "@/types";
+import { ISdk, IModel } from "universal-fire";
 import { FireModelError } from "@/errors";
 
 export class NotHasManyRelationship<S extends ISdk, T extends IModel> extends FireModelError {

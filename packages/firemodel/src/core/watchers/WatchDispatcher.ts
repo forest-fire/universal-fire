@@ -80,7 +80,7 @@ export const WatchDispatcher = <S extends ISdk, T extends IModel>(
         const rec = Record.createWith(
           watcherContext.modelConstructor,
           recordProps
-        ) as Record<S, T>;
+        ) ;
 
         let type: FmEvents;
         switch (event.kind) {

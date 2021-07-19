@@ -1,4 +1,5 @@
-import { IFmModelPropertyMeta } from "universal-fire";
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { IFmModelPropertyMeta, IModel } from "universal-fire";
 import { propertiesByModel } from "@/util";
 import { propertyReflector } from "@/decorators";
 
@@ -7,7 +8,7 @@ import { propertyReflector } from "@/decorators";
  * Allows setting a default value for a given property
  */
 export function defaultValue(value: any) {
-  return propertyReflector<IFmModelPropertyMeta>(
+  return propertyReflector<IFmModelPropertyMeta<IModel>>(
     { defaultValue: value },
     propertiesByModel
   );

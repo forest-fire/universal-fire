@@ -1,4 +1,7 @@
-import { IFmChangedProperties, IModel } from "@/types";
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { IFmChangedProperties } from "@/types";
+import { IModel } from "universal-fire";
+
 const equal = require("fast-deep-equal/es6");
 
 export function compareHashes<T extends IModel>(

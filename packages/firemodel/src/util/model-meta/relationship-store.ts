@@ -1,4 +1,4 @@
-import { IFmModelRelationshipMeta, IModel } from "@/types";
+import { IFmModelRelationshipMeta, IModel } from "universal-fire";
 
 import { IDictionary } from "common-types";
 import { hashToArray } from "typed-conversions";
@@ -8,7 +8,7 @@ export const relationshipsByModel: IDictionary<IDictionary<
 >> = {};
 
 /** allows the addition of meta information to be added to a IModel's relationships */
-export function addRelationshipToModelMeta<T extends IModel = IModel>(
+export function addRelationshipToModelMeta<T extends {}>(
   IModelName: string,
   property: string,
   meta: IFmModelRelationshipMeta<T>
@@ -22,7 +22,7 @@ export function addRelationshipToModelMeta<T extends IModel = IModel>(
   >;
 }
 
-export function isRelationship(IModelKlass: IDictionary) {
+export function isRelationship<T extends {}>(IModelKlass: T) {
   return (prop: string) => {
     return getModelRelationship(IModelKlass)(prop) ? true : false;
   };
@@ -42,7 +42,7 @@ export function getModelRelationship<T extends IModel>(IModel: T) {
 /**
  * Gets all the relationships for a given IModel
  */
-export function getRelationships(IModel: object) {
+export function getRelationships<T extends {}>(IModel: T) {
   const IModelName = IModel.constructor.name;
   const properties =
     hashToArray(relationshipsByModel[IModelName], "property") || [];

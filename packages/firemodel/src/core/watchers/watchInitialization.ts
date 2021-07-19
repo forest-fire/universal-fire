@@ -27,7 +27,7 @@ export const hasInitialized = (
  */
 export async function waitForInitialization<T = Model>(
   watcher: IWatcherEventContext<T>,
-  timeout: number = 750
+  timeout = 750
 ): Promise<void> {
   const startTime = new Date().getTime();
 

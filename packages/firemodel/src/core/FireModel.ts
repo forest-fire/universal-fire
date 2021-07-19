@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   IDatabaseSdk,
   IAdminConfig,
@@ -22,16 +24,16 @@ import {
 } from "@/util";
 
 import { Record, DefaultDbCache } from "@/core";
+import { pluralize } from "native-dash";
 
-// tslint:disable-next-line:no-var-requires
-const pluralize = require("pluralize");
 const defaultDispatch: IReduxDispatch<any, any> = async (context) => "";
 
 const registeredModules: IDictionary<new () => any> = {};
 
 export class FireModel<S extends ISdk, T extends IModel> {
   public static get defaultDb() {
-    return FireModel._defaultDb;
+    const db = DefaultDbCache().get();
+    return db as unknown as IDatabaseSdk<typeof db.sdk>
   }
 
   /**
@@ -78,50 +80,11 @@ export class FireModel<S extends ISdk, T extends IModel> {
   /**
    * The name of the model; typically a "sigular" name
    */
-  public get modelName() {
+  public get modelName(): string {
     const name = this._model.constructor.name;
     const pascal = name.slice(0, 1).toLowerCase() + name.slice(1);
 
     return pascal;
-  }
-
-  /**
-   * The plural name of the model (which plays a role in storage of state in both
-   * the database as well as the dispatch function's path)
-   */
-  public get pluralName() {
-    const explicitPlural = this.META.plural;
-    return explicitPlural || pluralize(this.modelName);
-  }
-
-  public get dbPath() {
-    return "dbPath was not overwritten!";
-  }
-
-  public get localPath() {
-    return "dbPath was not overwritten!";
-  }
-
-  public get META(): IFmModelMeta<T> {
-    return getModelMeta(this._model);
-  }
-
-  /**
-   * A list of all the properties -- and those properties
-   * meta information -- contained on the given model
-   */
-  public get properties(): IFmModelPropertyMeta[] {
-    const meta = getModelMeta(this._model);
-    return meta.properties;
-  }
-
-  /**
-   * A list of all the realtionships -- and those relationships
-   * meta information -- contained on the given model
-   */
-  public get relationships(): IFmModelRelationshipMeta[] {
-    const meta = getModelMeta(this._model);
-    return meta.relationships;
   }
 
   public get dispatch() {
@@ -139,7 +102,7 @@ export class FireModel<S extends ISdk, T extends IModel> {
   /** the connected real-time database */
   public get db(): IDatabaseSdk<S> {
     if (!this._db) {
-      this._db = DefaultDbCache().get() as IDatabaseSdk<S>;
+      this._db = DefaultDbCache().get() as unknown as IDatabaseSdk<S>;
     }
     if (!this._db) {
       const e = new Error(
@@ -156,36 +119,7 @@ export class FireModel<S extends ISdk, T extends IModel> {
     return (this._model as IModel).META.pushKeys;
   }
 
-  public static auditLogs: string = "/auditing";
-
-  /**
-   * **connect**
-   *
-   * This static initializer facilitates connecting **FireModel** with
-   * the firebase database in a compact and convenient way:
-```typescript
-import { DB } from 'abstracted-xxx';
-const db = await FireModel.connect(DB, options);
-```
-   * This method not only sets **FireModel**'s `defaultDb` property but
-   * also returns a reference to the `abstracted-client`/`abstracted-admin`
-   * object so you can use this externally to FireModel should you choose to.
-   *
-   * Note: each _CRUD_ action in FireModel allows passing
-   * in a DB connection (which opens up the possibility of multiple firebase
-   * databases) but the vast majority of projects only have ONE firebase
-   * database so this just makes the whole process much easier.
-   */
-  public static async connect<S extends ISdk, T extends IDatabaseSdk<S>>(
-    RTDB: {
-      connect: (options: Partial<IAdminConfig> & IClientConfig) => T;
-    },
-    options: Partial<IAdminConfig> & IClientConfig
-  ) {
-    const db = RTDB.connect(options);
-    DefaultDbCache().set(db);
-    return db;
-  }
+  public static auditLogs = "/auditing";
 
   public static register<T extends IModel = IModel>(model: new () => T) {
     modelRegister(model);
@@ -195,8 +129,8 @@ const db = await FireModel.connect(DB, options);
     return listRegisteredModels();
   }
 
-  public static lookupModel(name: string) {
-    return modelRegistryLookup(name);
+  public static lookupModel<T extends IModel>(name: string) {
+    return modelRegistryLookup<T>(name);
   }
 
   //#region STATIC INTERFACE
@@ -205,8 +139,8 @@ const db = await FireModel.connect(DB, options);
     // TODO: implement this!
     return false;
   }
-  private static _defaultDb: IDatabaseSdk<any>;
-  private static _dispatchActive: boolean = false;
+  private static _defaultDb: IDatabaseSdk<ISdk>;
+  private static _dispatchActive = false;
   /** the dispatch function used to interact with frontend frameworks */
   private static _dispatch: IReduxDispatch = defaultDispatch;
 

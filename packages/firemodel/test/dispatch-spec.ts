@@ -60,18 +60,6 @@ describe("Dispatch →", () => {
     });
   });
 
-  it("set() immediately changes value on Record", async () => {
-    const person = await Record.add(Person, {
-      name: "Jane",
-      age: 18,
-    });
-
-    const p = person.set("name", "Carol");
-    expect(person.isDirty).toBe(true);
-    expect(person.get("name")).toBe("Carol");
-    await p;
-    expect(person.isDirty).toBe(false);
-  });
 
   it("waiting for set() fires the appropriate Redux event; and inProgress is set", async () => {
     const events: Array<IFmWatchEvent<Person>> = [];
@@ -84,7 +72,6 @@ describe("Dispatch →", () => {
     await person.set("name", "Carol");
     expect(person.get("name")).toBe("Carol"); // local change took place
     expect(events.length).toBe(2); // two phase commit
-    expect(person.isDirty).toBe(false); // value  back to false
 
     // 1st EVENT (local change)
     let event = events[0];
