@@ -2,13 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   IDatabaseSdk,
-  IAdminConfig,
-  IClientConfig,
   ISdk,
   IModel,
-  IFmModelMeta,
-  IFmModelPropertyMeta,
-  IFmModelRelationshipMeta,
 } from "universal-fire";
 import { IDictionary } from "common-types";
 import {
@@ -17,18 +12,14 @@ import {
 } from "@/types";
 
 import {
-  getModelMeta,
   modelRegister,
   listRegisteredModels,
   modelRegistryLookup,
 } from "@/util";
 
 import { Record, DefaultDbCache } from "@/core";
-import { pluralize } from "native-dash";
 
 const defaultDispatch: IReduxDispatch<any, any> = async (context) => "";
-
-const registeredModules: IDictionary<new () => any> = {};
 
 export class FireModel<S extends ISdk, T extends IModel> {
   public static get defaultDb() {
