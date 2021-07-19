@@ -13,7 +13,7 @@ export class Deployment<T extends IDictionary = IDictionary> {
   private queue: Queue<IQueue> = new Queue('queue');
   private schemas: Queue<ISchema> = new Queue("schemas");
   private relationships: Queue<IRelationship> = new Queue('relationships');
-  private store: T;
+  private store: T = {} as T;
 
   /**
    * Queue a schema for deployment to the mock DB
@@ -101,7 +101,7 @@ export class Deployment<T extends IDictionary = IDictionary> {
     return this;
   }
 
-  public generate<T extends any>(): T {
+  public generate(): T {
     // iterate over each schema that has been queued
     // for generation
     this.queue.map((q: IQueue) => {

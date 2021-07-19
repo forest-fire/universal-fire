@@ -1,7 +1,7 @@
 import { IRelationship, ISchema, SchemaCallback } from '~/@types';
 import { addException, Queue, SchemaHelper } from '~/index';
 import { pluralize } from 'native-dash';
-import { getFakerLibrary } from './fakerInitialiation';
+import faker from "faker"
 
 /**
  * The property that exists on the source scheme as a FK reference
@@ -26,7 +26,7 @@ export class Schema<T = any> {
     const schemaId = newSchemaId || this.schemaId;
     this._schemas.enqueue({
       id: schemaId,
-      fn: cb(new SchemaHelper<T>({} as T, getFakerLibrary())), // TODO: pass in support for DB lookups
+      fn: cb(new SchemaHelper<T>({} as T, faker)), // TODO: pass in support for DB lookups
       path: () => {
         const schema: ISchema = this._schemas.find(schemaId);
 

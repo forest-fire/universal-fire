@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+
 import * as fs from 'fs';
 import * as process from 'process';
 import * as yaml from 'js-yaml';
 
+import { first, last } from 'lodash';
 import { stderr, stdout } from 'test-console';
 
 // tslint:disable:no-implicit-dependencies
 import { IDictionary } from 'common-types';
-import {first, last} from 'lodash';
 
 // tslint:disable-next-line
 interface Console {
@@ -26,28 +28,29 @@ interface Console {
   warn(message?: any, ...optionalParams: any[]): void;
 }
 
-declare var console: Console;
+declare let console: Console;
 
 export function restoreStdoutAndStderr() {
   console._restored = true;
 }
 
 export async function timeout(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms, {}));
 }
 
 export function setupEnv() {
   if (!process.env.AWS_STAGE) {
     process.env.AWS_STAGE = 'test';
   }
-  const stage = process.env.AWS_STAGE || process.env.NODE_ENV || 'test';
-  process.env.AWS_STAGE = stage;
-  process.env.NODE_ENV = stage;
+
+  if (process.env.MOCK === undefined) {
+    process.env.MOCK = 'true';
+  }
 
   const current = process.env;
-  const yamlConfig = yaml.load(fs.readFileSync('./env.yml', 'utf8')) as IDictionary<any>;
+  const yamlConfig = yaml.load(fs.readFileSync('./env.yml', 'utf8')) as Record<string, any>;
   const combined = {
-    ...yamlConfig[stage],
+    ...yamlConfig[process.env.AWS_STAGE],
     ...process.env,
   };
 
@@ -66,7 +69,7 @@ export function ignoreStdout() {
 }
 
 export function captureStdout(): () => any {
-  const rStdout: IAsyncStreamCallback = stdout.inspect();
+  const rStdout = stdout.inspect();
   const restore = () => {
     rStdout.restore();
     console._restored = true;
@@ -77,7 +80,7 @@ export function captureStdout(): () => any {
 }
 
 export function captureStderr(): () => any {
-  const rStderr: IAsyncStreamCallback = stderr.inspect();
+  const rStderr  = stderr.inspect();
   const restore = () => {
     rStderr.restore();
     console._restored = true;
@@ -139,7 +142,7 @@ export function lastRecord<T = any>(dictionary: IDictionary<T>) {
 
 export function valuesOf<T = any>(listOf: IDictionary<T>, property: string) {
   const keys: any[] = Object.keys(listOf);
-  return keys.map((key: any) => {
+  return keys.map((key: never) => {
     const item: IDictionary = listOf[key];
     return item[property];
   });

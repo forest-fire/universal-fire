@@ -1,7 +1,7 @@
 import { RealTimeAdmin } from '../src/index';
 
 import * as helpers from './testing/helpers';
-import { IMockConfig, SDK } from '@forest-fire/types';
+import { IMockConfig } from '@forest-fire/types';
 import { Fixture, SchemaCallback } from '@forest-fire/fixture';
 helpers.setupEnv();
 
@@ -26,19 +26,21 @@ describe('Mocking', () => {
   });
 
   it('getSnapshot() returns a mock snapshot', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
+    const mockData = await addAnimals(10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData });
 
     const animals = await db.getSnapshot('/animals');
     expect(animals.numChildren()).toBe(10);
-    animals.forEach(animal => {
-      expect(animal).toHaveProperty("type");
-      expect(animal).toHaveProperty("name");
-      expect(animal).toHaveProperty("age");
-    })
+    animals.forEach((animal) => {
+      expect(animal).toHaveProperty('type');
+      expect(animal).toHaveProperty('name');
+      expect(animal).toHaveProperty('age');
+    });
   });
 
   it('getValue() returns a value from mock DB', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
+    const mockData = await addAnimals(10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData });
 
     const animals = await db.getValue('/animals');
     expect(typeof animals === 'object').toBeTruthy();
@@ -49,7 +51,8 @@ describe('Mocking', () => {
   });
 
   it('getRecord() returns a record from mock DB', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
+    const mockData = await addAnimals(10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData });
 
     const firstKey = helpers.firstKey(db.mock.store.state.animals);
     const animal = await db.getRecord(`/animals/${firstKey}`);
@@ -60,7 +63,8 @@ describe('Mocking', () => {
   });
 
   it('getRecord() returns a record from mock DB with bespoke id prop', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
+    const mockData = await addAnimals(10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData });
 
     const firstKey = helpers.firstKey(db.mock.store.state.animals);
     const animal = await db.getRecord(`/animals/${firstKey}`, 'key');
@@ -72,7 +76,8 @@ describe('Mocking', () => {
   });
 
   it('getList() returns an array of records', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
+    const mockData = await addAnimals(10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData });
     const animals = await db.getList('/animals');
     expect(Array.isArray(animals)).toBeTruthy();
     expect(animals).toHaveLength(10);
@@ -82,7 +87,8 @@ describe('Mocking', () => {
   });
 
   it('getList() returns an array of records, with bespoke "id" property', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
+    const mockData = await addAnimals(10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData });
     const animals = await db.getList('/animals', 'key');
     expect(Array.isArray(animals)).toBeTruthy();
     expect(animals).toHaveLength(10);
@@ -94,15 +100,17 @@ describe('Mocking', () => {
   it.only('set() sets to the mock DB', async () => {
     const db = new RealTimeAdmin({ mocking: true });
     await db.connect();
-    db.set('/people/abcd', {
+    await db.set('/people/abcd', {
       name: 'Frank Black',
       age: 45,
     });
-    const person = await db.getRecord<{ name: string; age: number; id: any }>('/people/abcd');
+    const person = await db.getRecord<{ name: string; age: number; id: any }>(
+      '/people/abcd'
+    );
     expect(person).toHaveProperty('id');
     expect(person).toHaveProperty('name');
     expect(person).toHaveProperty('age');
-    expect(person.id).toBe("abcd");
+    expect(person.id).toBe('abcd');
   });
 
   it('update() updates the mock DB', async () => {
@@ -114,7 +122,7 @@ describe('Mocking', () => {
         age: 45,
       },
     });
-    db.update('/people/abcd', { age: 14 });
+    await db.update('/people/abcd', { age: 14 });
     const people = await db.getRecord('/people/abcd');
     expect(typeof people === 'object').toBeTruthy();
     expect(people).toHaveProperty('id');
@@ -127,7 +135,7 @@ describe('Mocking', () => {
   it('push() pushes records into the mock DB', async () => {
     const db = new RealTimeAdmin({ mocking: true });
     await db.connect();
-    db.push('/people', {
+    await db.push('/people', {
       name: 'Frank Black',
       age: 45,
     });
@@ -142,7 +150,8 @@ describe('Mocking', () => {
 
   // TODO: look into why the fluent API seems to have gotten broken in this test
   it.skip('read operations on mock with a schema prefix are offset correctly', async () => {
-    const db = await RealTimeAdmin.connect({ mocking: true, mockData: addAnimals(10) });
+    const mockData = await addAnimals(10);
+    const db = await RealTimeAdmin.connect({ mocking: true, mockData });
 
     // const fixture = new Fixture()
     //   .addSchema('meal', (h) => () => ({
@@ -160,7 +169,7 @@ describe('Mocking', () => {
 });
 
 async function addAnimals(count: number) {
-  const fixture = new Fixture();
+  const fixture = await Fixture.prepare();
   fixture.addSchema('animal', animalMocker);
   fixture.queueSchema('animal', count);
   return fixture.generate();
