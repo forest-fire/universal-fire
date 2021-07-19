@@ -135,6 +135,8 @@ export interface IMockAuthMgmt<TSdk extends ISdk> {
 
   authProviders: AuthProviderFrom<TSdk>;
 
+  getAuthProvidersNames: () => AuthProviderName[];
+
   /**
    * **findKnownUser**
    *

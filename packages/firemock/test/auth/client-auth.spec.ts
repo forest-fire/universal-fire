@@ -1,28 +1,25 @@
-import 'jest-extended';
-import { Mock } from '../../src/mocking/index';
-
-import {
-  addAuthObserver,
-  authProviders,
-  setCurrentUser,
-  setDefaultAnonymousUid,
-} from '../../src/auth/user-mgmt/index';
 import { createDatabase } from '~/databases';
-import { SDK } from '~/auth/admin-sdk';
+import { AuthProviderName, IMockAuthConfig, SDK } from '~/auth/admin-sdk';
+import { createAuth } from '~/auth';
+import { IClientAuth } from '@forest-fire/types';
 
 describe('Firebase Auth →', () => {
   it('Calling auth() gives you API', async () => {
-    const m = await Fixture.prepare();
-    const auth = await m.auth();
+    const [auth, _] = createAuth('RealTimeClient', {} as IMockAuthConfig);
     expect(auth).toHaveProperty('signInAnonymously');
     expect(auth).toHaveProperty('signInWithEmailAndPassword');
     expect(auth).toHaveProperty('createUserWithEmailAndPassword');
   });
 
   it('Signing in anonymously is defaulted to true', async () => {
-    const m = await Fixture.prepare();
-    const auth = await m.auth();
-    expect(authProviders().includes('anonymous')).toEqual(true);
+    const [_, authManager] = createAuth(
+      'RealTimeClient',
+      {} as IMockAuthConfig
+    );
+
+    expect(
+      authManager.getAuthProvidersNames().includes(AuthProviderName.anonymous)
+    ).toEqual(true);
   });
 
   it('Signing in with email is defaulted to false', async () => {
@@ -31,24 +28,23 @@ describe('Firebase Auth →', () => {
   });
 
   it('signInAnonymously returns uid of default anonymous user (when set)', async () => {
-    const m = await Fixture.prepare();
-    const auth = await m.auth();
-    setDefaultAnonymousUid('1234');
+    const [auth, _] = createAuth('RealTimeClient', {} as IMockAuthConfig);
+
     const user = await auth.signInAnonymously();
 
     expect(user.user.uid).toEqual('1234');
   });
 
   it('signInWithEmail with valid email returns a valid user', async () => {
-    const m = await Fixture.prepare({
+    const m = createDatabase(SDK.RealTimeClient, {
       auth: {
         users: [
           { email: 'test@test.com', password: 'foobar', emailVerified: true },
         ],
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
       },
     });
-    const auth = await m.auth();
+    const auth = m.auth;
     const user = await auth.signInWithEmailAndPassword(
       'test@test.com',
       'foobar'
@@ -59,16 +55,16 @@ describe('Firebase Auth →', () => {
   });
 
   it(`signInWithEmail when user's configuration is passed in asynchronously`, async () => {
-    const m = await Fixture.prepare({
+    const m = createDatabase(SDK.RealTimeClient, {
       auth: {
         users: () =>
           Promise.resolve([
             { email: 'test@test.com', password: 'foobar', emailVerified: true },
           ]),
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
       },
     });
-    const auth = await m.auth();
+    const auth = m.auth;
     const user = await auth.signInWithEmailAndPassword(
       'test@test.com',
       'foobar'
@@ -79,15 +75,15 @@ describe('Firebase Auth →', () => {
   });
 
   it('signInWithEmail with valid email but invalid password fails', async () => {
-    const m = await Fixture.prepare({
+    const m = createDatabase(SDK.RealTimeClient, {
       auth: {
         users: [
           { email: 'test@test.com', password: 'foobar', emailVerified: true },
         ],
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
       },
     });
-    const auth = await m.auth();
+    const auth = m.auth;
     try {
       const user = await auth.signInWithEmailAndPassword(
         'test@test.com',
@@ -101,25 +97,29 @@ describe('Firebase Auth →', () => {
   });
 
   it('createUserWithEmailAndPassword created unverified user', async () => {
-    const m = await Fixture.prepare({
+    const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [],
       },
     });
-    const { userCredential } = await createUser(m, 'test@test.com', 'password');
+    const { userCredential } = await createUser(
+      m.auth,
+      'test@test.com',
+      'password'
+    );
     expect(userCredential.user.email).toEqual('test@test.com');
     expect(userCredential.user.emailVerified).toEqual(false);
   });
 
   it('once user is created, it can be used to login with', async () => {
-    const m = await Fixture.prepare({
+    const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [],
       },
     });
-    const { auth } = await createUser(m, 'test@test.com', 'password');
+    const { auth } = await createUser(m.auth, 'test@test.com', 'password');
     const userCredentials = await auth.signInWithEmailAndPassword(
       'test@test.com',
       'password'
@@ -128,18 +128,18 @@ describe('Firebase Auth →', () => {
   });
 
   it('userCredential passed back from creation allows password reset', async () => {
-    const m = await Fixture.prepare({
+    const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [],
       },
     });
     const { userCredential, auth } = await createUser(
-      m,
+      m.auth,
       'test@test.com',
       'password'
     );
-    setCurrentUser(userCredential);
+    m.authManager.setCurrentUser(userCredential);
     expect(userCredential.user.updatePassword).toBeFunction();
 
     await userCredential.user.updatePassword('foobar');
@@ -148,9 +148,9 @@ describe('Firebase Auth →', () => {
 
   it('calls to getIdToken() respond with value configured when available', async () => {
     const expectedToken = '123456789';
-    const m = await Fixture.prepare({
+    const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [
           {
             email: 'test@company.com',
@@ -161,7 +161,7 @@ describe('Firebase Auth →', () => {
       },
     });
 
-    const auth = await m.auth();
+    const auth = m.auth;
     const user = await auth.signInWithEmailAndPassword(
       'test@company.com',
       'foobar'
@@ -173,17 +173,17 @@ describe('Firebase Auth →', () => {
 
   it('signInWithEmailAndPassword should notify authObservers', async () => {
     const user = { email: 'test@test.com', password: 'foobar' };
-    const m = await Fixture.prepare({
+    const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [user],
       },
     });
 
-    const auth = await m.auth();
+    const auth = m.auth;
 
     let hasBeenNotified = false;
-    addAuthObserver(() => (hasBeenNotified = true));
+    m.authManager.addAuthObserver(() => (hasBeenNotified = true));
     await auth.signInWithEmailAndPassword(user.email, user.password);
 
     expect(hasBeenNotified).toEqual(true);
@@ -191,25 +191,24 @@ describe('Firebase Auth →', () => {
 
   it('signOut should notify authObservers', async () => {
     const user = { email: 'test@test.com', password: 'foobar' };
-    const m = await Fixture.prepare({
+    const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: ['emailPassword'],
+        providers: [AuthProviderName.emailPassword],
         users: [user],
       },
     });
 
-    const auth = await m.auth();
+    const auth = m.auth;
 
     let hasBeenNotified = false;
-    addAuthObserver(() => (hasBeenNotified = true));
+    m.authManager.addAuthObserver(() => (hasBeenNotified = true));
     await auth.signOut();
 
     expect(hasBeenNotified).toEqual(true);
   });
 });
 
-async function createUser(mock: Mock, email: string, password: string) {
-  const auth = await mock.auth();
+async function createUser(auth: IClientAuth, email: string, password: string) {
   const userCredential = await auth.createUserWithEmailAndPassword(
     email,
     password

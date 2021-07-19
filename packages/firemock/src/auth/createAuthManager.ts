@@ -293,6 +293,10 @@ export function createAuthManager<TSdk extends ISdk>(
   const authProviders: AuthProviderFrom<TSdk> = isAdminSdk(sdk)
     ? undefined
     : (_authProviders as AuthProviderFrom<TSdk>);
+  
+  const getAuthProvidersNames = () => {
+    return _providers;
+  }
 
   const networkDelay = async () => {
     await delay(_networkDelay);
@@ -324,5 +328,6 @@ export function createAuthManager<TSdk extends ISdk>(
     removeFromUserPool,
     setNetworkDelay,
     authProviders,
+    getAuthProvidersNames
   };
 }
