@@ -5,32 +5,33 @@ import { IClientAuth } from '@forest-fire/types';
 
 describe('Firebase Auth →', () => {
   it('Calling auth() gives you API', async () => {
-    const [auth, _] = createAuth('RealTimeClient', {} as IMockAuthConfig);
-    expect(auth).toHaveProperty('signInAnonymously');
-    expect(auth).toHaveProperty('signInWithEmailAndPassword');
-    expect(auth).toHaveProperty('createUserWithEmailAndPassword');
+    const m = createDatabase('RealTimeClient');
+    expect(m.auth).toHaveProperty('signInAnonymously');
+    expect(m.auth).toHaveProperty('signInWithEmailAndPassword');
+    expect(m.auth).toHaveProperty('createUserWithEmailAndPassword');
   });
 
   it('Signing in anonymously is defaulted to true', async () => {
-    const [_, authManager] = createAuth(
-      'RealTimeClient',
-      {} as IMockAuthConfig
-    );
+    const m = createDatabase('RealTimeClient');
 
     expect(
-      authManager.getAuthProvidersNames().includes(AuthProviderName.anonymous)
+      m.authManager.getAuthProvidersNames().includes(AuthProviderName.anonymous)
     ).toEqual(true);
   });
 
   it('Signing in with email is defaulted to false', async () => {
     const m = createDatabase(SDK.RealTimeClient);
-    expect(Object.keys(m.authManager).includes('emailPassword')).toEqual(false);
+    expect(
+      Object.keys(m.authManager.getAuthProvidersNames()).includes(
+        'emailPassword'
+      )
+    ).toEqual(false);
   });
 
   it('signInAnonymously returns uid of default anonymous user (when set)', async () => {
-    const [auth, _] = createAuth('RealTimeClient', {} as IMockAuthConfig);
+    const m = createDatabase('RealTimeClient');
 
-    const user = await auth.signInAnonymously();
+    const user = await m.auth.signInAnonymously();
 
     expect(user.user.uid).toEqual('1234');
   });
@@ -49,7 +50,7 @@ describe('Firebase Auth →', () => {
       'test@test.com',
       'foobar'
     );
-    expect(user.user.email).toBeString();
+    expect(typeof user.user.email).toEqual('string');
     expect(user.user.email).toEqual('test@test.com');
     expect(user.user.emailVerified).toEqual(true);
   });
@@ -69,7 +70,7 @@ describe('Firebase Auth →', () => {
       'test@test.com',
       'foobar'
     );
-    expect(user.user.email).toBeString();
+    expect(typeof user.user.email).toEqual('string');
     expect(user.user.email).toEqual('test@test.com');
     expect(user.user.emailVerified).toEqual(true);
   });
@@ -140,7 +141,7 @@ describe('Firebase Auth →', () => {
       'password'
     );
     m.authManager.setCurrentUser(userCredential);
-    expect(userCredential.user.updatePassword).toBeFunction();
+    expect(typeof userCredential.user.updatePassword).toEqual('function');
 
     await userCredential.user.updatePassword('foobar');
     await auth.signInWithEmailAndPassword('test@test.com', 'foobar');

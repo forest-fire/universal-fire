@@ -1,22 +1,17 @@
 import { IDictionary } from 'common-types';
-import { Mock } from '../../src/mocking';
-import { adminAuthSdk } from '../../src';
-import { clearAuthUsers } from '../../src/auth/user-mgmt';
-import 'jest-extended';
+import { createDatabase } from '../../src';
+import { AuthProviderName, SDK } from '~/auth/admin-sdk';
 
 describe('Admin Auth => ', () => {
-  beforeEach(async () => {
-    clearAuthUsers();
-  });
-
   it('using a direct import, primary functions are in place', async () => {
-    hasExpectedFunctions(adminAuthSdk);
+    const m = createDatabase(SDK.RealTimeAdmin);
+
+    hasExpectedFunctions(m.auth);
   });
 
   it('returned UserRecord has correct props when calling createUser', async () => {
-    const m = await Fixture.prepare();
-    const auth = await m.auth();
-    const admin = adminAuthSdk;
+    const m = createDatabase(SDK.RealTimeAdmin);
+    const admin = m.auth;
     const response = await admin.createUser({
       email: 'test@test.com',
       disabled: false,
@@ -26,25 +21,26 @@ describe('Admin Auth => ', () => {
       password: 'foobar',
     });
     // UserRecord has correct props
-    expect(response).toBeInstanceOf(Object);
+    expect(typeof response).toEqual("object");
     expect(response.uid).toBe('1234');
     expect(response.email).toBe('test@test.com');
     expect(response.displayName).toBe('John Smith');
     expect(response.disabled).toBe(false);
   });
 
-  it('creating a User allows the client API to use that user to login', async () => {
-    const m = await Fixture.prepare({ auth: { providers: ['emailPassword'] } });
-    const auth = await m.auth();
-    const admin = adminAuthSdk;
-    await admin.createUser({
-      email: 'test@test.com',
-      disabled: false,
-      displayName: 'John Smith',
-      emailVerified: true,
-      uid: '1234',
-      password: 'foobar',
-    });
+  // TODO: Since now we are not using a global state for users, creating in-memory client and admin instances, they will hold their own state. This test does not make sense anymore  
+  it.skip('creating a User allows the client API to use that user to login', async () => {
+    const m = createDatabase(SDK.RealTimeClient,{ auth: { providers: [AuthProviderName.emailPassword] } });
+    const auth = m.auth;
+    // const admin = createAdminAuth(m.authManager);
+    // await admin.createUser({
+    //   email: 'test@test.com',
+    //   disabled: false,
+    //   displayName: 'John Smith',
+    //   emailVerified: true,
+    //   uid: '1234',
+    //   password: 'foobar',
+    // });
 
     const response = await auth.signInWithEmailAndPassword(
       'test@test.com',
@@ -58,7 +54,9 @@ describe('Admin Auth => ', () => {
   });
 
   it('using admin API ... can create, update, then delete two users; listing at every step', async () => {
-    const admin = adminAuthSdk;
+    const m = createDatabase(SDK.RealTimeAdmin,{ auth: { providers: [AuthProviderName.emailPassword] } });
+
+    const admin = m.auth;
     await admin.createUser({
       email: 'john@test.com',
       displayName: 'John Smith',

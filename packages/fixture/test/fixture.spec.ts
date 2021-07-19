@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import * as helpers from './testing/helpers';
 import { Fixture, SchemaHelper, SchemaCallback } from '@forest-fire/fixture';
-import 'jest-extended';
 import { createDatabase } from '~/databases';
 import { SDK } from '~/auth/admin-sdk';
 import { first } from 'native-dash';
@@ -15,17 +14,8 @@ const employeeMocker: SchemaCallback = (h: SchemaHelper) => () => ({
 });
 
 describe('Mock class()', () => {
-  it.skip('using Mock without prepare() does not provide faker support at onset', async () => {
-    const m = new Fixture();
-    // this is unreliable; it may or may not be resolved
-    expect(m.faker).toBeUndefined();
-  });
 
-  it('using Fixture.prepare() initializer returns immediate use of faker library', async () => {
-    const m = await Fixture.prepare();
-    expect(m.faker).toBeInstanceOf(Object);
-    expect(m.faker.address.city).toBeFunction();
-  });
+
 
   it('Mock a Schema API structured correctly', async () => {
     const m = await Fixture.prepare();

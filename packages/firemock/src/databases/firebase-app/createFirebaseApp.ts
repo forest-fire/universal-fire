@@ -3,8 +3,9 @@ import { ISdk, IMockStore, IAdminApp, IClientApp, AdminSdk, isAdminSdk } from "@
 import { FireMockError } from "~/errors";
 
 export function createFirebaseApp<TSdk extends ISdk>(sdk: TSdk, store: IMockStore<TSdk>): TSdk extends AdminSdk ? IAdminApp : IClientApp {
+  const name = store.config?.name || "default";
   const client = {
-    name: store.config.name,
+    name,
     options: {},
     automaticDataCollectionEnabled: false,
     delete: async () => {
@@ -13,7 +14,7 @@ export function createFirebaseApp<TSdk extends ISdk>(sdk: TSdk, store: IMockStor
   } as unknown as IClientApp;
 
   const admin = {
-    name: store.config.name,
+    name,
     auth() {
       throw new FireMockError(
         `database.auth() does not have an implementation in Firemock`

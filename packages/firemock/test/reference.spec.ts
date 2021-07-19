@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Fixture, SchemaHelper, SchemaCallback } from '@forest-fire/fixture';
 import * as convert from 'typed-conversions';
 import * as helpers from './testing/helpers';
@@ -37,15 +33,16 @@ describe('Reference functions', () => {
       const fixture = m.queueSchema('foo', 5).generate();
       mock.store.setDb("/", fixture);
 
-      return mock.db
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return await mock.db
         .ref('/foos')
         .once('value')
         .then((results) => {
           expect(results.numChildren()).toBe(5);
-          expect(helpers.firstRecord(results.val()).name).toBeInstanceOf(
+          expect(typeof helpers.firstRecord(results.val()).name).toEqual(
             'string'
           );
-          expect(helpers.firstRecord(results.val()).age).toBeInstanceOf(
+          expect(typeof helpers.firstRecord(results.val()).age).toEqual(
             'number'
           );
         });
@@ -59,12 +56,12 @@ describe('Reference functions', () => {
 
       const results = await mock.db.ref('/foos').once('value');
       expect(results.numChildren()).toBe(5);
-      expect(helpers.firstRecord(results.val()).name).toBeString();
-      expect(helpers.firstRecord(results.val()).age).toBeNumber();
+      expect(typeof helpers.firstRecord(results.val()).name).toEqual("string");
+      expect(typeof helpers.firstRecord(results.val()).age).toEqual("number");
     });
 
     it.skip('with named delay, querying returns an asynchronous result', async () => {
-      const m = await Fixture.prepare();
+      const m = Fixture.prepare();
 
       m.addSchema('foo', mocker);
       m.addSchema('bar', mocker);
@@ -74,15 +71,16 @@ describe('Reference functions', () => {
       mock.store.setDb("/", fixture);
 
       mock.store.setNetworkDelay(NetworkDelay.mobile3g);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return mock.db
         .ref('/foos')
         .once('value')
         .then((results) => {
           expect(results.numChildren()).toBe(5);
-          expect(helpers.firstRecord(results.val()).name).toBeInstanceOf(
+          expect(typeof helpers.firstRecord(results.val()).name).toEqual(
             'string'
           );
-          expect(helpers.firstRecord(results.val()).age).toBeInstanceOf(
+          expect(typeof helpers.firstRecord(results.val()).age).toEqual(
             'number'
           );
         });
@@ -95,15 +93,16 @@ describe('Reference functions', () => {
       m.queueSchema('foo', 5).queueSchema('bar', 5).generate();
 
       mock.store.setNetworkDelay([50, 80]);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return mock.db
         .ref('/foos')
         .once('value')
         .then((results) => {
           expect(results.numChildren()).toBe(5);
-          expect(helpers.firstRecord(results.val()).name).toBeInstanceOf(
+          expect(typeof helpers.firstRecord(results.val()).name).toEqual(
             'string'
           );
-          expect(helpers.firstRecord(results.val()).age).toBeInstanceOf(
+          expect(typeof helpers.firstRecord(results.val()).age).toEqual(
             'number'
           );
         });
@@ -640,7 +639,7 @@ describe('CRUD actions', () => {
     expect(person.age).toBe(35);
     expect(person.lastUpdated).toBe(now);
     expect(person.foo.bar).toBe(5);
-    expect(person.foo.baz).toBeUndefined();
+    expect(person.foo.baz).toBe(undefined);
   });
 
   it('remove() will remove data at referenced path', async () => {
