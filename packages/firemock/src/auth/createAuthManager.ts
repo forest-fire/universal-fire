@@ -1,4 +1,4 @@
-import { FireMockError } from "../errors";
+import { FireMockError } from '../errors';
 import {
   IMockUser,
   IMockUserRecord,
@@ -10,7 +10,6 @@ import {
   UpdateRequest,
   IAuthObserver,
   NetworkDelay,
-  AuthProviders,
   IClientAuthProviders,
   ClientSdk,
   AdminSdk,
@@ -28,16 +27,19 @@ import {
 } from './type-guards/index';
 import { toUser } from './util';
 import { networkDelay as delay } from '../util';
-import _authProviders from "./client-sdk/AuthProviders";
+import _authProviders from './client-sdk/AuthProviders';
 
-export type SdkFromProviders<T extends IClientAuthProviders | undefined> = T extends IClientAuthProviders ? ClientSdk : AdminSdk;
+export type SdkFromProviders<T extends IClientAuthProviders | undefined> =
+  T extends IClientAuthProviders ? ClientSdk : AdminSdk;
 
 /**
  * Creates an Auth Admin Manager API which can be used for advanced
- * test use cases. This API will be appropriately adjusted based on 
+ * test use cases. This API will be appropriately adjusted based on
  * whether this is an Admin or Client SDK.
  */
-export function createAuthManager<TSdk extends ISdk>(sdk: TSdk): IMockAuthMgmt<TSdk> {
+export function createAuthManager<TSdk extends ISdk>(
+  sdk: TSdk
+): IMockAuthMgmt<TSdk> {
   const _anonymousUidQueue: string[] = [];
   let _providers: AuthProviderName[];
   const _authObservers: IAuthObserver[] = [];
@@ -217,6 +219,11 @@ export function createAuthManager<TSdk extends ISdk>(sdk: TSdk): IMockAuthMgmt<T
   };
 
   const initializeAuth = async (config: IMockAuthConfig): Promise<void> => {
+    config = {
+      providers: [AuthProviderName.anonymous],
+      users: [],
+      ...config,
+    };
     _providers =
       typeof config.providers === 'function'
         ? await config.providers()
@@ -278,7 +285,9 @@ export function createAuthManager<TSdk extends ISdk>(sdk: TSdk): IMockAuthMgmt<T
     //
   };
 
-  const authProviders: AuthProviderFrom<TSdk> = isAdminSdk(sdk) ? undefined : _authProviders as AuthProviderFrom<TSdk>;
+  const authProviders: AuthProviderFrom<TSdk> = isAdminSdk(sdk)
+    ? undefined
+    : (_authProviders as AuthProviderFrom<TSdk>);
 
   const networkDelay = async () => {
     await delay(_networkDelay);
@@ -309,6 +318,6 @@ export function createAuthManager<TSdk extends ISdk>(sdk: TSdk): IMockAuthMgmt<T
     networkDelay,
     removeFromUserPool,
     setNetworkDelay,
-    authProviders
+    authProviders,
   };
 }

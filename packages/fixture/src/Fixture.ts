@@ -2,12 +2,9 @@ import { IDictionary } from 'common-types';
 import {
   Schema,
   Deployment,
-  getFakerLibrary,
-  importFakerLibrary,
   Queue,
   SchemaCallback,
 } from '~/index';
-import { FixtureError } from './errors/FixtureError';
 
 export class Fixture<T extends IDictionary> {
   private _schema: Schema;
@@ -16,28 +13,19 @@ export class Fixture<T extends IDictionary> {
   /**
    * Static initializer
    */
-  public static async prepare<T extends IDictionary = IDictionary>() {
-    await importFakerLibrary();
-
+  public static prepare<T extends IDictionary = IDictionary>() {
     const obj = new Fixture<T>();
 
     return obj;
   }
 
   public get deploy() {
-    return new Deployment();
+    return new Deployment<T>();
   }
 
   constructor() {
     Queue.clearAll();
     this.store = {};
-  }
-
-  /**
-   * returns an instance static FakerJS libraray
-   */
-  public get faker() {
-    return getFakerLibrary();
   }
 
   public addSchema(schema: string, mock?: SchemaCallback<T>) {
@@ -63,13 +51,6 @@ export class Fixture<T extends IDictionary> {
   }
 
   public generate<T extends any>(): T {
-    const faker = getFakerLibrary();
-    if (!faker && !faker.address) {
-      throw new FixtureError(
-        `The Faker library must be loaded before you can generate mocked data can be returned`,
-        'firemock/faker-not-ready'
-      );
-    }
-    return new Deployment().generate<T>();
+    return new Deployment<T>().generate();
   }
 }

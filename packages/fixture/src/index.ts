@@ -12,7 +12,6 @@ export * from "./Deployment";
 export * from "./Fixture";
 export * from "./Queue";
 export * from "./Schema";
-export * from "./fakerInitialiation";
 export * from "./schema-helper";
 
 // directory exports

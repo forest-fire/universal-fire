@@ -47,7 +47,7 @@ describe(`Connect to the database but don't re-connect`, () => {
     });
 
     it.skip('Going offline disconnects', async () => {
-      let db = await RealTimeAdmin.connect();
+      const db = await RealTimeAdmin.connect();
       db.goOffline();
       expect(RealTimeAdmin.connections).toHaveLength(0);
     });

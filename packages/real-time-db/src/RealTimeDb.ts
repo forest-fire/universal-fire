@@ -37,6 +37,7 @@ import {
   AppFrom,
   IsAdminSdk,
   IFirestoreSdk,
+  AuthProviderName,
 } from '@forest-fire/types';
 
 import { createError } from 'brilliant-errors';
@@ -489,7 +490,10 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    * and converts it to a JS object where the snapshot's key
    * is included as part of the record (as `id` by default)
    */
-  public async getRecord<T extends any = any>(path: string, idProp = 'id'): Promise<T> {
+  public async getRecord<T extends any = any>(
+    path: string,
+    idProp = 'id'
+  ): Promise<T> {
     try {
       const snap = await this.getSnapshot<T>(path);
       let object = snap.val();
@@ -624,14 +628,15 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    */
   protected getFiremock(config: IMockConfig): void {
     try {
-      createDatabase(
+      this._mock = createDatabase(
         this.sdk,
-        { ...(config.mockAuth ? { auth: config.mockAuth } : {}), db: { mocking: true } },
-        config.mockData || {},
+        { auth: config.mockAuth, db: { mocking: true, name: config.name } },
+        config.mockData || {}
       );
     } catch (e) {
       throw new FireError(
-        `A problem was encountered while trying to setup the mock database: ${(e as Error).message
+        `A problem was encountered while trying to setup the mock database: ${
+          (e as Error).message
         }`,
         'failed-mock-prep'
       );

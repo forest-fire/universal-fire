@@ -21,14 +21,14 @@ describe('Query based Read ops:', () => {
     };
   };
   beforeAll(async () => {
-    const f = new Fixture();
+    const f = await Fixture.prepare();
     f.addSchema('person', personMockGenerator);
     f.queueSchema('person', 20);
     f.queueSchema('person', 5, { age: 100 });
     f.queueSchema('person', 5, { age: 1 });
     f.queueSchema('person', 3, { age: 3 });
     const fixture = f.generate();
-    const db = await RealTimeAdmin.connect({ mocking: true, mockData: fixture });
+    db = await RealTimeAdmin.connect({ mocking: true, mockData: fixture });
   });
 
   it('getSnapshot() works with query passed in', async () => {
