@@ -12,6 +12,7 @@ export * from "./networkDelay";
 export * from "./other";
 export * from "./pluralize";
 export * from "./sortFns";
+export * from "./set";
 
 // Note:
 // -----

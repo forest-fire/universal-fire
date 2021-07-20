@@ -7,9 +7,10 @@ import {
   getParent,
   join,
   networkDelay as delay,
+  set,
 } from '../util';
 
-import { get, set } from 'native-dash';
+import { get } from 'native-dash';
 import { deepEqual } from 'fast-equals';
 import copy from 'fast-copy';
 import { key as fbKey } from 'firebase-key';
