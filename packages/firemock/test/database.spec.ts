@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import { firstKey } from 'native-dash';
 import {
   GenericEventHandler,
@@ -7,7 +8,7 @@ import {
 } from '~/index';
 import { IMockDatabase, SDK } from '@forest-fire/types';
 
-import * as helpers from "./testing/helpers";
+import * as helpers from './testing/helpers';
 
 import { SchemaCallback, Fixture } from '@forest-fire/fixture';
 import { createDatabase } from '~/databases/createDatabase';
@@ -95,10 +96,15 @@ describe('Database', () => {
       db.store.addListener('/path/to/moved', 'child_moved', callback);
       db.store.removeListener('value');
       expect(db.store.getAllListeners()).toHaveLength(3);
-      expect(db.store.getAllListeners().filter(l => l.eventType === 'value')).toBe(1);
-      db.store.getAllListeners().filter(l => l.eventType === 'value').forEach((l) => {
-        expect(l).toContain('value3');
-      });
+      expect(
+        db.store.getAllListeners().filter((l) => l.eventType === 'value')
+      ).toBe(1);
+      db.store
+        .getAllListeners()
+        .filter((l) => l.eventType === 'value')
+        .forEach((l) => {
+          expect(l).toContain('value3');
+        });
     });
 
     it('can remove listeners of same eventType, callback, and context', () => {
@@ -108,7 +114,13 @@ describe('Database', () => {
       const context2 = { foo: 'baz' };
       db.store.removeAllListeners();
       db.store.addListener('/path/to/value1', 'value', callback, null, context);
-      db.store.addListener('/path/to/value2', 'value', callback2, null, context);
+      db.store.addListener(
+        '/path/to/value2',
+        'value',
+        callback2,
+        null,
+        context
+      );
       db.store.addListener(
         '/path/to/added',
         'child_added',
@@ -116,7 +128,13 @@ describe('Database', () => {
         null,
         context
       );
-      const cb2 = db.store.addListener('/path/to/value3', 'value', callback2, null, context2);
+      const cb2 = db.store.addListener(
+        '/path/to/value3',
+        'value',
+        callback2,
+        null,
+        context2
+      );
       const cb = db.store.addListener(
         '/path/to/moved',
         'child_moved',
@@ -127,7 +145,9 @@ describe('Database', () => {
       expect(db.store.getAllListeners()).toHaveLength(5);
       db.store.removeListener(cb2.id);
       expect(db.store.getAllListeners()).toHaveLength(4);
-      expect(listenerPaths('value')).toHaveLength(2);
+      expect(
+        db.store.getAllListeners()?.filter((evt) => evt.eventType === 'value')
+      ).toHaveLength(2);
     });
 
     it('cancel callbacks are called when set', () => {
@@ -136,8 +156,18 @@ describe('Database', () => {
       const callback2: GenericEventHandler = () => undefined;
       const cancelCallback = () => count++;
       db.store.removeAllListeners();
-      db.store.addListener('/path/to/value1', 'value', callback, cancelCallback);
-      db.store.addListener('/path/to/value2', 'value', callback2, cancelCallback);
+      db.store.addListener(
+        '/path/to/value1',
+        'value',
+        callback,
+        cancelCallback
+      );
+      db.store.addListener(
+        '/path/to/value2',
+        'value',
+        callback2,
+        cancelCallback
+      );
       db.store.addListener(
         '/path/to/added',
         'child_added',
@@ -149,8 +179,18 @@ describe('Database', () => {
       let howMany = db.store.removeAllListeners();
       expect(howMany).toBe(3);
       expect(count).toBe(3);
-      db.store.addListener('/path/to/value1', 'value', callback, cancelCallback);
-      db.store.addListener('/path/to/value2', 'value', callback2, cancelCallback);
+      db.store.addListener(
+        '/path/to/value1',
+        'value',
+        callback,
+        cancelCallback
+      );
+      db.store.addListener(
+        '/path/to/value2',
+        'value',
+        callback2,
+        cancelCallback
+      );
       db.store.addListener(
         '/path/to/added',
         'child_added',
@@ -232,10 +272,8 @@ describe('Database', () => {
     //   db.store.addListener('/auth/people', 'value', callback);
     //   db.store.addListener('/auth/company', 'child_removed', callback);
     //   const listeners = db.store.findChildListeners('/auth/people');
-
     //   expect(listeners).toHaveLength(3);
     // });
-
     // it('find all child listeners at a path below the listening path', () => {
     //   const callback: HandleValueEvent = (snap) => undefined;
     //   db.store.removeAllListeners();
@@ -246,10 +284,8 @@ describe('Database', () => {
     //   db.store.addListener('/auth/people', 'value', callback);
     //   db.store.addListener('/auth/company', 'child_removed', callback);
     //   const listeners = findChildListeners('/auth/people/1234');
-
     //   expect(listeners).toHaveLength(3);
     // });
-
     // it('find all child listeners at a path and event type', () => {
     //   const callback: HandleValueEvent = (snap) => undefined;
     //   db.store.removeAllListeners();
@@ -262,7 +298,6 @@ describe('Database', () => {
     //   const listeners = findChildListeners('/auth/people', 'child_added');
     //   expect(listeners).toHaveLength(1);
     // });
-
     // it('find all value listeners at a path', () => {
     //   const callback: HandleValueEvent = (snap) => undefined;
     //   db.store.removeAllListeners();
@@ -322,10 +357,10 @@ describe('Database', () => {
       status = 'has-listener';
       const people = await m.db.ref('/people').once('value');
 
-      firstKey = helpers.firstKey(people.val());
-      firstRecord = helpers.firstRecord(people.val());
+      const _firstKey = helpers.firstKey(people.val());
+      const _firstRecord = helpers.firstRecord(people.val());
 
-      db.store.updateDb(`/people/${firstKey}`, { age: firstRecord.age + 1 });
+      db.store.updateDb(`/people/${_firstKey}`, { age: _firstRecord.age + 1 });
     });
 
     it('"value" responds to deeply nested CHANGE', () => {
@@ -358,9 +393,9 @@ describe('Database', () => {
       let status = 'starting';
       const people = (await m.db.ref('/people').once('value')).val();
       expect(Object.keys(people)).toHaveLength(10);
-      const firstPerson = firstKey(people);
+      const firstPerson = firstKey(people) as string;
 
-      const callback: IFirebaseEventHandler = (snap) => {
+      const callback: IFirebaseEventHandler<SDK.RealTimeAdmin> = (snap) => {
         const list = snap.val();
         if (list) {
           expect(snap.numChildren()).toBe(status === 'starting' ? 10 : 9);
@@ -382,7 +417,7 @@ describe('Database', () => {
       status = 'after';
       db.store.removeDb(`/people/${firstPerson}`);
 
-      const andThen = (await m.ref('/people').once('value')).val();
+      const andThen = (await m.db.ref('/people').once('value')).val();
 
       expect(Object.keys(andThen)).toHaveLength(9);
       expect(Object.keys(andThen)).toEqual(
@@ -394,9 +429,13 @@ describe('Database', () => {
   describe('Initialing DB state', () => {
     it('passing in dictionary for db config initializes the DB', () => {
       db.store.reset();
-      const m = createDatabase(SDK.RealTimeAdmin, {}, {
-        db: { foo: { bar: true, baz: true } },
-      });
+      const m = createDatabase(
+        SDK.RealTimeAdmin,
+        {},
+        {
+          db: { foo: { bar: true, baz: true } },
+        }
+      );
 
       expect(m.store.getDb()).toBeInstanceOf(Object);
       expect(m.store.getDb().foo).toBeInstanceOf(Object);
@@ -531,7 +570,9 @@ describe('Database', () => {
       const callback: HandleValueEvent = (snap) => {
         if (ready) {
           throw new Error(
-            `Should NOT have called callback! [ ${snap.key}, ${snap.val() as string} ]`
+            `Should NOT have called callback! [ ${snap.key as string}, ${
+              snap.val() as string
+            } ]`
           );
         }
       };

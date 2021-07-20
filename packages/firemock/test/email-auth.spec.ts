@@ -14,7 +14,7 @@ describe('EmailAuthProvider =>', () => {
 
   it('EmailAuthProvider exists on client API', () => {
     const credential = mock.authManager.authProviders.EmailAuthProvider.credential;
-    expect(credential).toBeFunction();
+    expect(typeof credential).toEqual('function');
   });
 
   it('calling EmailAuthProvider.credential() gives back a valid AuthCredential', () => {
@@ -23,9 +23,9 @@ describe('EmailAuthProvider =>', () => {
       'me@somewhere.com',
       "i'm a little teacup"
     );
-    expect(response).toBeInstanceOf(Object);
-    expect(response.providerId).toBeString();
+    expect(typeof response === "object").toBeTruthy();
+    expect(typeof response.providerId).toEqual("string");
     expect(response.signInMethod).toBe('email-and-password');
-    expect(response.toJSON).toBeFunction();
+    expect(typeof response.toJSON).toEqual("function");
   });
 });

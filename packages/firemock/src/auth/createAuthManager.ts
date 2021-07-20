@@ -222,12 +222,17 @@ export function createAuthManager<TSdk extends ISdk>(
     config = {
       providers: [AuthProviderName.anonymous],
       users: [],
+      options: {
+        networkDelay: NetworkDelay.wifi,
+      },
       ...config,
     };
     _providers =
       typeof config.providers === 'function'
         ? await config.providers()
         : config.providers;
+
+    setNetworkDelay(config.options.networkDelay);
 
     const users =
       typeof config.users === 'function' ? await config.users() : config.users;
@@ -288,6 +293,10 @@ export function createAuthManager<TSdk extends ISdk>(
   const authProviders: AuthProviderFrom<TSdk> = isAdminSdk(sdk)
     ? undefined
     : (_authProviders as AuthProviderFrom<TSdk>);
+  
+  const getAuthProvidersNames = () => {
+    return _providers;
+  }
 
   const networkDelay = async () => {
     await delay(_networkDelay);
@@ -319,5 +328,6 @@ export function createAuthManager<TSdk extends ISdk>(
     removeFromUserPool,
     setNetworkDelay,
     authProviders,
+    getAuthProvidersNames
   };
 }

@@ -1,6 +1,6 @@
 const { resolve } = require('path');
 module.exports = {
-  testMatch: ['**/test/**/?(*-)+(spec|test).[jt]s?(x)'],
+  testMatch: ['**/test/**/?(*[-.])+(spec|test).[jt]s?(x)'],
 
   // Maps a regular expression for a "path" and maps it to a transformer
   // https://jestjs.io/docs/en/configuration#transform-objectstring-pathtotransformer--pathtotransformer-object
@@ -12,7 +12,7 @@ module.exports = {
   transformIgnorePatterns: [
     // "<rootDir>/node_modules/(?!(universal-fire|@forest-fire)).+\\.js$",
     resolve(process.cwd(), 'node_modules') +
-      `/(?!(universal-fire|@forest-fire)).+\\.js$`,
+    `/(?!(universal-fire|@forest-fire)).+\\.js$`,
   ],
 
   // modules which do NOT export CJS must have an entry to

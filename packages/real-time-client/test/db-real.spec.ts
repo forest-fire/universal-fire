@@ -2,7 +2,7 @@
 import * as helpers from './testing/helpers';
 
 import { IDictionary } from 'common-types';
-import { RealTimeClient } from '../src/';
+import { RealTimeClient } from '../src';
 import { SchemaHelper } from '../../fixture/dist/types';
 
 const config = {

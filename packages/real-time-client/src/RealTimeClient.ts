@@ -31,8 +31,7 @@ import { IDictionary } from 'brilliant-errors';
 export const MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';
 
-export class RealTimeClient
-  extends RealTimeDb<SDK.RealTimeClient> {
+export class RealTimeClient extends RealTimeDb<SDK.RealTimeClient> {
   public readonly sdk: SDK.RealTimeClient = SDK.RealTimeClient;
   public readonly apiKind: ApiKind.client = ApiKind.client;
   public readonly dbType: Database.RTDB = Database.RTDB;
@@ -41,7 +40,9 @@ export class RealTimeClient
    * Uses configuration to connect to the `RealTimeDb` database using the Client SDK
    * and then returns a promise which is resolved once the _connection_ is established.
    */
-  public static async connect(config?: IClientConfig | IMockConfig): Promise<RealTimeClient> {
+  public static async connect(
+    config?: IClientConfig | IMockConfig
+  ): Promise<RealTimeClient> {
     const obj = new RealTimeClient(config);
     await obj.connect();
     return obj;
@@ -134,7 +135,9 @@ export class RealTimeClient
           'missing-auth'
         );
       }
-      const providers = (firebase as IDictionary)?.auth ? (firebase as IDictionary)?.auth : undefined;
+      const providers = (firebase as IDictionary)?.auth
+        ? (firebase as IDictionary)?.auth
+        : undefined;
       this._authProviders = providers;
     }
 
@@ -164,13 +167,7 @@ export class RealTimeClient
    * mocked DB.
    */
   protected async _connectMockDb(config: IMockConfig): Promise<void> {
-    const firemock = await this._loadFiremock();
-    const mock = firemock(
-      this.sdk,
-      { auth: config.mockAuth },
-      config.mockData
-    );
-    this._mock = mock;
+    this.getFiremock(config);
     //TODO:
     // this._authProviders = mock.authProviders;
     await this._listenForConnectionStatus();
@@ -178,13 +175,6 @@ export class RealTimeClient
 
   protected async _loadAuthApi(): Promise<void> {
     await import(/* webpackChunkName: "firebase-auth" */ '@firebase/auth');
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  protected async _loadFiremock() {
-    const fm = (await import(/* webpackChunkName: "firemock" */ 'firemock')).default;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return fm.createDatabase;
   }
 
   protected async _loadDatabaseApi(): Promise<void> {
@@ -208,7 +198,7 @@ export class RealTimeClient
       this.enableDatabaseLogging(
         typeof config.debugging !== 'function'
           ? (message: string) =>
-            (config.debugging as DebuggingCallback)(message)
+              (config.debugging as DebuggingCallback)(message)
           : (message: string) => console.log('[FIREBASE]', message)
       );
     }

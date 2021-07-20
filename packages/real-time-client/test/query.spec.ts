@@ -18,14 +18,14 @@ describe('Query based Read ops:', () => {
     age: h.faker.datatype.number({ min: 10, max: 99 }),
   });
   beforeEach(async () => {
-    db = await RealTimeClient.connect({ mocking: true });
-    const fixture = await Fixture.prepare<SDK.RealTimeClient>({ db: db.mock });
+    const fixture =  Fixture.prepare();
     fixture.addSchema('person', personMockGenerator);
     fixture.queueSchema('person', 20);
     fixture.queueSchema('person', 5, { age: 100 });
     fixture.queueSchema('person', 5, { age: 1 });
     fixture.queueSchema('person', 3, { age: 3 });
-    fixture.generate();
+    const mockData = fixture.generate();
+    db = await RealTimeClient.connect({ mocking: true, mockData });
   });
 
   it('getSnapshot() works with query passed in', async () => {
