@@ -71,7 +71,7 @@ describe('Admin Auth => ', () => {
     });
     let users = await admin.listUsers();
     expect(users.hasOwnProperty('users')).toBeTruthy();
-    expect(users.users).toBeArray();
+    expect(Array.isArray(users.users)).toBeTruthy();
     expect(users.users).toHaveLength(2);
     let found = users.users.find((u) => u.uid === '1234');
     expect(found).toBeDefined();

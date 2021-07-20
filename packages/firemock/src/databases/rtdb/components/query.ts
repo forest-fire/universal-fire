@@ -87,7 +87,6 @@ export const query = <
       await store.networkDelay();
 
       const data = store.getDb(serializedQuery.path);
-
       const results = runQuery(serializedQuery, data);
 
       // TODO: See how this was implemented before

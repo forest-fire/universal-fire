@@ -34,9 +34,7 @@ import { FireMockError } from '../errors';
 import { IMockWatcherGroupEvent } from '../@types';
 import { notify } from './rtdb';
 
-export function createStore<
-  TSdk extends ISdk
->(
+export function createStore<TSdk extends ISdk>(
   sdk: TSdk,
   config: IDatabaseConfig,
   initialState: IDictionary | IMockDelayedState<IDictionary>
@@ -78,7 +76,7 @@ export function createStore<
     const query =
       typeof pathOrQuery === 'string'
         ? // TODO: this needs to be generalized across RTDB and Firestore
-        new SerializedRealTimeQuery(pathOrQuery)
+          new SerializedRealTimeQuery(pathOrQuery)
         : pathOrQuery;
 
     const listener = {
@@ -92,7 +90,6 @@ export function createStore<
     _listeners.push(listener);
 
     return listener;
-
   };
 
   const groupEventsByWatcher = (
@@ -144,8 +141,8 @@ export function createStore<
             ? justKey(changeObject)
             : listener.query.path.split('.').pop()
           : dotify(
-            join(slashNotation(listener.query.path), justKey(changeObject))
-          );
+              join(slashNotation(listener.query.path), justKey(changeObject))
+            );
 
       const newResponse = {
         listenerId: listener.id,
@@ -172,7 +169,6 @@ export function createStore<
 
   const removeListener = (eventType: string) => {
     _listeners = _listeners.filter((l) => l.eventType !== eventType);
-
   };
   const getAllListeners = () => {
     return _listeners;
@@ -180,8 +176,8 @@ export function createStore<
 
   const api: IMockStore<TSdk> = {
     api: isAdminSdk(sdk)
-      ? ApiKind.admin as IMockStore<TSdk>["api"]
-      : ApiKind.client as IMockStore<TSdk>["api"],
+      ? (ApiKind.admin as IMockStore<TSdk>['api'])
+      : (ApiKind.client as IMockStore<TSdk>['api']),
 
     config,
     state: _state,
@@ -211,7 +207,8 @@ export function createStore<
       keys.forEach((key) => delete _state[key]);
     },
     getDb<D extends unknown = never>(path?: string): D {
-      return (path ? get(_state, dotify(path)) : _state) as D;
+      const dotifyPath = dotify(path);
+      return (dotifyPath ? get(_state, dotifyPath) : _state) as D;
     },
     setDb<V extends unknown>(path: string, value: V, silent = false) {
       const dotPath = join(path);
@@ -275,7 +272,9 @@ export function createStore<
       }
 
       const newValue =
-        typeof oldValue === 'object' ? { ...(oldValue as IDictionary), ...(value as IDictionary) } : value;
+        typeof oldValue === 'object'
+          ? { ...(oldValue as IDictionary), ...(value as IDictionary) }
+          : value;
 
       this.setDb(dotPath, newValue);
     },

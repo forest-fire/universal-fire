@@ -53,6 +53,5 @@ export function set(
     ref = ref[p];
   });
 
-  ref[key as keyof typeof ref] = { ...ref[key as keyof typeof ref], ...value };
-  obj = ref;
+  ref[key as keyof typeof ref] = value;
 }

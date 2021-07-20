@@ -48,7 +48,7 @@ describe('Listener events ->', () => {
 
     store.pushDb('userProfile', { name: 'Jane Doe' });
     events.map((e) => {
-      expect(e.key).toBeString();
+      expect(typeof e.key).toEqual("string");
       expect(e.key.slice(0, 1)).toBe('-');
     });
     expect(events.map((e) => e.eventType)).toEqual(
@@ -99,7 +99,7 @@ describe('Listener events ->', () => {
 
     store.pushDb('userProfile', { name: 'Chris Christy' });
     events.map((e) => {
-      expect(e.key).toBeString();
+      expect(typeof e.key).toEqual("string");
       expect(e.key.slice(0, 1)).toBe('-');
     });
     expect(events.map((e) => e.eventType)).toEqual(
