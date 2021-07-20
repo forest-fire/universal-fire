@@ -55,6 +55,7 @@
     "wait-in-parallel": "^1.2.6"
   },
   "devDependencies": {
+    "@forest-fire/serialized-query": "*",
     "@forest-fire/types": "*",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-json": "^4.0.3",
@@ -112,6 +113,7 @@
     "vuepress-plugin-autometa": "^0.1.13"
   },
   "peerDependencies": {
+    "@forest-fire/serialized-query": "*",
     "@forest-fire/types": "*",
     "common-types": "^1.27.0",
     "date-fns": "^2.15.0",

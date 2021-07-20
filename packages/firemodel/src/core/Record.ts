@@ -64,7 +64,7 @@ import { IDatabaseSdk, IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel, I
 
 //#endregion
 
-export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> implements IRecord<S, T> {
+export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   //#region STATIC INTERFACE
   public static set defaultDb(db: IDatabaseSdk<ISdk>) {
     DefaultDbCache().set<IDatabaseSdk<typeof db.sdk>>(db);

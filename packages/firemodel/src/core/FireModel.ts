@@ -67,7 +67,7 @@ export class FireModel<S extends ISdk, T extends IModel> {
   //#region PUBLIC INTERFACE
 
   /**
-   * The name of the model; typically a "sigular" name
+   * The name of the model; typically a _singular_ name
    */
   public get modelName(): string {
     const name = this._model.constructor.name;

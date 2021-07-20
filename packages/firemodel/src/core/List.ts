@@ -8,6 +8,7 @@ import {
   IModel,
   ModelMeta
 } from "@forest-fire/types";
+import { SerializedQuery } from "@forest-fire/serialized-query";
 import {
   IDictionary,
   epochWithMilliseconds,
@@ -134,7 +135,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
     model: ConstructorFor<T>,
     query: ISerializedQuery<S, T>,
     options: IListOptions<S, T> = {}
-  ) {
+  ): Promise<List<ISdk, T>> {
     const defaultSdk = DefaultDbCache().sdk;
     type SDK = typeof defaultSdk extends ISdk ? typeof defaultSdk : S extends ISdk ? S : ISdk;
     const list = List.create(model, options);
@@ -146,7 +147,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
 
     query.setPath(path);
 
-    return list._loadQuery(query) as unknown as List<SDK, T>;
+    return list._loadQuery(query);
   }
 
   /**
