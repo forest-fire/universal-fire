@@ -9,8 +9,8 @@ import {
 import { query } from './query';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import { onDisconnect } from './onDisconnect';
-import { FireMockError } from '../../../errors';
-import { join } from '../../../util';
+import { FireMockError } from '~/errors';
+import { join } from '~/util';
 import { IDictionary } from 'common-types';
 
 function isMultiPath(data: IDictionary) {
@@ -28,11 +28,11 @@ function isMultiPath(data: IDictionary) {
   return indexesAreStrings && indexesLookLikeAPath ? true : false;
 }
 
-export function reference<TStore extends IMockStore<TSdk, IDictionary>, TSdk extends IRtdbSdk>(
-  store: TStore,
-  path: string | ISerializedQuery<TSdk> = ''
+export function reference<TSdk extends IRtdbSdk, TData extends unknown = Record<string, unknown>>(
+  store: IMockStore<TSdk, TData>,
+  path: string | ISerializedQuery<TSdk, TData> = ''
 ): IRtdbReference {
-  const serializedQuery = typeof path === "string" ? new SerializedRealTimeQuery(path) : path;
+  const serializedQuery = typeof path === "string" ? new SerializedRealTimeQuery<TSdk, TData>(path) : path;
   const query_ = query(store, serializedQuery);
   const ref: IRtdbReference = {
     orderByKey: query_.orderByKey,

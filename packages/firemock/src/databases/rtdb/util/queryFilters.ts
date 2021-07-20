@@ -1,7 +1,7 @@
 import { IRtdbSdk, ISerializedQuery } from '@forest-fire/types';
 import { QueryFunction } from '~/@types';
 
-export function startAt<T extends ISerializedQuery<IRtdbSdk>>(query: T): QueryFunction {
+export function startAt<TSdk extends IRtdbSdk, TData extends unknown = Record<string, unknown>>(query: ISerializedQuery<TSdk, TData>): QueryFunction {
   const key = query.identity.startAtKey || query.identity.orderByKey;
   const value = query.identity.startAt;
 
@@ -14,7 +14,7 @@ export function startAt<T extends ISerializedQuery<IRtdbSdk>>(query: T): QueryFu
   };
 }
 
-export function endAt<T extends ISerializedQuery<IRtdbSdk>>(query: T): QueryFunction {
+export function endAt<TSdk extends IRtdbSdk, TData extends unknown = Record<string, unknown>>(query: ISerializedQuery<TSdk, TData>): QueryFunction {
   const key = query.identity.endAtKey || query.identity.orderByKey;
   const value = query.identity.endAt;
 
@@ -28,7 +28,7 @@ export function endAt<T extends ISerializedQuery<IRtdbSdk>>(query: T): QueryFunc
 }
 
 /** a filter function for queries with a `equalTo` value */
-export function equalTo<T extends ISerializedQuery<IRtdbSdk>>(query: T): QueryFunction {
+export function equalTo<TSdk extends IRtdbSdk, TData extends unknown = Record<string, unknown>>(query: ISerializedQuery<TSdk, TData>): QueryFunction {
   const key = query.identity.equalToKey || query.identity.orderByKey;
   const value = query.identity.equalTo;
 

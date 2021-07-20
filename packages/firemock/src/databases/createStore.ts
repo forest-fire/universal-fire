@@ -209,8 +209,8 @@ export function createStore<
       const keys = Object.keys(_state);
       keys.forEach((key) => delete _state[key]);
     },
-    getDb(path?: string) {
-      return path ? get(_state, dotify(path)) : _state;
+    getDb<D extends unknown = never>(path?: string): D {
+      return (path ? get(_state, dotify(path)) : _state) as D;
     },
     setDb<V extends unknown>(path: string, value: V, silent = false) {
       const dotPath = join(path);

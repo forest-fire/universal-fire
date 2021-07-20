@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { IFmModelMeta } from "universal-fire";
-import { index, mock, model, property } from "@/decorators";
+import { index, mock, property } from "@/decorators";
 import { epochWithMilliseconds } from "common-types";
 import { IModel } from "@forest-fire/types";
 
-@model()
-export class Model<T extends {}> implements IModel<T> {
+export class Model<T extends IModel> {
   // prettier-ignore
   // TODO: This should be made required and the API updated to make it optional where appropriate
   /** The primary-key for the record */

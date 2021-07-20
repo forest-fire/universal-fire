@@ -30,7 +30,7 @@ export interface IMockStore<
    * Adds a listener to the mock database based on a specified
    * event type.
    */
-  addListener(
+  addListener<TData extends unknown = Record<string, unknown>>(
     /**
      * The query being used to represent the watcher.
      *
@@ -38,7 +38,7 @@ export interface IMockStore<
      * queries even if they're just a string path. This just simplifies
      * the interface somewhat.
      */
-    query: string | ISerializedQuery<TSdk>,
+    query: string | ISerializedQuery<TSdk, TData>,
     /**
      * The event type which this listener will respond to.
      */
@@ -101,7 +101,7 @@ export interface IMockStore<
   /**
    * Get the state at a given path in the mock database's state tree
    */
-  getDb(path?: string): TState;
+  getDb<TData extends unknown = never>(path?: string): TData extends never ? TState : TData;
   /**
    * Sets the state at a given path of the Mock DB's state tree
    */

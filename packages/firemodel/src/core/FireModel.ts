@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import {
-  IDatabaseSdk,
-  ISdk,
-  IModel,
-} from "universal-fire";
+
 import { IDictionary } from "common-types";
 import {
   IFmChangedProperties,
@@ -18,6 +14,8 @@ import {
 } from "@/util";
 
 import { Record, DefaultDbCache } from "@/core";
+import { ModelMeta, IDatabaseSdk, ISdk, IModel, } from "@forest-fire/types";
+import { convertModelToModelClass } from "@/util/convertModelToModelClass";
 
 const defaultDispatch: IReduxDispatch<any, any> = async (context) => "";
 
@@ -106,8 +104,12 @@ export class FireModel<S extends ISdk, T extends IModel> {
     return this._db;
   }
 
+  public get META(): ModelMeta<T> {
+    return convertModelToModelClass(new this._modelConstructor).META;
+  }
+
   public get pushKeys() {
-    return (this._model as IModel).META.pushKeys;
+    return convertModelToModelClass(new this._modelConstructor()).META.pushKeys;
   }
 
   public static auditLogs = "/auditing";

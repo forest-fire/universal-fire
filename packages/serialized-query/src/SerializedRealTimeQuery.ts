@@ -1,20 +1,19 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { slashNotation } from './index';
 import {
   IComparisonOperator,
   IFirebaseRtdbQuery,
-  IModel,
-  IRtdbDataSnapshot,
   IRtdbOrder,
   ISerializedIdentity,
   ISerializedQuery,
   IRtdbDatabase,
-  IAdminRtdbDatabase,
-  IClientRtdbDatabase,
   IFirebaseRtdbReference,
   IRtdbSdk,
-  SDK,
+  DbFrom,
+  SnapshotFrom,
+  DeserializedQueryFrom,
 } from '@forest-fire/types';
 
 /**
@@ -23,23 +22,20 @@ import {
  */
 export class SerializedRealTimeQuery<
   TSdk extends IRtdbSdk,
-  M extends IModel = IModel,
-  TDatabase extends IRtdbDatabase = TSdk extends SDK.RealTimeAdmin
-    ? IAdminRtdbDatabase
-    : IClientRtdbDatabase
-> implements ISerializedQuery<IRtdbSdk, M>
+  TData extends unknown = Record<string, unknown>
+  > implements ISerializedQuery<TSdk, TData>
 {
-  protected _endAtKey?: keyof M & string;
+  protected _endAtKey?: keyof TData & string;
   protected _endAt?: string | number | boolean;
-  protected _equalToKey?: keyof M & string;
+  protected _equalToKey?: keyof TData & string;
   protected _equalTo?: string | number | boolean;
   protected _limitToFirst?: number;
   protected _limitToLast?: number;
-  protected _orderKey?: keyof M & string;
-  protected _path: string;
-  protected _startAtKey?: keyof M & string;
+  protected _orderKey?: keyof TData & string;
+  private _path: string;
+  protected _startAtKey?: keyof TData & string;
   protected _startAt?: string | number | boolean;
-  protected _db?: TDatabase;
+  protected _db?: DbFrom<TSdk>;
   protected _orderBy: IRtdbOrder = 'orderByKey';
 
   /**
@@ -55,7 +51,7 @@ export class SerializedRealTimeQuery<
   //   return q;
   // }
 
-  public get db(): TDatabase {
+  public get db(): DbFrom<TSdk> {
     if (!this._db) {
       throw new Error(
         'Attempt to use SerializedFirestoreQuery without setting database'
@@ -65,7 +61,7 @@ export class SerializedRealTimeQuery<
     return this._db;
   }
 
-  public set db(value: TDatabase) {
+  public set db(value: DbFrom<TSdk>) {
     this._db = value;
   }
 
@@ -73,7 +69,7 @@ export class SerializedRealTimeQuery<
     return this._path;
   }
 
-  public get identity(): ISerializedIdentity<M> {
+  public get identity(): ISerializedIdentity<TSdk, TData> {
     return {
       endAtKey: this._endAtKey,
       endAt: this._endAt,
@@ -93,69 +89,69 @@ export class SerializedRealTimeQuery<
    * Allows the DB interface to be setup early, allowing clients
    * to call execute without any params.
    */
-  public setDB(db: TDatabase): SerializedRealTimeQuery<TSdk, M> {
+  public setDB(db: DbFrom<TSdk>): SerializedRealTimeQuery<TSdk, TData> {
     this._db = db;
-    return this as SerializedRealTimeQuery<TSdk, M>;
+    return this as SerializedRealTimeQuery<TSdk, TData>;
   }
 
-  public setPath(path: string): SerializedRealTimeQuery<TSdk, M> {
+  public setPath(path: string): SerializedRealTimeQuery<TSdk, TData> {
     this._path = slashNotation(path);
-    return this as SerializedRealTimeQuery<TSdk, M>;
+    return this;
   }
 
-  public limitToFirst(value: number): SerializedRealTimeQuery<TSdk, M> {
+  public limitToFirst(value: number): SerializedRealTimeQuery<TSdk, TData> {
     this._limitToFirst = value;
-    return this as SerializedRealTimeQuery<TSdk, M>;
+    return this;
   }
 
-  public limitToLast(value: number): SerializedRealTimeQuery<TSdk, M> {
+  public limitToLast(value: number): SerializedRealTimeQuery<TSdk, TData> {
     this._limitToLast = value;
-    return this as SerializedRealTimeQuery<TSdk, M>;
+    return this;
   }
 
   public orderByChild(
-    child: keyof M & string
-  ): SerializedRealTimeQuery<TSdk, M> {
+    child: keyof TData & string
+  ): SerializedRealTimeQuery<TSdk, TData> {
     this._orderBy = 'orderByChild';
     this._orderKey = child;
-    return this as SerializedRealTimeQuery<TSdk, M>;
+    return this;
   }
 
-  public orderByValue(): SerializedRealTimeQuery<TSdk, M> {
+  public orderByValue(): SerializedRealTimeQuery<TSdk, TData> {
     this._orderBy = 'orderByValue';
-    return this as SerializedRealTimeQuery<TSdk, M>;
+    return this;
   }
 
-  public orderByKey(): SerializedRealTimeQuery<TSdk, M> {
+  public orderByKey(): SerializedRealTimeQuery<TSdk, TData> {
     this._orderBy = 'orderByKey';
-    return this as SerializedRealTimeQuery<TSdk, M>;
+    return this;
   }
 
   public startAt(
     value: string | number | boolean,
-    key?: keyof M & string
-  ): SerializedRealTimeQuery<TSdk, M> {
+    key?: keyof TData & string
+  ): SerializedRealTimeQuery<TSdk, TData> {
     this._startAt = value;
     this._startAtKey = key;
-    return this as SerializedRealTimeQuery<TSdk, M>;
+    return this;
   }
 
   public endAt(
     value: string | number | boolean,
-    key?: keyof M & string
-  ): SerializedRealTimeQuery<TSdk, M> {
+    key?: keyof TData & string
+  ): SerializedRealTimeQuery<TSdk, TData> {
     this._endAt = value;
     this._endAtKey = key;
-    return this as SerializedRealTimeQuery<TSdk, M>;
+    return this;
   }
 
   public equalTo(
     value: string | number | boolean,
-    key?: keyof M & string
-  ): SerializedRealTimeQuery<TSdk, M> {
+    key?: keyof TData & string
+  ): SerializedRealTimeQuery<TSdk, TData> {
     this._equalTo = value;
     this._equalToKey = key;
-    return this as SerializedRealTimeQuery<TSdk, M>;
+    return this;
   }
 
   /**
@@ -176,7 +172,7 @@ export class SerializedRealTimeQuery<
     return hash;
   }
 
-  public deserialize(db?: IRtdbDatabase): IFirebaseRtdbReference {
+  public deserialize(db?: DbFrom<TSdk>): DeserializedQueryFrom<TSdk> {
     const database = db || this.db;
     let q = database.ref(this.path) as unknown as IFirebaseRtdbQuery;
     switch (this._orderBy) {
@@ -208,20 +204,20 @@ export class SerializedRealTimeQuery<
         : q.equalTo(this.identity.equalTo);
     }
 
-    return q as IFirebaseRtdbReference;
+    return q as DeserializedQueryFrom<TSdk>;
   }
 
-  public async execute(db?: IRtdbDatabase): Promise<IRtdbDataSnapshot> {
+  public async execute(db?: DbFrom<TSdk>): Promise<SnapshotFrom<TSdk>> {
     const database = db || this.db;
     const snapshot = await this.deserialize(database).once('value');
-    return snapshot;
+    return snapshot as SnapshotFrom<TSdk>;
   }
 
   public where(
     operation: IComparisonOperator,
     value: string | number | boolean,
-    key?: keyof M & string
-  ): SerializedRealTimeQuery<TSdk, M> {
+    key?: keyof TData & string
+  ): SerializedRealTimeQuery<TSdk, TData> {
     switch (operation) {
       case '=':
         return this.equalTo(value, key);
@@ -232,7 +228,7 @@ export class SerializedRealTimeQuery<
     }
   }
 
-  public toJSON(): ISerializedIdentity<M> {
+  public toJSON(): ISerializedIdentity<TSdk, TData> {
     return this.identity;
   }
 

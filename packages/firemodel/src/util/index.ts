@@ -2,13 +2,14 @@
 
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 11:09 AM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 07:36 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: compareHashes, get, getAllPropertiesFromClassStructure, isHasManyRelationship, modelRegister, path, set, shared.
+// files: compareHashes, convertModelToModelClass, get, getAllPropertiesFromClassStructure, isHasManyRelationship, modelRegister, path, set, shared, type-guards.
 // directories: model-meta.
 
 // local file exports
 export * from "./compareHashes";
+export * from "./convertModelToModelClass";
 export * from "./get";
 export * from "./getAllPropertiesFromClassStructure";
 export * from "./isHasManyRelationship";
@@ -16,6 +17,7 @@ export * from "./modelRegister";
 export * from "./path";
 export * from "./set";
 export * from "./shared";
+export * from "./type-guards";
 
 // directory exports
 export * from "./model-meta/index";

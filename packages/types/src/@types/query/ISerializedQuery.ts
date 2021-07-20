@@ -5,7 +5,6 @@ import {
   SnapshotFrom,
 } from '../database/db-util';
 import { ISdk } from '../fire-types';
-import { IModel } from '../firemodel';
 import { IComparisonOperator, ISerializedIdentity } from '../index';
 
 /**
@@ -20,32 +19,33 @@ import { IComparisonOperator, ISerializedIdentity } from '../index';
 export interface ISerializedQuery<
   TSdk extends ISdk,
   /** the data model being serialized */
-  TModel extends IModel = IModel
+  TData extends unknown = Record<string, unknown>
   > {
-  db: DbFrom<TSdk>;
-  path: string;
-  identity: ISerializedIdentity<TModel>;
-  setDB: (db: DbFrom<TSdk>) => ISerializedQuery<TSdk, TModel>;
-  setPath: (path: string) => ISerializedQuery<TSdk, TModel>;
+  get db(): DbFrom<TSdk>;
+  set db(value: DbFrom<TSdk>);
+  get path(): string;
+  get identity(): ISerializedIdentity<TSdk, TData>;
+  setDB: (db: DbFrom<TSdk>) => ISerializedQuery<TSdk, TData>;
+  setPath: (path: string) => ISerializedQuery<TSdk, TData>;
   hashCode: () => number;
-  limitToFirst: (value: number) => ISerializedQuery<TSdk, TModel>;
-  limitToLast: (value: number) => ISerializedQuery<TSdk, TModel>;
-  orderByChild: (child: keyof TModel) => ISerializedQuery<TSdk, TModel>;
-  orderByValue: () => ISerializedQuery<TSdk, TModel>;
-  orderByKey: () => ISerializedQuery<TSdk, TModel>;
+  limitToFirst: (value: number) => ISerializedQuery<TSdk, TData>;
+  limitToLast: (value: number) => ISerializedQuery<TSdk, TData>;
+  orderByChild: (child: keyof TData) => ISerializedQuery<TSdk, TData>;
+  orderByValue: () => ISerializedQuery<TSdk, TData>;
+  orderByKey: () => ISerializedQuery<TSdk, TData>;
   startAt: (
     value: string | number | boolean,
-    key?: keyof TModel & string
-  ) => ISerializedQuery<TSdk, TModel>;
+    key?: keyof TData & string
+  ) => ISerializedQuery<TSdk, TData>;
   endAt: (
     value: string | number | boolean,
-    key?: keyof TModel & string
-  ) => ISerializedQuery<TSdk, TModel>;
+    key?: keyof TData & string
+  ) => ISerializedQuery<TSdk, TData>;
   /** Equality comparison */
   equalTo: (
     value: string | number | boolean,
-    key?: keyof TModel & string
-  ) => ISerializedQuery<TSdk, TModel>;
+    key?: keyof TData & string
+  ) => ISerializedQuery<TSdk, TData>;
   /**
    * Use the familiar "where" logical construct to build a query.
    * The _property_ being operated on is determined by which
@@ -54,10 +54,10 @@ export interface ISerializedQuery<
   where: (
     operation: IComparisonOperator,
     value: unknown,
-    key?: (keyof TModel & string) | undefined
-  ) => ISerializedQuery<TSdk, TModel>;
+    key?: (keyof TData & string) | undefined
+  ) => ISerializedQuery<TSdk, TData>;
 
-  toJSON: () => ISerializedIdentity<TModel>;
+  toJSON: () => ISerializedIdentity<TSdk, TData>;
   toString: () => string;
 
   /**

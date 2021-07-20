@@ -1,14 +1,13 @@
 import { IDictionary, epoch, fk, pk } from "common-types";
-import {
-  IFmModelMeta,
-  IFmModelPropertyMeta,
-  IFmModelRelationshipMeta,
-  IModel,
-} from "universal-fire";
 import { IReduxDispatch } from "./state-mgmt";
 
 import { IDatabaseSdk, ISdk, IFmFunctionToConstructor } from "universal-fire";
 import { IFmHasId } from "./general";
+import {
+  ModelMeta, IFmModelPropertyMeta,
+  IFmModelRelationshipMeta,
+  IModel,
+} from "@forest-fire/types";
 
 /**
  * A simplified interface that represents a `Record`'s shape
@@ -16,7 +15,9 @@ import { IFmHasId } from "./general";
  * fidelity can use this internally.
  */
 export interface IRecord<S extends ISdk, T extends IModel> {
-  get META(): T["META"];
+  get META(): ModelMeta<T>;
+  get<K extends keyof T>(prop: K): Readonly<T[K]>;
+  set<K extends keyof T = keyof T>(prop: K, val: T[K], silent?: boolean): void;
   localPath: string;
   localPrefix: string;
   dbPath: string;

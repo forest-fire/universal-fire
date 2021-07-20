@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as limitFilters from './limitFilters';
-import * as queryFilters from './queryFilters';
-import * as sortFns from './sortFns';
+import * as limitFilters from '~/databases/rtdb/util/limitFilters';
+import * as queryFilters from '~/databases/rtdb/util/queryFilters';
+import * as sortFns from '~/util/sortFns';
 import { keys } from 'native-dash';
 
 import { arrayToHash, hashToArray } from 'typed-conversions';
 
 import { IDictionary } from 'common-types';
 import { RtdbOrder, IRtdbSdk, ISerializedQuery } from '@forest-fire/types';
-import { SortOrder } from '../@types/query-types';
+import { SortOrder } from '~/@types/query-types';
 
 const orderByKey = (list: IDictionary) => {
   const keys = Object.keys(list).sort();
@@ -47,10 +47,9 @@ const sortFn: (query: any) => sortFns.ISortFns = (query) =>
     ] as sortFns.ISortFns);
 
 export function runQuery<
-  T extends ISerializedQuery<TSdk>,
   TSdk extends IRtdbSdk,
-  D extends IDictionary<any> | any[]
->(query: T, data: D): any {
+  TData extends unknown = Record<string, unknown>
+>(query: ISerializedQuery<TSdk, TData>, data: TData): any {
   /**
    * A boolean _flag_ to indicate whether the path is of the query points to a Dictionary
    * of Objects. This is indicative of a **Firemodel** list node.
@@ -71,7 +70,7 @@ export function runQuery<
   if (dataIsAnObject && !isListOfObjects) {
     data =
       query.identity.orderBy === 'orderByKey'
-        ? (orderByKey(data) as D)
+        ? (orderByKey(data) as TData)
         : orderByValue(data);
     // allows non-array data that can come from a 'value' listener
     // to pass through at this point
@@ -98,10 +97,14 @@ export function runQuery<
     return undefined;
   }
 
-  const limitFilter = _limitFilter<TSdk>(query);
-  const queryFilter = _queryFilter<TSdk>(query);
+  const limitFilter = _limitFilter<TSdk, TData>(query);
+  const queryFilter = _queryFilter<TSdk, TData>(query);
 
-  const list = limitFilter(queryFilter(dataList.sort(sortFn(query)))) as any[];
+  let list: any[];
+
+  if (Array.isArray(dataList)) {
+    list = limitFilter(queryFilter(dataList)) as any[];
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return isListOfObjects
@@ -134,17 +137,16 @@ export function runQuery<
       : list;
 }
 
-function _limitFilter<TSdk extends IRtdbSdk>(query: ISerializedQuery<TSdk>) {
+function _limitFilter<TSdk extends IRtdbSdk, TData extends unknown = Record<string, unknown>>(query: ISerializedQuery<TSdk, TData>) {
   const first = limitFilters.limitToFirst(query);
   const last = limitFilters.limitToLast(query);
 
   return (list: unknown[]) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return first(last(list));
   };
 }
 
-function _queryFilter<TSdk extends IRtdbSdk>(query: ISerializedQuery<TSdk>) {
+function _queryFilter<TSdk extends IRtdbSdk, TData extends unknown = Record<string, unknown>>(query: ISerializedQuery<TSdk, TData>) {
   return (list: unknown[]) => {
     return list
       .filter(queryFilters.equalTo(query))

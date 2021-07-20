@@ -57,12 +57,11 @@ import {
 } from "@/util";
 
 import { pluralize } from "native-dash";
-
-import { IDatabaseSdk, IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel, ISdk } from "universal-fire";
 import { UnwatchedLocalEvent } from "@/state-mgmt";
 import { default as copy } from "fast-copy";
 import { key as fbKey } from "firebase-key";
 import { writeAudit } from "@/audit";
+import { IDatabaseSdk, IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel, ISdk, ModelMeta } from "@forest-fire/types";
 
 //#endregion
 
@@ -116,7 +115,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
       );
     }
 
-    return r as IRecord<typeof defaultSdk, T>;
+    return r;
   }
 
   /**
@@ -199,6 +198,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
       );
       defaultValues.forEach((i: IFmModelPropertyMeta<T>) => {
         if (r.get(i.property) === undefined) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           r.set(i.property, i.defaultValue, true);
         }
       });
@@ -324,7 +324,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     rec._initialize(properties, options);
     DefaultDbCache().set(defaultDb);
-    return rec as Record<S, T>;
+    return rec;
   }
 
   /**
@@ -341,8 +341,8 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     model: new () => T,
     pk: IPrimaryKey<T>,
     options: O = {} as O
-  ) {
-    const record = Record.create(model, options);
+  ): Promise<Record<ISdk, T>> {
+    const record = Record.create<T>(model, options);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (record as any)._getFromDB(pk);
     return record;
@@ -407,7 +407,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
       pathParts.length - 2 > segments.length
     ) {
       throw new FireModelError(
-        `Attempt to get the composite key from a path failed due to the diparity of segments in the path [ ${pathParts.length} ] versus the dynamic path [ ${segments.length} ]`,
+        `Attempt to get the composite key from a path failed due to the diparity of segments in the path [ ${pathParts.length} ] versus the dynamic path [ ${String(segments.length)} ]`,
         "firemodel/not-allowed"
       );
     }
@@ -541,10 +541,6 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
     return this._data as Readonly<T>;
   }
 
-  public get META(): T["META"] {
-    return this._data.META;
-  }
-
   /**
    * The plural name of the model
    */
@@ -667,7 +663,8 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * to indicate where the the values will go.
    */
   public get dbOffset() {
-    return getModelMeta(this).dbOffset;
+    // return getModelMeta(this as Record<S, T>).dbOffset;
+    return this.META.dbOffset;
   }
 
   /**
@@ -697,7 +694,8 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * Record versus a List.
    */
   public get localPrefix() {
-    return getModelMeta(this).localPrefix;
+    // return getModelMeta(this).localPrefix;
+    return this.META.localPrefix;
   }
 
   public get existsOnDB() {
@@ -872,7 +870,8 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * updated and their new values
    */
   public async update(props: Nullable<Partial<T>>) {
-    const meta = getModelMeta(this);
+    // const meta = getModelMeta(this);
+    const meta = this.META;
     if (!meta.property) {
       throw new FireModelError(
         `There is a problem with this record's META information [ model: ${capitalize(
@@ -989,10 +988,11 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
   public async associate(
     property: keyof T & string,
     // TODO: ideally stronger typing
-    refs: IFkReference<any> | IFkReference<any>[],
+    refs: IFkReference<unknown> | IFkReference<unknown>[],
     options: IFmRelationshipOptions<S> = {}
   ) {
-    const meta = getModelMeta(this);
+    // const meta = getModelMeta(this);
+    const meta = this.META;
     if (!meta.relationship(property)) {
       throw new FireModelError(
         `Attempt to associate the property "${property}" can not be done on model ${capitalize(

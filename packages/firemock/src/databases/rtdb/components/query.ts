@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  EventFrom,
   IMockStore,
   IRtdbDataSnapshot,
   IRtdbDbEvent,
@@ -10,16 +11,16 @@ import {
   ISerializedQuery,
   RtdbOrder,
 } from '@forest-fire/types';
-import { leafNode, runQuery } from '../../..';
+import { leafNode } from '~/util';
+import { runQuery } from '../util/runQuery';
 import { reference } from './reference';
 import { snapshot } from './snapshot';
 
-export type IRtdbMockQueryFactory<TSdk extends ISdk> = (
-  store: IMockStore<TSdk>,
-  query: ISerializedQuery<TSdk, Record<string, unknown>>
-) => IRtdbQuery;
 
-export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) => {
+export const query = <
+  TSdk extends IRtdbSdk,
+  TData extends unknown = Record<string, unknown>
+>(store: IMockStore<TSdk, TData>, serializedQuery: ISerializedQuery<TSdk, TData>): IRtdbQuery => {
   const partialQuery: IRtdbQuery = {
     endBefore: () => {
       throw new Error('not implemented');
@@ -29,24 +30,24 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
     },
     get: async () => {
       await store.networkDelay();
-      const data = store.getDb(serializedQuery.path);
-      const results = runQuery(serializedQuery, data);
+      const data = store.getDb<TData>(serializedQuery.path);
+      const results = runQuery(serializedQuery, data as TData);
 
       // TODO: See how this was implemented before
       return snapshot(store, leafNode(serializedQuery.path), results ? results : null);
     },
     endAt: (value, key) => {
-      serializedQuery.endAt(value, key);
+      serializedQuery.endAt(value, key as string & keyof TData);
       return query(store, serializedQuery);
     },
     equalTo: (value, key) => {
-      serializedQuery.equalTo(value, key);
+      serializedQuery.equalTo(value, key as string & keyof TData);
       if (key && serializedQuery.identity.orderBy === RtdbOrder.orderByKey) {
         throw new Error(
           `You can not use "equalTo(val, key)" with a "key" property defined when using a key sort!`
         );
       }
-      serializedQuery.equalTo(value, key);
+      serializedQuery.equalTo(value, key as string & keyof TData);
 
       return query(store, serializedQuery);
     },
@@ -68,12 +69,12 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
       console.log('off() not implemented yet on Firemock');
     },
     on: (
-      eventType: IRtdbDbEvent,
+      eventType: EventFrom<TSdk>,
       callback: (a: IRtdbDataSnapshot, b?: null | string) => any,
       cancelCallbackOrContext?: (err?: Error) => void | null,
       context?: Record<string, unknown> | null
     ): ((a: IRtdbDataSnapshot, b?: null | string) => unknown) => {
-      store.addListener(
+      store.addListener<TData>(
         serializedQuery,
         eventType,
         callback,
@@ -92,7 +93,7 @@ export const query: IRtdbMockQueryFactory<IRtdbSdk> = (store, serializedQuery) =
       // TODO: See how this was implemented before
       return snapshot(store, leafNode(serializedQuery.path), results ? results : null);
     },
-    orderByChild: (prop: string) => {
+    orderByChild: (prop: string & keyof TData) => {
       serializedQuery.orderByChild(prop);
       return query(store, serializedQuery);
     },

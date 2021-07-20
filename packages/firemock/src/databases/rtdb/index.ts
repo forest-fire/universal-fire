@@ -1,11 +1,11 @@
-//#autoindex
+//#autoindex, exclude: util
 
 
 
 // #region autoindexed files
 
-// index last changed at: 10th Oct, 2020, 09:29 AM ( GMT-7 )
-// export: named; exclusions: index, private.
+// index last changed at: 7th Jul, 2021, 02:17 PM ( GMT-7 )
+// export: named; exclusions: util, index, private.
 // directories: components, factories.
 
 // directory exports
@@ -14,7 +14,7 @@ export * from "./factories/index";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

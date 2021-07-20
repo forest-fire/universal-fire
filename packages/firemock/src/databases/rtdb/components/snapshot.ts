@@ -2,26 +2,24 @@
 import { IMockStore, IRtdbDataSnapshot, IRtdbSdk } from '@forest-fire/types';
 import { SortingFunction } from 'common-types';
 import { arrayToHash } from 'typed-conversions';
-import { getKey, join } from '../../../util';
+import { getKey, join } from '~/util';
 import { get } from "native-dash";
 import { reference } from './reference';
 
-export type IRtdbMockSnapshotFactory<
-  TSdk extends IRtdbSdk,
+export const snapshot = <
+  TSdk extends IRtdbSdk = IRtdbSdk,
   T extends unknown = unknown
-  > = (store: IMockStore<TSdk>, key: string, value: T[] | T) => IRtdbDataSnapshot;
-
-export const snapshot: IRtdbMockSnapshotFactory<IRtdbSdk> = (
-  store,
-  key,
-  value
-) => {
+>(
+  store: IMockStore<TSdk>,
+  key: string,
+  value: T[] | T
+): IRtdbDataSnapshot => {
   const val = () => (Array.isArray(value) ? arrayToHash(value) : value);
   let sortingFunction: SortingFunction;
 
   const snapshotKey = getKey(join(key));
 
-  const partialSnapshot: IRtdbDataSnapshot = {
+  return {
     get key() {
       return snapshotKey;
     },
@@ -91,10 +89,10 @@ export const snapshot: IRtdbMockSnapshotFactory<IRtdbSdk> = (
       return null;
     },
   };
-  return {
-    sortingFunction(fn: SortingFunction) {
-      sortingFunction = fn;
-    },
-    ...partialSnapshot,
-  };
+  // return {
+  //   sortingFunction(fn: SortingFunction) {
+  //     sortingFunction = fn;
+  //   },
+  //   ...partialSnapshot,
+  // };
 };

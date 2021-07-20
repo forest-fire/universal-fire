@@ -11,36 +11,36 @@ import { SerializedRealTimeQuery, SerializedFirestoreQuery } from './index';
 
 export class SerializedQuery<
   TSdk extends ISdk,
-  TModel extends IModel,
+  TData extends unknown = Record<string, unknown>,
   > {
   constructor(db: IDatabaseSdk<TSdk>, path = '/') {
     if (isRealTimeDatabase(db)) {
       return isAdminSdk(db)
-        ? new SerializedRealTimeQuery<'RealTimeClient', TModel>(path)
-        : new SerializedRealTimeQuery<'RealTimeAdmin', TModel>(path);
+        ? new SerializedRealTimeQuery<'RealTimeClient', TData>(path)
+        : new SerializedRealTimeQuery<'RealTimeAdmin', TData>(path);
     } else {
       return isAdminSdk(db)
-        ? new SerializedFirestoreQuery<'FirestoreAdmin', TModel>(path)
-        : new SerializedFirestoreQuery<'FirestoreClient', TModel>(path);
+        ? new SerializedFirestoreQuery<'FirestoreAdmin', TData>(path)
+        : new SerializedFirestoreQuery<'FirestoreClient', TData>(path);
     }
   }
 
-  static create<TSdk extends ISdk, TModel extends IModel,>(
+  static create<TSdk extends ISdk = ISdk, TData extends unknown = Record<string, unknown>>(
     db: IDatabaseSdk<TSdk>,
     path = '/'
-  ): ISerializedQuery<TSdk, TModel> {
+  ): ISerializedQuery<TSdk, TData> {
     if (isRealTimeDatabase(db)) {
       return (isAdminSdk(db)
-        ? new SerializedRealTimeQuery<SDK.RealTimeClient, TModel>(path)
-        : new SerializedRealTimeQuery<SDK.RealTimeAdmin, TModel>(
+        ? new SerializedRealTimeQuery<SDK.RealTimeClient, TData>(path)
+        : new SerializedRealTimeQuery<SDK.RealTimeAdmin, TData>(
           path
-        )) as unknown as ISerializedQuery<TSdk, TModel>;
+        )) as unknown as ISerializedQuery<TSdk, TData>;
     } else {
       return (isAdminSdk(db)
-        ? new SerializedFirestoreQuery<'FirestoreAdmin', TModel>(path)
-        : new SerializedFirestoreQuery<'FirestoreClient', TModel>(
+        ? new SerializedFirestoreQuery<'FirestoreAdmin', TData>(path)
+        : new SerializedFirestoreQuery<'FirestoreClient', TData>(
           path
-        )) as unknown as ISerializedQuery<TSdk, TModel>;
+        )) as unknown as ISerializedQuery<TSdk, TData>;
     }
   }
 }

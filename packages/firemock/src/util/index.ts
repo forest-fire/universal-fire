@@ -2,18 +2,15 @@
 
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 08:10 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 02:13 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: dotify, limitFilters, networkDelay, other, pluralize, queryFilters, runQuery, sortFns.
+// files: dotify, networkDelay, other, pluralize, sortFns.
 
 // local file exports
 export * from "./dotify";
-export * from "./limitFilters";
 export * from "./networkDelay";
 export * from "./other";
 export * from "./pluralize";
-export * from "./queryFilters";
-export * from "./runQuery";
 export * from "./sortFns";
 
 // Note:

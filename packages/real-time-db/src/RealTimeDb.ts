@@ -37,7 +37,6 @@ import {
   AppFrom,
   IsAdminSdk,
   IFirestoreSdk,
-  AuthProviderName,
 } from '@forest-fire/types';
 
 import { createError } from 'brilliant-errors';
@@ -635,8 +634,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
       );
     } catch (e) {
       throw new FireError(
-        `A problem was encountered while trying to setup the mock database: ${
-          (e as Error).message
+        `A problem was encountered while trying to setup the mock database: ${(e as Error).message
         }`,
         'failed-mock-prep'
       );

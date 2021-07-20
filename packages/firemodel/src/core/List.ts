@@ -28,6 +28,9 @@ import { pathJoin } from "native-dash";
 import { FireModelError } from "@/errors";
 import { arrayToHash } from "typed-conversions";
 import { queryAdjustForNext, reduceOptionsForQuery } from "./lists";
+import { IModelClass, ModelMeta } from "../../../types/dist/types";
+import { isArrayOf } from "@/util/type-guards";
+import { isString } from "lodash";
 
 const DEFAULT_IF_NOT_FOUND = Symbol("DEFAULT_IF_NOT_FOUND");
 
@@ -55,8 +58,12 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
     DefaultDbCache().set<IDatabaseSdk<typeof db.sdk>>(db);
   }
 
-  public static get defaultDb() {
+  public static get defaultDb(): IDatabaseSdk<ISdk> {
     return DefaultDbCache().get();
+  }
+
+  public get META(): ModelMeta<T> {
+    return Record.create(this._modelConstructor).META;
   }
 
   // TODO: should `set` be removed?
@@ -71,11 +78,11 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
     model: ConstructorFor<T>,
     payload: IDictionary<T>,
     options: IListOptions<S, T> = {}
-  ) {
+  ): Promise<List<S, T>> {
     try {
-      const m = Record.create(model, options);
+      const r = Record.create(model, options);
       // If Auditing is one we must be more careful
-      if (m.META.audit) {
+      if (r.META.audit) {
         const existing = await List.all(model, options);
         if (existing.length > 0) {
           // TODO: need to write an appropriate AUDIT EVENT
@@ -87,9 +94,8 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
         }
       } else {
         // Without auditing we can just set the payload into the DB
-        const datetime = new Date().getTime();
         await FireModel.defaultDb.set(
-          `${m.META.dbOffset}/${m.pluralName}`,
+          `${String(r.META.dbOffset)}/${r.pluralName}`,
           addTimestamps(payload)
         );
       }
@@ -97,7 +103,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       const current = await List.all(model, options);
       return current;
     } catch (e) {
-      const err = new Error(`Problem adding new Record: ${e.message}`);
+      const err = new Error(`Problem adding new Record: ${String(e.message)}`);
       err.name = e.name !== "Error" ? e.name : "FireModel";
       throw e;
     }
@@ -110,9 +116,10 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
     FireModel.dispatch = fn;
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public static create<T extends IModel>(
     model: ConstructorFor<T>,
-    options?: IListOptions<any, T>
+    options?: IListOptions<ISdk, T>
   ) {
     const defaultSdk = DefaultDbCache().sdk;
     type SDK = typeof defaultSdk extends ISdk ? typeof defaultSdk : ISdk;
@@ -168,13 +175,14 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       options && options.offsets
         ? List.dbPath(model, options.offsets)
         : List.dbPath(model);
-    const q = SerializedQuery.create(db, path);
+    const q = SerializedQuery.create<S, T>(db, path);
     const list = List.create(model, options);
     if (options.paginate) {
       list._pageSize = options.paginate;
     }
 
-    return list._loadQuery(query(q)) as unknown as List<S, T>;
+    const r = await list._loadQuery(query(q)) as unknown as List<S, T>;
+    return r;
   }
 
   /**
@@ -218,7 +226,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       "limitToFirst" | "limitToLast" | "startAt" | "orderBy"
     > = {}
   ): Promise<List<S, T>> {
-    return List.query<S, T>(
+    const r = await List.query<S, T>(
       model,
       (q) => {
         q.orderByChild("createdAt").limitToLast(howMany);
@@ -235,6 +243,8 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       },
       reduceOptionsForQuery<S, T>(options)
     ) as unknown as List<S, T>;
+
+    return r;
   }
 
   /**
@@ -250,7 +260,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       IListOptions<S, T>,
       "limitToFirst" | "limitToLast" | "orderBy" | "endAt"
     > = {}
-  ) {
+  ): Promise<List<S, T>> {
     return List.query<S, T>(
       model,
       (q) => {
@@ -281,7 +291,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
     model: ConstructorFor<T>,
     since: epochWithMilliseconds | datetime | Date,
     options: Omit<IListOptions<S, T>, "startAt" | "endAt" | "orderBy"> = {}
-  ) {
+  ): Promise<List<S, T>> {
     switch (typeof since) {
       case "string":
         since = new Date(since).getTime();
@@ -335,7 +345,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
       IListOptions<S, T>,
       "limitToLast" | "limitToFirst" | "orderBy"
     > = {}
-  ) {
+  ): Promise<List<S, T>> {
     return List.query<S, T>(
       model,
       (q) => {
@@ -382,19 +392,24 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    */
   public static async findWhere<S extends ISdk, T extends IModel, K extends keyof T>(
     model: ConstructorFor<T>,
-    property: K & string,
+    property: K,
     value: T[K] | [IComparisonOperator, T[K]],
     options: IListOptions<S, T> = {}
-  ) {
-    if (property === "id" && !Array.isArray(value)) {
+  ): Promise<K extends "id" ? T[K] extends string ? Record<ISdk, T> : List<S, T> : List<S, T>> {
+
+    let result: unknown;
+
+    if (property === "id" && isString(value)) {
       const modelName = capitalize(model.constructor.name);
       console.warn(
-        `you used List.find(${modelName}, "id", ${value} ) this will be converted to Record.get(${modelName}, ${value}). The List.find() command should be used for properties other than "id"; please make a note of this and change your code accordingly!`
+        `you used List.find(${modelName}, "id", ${String(value)} ) this will be converted to Record.get(${modelName}, ${String(value)}). The List.find() command should be used for properties other than "id"; please make a note of this and change your code accordingly!`
       );
-      return Record.get(model, (value as unknown) as string);
+      result = await Record.get(model, value as string) as unknown as Promise<Record<ISdk, T>>;
+    } else {
+      result = await List.where(model, property as string & keyof T, value, options);
     }
-    const results = await List.where(model, property, value, options);
-    return results.length > 0 ? results.data[0] : undefined;
+
+    return result as Promise<K extends "id" ? T[K] extends string ? Record<ISdk, T> : List<S, T> : List<S, T>>;
   }
 
   /**
@@ -610,8 +625,8 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   }
 
   public get dbPath(): string {
-    const r = Record.create(this._modelConstructor) as IRecord<S, T>;
-    return [this._injectDynamicDbOffsets(r.META.dbOffset), r.pluralName].join("/");
+    // const r = Record.create(this._modelConstructor) as IRecord<S, T>;
+    return [this._injectDynamicDbOffsets(this.META.dbOffset), this.pluralName].join("/");
   }
 
   /**
@@ -621,7 +636,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Includes `localPrefix` and `pluralName`, but does not include `localPostfix`
    */
   public get localPath(): string {
-    const r = Record.create(this._modelConstructor) as IRecord<S, T>;
+    const r = Record.create(this._modelConstructor);
     const meta = r.META;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return pathJoin(
@@ -640,8 +655,9 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * (assuming the default `all` postfix)
    */
   public get localPostfix(): string {
-    const r = Record.create(this._modelConstructor) as IRecord<S, T>;
-    return r.META.localPostfix;
+    // const r = Record.create(this._modelConstructor);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this.META?.localPostfix || "";
   }
 
   //#endregion Getters

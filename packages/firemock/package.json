@@ -40,6 +40,7 @@
     "firebase-key": "^2.0.2",
     "jest": "^27.0.6",
     "native-dash": "~1.15.1",
+    "firemock": "*",
     "scripty": "^2.0.0",
     "test-console": "^2.0.0",
     "ttypescript": "^1.5.12",
@@ -60,7 +61,8 @@
   },
   "peerDependencies": {
     "firebase-key": "^2.0.2",
-    "native-dash": "~1.15.1",
+    "firemock": "*",
+    "native-dash": ">1.16",
     "typed-conversions": "~0.11.1"
   },
   "engines": {

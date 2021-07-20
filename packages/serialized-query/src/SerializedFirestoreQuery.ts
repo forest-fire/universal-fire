@@ -4,13 +4,12 @@ import { slashNotation } from './slashNotation';
 import type {
   IComparisonOperator,
   ISerializedQuery,
-  IModel,
   ISerializedIdentity,
-  IFirestoreOrder,
   DbFrom,
   SnapshotFrom,
   DeserializedQueryFrom,
-  IFirestoreSdk
+  IFirestoreSdk,
+  IFirestoreOrder
 } from '@forest-fire/types';
 import { SerializedError } from './SerializedError';
 
@@ -20,18 +19,18 @@ import { SerializedError } from './SerializedError';
  */
 export class SerializedFirestoreQuery<
   TSdk extends IFirestoreSdk,
-  M extends IModel = IModel
+  TData extends unknown = Record<string, unknown>
   >
-  implements ISerializedQuery<TSdk, M> {
-  protected _endAtKey?: keyof M & string;
+  implements ISerializedQuery<TSdk, TData> {
+  protected _endAtKey?: keyof TData & string;
   protected _endAt?: string | number | boolean;
-  protected _equalToKey?: keyof M & string;
+  protected _equalToKey?: keyof TData & string;
   protected _equalTo?: string | number | boolean;
   protected _limitToFirst?: number;
   protected _limitToLast?: number;
-  protected _orderKey?: keyof M & string;
+  protected _orderKey?: keyof TData & string;
   protected _path: string;
-  protected _startAtKey?: keyof M & string;
+  protected _startAtKey?: keyof TData & string;
   protected _startAt?: string | number | boolean;
   protected _db?: DbFrom<TSdk>;
 
@@ -51,7 +50,7 @@ export class SerializedFirestoreQuery<
 
   protected _orderBy: IFirestoreOrder = 'orderBy';
 
-  public get identity(): ISerializedIdentity<M> {
+  public get identity(): ISerializedIdentity<"FirestoreClient" | "FirestoreAdmin", TData> {
     return {
       endAtKey: this._endAtKey,
       endAt: this._endAt,
@@ -84,63 +83,63 @@ export class SerializedFirestoreQuery<
     return this._path;
   }
 
-  public orderBy(child: keyof M & string): SerializedFirestoreQuery<TSdk, M> {
+  public orderBy(child: keyof TData & string): SerializedFirestoreQuery<TSdk, TData> {
     this._orderBy = 'orderBy';
     this._orderKey = child;
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this;
   }
 
-  public limitToFirst(value: number): SerializedFirestoreQuery<TSdk, M> {
+  public limitToFirst(value: number): SerializedFirestoreQuery<TSdk, TData> {
     this._limitToFirst = value;
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this as SerializedFirestoreQuery<TSdk, TData>;
   }
 
-  public limitToLast(value: number): SerializedFirestoreQuery<TSdk, M> {
+  public limitToLast(value: number): SerializedFirestoreQuery<TSdk, TData> {
     this._limitToLast = value;
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this as SerializedFirestoreQuery<TSdk, TData>;
   }
 
-  public orderByChild(child: keyof M & string): SerializedFirestoreQuery<TSdk, M> {
+  public orderByChild(child: keyof TData & string): SerializedFirestoreQuery<TSdk, TData> {
     this._orderBy = 'orderByChild';
     this._orderKey = child;
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this as SerializedFirestoreQuery<TSdk, TData>;
   }
 
-  public orderByValue(): SerializedFirestoreQuery<TSdk, M> {
+  public orderByValue(): SerializedFirestoreQuery<TSdk, TData> {
     this._orderBy = 'orderByValue';
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this as SerializedFirestoreQuery<TSdk, TData>;
   }
 
-  public orderByKey(): SerializedFirestoreQuery<TSdk, M> {
+  public orderByKey(): SerializedFirestoreQuery<TSdk, TData> {
     this._orderBy = 'orderByKey';
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this as SerializedFirestoreQuery<TSdk, TData>;
   }
 
   public startAt(
     value: string | number | boolean,
-    key?: keyof M & string
-  ): SerializedFirestoreQuery<TSdk, M> {
+    key?: keyof TData & string
+  ): SerializedFirestoreQuery<TSdk, TData> {
     this._startAt = value;
     this._startAtKey = key;
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this as SerializedFirestoreQuery<TSdk, TData>;
   }
 
   public endAt(
     value: string | number | boolean,
-    key?: keyof M & string
-  ): SerializedFirestoreQuery<TSdk, M> {
+    key?: keyof TData & string
+  ): SerializedFirestoreQuery<TSdk, TData> {
     this._endAt = value;
     this._endAtKey = key;
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this as SerializedFirestoreQuery<TSdk, TData>;
   }
 
   public equalTo(
     value: string | number | boolean,
-    key?: keyof M & string
-  ): SerializedFirestoreQuery<TSdk, M> {
+    key?: keyof TData & string
+  ): SerializedFirestoreQuery<TSdk, TData> {
     this._equalTo = value;
     this._equalToKey = key;
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this as SerializedFirestoreQuery<TSdk, TData>;
   }
 
   /**
@@ -214,8 +213,8 @@ export class SerializedFirestoreQuery<
   public where(
     operation: IComparisonOperator,
     value: string | number | boolean,
-    key?: keyof M & string
-  ): SerializedFirestoreQuery<TSdk, M> {
+    key?: keyof TData & string
+  ): SerializedFirestoreQuery<TSdk, TData> {
     switch (operation) {
       case '=':
         return this.equalTo(value, key);
@@ -235,17 +234,17 @@ export class SerializedFirestoreQuery<
    * Allows the DB interface to be setup early, allowing clients
    * to call execute without any params.
    */
-  public setDB(db: DbFrom<TSdk>): SerializedFirestoreQuery<TSdk, M> {
+  public setDB(db: DbFrom<TSdk>): SerializedFirestoreQuery<TSdk, TData> {
     this._db = db;
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this as SerializedFirestoreQuery<TSdk, TData>;
   }
 
-  public setPath(path: string): SerializedFirestoreQuery<TSdk, M> {
+  public setPath(path: string): SerializedFirestoreQuery<TSdk, TData> {
     this._path = slashNotation(path);
-    return this as SerializedFirestoreQuery<TSdk, M>;
+    return this as SerializedFirestoreQuery<TSdk, TData>;
   }
 
-  public toJSON(): ISerializedIdentity<M> {
+  public toJSON(): ISerializedIdentity<TSdk, TData> {
     return this.identity;
   }
 

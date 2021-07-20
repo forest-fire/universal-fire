@@ -14,9 +14,10 @@ import { getPushKeys, modelRegister } from "@/util";
 
 import { ConstructorFor, IDictionary } from "common-types";
 import { getDbIndexes } from "@/decorators";
-import { IFmModelMeta, IModel } from "universal-fire";
+import { IFmModelMeta } from "universal-fire";
+import { IModel } from "@forest-fire/types";
 
-export function model<T>(options: IFmModelMeta<T> = {} as IFmModelMeta<T>) {
+export function model<T extends IModel>(options: IFmModelMeta<T> = {} as IFmModelMeta<T>) {
   let isDirty = false;
 
   return function decorateModel<M extends IModel>(
