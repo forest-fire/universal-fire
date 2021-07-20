@@ -2,7 +2,7 @@ import { FireModel, Record } from "@/core";
 import { IModel, IModelOptions, IPrimaryKey } from "@/types";
 
 import { FireModelError } from "@/errors";
-import { SerializedQuery } from "universal-fire";
+import { SerializedQuery } from "@forest-fire/types";
 import { WatchBase } from "./WatchBase";
 
 export class WatchRecord<T extends IModel> extends WatchBase<T> {

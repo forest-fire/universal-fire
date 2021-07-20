@@ -1,6 +1,6 @@
 import { IDictionary } from "common-types";
 
-import type { ISerializedQuery, IDatabaseSdk, ISdk } from "universal-fire";
+import type { ISerializedQuery, IDatabaseSdk, ISdk } from "@forest-fire/types";
 
 import {
   WatchRecord,

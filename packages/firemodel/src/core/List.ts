@@ -2,12 +2,12 @@ import { DefaultDbCache, FireModel, Record } from "@/core";
 import {
   IComparisonOperator,
   ISerializedQuery,
-  SerializedQuery,
   ISdk,
   IDatabaseSdk,
   isClientSdk,
-  IModel
-} from "universal-fire";
+  IModel,
+  ModelMeta
+} from "@forest-fire/types";
 import {
   IDictionary,
   epochWithMilliseconds,
@@ -19,18 +19,15 @@ import {
   IListOptions,
   IListQueryOptions,
   IPrimaryKey,
-  IRecord,
   IReduxDispatch,
 } from "@/types";
-import { capitalize, getModelMeta } from "@/util";
+import { capitalize } from "@/util";
 import { pathJoin } from "native-dash";
 
 import { FireModelError } from "@/errors";
 import { arrayToHash } from "typed-conversions";
 import { queryAdjustForNext, reduceOptionsForQuery } from "./lists";
-import { IModelClass, ModelMeta } from "../../../types/dist/types";
-import { isArrayOf } from "@/util/type-guards";
-import { isString } from "lodash";
+import { isString } from "@/util";
 
 const DEFAULT_IF_NOT_FOUND = Symbol("DEFAULT_IF_NOT_FOUND");
 

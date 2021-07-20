@@ -8,7 +8,7 @@ import {
 import { DexieError } from "@/errors";
 import {
   IComparisonOperator, IModel,
-} from "universal-fire";
+} from "@forest-fire/types";
 import { capitalize } from "@/util";
 import { ConstructorFor, epoch } from "common-types";
 

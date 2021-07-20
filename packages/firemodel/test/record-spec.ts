@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import { IFmLocalEvent, IFmWatchEvent, List, Record } from "../src";
-import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
+import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
 
 import { FireModel } from "@/index";
 import { FmEvents } from "@/index";

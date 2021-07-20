@@ -1,7 +1,7 @@
 import { IRecord } from "@/types";
 import { IDictionary } from "common-types";
 import { keys } from "native-dash";
-import { IFmModelMeta, IModel, ISdk } from "universal-fire";
+import { IFmModelMeta, IModel, ISdk } from "@forest-fire/types";
 
 const meta: IDictionary<IFmModelMeta<IModel>> = {};
 

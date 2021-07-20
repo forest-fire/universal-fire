@@ -1,4 +1,4 @@
-import type { IModel, ISdk } from "universal-fire";
+import type { IModel, ISdk } from "@forest-fire/types";
 
 import {
   FmEvents,

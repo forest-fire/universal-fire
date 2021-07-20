@@ -1,4 +1,4 @@
-import { IModel } from "universal-fire";
+import { IModel } from "@forest-fire/types";
 
 // TODO: this is necessitated by the use of `Record` in some error classes
 // which sets up a whole dependency chain

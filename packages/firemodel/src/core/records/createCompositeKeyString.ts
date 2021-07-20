@@ -1,7 +1,7 @@
 import { IDictionary } from "common-types";
 import { Record } from "@/core";
 import { createCompositeKey } from "./index";
-import { ISdk, IModel } from "universal-fire";
+import { ISdk, IModel } from "@forest-fire/types";
 
 /**
  * Creates a string based composite key if the passed in record

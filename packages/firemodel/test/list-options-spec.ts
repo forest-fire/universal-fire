@@ -1,4 +1,4 @@
-import { RealTimeAdmin } from "universal-fire";
+import { RealTimeAdmin } from "@forest-fire/types";
 import { Car } from "./testing/Car";
 import { FireModel, List, Mock } from "@/core/index";
 import { IDatabaseSdk, SDK } from "../../types/dist/types";

@@ -4,7 +4,6 @@ import {
   IFmLocalEvent,
   IFmWatchEvent,
   IReduxAction,
-  Mock,
   Record,
   Watch,
   WatchList,

@@ -1,5 +1,5 @@
 import { IFmWatchEvent, Record } from "../src";
-import { IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
+import { IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
 import {
   buildRelationshipPaths,
   createCompositeKeyFromFkString,

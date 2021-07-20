@@ -8,7 +8,7 @@ import { ConstructorFor } from "common-types";
 import { Table } from "dexie";
 import { capitalize } from "@/util";
 import { key as fbKey } from "firebase-key";
-import { IModel } from "universal-fire";
+import { IModel } from "@forest-fire/types";
 import { IDictionary } from "brilliant-errors";
 
 /**

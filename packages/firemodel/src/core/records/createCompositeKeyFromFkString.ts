@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { ICompositeKey } from "@/types";
-import { IModel } from "universal-fire";
+import { IModel } from "@forest-fire/types";
 import { FireModelError } from "@/errors";
 import { capitalize } from "@/util";
 

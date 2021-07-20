@@ -1,5 +1,5 @@
 import { AuditLog, FireModel, List, Mock, Record } from "@/index";
-import { IDatabaseSdk, RealTimeAdmin } from "universal-fire";
+import { IDatabaseSdk, RealTimeAdmin } from "@forest-fire/types";
 
 import { Person } from "./testing/AuditedPerson";
 import { wait } from "common-types";

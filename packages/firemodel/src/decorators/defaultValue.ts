@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { IFmModelPropertyMeta, IModel } from "universal-fire";
+import { IFmModelPropertyMeta, IModel } from "@forest-fire/types";
 import { propertiesByModel } from "@/util";
 import { propertyReflector } from "@/decorators";
 

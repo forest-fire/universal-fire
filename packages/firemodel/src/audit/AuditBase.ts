@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { FireModel, Record } from "@/core";
-import { IDatabaseSdk, ISerializedQuery, IModel, ISdk } from "universal-fire";
+import { IDatabaseSdk, ISerializedQuery, IModel, ISdk } from "@forest-fire/types";
 import { IModelOptions } from "@/types";
 
 import { pathJoin } from "native-dash";

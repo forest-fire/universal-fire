@@ -1,5 +1,5 @@
 import { FireModelError } from "@/errors";
-import { IDatabaseSdk, ISdk } from "universal-fire";
+import { IDatabaseSdk, ISdk } from "@forest-fire/types";
 
 export type IDefaultDbCache<D extends IDatabaseSdk<ISdk>> = {
   set<T extends IDatabaseSdk<ISdk>>(db: T): IDefaultDbCache<T>;

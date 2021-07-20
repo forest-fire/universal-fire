@@ -5,7 +5,7 @@ import {
   Record,
   VeuxWrapper,
 } from "@/index";
-import { IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
+import { IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
 
 import { FmEvents } from "@/index";
 import { Person } from "./testing/Person";

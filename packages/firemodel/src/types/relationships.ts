@@ -1,6 +1,6 @@
 import { FireModelError } from "@/errors";
 import { IDictionary } from "common-types";
-import { IDatabaseSdk, ISdk } from "universal-fire";
+import { IDatabaseSdk, ISdk } from "@forest-fire/types";
 
 /**
  * **IFmRelationshipOperation**

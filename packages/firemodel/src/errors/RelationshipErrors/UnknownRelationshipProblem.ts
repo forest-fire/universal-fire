@@ -1,8 +1,8 @@
 import { FireModelError } from "@/errors";
 import { IFmRelationshipOperation } from "@/types";
-import { IModel } from "universal-fire";
+import { IModel } from "@forest-fire/types";
 import { Record } from "@/core";
-import { ISdk } from "universal-fire";
+import { ISdk } from "@forest-fire/types";
 
 export class UnknownRelationshipProblem<
   S extends ISdk,

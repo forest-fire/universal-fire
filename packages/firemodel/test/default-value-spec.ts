@@ -1,7 +1,7 @@
 import { FireModel, List, Mock, Record } from "../src";
 
 import { Person } from "./testing/default-values/Person";
-import { RealTimeAdmin } from "universal-fire";
+import { RealTimeAdmin } from "@forest-fire/types";
 
 describe("defaultValue() → ", () => {
   beforeAll(async () => {

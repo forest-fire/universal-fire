@@ -1,5 +1,5 @@
 import { FireModelError } from "@/errors";
-import { IModel } from "universal-fire";
+import { IModel } from "@forest-fire/types";
 
 export class FkDoesNotExist<
   P extends IModel,

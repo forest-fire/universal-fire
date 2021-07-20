@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { IFmModelMeta } from "universal-fire";
+import { IFmModelMeta } from "@forest-fire/types";
 import { index, mock, property } from "@/decorators";
 import { epochWithMilliseconds } from "common-types";
 import { IModel } from "@forest-fire/types";

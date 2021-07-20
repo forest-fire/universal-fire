@@ -1,5 +1,5 @@
 import { IListOptions, IListQueryOptions } from "@/types";
-import { ISdk, IModel, IDatabaseSdk } from "universal-fire";
+import { ISdk, IModel, IDatabaseSdk } from "@forest-fire/types";
 import { DefaultDbCache } from "../DefaultDbCache";
 
 /**

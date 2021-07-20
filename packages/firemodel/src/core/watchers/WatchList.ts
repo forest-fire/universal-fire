@@ -3,7 +3,7 @@ import {
   ISdk,
   ISerializedQuery,
   SerializedQuery,
-} from "universal-fire";
+} from "@forest-fire/types";
 import { IListOptions, IModel, IPrimaryKey } from "@/types";
 import { List, Record, Watch } from "@/core";
 

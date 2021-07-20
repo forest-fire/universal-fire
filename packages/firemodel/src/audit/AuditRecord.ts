@@ -2,7 +2,7 @@ import { IAuditLogItem, IModel, IModelOptions } from "@/types";
 
 import { AuditBase } from "@/audit";
 import { Parallel } from "wait-in-parallel";
-import { SerializedQuery } from "universal-fire";
+import { SerializedQuery } from "@forest-fire/types";
 import { epochWithMilliseconds } from "common-types";
 import { pathJoin } from "native-dash";
 

@@ -2,7 +2,7 @@ import { IRecord } from "@/types";
 
 import { FireModelError } from "@/errors";
 import { capitalize } from "@/util";
-import { ISdk, IModel } from "universal-fire";
+import { ISdk, IModel } from "@forest-fire/types";
 
 export class MissingReciprocalInverse<S extends ISdk, T extends IModel> extends FireModelError {
   constructor(rec: IRecord<S, T>, property: keyof T & string) {

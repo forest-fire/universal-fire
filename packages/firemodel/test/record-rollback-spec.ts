@@ -1,4 +1,4 @@
-import { IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
+import { IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
 
 import { FireModel } from "@/index";
 

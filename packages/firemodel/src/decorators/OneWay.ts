@@ -1,4 +1,4 @@
-import { IFmRelationshipDirectionality } from "universal-fire";
+import { IFmRelationshipDirectionality } from "@forest-fire/types";
 
 /**
  * A helper method when designing relationships. In most cases when you

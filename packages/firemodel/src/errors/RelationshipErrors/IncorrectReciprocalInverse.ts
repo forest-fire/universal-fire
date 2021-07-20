@@ -2,7 +2,7 @@ import { FireModelError, MissingReciprocalInverse } from "@/errors";
 import { IRecord } from "@/types";
 
 import { capitalize } from "@/util";
-import { ISdk, IModel } from "universal-fire";
+import { ISdk, IModel } from "@forest-fire/types";
 
 export class IncorrectReciprocalInverse<
   S extends ISdk,

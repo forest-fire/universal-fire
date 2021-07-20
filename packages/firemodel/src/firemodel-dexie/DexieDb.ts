@@ -12,7 +12,7 @@ import { ConstructorFor, IDictionary, pk } from "common-types";
 
 import { Record } from "@/core";
 import { capitalize } from "@/util";
-import { IModel } from "universal-fire";
+import { IModel } from "@forest-fire/types";
 
 /**
  * Provides a simple API to convert to/work with **Dexie** models

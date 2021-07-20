@@ -1,4 +1,4 @@
-import { ISdk, IModel } from "universal-fire";
+import { ISdk, IModel } from "@forest-fire/types";
 import { IFmLocalEvent, IFmRecordMeta } from "@/types";
 
 import { Record } from "@/core";

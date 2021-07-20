@@ -10,7 +10,7 @@ import { Record, hasInitialized } from "@/core";
 
 import { FireModelError } from "@/errors";
 import { IDictionary } from "common-types";
-import { IModel, ISdk } from "universal-fire";
+import { IModel, ISdk } from "@forest-fire/types";
 
 /**
  * **watchDispatcher**
@@ -80,7 +80,7 @@ export const WatchDispatcher = <S extends ISdk, T extends IModel>(
         const rec = Record.createWith(
           watcherContext.modelConstructor,
           recordProps
-        ) ;
+        );
 
         let type: FmEvents;
         switch (event.kind) {

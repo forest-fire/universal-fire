@@ -1,5 +1,5 @@
 import { IFmPathValuePair } from "@/types";
-import { IModel } from "universal-fire";
+import { IModel } from "@forest-fire/types";
 import { Record } from "@/core";
 import { pathJoin } from "native-dash";
 

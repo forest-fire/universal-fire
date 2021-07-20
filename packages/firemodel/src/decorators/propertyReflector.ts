@@ -3,7 +3,7 @@ import "reflect-metadata";
 import { get, lowercase, set } from "@/util";
 
 import { IDictionary } from "common-types";
-import { IModel } from "universal-fire";
+import { IModel } from "@forest-fire/types";
 
 /**
  * Adds meta data to a given "property" on a model. In this
@@ -29,7 +29,7 @@ export const propertyReflector = <R>(
 
   const meta: IDictionary = {
     ...(Reflect.getMetadata(key, modelKlass) || {}),
-    type: lowercase(reflect.name) ,
+    type: lowercase(reflect.name),
     ...context,
     property: key,
   };

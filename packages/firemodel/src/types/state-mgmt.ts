@@ -14,7 +14,7 @@ import {
   ISdk,
   ISerializedQuery,
   IValueBasedWatchEvent,
-} from "universal-fire";
+} from "@forest-fire/types";
 import { epoch, fk, pk } from "common-types";
 
 // TODO: replace this with typing from universal-fire

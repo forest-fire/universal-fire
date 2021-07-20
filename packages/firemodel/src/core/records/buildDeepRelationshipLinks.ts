@@ -1,4 +1,4 @@
-import { ISdk, IModel } from "universal-fire";
+import { ISdk, IModel } from "@forest-fire/types";
 import { IDictionary } from "common-types";
 import { IFkReference } from "@/types";
 import { Record } from "@/core";

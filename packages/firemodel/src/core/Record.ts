@@ -22,7 +22,6 @@ import {
   IFmPathValuePair,
   IFmRelationshipOptions,
   IFmRelationshipOptionsForHasMany,
-  IRecord,
   IRecordOptions,
   IRecordRelationshipMeta,
   IReduxDispatch,
@@ -61,7 +60,7 @@ import { UnwatchedLocalEvent } from "@/state-mgmt";
 import { default as copy } from "fast-copy";
 import { key as fbKey } from "firebase-key";
 import { writeAudit } from "@/audit";
-import { IDatabaseSdk, IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel, ISdk, ModelMeta } from "@forest-fire/types";
+import { IDatabaseSdk, IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel, ISdk } from "@forest-fire/types";
 
 //#endregion
 
@@ -235,7 +234,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
    * @param updates properties to update; this is a non-destructive operation so properties not expressed will remain unchanged. Also, because values are _nullable_ you can set a property to `null` to REMOVE it from the database.
    * @param options
    */
-  public static async update<T extends IModel, O extends IRecordOptions<any>>(
+  public static async update<T extends IModel, O extends IRecordOptions<ISdk>>(
     model: new () => T,
     pk: IPrimaryKey<T>,
     updates: Nullable<Partial<T>>,
@@ -1042,7 +1041,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
   public async disassociate(
     property: keyof T & string,
     // TODO: ideally stronger typing below
-    refs: IFkReference<any> | IFkReference<any>[],
+    refs: IFkReference<unknown> | IFkReference<unknown>[],
     options: IFmRelationshipOptions<S> = {}
   ) {
     const relType = this.META.relationship(property).relType;
@@ -1555,8 +1554,6 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> im
           this.db.update("/", paths);
           break;
       }
-
-      this.isDirty = false;
 
       // write audit if option is turned on
       this._writeAudit(crudAction, this.data, priorValue);

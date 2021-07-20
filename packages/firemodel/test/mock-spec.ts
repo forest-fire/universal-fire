@@ -12,7 +12,7 @@ import {
   property,
 } from "../src";
 import { IDictionary, wait } from "common-types";
-import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
+import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
 
 import { Car } from "./testing/Car";
 import { Company } from "./testing/Company";

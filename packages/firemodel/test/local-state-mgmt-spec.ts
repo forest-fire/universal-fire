@@ -1,5 +1,5 @@
 import { FireModel, List, Record } from "@/index";
-import { IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
+import { IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
 
 import { DynamicPerson } from "./testing/localStateMgmt/DynamicPerson";
 import { Person } from "./testing/localStateMgmt/Person";

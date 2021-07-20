@@ -1,7 +1,7 @@
 import type { Dexie, Transaction } from "dexie";
 
 import { IDictionary } from "common-types";
-import { IFmModelMeta, IModel } from "universal-fire";
+import { IFmModelMeta, IModel } from "@forest-fire/types";
 
 export interface IDexiePriorVersion {
   /**

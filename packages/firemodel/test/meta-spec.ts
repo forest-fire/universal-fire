@@ -1,6 +1,6 @@
 import { Klass } from "./testing/klass";
 import { Person } from "./testing/Person";
-// import { DB, SDK } from "universal-fire";
+// import { DB, SDK } from "@forest-fire/types";
 import { RealTimeAdmin } from "@forest-fire/real-time-admin";
 import { Record } from "../src";
 

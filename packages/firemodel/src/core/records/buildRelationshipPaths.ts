@@ -15,7 +15,7 @@ import {
 import { Record } from "@/core";
 import { createCompositeKeyRefFromRecord } from "./index";
 import { getModelMeta, pathJoin } from "@/util";
-import { IModel, ISdk } from "universal-fire";
+import { IModel, ISdk } from "@forest-fire/types";
 import { ConstructorFor, fk } from "common-types";
 
 /**

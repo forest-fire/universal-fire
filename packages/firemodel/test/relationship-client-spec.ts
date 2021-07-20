@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import { IFmLocalRelationshipEvent, IFmWatchEvent, Record } from "../src";
-import { IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
+import { IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
 
 import { Company } from "./testing/Company";
 import { FancyPerson } from "./testing/FancyPerson";

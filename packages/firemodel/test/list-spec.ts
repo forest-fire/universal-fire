@@ -3,7 +3,7 @@ import "reflect-metadata";
 import * as helpers from "./testing/helpers";
 
 import { IFmWatchEvent, List, Record } from "@/index";
-import { RealTimeAdmin, SDK, SerializedQuery } from "universal-fire";
+import { RealTimeAdmin, SDK, SerializedQuery } from "@forest-fire/types";
 import { IDatabaseSdk } from "@forest-fire/types";
 
 import { Car } from "./testing/Car";

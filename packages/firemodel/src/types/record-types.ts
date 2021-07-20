@@ -1,7 +1,7 @@
 import { IDictionary, epoch, fk, pk } from "common-types";
 import { IReduxDispatch } from "./state-mgmt";
 
-import { IDatabaseSdk, ISdk, IFmFunctionToConstructor } from "universal-fire";
+import { IDatabaseSdk, ISdk, IFmFunctionToConstructor } from "@forest-fire/types";
 import { IFmHasId } from "./general";
 import {
   ModelMeta, IFmModelPropertyMeta,

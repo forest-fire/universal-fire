@@ -1,4 +1,4 @@
-import { ISerializedQuery } from "universal-fire";
+import { ISerializedQuery } from "@forest-fire/types";
 
 /**
  * Adjusts the query so that the next "page" will be loaded

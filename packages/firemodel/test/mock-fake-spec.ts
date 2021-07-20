@@ -2,7 +2,7 @@ import { Mock as FireMock, MockHelper } from "firemock";
 import { FireModel, List, Mock } from "../src";
 
 import { Product } from "./testing/Product";
-// import { DB, SDK } from "universal-fire";
+// import { DB, SDK } from "@forest-fire/types";
 import { RealTimeAdmin } from "@forest-fire/real-time-admin";
 import { fakeIt } from "@/index";
 

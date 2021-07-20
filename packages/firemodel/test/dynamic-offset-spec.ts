@@ -7,7 +7,7 @@ import {
   Record,
   Watch,
 } from "@/index";
-import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "universal-fire";
+import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
 import { firstKey, firstRecord, lastRecord } from "./testing/helpers";
 
 import Company from "./testing/dynamicPaths/Company";

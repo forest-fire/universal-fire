@@ -12,9 +12,9 @@ import { capitalize, getModelMeta } from "@/util";
 import { createCompositeRef, locallyUpdateFkOnRecord } from "./index";
 
 import { IDictionary } from "common-types";
-import { IModel } from "universal-fire";
+import { IModel } from "@forest-fire/types";
 import { Record } from "@/core";
-import { ISdk } from "universal-fire";
+import { ISdk } from "@forest-fire/types";
 
 /**
  * **relationshipOperation**

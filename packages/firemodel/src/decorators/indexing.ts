@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import { IDictionary } from "common-types";
-import { IModelIndexMeta } from "universal-fire";
+import { IModelIndexMeta } from "@forest-fire/types";
 import { hashToArray } from "typed-conversions";
 import { propertyReflector } from "@/decorators";
 
