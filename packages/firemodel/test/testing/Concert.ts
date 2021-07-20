@@ -1,9 +1,7 @@
-import { model, Model, property, hasMany } from "../../src";
-import { IDictionary, fk } from "common-types";
-import { Person } from "./Person";
+import { model, Model, property } from "../../src";
 
 @model({ dbOffset: "authenticated" })
-export class Concert extends Model {
+export class Concert extends Model<Concert> {
   // prettier-ignore
   @property public name: string;
   @property public employees?: number;

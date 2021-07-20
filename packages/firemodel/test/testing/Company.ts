@@ -11,7 +11,7 @@ import {
 import { Person } from "./AuditedPerson";
 
 @model({ dbOffset: "authenticated", audit: true })
-export class Company extends Model {
+export class Company extends Model<Company> {
   // prettier-ignore
   @property @length(20) @mock('companyName') name: string;
   @property founded?: string;

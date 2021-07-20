@@ -17,7 +17,7 @@ function bespokeMock(context: import("firemock").MockHelper) {
 }
 
 @model({ dbOffset: "authenticated", audit: true })
-export class Person extends Model {
+export class Person extends Model<Person> {
   // prettier-ignore
   @property @length(20) public name: string;
   // prettier-ignore

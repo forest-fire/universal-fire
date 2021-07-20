@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/require-await */
 import {
   FireModel,
   FmEvents,
@@ -10,9 +12,8 @@ import {
   getWatcherPool,
 } from "@/index";
 import { IDictionary, wait } from "common-types";
-import { IDatabaseSdk, RealTimeAdmin } from "universal-fire";
-
-import { BaseSerializer } from "@forest-fire/serialized-query";
+import { IDatabaseSdk } from "@forest-fire/types";
+import { RealTimeAdmin } from "universal-fire";
 import { DeeperPerson } from "./testing/dynamicPaths/DeeperPerson";
 import { Person } from "./testing/Person";
 import { PersonWithLocalAndPrefix } from "./testing/PersonWithLocalAndPrefix";
@@ -21,9 +22,9 @@ import { setupEnv } from "./testing/helpers";
 setupEnv();
 
 describe("Watch →", () => {
-  let realDB: IDatabaseSdk;
+  let realDB: IDatabaseSdk<"RealTimeAdmin">;
   beforeAll(async () => {
-    realDB = await RealTimeAdmin.connect();
+    realDB = await RealTimeAdmin.connect({ mocking: true });
     FireModel.defaultDb = realDB;
   });
 

@@ -7,7 +7,7 @@ export interface IDeepName {
 }
 
 @model({ dbOffset: ":group/:subGroup/testing", localPostfix: "all" })
-export class DeeperPerson extends Model {
+export class DeeperPerson extends Model<DeeperPerson> {
   @property public name: IDeepName;
   @property public age: number;
   @property public group: string;
