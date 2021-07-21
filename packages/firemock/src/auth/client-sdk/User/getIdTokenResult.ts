@@ -3,8 +3,8 @@ import { ClientSdk } from '@forest-fire/types';
 import { getIdToken } from './getIdToken';
 
 export function getIdTokenResult(api: IMockAuthMgmt<ClientSdk>) {
-  return (forceRefresh?: boolean) => {
-    return async (): Promise<IdTokenResult> => ({
+  return async (forceRefresh?: boolean): Promise<IdTokenResult> => {
+    return {
       authTime: '',
       claims: {},
       expirationTime: '',
@@ -12,6 +12,6 @@ export function getIdTokenResult(api: IMockAuthMgmt<ClientSdk>) {
       signInProvider: '',
       signInSecondFactor: '',
       token: await getIdToken(api)(),
-    });
+    };
   };
 }

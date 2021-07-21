@@ -35,7 +35,7 @@ describe('Firebase Auth →', () => {
 
     expect(user.user.uid).toBeDefined();
     expect(user.user.isAnonymous).toEqual(true);
-    expect(typeof user.user.uid).toEqual("string");
+    expect(typeof user.user.uid).toEqual('string');
   });
 
   it('signInWithEmail with valid email returns a valid user', async () => {
@@ -52,6 +52,7 @@ describe('Firebase Auth →', () => {
       'test@test.com',
       'foobar'
     );
+
     expect(typeof user.user.email).toEqual('string');
     expect(user.user.email).toEqual('test@test.com');
     expect(user.user.emailVerified).toEqual(true);
@@ -143,6 +144,7 @@ describe('Firebase Auth →', () => {
       'password'
     );
     m.authManager.setCurrentUser(userCredential);
+
     expect(typeof userCredential.user.updatePassword).toEqual('function');
 
     await userCredential.user.updatePassword('foobar');
@@ -202,7 +204,6 @@ describe('Firebase Auth →', () => {
     });
 
     const auth = m.auth;
-
     let hasBeenNotified = false;
     m.authManager.addAuthObserver(() => (hasBeenNotified = true));
     await auth.signOut();

@@ -28,6 +28,25 @@ import {
 import { toUser } from './util';
 import { networkDelay as delay } from '../util';
 import _authProviders from './client-sdk/AuthProviders';
+import { randomString } from 'native-dash';
+
+const toMockUser = (
+  user: User,
+  metadata?: UserRecord['metadata']
+): IMockUserRecord => {
+  return {
+    kind: 'MockUserRecord',
+    uid: user.uid,
+    email: user.email,
+    emailVerified: user.emailVerified,
+    disabled: false,
+    customClaims: {},
+    password: (user as IDictionary).password as string | '123456789',
+    metadata,
+    providerData: undefined,
+    toJSON: () => ({}),
+  };
+};
 
 export type SdkFromProviders<T extends IClientAuthProviders | undefined> =
   T extends IClientAuthProviders ? ClientSdk : AdminSdk;
@@ -91,31 +110,36 @@ export function createAuthManager<TSdk extends ISdk>(
   };
 
   const setCurrentUser = (
-    user?: string | User | UserCredential | IMockUser
+    user?: string | User | UserCredential | IMockUser,
+    force?: boolean
   ): IMockUserRecord => {
     let lookingFor: string;
-    if (typeof user === 'string') {
+    if (!user) {
+      _currentUser = undefined;
+    } else if (typeof user === 'string') {
       lookingFor = user;
     } else if (isUser(user) || isMockUserRecord(user)) {
       lookingFor = user.uid;
     } else if (isUserCredential(user)) {
       lookingFor = user.user.uid;
     }
-
     const u = findKnownUser('uid', lookingFor);
     const uid = u ? u.uid : undefined;
 
-    if (!uid) {
+    if (!uid && !force) {
       throw new FireMockError(
         `Attempt to set current user failed as UID [${lookingFor}] could not be found in the known users being managed by the Auth service!`,
         'user-missing'
       );
     }
 
-    if (_currentUser !== uid) {
+    if (_currentUser !== uid || force) {
       _currentUser = uid;
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      getAuthObservers().map((o) => o(toUser(getCurrentUser())));
+      getAuthObservers()?.map((o) => {
+        const currentUser = getCurrentUser();
+        return o(currentUser ? toUser(currentUser) : undefined);
+      });
     }
 
     return u;
@@ -136,7 +160,7 @@ export function createAuthManager<TSdk extends ISdk>(
       if (_providers.includes(AuthProviderName.anonymous)) {
         setCurrentUser(getAnonymousUid());
       } else {
-        setCurrentUser();
+        setCurrentUser(undefined, true);
       }
     }
   };
@@ -190,18 +214,19 @@ export function createAuthManager<TSdk extends ISdk>(
         toJSON: () => ({}),
       };
     } else if (isUser(user)) {
+      mockUser = toMockUser(user, metadata);
+    } else if ('email' in user) {
       mockUser = {
         kind: 'MockUserRecord',
-        uid: user.uid,
-        email: user.email,
-        emailVerified: user.emailVerified,
+        uid: user.uid || randomString(),
+        emailVerified: true,
         disabled: false,
         customClaims: {},
-        password: (user as IDictionary).password as string | '123456789',
+        tokenIds: [],
         metadata,
         providerData: undefined,
-        toJSON: () => ({}),
-      };
+        ...user,
+      } as IMockUserRecord;
     }
 
     _knownUsers.push(mockUser);
@@ -219,23 +244,25 @@ export function createAuthManager<TSdk extends ISdk>(
   };
 
   const initializeAuth = async (config: IMockAuthConfig): Promise<void> => {
-    config = {
-      providers: [AuthProviderName.anonymous],
-      users: [],
+    const fullConfig: IMockAuthConfig = {
+      providers: config?.providers || [AuthProviderName.anonymous],
+      users: config?.users || [],
       options: {
         networkDelay: NetworkDelay.wifi,
+        ...config?.options,
       },
-      ...config,
     };
     _providers =
-      typeof config.providers === 'function'
-        ? await config.providers()
-        : config.providers;
+      typeof fullConfig.providers === 'function'
+        ? await fullConfig.providers()
+        : fullConfig.providers;
 
-    setNetworkDelay(config.options.networkDelay);
+    setNetworkDelay(fullConfig.options.networkDelay);
 
     const users =
-      typeof config.users === 'function' ? await config.users() : config.users;
+      typeof fullConfig.users === 'function'
+        ? await fullConfig.users()
+        : fullConfig.users;
     _knownUsers = [];
     users?.forEach((u) => {
       addToUserPool(u);
@@ -293,10 +320,10 @@ export function createAuthManager<TSdk extends ISdk>(
   const authProviders: AuthProviderFrom<TSdk> = isAdminSdk(sdk)
     ? undefined
     : (_authProviders as AuthProviderFrom<TSdk>);
-  
+
   const getAuthProvidersNames = () => {
     return _providers;
-  }
+  };
 
   const networkDelay = async () => {
     await delay(_networkDelay);
@@ -328,6 +355,6 @@ export function createAuthManager<TSdk extends ISdk>(
     removeFromUserPool,
     setNetworkDelay,
     authProviders,
-    getAuthProvidersNames
+    getAuthProvidersNames,
   };
 }

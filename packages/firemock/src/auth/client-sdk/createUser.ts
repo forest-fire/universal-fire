@@ -16,11 +16,11 @@ import {
 export function createUser(api: IMockAuthMgmt<ISdk>, user: Partial<User>): User {
   const fns = {
     ...(notImplemented as Required<typeof notImplemented>),
-    getIdToken,
-    getIdTokenResult,
-    updateEmail,
-    updatePassword,
-    updateProfile,
+    getIdToken: getIdToken(api),
+    getIdTokenResult: getIdTokenResult(api),
+    updateEmail: updateEmail(api),
+    updatePassword: updatePassword(api),
+    updateProfile: updateProfile(api),
   };
 
   return {
