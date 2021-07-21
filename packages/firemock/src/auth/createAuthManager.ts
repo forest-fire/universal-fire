@@ -272,7 +272,7 @@ export function createAuthManager<TSdk extends ISdk>(
     }
 
     if (typeof user === 'string') {
-      const u = findKnownUser('uid', user);
+      u = findKnownUser('uid', user);
       if (!u) {
         throw new FireMockError(
           `Attempt to update the user with UID of "${user}" failed because this user is not defined in the mock Auth instance!`

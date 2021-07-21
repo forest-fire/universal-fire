@@ -33,7 +33,9 @@ describe('Firebase Auth →', () => {
 
     const user = await m.auth.signInAnonymously();
 
-    expect(user.user.uid).toEqual('1234');
+    expect(user.user.uid).toBeDefined();
+    expect(user.user.isAnonymous).toEqual(true);
+    expect(typeof user.user.uid).toEqual("string");
   });
 
   it('signInWithEmail with valid email returns a valid user', async () => {

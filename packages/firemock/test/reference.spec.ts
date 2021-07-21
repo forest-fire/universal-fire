@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/unbound-method */
 import { Fixture, SchemaHelper, SchemaCallback } from '@forest-fire/fixture';
 import * as convert from 'typed-conversions';
 import * as helpers from './testing/helpers';
@@ -20,7 +22,7 @@ describe('Reference functions', () => {
     age: number;
   }
 
-  const mock = createDatabase("RealTimeClient");
+  const mock = createDatabase('RealTimeClient');
 
   describe('Basic DB Querying: ', () => {
     beforeEach(() => {
@@ -31,7 +33,7 @@ describe('Reference functions', () => {
       const m = new Fixture();
       m.addSchema('foo', mocker);
       const fixture = m.queueSchema('foo', 5).generate();
-      mock.store.setDb("/", fixture);
+      mock.store.setDb('/', fixture);
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return await mock.db
@@ -49,18 +51,19 @@ describe('Reference functions', () => {
     });
 
     it('with numeric delay, querying returns an asynchronous result', async () => {
-      const m = await Fixture.prepare();
+      const m = Fixture.prepare();
       m.addSchema('foo', mocker);
       m.addSchema('bar', mocker);
-      m.queueSchema('foo', 5).queueSchema('bar', 5).generate();
+      const fixture = m.queueSchema('foo', 5).queueSchema('bar', 5).generate();
+      mock.store.setDb('/', fixture);
 
       const results = await mock.db.ref('/foos').once('value');
       expect(results.numChildren()).toBe(5);
-      expect(typeof helpers.firstRecord(results.val()).name).toEqual("string");
-      expect(typeof helpers.firstRecord(results.val()).age).toEqual("number");
+      expect(typeof helpers.firstRecord(results.val()).name).toEqual('string');
+      expect(typeof helpers.firstRecord(results.val()).age).toEqual('number');
     });
 
-    it.skip('with named delay, querying returns an asynchronous result', async () => {
+    it.skip('with named delay, querying returns an asynchronous result', () => {
       const m = Fixture.prepare();
 
       m.addSchema('foo', mocker);
@@ -68,7 +71,7 @@ describe('Reference functions', () => {
       m.queueSchema('foo', 5);
       m.queueSchema('bar', 5);
       const fixture = m.generate();
-      mock.store.setDb("/", fixture);
+      mock.store.setDb('/', fixture);
 
       mock.store.setNetworkDelay(NetworkDelay.mobile3g);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -86,11 +89,11 @@ describe('Reference functions', () => {
         });
     });
 
-    it.skip('with delay range, querying returns an asynchronous result', async () => {
+    it.skip('with delay range, querying returns an asynchronous result', () => {
       const m = new Fixture();
-      m.addSchema('foo', mocker)
-        .addSchema('bar', mocker);
-      m.queueSchema('foo', 5).queueSchema('bar', 5).generate();
+      m.addSchema('foo', mocker).addSchema('bar', mocker);
+      const fixture = m.queueSchema('foo', 5).queueSchema('bar', 5).generate();
+      mock.store.setDb('/', fixture);
 
       mock.store.setNetworkDelay([50, 80]);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -107,8 +110,6 @@ describe('Reference functions', () => {
           );
         });
     });
-
-
   });
 
   describe('Filtered querying', () => {
@@ -121,7 +122,7 @@ describe('Reference functions', () => {
      * the end of the list (wrt to natural sort order).
      */
     it('query list with limitToFirst() set', async () => {
-      const f = await Fixture.prepare();
+      const f = Fixture.prepare();
       f.addSchema('monkey').mock(mocker);
       const fixture = f.queueSchema('monkey', 15).generate();
       const m = createDatabase(SDK.RealTimeAdmin, {}, fixture);
@@ -132,17 +133,15 @@ describe('Reference functions', () => {
       const allMonkeys = await m.db.ref('/monkeys').once('value');
       // const sortedMonkeys = convert.hashToArray(allMonkeys.val());
       expect(snap.numChildren()).toBe(10);
-      expect(Object.keys(m.store.getDb().monkeys).length).toBe(15);
-      expect(
-        firstKey(allMonkeys)
-      ).toBe(firstKey(fixture));
+      expect(Object.keys((m.store.getDb() as any).monkeys).length).toBe(15);
+      expect(firstKey(allMonkeys)).toBe(firstKey(fixture));
       // expect(
-      //   Object.keys(m.store.getDb().monkeys).indexOf(lastKey(filteredMonkeys))
+      //   Object.keys((m.store.getDb() as any).monkeys).indexOf(lastKey(filteredMonkeys))
       // ).not.toBe(-1);
       // expect(Object.keys(filteredMonkeys)).toEqual(
-      //   expect.arrayContaining([lastKey(m.store.getDb().monkeys)])
+      //   expect.arrayContaining([lastKey((m.store.getDb() as any).monkeys)])
       // );
-      // expect(Object.keys(filteredMonkeys).indexOf(firstKey(m.store.getDb().monkeys))).toBe(
+      // expect(Object.keys(filteredMonkeys).indexOf(firstKey((m.store.getDb() as any).monkeys))).toBe(
       //   -1
       // );
       // expect(Object.keys(filteredMonkeys).indexOf(lastKey(sortedMonkeys))).toBe(
@@ -189,14 +188,11 @@ describe('Reference functions', () => {
       const fixture = f.generate();
       const m = createDatabase(SDK.RealTimeClient, {}, fixture);
 
-      const snap = await m.db
-        .ref('/monkeys')
-        .limitToLast(10)
-        .once('value');
+      const snap = await m.db.ref('/monkeys').limitToLast(10).once('value');
 
       const listOf: Record<string, unknown> = snap.val();
       expect(snap.numChildren()).toBe(10);
-      expect(Object.keys(m.store.getDb().monkeys).length).toBe(15);
+      expect(Object.keys((m.store.getDb() as any).monkeys).length).toBe(15);
       expect(firstKey(listOf)).toBe(firstKey(fixture));
     });
   });
@@ -228,7 +224,7 @@ describe('Reference functions', () => {
       .equalTo(12, 'age')
       .once('value');
 
-    expect(Object.keys(m.store.getDb().people).length).toBe(20);
+    expect(Object.keys((m.store.getDb() as any).people).length).toBe(20);
     expect(snap.numChildren()).toBe(10);
   });
 
@@ -264,7 +260,7 @@ describe('Reference functions', () => {
   });
 
   it('startAt() filters a string property', async () => {
-    const f = await Fixture.prepare();
+    const f = Fixture.prepare();
     f.addSchema('dog', (h) => () => ({
       name: h.faker.name.firstName,
       born: '2014-09-08T08:02:17-05:00',
@@ -294,11 +290,11 @@ describe('Reference functions', () => {
     expect(pupsOnly.numChildren()).toBe(10);
   });
 
-  it.skip('startAt() filters sort by value when using value sort', async () =>
+  it.skip('startAt() filters sort by value when using value sort', () =>
     undefined);
-  it.skip('endAt() filters result by key by default', async () => undefined);
+  it.skip('endAt() filters result by key by default', () => undefined);
   it('endAt() filters a numeric property', async () => {
-    const f = await Fixture.prepare();
+    const f = Fixture.prepare();
     f.addSchema('dog', (h) => () => ({
       name: h.faker.name.firstName,
       age: 1,
@@ -319,10 +315,10 @@ describe('Reference functions', () => {
     expect(results.numChildren()).toBe(30);
     expect(pups.numChildren()).toBe(10);
   });
-  it.skip('endAt() filters sort by value when using value sort', async () =>
+  it.skip('endAt() filters sort by value when using value sort', () =>
     undefined);
   it('startAt() combined with endAt() filters correctly', async () => {
-    const f = await Fixture.prepare();
+    const f = Fixture.prepare();
     f.addSchema('dog', (h) => () => ({
       name: h.faker.name.firstName,
       age: 1,
@@ -348,29 +344,31 @@ describe('Reference functions', () => {
     expect(lastProp(middling.val()).age).toBe(5);
   });
 
-  it.skip('startAt(), endAt(), orderByValue() filters correctly', async () =>
+  it.skip('startAt(), endAt(), orderByValue() filters correctly', () =>
     undefined);
 }); // End Filtered Querying
 
 describe('Sort Order', () => {
-
   const personMock = (h: SchemaHelper) => () => ({
     name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
     age: h.faker.datatype.number({ min: 1, max: 80 }),
-    inUSA: h.faker.random.boolean(),
+    inUSA: h.faker.datatype.boolean(),
   });
 
   // const numbers = [123, 456, 7878, 9999, 10491, 15000, 18345, 20000];
   // const strings = ['abc', 'def', 'fgh', '123', '999', 'ABC', 'DEF'];
 
   it('orderByChild() -- where child is a string -- sorts correctly', async () => {
-    const f = await Fixture.prepare();
+    const f = Fixture.prepare();
     f.addSchema('person', personMock);
     f.queueSchema('person', 10);
     const fixture = f.generate();
     const m = createDatabase(SDK.RealTimeAdmin, {}, fixture);
 
-    const results = await m.db.ref('/people').orderByChild('name').once('value');
+    const results = await m.db
+      .ref('/people')
+      .orderByChild('name')
+      .once('value');
 
     const orderedPeople = convert.hashToArray(results.val());
     for (let i = 1; i <= 8; i++) {
@@ -378,7 +376,7 @@ describe('Sort Order', () => {
     }
 
     const orderedKeys = orderedPeople.map((p) => p.id);
-    const unorderedKeys = Object.keys(m.store.getDb().people);
+    const unorderedKeys = Object.keys((m.store.getDb() as any).people);
 
     expect(orderedKeys.join('.')).not.toBe(unorderedKeys.join('.'));
     expect(difference(orderedKeys, unorderedKeys).length).toBe(0);
@@ -405,11 +403,9 @@ describe('Sort Order', () => {
     }
 
     const orderedKeys = orderedPeople.map((p) => p.id);
-    const unorderedKeys = Object.keys(m.store.getDb().people);
+    const unorderedKeys = Object.keys((m.store.getDb() as any).people);
 
-    expect(JSON.stringify(orderedKeys)).not.toBe(
-      JSON.stringify(unorderedKeys)
-    );
+    expect(JSON.stringify(orderedKeys)).not.toBe(JSON.stringify(unorderedKeys));
     expect(difference(orderedKeys, unorderedKeys).length).toBe(0);
   });
 
@@ -420,26 +416,27 @@ describe('Sort Order', () => {
     const fixture = f.generate();
     const m = createDatabase(SDK.RealTimeAdmin, {}, fixture);
 
-
     const people = await m.db.ref('/people').orderByKey().once('value');
     const defaultPeople = await m.db.ref('/people').once('value');
     expect(JSON.stringify(people)).toBe(JSON.stringify(defaultPeople));
     const orderedPeople = convert.hashToArray(people.val());
 
     const orderedKeys = orderedPeople.map((p) => p.id);
-    const unorderedKeys = Object.keys(m.store.getDb().people);
+    const unorderedKeys = Object.keys((m.store.getDb() as any).people);
 
-    expect(JSON.stringify(orderedKeys)).not.toBe(
-      JSON.stringify(unorderedKeys)
-    );
+    expect(JSON.stringify(orderedKeys)).not.toBe(JSON.stringify(unorderedKeys));
     expect(difference(orderedKeys, unorderedKeys).length).toBe(0);
   });
 
   it('orderByValue() sorts on server correctly', async () => {
     const f = await Fixture.prepare();
-    f.addSchema('number', (h) => async () => h.faker.datatype.number({ min: 0, max: 10 })
+    f.addSchema(
+      'number',
+      (h) => h.faker.datatype.number({ min: 0, max: 10 }) as any
     );
-    f.addSchema('number2', (h) => async () => h.faker.datatype.number({ min: 20, max: 30 })
+    f.addSchema(
+      'number2',
+      (h) => h.faker.datatype.number({ min: 20, max: 30 }) as any
     ).modelName('number');
     f.queueSchema('number', 10);
     f.queueSchema('number2', 10);
@@ -452,7 +449,7 @@ describe('Sort Order', () => {
       .limitToLast(5)
       .once('value');
 
-    const naturalSort = Object.keys(m.store.getDb().numbers);
+    const naturalSort = Object.keys((m.store.getDb() as any).numbers);
     const orderedKeys = Object.keys(snap.val());
 
     expect(orderedKeys.join('.')).not.toBe(naturalSort.slice(0, 5).join('.'));
@@ -516,10 +513,13 @@ describe('CRUD actions', () => {
 
   it('push() can push record', async () => {
     const m = createDatabase(SDK.RealTimeAdmin);
-    await m.db.ref('/people').push({
-      name: 'Happy Jack',
-      age: 26,
-    }).once("value");
+    await m.db
+      .ref('/people')
+      .push({
+        name: 'Happy Jack',
+        age: 26,
+      })
+      .once('value');
     const people = (await m.db.ref('/people').once('value')).val();
     expect(helpers.length(people)).toBe(1);
     expect(helpers.firstRecord(people).name).toBe('Happy Jack');
@@ -527,7 +527,7 @@ describe('CRUD actions', () => {
 
   it('push() can push scalar', async () => {
     const m = createDatabase(SDK.RealTimeAdmin);
-    await m.db.ref('/data').push(444).once("value");
+    await m.db.ref('/data').push(444).once('value');
     const data = (await m.db.ref('/data').once('value')).val();
     expect(helpers.firstRecord(data)).toBe(444);
   });
@@ -536,7 +536,7 @@ describe('CRUD actions', () => {
     const m = createDatabase(SDK.RealTimeAdmin);
     let count = 0;
     const callback = () => count++;
-    await m.db.ref('/data').push(444, callback).once("value");
+    await m.db.ref('/data').push(444, callback).once('value');
     const data = (await m.db.ref('/data').once('value')).val();
     expect(helpers.firstRecord(data)).toBe(444);
     expect(count).toBe(1);
@@ -571,16 +571,20 @@ describe('CRUD actions', () => {
   });
 
   it('update() will update referenced path', async () => {
-    const m = createDatabase(SDK.RealTimeAdmin, {}, {
-      db: {
-        people: {
-          abcd: {
-            name: 'Happy Jack',
-            age: 35,
+    const m = createDatabase(
+      SDK.RealTimeAdmin,
+      {},
+      {
+        db: {
+          people: {
+            abcd: {
+              name: 'Happy Jack',
+              age: 35,
+            },
           },
         },
-      },
-    });
+      }
+    );
     await m.db.ref('/people/abcd').update({
       age: 26,
     });
@@ -593,16 +597,20 @@ describe('CRUD actions', () => {
 
   it('multi-path updates are reconized and set correctly', async () => {
     const now = new Date().toISOString();
-    const m = createDatabase(SDK.RealTimeAdmin, {}, {
-      db: {
-        people: {
-          abcd: {
-            name: 'Happy Jack',
-            age: 35,
+    const m = createDatabase(
+      SDK.RealTimeAdmin,
+      {},
+      {
+        db: {
+          people: {
+            abcd: {
+              name: 'Happy Jack',
+              age: 35,
+            },
           },
         },
-      },
-    });
+      }
+    );
     const updated: IDictionary = {};
     updated['/people/abcd/age'] = 40;
     updated['/people/abcd/lastUpdated'] = now;
@@ -616,20 +624,24 @@ describe('CRUD actions', () => {
 
   it("multi-path 'updates' behaves non-destructively like 'set' operations", async () => {
     const now = new Date().toISOString();
-    const m = createDatabase(SDK.RealTimeAdmin, {}, {
-      db: {
-        people: {
-          abcd: {
-            name: 'Happy Jack',
-            age: 35,
-            foo: {
-              bar: 1,
-              baz: 2,
+    const m = createDatabase(
+      SDK.RealTimeAdmin,
+      {},
+      {
+        db: {
+          people: {
+            abcd: {
+              name: 'Happy Jack',
+              age: 35,
+              foo: {
+                bar: 1,
+                baz: 2,
+              },
             },
           },
         },
-      },
-    });
+      }
+    );
     const updated: IDictionary = {};
     updated['/people/abcd/foo'] = { bar: 5 };
     updated['/people/abcd/lastUpdated'] = now;
@@ -643,16 +655,20 @@ describe('CRUD actions', () => {
   });
 
   it('remove() will remove data at referenced path', async () => {
-    const m = createDatabase(SDK.RealTimeAdmin, {}, {
-      db: {
-        people: {
-          abcd: {
-            name: 'Happy Jack',
-            age: 35,
+    const m = createDatabase(
+      SDK.RealTimeAdmin,
+      {},
+      {
+        db: {
+          people: {
+            abcd: {
+              name: 'Happy Jack',
+              age: 35,
+            },
           },
         },
-      },
-    });
+      }
+    );
     await m.db.ref('/people/abcd').remove();
     const people = (await m.db.ref('/people').once('value')).val();
     expect(helpers.length(people)).toBe(0);

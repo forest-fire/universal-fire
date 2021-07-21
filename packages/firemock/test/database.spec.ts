@@ -4,7 +4,6 @@ import {
   GenericEventHandler,
   HandleValueEvent,
   IFirebaseEventHandler,
-  listenerPaths,
 } from '~/index';
 import { IMockDatabase, SDK } from '@forest-fire/types';
 
@@ -82,7 +81,7 @@ describe('Database', () => {
 
       db.store
         .getAllListeners()
-        .forEach((p) => expect(p.eventType.includes('moved')).toBeTrue());
+        .forEach((p) => expect(p.eventType.includes('moved')).toBe(true));
     });
 
     it('can remove listeners of same eventType, callback', () => {
@@ -213,10 +212,10 @@ describe('Database', () => {
         age: 5,
       });
       // check directly in DB
-      expect(pushKey).toBeString();
+      expect(typeof pushKey).toEqual("string");
       expect(pushKey.includes('-')).toBeTruthy();
-      expect(db.store.getDb().people[pushKey]).toBeInstanceOf(Object);
-      expect(db.store.getDb().people[pushKey].name).toBe('Humpty Dumpty');
+      expect((db.store.getDb() as any).people[pushKey]).toBeInstanceOf(Object);
+      expect((db.store.getDb() as any).people[pushKey].name).toBe('Humpty Dumpty');
     });
 
     it('setDB() works', () => {
@@ -225,8 +224,8 @@ describe('Database', () => {
         name: 'Humpty Dumpty',
         age: 5,
       });
-      expect(db.store.getDb().people.abc).toBeInstanceOf(Object);
-      expect(db.store.getDb().people.abc.name).toBe('Humpty Dumpty');
+      expect((db.store.getDb() as any).people.abc).toBeInstanceOf(Object);
+      expect((db.store.getDb() as any).people.abc.name).toBe('Humpty Dumpty');
     });
 
     it('updateDB() works', () => {
@@ -235,16 +234,16 @@ describe('Database', () => {
         name: 'Humpty Dumpty',
         age: 5,
       });
-      expect(db.store.getDb().people.update).toBeInstanceOf(Object);
-      expect(db.store.getDb().people.update.name).toBe('Humpty Dumpty');
-      expect(db.store.getDb().people.update.age).toBe(5);
+      expect((db.store.getDb() as any).people.update).toBeInstanceOf(Object);
+      expect((db.store.getDb() as any).people.update.name).toBe('Humpty Dumpty');
+      expect((db.store.getDb() as any).people.update.age).toBe(5);
       db.store.updateDb('/people/update', {
         age: 6,
         nickname: 'Humpty',
       });
-      expect(db.store.getDb().people.update.name).toBe('Humpty Dumpty');
-      expect(db.store.getDb().people.update.age).toBe(6);
-      expect(db.store.getDb().people.update.nickname).toBe('Humpty');
+      expect((db.store.getDb() as any).people.update.name).toBe('Humpty Dumpty');
+      expect((db.store.getDb() as any).people.update.age).toBe(6);
+      expect((db.store.getDb() as any).people.update.nickname).toBe('Humpty');
     });
 
     it('removeDB() works', () => {
@@ -253,11 +252,11 @@ describe('Database', () => {
         name: 'Humpty Dumpty',
         age: 5,
       });
-      expect(db.store.getDb().people.remove.name).toBe('Humpty Dumpty');
-      expect(db.store.getDb().people.remove.age).toBe(5);
+      expect((db.store.getDb() as any).people.remove.name).toBe('Humpty Dumpty');
+      expect((db.store.getDb() as any).people.remove.age).toBe(5);
       db.store.removeDb('/people/remove');
 
-      expect(db.store.getDb().people.remove).toBeUndefined();
+      expect((db.store.getDb() as any).people.remove).toBeUndefined();
     });
   });
 
@@ -438,9 +437,9 @@ describe('Database', () => {
       );
 
       expect(m.store.getDb()).toBeInstanceOf(Object);
-      expect(m.store.getDb().foo).toBeInstanceOf(Object);
-      expect(m.store.getDb().foo.bar).toBe(true);
-      expect(m.store.getDb().foo.baz).toBe(true);
+      expect((m.store.getDb() as any).foo).toBeInstanceOf(Object);
+      expect((m.store.getDb() as any).foo.bar).toBe(true);
+      expect((m.store.getDb() as any).foo.baz).toBe(true);
     });
 
     // it('passing in an async function to db config initializes the DB', async () => {
@@ -456,9 +455,9 @@ describe('Database', () => {
     //   });
 
     //   expect (db.store.getDb()).toBeInstanceOf(Object);
-    //   expect (db.store.getDb().foo).toBeInstanceOf(Object);
-    //   expect (db.store.getDb().foo.bar).toBe(true);
-    //   expect (db.store.getDb().foo.baz).toBe(true);
+    //   expect ((db.store.getDb() as any).foo).toBeInstanceOf(Object);
+    //   expect ((db.store.getDb() as any).foo.bar).toBe(true);
+    //   expect ((db.store.getDb() as any).foo.baz).toBe(true);
     // });
   });
 
@@ -536,10 +535,10 @@ describe('Database', () => {
       let ready = false;
       const callback: HandleValueEvent = () => {
         if (ready) {
-          expect(db.store.getDb().people).toBeInstanceOf(Object);
-          expect(Object.keys(db.store.getDb().people)).toHaveLength(0);
+          expect((db.store.getDb() as any).people).toBeInstanceOf(Object);
+          expect(Object.keys((db.store.getDb() as any).people)).toHaveLength(0);
         } else {
-          expect(Object.keys(db.store.getDb().people)).toHaveLength(1);
+          expect(Object.keys((db.store.getDb() as any).people)).toHaveLength(1);
         }
       };
       db.store.addListener('/people', 'child_removed', callback);
