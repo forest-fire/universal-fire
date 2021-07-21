@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { IFmModelMeta } from "@forest-fire/types";
-import { index, mock, property } from "@/decorators";
+import { index, mock, model, property } from "@/decorators";
 import { epochWithMilliseconds } from "common-types";
-import { IModel } from "@forest-fire/types";
 
-export class Model<T extends IModel> {
+@model()
+export class Model {
   // prettier-ignore
   // TODO: This should be made required and the API updated to make it optional where appropriate
   /** The primary-key for the record */
@@ -16,5 +16,5 @@ export class Model<T extends IModel> {
   /** The datetime at which this record was first created */
   @property @mock("datePastMiliseconds") @index public createdAt?: epochWithMilliseconds;
   /** Metadata properties of the given schema */
-  public META: IFmModelMeta<T>;
+  public META: IFmModelMeta<this>;
 }

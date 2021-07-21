@@ -1,7 +1,8 @@
-import type { IModel, ISdk } from "@forest-fire/types";
+import type { ISdk } from "@forest-fire/types";
 
 import {
   FmEvents,
+  IModel,
   ICompositeKey,
   IFmLocalRecordEvent,
   IFmLocalRelationshipEvent,

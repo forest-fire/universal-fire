@@ -5,9 +5,9 @@ import { FmMockType, IFmFunctionToConstructor } from "./other";
 /**
  * The attributes assigned to all properties on a Model
  */
-export interface IFmModelAttributeBase<T extends IModel> {
+export interface IFmModelAttributeBase<TModel extends IModel, TFk extends IModel = IModel> {
   /** the property name */
-  property: Extract<keyof T, string>;
+  property: Extract<keyof TModel, string>;
   /** the property's "typed value" */
   type: FMPropertyType;
   /** constraint: a maximum length */
@@ -27,12 +27,12 @@ export interface IFmModelAttributeBase<T extends IModel> {
    * in a more complete way than just it's stict "type". Examples
    * would include "telephone", "name", etc.
    */
-  mockType?: FmMockType<T>;
+  mockType?: FmMockType<TModel>;
   /** a named mock can optionally recieve a set of parameters as additional input */
   mockParameters?: any[];
   /** what kind of relationship does this foreign key contain */
   relType?: FmRelationshipType;
   /** if the property is a relationship ... a constructor for the FK's Model */
-  fkConstructor?: IFmFunctionToConstructor;
+  fkConstructor?: IFmFunctionToConstructor<TFk>;
   fkModelName?: string;
 }

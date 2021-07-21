@@ -1,7 +1,7 @@
 import { IDictionary, epoch, fk, pk } from "common-types";
 import { IReduxDispatch } from "./state-mgmt";
 
-import { IDatabaseSdk, ISdk, IFmFunctionToConstructor } from "@forest-fire/types";
+import { IDatabaseSdk, ISdk, IFmFunctionToConstructor } from "universal-fire";
 import { IFmHasId } from "./general";
 import {
   ModelMeta, IFmModelPropertyMeta,
@@ -107,14 +107,32 @@ export type IIdWithDynamicPrefix = IDictionary<number | string> & {
 
 export type ICompositeKeyGeneric = IDictionary<string | number | boolean>;
 
-export type ICompositeKey<T extends IModel> = IFmHasId & Partial<T>;
+export type ICompositeKey<T extends IModel> = IFmHasId<T> & Partial<T>;
+
+/**
+ * A **Composite Key** represented in string form
+ */
+export type ICompositeKeyString = `${string}::${string}`;
+
+/**
+ * Type guard which tests whether the given input is a Composite Key in
+ * string form (aka., `string::string`)
+ */
+export function isCompositeString(input: unknown): input is ICompositeKeyString {
+  return typeof (input) === "string" && /\S+::\S+$/.test(input)
+}
+
 /**
  * A Foreign Key (FK) reference where both object and string notation of simple
  * or composite keys is valid.
  */
-export type IFkReference<T extends IModel> = fk | ICompositeKey<T>;
+export type ForeignKey<T extends IModel> = fk | ICompositeKeyString | ICompositeKey<T>;
 
-export type IPrimaryKey<T extends IModel> = pk | ICompositeKey<T>;
+/**
+ * The **Primary Key** for a model; represented either as a simple string or as
+ * a `ICompositeKey`.
+ */
+export type PrimaryKey<T extends IModel> = pk | ICompositeKeyString | ICompositeKey<T>;
 
 export function isCompositeKey<T extends IModel>(ref: unknown): ref is ICompositeKey<T> {
   return typeof ref === "object" && typeof (ref as IDictionary)?.id === "string";

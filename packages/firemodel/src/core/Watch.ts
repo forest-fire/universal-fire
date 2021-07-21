@@ -2,7 +2,7 @@ import {
   FmEvents,
   IFmWatcherStopped,
   IModelOptions,
-  IPrimaryKey,
+  PrimaryKey,
   IReduxDispatch,
   IWatcherEventContext,
 } from "@/types";
@@ -65,23 +65,21 @@ export class Watch<S extends ISdk, T extends IModel = IModel> {
    *
    * @param hashCode the unique hashcode given for each watcher
    */
-  public static lookup(hashCode: string): IWatcherEventContext<any, any> {
-    const codes = new Set(Object.keys(getWatcherPool()));
-    if (!codes.has(hashCode)) {
-      const e = new Error(
-        `You looked up an invalid watcher hashcode [${hashCode}].`
-      );
-      e.name = "FireModel::InvalidHashcode";
-      throw e;
+  public static lookup<S extends ISdk = ISdk, T extends IModel = IModel>(hashCode: string): IWatcherEventContext<S, T> {
+    const pool = getWatcherPool<S, T>();
+    const ctx = pool[hashCode];
+    if (!ctx) {
+      throw new FireModelError(`You looked up an invalid watcher hashcode [${hashCode}].`, "firemodel/invalid-code");
     }
-    return getWatcherPool()[hashCode];
+
+    return ctx;
   }
 
-  public static get watchCount() {
+  public static get watchCount(): number {
     return Object.keys(getWatcherPool()).length;
   }
 
-  public static reset() {
+  public static reset(): void {
     clearWatcherPool();
   }
 
@@ -89,7 +87,7 @@ export class Watch<S extends ISdk, T extends IModel = IModel> {
    * Finds the watcher by a given name and returns the ID of the
    * first match
    */
-  public static findByName(name: string) {
+  public static findByName(name: string): string {
     const pool = getWatcherPool();
     return Object.keys(pool).find((i) => pool[i].watcherName === name);
   }
@@ -97,7 +95,7 @@ export class Watch<S extends ISdk, T extends IModel = IModel> {
   /**
    * stops watching either a specific watcher or ALL if no hash code is provided
    */
-  public static stop(hashCode?: string, oneOffDB?: IDatabaseSdk<any>) {
+  public static async stop(hashCode?: string, oneOffDB?: IDatabaseSdk<ISdk>): Promise<void> {
     const codes = new Set(Object.keys(getWatcherPool()));
     const db = oneOffDB || FireModel.defaultDb;
     if (!db) {
@@ -124,7 +122,7 @@ export class Watch<S extends ISdk, T extends IModel = IModel> {
         const dispatch = pool[firstKey(pool)].dispatch;
         db.unWatch();
         clearWatcherPool();
-        dispatch({
+        await dispatch({
           type: FmEvents.WATCHER_STOPPED_ALL,
           stopped: keysAndPaths,
         });
@@ -137,7 +135,7 @@ export class Watch<S extends ISdk, T extends IModel = IModel> {
           : ["child_added", "child_changed", "child_moved", "child_removed"];
       db.unWatch(events, registry.dispatch);
       // tslint:disable-next-line: no-object-literal-type-assertion
-      registry.dispatch({
+      await registry.dispatch({
         type: FmEvents.WATCHER_STOPPED,
         watcherId: hashCode,
         remaining: getWatcherPoolList().map((i) => ({
@@ -158,15 +156,15 @@ export class Watch<S extends ISdk, T extends IModel = IModel> {
    * the composite key, or an object representation of the composite
    * key.
    */
-  public static record<T extends IModel>(
+  public static record<S extends ISdk, T extends IModel>(
     modelConstructor: new () => T,
-    pk: IPrimaryKey<T>,
+    pk: PrimaryKey<T>,
     options: IModelOptions = {}
-  ) {
-    return WatchRecord.record(modelConstructor, pk, options);
+  ): WatchRecord<S, T> {
+    return WatchRecord.record(modelConstructor, pk, options) as WatchRecord<S, T>;
   }
 
-  public static list<T extends IModel>(
+  public static list<S extends ISdk, T extends IModel>(
     /**
      * The **Model** subType which this list watcher will watch
      */
@@ -175,7 +173,7 @@ export class Watch<S extends ISdk, T extends IModel = IModel> {
      * optionally state the _dynamic path_ properties which offset the **dbPath**
      */
     offsets?: Partial<T>
-  ) {
-    return WatchList.list<ISdk, T>(modelConstructor, { offsets });
+  ): WatchList<S, T> {
+    return WatchList.list<S, T>(modelConstructor, { offsets });
   }
 }

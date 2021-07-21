@@ -1,11 +1,11 @@
 import { IDictionary, datetime, ConstructorFor } from "common-types";
-import { IPrimaryKey } from "@/types";
+import { PrimaryKey } from "@/types";
 import type { FireModelError } from "@/errors";
 import { IModel, ISdk, IDatabaseSdk } from "@forest-fire/types";
 
 export interface IUnderlyingError<T extends IModel> {
   /** an identifying characteristic of the individual error */
-  id: string | IPrimaryKey<T>;
+  id: string | PrimaryKey<T>;
   /** the error itself */
   error: FireModelError;
 }
@@ -216,8 +216,8 @@ export interface IFmPathValuePair {
 /**
  * A record which _does_ have the `id` property set
  */
-export interface IFmHasId {
-  id: string;
+export type IFmHasId<T extends IModel = IModel> = {
+  id: Required<T["id"]>;
 }
 
 /**

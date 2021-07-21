@@ -23,14 +23,14 @@ export function hasMany<T extends IModel>(
    * to a _constructor_. This approach is now deprecated.
    */
   fkClass: () => ConstructorFor<T> | (() => ConstructorFor<T>) | string,
-  inverse?: string | [string, IFmRelationshipDirectionality]
+  inverse?: string & keyof T | [string & keyof T, IFmRelationshipDirectionality]
 ) {
   try {
     const fkConstructor: () => ConstructorFor<T> = typeof fkClass === "string"
       ? modelNameLookup(fkClass)
       : modelConstructorLookup(fkClass as ConstructorFor<T> | (() => ConstructorFor<T>));
 
-    let inverseProperty: string | undefined;
+    let inverseProperty: string & keyof T | undefined;
     let directionality: IFmRelationshipDirectionality;
     if (Array.isArray(inverse)) {
       [inverseProperty, directionality] = inverse;

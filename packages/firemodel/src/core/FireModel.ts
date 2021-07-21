@@ -4,6 +4,7 @@
 import { IDictionary } from "common-types";
 import {
   IFmChangedProperties,
+  IReduxAction,
   IReduxDispatch
 } from "@/types";
 
@@ -17,7 +18,7 @@ import { Record, DefaultDbCache } from "@/core";
 import { ModelMeta, IDatabaseSdk, ISdk, IModel, } from "@forest-fire/types";
 import { convertModelToModelClass } from "@/util/convertModelToModelClass";
 
-const defaultDispatch: IReduxDispatch<any, any> = async (context) => "";
+const defaultDispatch: IReduxDispatch = async (context: IReduxAction) => Promise.resolve(context);
 
 export class FireModel<S extends ISdk, T extends IModel> {
   public static get defaultDb() {

@@ -24,7 +24,7 @@ export function belongsTo<T extends IModel = IModel>(
    * to a _constructor_. This approach is now deprecated.
    */
   fkClass: ConstructorFor<T> | (() => ConstructorFor<T>) | string,
-  inverse?: string | [string, IFmRelationshipDirectionality]
+  inverse?: string & keyof T | [string & keyof T, IFmRelationshipDirectionality]
 ) {
   try {
     const fkConstructor: () => ConstructorFor<T> =
@@ -32,7 +32,7 @@ export function belongsTo<T extends IModel = IModel>(
         ? modelNameLookup(fkClass)
         : modelConstructorLookup(fkClass);
 
-    let inverseProperty: string | null;
+    let inverseProperty: string & keyof T | null;
     let directionality: IFmRelationshipDirectionality;
     if (Array.isArray(inverse)) {
       [inverseProperty, directionality] = inverse;

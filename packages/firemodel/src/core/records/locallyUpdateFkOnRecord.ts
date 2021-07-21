@@ -1,7 +1,8 @@
-import { IFmLocalRelationshipEvent, IModel } from "@/types";
+import { IFmLocalRelationshipEvent, } from "@/types";
 
 import { Record } from "@/core";
 import { fk } from "common-types";
+import { ISdk, IModel } from "@forest-fire/types";
 
 /**
  * sets the `Record` property to the optimistic values set
@@ -10,15 +11,16 @@ import { fk } from "common-types";
  * This function has no concern with dispatch or the FK model
  * and any updates that may need to take place there.
  */
-export function locallyUpdateFkOnRecord<F extends IModel, T extends IModel>(
-  rec: Record<F>,
+export function locallyUpdateFkOnRecord<S extends ISdk, TFrom extends IModel, TTo extends IModel = IModel>(
+  rec: Record<S, TFrom>,
   fkId: fk,
-  event: IFmLocalRelationshipEvent<F, T>
-) {
+  event: IFmLocalRelationshipEvent<TFrom, TTo>
+): void {
   const relnType = rec.META.relationship(event.property).relType;
 
   // update lastUpdated but quietly as it will be updated again
   // once server responds
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   rec.set("lastUpdated", new Date().getTime(), true);
   // now work on a per-op basis
   switch (event.operation) {

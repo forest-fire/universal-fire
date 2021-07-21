@@ -1,23 +1,24 @@
 import { FireModel, Record } from "@/core";
-import { IModel, IModelOptions, IPrimaryKey } from "@/types";
+import { IModelOptions, PrimaryKey } from "@/types";
 
 import { FireModelError } from "@/errors";
-import { SerializedQuery } from "@forest-fire/types";
+import { ISdk, IModel } from "@forest-fire/types";
+import { SerializedQuery } from "@forest-fire/serialized-query";
 import { WatchBase } from "./WatchBase";
 
-export class WatchRecord<T extends IModel> extends WatchBase<T> {
+export class WatchRecord<S extends ISdk = ISdk, T extends IModel = IModel> extends WatchBase<S, T> {
   public static record<T extends IModel>(
     modelConstructor: new () => T,
-    pk: IPrimaryKey<T>,
+    pk: PrimaryKey<T>,
     options: IModelOptions = {}
-  ) {
+  ): WatchRecord<ISdk, T> {
     if (!pk) {
       throw new FireModelError(
         `Attempt made to watch a RECORD but no primary key was provided!`,
         "firemodel/no-pk"
       );
     }
-    const o = new WatchRecord<T>();
+    const o = new WatchRecord<ISdk, T>();
     // if options hash has a DB reference; use it
     if (o.db) {
       o._db = options.db;
@@ -31,7 +32,7 @@ export class WatchRecord<T extends IModel> extends WatchBase<T> {
       pk,
       options.db ? { db: options.db } : {}
     );
-    o._query = SerializedQuery.create<T>(
+    o._query = SerializedQuery.create<ISdk, T>(
       options.db || FireModel.defaultDb,
       `${r.dbPath}`
     );

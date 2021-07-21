@@ -1,4 +1,6 @@
 import { ICompositeKey } from "@/types";
+import { IModel } from "@forest-fire/types";
+import { keys } from "native-dash";
 
 /**
    * **_reduceCompositeNotationToStringRepresentation**
@@ -9,13 +11,10 @@ import { ICompositeKey } from "@/types";
 `${id}::${prop}:${propValue}::${prop2}:${propValue2}`
 ```
    */
-export function reduceCompositeNotationToStringRepresentation(
-  ck: ICompositeKey
+export function reduceCompositeNotationToStringRepresentation<T extends IModel = IModel>(
+  ck: ICompositeKey<T>
 ): string {
-  return (
-    `${ck.id}` +
-    Object.keys(ck)
-      .filter((k) => k !== "id")
-      .map((k) => `::${k}:${ck[k]}`)
-  );
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  const others = keys(ck).filter((k) => k !== "id").map((k) => `::${k}:${ck[k]}`);
+  return `${ck.id}${others.join("")}`
 }

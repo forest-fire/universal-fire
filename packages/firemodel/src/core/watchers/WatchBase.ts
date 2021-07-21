@@ -1,6 +1,6 @@
 import { IDictionary } from "common-types";
 
-import type { ISerializedQuery, IDatabaseSdk, ISdk } from "@forest-fire/types";
+import type { ISerializedQuery, IDatabaseSdk, ISdk, IModel } from "@forest-fire/types";
 
 import {
   WatchRecord,
@@ -18,9 +18,9 @@ import {
   IReduxDispatch,
   FmModelConstructor,
   ICompositeKey,
-  IModel,
 } from "@/types";
 import { FireModelError, FireModelProxyError } from "@/errors";
+import { DefaultDbCache } from "../DefaultDbCache";
 
 /**
  * The base class which both `WatchList` and `WatchRecord` derive.
@@ -30,7 +30,7 @@ export class WatchBase<S extends ISdk, T extends IModel> {
   protected _modelConstructor: FmModelConstructor<T>;
   protected _eventType: IWatchEventClassification;
   protected _dispatcher: IReduxDispatch;
-  protected _db: IDatabaseSdk;
+  protected _db: IDatabaseSdk<S>;
   protected _modelName: string;
   protected _localModelName: string;
   protected _pluralName: string;
@@ -38,12 +38,12 @@ export class WatchBase<S extends ISdk, T extends IModel> {
   protected _localPostfix: string;
   protected _dynamicProperties: string[];
   protected _compositeKey: ICompositeKey<T>;
-  protected _options: IListOptions<T> | IDictionary;
+  protected _options: IListOptions<S, T> | IDictionary;
   /**
    * this is only to accomodate the list watcher using `ids` which is an aggregate of
    * `record` watchers.
    */
-  protected _underlyingRecordWatchers: Array<WatchRecord<T>> = [];
+  protected _underlyingRecordWatchers: Array<WatchRecord<S, T>> = [];
   protected _watcherSource:
     | "record"
     | "list"
@@ -64,7 +64,7 @@ export class WatchBase<S extends ISdk, T extends IModel> {
    */
   public async start(
     options: IFmWatcherStartOptions = {}
-  ): Promise<IWatcherEventContext<T>> {
+  ): Promise<IWatcherEventContext<S, T>> {
     const isListOfRecords = this._watcherSource === "list-of-records";
     const watchIdPrefix = isListOfRecords ? "wlr" : "w";
     let watchHashCode;
@@ -75,7 +75,7 @@ export class WatchBase<S extends ISdk, T extends IModel> {
     } catch (e) {
       throw new FireModelProxyError(
         e,
-        `An error occured trying to start a watcher. The source was "${this._watcherSource}" and had a query of: ${this._query}\n\nThe underlying error was: ${e.message}`,
+        `An error occured trying to start a watcher. The source was "${this._watcherSource}" and had a query of: ${String(this._query)}\n\nThe underlying error was: ${String(e.message)}`,
         "watcher/not-allowed"
       );
     }
@@ -89,7 +89,7 @@ export class WatchBase<S extends ISdk, T extends IModel> {
     // The dispatcher will now have all the context it needs to publish events
     // in a consistent fashion; this dispatch function will be used both by
     // both locally originated events AND server based events.
-    const dispatch = WatchDispatcher<T>(watcherItem.dispatch)(watcherItem);
+    const dispatch = WatchDispatcher<S, T>(watcherItem.dispatch)(watcherItem);
 
     if (!this.db) {
       throw new FireModelError(
@@ -133,7 +133,7 @@ export class WatchBase<S extends ISdk, T extends IModel> {
       }
     } catch (e) {
       console.log(`Problem starting watcher [${watcherId}]: `, e);
-      (this._dispatcher || FireModel.dispatch)({
+      await (this._dispatcher || FireModel.dispatch)({
         type: FmEvents.WATCHER_FAILED,
         errorMessage: e.message,
         errorCode: e.code || e.name || "firemodel/watcher-failed",
@@ -142,9 +142,9 @@ export class WatchBase<S extends ISdk, T extends IModel> {
     }
 
     try {
-      addToWatcherPool(watcherItem);
+      addToWatcherPool<S, T>(watcherItem);
       // dispatch "starting"; no need to wait for promise
-      (this._dispatcher || FireModel.dispatch)({
+      await (this._dispatcher || FireModel.dispatch)({
         type: FmEvents.WATCHER_STARTING,
         ...watcherItem,
       });
@@ -177,7 +177,7 @@ export class WatchBase<S extends ISdk, T extends IModel> {
     return this;
   }
 
-  public toString() {
+  public toString(): string {
     return `Watching path "${this._query.path}" for "${this._eventType
       }" event(s) [ hashcode: ${String(this._query.hashCode())} ]`;
   }
@@ -191,7 +191,7 @@ export class WatchBase<S extends ISdk, T extends IModel> {
    * **Note:** that while used here as part of the `start()` method
    * it is also used externally by locally triggered events as well
    */
-  public buildWatcherItem(name?: string): IWatcherEventContext<T> {
+  public buildWatcherItem(name?: string): IWatcherEventContext<S, T> {
     const dispatch = this.getCoreDispatch();
     const isListOfRecords = this._watcherSource === "list-of-records";
     const watchIdPrefix = isListOfRecords ? "wlr" : "w";
@@ -212,7 +212,7 @@ export class WatchBase<S extends ISdk, T extends IModel> {
         ? this._underlyingRecordWatchers.map((i) => i._query)
         : this._query;
 
-    const watchContext: IWatcherEventContext<T> = {
+    const watchContext: IWatcherEventContext<S, T> = {
       watcherId,
       watcherName,
       eventFamily,
@@ -235,7 +235,7 @@ export class WatchBase<S extends ISdk, T extends IModel> {
     return watchContext;
   }
 
-  protected getCoreDispatch() {
+  protected getCoreDispatch(): IReduxDispatch {
     // Use the bespoke dispatcher for this class if it's available;
     // if not then fall back to the default Firemodel dispatch
     const coreDispatch = this._dispatcher || FireModel.dispatch;
@@ -249,12 +249,13 @@ export class WatchBase<S extends ISdk, T extends IModel> {
     return coreDispatch;
   }
 
-  protected get db(): IDatabaseSdk {
+  protected get db(): IDatabaseSdk<S> {
     if (!this._db) {
       if (FireModel.defaultDb) {
-        this._db = FireModel.defaultDb;
+        this._db = DefaultDbCache().get() as IDatabaseSdk<S>;
       }
     }
+
     return this._db;
   }
 }

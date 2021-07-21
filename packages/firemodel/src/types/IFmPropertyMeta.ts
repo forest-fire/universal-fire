@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IFmModelAttributeBase, IModel } from "./index";
 
-export interface IFmModelPropertyMeta<T extends IModel>
-  extends IFmModelAttributeBase<T> {
+export interface IFmModelPropertyMeta<TModel extends IModel, TFk extends IModel = IModel>
+  extends IFmModelAttributeBase<TModel, TFk> {
   /** constraint: a maximum length */
   length?: number;
   /** the minimum length of the property */

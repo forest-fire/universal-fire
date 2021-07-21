@@ -23,19 +23,9 @@ export type {
   AppFrom,
   ISdk,
   IRtdbSdk,
-  IModel,
-  IDbModel,
-  ModelManagedProps,
   IDatabaseSdk,
   IDatabaseApi,
   FakerStatic,
-  IFmModelMeta,
-  IFmModelPropertyMeta,
-  IFmModelRelationshipMeta,
-  IFmFunctionToConstructor,
-  IFmRelationshipDirectionality,
-  IModelIndexMeta,
-  FmMockType,
 } from '@forest-fire/types';
 
 export {

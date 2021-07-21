@@ -1,8 +1,9 @@
-import { FireModel, Record } from "@/core";
+import { DefaultDbCache, FireModel, Record } from "@/core";
 import { IAuditChange, IAuditOperations, IModelOptions } from "@/types";
 
 import { AuditLog } from "@/models";
 import { capitalize } from "@/util";
+import { ISdk } from "@forest-fire/types";
 
 /**
  * writeAudit
@@ -16,12 +17,12 @@ import { capitalize } from "@/util";
  * @param options
  */
 export async function writeAudit<T>(
-  record: Record<T>,
+  record: Record<ISdk, T>,
   action: IAuditOperations,
   changes: IAuditChange[],
   options: IModelOptions = {}
-) {
-  const db = options.db || FireModel.defaultDb;
+): Promise<void> {
+  const db = options.db || DefaultDbCache().get();
   await Record.add(
     AuditLog,
     {

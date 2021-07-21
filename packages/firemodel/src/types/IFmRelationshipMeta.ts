@@ -4,8 +4,8 @@ import { IFnToModelConstructor } from "./model-relationships";
 
 export type FmRelationshipType = "hasMany" | "hasOne";
 
-export interface IFmModelRelationshipMeta<T extends IModel>
-  extends IFmModelAttributeBase<T> {
+export interface IFmModelRelationshipMeta<TModel extends IModel, TFk extends IModel = IModel>
+  extends IFmModelAttributeBase<TModel, TFk> {
   isRelationship: true;
   isProperty: false;
   /** the general cardinality type of the relationship (aka, hasMany, hasOne) */
@@ -21,7 +21,7 @@ export interface IFmModelRelationshipMeta<T extends IModel>
   /** indicates whether the relationship is one-way or bi-directional */
   directionality: IFmRelationshipDirectionality;
   /** The constructor for a model of the FK reference that this relationship maintains */
-  fkConstructor: IFnToModelConstructor<T>;
+  fkConstructor: IFnToModelConstructor<TFk>;
   /** the singular name of the relationship's model */
   fkModelName?: string;
   /** the plural name of the relationship's model */

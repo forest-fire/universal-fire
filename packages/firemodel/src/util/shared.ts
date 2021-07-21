@@ -1,6 +1,6 @@
 import { IAuditChange } from "@/types";
 import { IDictionary } from "common-types";
-import { IModel } from "@forest-fire/types";
+import { IModel, isDbModel, isModelClass } from "@forest-fire/types";
 
 export function normalized(...args: string[]) {
   return args
@@ -26,7 +26,7 @@ export function dotNotation(...args: string[]) {
 export function updateToAuditChanges<T = any>(
   changed: IDictionary,
   prior: IDictionary
-) {
+): IAuditChange[] {
   return Object.keys(changed).reduce<IAuditChange[]>(
     (prev: IAuditChange[], curr: Extract<keyof T, string>) => {
       const after = changed[curr];
@@ -45,9 +45,8 @@ export function updateToAuditChanges<T = any>(
   );
 }
 
-export function withoutMetaOrPrivate<T extends IModel>(model: T) {
-  if (model && model.META) {
-    model = { ...model };
+export function withoutMetaOrPrivate<T extends IModel>(model: T): T {
+  if (isModelClass(model)) {
     delete model.META;
   }
   if (model) {
@@ -60,14 +59,14 @@ export function withoutMetaOrPrivate<T extends IModel>(model: T) {
   return model;
 }
 
-export function capitalize(str: string) {
+export function capitalize(str: string): string {
   return str ? str.slice(0, 1).toUpperCase() + str.slice(1) : "";
 }
 
-export function lowercase(str: string) {
+export function lowercase(str: string): string {
   return str ? str.slice(0, 1).toLowerCase() + str.slice(1) : "";
 }
 
-export function stripLeadingSlash(str: string) {
+export function stripLeadingSlash(str: string): string {
   return str.slice(0, 1) === "/" ? str.slice(1) : str;
 }

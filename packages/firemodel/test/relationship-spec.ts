@@ -1,5 +1,5 @@
 import { IFmWatchEvent, Record } from "../src";
-import { IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
+import { IRealTimeAdmin, ISdk, RealTimeAdmin } from "@forest-fire/types";
 import {
   buildRelationshipPaths,
   createCompositeKeyFromFkString,
@@ -42,8 +42,8 @@ describe("Relationship > ", () => {
     const hasMany = hasManyPaths(person.id, now);
     const hasOne = hasOnePaths(person.id, now);
 
-    const extractedHasMany = extractFksFromPaths(person, "children", hasMany);
-    const extractedHasOne = extractFksFromPaths(person, "company", hasOne);
+    const extractedHasMany = extractFksFromPaths<ISdk, Person>(person, "children", hasMany);
+    const extractedHasOne = extractFksFromPaths<ISdk, Person>(person, "company", hasOne);
 
     expect(extractedHasMany).toBeArray();
     expect(extractedHasMany).toHaveLength(2);

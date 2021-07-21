@@ -25,7 +25,6 @@ import {
   IRtdbDbEvent,
   ISerializedQuery,
   IAbstractedEvent,
-  IModel,
   IMockDatabase,
   IRtdbSdk,
   IDatabaseSdk,
@@ -157,7 +156,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    * @param events an event type or an array of event types (e.g., "value", "child_added")
    * @param cb the callback function to call when event triggered
    */
-  public watch<T extends IModel>(
+  public watch<T extends unknown>(
     target: string | ISerializedQuery<TSdk, T>,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: IFirebaseWatchHandler
@@ -244,7 +243,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    *
    * @param path path for query
    */
-  public query<T extends IModel = Record<string, unknown> & IModel>(
+  public query<T extends unknown = Record<string, unknown>>(
     path: string
   ): ISerializedQuery<IRtdbSdk, T> {
     return new SerializedRealTimeQuery<IRtdbSdk, T>(path);
@@ -516,7 +515,7 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    * @param path the path in the database to
    * @param idProp
    */
-  public async getList<T extends IModel = any>(
+  public async getList<T extends unknown = Record<string, unknown>>(
     path: string | ISerializedQuery<TSdk, T>,
     idProp = 'id'
   ): Promise<T[]> {

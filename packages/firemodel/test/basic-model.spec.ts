@@ -1,4 +1,4 @@
-import { Model } from "@/models";
+import { AuditLog, Model } from "@/models";
 
 describe("basic tests on a model", () => {
 
@@ -7,4 +7,10 @@ describe("basic tests on a model", () => {
     expect(m.id).toBe(undefined);
   });
 
+  it.only("AuditLog META", () => {
+    const a = new AuditLog();
+    expect(a.META.property("modelName").property).toBe("modelName");
+  });
+
 });
+

@@ -1,6 +1,6 @@
 import {
   IDexieModelMeta,
-  IPrimaryKey,
+  PrimaryKey,
 } from "@/types";
 
 import { DexieError } from "@/errors";
@@ -30,7 +30,7 @@ export class DexieRecord<T extends IModel> {
    * @param pk the primary key for the record; which is just the `id` in many cases
    * but becomes a `CompositeKey` if the model has a dynamic path.
    */
-  async get(pk: IPrimaryKey<T>): Promise<T> {
+  async get(pk: PrimaryKey<T>): Promise<T> {
     const r = this.table.get(pk).catch((e: Error & { code?: string; name?: string }) => {
       throw new DexieError(
         `DexieRecord: problem getting record ${JSON.stringify(
@@ -70,7 +70,7 @@ export class DexieRecord<T extends IModel> {
     const now = new Date().getTime();
     record.createdAt = now;
     record.lastUpdated = now;
-    const pk: IPrimaryKey<T> = await this.table
+    const pk: PrimaryKey<T> = await this.table
       .add(record as T)
       .catch((e: Error & { code?: string; name?: string }) => {
         throw new DexieError(
@@ -86,7 +86,7 @@ export class DexieRecord<T extends IModel> {
   /**
    * Update an existing record in the **IndexDB**
    */
-  async update(pk: IPrimaryKey<T>, updateHash: Partial<T>): Promise<void> {
+  async update(pk: PrimaryKey<T>, updateHash: Partial<T>): Promise<void> {
     const now = new Date().getTime();
     updateHash.lastUpdated = now;
 
@@ -119,7 +119,7 @@ export class DexieRecord<T extends IModel> {
     }
   }
 
-  async remove(id: IPrimaryKey<T>): Promise<void> {
+  async remove(id: PrimaryKey<T>): Promise<void> {
     const r = this.table.delete(id).catch((e: Error & { code?: string; name?: string }) => {
       throw new DexieError(
         `Problem removing record ${JSON.stringify(id)} from the ${capitalize(

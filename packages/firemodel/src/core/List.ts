@@ -19,7 +19,7 @@ import {
   IFmQueryDefn,
   IListOptions,
   IListQueryOptions,
-  IPrimaryKey,
+  PrimaryKey,
   IReduxDispatch,
 } from "@/types";
 import { capitalize } from "@/util";
@@ -487,11 +487,11 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    */
   public static async ids<T extends IModel>(
     model: ConstructorFor<T>,
-    ...fks: IPrimaryKey<T>[]
+    ...fks: PrimaryKey<T>[]
   ) {
     const promises: any[] = [];
     const results: T[] = [];
-    const errors: Array<{ error: FireModelError; id: IPrimaryKey<T> }> = [];
+    const errors: Array<{ error: FireModelError; id: PrimaryKey<T> }> = [];
     fks.forEach((id) => {
       promises.push(
         Record.get(model, id)
@@ -743,6 +743,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * If you just want the Model's data then use `getData` instead.
    */
   public getRecord(id: string): Record<S, T> {
+
     const found = this.filter((f) => f.id === id);
     if (found.length === 0) {
       throw new FireModelError(

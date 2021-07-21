@@ -1,6 +1,6 @@
 import {
   ICompositeKey,
-  IFkReference,
+  ForeignKey,
   IFmBuildRelationshipOptions,
   IFmPathValuePair,
   isCompositeKey,
@@ -34,7 +34,7 @@ import { ConstructorFor, fk } from "common-types";
 export function buildRelationshipPaths<S extends ISdk, T extends IModel>(
   rec: Record<S, T>,
   property: keyof T & string,
-  fkRef: IFkReference<T>,
+  fkRef: ForeignKey<unknown>,
   options: IFmBuildRelationshipOptions<S> = {}
 ): IFmPathValuePair[] {
   try {
@@ -48,13 +48,6 @@ export function buildRelationshipPaths<S extends ISdk, T extends IModel>(
       db: options.db || rec.db,
     });
     const results: IFmPathValuePair[] = [];
-
-    /**
-     * Normalize to a composite key format
-     */
-    const fkCompositeKey: ICompositeKey<T> =
-      typeof fkRef === "object" ? fkRef : fkRecord.compositeKey;
-
     const fkId: string = createCompositeKeyRefFromRecord(fkRecord);
 
     /**
@@ -83,6 +76,7 @@ export function buildRelationshipPaths<S extends ISdk, T extends IModel>(
 
     // INVERSE RELATIONSHIP
     if (inverseProperty) {
+      type FK = typeof fkRecord;
       const fkMeta = getModelMeta(fkRecord);
       const inverseReln = fkMeta.relationship(inverseProperty);
 

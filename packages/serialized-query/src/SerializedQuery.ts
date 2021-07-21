@@ -3,7 +3,6 @@ import {
   ISdk,
   isRealTimeDatabase,
   isAdminSdk,
-  IModel,
   ISerializedQuery,
   SDK,
 } from '@forest-fire/types';

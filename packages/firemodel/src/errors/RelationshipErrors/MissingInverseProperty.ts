@@ -1,5 +1,5 @@
 import { ISdk, IModel } from "@forest-fire/types";
-import { IRecord } from "@/types";
+import { Record } from "@/core";
 
 import { FireModelError } from "@/errors";
 import { capitalize } from "@/util";
@@ -13,7 +13,7 @@ export class MissingInverseProperty<S extends ISdk, T extends IModel> extends Fi
   public to: string;
   public inverseProperty: string;
 
-  constructor(rec: IRecord<S, T>, property: keyof T & string) {
+  constructor(rec: Record<S, T>, property: keyof T & string) {
     super("", "firemodel/missing-inverse-property");
 
     const fkMeta = rec.getMetaForRelationship(property);
@@ -23,7 +23,7 @@ export class MissingInverseProperty<S extends ISdk, T extends IModel> extends Fi
     const pkInverse = rec.META.relationship(property).inverseProperty;
     this.inverseProperty = pkInverse;
 
-    const message = `Missing Inverse Property: the model "${this.from}" has defined a relationship with the "${this.to}" model where the FK property is "${property}" and it states that the "inverse property" is "${pkInverse}" on the ${this.to} model. Unfortunately the ${this.to} model does NOT define a property called "${this.inverseProperty}".`;
+    const message = `Missing Inverse Property: the model "${this.from}" has defined a relationship with the "${this.to}" model where the FK property is "${property}" and it states that the "inverse property" is "${String(pkInverse)}" on the ${this.to} model. Unfortunately the ${this.to} model does NOT define a property called "${this.inverseProperty}".`;
     this.message = message;
   }
 }

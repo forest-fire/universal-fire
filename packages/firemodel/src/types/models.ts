@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { IDictionary } from 'brilliant-errors';
 import { epochWithMilliseconds } from 'common-types';
-import { IFmModelMeta } from './index';
+import { IFmModelMeta } from '@/types';
 /**
  * Properties in a model which are managed and should not be set by a
  * user directly.
@@ -25,12 +25,11 @@ export type IModelProps = Record<string, unknown> & IModelManaged;
  * - the generic `<T>` allows extending the props beyond the managed props like `id`, `lastUpdated`, etc.
  * - the `META` property is masked in this interface and instead exposed in the `IModelClass` interface
  */
-export type IModel<T extends IModelProps = {}> = T & IModelManaged;
+export type IModel<T extends Record<string, unknown> & { id?: string; lastUpdated?: number; createdAt?: number } = {}> = T & IModelManaged;
 /**
  * Utility that converts an `IModel` type to the META key/value pair
  */
 export type ModelMeta<T extends IModel> = IFmModelMeta<T>;
-
 
 /**
  * The `IModel` interface _plus_ the META property
@@ -53,6 +52,16 @@ export type ModelInput<T extends IModel> = Omit<T, ModelManagedProps>;
  * optional.
  */
 export type IDbModel<T extends IModel> = T & Required<IModelManaged> & { META: ModelMeta<T> }
+
+
+/**
+ * A type guard that recieves an `IModel` and if the run time data has a META property (which it
+ * should in most cases) then it will be recognized once passing this test as the interface
+ * `IModelClass<T>` versus simply `IModel<T>`.
+ */
+export function isModelClass<T extends IModel>(model: T): model is T & { META: ModelMeta<T> } {
+  return (model as any).META !== undefined;
+}
 
 /**
  * A _type guard_ which receives an `IModel` and upgrades it to a `IDbModel` if the 

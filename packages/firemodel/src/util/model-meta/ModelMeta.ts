@@ -1,4 +1,4 @@
-import { IRecord } from "@/types";
+import { Record } from "@/core";
 import { IDictionary } from "common-types";
 import { keys } from "native-dash";
 import { IFmModelMeta, IModel, ISdk } from "@forest-fire/types";
@@ -21,12 +21,12 @@ export function addModelMeta(
  *
  * @param rec a model or record which exposes META property
  */
-export function getModelMeta<R extends IRecord<S, T>, S extends ISdk, T extends IModel>(rec: R): IFmModelMeta<T> {
+export function getModelMeta<S extends ISdk, T extends IModel>(rec: Record<S, T>): IFmModelMeta<T> {
   const localMeta = rec.META;
   const modelMeta = keys(meta).includes(rec.modelName) ? meta[rec.modelName] : {};
   return localMeta && localMeta.properties ? localMeta : modelMeta as unknown as IFmModelMeta<T>;
 }
 
-export function modelsWithMeta() {
+export function modelsWithMeta(): string[] {
   return Object.keys(meta);
 }

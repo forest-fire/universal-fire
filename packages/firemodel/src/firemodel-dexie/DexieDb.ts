@@ -1,24 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import Dexie from "dexie";
+import Dexie, { DexieDOMDependencies, TableSchema } from "dexie";
 import { DexieError, FireModelError } from "@/errors";
 import { DexieList, DexieRecord } from "@/firemodel-dexie/index";
 import {
   ICompositeKey,
   IDexieModelMeta,
   IDexiePriorVersion,
-  IPrimaryKey,
+  PrimaryKey,
 } from "@/types";
 import { ConstructorFor, IDictionary, pk } from "common-types";
 
 import { Record } from "@/core";
 import { capitalize } from "@/util";
-import { IModel } from "@forest-fire/types";
+import { IModel, ISdk, ModelMeta } from "@forest-fire/types";
+import { keys } from "lodash";
 
 /**
  * Provides a simple API to convert to/work with **Dexie** models
  * from a **Firemodel** model definition.
  */
-export class DexieDb<T extends IModel> {
+export class DexieDb {
   //#region STATIC
   /**
    * Takes a _deconstructed_ array of **Firemodel** `Model` constructors and converts
@@ -26,8 +27,8 @@ export class DexieDb<T extends IModel> {
    * the dictionary is the plural name of the model
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  public static modelConversion<T extends IModel>(
-    ...modelConstructors: Array<ConstructorFor<T>>
+  public static modelConversion(
+    ...modelConstructors: Array<ConstructorFor<IModel>>
   ) {
     if (modelConstructors.length === 0) {
       throw new FireModelError(
@@ -37,9 +38,9 @@ export class DexieDb<T extends IModel> {
     }
 
     return modelConstructors.reduce(
-      (agg: IDictionary<string>, curr: ConstructorFor<T>) => {
+      <M extends ConstructorFor<IModel>>(agg: IDictionary<string>, curr: M) => {
         const dexieModel: string[] = [];
-        const r = Record.createWith(curr, {});
+        const r = Record.create(curr);
 
         const compoundIndex = r.hasDynamicPath
           ? ["id"].concat(r.dynamicPathComponents)
@@ -100,7 +101,7 @@ export class DexieDb<T extends IModel> {
    * This allows leveraging libraries such as:
    * - [fakeIndexedDB](https://github.com/dumbmatter/fakeIndexedDB)
    */
-  public static indexedDB(indexedDB: any, idbKeyRange?: any) {
+  public static indexedDB(indexedDB: any, idbKeyRange?: DexieDOMDependencies["IDBKeyRange"]): void {
     // Dexie.dependencies.indexedDB = indexedDB;
     DexieDb._indexedDb = indexedDB;
     if (idbKeyRange) {
@@ -127,7 +128,7 @@ export class DexieDb<T extends IModel> {
     return this._name;
   }
 
-  public get version() {
+  public get version(): number {
     return this._currentVersion;
   }
 
@@ -135,7 +136,7 @@ export class DexieDb<T extends IModel> {
    * The models which are known to this `DexieModel` instance.
    * The names will be in the _singular_ vernacular.
    */
-  public get modelNames() {
+  public get modelNames(): string[] {
     return Object.keys(this._singularToPlural);
   }
 
@@ -143,7 +144,7 @@ export class DexieDb<T extends IModel> {
    * The models which are known to this `DexieModel` instance.
    * The names will be in the _plural_ vernacular.
    */
-  public get pluralNames() {
+  public get pluralNames(): string[] {
     return Object.keys(this._models);
   }
 
@@ -151,11 +152,11 @@ export class DexieDb<T extends IModel> {
     return this._db;
   }
 
-  public get status() {
+  public get status(): string {
     return this._status;
   }
 
-  public get isMapped() {
+  public get isMapped(): boolean {
     return this._isMapped;
   }
 
@@ -166,7 +167,7 @@ export class DexieDb<T extends IModel> {
    * Note: this will throw a "not-ready" error
    * if Dexie has _not_ yet connected to the DB.
    */
-  public get dexieTables() {
+  public get dexieTables(): { name: string, schema: TableSchema }[] {
     return this.db.tables.map((t) => ({
       name: t.name,
       schema: t.schema,
@@ -179,7 +180,7 @@ export class DexieDb<T extends IModel> {
   /** the core **Dexie** API surface */
   private _db: Dexie;
   /** META information for each of the `Model`'s */
-  private _meta: IDictionary<IDexieModelMeta<T>> = {};
+  private _meta: IDictionary<IDexieModelMeta<IModel>> = {};
   /** maps `Model`'s singular name to a plural */
   private _singularToPlural: IDictionary<string> = {};
   /** the current version number for the indexDB database */
@@ -190,7 +191,7 @@ export class DexieDb<T extends IModel> {
 
   private _status = "initialized";
 
-  constructor(private _name: string, ...models: Array<ConstructorFor<T>>) {
+  constructor(private _name: string, ...models: Array<ConstructorFor<unknown>>) {
     this._models = DexieDb.modelConversion(...models);
 
     this._db = DexieDb._indexedDb
@@ -208,15 +209,15 @@ export class DexieDb<T extends IModel> {
     });
 
     models.forEach((m) => {
-      const r = Record.create(m);
+      const r: Record<ISdk, IModel> = Record.create(m);
       this._constructors[r.pluralName] = m;
-      const meta: IDexieModelMeta<T> = {
+      const meta: IDexieModelMeta<IModel> = {
         ...r.META,
         modelName: r.modelName,
         hasDynamicPath: r.hasDynamicPath,
         dynamicPathComponents: r.dynamicPathComponents,
         pluralName: r.pluralName,
-      } as unknown as IDexieModelMeta<T>;
+      } as unknown as IDexieModelMeta<IModel>;
       this._meta[r.pluralName] = meta;
       this._singularToPlural[r.modelName] = r.pluralName;
     });
@@ -233,7 +234,7 @@ export class DexieDb<T extends IModel> {
    * - [Dexie Docs](https://dexie.org/docs/Tutorial/Design#database-versioning)
    * - [Prior Version _typing_](https://github.com/forest-fire/firemodel/blob/master/src/%40types/dexie.ts)
    */
-  public addPriorVersion(version: IDexiePriorVersion) {
+  public addPriorVersion(version: IDexiePriorVersion): DexieDb {
     this._priors.push(version);
     this._currentVersion++;
 
@@ -246,7 +247,7 @@ export class DexieDb<T extends IModel> {
    *
    * @param model the `Model` in question
    */
-  public modelIsManagedByDexie<T extends IModel>(model: ConstructorFor<T>) {
+  public modelIsManagedByDexie<T extends IModel>(model: ConstructorFor<T>): boolean {
     const r = Record.create(model);
     return this.modelNames.includes(r.modelName);
   }
@@ -256,10 +257,11 @@ export class DexieDb<T extends IModel> {
    */
   public table<T extends IModel>(
     model: ConstructorFor<T>
-  ): Dexie.Table<T, IPrimaryKey<T>> {
+  ): Dexie.Table<T, PrimaryKey<T>> {
     const r = Record.create(model);
 
     if (!this.isOpen()) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.open();
     }
 
@@ -276,7 +278,7 @@ export class DexieDb<T extends IModel> {
 
     const table = this._db.table(r.pluralName) as Dexie.Table<
       T,
-      IPrimaryKey<T>
+      PrimaryKey<T>
     >;
     table.mapToClass(model);
 
@@ -289,12 +291,12 @@ export class DexieDb<T extends IModel> {
    *
    * @param model the **Firemodel** model (aka, the constructor)
    */
-  public record<T extends IModel>(model: ConstructorFor<T>) {
+  public record<T extends IModel>(model: ConstructorFor<T>): DexieRecord<T> {
     const r = Record.create(model);
     if (!this.modelNames.includes(r.modelName)) {
       const isPlural = this.pluralNames.includes(r.modelName);
       throw new DexieError(
-        `Attempt to reach the record API via DexieDb.record("${model}") failed as there is no known Firemodel model of that name. ${isPlural
+        `Attempt to reach the record API via DexieDb.record("${r.modelName}") failed as there is no known Firemodel model of that name. ${isPlural
           ? "It looks like you may have accidentally used the plural name instead"
           : ""
         }. Known model types are: ${this.modelNames.join(", ")}`,
@@ -302,6 +304,7 @@ export class DexieDb<T extends IModel> {
       );
     }
     if (!this.isOpen()) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.open();
     }
 
@@ -318,26 +321,27 @@ export class DexieDb<T extends IModel> {
    *
    * @param model the **Firemodel** `Model` name
    */
-  public list<T extends IModel>(model: ConstructorFor<T>) {
+  public list<T extends IModel>(model: ConstructorFor<T>): DexieList<T> {
     const r = Record.create(model);
     if (!this.isOpen()) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.open();
     }
     const table = r.hasDynamicPath
       ? (this.table(model) as Dexie.Table<T, ICompositeKey<T>>)
       : (this.table(model) as Dexie.Table<T, pk>);
 
-    const meta = this.meta(r.modelName);
+    const meta = this.meta<T>(r.modelName);
 
-    return new DexieList(model, table, meta);
+    return new DexieList<T>(model, table, meta);
   }
 
   /**
    * Returns the META for a given `Model` identified by
    * the model's _plural_ (checked first) or _singular_ name.
    */
-  public meta(name: string, _originated = "meta") {
-    return this._checkPluralThenSingular(this._meta, name, _originated);
+  public meta<T extends IModel = IModel>(name: string): IDexieModelMeta<T> {
+    return this._lookupMetaWithSingularOrPluralName(this._meta, name) as unknown as IDexieModelMeta<T>;
   }
 
   /**
@@ -346,12 +350,15 @@ export class DexieDb<T extends IModel> {
    * @param name either the _plural_ or _singular_ name of a model
    * managed by the `DexieModel` instance
    */
-  public modelConstructor(name: string): ConstructorFor<any> {
-    return this._checkPluralThenSingular(
-      this._constructors,
-      name,
-      "modelConstructor"
-    );
+  public modelConstructor<T extends IModel>(name: string): ConstructorFor<T> {
+    let CTOR = this._constructors[name];
+    if (!CTOR) {
+      const plural = this._singularToPlural[name];
+      if (plural) CTOR = this._constructors[plural];
+      else throw new FireModelError(`Attempt to get model ${name}'s constructor failed`, "firemodel/invalid-model");
+
+      return CTOR;
+    }
   }
 
   /**
@@ -393,7 +400,7 @@ export class DexieDb<T extends IModel> {
   /**
    * Closes the IndexDB connection
    */
-  public close() {
+  public close(): void {
     if (!this._db.isOpen()) {
       throw new DexieError(
         `Attempt to call DexieDb.close() failed because the database is NOT open!`,
@@ -403,17 +410,17 @@ export class DexieDb<T extends IModel> {
     this._db.close();
   }
 
-  private _checkPluralThenSingular(obj: IDictionary, name: string, fn: string) {
-    if (obj[name]) {
-      return obj[name];
-    } else if (this._singularToPlural[name]) {
-      return obj[this._singularToPlural[name]];
+  private _lookupMetaWithSingularOrPluralName(obj: IDictionary<IDexieModelMeta<IModel>>, name: string) {
+    if (keys(obj).includes(name)) {
+      return obj[name as keyof typeof obj];
+    } else {
+      const plural = this._singularToPlural[name];
+      if (keys(obj).includes(plural)) {
+        return obj[plural as keyof typeof obj];
+      } else {
+        throw new FireModelError(`Attempt to lookup the Dexie::${name}'s meta data but it was not found!`, "firemodel/invalid-dexie-model")
+      }
     }
-
-    throw new DexieError(
-      `Failed while calling DexieModel.${fn}("${name}") because "${name}" is neither a singular or plural name of a known model!`,
-      `firemodel/invalid-dexie-model`
-    );
   }
 
   private _mapVersionsToDexie() {

@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import {
-  IAbstractedEvent,
-} from '../fire-proxies';
+
+import { IAbstractedEvent } from '../fire-proxies';
 import { ISdk } from '../fire-types';
-import { IModel } from '../firemodel/models';
 import { IRtdbReference } from '../proxy-plus';
 import { ISerializedQuery } from '../query';
 
@@ -32,7 +30,7 @@ export interface IDatabaseApi<
    * an array of dictionaries where the _key_ for the record will be assigned the property value
    * of `id` (unless overriden by the `idProp` param)
    */
-  getList: <T extends IModel, P extends string | ISerializedQuery<TSdk, T> = string | ISerializedQuery<TSdk, T>>(
+  getList: <T extends unknown = unknown, P extends string | ISerializedQuery<TSdk, T> = string | ISerializedQuery<TSdk, T>>(
     path: P,
     idProp?: string
   ) => Promise<T[]>;

@@ -42,9 +42,7 @@ export interface IFmDispatchOptions {
 /**
  * the normal call signature of a **Redux** `dispatch()` call
  */
-export type IReduxDispatch<T extends IReduxAction = IReduxAction, O extends any = any> = (
-  payload: T
-) => Promise<O>;
+export type IReduxDispatch = (payload: IReduxAction) => Promise<IReduxAction>;
 
 /**
  * The structure of a Redux action message (aka, a dictionary with

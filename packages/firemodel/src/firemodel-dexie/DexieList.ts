@@ -23,6 +23,7 @@ export class DexieList<T extends IModel> {
     private meta: IDexieModelMeta<T>
   ) { }
 
+
   /**
    * Get a full list of _all_ records of a given model type
    */

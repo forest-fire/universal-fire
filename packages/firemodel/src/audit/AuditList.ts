@@ -1,12 +1,11 @@
-import { IAuditLogItem, IModel, IModelOptions } from "@/types";
-
+import { IAuditLogItem, IModelOptions } from "@/types";
 import { AuditBase } from "@/audit";
-import { SerializedQuery } from "@forest-fire/types";
+import { SerializedQuery } from "@forest-fire/serialized-query";
 import { epochWithMilliseconds } from "common-types";
 import { pathJoin } from "native-dash";
 
-export class AuditList<T extends IModel> extends AuditBase<T> {
-  constructor(modelKlass: new () => T, options: IModelOptions = {}) {
+export class AuditList extends AuditBase {
+  constructor(modelKlass: new () => IAuditLogItem, options: IModelOptions = {}) {
     super(modelKlass, options);
     this._query = SerializedQuery.create(this.db, pathJoin(this.dbPath, "all"));
   }

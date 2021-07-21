@@ -1,6 +1,7 @@
 import { IWatcherEventContext } from "@/types";
 import { Watch } from "@/core";
 import { hashToArray } from "typed-conversions";
+import { ISdk, IModel } from "@forest-fire/types";
 
 /**
  * **findWatchers**
@@ -14,8 +15,8 @@ import { hashToArray } from "typed-conversions";
 export function findWatchers(
   /** the database path where change was detected */
   dbPath: string
-) {
-  const inspectListofRecords = (watcher: IWatcherEventContext) => {
+): IWatcherEventContext<ISdk, IModel>[] {
+  const inspectListofRecords = (watcher: IWatcherEventContext<ISdk, IModel>) => {
     const paths = watcher.watcherPaths;
     let found = false;
     paths.forEach((p) => {
@@ -29,8 +30,8 @@ export function findWatchers(
   return hashToArray(Watch.inventory).filter((i) =>
     i.watcherSource === "list-of-records"
       ? /** handles the "list-of-records" use case */
-        inspectListofRecords(i)
+      inspectListofRecords(i)
       : /** handles the standard use case */
-        dbPath.includes(i.query.path)
+      dbPath.includes(i.query.path)
   );
 }

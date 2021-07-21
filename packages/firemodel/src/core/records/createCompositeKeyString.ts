@@ -1,6 +1,6 @@
 import { IDictionary } from "common-types";
 import { Record } from "@/core";
-import { createCompositeKey } from "./index";
+import { createCompositeKeyFromRecord } from "./index";
 import { ISdk, IModel } from "@forest-fire/types";
 
 /**
@@ -10,7 +10,7 @@ import { ISdk, IModel } from "@forest-fire/types";
 export function createCompositeKeyRefFromRecord<S extends ISdk, T extends IModel = IModel>(
   rec: Record<S, T>
 ) {
-  const cKey: IDictionary & { id: string } = createCompositeKey(rec);
+  const cKey: IDictionary & { id: string } = createCompositeKeyFromRecord(rec);
   return rec.hasDynamicPath ? createCompositeRef(cKey) : rec.id;
 }
 

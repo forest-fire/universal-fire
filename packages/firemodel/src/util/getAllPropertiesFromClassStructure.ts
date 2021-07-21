@@ -1,10 +1,10 @@
-import { IModel, IFmModelMeta, IModelProps } from "@forest-fire/types";
+import { IModel, IFmModelPropertyMeta } from "@forest-fire/types";
 import { hashToArray } from "typed-conversions";
 import { propertiesByModel } from "@/util";
 
-export function getAllPropertiesFromClassStructure<T extends IModel<P>, P extends IModelProps>(model: T): IFmModelMeta<P>["property"][] {
+export function getAllPropertiesFromClassStructure<T extends IModel>(model: T): IFmModelPropertyMeta<T>[] {
   const modelName: string = model.constructor.name;
-  const properties: IFmModelMeta<P>["property"][] =
+  const properties: IFmModelPropertyMeta<T>[] =
     hashToArray(propertiesByModel[modelName], "property") || [];
   let parent = Object.getPrototypeOf(model.constructor);
 

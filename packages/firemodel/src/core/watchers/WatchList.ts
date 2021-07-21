@@ -2,15 +2,17 @@ import {
   IComparisonOperator,
   ISdk,
   ISerializedQuery,
-  SerializedQuery,
+  IModel
 } from "@forest-fire/types";
-import { IListOptions, IModel, IPrimaryKey } from "@/types";
+import { SerializedQuery } from "@forest-fire/serialized-query";
+import { ICompositeKey, IListOptions, PrimaryKey } from "@/types";
 import { List, Record, Watch } from "@/core";
 
 import { FireModelError } from "@/errors";
 import { WatchBase } from "./WatchBase";
 import { epochWithMilliseconds } from "common-types";
 import { getAllPropertiesFromClassStructure } from "@/util";
+import { WatchRecord } from "./WatchRecord";
 
 export class WatchList<S extends ISdk, T extends IModel> extends WatchBase<S, T> {
   public static list<S extends ISdk, T extends IModel>(
@@ -43,11 +45,10 @@ export class WatchList<S extends ISdk, T extends IModel> extends WatchBase<S, T>
       this._offsets = options.offsets;
     }
 
-    const lst = List.create(modelConstructor, options);
     this._modelConstructor = modelConstructor;
-    this._classProperties = getAllPropertiesFromClassStructure(
+    this._classProperties = getAllPropertiesFromClassStructure<T>(
       new this._modelConstructor()
-    );
+    ).map(i => i.property);
     this._dynamicProperties = Record.dynamicPathProperties(modelConstructor);
     this.setPathDependantProperties();
 
@@ -58,9 +59,8 @@ export class WatchList<S extends ISdk, T extends IModel> extends WatchBase<S, T>
    *
    * @param offsetDict
    */
-  public offsets(offsetDict: Partial<T>) {
+  public offsets(offsetDict: Partial<T>): WatchList<S, T> {
     this._offsets = offsetDict;
-    const lst = List.create(this._modelConstructor, this._options);
     this.setPathDependantProperties();
 
     return this;
@@ -81,7 +81,7 @@ export class WatchList<S extends ISdk, T extends IModel> extends WatchBase<S, T>
    *
    * @param ids the list of FK references (simple or composite)
    */
-  public ids(...ids: Array<IPrimaryKey<T>>) {
+  public ids(...ids: Array<PrimaryKey<T>>): WatchList<S, T> {
     if (ids.length === 0) {
       throw new FireModelError(
         `You attempted to setup a watcher list on a given set of ID's of "${this._modelName}" but the list of ID's was empty!`,
@@ -89,14 +89,11 @@ export class WatchList<S extends ISdk, T extends IModel> extends WatchBase<S, T>
       );
     }
     for (const id of ids) {
-      this._underlyingRecordWatchers.push(
-        this._options.offsets
-          ? Watch.record<T>(this._modelConstructor, {
-            ...(typeof id === "string" ? { id } : id),
-            ...this._options.offsets,
-          })
-          : Watch.record<T>(this._modelConstructor, id)
-      );
+      const pk = this._options.offsets ? {
+        ...(typeof id === "string" ? { id } : id),
+        ...this._options.offsets,
+      } as ICompositeKey<T> : id;
+      this._underlyingRecordWatchers.push(Watch.record<S, T>(this._modelConstructor, pk));
     }
     this._watcherSource = "list-of-records";
     this._eventType = "value";

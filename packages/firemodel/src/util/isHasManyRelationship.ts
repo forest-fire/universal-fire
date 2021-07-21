@@ -1,4 +1,5 @@
 import { IModel, ISdk } from "@forest-fire/types";
+import { Record } from "@/core";
 
 export function isHasManyRelationship<S extends ISdk, T extends IModel>(
   rec: Record<S, T>,

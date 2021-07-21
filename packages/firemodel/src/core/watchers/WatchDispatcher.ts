@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
   FmEvents,
   IEventTimeContext,
@@ -47,7 +48,6 @@ export const WatchDispatcher = <S extends ISdk, T extends IModel>(
       };
 
       let eventContext: IEventTimeContext<T>;
-      let errorMessage: string;
 
       if (event.kind === "relationship") {
         eventContext = {
@@ -77,7 +77,7 @@ export const WatchDispatcher = <S extends ISdk, T extends IModel>(
             ? { id: event.key, ...event.value }
             : { id: event.key };
 
-        const rec = Record.createWith(
+        const rec = Record.createWith<any>(
           watcherContext.modelConstructor,
           recordProps
         );
@@ -95,8 +95,6 @@ export const WatchDispatcher = <S extends ISdk, T extends IModel>(
             break;
           default:
             type = FmEvents.UNEXPECTED_ERROR;
-            errorMessage = `The "kind" of event was not recognized [ ${(event as any).kind
-              } ]`;
         }
 
         eventContext = {
@@ -105,7 +103,7 @@ export const WatchDispatcher = <S extends ISdk, T extends IModel>(
         };
       }
 
-      const reduxAction: IFmWatchEvent<T> = {
+      const reduxAction: IFmWatchEvent<S, T> = {
         ...watcherContext,
         ...event,
         ...eventContext,
@@ -115,6 +113,6 @@ export const WatchDispatcher = <S extends ISdk, T extends IModel>(
       // The mock server and client are now in sync
       hasInitialized(watcherContext.watcherId);
 
-      return results;
+      return results as IFmWatchEvent<S, T>;
     };
   };

@@ -2,29 +2,30 @@ import { IReduxDispatch, IWatcherEventContext } from "@/types";
 
 import { IDictionary } from "common-types";
 import { hashToArray } from "typed-conversions";
+import { ISdk, IModel } from "@forest-fire/types";
 
 /** a cache of all the watched  */
-let watcherPool: IDictionary<IWatcherEventContext<any>> = {};
+let watcherPool: IDictionary<IWatcherEventContext<ISdk, IModel>> = {};
 
-export function getWatcherPool() {
-  return watcherPool;
+export function getWatcherPool<S extends ISdk = ISdk, T extends IModel = IModel>(): IDictionary<IWatcherEventContext<S, T>> {
+  return watcherPool as unknown as IDictionary<IWatcherEventContext<S, T>>;
 }
 
-export function getWatcherPoolList() {
-  return hashToArray(getWatcherPool());
+export function getWatcherPoolList<S extends ISdk = ISdk, T extends IModel = IModel>(): IWatcherEventContext<S, T>[] {
+  return hashToArray(getWatcherPool()) as unknown as IWatcherEventContext<S, T>[];
 }
 
-export function addToWatcherPool<T = IWatcherEventContext<any>>(
-  item: IWatcherEventContext<T>
-) {
-  watcherPool[item.watcherId] = item;
+export function addToWatcherPool<S extends ISdk, T extends IModel>(
+  item: IWatcherEventContext<S, T>
+): void {
+  watcherPool[item.watcherId] = item as unknown as IWatcherEventContext<ISdk, IModel>;
 }
 
-export function getFromWatcherPool(code: keyof typeof watcherPool) {
-  return watcherPool[code];
+export function getFromWatcherPool<S extends ISdk = ISdk, T extends IModel = IModel>(code: keyof typeof watcherPool): IWatcherEventContext<S, T> {
+  return watcherPool[code] as unknown as IWatcherEventContext<S, T>;
 }
 
-export function clearWatcherPool() {
+export function clearWatcherPool(): void {
   watcherPool = {};
 }
 

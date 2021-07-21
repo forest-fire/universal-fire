@@ -3,7 +3,7 @@ import { index, model, property } from "@/decorators";
 import { Model } from "./Model";
 
 @model({ dbOffset: "_auditing" })
-export class AuditLog extends Model<AuditLog> {
+export class AuditLog extends Model {
   /** the `Model` which has been changed */
   @property @index modelName: string;
   /** the `id` of the record changing */
@@ -13,4 +13,6 @@ export class AuditLog extends Model<AuditLog> {
   /** the changes to properties, typically not represented in a "removed" op */
   @property action: IAuditOperations;
 }
+
+
 

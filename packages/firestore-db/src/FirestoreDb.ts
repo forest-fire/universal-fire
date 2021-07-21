@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/ban-types */
 import type {
   IFirestoreDatabase,
@@ -13,8 +14,7 @@ import type {
   IsAdminSdk,
   IMockDatabase,
   EventFrom,
-  IRtdbReference,
-  IModel
+  IRtdbReference
 } from '@forest-fire/types';
 import { FireError } from '@forest-fire/utility';
 import {
@@ -91,7 +91,7 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     throw new Error('Not implemented');
   }
 
-  public async getList<T extends IModel>(
+  public async getList<T extends unknown>(
     path: string | ISerializedQuery<TSdk, T>,
     idProp = 'id'
   ): Promise<T[]> {
@@ -147,10 +147,10 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
    * @param events an event type or an array of event types (e.g., "value", "child_added")
    * @param _cb the callback function to call when event triggered
    */
-  public watch<C extends IModel>(
-    target: string | ISerializedQuery<TSdk, C>,
+  public watch<T extends unknown>(
+    target: string | ISerializedQuery<TSdk, T>,
     events: EventFrom<TSdk> | EventFrom<TSdk>[],
-    _cb: C
+    _cb: T
   ): void {
     if (events && !isFirestoreEvent(events)) {
       throw new FirestoreDbError(

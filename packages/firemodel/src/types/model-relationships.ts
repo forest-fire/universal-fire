@@ -1,4 +1,4 @@
-import { IModel } from "./index";
+import { IModel } from "@/types";
 
 export type IModelConstructor<
   T extends IModel

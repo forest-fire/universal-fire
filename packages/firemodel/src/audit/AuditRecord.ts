@@ -1,14 +1,14 @@
-import { IAuditLogItem, IModel, IModelOptions } from "@/types";
+import { IAuditLogItem, IModelOptions } from "@/types";
 
 import { AuditBase } from "@/audit";
 import { Parallel } from "wait-in-parallel";
-import { SerializedQuery } from "@forest-fire/types";
+import { SerializedQuery } from "@forest-fire/serialized-query";
 import { epochWithMilliseconds } from "common-types";
 import { pathJoin } from "native-dash";
 
-export class AuditRecord<T extends IModel> extends AuditBase {
+export class AuditRecord extends AuditBase {
   constructor(
-    modelKlass: new () => T,
+    modelKlass: new () => IAuditLogItem,
     id: string,
     options: IModelOptions = {}
   ) {
@@ -22,14 +22,14 @@ export class AuditRecord<T extends IModel> extends AuditBase {
    * a given Record type. You can also optionally specify an offset to
    * start at [`startAt`].
    */
-  public async first(howMany: number, startAt?: string) {
+  public async first(howMany: number, startAt?: string): Promise<IAuditLogItem[]> {
     this._query = this._query.setPath(this.byId);
 
     this._query = this._query.orderByKey().limitToLast(howMany);
     if (startAt) {
       this._query = this._query.startAt(startAt);
     }
-    const ids = (await this.db.getList(this._query)).map((i) =>
+    const ids = (await this.db.getList<IAuditLogItem>(this._query)).map((i) =>
       pathJoin(this.auditLogs, i.id)
     );
     const p = new Parallel<IAuditLogItem>();
@@ -46,7 +46,7 @@ export class AuditRecord<T extends IModel> extends AuditBase {
     if (startAt) {
       this._query = this._query.startAt(startAt);
     }
-    const ids = (await this.db.getList(this._query)).map((i) =>
+    const ids = (await this.db.getList<IAuditLogItem>(this._query)).map((i) =>
       pathJoin(this.auditLogs, i.id)
     );
     const p = new Parallel<IAuditLogItem>();
@@ -64,9 +64,8 @@ export class AuditRecord<T extends IModel> extends AuditBase {
       .setPath(this.byId)
       .orderByChild("value")
       .startAt(when);
-    const qr = await this.db.getList(this._query);
 
-    const ids = (await this.db.getList(this._query)).map((i) =>
+    const ids = (await this.db.getList<IAuditLogItem>(this._query)).map((i) =>
       pathJoin(this.auditLogs, i.id)
     );
 
@@ -88,9 +87,9 @@ export class AuditRecord<T extends IModel> extends AuditBase {
       .setPath(this.byId)
       .orderByChild("value")
       .endAt(when);
-    const qr = await this.db.getList(this._query);
+    const qr = await this.db.getList<IAuditLogItem>(this._query);
 
-    const ids = (await this.db.getList(this._query)).map((i) =>
+    const ids = (await this.db.getList<IAuditLogItem>(this._query)).map((i) =>
       pathJoin(this.auditLogs, i.id)
     );
 
@@ -119,9 +118,9 @@ export class AuditRecord<T extends IModel> extends AuditBase {
       .orderByChild("value")
       .startAt(after)
       .endAt(before);
-    const qr = await this.db.getList(this._query);
+    const qr = await this.db.getList<IAuditLogItem>(this._query);
 
-    const ids = (await this.db.getList(this._query)).map((i) =>
+    const ids = (await this.db.getList<IAuditLogItem>(this._query)).map((i) =>
       pathJoin(this.auditLogs, i.id)
     );
 

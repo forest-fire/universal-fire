@@ -1,7 +1,7 @@
 import { FireModelProxyError, UnknownRelationshipProblem } from "@/errors";
 import {
   FmEvents,
-  IFkReference,
+  ForeignKey,
   IFmLocalRelationshipEvent,
   IFmPathValuePair,
   IFmRelationshipOperation,
@@ -11,7 +11,7 @@ import {
 import { capitalize, getModelMeta } from "@/util";
 import { createCompositeRef, locallyUpdateFkOnRecord } from "./index";
 
-import { IDictionary } from "common-types";
+import { ConstructorFor, IDictionary } from "common-types";
 import { IModel } from "@forest-fire/types";
 import { Record } from "@/core";
 import { ISdk } from "@forest-fire/types";
@@ -24,10 +24,10 @@ import { ISdk } from "@forest-fire/types";
  */
 export async function relationshipOperation<
   S extends ISdk,
-  F extends IModel,
-  T extends IModel = IModel
+  TFrom extends IModel,
+  TTo extends IModel = IModel
 >(
-  rec: Record<S, F>,
+  rec: Record<S, TFrom>,
   /**
    * **operation**
    *
@@ -39,11 +39,11 @@ export async function relationshipOperation<
    *
    * The property on this model which changing its relationship status in some way
    */
-  property: keyof F & string,
+  property: keyof TFrom & string,
   /**
    * The array of _foreign keys_ (of the "from" model) which will be operated on
    */
-  fkRefs: Array<IFkReference<T>>,
+  fkRefs: Array<ForeignKey<TTo>>,
   /**
    * **paths**
    *
@@ -51,8 +51,9 @@ export async function relationshipOperation<
    * and the value is the value to set.
    */
   paths: IFmPathValuePair[],
-  options: IFmRelationshipOptions<S> | IFmRelationshipOptionsForHasMany<S> = {}
-) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _options: IFmRelationshipOptions<S> | IFmRelationshipOptionsForHasMany<S> = {}
+): Promise<void> {
   // make sure all FK's are strings
   const fks = fkRefs.map((fk) => {
     return typeof fk === "object" ? createCompositeRef(fk) : fk;
@@ -87,9 +88,9 @@ export async function relationshipOperation<
 
   try {
     const [localEvent, confirmEvent, rollbackEvent] = dispatchEvents[operation];
-    const fkConstructor = rec.META.relationship(property).fkConstructor;
+    const fkConstructor = rec.META.relationship(property).fkConstructor() as unknown as ConstructorFor<TTo>;
     // TODO: fix the typing here to make sure fkConstructor knows it's type
-    const fkRecord: Record<S, T> = new Record<S, T>(fkConstructor());
+    const fkRecord = new Record<S, TTo>(fkConstructor);
     const fkMeta = getModelMeta(fkRecord);
     const transactionId: string =
       "t-reln-" +
@@ -97,7 +98,7 @@ export async function relationshipOperation<
       "-" +
       Math.random().toString(36).substr(2, 5);
 
-    const event: Omit<IFmLocalRelationshipEvent<F, T>, "type"> = {
+    const event: Omit<IFmLocalRelationshipEvent<TFrom, TTo>, "type"> = {
       key: rec.compositeKeyRef,
       operation,
       property,
@@ -116,11 +117,11 @@ export async function relationshipOperation<
 
     const inverseProperty = rec.META.relationship(property).inverseProperty;
     if (inverseProperty) {
-      event.inverseProperty = inverseProperty as keyof T;
+      event.inverseProperty = inverseProperty as keyof TTo;
     }
 
     try {
-      await localRelnOp(rec, event, localEvent);
+      await localRelnOp<S, TFrom, TTo>(rec, event, localEvent);
       await relnConfirmation(rec, event, confirmEvent);
     } catch (e) {
       await relnRollback(rec, event, rollbackEvent);
@@ -142,18 +143,19 @@ export async function relationshipOperation<
   }
 }
 
-export async function localRelnOp<S extends ISdk, F extends IModel, T extends IModel>(
-  rec: Record<S, F>,
-  event: Omit<IFmLocalRelationshipEvent<F, T>, "type">,
+export async function localRelnOp<S extends ISdk, TFrom extends IModel, TTo extends IModel>(
+  rec: Record<S, TFrom>,
+  event: Omit<IFmLocalRelationshipEvent<TFrom, TTo>, "type">,
   type: FmEvents
-) {
+): Promise<void> {
   try {
     // locally modify Record's values
     // const ids = extractFksFromPaths(rec, event.property, event.paths);
     event.fks.map((fk) => {
-      locallyUpdateFkOnRecord(rec, fk, { ...event, type });
+      locallyUpdateFkOnRecord<S, TFrom, TTo>(rec, fk, { ...event, type } as unknown as IFmLocalRelationshipEvent<TFrom, TTo>);
     });
     // local optimistic dispatch
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     rec.dispatch({ ...event, type });
     const ref = rec.db.ref("/");
     await (ref).update(
@@ -176,20 +178,20 @@ export async function relnConfirmation<S extends ISdk, F extends IModel, T exten
   rec: Record<S, F>,
   event: Omit<IFmLocalRelationshipEvent<F, T>, "type">,
   type: FmEvents
-) {
-  rec.dispatch({ ...event, type });
+): Promise<void> {
+  await rec.dispatch({ ...event, type });
 }
 
 export async function relnRollback<S extends ISdk, F extends IModel, T extends IModel>(
   rec: Record<S, F>,
   event: Omit<IFmLocalRelationshipEvent<F, T>, "type">,
   type: FmEvents
-) {
+): Promise<void> {
   //
   /**
    * no writes will have actually been done to DB but
    * front end framework will need to know as it probably
    * adjusted _optimistically_
    */
-  rec.dispatch({ ...event, type });
+  await rec.dispatch({ ...event, type });
 }

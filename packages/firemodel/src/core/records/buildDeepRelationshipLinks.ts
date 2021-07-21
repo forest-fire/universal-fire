@@ -1,6 +1,6 @@
 import { ISdk, IModel } from "@forest-fire/types";
 import { IDictionary } from "common-types";
-import { IFkReference } from "@/types";
+import { ForeignKey } from "@/types";
 import { Record } from "@/core";
 import { getModelMeta } from "@/util";
 
@@ -59,7 +59,7 @@ async function processBelongsTo<S extends ISdk, T extends IModel>(
   rec: Record<S, T>,
   property: keyof T & string
 ) {
-  const fk: IFkReference<T> = rec.get(property) as any;
+  const fk: ForeignKey<T> = rec.get(property) as any;
   const meta = getModelMeta(rec).property(property);
 
   if (fk && typeof fk === "object") {

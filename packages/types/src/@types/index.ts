@@ -2,10 +2,10 @@
 
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 06:50 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 09:23 AM ( GMT-7 )
 // export: named; exclusions: index, private.
 // files: auth, events, fire-proxies, fire-types.
-// directories: database, db-mocking, firemodel, proxy-plus, query, snapshot.
+// directories: database, db-mocking, proxy-plus, query, snapshot.
 
 // local file exports
 export * from "./auth";
@@ -16,7 +16,6 @@ export * from "./fire-types";
 // directory exports
 export * from "./database/index";
 export * from "./db-mocking/index";
-export * from "./firemodel/index";
 export * from "./proxy-plus/index";
 export * from "./query/index";
 export * from "./snapshot/index";
