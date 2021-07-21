@@ -1,11 +1,11 @@
-import { AuditLog, FireModel, List, Mock, Record } from "@/index";
-import { IDatabaseSdk, RealTimeAdmin } from "@forest-fire/types";
+import { FireModel, List, Record } from "@/core";
+import { RealTimeAdmin, IDatabaseSdk } from "universal-fire";
 
 import { Person } from "./testing/AuditedPerson";
 import { wait } from "common-types";
 
 describe("Auditing ->�", () => {
-  let db: IDatabaseSdk;
+  let db: IDatabaseSdk<"RealTimeAdmin">;
 
   beforeEach(async () => {
     db = await RealTimeAdmin.connect({ mocking: true });

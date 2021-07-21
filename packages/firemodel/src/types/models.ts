@@ -2,6 +2,7 @@
 import { IDictionary } from 'brilliant-errors';
 import { epochWithMilliseconds } from 'common-types';
 import { IFmModelMeta } from '@/types';
+import { Model } from '@/models';
 /**
  * Properties in a model which are managed and should not be set by a
  * user directly.
@@ -25,7 +26,8 @@ export type IModelProps = Record<string, unknown> & IModelManaged;
  * - the generic `<T>` allows extending the props beyond the managed props like `id`, `lastUpdated`, etc.
  * - the `META` property is masked in this interface and instead exposed in the `IModelClass` interface
  */
-export type IModel<T extends Record<string, unknown> & { id?: string; lastUpdated?: number; createdAt?: number } = {}> = T & IModelManaged;
+export type IModel<T extends Model = Model> = Omit<T, "META">;
+
 /**
  * Utility that converts an `IModel` type to the META key/value pair
  */

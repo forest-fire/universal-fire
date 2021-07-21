@@ -1,6 +1,6 @@
-import { ISdk, IModel } from "@forest-fire/types";
+import { ISdk, } from "@forest-fire/types";
 import { IDictionary } from "common-types";
-import { ForeignKey } from "@/types";
+import { ForeignKey, IModel } from "@/types";
 import { Record } from "@/core";
 import { getModelMeta } from "@/util";
 

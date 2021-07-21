@@ -3,14 +3,13 @@ import "reflect-metadata";
 import * as helpers from "./testing/helpers";
 
 import { IFmWatchEvent, List, Record } from "@/index";
-import { RealTimeAdmin, SDK, SerializedQuery } from "@forest-fire/types";
-import { IDatabaseSdk } from "@forest-fire/types";
+import { RealTimeAdmin, SDK, SerializedQuery, IDatabaseSdk } from "universal-fire";
 
 import { Car } from "./testing/Car";
 import Company from "./testing/dynamicPaths/Company";
 import { FireModel } from "@/index";
 import { FmEvents } from "@/index";
-import { Mock } from "@/index";
+import { Mock } from "@forest-fire/fixture";
 import { Person } from "./testing/Person";
 
 describe("List class: ", () => {

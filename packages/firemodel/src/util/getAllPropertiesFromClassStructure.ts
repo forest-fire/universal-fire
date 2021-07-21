@@ -1,4 +1,4 @@
-import { IModel, IFmModelPropertyMeta } from "@forest-fire/types";
+import { IModel, IFmModelPropertyMeta } from "@/types";
 import { hashToArray } from "typed-conversions";
 import { propertiesByModel } from "@/util";
 

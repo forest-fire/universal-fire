@@ -1,7 +1,7 @@
-import { RealTimeAdmin } from "@forest-fire/types";
+import { RealTimeAdmin, IDatabaseSdk, SDK } from "universal-fire";
 import { Car } from "./testing/Car";
-import { FireModel, List, Mock } from "@/core/index";
-import { IDatabaseSdk, SDK } from "../../types/dist/types";
+import { FireModel, List } from "@/core/index";
+import { Mock } from "@forest-fire/fixture";
 
 describe("List Options: ", () => {
   let db: IDatabaseSdk<SDK.RealTimeAdmin>;

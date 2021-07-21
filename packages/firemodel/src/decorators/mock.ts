@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { FmMockType, IFmModelPropertyMeta, IModel } from "@forest-fire/types";
+import { FmMockType, IFmModelPropertyMeta, IModel } from "@/types";
 
 import { propertiesByModel } from "@/util";
 import { propertyReflector } from "@/decorators";

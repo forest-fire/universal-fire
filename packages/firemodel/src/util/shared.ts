@@ -1,6 +1,6 @@
 import { IAuditChange } from "@/types";
 import { IDictionary } from "common-types";
-import { IModel, isDbModel, isModelClass } from "@forest-fire/types";
+import { IModel, isModelClass } from "@/types";
 
 export function normalized(...args: string[]) {
   return args

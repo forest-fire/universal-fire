@@ -1,5 +1,5 @@
 import { epochWithMilliseconds } from "common-types";
-import { IModel } from "@forest-fire/types";
+import { IModel } from "@/types";
 
 export interface IAuditLogItem extends IModel {
   createdAt: epochWithMilliseconds;

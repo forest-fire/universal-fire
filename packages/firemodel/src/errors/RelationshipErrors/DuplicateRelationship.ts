@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { FireModelError } from "@/errors";
-import { IModel, isModelClass } from "@forest-fire/types";
+import { IModel, isModelClass } from "@/types";
 
 export class DuplicateRelationship<T extends IModel> extends FireModelError {
   constructor(model: T, property: keyof T, fkId: string) {

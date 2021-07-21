@@ -11,7 +11,7 @@ import {
   Watch,
 } from "../src";
 import { IDictionary, wait } from "common-types";
-import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
+import { IDatabaseSdk, RealTimeAdmin } from "universal-fire";
 
 import { FancyPerson } from "./testing/FancyPerson";
 import { FireModel } from "@/index";

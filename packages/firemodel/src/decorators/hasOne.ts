@@ -3,7 +3,7 @@ import {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
   IModel,
-} from "@forest-fire/types";
+} from "@/types";
 import {
   modelConstructorLookup,
   modelNameLookup,

@@ -12,8 +12,9 @@ import { ConstructorFor, IDictionary, pk } from "common-types";
 
 import { Record } from "@/core";
 import { capitalize } from "@/util";
-import { IModel, ISdk, ModelMeta } from "@forest-fire/types";
-import { keys } from "lodash";
+import { IModel } from "@/types";
+import { ISdk } from "@forest-fire/types";
+import { keys } from "native-dash";
 
 /**
  * Provides a simple API to convert to/work with **Dexie** models

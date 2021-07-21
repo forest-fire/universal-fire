@@ -1,8 +1,8 @@
 import { FireModel, Record } from "@/core";
-import { IModelOptions, PrimaryKey } from "@/types";
+import { IModelOptions, PrimaryKey, IModel } from "@/types";
 
 import { FireModelError } from "@/errors";
-import { ISdk, IModel } from "@forest-fire/types";
+import { ISdk } from "@forest-fire/types";
 import { SerializedQuery } from "@forest-fire/serialized-query";
 import { WatchBase } from "./WatchBase";
 

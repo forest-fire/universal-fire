@@ -4,7 +4,7 @@ import {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
   IModel,
-} from "@forest-fire/types";
+} from "@/types";
 import { modelConstructorLookup, modelNameLookup } from "@/util";
 
 import { DecoratorProblem } from "@/errors";

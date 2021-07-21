@@ -1,7 +1,7 @@
-import { IRecord } from "@/types";
+import { IModel, IRecord } from "@/types";
 
 import { FireModelError } from "@/errors";
-import { IModel, ISdk } from "@forest-fire/types";
+import { ISdk } from "@forest-fire/types";
 
 export class DynamicPropertiesNotReady<
   T extends IModel

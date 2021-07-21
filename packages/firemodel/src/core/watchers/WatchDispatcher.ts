@@ -11,7 +11,8 @@ import { Record, hasInitialized } from "@/core";
 
 import { FireModelError } from "@/errors";
 import { IDictionary } from "common-types";
-import { IModel, ISdk } from "@forest-fire/types";
+import { IModel } from "@/types";
+import { ISdk } from "@forest-fire/types";
 
 /**
  * **watchDispatcher**

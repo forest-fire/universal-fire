@@ -1,5 +1,5 @@
 import { FireModelError } from "@/errors";
-import { IModel, IModelClass, IModelProps, ModelMeta } from "@forest-fire/types";
+import { IModel, IModelClass, IModelProps, ModelMeta } from "@/types";
 
 /**
  * Takes an `IModel` data structure and converts it to

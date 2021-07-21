@@ -11,14 +11,13 @@ import {
   model,
   property,
 } from "../src";
-import { IDictionary, wait } from "common-types";
-import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
+import { IDictionary } from "common-types";
+import { IDatabaseSdk, RealTimeAdmin } from "universal-fire";
 
 import { Car } from "./testing/Car";
 import { Company } from "./testing/Company";
 import { FancyPerson } from "./testing/FancyPerson";
-import { Mock as FireMock } from "firemock";
-import { Mock } from "@/index";
+import { Mock, Fixture } from "@forest-fire/fixture";
 
 helpers.setupEnv();
 @model({})

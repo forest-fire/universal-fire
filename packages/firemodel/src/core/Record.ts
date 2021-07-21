@@ -30,6 +30,7 @@ import {
   PropertyOf,
   PrimaryKey,
   isCompositeString,
+  IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel,
 } from "@/types";
 import {
   IDictionary,
@@ -64,7 +65,7 @@ import { UnwatchedLocalEvent } from "@/state-mgmt";
 import { default as copy } from "fast-copy";
 import { key as fbKey } from "firebase-key";
 import { writeAudit } from "@/audit";
-import { IDatabaseSdk, IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel, ISdk, ModelInput } from "@forest-fire/types";
+import { IDatabaseSdk, ISdk } from "@forest-fire/types";
 import { Error } from "@firebase/auth-types";
 
 //#endregion

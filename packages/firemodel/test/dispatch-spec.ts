@@ -5,14 +5,13 @@ import {
   Record,
   VeuxWrapper,
 } from "@/index";
-import { IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
+import { RealTimeAdmin } from "universal-fire";
 
 import { FmEvents } from "@/index";
 import { Person } from "./testing/Person";
 import { PersonWithLocal } from "./testing/PersonWithLocal";
 import { PersonWithLocalAndPrefix } from "./testing/PersonWithLocalAndPrefix";
 import { compareHashes } from "@/util";
-import { wait } from "./testing/helpers";
 
 describe("Dispatch →", () => {
   beforeEach(async () => {

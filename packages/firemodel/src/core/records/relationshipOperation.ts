@@ -12,7 +12,7 @@ import { capitalize, getModelMeta } from "@/util";
 import { createCompositeRef, locallyUpdateFkOnRecord } from "./index";
 
 import { ConstructorFor, IDictionary } from "common-types";
-import { IModel } from "@forest-fire/types";
+import { IModel } from "@/types";
 import { Record } from "@/core";
 import { ISdk } from "@forest-fire/types";
 

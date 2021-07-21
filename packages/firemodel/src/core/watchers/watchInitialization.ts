@@ -1,7 +1,7 @@
 import { IDictionary, wait } from "common-types";
 
-import { IWatcherEventContext } from "@/types";
-import { ISdk, IModel } from "@forest-fire/types";
+import { IWatcherEventContext, IModel } from "@/types";
+import { ISdk } from "@forest-fire/types";
 
 /**
  * indicates which watcherId's have returned their initial

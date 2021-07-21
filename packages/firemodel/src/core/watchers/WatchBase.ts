@@ -1,6 +1,6 @@
 import { IDictionary } from "common-types";
 
-import type { ISerializedQuery, IDatabaseSdk, ISdk, IModel } from "@forest-fire/types";
+import type { ISerializedQuery, IDatabaseSdk, ISdk } from "@forest-fire/types";
 
 import {
   WatchRecord,
@@ -17,7 +17,7 @@ import {
   IListOptions,
   IReduxDispatch,
   FmModelConstructor,
-  ICompositeKey,
+  ICompositeKey, IModel
 } from "@/types";
 import { FireModelError, FireModelProxyError } from "@/errors";
 import { DefaultDbCache } from "../DefaultDbCache";

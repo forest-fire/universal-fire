@@ -1,6 +1,6 @@
-import { ISdk, IModel } from "@forest-fire/types";
+import { ISdk } from "@forest-fire/types";
 import { Record } from "@/core";
-
+import { IModel } from "@/types";
 import { FireModelError } from "@/errors";
 import { capitalize } from "@/util";
 

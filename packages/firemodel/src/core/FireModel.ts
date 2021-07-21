@@ -4,8 +4,10 @@
 import { IDictionary } from "common-types";
 import {
   IFmChangedProperties,
+  IModel,
   IReduxAction,
-  IReduxDispatch
+  IReduxDispatch,
+  ModelMeta
 } from "@/types";
 
 import {
@@ -15,7 +17,7 @@ import {
 } from "@/util";
 
 import { Record, DefaultDbCache } from "@/core";
-import { ModelMeta, IDatabaseSdk, ISdk, IModel, } from "@forest-fire/types";
+import { IDatabaseSdk, ISdk, } from "@forest-fire/types";
 import { convertModelToModelClass } from "@/util/convertModelToModelClass";
 
 const defaultDispatch: IReduxDispatch = async (context: IReduxAction) => Promise.resolve(context);

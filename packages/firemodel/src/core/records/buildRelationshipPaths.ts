@@ -1,9 +1,7 @@
 import {
-  ICompositeKey,
   ForeignKey,
   IFmBuildRelationshipOptions,
   IFmPathValuePair,
-  isCompositeKey,
 } from "@/types";
 import {
   IncorrectReciprocalInverse,
@@ -15,8 +13,9 @@ import {
 import { Record } from "@/core";
 import { createCompositeKeyRefFromRecord } from "./index";
 import { getModelMeta, pathJoin } from "@/util";
-import { IModel, ISdk } from "@forest-fire/types";
-import { ConstructorFor, fk } from "common-types";
+import { IModel } from "@/types";
+import { ISdk } from "@forest-fire/types";
+import { ConstructorFor } from "common-types";
 
 /**
  * Builds all the DB paths needed to update a pairing of a PK:FK. It is intended

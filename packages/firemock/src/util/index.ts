@@ -2,17 +2,17 @@
 
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 02:13 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 10:59 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: dotify, networkDelay, other, pluralize, sortFns.
+// files: dotify, networkDelay, other, pluralize, set, sortFns.
 
 // local file exports
 export * from "./dotify";
 export * from "./networkDelay";
 export * from "./other";
 export * from "./pluralize";
-export * from "./sortFns";
 export * from "./set";
+export * from "./sortFns";
 
 // Note:
 // -----

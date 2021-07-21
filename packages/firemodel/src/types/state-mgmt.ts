@@ -1,4 +1,5 @@
 import {
+  IModel,
   FmEvents,
   IFmPathValuePair,
   IFmRecordMeta,
@@ -8,7 +9,7 @@ import {
   IWatcherSource,
 } from "@/types";
 import {
-  IModel,
+
   IPathBasedWatchEvent,
   IRtdbDbEvent,
   ISdk,

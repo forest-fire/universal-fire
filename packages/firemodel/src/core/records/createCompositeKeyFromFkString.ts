@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { ICompositeKey, IFmHasId, isCompositeKey } from "@/types";
-import { IModel, IModelClass } from "@forest-fire/types";
+import { ICompositeKey, isCompositeKey, IModel, } from "@/types";
 import { FireModelError } from "@/errors";
-import { capitalize } from "@/util";
 import { Record } from "../Record";
 
 export function createCompositeKeyFromFkString<T extends IModel>(

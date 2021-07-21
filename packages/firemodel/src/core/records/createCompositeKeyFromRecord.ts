@@ -1,8 +1,8 @@
-import { ICompositeKey } from "@/types";
+import { ICompositeKey, IModel } from "@/types";
 import { FireModelError } from "@/errors";
 import { Record } from "@/core";
 import { capitalize } from "@/util";
-import { ISdk, IModel } from "@forest-fire/types";
+import { ISdk } from "@forest-fire/types";
 
 /**
  * Given a `Record` which defines all properties in it's

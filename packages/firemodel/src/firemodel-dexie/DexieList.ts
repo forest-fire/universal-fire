@@ -2,12 +2,12 @@ import Dexie, { IndexableType } from "dexie";
 import {
   IDexieListOptions,
   IDexieModelMeta,
-  PropType
+  PropType, IModel
 } from "@/types";
 
 import { DexieError } from "@/errors";
 import {
-  IComparisonOperator, IModel,
+  IComparisonOperator,
 } from "@forest-fire/types";
 import { capitalize } from "@/util";
 import { ConstructorFor, epoch } from "common-types";

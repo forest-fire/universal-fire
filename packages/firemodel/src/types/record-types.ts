@@ -1,13 +1,14 @@
 import { IDictionary, epoch, fk, pk } from "common-types";
 import { IReduxDispatch } from "./state-mgmt";
 
-import { IDatabaseSdk, ISdk, IFmFunctionToConstructor } from "universal-fire";
+import { IDatabaseSdk, ISdk, } from "@forest-fire/types";
 import { IFmHasId } from "./general";
 import {
   ModelMeta, IFmModelPropertyMeta,
   IFmModelRelationshipMeta,
   IModel,
-} from "@forest-fire/types";
+  IFmFunctionToConstructor
+} from "@/types";
 
 /**
  * A simplified interface that represents a `Record`'s shape

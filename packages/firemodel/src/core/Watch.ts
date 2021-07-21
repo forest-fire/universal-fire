@@ -5,8 +5,9 @@ import {
   PrimaryKey,
   IReduxDispatch,
   IWatcherEventContext,
+  IModel,
 } from "@/types";
-import { IDatabaseSdk, IRtdbDbEvent, ISdk, IModel } from "@forest-fire/types";
+import { IDatabaseSdk, IRtdbDbEvent, ISdk } from "@forest-fire/types";
 import {
   WatchList,
   WatchRecord,

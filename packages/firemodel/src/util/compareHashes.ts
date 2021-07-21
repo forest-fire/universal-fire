@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { IFmChangedProperties } from "@/types";
-import { IModel } from "@forest-fire/types";
+import { IFmChangedProperties, IModel } from "@/types";
 
 const equal = require("fast-deep-equal/es6");
 

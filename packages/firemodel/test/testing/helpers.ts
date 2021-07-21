@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as process from "process";
 import * as yaml from "js-yaml";
 
-import { first, last } from "lodash";
+import { first, last } from "native-dash";
 import { stderr, stdout } from "test-console";
 
 import { IDictionary } from "common-types";

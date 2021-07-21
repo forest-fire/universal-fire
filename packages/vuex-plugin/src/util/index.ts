@@ -2,9 +2,9 @@
 
 // #region autoindexed files
 
-// index last changed at: 1st Jan, 2021, 09:33 AM ( GMT-8 )
+// index last changed at: 7th Jul, 2021, 10:59 AM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: addNamespace, authChanges, capitalize, changeRoot, determineLocalStateNode, isRecord, localChange, localizeName, removeProperty, runQueue, set, updateList.
+// files: addNamespace, authChanges, capitalize, changeRoot, determineLocalStateNode, isRecord, localChange, localizeName, removeProperty, runQueue, updateList.
 // directories: state-mgmt.
 
 // local file exports
@@ -18,7 +18,6 @@ export * from "./localChange";
 export * from "./localizeName";
 export * from "./removeProperty";
 export * from "./runQueue";
-export * from "./set";
 export * from "./updateList";
 
 // directory exports
@@ -26,7 +25,7 @@ export * from "./state-mgmt/index";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

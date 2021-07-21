@@ -5,8 +5,6 @@ import {
   ISdk,
   IDatabaseSdk,
   isClientSdk,
-  IModel,
-  ModelMeta
 } from "@forest-fire/types";
 import { SerializedQuery } from "@forest-fire/serialized-query";
 import {
@@ -21,6 +19,8 @@ import {
   IListQueryOptions,
   PrimaryKey,
   IReduxDispatch,
+  IModel,
+  ModelMeta
 } from "@/types";
 import { capitalize } from "@/util";
 import { pathJoin } from "native-dash";

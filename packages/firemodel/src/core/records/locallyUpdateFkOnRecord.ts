@@ -1,8 +1,8 @@
-import { IFmLocalRelationshipEvent, } from "@/types";
+import { IFmLocalRelationshipEvent, IModel } from "@/types";
 
 import { Record } from "@/core";
 import { fk } from "common-types";
-import { ISdk, IModel } from "@forest-fire/types";
+import { ISdk } from "@forest-fire/types";
 
 /**
  * sets the `Record` property to the optimistic values set

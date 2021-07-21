@@ -1,4 +1,5 @@
-import { ISerializedQuery, ISdk, IModel } from "@forest-fire/types";
+import { ISerializedQuery, ISdk } from "@forest-fire/types";
+import { IModel } from "@/types";
 
 /**
  * **IFmQueryDefn**

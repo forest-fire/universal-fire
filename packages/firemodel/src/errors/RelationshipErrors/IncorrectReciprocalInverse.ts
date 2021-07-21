@@ -1,8 +1,8 @@
 import { FireModelError, MissingReciprocalInverse } from "@/errors";
 import { Record } from "@/core";
-
+import { IModel } from "@/types";
 import { capitalize } from "@/util";
-import { ISdk, IModel } from "@forest-fire/types";
+import { ISdk } from "@forest-fire/types";
 
 export class IncorrectReciprocalInverse<
   S extends ISdk,

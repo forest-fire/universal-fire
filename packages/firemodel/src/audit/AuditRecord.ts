@@ -1,7 +1,6 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { IAuditLogItem, IModelOptions } from "@/types";
-
 import { AuditBase } from "@/audit";
-import { Parallel } from "wait-in-parallel";
 import { SerializedQuery } from "@forest-fire/serialized-query";
 import { epochWithMilliseconds } from "common-types";
 import { pathJoin } from "native-dash";
@@ -32,9 +31,9 @@ export class AuditRecord extends AuditBase {
     const ids = (await this.db.getList<IAuditLogItem>(this._query)).map((i) =>
       pathJoin(this.auditLogs, i.id)
     );
-    const p = new Parallel<IAuditLogItem>();
-    ids.map((id) => p.add(id, this.db.getValue<IAuditLogItem>(id)));
-    const results = await p.isDoneAsArray();
+    const wait: Promise<IAuditLogItem>[] = []
+    ids.map((id) => wait.push(this.db.getValue<IAuditLogItem>(id) as Promise<IAuditLogItem>));
+    const results = await Promise.all(wait);
     return results;
   }
 
@@ -49,9 +48,9 @@ export class AuditRecord extends AuditBase {
     const ids = (await this.db.getList<IAuditLogItem>(this._query)).map((i) =>
       pathJoin(this.auditLogs, i.id)
     );
-    const p = new Parallel<IAuditLogItem>();
-    ids.map((id) => p.add(id, this.db.getValue(id)));
-    const results = await p.isDoneAsArray();
+    const wait: Promise<IAuditLogItem>[] = [];
+    ids.map((id) => wait.push(this.db.getValue(id) as Promise<IAuditLogItem>));
+    const results = await Promise.all(wait);
     return results;
   }
 
@@ -69,12 +68,12 @@ export class AuditRecord extends AuditBase {
       pathJoin(this.auditLogs, i.id)
     );
 
-    const p = new Parallel<IAuditLogItem>();
+    const wait: Promise<IAuditLogItem>[] = [];
 
     ids.map((id) => {
-      p.add(id, this.db.getValue(id));
+      wait.push(this.db.getValue(id) as Promise<IAuditLogItem>);
     });
-    const results = await p.isDoneAsArray();
+    const results = Promise.all(wait);
     return results;
   }
 
@@ -93,12 +92,12 @@ export class AuditRecord extends AuditBase {
       pathJoin(this.auditLogs, i.id)
     );
 
-    const p = new Parallel<IAuditLogItem>();
+    const wait: Promise<IAuditLogItem>[] = [];
 
     ids.map((id) => {
-      p.add(id, this.db.getValue(id));
+      wait.push(this.db.getValue(id) as Promise<IAuditLogItem>);
     });
-    const results = await p.isDoneAsArray();
+    const results = Promise.all(wait);
     return results;
   }
 
@@ -118,18 +117,15 @@ export class AuditRecord extends AuditBase {
       .orderByChild("value")
       .startAt(after)
       .endAt(before);
-    const qr = await this.db.getList<IAuditLogItem>(this._query);
 
     const ids = (await this.db.getList<IAuditLogItem>(this._query)).map((i) =>
       pathJoin(this.auditLogs, i.id)
     );
 
-    const p = new Parallel<IAuditLogItem>();
+    const wait: Promise<IAuditLogItem>[] = [];
+    ids.map((id) => wait.push(this.db.getValue(id) as Promise<IAuditLogItem>));
+    const results = Promise.all(wait);
 
-    ids.map((id) => {
-      p.add(id, this.db.getValue(id));
-    });
-    const results = await p.isDoneAsArray();
     return results;
   }
 

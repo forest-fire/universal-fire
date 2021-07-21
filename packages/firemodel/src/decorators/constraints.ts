@@ -2,7 +2,7 @@
 import "reflect-metadata";
 
 import { IDictionary } from "common-types";
-import { IFmModelPropertyMeta, IModel } from "@forest-fire/types";
+import { IFmModelPropertyMeta, IModel } from "@/types";
 import { propertiesByModel } from "@/util";
 import { propertyReflector } from "@/decorators";
 
