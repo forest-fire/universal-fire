@@ -1,7 +1,7 @@
 import { ISdk } from "@forest-fire/types";
-import { IFmLocalEvent, IFmRecordMeta, IModel } from "@/types";
+import { IFmLocalEvent, IFmRecordMeta, IModel } from "~/types";
 
-import { Record } from "@/core";
+import { Record } from "~/core";
 
 export type IUnwatchedLocalEvent<T> = IFmRecordMeta<T> & { dbPath: string, watcherSource: string, type: "UnwatchedLocalEvent" }
 

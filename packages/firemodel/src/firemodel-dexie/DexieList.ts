@@ -3,13 +3,13 @@ import {
   IDexieListOptions,
   IDexieModelMeta,
   PropType, IModel
-} from "@/types";
+} from "~/types";
 
-import { DexieError } from "@/errors";
+import { DexieError } from "~/errors";
 import {
   IComparisonOperator,
 } from "@forest-fire/types";
-import { capitalize } from "@/util";
+import { capitalize } from "~/util";
 import { ConstructorFor, epoch } from "common-types";
 
 /**

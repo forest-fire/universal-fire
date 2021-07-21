@@ -1,8 +1,8 @@
-import type { IFiremodelConfig } from '@/types';
+import type { IFiremodelConfig } from '~/types';
 
 import { Store } from 'vuex';
-import { addNamespace } from '@/util';
-import { getDatabase } from '@/util/state-mgmt';
+import { addNamespace } from '~/util';
+import { getDatabase } from '~/util/state-mgmt';
 import { FmConfigAction, FmConfigMutation } from './enums';
 
 /**

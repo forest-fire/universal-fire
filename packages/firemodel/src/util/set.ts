@@ -1,4 +1,4 @@
-import { FmUtilityError } from "@/errors";
+import { FmUtilityError } from "~/errors";
 import { IDictionary } from "common-types";
 
 /**

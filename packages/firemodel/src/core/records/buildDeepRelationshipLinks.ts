@@ -1,8 +1,8 @@
 import { ISdk, } from "@forest-fire/types";
 import { IDictionary } from "common-types";
-import { ForeignKey, IModel } from "@/types";
-import { Record } from "@/core";
-import { getModelMeta } from "@/util";
+import { ForeignKey, IModel } from "~/types";
+import { Record } from "~/core";
+import { getModelMeta } from "~/util";
 
 /**
  * When creating a new record it is sometimes desirable to pass in

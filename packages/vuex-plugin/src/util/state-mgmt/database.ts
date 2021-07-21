@@ -1,6 +1,6 @@
 import type { IDatabaseSdk } from 'universal-fire';
 
-import { FireModelPluginError } from "@/errors";
+import { FireModelPluginError } from "~/errors";
 
 let _db: IDatabaseSdk;
 /**

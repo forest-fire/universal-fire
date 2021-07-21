@@ -1,4 +1,4 @@
-import { IReduxAction, IVuexDispatch } from "@/types";
+import { IReduxAction, IVuexDispatch } from "~/types";
 
 /**
  * wraps a Vuex function's to Mutation.commit() function so it's

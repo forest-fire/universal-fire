@@ -10,8 +10,8 @@ import type {
   IQueryOptions,
   IQueryServerResults,
   IWatchCallback,
-} from '@/types';
-import { isDiscreteRequest } from '@/type-guards';
+} from '~/types';
+import { isDiscreteRequest } from '~/type-guards';
 import {
   AbcResult,
   getDefaultApiConfig,
@@ -22,13 +22,13 @@ import {
   queryFirebase,
   queryIndexedDb,
   saveToIndexedDb,
-} from '@/abc';
+} from '~/abc';
 import { DexieDb, FireModel, IFmModelMeta, IPrimaryKey, Model, Record, Watch } from 'firemodel';
 import { IDictionary } from 'common-types';
 import { pathJoin, capitalize } from 'native-dash';
-import { getStore } from '@/util';
-import { AbcError } from '@/errors';
-import { AbcMutation, AbcStrategy, DbSyncOperation, QueryType } from '@/enums';
+import { getStore } from '~/util';
+import { AbcError } from '~/errors';
+import { AbcMutation, AbcStrategy, DbSyncOperation, QueryType } from '~/enums';
 
 /**
  * Provides the full **ABC** API, including `get`, `load`, and `watch` but also

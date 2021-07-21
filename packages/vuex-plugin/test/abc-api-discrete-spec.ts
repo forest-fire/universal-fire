@@ -1,5 +1,5 @@
-import { AbcApi, AbcResult } from '@/abc';
-import type { IAbcRequest } from '@/types';
+import { AbcApi, AbcResult } from '~/abc';
+import type { IAbcRequest } from '~/types';
 import { MutationPayload, Store } from 'vuex';
 
 import { Company } from './models/Company';
@@ -8,10 +8,10 @@ import { IRootState } from './store/index';
 import { Product } from './models/Product';
 import { companyData } from './data/companyData';
 import { fakeIndexedDb } from './helpers/fakeIndexedDb';
-import { getStore } from '@/util';
+import { getStore } from '~/util';
 import { hashToArray } from 'typed-conversions';
 import { productData } from './data/productData';
-import { AbcStrategy, DbSyncOperation } from '@/enums';
+import { AbcStrategy, DbSyncOperation } from '~/enums';
 
 let events: Array<[string, any]> = [];
 let eventCounts: IDictionary<number> = {};

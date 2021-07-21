@@ -3,11 +3,11 @@ import type {
   IAbcFirebaseQueryResult,
   IAbcQueryHelper,
   IQueryOptions,
-} from '@/types';
+} from '~/types';
 
-import { AbcApi } from '@/abc';
+import { AbcApi } from '~/abc';
 import { List } from 'firemodel';
-import { QueryType } from '@/enums';
+import { QueryType } from '~/enums';
 
 export const all: IAbcQueryHelper = function all<T>(
   defn: Omit<IAbcAllQueryDefinition<T>, 'queryType'> | IAbcAllQueryDefinition<T> = {}

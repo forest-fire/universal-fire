@@ -1,4 +1,4 @@
-import { FireModelError } from "@/errors";
+import { FireModelError } from "~/errors";
 import { IDictionary } from "common-types";
 import { IDatabaseSdk, ISdk } from "@forest-fire/types";
 

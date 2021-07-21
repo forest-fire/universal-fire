@@ -1,14 +1,14 @@
 import {
   IDexieModelMeta,
   PrimaryKey,
-} from "@/types";
+} from "~/types";
 
-import { DexieError } from "@/errors";
+import { DexieError } from "~/errors";
 import { ConstructorFor } from "common-types";
 import { Table } from "dexie";
-import { capitalize } from "@/util";
+import { capitalize } from "~/util";
 import { key as fbKey } from "firebase-key";
-import { IModel } from "@/types";
+import { IModel } from "~/types";
 import { IDictionary } from "brilliant-errors";
 
 /**

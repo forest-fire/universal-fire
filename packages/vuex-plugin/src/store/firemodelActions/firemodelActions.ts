@@ -8,10 +8,10 @@ import {
   recordServerChanges,
   relationship,
   watchActions
-} from "@/store";
+} from "~/store";
 
 import { ActionTree } from "vuex";
-import type { IFiremodelState } from "@/types";
+import type { IFiremodelState } from "~/types";
 
 export const firemodelActions = <T>() =>
   stripNamespaceFromKeys<T>({

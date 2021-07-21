@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import Dexie, { DexieDOMDependencies, TableSchema } from "dexie";
-import { DexieError, FireModelError } from "@/errors";
-import { DexieList, DexieRecord } from "@/firemodel-dexie/index";
+import { DexieError, FireModelError } from "~/errors";
+import { DexieList, DexieRecord } from "~/firemodel-dexie/index";
 import {
   ICompositeKey,
   IDexieModelMeta,
   IDexiePriorVersion,
   PrimaryKey,
-} from "@/types";
+} from "~/types";
 import { ConstructorFor, IDictionary, pk } from "common-types";
 
-import { Record } from "@/core";
-import { capitalize } from "@/util";
-import { IModel } from "@/types";
+import { Record } from "~/core";
+import { capitalize } from "~/util";
+import { IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
 import { keys } from "native-dash";
 

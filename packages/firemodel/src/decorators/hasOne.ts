@@ -3,16 +3,16 @@ import {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
   IModel,
-} from "@/types";
+} from "~/types";
 import {
   modelConstructorLookup,
   modelNameLookup,
   relationshipsByModel,
-} from "@/util";
+} from "~/util";
 
-import { DecoratorProblem } from "@/errors";
+import { DecoratorProblem } from "~/errors";
 import { ConstructorFor, Omit } from "common-types";
-import { propertyReflector } from "@/decorators";
+import { propertyReflector } from "~/decorators";
 
 export function belongsTo<T extends IModel = IModel>(
   /**

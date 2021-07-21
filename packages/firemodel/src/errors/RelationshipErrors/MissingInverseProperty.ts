@@ -1,8 +1,8 @@
 import { ISdk } from "@forest-fire/types";
-import { Record } from "@/core";
-import { IModel } from "@/types";
-import { FireModelError } from "@/errors";
-import { capitalize } from "@/util";
+import { Record } from "~/core";
+import { IModel } from "~/types";
+import { FireModelError } from "~/errors";
+import { capitalize } from "~/util";
 
 /**
  * When the record's META points to a inverse property on the FK; this error

@@ -1,4 +1,4 @@
-import { AbcApi, AbcResult, queryFirebase, queryIndexedDb, saveToIndexedDb } from '@/abc';
+import { AbcApi, AbcResult, queryFirebase, queryIndexedDb, saveToIndexedDb } from '~/abc';
 import type {
   AbcRequestCommand,
   IAbcOptions,
@@ -7,11 +7,11 @@ import type {
   IGeneralizedQuery,
   IQueryLocalResults,
   IQueryServerResults,
-} from '@/types';
+} from '~/types';
 import { Model, Record } from 'firemodel';
-import { getStore } from '@/util';
+import { getStore } from '~/util';
 import { get } from 'native-dash';
-import { AbcMutation, AbcStrategy, DbSyncOperation, QueryType } from '@/enums';
+import { AbcMutation, AbcStrategy, DbSyncOperation, QueryType } from '~/enums';
 
 /**
  * A generalized flow for queries; specific query helpers

@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 //#region imports
-import { DefaultDbCache, FireModel, List } from "@/core";
+import { DefaultDbCache, FireModel, List } from "~/core";
 import {
   FireModelError,
   FireModelProxyError,
   NotHasManyRelationship,
   NotHasOneRelationship,
   RecordCrudFailure,
-} from "@/errors";
+} from "~/errors";
 import {
   FmEvents,
   IAuditChange,
@@ -31,7 +31,7 @@ import {
   PrimaryKey,
   isCompositeString,
   IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel,
-} from "@/types";
+} from "~/types";
 import {
   IDictionary,
   Nullable,
@@ -56,15 +56,15 @@ import {
   isHasManyRelationship,
   pathJoin,
   withoutMetaOrPrivate,
-} from "@/util";
+} from "~/util";
 
 import { keys } from "native-dash";
 
 import { pluralize } from "native-dash";
-import { UnwatchedLocalEvent } from "@/state-mgmt";
+import { UnwatchedLocalEvent } from "~/state-mgmt";
 import { default as copy } from "fast-copy";
 import { key as fbKey } from "firebase-key";
-import { writeAudit } from "@/audit";
+import { writeAudit } from "~/audit";
 import { IDatabaseSdk, ISdk } from "@forest-fire/types";
 import { Error } from "@firebase/auth-types";
 

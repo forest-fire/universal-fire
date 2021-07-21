@@ -1,8 +1,8 @@
 import type { Model, IPrimaryKey } from 'firemodel';
 import type { IDatabaseSdk, ISerializedQuery } from 'universal-fire';
 import type { epochWithMilliseconds, IDictionary } from 'common-types';
-import type { AbcApi, AbcResult } from '@/abc';
-import type { AbcMutation, DbSyncOperation, AbcStrategy, QueryType } from '@/enums';
+import type { AbcApi, AbcResult } from '~/abc';
+import type { AbcMutation, DbSyncOperation, AbcStrategy, QueryType } from '~/enums';
 
 export interface IAbcApiConfig<T extends Model> {
   /**

@@ -1,5 +1,5 @@
-import { IAuditLogItem, IModelOptions } from "@/types";
-import { AuditBase } from "@/audit";
+import { IAuditLogItem, IModelOptions } from "~/types";
+import { AuditBase } from "~/audit";
 import { SerializedQuery } from "@forest-fire/serialized-query";
 import { epochWithMilliseconds } from "common-types";
 import { pathJoin } from "native-dash";

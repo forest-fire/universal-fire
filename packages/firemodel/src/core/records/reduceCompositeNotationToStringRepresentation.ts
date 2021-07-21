@@ -1,5 +1,5 @@
-import { ICompositeKey } from "@/types";
-import { IModel } from "@/types";
+import { ICompositeKey } from "~/types";
+import { IModel } from "~/types";
 import { keys } from "native-dash";
 
 /**

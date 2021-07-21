@@ -3,12 +3,12 @@ import type {
   IAbcQueryHelper,
   IAbcSinceQueryDefinition,
   IQueryOptions,
-} from '@/types';
+} from '~/types';
 import { List, Model } from 'firemodel';
-import { AbcApi } from '@/abc';
+import { AbcApi } from '~/abc';
 import cookies from 'js-cookie';
-import { QueryType } from '@/enums';
-import { SINCE_LAST_COOKIE } from '@/constants';
+import { QueryType } from '~/enums';
+import { SINCE_LAST_COOKIE } from '~/constants';
 
 /**
  * **since**

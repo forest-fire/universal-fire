@@ -5,7 +5,7 @@ import {
   serverEvents,
   serverRollbacks,
   watchEvents
-} from "@/store";
+} from "~/store";
 
 import { AbcFiremodelMutation } from "./abc";
 import { IDictionary } from "common-types";

@@ -1,8 +1,8 @@
-import { DefaultDbCache, FireModel, Record } from "@/core";
-import { IAuditChange, IAuditOperations, IModelOptions } from "@/types";
+import { DefaultDbCache, FireModel, Record } from "~/core";
+import { IAuditChange, IAuditOperations, IModelOptions } from "~/types";
 
-import { AuditLog } from "@/models";
-import { capitalize } from "@/util";
+import { AuditLog } from "~/models";
+import { capitalize } from "~/util";
 import { ISdk } from "@forest-fire/types";
 
 /**

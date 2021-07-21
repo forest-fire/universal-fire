@@ -1,4 +1,4 @@
-import { AuditLog, Model } from "@/models";
+import { AuditLog, Model } from "~/models";
 
 describe("basic tests on a model", () => {
 

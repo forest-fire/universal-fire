@@ -6,7 +6,7 @@ import {
   IReduxDispatch,
   IWatcherEventContext,
   IModel,
-} from "@/types";
+} from "~/types";
 import { IDatabaseSdk, IRtdbDbEvent, ISdk } from "@forest-fire/types";
 import {
   WatchList,
@@ -17,9 +17,9 @@ import {
   removeFromWatcherPool,
 } from "./watchers";
 
-import { DefaultDbCache, FireModel } from "@/core";
-import { FireModelError } from "@/errors";
-import { firstKey } from "@/util";
+import { DefaultDbCache, FireModel } from "~/core";
+import { FireModelError } from "~/errors";
+import { firstKey } from "~/util";
 
 /**
  * A static library for interacting with _watchers_. It

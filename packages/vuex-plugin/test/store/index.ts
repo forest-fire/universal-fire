@@ -1,6 +1,6 @@
 import * as lifecycle from "./lifecycle";
 
-import { AsyncMockData, IFiremodelState } from "@/types";
+import { AsyncMockData, IFiremodelState } from "~/types";
 import Vuex, { Store } from "vuex";
 import companies, { ICompaniesState } from "./modules/companies";
 import orders, { IOrdersState } from "./modules/orders";
@@ -8,14 +8,14 @@ import products, { IProductsState } from "./modules/products";
 import userProfile, { IUserProfileState } from "./modules/userProfile";
 
 import { Company } from "../models/Company";
-import { FiremodelPlugin } from "@/plugin";
+import { FiremodelPlugin } from "~/plugin";
 import { IDictionary } from "common-types";
 import { Order } from "../models/Order";
 import { Person } from "../models/Person";
 import { Product } from "../models/Product";
 import { RealTimeClient } from "@forest-fire/real-time-client";
 import Vue from "vue";
-import { abc } from "@/abc";
+import { abc } from "~/abc";
 import { config } from "./config";
 
 Vue.use(Vuex);

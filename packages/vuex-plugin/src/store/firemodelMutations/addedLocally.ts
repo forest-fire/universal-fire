@@ -1,6 +1,6 @@
-import { changeRoot, isRecord, updateList } from "@/util";
+import { changeRoot, isRecord, updateList } from "~/util";
 
-import { FmCrudMutation } from "@/enums";
+import { FmCrudMutation } from "~/enums";
 import { IDictionary } from "common-types";
 import { IFmWatchEvent, IModel } from "firemodel";
 import { MutationTree } from "vuex";

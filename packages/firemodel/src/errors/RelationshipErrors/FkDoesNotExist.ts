@@ -1,6 +1,6 @@
-import { FireModelError } from "@/errors";
-import { IModel, isModelClass } from "@/types";
-import { Record } from "@/core";
+import { FireModelError } from "~/errors";
+import { IModel, isModelClass } from "~/types";
+import { Record } from "~/core";
 import { ISdk } from "universal-fire";
 
 export class FkDoesNotExist<

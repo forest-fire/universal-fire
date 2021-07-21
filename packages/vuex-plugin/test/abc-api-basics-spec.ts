@@ -1,11 +1,11 @@
-import type { IAbcRequest } from '@/types';
+import type { IAbcRequest } from '~/types';
 
 import { Company } from './models/Company';
 import { IRootState } from './store';
 import { Person } from './models/Person';
 import { Store } from 'vuex';
 import { fakeIndexedDb } from './helpers/fakeIndexedDb';
-import { abc, AbcApi } from '@/abc';
+import { abc, AbcApi } from '~/abc';
 
 describe('ABC API Basics => ', () => {
   let store: Store<IRootState>;

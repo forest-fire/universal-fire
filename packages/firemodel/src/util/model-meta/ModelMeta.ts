@@ -1,8 +1,8 @@
-import { Record } from "@/core";
+import { Record } from "~/core";
 import { IDictionary } from "common-types";
 import { keys } from "native-dash";
 import { ISdk } from "@forest-fire/types";
-import { IFmModelMeta, IModel, } from "@/types";
+import { IFmModelMeta, IModel, } from "~/types";
 
 const meta: IDictionary<IFmModelMeta<IModel>> = {};
 

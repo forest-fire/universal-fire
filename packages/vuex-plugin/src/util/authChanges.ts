@@ -3,12 +3,12 @@ import {
   IFmAuthenticatatedContext,
   IFmLoginEventContext,
   IFmLogoutEventContext,
-} from '@/types';
+} from '~/types';
 
 import { User } from '@firebase/auth-types';
-import { getPluginConfig } from '@/util';
+import { getPluginConfig } from '~/util';
 import { runQueue } from './runQueue';
-import { FmConfigMutation } from '@/enums';
+import { FmConfigMutation } from '~/enums';
 
 let _uid: string;
 let _isAnonymous: boolean;
@@ -85,27 +85,27 @@ export const authChanged = <T>(context: IFmAuthenticatatedContext<T>) => async (
 function extractUserInfo(input: User | null): ICurrentUser {
   return input
     ? {
-        uid: input.uid,
-        isAnonymous: input.isAnonymous,
-        isLoggedIn: true,
-        displayName: input.displayName,
-        email: input.email,
-        emailVerified: input.emailVerified,
-        phoneNumber: input.phoneNumber,
-        photoUrl: input.photoURL,
-        refreshToken: input.refreshToken,
-        lastSignIn: input.metadata.lastSignInTime,
-        createdAt: input.metadata.creationTime,
-      }
+      uid: input.uid,
+      isAnonymous: input.isAnonymous,
+      isLoggedIn: true,
+      displayName: input.displayName,
+      email: input.email,
+      emailVerified: input.emailVerified,
+      phoneNumber: input.phoneNumber,
+      photoUrl: input.photoURL,
+      refreshToken: input.refreshToken,
+      lastSignIn: input.metadata.lastSignInTime,
+      createdAt: input.metadata.creationTime,
+    }
     : {
-        uid: '',
-        isAnonymous: false,
-        isLoggedIn: false,
-        displayName: null,
-        email: null,
-        emailVerified: false,
-        phoneNumber: null,
-        photoUrl: null,
-        refreshToken: '',
-      };
+      uid: '',
+      isAnonymous: false,
+      isLoggedIn: false,
+      displayName: null,
+      email: null,
+      emailVerified: false,
+      phoneNumber: null,
+      photoUrl: null,
+      refreshToken: '',
+    };
 }

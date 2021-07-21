@@ -1,5 +1,5 @@
 import { AuthCredential, IClientConfig, IdTokenResult, User } from 'universal-fire';
-import type { ICurrentUser, IFmQueuedAction } from '@/types';
+import type { ICurrentUser, IFmQueuedAction } from '~/types';
 import { IFmLocalEvent, IWatcherEventContext } from 'firemodel';
 
 import { IDictionary } from 'common-types';

@@ -3,7 +3,7 @@ import { FireModel, List, Mock } from "../src";
 
 import { Product } from "./testing/Product";
 import { RealTimeAdmin } from "@forest-fire/real-time-admin";
-import { fakeIt } from "@/index";
+import { fakeIt } from "~/index";
 
 const helper = new MockHelper();
 

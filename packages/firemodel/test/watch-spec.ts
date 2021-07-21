@@ -10,7 +10,7 @@ import {
   Watch,
   WatchList,
   getWatcherPool,
-} from "@/index";
+} from "~/index";
 import { IDictionary, wait } from "common-types";
 import { IDatabaseSdk } from "@forest-fire/types";
 import { RealTimeAdmin } from "universal-fire";

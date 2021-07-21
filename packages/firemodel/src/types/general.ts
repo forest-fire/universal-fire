@@ -1,7 +1,7 @@
 import type { IDatabaseSdk, ISdk } from "@forest-fire/types";
 import { IDictionary, datetime, ConstructorFor } from "common-types";
-import { IModel, PrimaryKey } from "@/types";
-import type { FireModelError } from "@/errors";
+import { IModel, PrimaryKey } from "~/types";
+import type { FireModelError } from "~/errors";
 
 export interface IUnderlyingError<T extends IModel> {
   /** an identifying characteristic of the individual error */

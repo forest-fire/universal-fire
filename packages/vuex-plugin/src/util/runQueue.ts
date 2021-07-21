@@ -1,5 +1,5 @@
-import { FmConfigMutation } from '@/enums';
-import type { IFmLifecycleContext, IFmLifecycleEvent, IFmQueuedAction } from '@/types';
+import { FmConfigMutation } from '~/enums';
+import type { IFmLifecycleContext, IFmLifecycleEvent, IFmQueuedAction } from '~/types';
 
 /**
  * **runQueue**
@@ -20,10 +20,8 @@ export async function runQueue<T>(ctx: IFmLifecycleContext<T>, lifecycle: IFmLif
     } catch (e) {
       errors++;
       console.warn(
-        `deQueing ${item.name}: ${
-          e.message
-        }.\n\nThe callback which being called when the error occurred starts like this: ${
-          item.cb ? item.cb.toString().slice(0, 50) : 'undefined callback'
+        `deQueing ${item.name}: ${e.message
+        }.\n\nThe callback which being called when the error occurred starts like this: ${item.cb ? item.cb.toString().slice(0, 50) : 'undefined callback'
         }`
       );
 

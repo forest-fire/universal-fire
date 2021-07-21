@@ -1,7 +1,7 @@
 import { FireModel, IMockOptions } from "firemodel";
 import { IDatabaseSdk, IModel } from "universal-fire";
 
-import { FireModelError } from "@/errors";
+import { FireModelError } from "~/errors";
 import { MockApi } from "~/mocking/MockApi";
 import { capitalize } from "native-dash";
 

@@ -1,4 +1,4 @@
-import { DefaultDbCache, FireModel, Record } from "@/core";
+import { DefaultDbCache, FireModel, Record } from "~/core";
 import {
   IComparisonOperator,
   ISerializedQuery,
@@ -21,14 +21,14 @@ import {
   IReduxDispatch,
   IModel,
   ModelMeta
-} from "@/types";
-import { capitalize } from "@/util";
+} from "~/types";
+import { capitalize } from "~/util";
 import { pathJoin } from "native-dash";
 
-import { FireModelError } from "@/errors";
+import { FireModelError } from "~/errors";
 import { arrayToHash } from "typed-conversions";
 import { queryAdjustForNext, reduceOptionsForQuery } from "./lists";
-import { isString } from "@/util";
+import { isString } from "~/util";
 
 const DEFAULT_IF_NOT_FOUND = Symbol("DEFAULT_IF_NOT_FOUND");
 

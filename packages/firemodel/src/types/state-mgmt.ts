@@ -7,7 +7,7 @@ import {
   IMultiPathUpdates,
   IWatchEventClassification,
   IWatcherSource,
-} from "@/types";
+} from "~/types";
 import {
 
   IPathBasedWatchEvent,

@@ -6,12 +6,12 @@ import {
   IFmWatchEvent,
   IReduxDispatch,
   IWatcherEventContext,
-} from "@/types/index";
-import { Record, hasInitialized } from "@/core";
+} from "~/types/index";
+import { Record, hasInitialized } from "~/core";
 
-import { FireModelError } from "@/errors";
+import { FireModelError } from "~/errors";
 import { IDictionary } from "common-types";
-import { IModel } from "@/types";
+import { IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
 
 /**

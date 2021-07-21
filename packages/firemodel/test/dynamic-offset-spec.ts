@@ -6,7 +6,7 @@ import {
   Mock,
   Record,
   Watch,
-} from "@/index";
+} from "~/index";
 import { IDatabaseSdk, IRealTimeAdmin, RealTimeAdmin } from "@forest-fire/types";
 import { firstKey, firstRecord, lastRecord } from "./testing/helpers";
 

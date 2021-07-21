@@ -7,8 +7,8 @@ import {
   addToWatcherPool,
   waitForInitialization,
   WatchDispatcher,
-} from "@/core/watchers";
-import { List, FireModel } from "@/core";
+} from "~/core/watchers";
+import { List, FireModel } from "~/core";
 import {
   FmEvents,
   IWatcherEventContext,
@@ -18,8 +18,8 @@ import {
   IReduxDispatch,
   FmModelConstructor,
   ICompositeKey, IModel
-} from "@/types";
-import { FireModelError, FireModelProxyError } from "@/errors";
+} from "~/types";
+import { FireModelError, FireModelProxyError } from "~/errors";
 import { DefaultDbCache } from "../DefaultDbCache";
 
 /**

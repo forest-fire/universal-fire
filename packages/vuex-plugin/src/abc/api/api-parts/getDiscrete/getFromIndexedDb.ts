@@ -1,6 +1,6 @@
 import { DexieRecord, IPrimaryKey, Model } from "firemodel";
 
-import { AbcApi } from "@/abc";
+import { AbcApi } from "~/abc";
 
 export async function getFromIndexedDb<T extends Model>(
   dexieRecord: DexieRecord<T>,

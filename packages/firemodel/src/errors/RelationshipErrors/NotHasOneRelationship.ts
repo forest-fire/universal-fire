@@ -1,7 +1,7 @@
-import { IModel } from "@/types";
+import { IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
-import { Record } from "@/core";
-import { FireModelError } from "@/errors";
+import { Record } from "~/core";
+import { FireModelError } from "~/errors";
 
 export class NotHasOneRelationship<S extends ISdk, T extends IModel> extends FireModelError {
   constructor(rec: Record<S, T>, property: string, method: string) {

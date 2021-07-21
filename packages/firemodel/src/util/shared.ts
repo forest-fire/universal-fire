@@ -1,6 +1,6 @@
-import { IAuditChange } from "@/types";
+import { IAuditChange } from "~/types";
 import { IDictionary } from "common-types";
-import { IModel, isModelClass } from "@/types";
+import { IModel, isModelClass } from "~/types";
 
 export function normalized(...args: string[]) {
   return args

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { IDictionary } from 'brilliant-errors';
 import { epochWithMilliseconds } from 'common-types';
-import { IFmModelMeta } from '@/types';
-import { Model } from '@/models';
+import { IFmModelMeta } from '~/types';
+import { Model } from '~/models';
 /**
  * Properties in a model which are managed and should not be set by a
  * user directly.

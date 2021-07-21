@@ -1,4 +1,4 @@
-import { FireModelProxyError, UnknownRelationshipProblem } from "@/errors";
+import { FireModelProxyError, UnknownRelationshipProblem } from "~/errors";
 import {
   FmEvents,
   ForeignKey,
@@ -7,13 +7,13 @@ import {
   IFmRelationshipOperation,
   IFmRelationshipOptions,
   IFmRelationshipOptionsForHasMany,
-} from "@/types";
-import { capitalize, getModelMeta } from "@/util";
+} from "~/types";
+import { capitalize, getModelMeta } from "~/util";
 import { createCompositeRef, locallyUpdateFkOnRecord } from "./index";
 
 import { ConstructorFor, IDictionary } from "common-types";
-import { IModel } from "@/types";
-import { Record } from "@/core";
+import { IModel } from "~/types";
+import { Record } from "~/core";
 import { ISdk } from "@forest-fire/types";
 
 /**

@@ -1,8 +1,8 @@
-import { IModel } from "@/types";
+import { IModel } from "~/types";
 
 // TODO: this is necessitated by the use of `Record` in some error classes
 // which sets up a whole dependency chain
-import { FireModelError } from "@/errors/FireModelError";
+import { FireModelError } from "~/errors/FireModelError";
 import { ConstructorFor, IDictionary } from "common-types";
 
 const registeredModels: IDictionary<ConstructorFor<IModel>> = {};

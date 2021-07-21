@@ -1,6 +1,6 @@
 import { IDictionary, wait } from "common-types";
 
-import { IWatcherEventContext, IModel } from "@/types";
+import { IWatcherEventContext, IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
 
 /**

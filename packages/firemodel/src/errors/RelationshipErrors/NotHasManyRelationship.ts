@@ -1,7 +1,7 @@
 import { ISdk } from "@forest-fire/types";
-import { Record } from "@/core";
-import { FireModelError } from "@/errors";
-import { IModel } from "@/types";
+import { Record } from "~/core";
+import { FireModelError } from "~/errors";
+import { IModel } from "~/types";
 
 export class NotHasManyRelationship<S extends ISdk, T extends IModel> extends FireModelError {
   constructor(rec: Record<S, T>, property: string, method: string) {

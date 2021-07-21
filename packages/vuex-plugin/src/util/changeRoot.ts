@@ -1,7 +1,7 @@
-import { FireModelPluginError } from "@/errors";
+import { FireModelPluginError } from "~/errors";
 import { Model } from "firemodel";
 import Vue from "vue";
-import { getInitialState } from "@/util";
+import { getInitialState } from "~/util";
 
 /**
  * **changeRoot**

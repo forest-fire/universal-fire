@@ -1,5 +1,5 @@
-import { AbcApi } from "@/abc";
-import { getStore } from "@/util";
+import { AbcApi } from "~/abc";
+import { getStore } from "~/util";
 import { get } from "native-dash";
 
 export async function getFromVuex<T>(ctx: AbcApi<T>) {

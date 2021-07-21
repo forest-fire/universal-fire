@@ -2,18 +2,18 @@ import {
   ForeignKey,
   IFmBuildRelationshipOptions,
   IFmPathValuePair,
-} from "@/types";
+} from "~/types";
 import {
   IncorrectReciprocalInverse,
   MissingInverseProperty,
   MissingReciprocalInverse,
   UnknownRelationshipProblem,
-} from "@/errors";
+} from "~/errors";
 
-import { Record } from "@/core";
+import { Record } from "~/core";
 import { createCompositeKeyRefFromRecord } from "./index";
-import { getModelMeta, pathJoin } from "@/util";
-import { IModel } from "@/types";
+import { getModelMeta, pathJoin } from "~/util";
+import { IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
 import { ConstructorFor } from "common-types";
 

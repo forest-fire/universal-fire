@@ -1,6 +1,6 @@
 import { RealTimeAdmin } from "universal-fire";
 
-import { FireModel } from "@/index";
+import { FireModel } from "~/index";
 
 describe("Rolling back a record => ", () => {
   beforeEach(async () => {

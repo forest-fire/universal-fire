@@ -1,7 +1,7 @@
-import { ICompositeKey, IModel } from "@/types";
-import { FireModelError } from "@/errors";
-import { Record } from "@/core";
-import { capitalize } from "@/util";
+import { ICompositeKey, IModel } from "~/types";
+import { FireModelError } from "~/errors";
+import { Record } from "~/core";
+import { capitalize } from "~/util";
 import { ISdk } from "@forest-fire/types";
 
 /**

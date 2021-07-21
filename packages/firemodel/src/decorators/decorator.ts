@@ -4,8 +4,8 @@ import {
   IFmModelPropertyMeta,
   IFmModelRelationshipMeta,
   IModel,
-} from "@/types";
-import { addPropertyToModelMeta, addRelationshipToModelMeta } from "@/util";
+} from "~/types";
+import { addPropertyToModelMeta, addRelationshipToModelMeta } from "~/util";
 
 import { IDictionary } from "common-types";
 

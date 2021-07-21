@@ -9,12 +9,12 @@ import {
   getRelationships,
   isProperty,
   isRelationship,
-} from "@/util";
-import { getPushKeys, modelRegister } from "@/util";
+} from "~/util";
+import { getPushKeys, modelRegister } from "~/util";
 
 import { ConstructorFor, IDictionary } from "common-types";
-import { getDbIndexes } from "@/decorators";
-import { IModel, IFmModelMeta } from "@/types";
+import { getDbIndexes } from "~/decorators";
+import { IModel, IFmModelMeta } from "~/types";
 
 export function model<T extends IModel>(options: IFmModelMeta<T> = {} as IFmModelMeta<T>) {
   let isDirty = false;

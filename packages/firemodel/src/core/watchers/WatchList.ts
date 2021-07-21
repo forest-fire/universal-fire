@@ -4,13 +4,13 @@ import {
   ISerializedQuery,
 } from "@forest-fire/types";
 import { SerializedQuery } from "@forest-fire/serialized-query";
-import { ICompositeKey, IListOptions, IModel, PrimaryKey } from "@/types";
-import { List, Record, Watch } from "@/core";
+import { ICompositeKey, IListOptions, IModel, PrimaryKey } from "~/types";
+import { List, Record, Watch } from "~/core";
 
-import { FireModelError } from "@/errors";
+import { FireModelError } from "~/errors";
 import { WatchBase } from "./WatchBase";
 import { epochWithMilliseconds } from "common-types";
-import { getAllPropertiesFromClassStructure } from "@/util";
+import { getAllPropertiesFromClassStructure } from "~/util";
 
 export class WatchList<S extends ISdk, T extends IModel> extends WatchBase<S, T> {
   public static list<S extends ISdk, T extends IModel>(

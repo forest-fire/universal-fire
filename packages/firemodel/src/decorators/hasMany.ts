@@ -4,12 +4,12 @@ import {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
   IModel,
-} from "@/types";
-import { modelConstructorLookup, modelNameLookup } from "@/util";
+} from "~/types";
+import { modelConstructorLookup, modelNameLookup } from "~/util";
 
-import { DecoratorProblem } from "@/errors";
-import { propertyReflector } from "@/decorators";
-import { relationshipsByModel } from "@/util";
+import { DecoratorProblem } from "~/errors";
+import { propertyReflector } from "~/decorators";
+import { relationshipsByModel } from "~/util";
 
 export type IFmHasMany<T = true> = IDictionary<T>;
 

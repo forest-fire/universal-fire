@@ -2,10 +2,10 @@ import type {
   AbcRequestCommand,
   IDiscreteLocalResults,
   IDiscreteOptions
-} from "@/types";
+} from "~/types";
 import { IPrimaryKey, Model, Record } from "firemodel";
-import { getStore } from "@/util";
-import { AbcApi } from "@/abc";
+import { getStore } from "~/util";
+import { AbcApi } from "~/abc";
 import { get } from "native-dash";
 
 /**

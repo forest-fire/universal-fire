@@ -1,5 +1,5 @@
-import { AbcApi, AbcResult, all, saveToIndexedDb, since, where } from '@/abc';
-import type { IAbcQueryRequest, IAbcRequest, IQueryServerResults } from '@/types';
+import { AbcApi, AbcResult, all, saveToIndexedDb, since, where } from '~/abc';
+import type { IAbcQueryRequest, IAbcRequest, IQueryServerResults } from '~/types';
 import { FireModel, IPrimaryKey, List, Model, Record } from 'firemodel';
 import { MutationPayload, Store } from 'vuex';
 
@@ -10,12 +10,12 @@ import { Mock } from 'firemock';
 import { Order } from './models/Order';
 import { Product } from './models/Product';
 import { fakeIndexedDb } from './helpers/fakeIndexedDb';
-import { getStore } from '@/util';
+import { getStore } from '~/util';
 import { hashToArray } from 'typed-conversions';
 import { orderData } from './data/orderData';
 import { productData } from './data/productData';
 import { productDataExtra } from './data/productDataExtra';
-import { DbSyncOperation, AbcStrategy } from '@/enums';
+import { DbSyncOperation, AbcStrategy } from '~/enums';
 
 let events: Array<[string, any]> = [];
 let eventCounts: IDictionary<number> = {};

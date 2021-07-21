@@ -1,6 +1,6 @@
 import { IFmWatchEvent, Model } from 'firemodel';
 
-import { FmCrudMutation } from '@/enums';
+import { FmCrudMutation } from '~/enums';
 import { MutationTree } from 'vuex';
 
 /**

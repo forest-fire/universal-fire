@@ -2,8 +2,8 @@ import {
   IFmModelRelationshipMeta,
   IMockRelationshipConfig,
   IMockResponse,
-} from "@/types";
-import { Mock, Record } from "@/core";
+} from "~/types";
+import { Mock, Record } from "~/core";
 
 import { IDatabaseSdk } from "universal-fire";
 

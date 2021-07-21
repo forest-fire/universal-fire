@@ -1,5 +1,5 @@
-import { IAuditChange, IAuditOperations } from "@/types";
-import { index, model, property } from "@/decorators";
+import { IAuditChange, IAuditOperations } from "~/types";
+import { index, model, property } from "~/decorators";
 import { Model } from "./Model";
 
 @model({ dbOffset: "_auditing" })

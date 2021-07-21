@@ -1,4 +1,4 @@
-import { FireModel, List, Record } from "@/index";
+import { FireModel, List, Record } from "~/index";
 import { RealTimeAdmin } from "universal-fire";
 
 import { DynamicPerson } from "./testing/localStateMgmt/DynamicPerson";

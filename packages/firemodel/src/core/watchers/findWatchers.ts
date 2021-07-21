@@ -1,5 +1,5 @@
-import { IWatcherEventContext, IModel } from "@/types";
-import { Watch } from "@/core";
+import { IWatcherEventContext, IModel } from "~/types";
+import { Watch } from "~/core";
 import { hashToArray } from "typed-conversions";
 import { ISdk } from "@forest-fire/types";
 

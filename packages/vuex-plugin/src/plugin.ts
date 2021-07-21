@@ -1,11 +1,11 @@
-import type { IFiremodelConfig, IFiremodelState } from '@/types';
-import { addNamespace, setInitialState, storeDatabase, storePluginConfig } from '@/util';
+import type { IFiremodelConfig, IFiremodelState } from '~/types';
+import { addNamespace, setInitialState, storeDatabase, storePluginConfig } from '~/util';
 
 import { FireModel } from 'firemodel';
 import type { IDatabaseSdk, IRealTimeClient, IFirestoreClient } from 'universal-fire';
 import type { Store } from 'vuex';
 import copy from 'fast-copy';
-import { preserveStore } from '@/util';
+import { preserveStore } from '~/util';
 import { queueLifecycleEvents } from './queueLifecycleEvents';
 import { coreServices } from './coreServices';
 import { FireModelPluginError } from './errors';

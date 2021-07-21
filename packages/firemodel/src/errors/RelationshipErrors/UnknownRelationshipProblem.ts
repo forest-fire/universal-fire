@@ -1,7 +1,7 @@
-import { FireModelError } from "@/errors";
-import { IFmRelationshipOperation } from "@/types";
-import { IModel } from "@/types";
-import { Record } from "@/core";
+import { FireModelError } from "~/errors";
+import { IFmRelationshipOperation } from "~/types";
+import { IModel } from "~/types";
+import { Record } from "~/core";
 import { ISdk } from "@forest-fire/types";
 
 export class UnknownRelationshipProblem<

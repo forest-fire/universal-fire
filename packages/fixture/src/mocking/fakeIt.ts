@@ -1,6 +1,6 @@
 import { IDictionary } from "common-types";
 import { MockHelper } from "firemock";
-import { NamedFakes } from "@/types";
+import { NamedFakes } from "~/types";
 // TODO: bring in this functionality again
 import { key as fbKey } from "firebase-key";
 import { format } from "date-fns";
@@ -261,9 +261,8 @@ export function fakeIt<T = any>(
     case "placeImage":
       // TODO: determine why data structure is an array of arrays
       const [width, height, imgType] = rest;
-      return `https://placeimg.com/${width}/${height}/${
-        imgType ? imgType : "all"
-      }`;
+      return `https://placeimg.com/${width}/${height}/${imgType ? imgType : "all"
+        }`;
     case "placeHolder":
       const [size, backgroundColor, textColor] = rest;
       let url = `https://via.placeholder.com/${size}`;

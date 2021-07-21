@@ -8,7 +8,7 @@ import {
   IFmLocalRelationshipEvent,
   IFmServerOrLocalEvent,
   IWatcherEventContext,
-} from "@/types";
+} from "~/types";
 
 export interface IFmWatcherStopped {
   type: typeof FmEvents.WATCHER_STOPPED;

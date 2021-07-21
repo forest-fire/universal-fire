@@ -3,9 +3,9 @@ import "reflect-metadata";
 import { IFmLocalEvent, IFmWatchEvent, List, Record } from "../src";
 import { IDatabaseSdk, RealTimeAdmin } from "universal-fire";
 
-import { FireModel } from "@/index";
-import { FmEvents } from "@/index";
-import { Mock } from "@/index";
+import { FireModel } from "~/index";
+import { FmEvents } from "~/index";
+import { Mock } from "~/index";
 import { Person as Peeps } from "./testing/PersonAsPeeps";
 import { Person } from "./testing/Person";
 

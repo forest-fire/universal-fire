@@ -4,14 +4,14 @@ import {
   buildRelationshipPaths,
   createCompositeKeyFromFkString,
   extractFksFromPaths,
-} from "@/core/records";
+} from "~/core/records";
 
 import { Car } from "./testing/Car";
 import { Company } from "./testing/Company";
 import DeepPerson from "./testing/dynamicPaths/DeepPerson";
 import { FancyPerson } from "./testing/FancyPerson";
-import { FireModel } from "@/index";
-import { FmEvents } from "@/index";
+import { FireModel } from "~/index";
+import { FmEvents } from "~/index";
 import OffsetCar from "./testing/dynamicPaths/Car";
 import { Pay } from "./testing/Pay";
 import { Person } from "./testing/Person";

@@ -14,7 +14,7 @@ import { IDictionary, wait } from "common-types";
 import { IDatabaseSdk, RealTimeAdmin } from "universal-fire";
 
 import { FancyPerson } from "./testing/FancyPerson";
-import { FireModel } from "@/index";
+import { FireModel } from "~/index";
 import { Person } from "./testing/Person";
 import { pathJoin } from "native-dash";
 

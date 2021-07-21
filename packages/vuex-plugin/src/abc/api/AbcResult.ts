@@ -1,9 +1,9 @@
 import { IModel, Model, Record } from 'firemodel';
 import { arrayToHash, hashToArray } from 'typed-conversions';
 
-import { AbcApi } from '@/abc';
-import { AbcError } from '@/errors';
-import type { IAbcResult } from '@/types';
+import { AbcApi } from '~/abc';
+import { AbcError } from '~/errors';
+import type { IAbcResult } from '~/types';
 import { IDictionary } from 'common-types';
 
 /**
@@ -17,7 +17,7 @@ export class AbcResult<T extends IModel> {
     private _context: AbcApi<T>,
     private _results: IAbcResult<T>,
     private _performance?: IDictionary
-  ) {}
+  ) { }
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
   static async create<T extends IModel>(

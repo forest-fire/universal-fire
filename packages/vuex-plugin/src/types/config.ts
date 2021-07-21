@@ -2,7 +2,7 @@ import { IDictionary, epoch } from 'common-types';
 import type { IClientAuth, IDatabaseSdk } from 'universal-fire';
 import { Watch, Record, List, Model, IModelOptions } from 'firemodel';
 import { Commit, Dispatch } from 'vuex';
-import type { IAuthPersistenceStrategy, IFiremodelState } from '@/types';
+import type { IAuthPersistenceStrategy, IFiremodelState } from '~/types';
 
 export type AsyncMockData = () => Promise<IDictionary>;
 

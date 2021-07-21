@@ -1,16 +1,16 @@
-import { AbcApi, AbcResult } from '@/abc';
+import { AbcApi, AbcResult } from '~/abc';
 import type {
   IAbcResult,
   IDiscreteLocalResults,
   IDiscreteResult,
   IDiscreteServerResults,
-} from '@/types';
-import { AbcMutation, DbSyncOperation } from '@/enums';
+} from '~/types';
+import { AbcMutation, DbSyncOperation } from '~/enums';
 import { arrayToHash, hashToArray } from 'typed-conversions';
-import { changeRoot } from '@/util';
+import { changeRoot } from '~/util';
 import { get } from 'native-dash';
 
-import { AbcError } from '@/errors';
+import { AbcError } from '~/errors';
 import { IDictionary } from 'common-types';
 import { MutationTree } from 'vuex';
 import Vue from 'vue';

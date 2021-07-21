@@ -2,7 +2,7 @@ import type {
   IFmModelConstructor,
   IGeneralizedQuery,
   IQueryLocalResults
-} from "@/types";
+} from "~/types";
 
 import { Record } from "firemodel";
 

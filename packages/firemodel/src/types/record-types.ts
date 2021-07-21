@@ -8,7 +8,7 @@ import {
   IFmModelRelationshipMeta,
   IModel,
   IFmFunctionToConstructor
-} from "@/types";
+} from "~/types";
 
 /**
  * A simplified interface that represents a `Record`'s shape

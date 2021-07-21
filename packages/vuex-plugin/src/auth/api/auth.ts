@@ -10,10 +10,10 @@ import {
   IdTokenResult,
   UserCredential
 } from "@firebase/auth-types";
-import type { IAuthProfile, IFiremodelState } from "@/types";
-import { getAuth, getStore } from "@/util";
+import type { IAuthProfile, IFiremodelState } from "~/types";
+import { getAuth, getStore } from "~/util";
 
-import { FireModelPluginError } from "@/errors";
+import { FireModelPluginError } from "~/errors";
 import { IModelConstructor } from "firemodel";
 
 /**
@@ -79,10 +79,9 @@ export async function getIdToken(
   }
 
   throw new FireModelPluginError(
-    `Call to getIdToken() returned nothing! ${
-      auth.currentUser
-        ? ""
-        : 'This was because -- for some reason -- the "userProfile" was not set!'
+    `Call to getIdToken() returned nothing! ${auth.currentUser
+      ? ""
+      : 'This was because -- for some reason -- the "userProfile" was not set!'
     }`,
     "firemodel-plugin/not-allowed"
   );

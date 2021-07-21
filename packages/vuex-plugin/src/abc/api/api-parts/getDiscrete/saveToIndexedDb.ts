@@ -1,4 +1,4 @@
-import type { IDiscreteServerResults, IQueryServerResults } from '@/types';
+import type { IDiscreteServerResults, IQueryServerResults } from '~/types';
 import { IPrimaryKey, Model } from 'firemodel';
 
 import Dexie from 'dexie';

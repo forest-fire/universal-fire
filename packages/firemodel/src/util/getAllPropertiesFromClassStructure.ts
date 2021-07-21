@@ -1,6 +1,6 @@
-import { IModel, IFmModelPropertyMeta } from "@/types";
+import { IModel, IFmModelPropertyMeta } from "~/types";
 import { hashToArray } from "typed-conversions";
-import { propertiesByModel } from "@/util";
+import { propertiesByModel } from "~/util";
 
 export function getAllPropertiesFromClassStructure<T extends IModel>(model: T): IFmModelPropertyMeta<T>[] {
   const modelName: string = model.constructor.name;

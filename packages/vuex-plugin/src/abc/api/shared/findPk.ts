@@ -1,4 +1,4 @@
-import { AbcError } from "@/errors";
+import { AbcError } from "~/errors";
 import { IDictionary } from "common-types";
 
 /**

@@ -1,6 +1,6 @@
-import type { IAbcApiConfig, IFmModelConstructor } from "@/types"
+import type { IAbcApiConfig, IFmModelConstructor } from "~/types"
 
-import { AbcApi } from "@/abc/api";
+import { AbcApi } from "~/abc/api";
 import { Model } from "firemodel";
 
 /**

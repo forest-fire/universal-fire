@@ -7,9 +7,9 @@ import {
   serverConfirm,
   serverRollback,
   watcher
-} from "@/store";
+} from "~/store";
 
-import type { IFiremodelState } from "@/types";
+import type { IFiremodelState } from "~/types";
 import { MutationTree } from "vuex";
 
 /**
@@ -18,15 +18,15 @@ import { MutationTree } from "vuex";
  * unknown/generic to this plugin
  */
 export const mutations = <T>() =>
-  ({
-    ...errorMutations<T>(),
-    ...localConfig<T>(),
-    ...authMutations<T>(),
-    ...serverConfirm<T>(),
-    ...serverRollback<T>(),
-    ...localCrud<T>(),
-    ...relationships<T>(),
-    ...watcher<T>()
-  } as MutationTree<IFiremodelState<T>>);
+({
+  ...errorMutations<T>(),
+  ...localConfig<T>(),
+  ...authMutations<T>(),
+  ...serverConfirm<T>(),
+  ...serverRollback<T>(),
+  ...localCrud<T>(),
+  ...relationships<T>(),
+  ...watcher<T>()
+} as MutationTree<IFiremodelState<T>>);
 
 export type IFiremodelMutation = keyof typeof mutations;

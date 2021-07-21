@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { ICompositeKey, isCompositeKey, IModel, } from "@/types";
-import { FireModelError } from "@/errors";
+import { ICompositeKey, isCompositeKey, IModel, } from "~/types";
+import { FireModelError } from "~/errors";
 import { Record } from "../Record";
 
 export function createCompositeKeyFromFkString<T extends IModel>(

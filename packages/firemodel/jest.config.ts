@@ -20,7 +20,7 @@ const config: Config.InitialOptions = {
   // modules which do NOT export CJS must have an entry to
   // https://jestjs.io/docs/en/configuration#modulenamemapper-objectstring-string--arraystring
   moduleNameMapper: {
-    "^@/(.*)$": resolve(process.cwd(), "src", "$1"),
+    "^~/(.*)$": resolve(process.cwd(), "src", "$1"),
   },
 
   // adds more assertions to the default library that Jest provides

@@ -3,7 +3,7 @@ import "./testing/fake-indexeddb";
 import { Car } from "./testing/Car";
 import DeepPerson from "./testing/dynamicPaths/DeepPerson";
 import { DeeperPerson } from "./testing/dynamicPaths/DeeperPerson";
-import { DexieDb } from "@/index";
+import { DexieDb } from "~/index";
 import { Person } from "./testing/Person";
 import fdbKeyRange from "fake-indexeddb/lib/FDBKeyRange";
 import indexedDB from "fake-indexeddb";

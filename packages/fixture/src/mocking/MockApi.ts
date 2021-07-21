@@ -2,12 +2,12 @@ import {
   IMockRelationshipConfig,
   IMockResponse,
   FmModelConstructor,
-} from "@/types";
+} from "~/types";
 import { addRelationships, mockProperties } from "./index";
 
-import { FireModelError } from "@/errors";
+import { FireModelError } from "~/errors";
 import { IDictionary } from "common-types";
-import { Record } from "@/core";
+import { Record } from "~/core";
 import { IDatabaseSdk, SDK } from "universal-fire";
 
 let mockPrepared = false;

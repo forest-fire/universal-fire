@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { IFmModelPropertyMeta, IModel } from "@/types";
-import { propertiesByModel } from "@/util";
-import { propertyReflector } from "@/decorators";
+import { IFmModelPropertyMeta, IModel } from "~/types";
+import { propertiesByModel } from "~/util";
+import { propertyReflector } from "~/decorators";
 
 // TODO: make the defaultValue typed
 /**

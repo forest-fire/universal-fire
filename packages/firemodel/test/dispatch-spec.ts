@@ -4,14 +4,14 @@ import {
   IVuexDispatch,
   Record,
   VeuxWrapper,
-} from "@/index";
+} from "~/index";
 import { RealTimeAdmin } from "universal-fire";
 
-import { FmEvents } from "@/index";
+import { FmEvents } from "~/index";
 import { Person } from "./testing/Person";
 import { PersonWithLocal } from "./testing/PersonWithLocal";
 import { PersonWithLocalAndPrefix } from "./testing/PersonWithLocalAndPrefix";
-import { compareHashes } from "@/util";
+import { compareHashes } from "~/util";
 
 describe("Dispatch →", () => {
   beforeEach(async () => {

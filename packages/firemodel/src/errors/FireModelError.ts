@@ -1,5 +1,5 @@
-import { IUnderlyingError } from "@/types";
-import { IModel } from "@/types";
+import { IUnderlyingError } from "~/types";
+import { IModel } from "~/types";
 
 /**
  * Base **Error** for **FireModel**. Takes _message_ and _type/subtype_ as

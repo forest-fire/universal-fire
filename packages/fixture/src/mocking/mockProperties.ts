@@ -1,10 +1,10 @@
-import { IMockRelationshipConfig, IModel } from "@/types";
+import { IMockRelationshipConfig, IModel } from "~/types";
 
 import { IDatabaseSdk } from "universal-fire";
 import { IDictionary } from "common-types";
-import { Record } from "@/core";
+import { Record } from "~/core";
 import { getMockHelper } from "firemock";
-import { getModelMeta } from "@/util";
+import { getModelMeta } from "~/util";
 import { mockValue } from "./index";
 
 /** adds mock values for all the properties on a given model */

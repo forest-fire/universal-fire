@@ -1,6 +1,6 @@
-import type { IModel } from "@/types";
+import type { IModel } from "~/types";
 import type { FakerStatic } from "@forest-fire/types";
-import { NamedFakes } from "@/types/constants";
+import { NamedFakes } from "~/types/constants";
 
 export type MockHelper = {
   faker: FakerStatic;

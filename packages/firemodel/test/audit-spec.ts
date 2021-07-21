@@ -1,4 +1,4 @@
-import { FireModel, List, Record } from "@/core";
+import { FireModel, List, Record } from "~/core";
 import { RealTimeAdmin, IDatabaseSdk } from "universal-fire";
 
 import { Person } from "./testing/AuditedPerson";

@@ -1,6 +1,6 @@
 import { RealTimeAdmin, IDatabaseSdk, SDK } from "universal-fire";
 import { Car } from "./testing/Car";
-import { FireModel, List } from "@/core/index";
+import { FireModel, List } from "~/core/index";
 import { Mock } from "@forest-fire/fixture";
 
 describe("List Options: ", () => {

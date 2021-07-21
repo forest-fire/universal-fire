@@ -1,9 +1,9 @@
 import "reflect-metadata";
 
 import { get } from "native-dash";
-import { lowercase, set } from "@/util";
+import { lowercase, set } from "~/util";
 import { IDictionary } from "common-types";
-import { IModel } from "@/types";
+import { IModel } from "~/types";
 
 /**
  * Adds meta data to a given "property" on a model. In this

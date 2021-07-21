@@ -1,5 +1,5 @@
 import { FmEvents, IFmWatchEvent, Record } from 'firemodel';
-import type { IFmEventActions, IFmLocalChange } from '@/types';
+import type { IFmEventActions, IFmLocalChange } from '~/types';
 
 import { IDictionary } from 'common-types';
 

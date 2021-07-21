@@ -8,17 +8,17 @@ import {
   IReduxAction,
   IReduxDispatch,
   ModelMeta
-} from "@/types";
+} from "~/types";
 
 import {
   modelRegister,
   listRegisteredModels,
   modelRegistryLookup,
-} from "@/util";
+} from "~/util";
 
-import { Record, DefaultDbCache } from "@/core";
+import { Record, DefaultDbCache } from "~/core";
 import { IDatabaseSdk, ISdk, } from "@forest-fire/types";
-import { convertModelToModelClass } from "@/util/convertModelToModelClass";
+import { convertModelToModelClass } from "~/util/convertModelToModelClass";
 
 const defaultDispatch: IReduxDispatch = async (context: IReduxAction) => Promise.resolve(context);
 

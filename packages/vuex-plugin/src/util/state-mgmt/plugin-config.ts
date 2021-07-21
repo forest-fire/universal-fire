@@ -1,4 +1,4 @@
-import type { IFiremodelConfig } from '@/types';
+import type { IFiremodelConfig } from '~/types';
 
 let _pluginConfig: IFiremodelConfig<any>;
 
