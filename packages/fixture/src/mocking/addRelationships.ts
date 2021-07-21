@@ -1,5 +1,5 @@
-import { Record } from "firemodel";
-import { IDatabaseSdk, SDK, IModel } from "@forest-fire/types";
+import { Record, IModel } from "firemodel";
+import { IDatabaseSdk  } from "@forest-fire/types";
 import { IMockRelationshipConfig, IMockResponse } from "~/mocking/index"
 import { processHasMany, processHasOne } from "./index";
 
