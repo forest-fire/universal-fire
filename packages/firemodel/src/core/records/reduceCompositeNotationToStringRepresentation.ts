@@ -1,7 +1,7 @@
 import { ICompositeKey } from "~/types";
 import { IModel } from "~/types";
 import { keys } from "native-dash";
-
+import { Model } from "~/models/Model";
 /**
    * **_reduceCompositeNotationToStringRepresentation**
    *
@@ -11,7 +11,7 @@ import { keys } from "native-dash";
 `${id}::${prop}:${propValue}::${prop2}:${propValue2}`
 ```
    */
-export function reduceCompositeNotationToStringRepresentation<T extends IModel = IModel>(
+export function reduceCompositeNotationToStringRepresentation<T extends Model = Model>(
   ck: ICompositeKey<T>
 ): string {
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

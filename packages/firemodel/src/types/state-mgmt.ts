@@ -9,17 +9,15 @@ import {
   IWatcherSource,
 } from "~/types";
 import {
-
   IPathBasedWatchEvent,
   IRtdbDbEvent,
   ISdk,
   ISerializedQuery,
   IValueBasedWatchEvent,
 } from "@forest-fire/types";
-import { epoch, fk, pk } from "common-types";
+import { Model } from "~/models/Model";
 
-// TODO: replace this with typing from universal-fire
-import { IDictionary } from "common-types";
+import { IDictionary, epoch, fk, pk } from "common-types";
 
 export type Extractable<T, U> = T extends U ? any : never;
 export type NotString<T> = string extends T ? never : any;
@@ -82,12 +80,12 @@ export type IFmServerEvent =
  * Allows either a server event (aka, Firebase originated) or a locally
  * sourced event
  */
-export type IFmServerOrLocalEvent<T extends IModel> =
+export type IFmServerOrLocalEvent<T extends Model> =
   | IFmServerEvent
   | IFmLocalEvent<T>
   | IFmWatcherEvent<T>;
 
-export interface IFmWatcherEvent<T extends IModel = IModel> {
+export interface IFmWatcherEvent<T extends Model = IModel> {
   type: FmEvents;
   kind: "watcher";
   key: string;
@@ -137,7 +135,7 @@ export interface IFmLocalEventBase<T> {
  */
 export interface IFmLocalRelationshipEvent<
   F extends IModel = IModel,
-  T extends IModel = IModel
+  T extends Model = IModel
   > extends IFmLocalEventBase<F> {
   kind: "relationship";
   operation: IFmRelationshipOperation;
@@ -180,7 +178,7 @@ export interface IFmLocalRelationshipEvent<
 /**
  * Core event properties of a `Record` based change in **Firemodel**
  */
-export interface IFmLocalRecordEvent<T extends IModel = IModel>
+export interface IFmLocalRecordEvent<T extends Model = IModel>
   extends IFmLocalEventBase<T> {
   kind: "record";
   operation: IFmCrudOperations;
@@ -224,11 +222,11 @@ export interface IFmLocalRecordEvent<T extends IModel = IModel>
  * Meta information for events that are originated from **Firemodel**. This event
  * type is then extended with _watcher context_
  */
-export type IFmLocalEvent<T extends IModel> =
+export type IFmLocalEvent<T extends Model> =
   | IFmLocalRecordEvent<T>
   | IFmLocalRelationshipEvent<T>;
 
-export interface IWatcherEventContextBase<S extends ISdk, T extends IModel = IModel>
+export interface IWatcherEventContextBase<S extends ISdk, T extends Model = IModel>
   extends IFmRecordMeta<T> {
   watcherId: string;
   /** if defined, pass along the string name off the watcher */
@@ -263,7 +261,7 @@ export interface IWatcherEventContextBase<S extends ISdk, T extends IModel = IMo
  * When watching a "list-of-records" you are really watching
  * a basket/array of underlying record watchers.
  */
-export interface IWatcherEventContextListofRecords<S extends ISdk, T extends IModel = IModel>
+export interface IWatcherEventContextListofRecords<S extends ISdk, T extends Model = IModel>
   extends IWatcherEventContextBase<S, T> {
   watcherSource: "list-of-records";
   /**
@@ -274,7 +272,7 @@ export interface IWatcherEventContextListofRecords<S extends ISdk, T extends IMo
   eventFamily: "child";
 }
 
-export interface IWatcherEventContextList<S extends ISdk, T extends IModel = IModel>
+export interface IWatcherEventContextList<S extends ISdk, T extends Model = IModel>
   extends IWatcherEventContextBase<S, T> {
   watcherSource: "list";
   /**
@@ -284,7 +282,7 @@ export interface IWatcherEventContextList<S extends ISdk, T extends IModel = IMo
   eventFamily: "child";
 }
 
-export interface IWatcherEventContextRecord<S extends ISdk, T extends IModel = IModel>
+export interface IWatcherEventContextRecord<S extends ISdk, T extends Model = IModel>
   extends IWatcherEventContextBase<S, T> {
   watcherSource: "record";
   /**
@@ -298,7 +296,7 @@ export interface IWatcherEventContextRecord<S extends ISdk, T extends IModel = I
  * The meta information provided when a watcher is started;
  * it is also added to events when they have watcher context.
  */
-export type IWatcherEventContext<S extends ISdk, T extends IModel = IModel> =
+export type IWatcherEventContext<S extends ISdk, T extends Model = IModel> =
   | IWatcherEventContextList<S, T>
   | IWatcherEventContextRecord<S, T>
   | IWatcherEventContextListofRecords<S, T>;

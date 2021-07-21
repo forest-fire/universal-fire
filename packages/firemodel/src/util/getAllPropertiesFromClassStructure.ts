@@ -1,8 +1,9 @@
-import { IModel, IFmModelPropertyMeta } from "~/types";
+import { IFmModelPropertyMeta } from "~/types";
 import { hashToArray } from "typed-conversions";
 import { propertiesByModel } from "~/util";
+import { Model } from "~/models/Model";
 
-export function getAllPropertiesFromClassStructure<T extends IModel>(model: T): IFmModelPropertyMeta<T>[] {
+export function getAllPropertiesFromClassStructure<T extends Model>(model: T): IFmModelPropertyMeta<T>[] {
   const modelName: string = model.constructor.name;
   const properties: IFmModelPropertyMeta<T>[] =
     hashToArray(propertiesByModel[modelName], "property") || [];

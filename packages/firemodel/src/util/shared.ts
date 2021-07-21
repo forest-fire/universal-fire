@@ -1,6 +1,7 @@
 import { IAuditChange } from "~/types";
 import { IDictionary } from "common-types";
-import { IModel, isModelClass } from "~/types";
+import { isModelClass } from "~/types";
+import { Model } from "~/models/Model";
 
 export function normalized(...args: string[]) {
   return args
@@ -45,7 +46,7 @@ export function updateToAuditChanges<T = any>(
   );
 }
 
-export function withoutMetaOrPrivate<T extends IModel>(model: T): T {
+export function withoutMetaOrPrivate<T extends Model>(model: T): T {
   if (isModelClass(model)) {
     delete model.META;
   }

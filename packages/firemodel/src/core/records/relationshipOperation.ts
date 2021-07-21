@@ -15,7 +15,7 @@ import { ConstructorFor, IDictionary } from "common-types";
 import { IModel } from "~/types";
 import { Record } from "~/core";
 import { ISdk } from "@forest-fire/types";
-
+import { Model } from "~/models/Model";
 /**
  * **relationshipOperation**
  *
@@ -24,8 +24,8 @@ import { ISdk } from "@forest-fire/types";
  */
 export async function relationshipOperation<
   S extends ISdk,
-  TFrom extends IModel,
-  TTo extends IModel = IModel
+  TFrom extends Model,
+  TTo extends Model = Model
 >(
   rec: Record<S, TFrom>,
   /**
@@ -143,7 +143,7 @@ export async function relationshipOperation<
   }
 }
 
-export async function localRelnOp<S extends ISdk, TFrom extends IModel, TTo extends IModel>(
+export async function localRelnOp<S extends ISdk, TFrom extends sModel, TTo extends Model>(
   rec: Record<S, TFrom>,
   event: Omit<IFmLocalRelationshipEvent<TFrom, TTo>, "type">,
   type: FmEvents
@@ -174,7 +174,7 @@ export async function localRelnOp<S extends ISdk, TFrom extends IModel, TTo exte
   }
 }
 
-export async function relnConfirmation<S extends ISdk, F extends IModel, T extends IModel>(
+export async function relnConfirmation<S extends ISdk, F extends Model, T extends Model>(
   rec: Record<S, F>,
   event: Omit<IFmLocalRelationshipEvent<F, T>, "type">,
   type: FmEvents
@@ -182,7 +182,7 @@ export async function relnConfirmation<S extends ISdk, F extends IModel, T exten
   await rec.dispatch({ ...event, type });
 }
 
-export async function relnRollback<S extends ISdk, F extends IModel, T extends IModel>(
+export async function relnRollback<S extends ISdk, F extends Model, T extends Model>(
   rec: Record<S, F>,
   event: Omit<IFmLocalRelationshipEvent<F, T>, "type">,
   type: FmEvents

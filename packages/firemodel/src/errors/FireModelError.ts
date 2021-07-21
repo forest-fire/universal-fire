@@ -1,11 +1,12 @@
 import { IUnderlyingError } from "~/types";
 import { IModel } from "~/types";
+import { Model } from "~/models/Model";
 
 /**
  * Base **Error** for **FireModel**. Takes _message_ and _type/subtype_ as
  * parameters. The code will be the `subtype`; the name is both.
  */
-export class FireModelError<T extends IModel = IModel> extends Error {
+export class FireModelError<T extends Model = Model> extends Error {
   public firemodel = true;
   public code: string;
   /**

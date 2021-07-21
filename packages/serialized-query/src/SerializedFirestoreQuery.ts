@@ -34,13 +34,6 @@ export class SerializedFirestoreQuery<
   protected _startAt?: string | number | boolean;
   protected _db?: DbFrom<TSdk>;
 
-  /** Static initializer */
-  // public static path<T extends IModel>(
-  //   path = '/'
-  // ): SerializedFirestoreQuery<T> {
-  //   return new SerializedFirestoreQuery<TSdk, M>(path);
-  // }
-
   /**
    * Constructor
    */

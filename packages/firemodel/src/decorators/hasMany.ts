@@ -10,10 +10,11 @@ import { modelConstructorLookup, modelNameLookup } from "~/util";
 import { DecoratorProblem } from "~/errors";
 import { propertyReflector } from "~/decorators";
 import { relationshipsByModel } from "~/util";
+import { Model } from "~/models/Model";
 
 export type IFmHasMany<T = true> = IDictionary<T>;
 
-export function hasMany<T extends IModel>(
+export function hasMany<T extends Model>(
   /**
    * either a _string_ representing the Model's class name
    * or a _constructor_ for the Model class

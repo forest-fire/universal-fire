@@ -1,6 +1,7 @@
-import { IListOptions, IListQueryOptions, IModel } from "~/types";
+import { IListOptions, IListQueryOptions } from "~/types";
 import { ISdk, IDatabaseSdk } from "@forest-fire/types";
 import { DefaultDbCache } from "../DefaultDbCache";
+import { Model } from "~/models/Model";
 
 /**
  * List.query() has a naturally more limited scope of options
@@ -8,7 +9,7 @@ import { DefaultDbCache } from "../DefaultDbCache";
  * narrows the options that these query shorthands have received
  * to just those options which are
  */
-export function reduceOptionsForQuery<S extends ISdk, T extends IModel>(
+export function reduceOptionsForQuery<S extends ISdk, T extends Model>(
   o: IListOptions<S, T>
 ): IListQueryOptions<S, T> {
   return {

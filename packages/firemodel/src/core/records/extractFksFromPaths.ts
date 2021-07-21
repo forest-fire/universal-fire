@@ -3,8 +3,9 @@ import { IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
 import { Record } from "~/core";
 import { pathJoin } from "native-dash";
+import { Model } from "~/models/Model";
 
-export function extractFksFromPaths<S extends ISdk = ISdk, T extends IModel = IModel>(
+export function extractFksFromPaths<S extends ISdk = ISdk, T extends Model = Model>(
   rec: Record<S, T>,
   prop: keyof T & string,
   paths: IFmPathValuePair[]

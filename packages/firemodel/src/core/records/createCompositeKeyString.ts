@@ -3,12 +3,13 @@ import { Record } from "~/core";
 import { createCompositeKeyFromRecord } from "./index";
 import { ISdk } from "@forest-fire/types";
 import { IModel } from "~/types";
+import { Model } from "~/models/Model";
 
 /**
  * Creates a string based composite key if the passed in record
  * has dynamic path segments; if not it will just return the "id"
  */
-export function createCompositeKeyRefFromRecord<S extends ISdk, T extends IModel = IModel>(
+export function createCompositeKeyRefFromRecord<S extends ISdk, T extends Model = IModel>(
   rec: Record<S, T>
 ) {
   const cKey: IDictionary & { id: string } = createCompositeKeyFromRecord(rec);

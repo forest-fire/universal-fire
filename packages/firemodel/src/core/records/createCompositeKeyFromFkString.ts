@@ -2,8 +2,9 @@
 import { ICompositeKey, isCompositeKey, IModel, } from "~/types";
 import { FireModelError } from "~/errors";
 import { Record } from "../Record";
+import { Model } from "~/models/Model";
 
-export function createCompositeKeyFromFkString<T extends IModel>(
+export function createCompositeKeyFromFkString<T extends Model>(
   fkCompositeRef: string,
   modelConstructor?: new () => T
 ): ICompositeKey<T> {

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { IFmChangedProperties, IModel } from "~/types";
-
+import { IFmChangedProperties, } from "~/types";
+import { Model } from "~/models/Model";
 const equal = require("fast-deep-equal/es6");
 
-export function compareHashes<T extends IModel>(
+export function compareHashes<T extends Model>(
   from: Partial<T>,
   to: Partial<T>,
   /**

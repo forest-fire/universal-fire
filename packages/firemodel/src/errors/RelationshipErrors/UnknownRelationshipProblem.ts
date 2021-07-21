@@ -3,10 +3,10 @@ import { IFmRelationshipOperation } from "~/types";
 import { IModel } from "~/types";
 import { Record } from "~/core";
 import { ISdk } from "@forest-fire/types";
-
+import { Model } from "~/models/Model";
 export class UnknownRelationshipProblem<
   S extends ISdk,
-  T extends IModel
+  T extends Model
   > extends FireModelError {
   constructor(
     err: Error,

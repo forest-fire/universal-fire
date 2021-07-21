@@ -29,10 +29,11 @@ import { FireModelError } from "~/errors";
 import { arrayToHash } from "typed-conversions";
 import { queryAdjustForNext, reduceOptionsForQuery } from "./lists";
 import { isString } from "~/util";
+import { Model } from "~/models/Model";
 
 const DEFAULT_IF_NOT_FOUND = Symbol("DEFAULT_IF_NOT_FOUND");
 
-function addTimestamps<T extends IModel>(obj: IDictionary) {
+function addTimestamps<T extends Model>(obj: IDictionary) {
   const datetime = new Date().getTime();
   const output: IDictionary = {};
   Object.keys(obj).forEach((i) => {
@@ -45,7 +46,7 @@ function addTimestamps<T extends IModel>(obj: IDictionary) {
 
   return output as T;
 }
-export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
+export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
   //#region STATIC Interfaces
 
   /**
@@ -72,7 +73,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * a destructive operation ... any other records of the
    * same type that existed beforehand are removed.
    */
-  public static async set<S extends ISdk = ISdk, T extends IModel = IModel>(
+  public static async set<S extends ISdk = ISdk, T extends Model = Model>(
     model: ConstructorFor<T>,
     payload: IDictionary<T>,
     options: IListOptions<S, T> = {}
@@ -115,7 +116,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  public static create<T extends IModel>(
+  public static create<T extends Model>(
     model: ConstructorFor<T>,
     options?: IListOptions<ISdk, T>
   ) {
@@ -131,7 +132,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param query the serialized query; note that this LIST will override the path of the query
    * @param options model options
    */
-  public static async fromQuery<S extends ISdk, T extends IModel>(
+  public static async fromQuery<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     query: ISerializedQuery<S, T>,
     options: IListOptions<S, T> = {}
@@ -155,7 +156,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    *
    * Allow connecting any valid Firebase query to the List object
    */
-  public static async query<S extends ISdk, T extends IModel>(
+  public static async query<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     query: IFmQueryDefn<S, T>,
     options: IListQueryOptions<S, T> = {}
@@ -189,7 +190,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * **Note:** will order results by `lastUpdated` unless
    * an `orderBy` property is passed into the options hash.
    */
-  public static async all<S extends ISdk, T extends IModel>(
+  public static async all<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     options: IListOptions<S, T> = {}
   ): Promise<List<S, T>> {
@@ -216,7 +217,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param howMany the number of records to bring back
    * @param options model options
    */
-  public static async first<S extends ISdk, T extends IModel>(
+  public static async first<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     howMany: number,
     options: Omit<
@@ -251,7 +252,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Get a discrete number of records which represent the most _recently_
    * updated records (uses the `lastUpdated` property on the model).
    */
-  public static async recent<S extends ISdk, T extends IModel>(
+  public static async recent<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     howMany: number,
     options: Omit<
@@ -285,7 +286,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Brings back all records that have changed since a given date
    * (using `lastUpdated` field)
    */
-  public static async since<S extends ISdk, T extends IModel>(
+  public static async since<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     since: epochWithMilliseconds | datetime | Date,
     options: Omit<IListOptions<S, T>, "startAt" | "endAt" | "orderBy"> = {}
@@ -336,7 +337,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * "least active" means that their `lastUpdated` property has gone
    * without any update for the longest.
    */
-  public static async inactive<S extends ISdk, T extends IModel>(
+  public static async inactive<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     howMany: number,
     options: Omit<
@@ -363,7 +364,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Lists the last _x_ items of a given model where "last" refers to the datetime
    * that the record was **created**.
    */
-  public static async last<S extends ISdk, T extends IModel>(
+  public static async last<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     howMany: number,
     options: Omit<IListOptions<S, T>, "orderBy"> = {}
@@ -388,7 +389,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Runs a `List.where()` search and returns the first result as a _model_
    * of type `T`. If no results were found it returns `undefined`.
    */
-  public static async findWhere<S extends ISdk, T extends IModel, K extends keyof T>(
+  public static async findWhere<S extends ISdk, T extends Model, K extends keyof T>(
     model: ConstructorFor<T>,
     property: K,
     value: T[K] | [IComparisonOperator, T[K]],
@@ -414,7 +415,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Puts an array of records into Firemodel as one operation; this operation
    * is only available to those who are using the Admin SDK/API.
    */
-  public static async bulkPut<S extends ISdk, T extends IModel>(
+  public static async bulkPut<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     records: T[] | IDictionary<T>,
     options: IListOptions<S, T> = {}
@@ -446,7 +447,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * override this default by adding a _tuple_ to the `value` where the first
    * array item is the operator, the second the value you are comparing against.
    */
-  public static async where<S extends ISdk, T extends IModel, K extends keyof T>(
+  public static async where<S extends ISdk, T extends Model, K extends keyof T>(
     model: ConstructorFor<T>,
     property: K & string,
     value: T[K] | [IComparisonOperator, T[K]],
@@ -485,10 +486,10 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    *
    * `removed` COMMENT
    */
-  public static async ids<T extends IModel>(
+  public static async ids<T extends Model>(
     model: ConstructorFor<T>,
     ...fks: PrimaryKey<T>[]
-  ) {
+  ): Promise<List<ISdk, T>> {
     const promises: any[] = [];
     const results: T[] = [];
     const errors: Array<{ error: FireModelError; id: PrimaryKey<T> }> = [];
@@ -555,7 +556,7 @@ export class List<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * **Note:** the optional second parameter lets you pass in any
    * dynamic path segments if that is needed for the given model.
    */
-  public static dbPath<S extends ISdk, T extends IModel>(
+  public static dbPath<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     offsets?: Partial<T>
   ) {

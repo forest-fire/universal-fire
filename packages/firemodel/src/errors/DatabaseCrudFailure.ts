@@ -4,8 +4,8 @@ import { ISdk } from "@forest-fire/types";
 import { FireModelError } from "~/errors";
 import { Record } from "~/core";
 import { capitalize } from "~/util";
-
-export class RecordCrudFailure<T extends IModel> extends FireModelError<T> {
+import { Model } from "~/models/Model";
+export class RecordCrudFailure<T extends Model> extends FireModelError<T> {
   constructor(
     rec: Record<ISdk, T>,
     crudAction: IFmCrudOperation,

@@ -1,14 +1,14 @@
 import { ISdk } from "@forest-fire/types";
 import { Record } from "~/core";
-import { IModel } from "~/types";
 import { FireModelError } from "~/errors";
 import { capitalize } from "~/util";
+import { Model } from "~/models/Model";
 
 /**
  * When the record's META points to a inverse property on the FK; this error
  * presents when that `FK[inverseProperty]` doesn't exist in the FK's meta.
  */
-export class MissingInverseProperty<S extends ISdk, T extends IModel> extends FireModelError {
+export class MissingInverseProperty<S extends ISdk, T extends Model> extends FireModelError {
   public from: string;
   public to: string;
   public inverseProperty: string;

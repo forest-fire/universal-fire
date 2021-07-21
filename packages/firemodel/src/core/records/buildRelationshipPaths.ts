@@ -16,6 +16,7 @@ import { getModelMeta, pathJoin } from "~/util";
 import { IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
 import { ConstructorFor } from "common-types";
+import { Model } from "~/models/Model";
 
 /**
  * Builds all the DB paths needed to update a pairing of a PK:FK. It is intended
@@ -30,7 +31,7 @@ import { ConstructorFor } from "common-types";
  * @param property the _property_ on the `Record` which holds the FK id
  * @param fkRef the "id" for the FK which is being worked on
  */
-export function buildRelationshipPaths<S extends ISdk, T extends IModel>(
+export function buildRelationshipPaths<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
   property: keyof T & string,
   fkRef: ForeignKey<unknown>,

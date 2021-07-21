@@ -1,6 +1,6 @@
-import type { IModel } from "~/types";
 import type { FakerStatic } from "@forest-fire/types";
 import { NamedFakes } from "~/types/constants";
+import { Model } from "~/models/Model";
 
 export type MockHelper = {
   faker: FakerStatic;
@@ -11,8 +11,8 @@ export type MockHelper = {
  * when called. This type of function is leveraged from within the `@forest-fire/fixture`
  * repo and is not executed directly inside of **Firemodel** itself anymore.
  */
-export type MockFunction<T extends IModel> = (context: MockHelper) => T | Promise<T>;
-export type FmMockType<T extends IModel> = keyof typeof NamedFakes | MockFunction<T>;
+export type MockFunction<T extends Model> = (context: MockHelper) => T | Promise<T>;
+export type FmMockType<T extends Model> = keyof typeof NamedFakes | MockFunction<T>;
 export type IFmHasOne = string;
 export type IFmFunctionToConstructor<X = any> = () => new () => X;
 export type IFmRelationshipDirectionality = "bi-directional" | "one-way";

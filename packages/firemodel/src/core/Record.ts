@@ -67,10 +67,11 @@ import { key as fbKey } from "firebase-key";
 import { writeAudit } from "~/audit";
 import { IDatabaseSdk, ISdk } from "@forest-fire/types";
 import { Error } from "@firebase/auth-types";
+import { Model } from "~/models/Model";
 
 //#endregion
 
-export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
+export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   //#region STATIC INTERFACE
   public static set defaultDb(db: IDatabaseSdk<ISdk>) {
     DefaultDbCache().set<IDatabaseSdk<typeof db.sdk>>(db);
@@ -92,7 +93,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * An array of "dynamic properties" that are derived fom the "dbOffset" to
    * produce the "dbPath". Note: this does NOT include the `id` property.
    */
-  public static dynamicPathProperties<T extends IModel = IModel>(
+  public static dynamicPathProperties<T extends Model = IModel>(
     /**
      * the **Model** who's properties are being interogated
      */
@@ -107,7 +108,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * creates a new -- and empty -- Record object; often used in
    * conjunction with the Record's initialize() method
    */
-  public static create<T extends IModel>(
+  public static create<T extends Model>(
     model: new () => T,
     options: IRecordOptions<ISdk> = {}
   ) {
@@ -127,7 +128,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Creates an empty record and then inserts all values
    * provided along with default values provided in META.
    */
-  public static local<T extends IModel, O extends IRecordOptions<ISdk>>(
+  public static local<T extends Model, O extends IRecordOptions<ISdk>>(
     model: new () => T,
     values: Partial<T>,
     options: O & { ignoreEmptyValues?: boolean } = {} as O
@@ -169,9 +170,9 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param payload the data for the new record; this optionally can include the "id" but if left off the new record will use a firebase pushkey
    * @param options
    */
-  public static async add<T extends IModel, O extends IRecordOptions<ISdk>>(
+  public static async add<T extends Model, O extends IRecordOptions<ISdk>>(
     model: (new () => T) | string,
-    payload: T,
+    payload: IModel<T>,
     options: O = {} as O
   ) {
     const defaultSdk = DefaultDbCache().sdk;
@@ -240,7 +241,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param updates properties to update; this is a non-destructive operation so properties not expressed will remain unchanged. Also, because values are _nullable_ you can set a property to `null` to REMOVE it from the database.
    * @param options
    */
-  public static async update<T extends IModel, O extends IRecordOptions<ISdk>>(
+  public static async update<T extends Model, O extends IRecordOptions<ISdk>>(
     model: new () => T,
     pk: PrimaryKey<T>,
     updates: Nullable<Partial<T>>,
@@ -267,7 +268,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param property the property on the record
    * @param payload the new payload you want to push into the array
    */
-  public static async pushKey<T extends IModel, O extends IRecordOptions<ISdk>>(
+  public static async pushKey<T extends Model, O extends IRecordOptions<ISdk>>(
     model: new () => T,
     pk: PrimaryKey<T>,
     property: keyof T & string,
@@ -300,7 +301,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @payload either a string representing an `id` or Composite Key or alternatively
    * a hash/dictionary of attributes that are to be set as a starting point
    */
-  public static createWith<T extends IModel>(
+  public static createWith<T extends Model>(
     model: ConstructorFor<T>,
     payload: PrimaryKey<T> | Partial<T>,
     options: IRecordOptions<ISdk> = {}
@@ -343,7 +344,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param id either just an "id" string or in the case of models with dynamic path prefixes you can pass in an object with the id and all dynamic prefixes
    * @param options
    */
-  public static async get<T extends IModel, O extends IRecordOptions<ISdk>>(
+  public static async get<T extends Model, O extends IRecordOptions<ISdk>>(
     model: new () => T,
     pk: PrimaryKey<T>,
     options: O = {} as O
@@ -354,7 +355,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
     return record;
   }
 
-  public static async remove<S extends ISdk, T extends IModel>(
+  public static async remove<S extends ISdk, T extends Model>(
     model: new () => T,
     pk: PrimaryKey<T>,
     /** if there is a known current state of this model you can avoid a DB call to get it */
@@ -377,7 +378,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param property the _property_ on the primary model which relates to another model(s)
    * @param refs one or more FK references
    */
-  public static async associate<S extends ISdk, T extends IModel>(
+  public static async associate<S extends ISdk, T extends Model>(
     model: ConstructorFor<T>,
     pk: PrimaryKey<T>,
     property: PropertyOf<T>,
@@ -395,7 +396,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * and in both cases the `id` property will be returned as part of the composite
    * so long as the path does indeed have the `id` at the end of the path.
    */
-  public static getCompositeKeyFromPath<T extends IModel>(
+  public static getCompositeKeyFromPath<T extends Model>(
     model: new () => T,
     path: string
   ) {
@@ -450,7 +451,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param model the class definition of the model you want the CompositeKey for
    * @param object the data which will be used to generate the Composite key from
    */
-  public static compositeKey<T extends IModel>(
+  public static compositeKey<T extends Model>(
     model: new () => T,
     obj: Partial<T>
   ): ICompositeKey<T> {
@@ -477,7 +478,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * @param model the class definition of the model you want the CompositeKey for
    * @param object the data which will be used to generate the Composite key from
    */
-  public static compositeKeyRef<T extends IModel>(
+  public static compositeKeyRef<T extends Model>(
     model: new () => T,
     /** either a partial model or just the `id` of the model if model is not a dynamic path */
     object: Partial<T> | string
@@ -521,7 +522,7 @@ export class Record<S extends ISdk, T extends IModel> extends FireModel<S, T> {
    * Note: it returns the name in PascalCase _not_
    * camelCase.
    */
-  public static modelName<T extends IModel>(model: new () => T) {
+  public static modelName<T extends Model>(model: new () => T) {
     const r = Record.create(model);
     return capitalize(r.modelName);
   }

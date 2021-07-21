@@ -1,10 +1,9 @@
 import { ISdk } from "@forest-fire/types";
 import { Record } from "~/core";
 import { FireModelError } from "~/errors";
-import { IModel } from "~/types";
 import { capitalize } from "~/util";
-
-export class MissingReciprocalInverse<S extends ISdk, T extends IModel> extends FireModelError {
+import { Model } from "~/models/Model";
+export class MissingReciprocalInverse<S extends ISdk, T extends Model> extends FireModelError {
   constructor(rec: Record<S, T>, property: keyof T & string) {
     super("", "firemodel/missing-reciprocal-inverse");
     const fkMeta = rec.getMetaForRelationship(property);

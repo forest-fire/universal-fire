@@ -13,8 +13,9 @@ import {
 import { DecoratorProblem } from "~/errors";
 import { ConstructorFor, Omit } from "common-types";
 import { propertyReflector } from "~/decorators";
+import { Model } from "~/models/Model";
 
-export function belongsTo<T extends IModel = IModel>(
+export function belongsTo<T extends Model = Model>(
   /**
    * either a _string_ representing the Model's class name
    * or a _constructor_ for the Model class.

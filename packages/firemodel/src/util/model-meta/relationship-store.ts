@@ -1,7 +1,8 @@
-import { IFmModelRelationshipMeta, IModel } from "@forest-fire/types";
 
+import { Model } from "~/models/Model";
 import { IDictionary } from "common-types";
 import { hashToArray } from "typed-conversions";
+import { IFmModelRelationshipMeta } from "~/types";
 
 export const relationshipsByModel: IDictionary<IDictionary<
   IFmModelRelationshipMeta
@@ -28,7 +29,7 @@ export function isRelationship<T extends {}>(IModelKlass: T) {
   };
 }
 
-export function getModelRelationship<T extends IModel>(IModel: T) {
+export function getModelRelationship<T extends Model>(IModel: T) {
   const relnsForIModel = getRelationships(IModel);
   const className = IModel.constructor.name;
 

@@ -21,11 +21,12 @@ import {
 } from "~/types";
 import { FireModelError, FireModelProxyError } from "~/errors";
 import { DefaultDbCache } from "../DefaultDbCache";
+import { Model } from "~/models/Model";
 
 /**
  * The base class which both `WatchList` and `WatchRecord` derive.
  */
-export class WatchBase<S extends ISdk, T extends IModel> {
+export class WatchBase<S extends ISdk, T extends Model> {
   protected _query: ISerializedQuery<S, T>;
   protected _modelConstructor: FmModelConstructor<T>;
   protected _eventType: IWatchEventClassification;

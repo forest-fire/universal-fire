@@ -1,11 +1,11 @@
 import { FireModelError } from "~/errors";
-import { IModel, isModelClass } from "~/types";
+import { isModelClass } from "~/types";
 import { Record } from "~/core";
 import { ISdk } from "universal-fire";
-
+import { Model } from "~/models/Model";
 export class FkDoesNotExist<
   S extends ISdk,
-  T extends IModel
+  T extends Model
   > extends FireModelError {
   constructor(pk: Record<S, T>, property: string, fkId: string) {
     // TODO: is this typing right for constructor?

@@ -3,13 +3,14 @@ import { FireModelError } from "~/errors";
 import { Record } from "~/core";
 import { capitalize } from "~/util";
 import { ISdk } from "@forest-fire/types";
+import { Model } from "~/models/Model";
 
 /**
  * Given a `Record` which defines all properties in it's
  * "dynamic segments" as well as an `id`; this function returns
  * an object representation of the composite key.
  */
-export function createCompositeKeyFromRecord<S extends ISdk, T extends IModel = IModel>(
+export function createCompositeKeyFromRecord<S extends ISdk, T extends Model = IModel>(
   rec: Record<S, T>
 ): ICompositeKey<T> {
   const model = rec.data;

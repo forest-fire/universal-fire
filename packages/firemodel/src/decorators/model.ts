@@ -15,8 +15,9 @@ import { getPushKeys, modelRegister } from "~/util";
 import { ConstructorFor, IDictionary } from "common-types";
 import { getDbIndexes } from "~/decorators";
 import { IModel, IFmModelMeta } from "~/types";
+import { Model } from "~/models/Model";
 
-export function model<T extends IModel>(options: IFmModelMeta<T> = {} as IFmModelMeta<T>) {
+export function model<T extends Model>(options: IFmModelMeta<T> = {} as IFmModelMeta<T>) {
   let isDirty = false;
 
   return function decorateModel<M extends IModel>(

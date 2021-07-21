@@ -19,10 +19,11 @@ import {
 import { Record, DefaultDbCache } from "~/core";
 import { IDatabaseSdk, ISdk, } from "@forest-fire/types";
 import { convertModelToModelClass } from "~/util/convertModelToModelClass";
+import { Model } from "~/models/Model";
 
 const defaultDispatch: IReduxDispatch = async (context: IReduxAction) => Promise.resolve(context);
 
-export class FireModel<S extends ISdk, T extends IModel> {
+export class FireModel<S extends ISdk, T extends Model> {
   public static get defaultDb() {
     const db = DefaultDbCache().get();
     return db as unknown as IDatabaseSdk<typeof db.sdk>
@@ -117,7 +118,7 @@ export class FireModel<S extends ISdk, T extends IModel> {
 
   public static auditLogs = "/auditing";
 
-  public static register<T extends IModel = IModel>(model: new () => T) {
+  public static register<T extends Model = Model>(model: new () => T) {
     modelRegister(model);
   }
 
@@ -125,7 +126,7 @@ export class FireModel<S extends ISdk, T extends IModel> {
     return listRegisteredModels();
   }
 
-  public static lookupModel<T extends IModel>(name: string) {
+  public static lookupModel<T extends Model>(name: string) {
     return modelRegistryLookup<T>(name);
   }
 

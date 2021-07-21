@@ -13,6 +13,7 @@ import { FireModelError } from "~/errors";
 import { IDictionary } from "common-types";
 import { IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
+import { Model } from "~/models/Model";
 
 /**
  * **watchDispatcher**
@@ -21,7 +22,7 @@ import { ISdk } from "@forest-fire/types";
  * event information (like the `key` and `dbPath`) to provide a rich
  * data environment for the `dispatch` function to operate with.
  */
-export const WatchDispatcher = <S extends ISdk, T extends IModel>(
+export const WatchDispatcher = <S extends ISdk, T extends Model>(
   /**
    * a base/generic redux dispatch function; typically provided
    * by the frontend state management framework

@@ -6,10 +6,10 @@ import {
   IModel,
 } from "~/types";
 import { addPropertyToModelMeta, addRelationshipToModelMeta } from "~/util";
-
+import { Model } from "~/models/Model";
 import { IDictionary } from "common-types";
 
-export const propertyDecorator = <T extends IModel>(
+export const propertyDecorator = <T extends Model>(
   nameValuePairs: IDictionary = {},
   /**
    * if you want to set the property being decorated's name

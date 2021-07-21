@@ -31,12 +31,12 @@ export type IModel<T extends Model = Model> = Omit<T, "META">;
 /**
  * Utility that converts an `IModel` type to the META key/value pair
  */
-export type ModelMeta<T extends IModel> = IFmModelMeta<T>;
+export type ModelMeta<T extends Model> = IFmModelMeta<T>;
 
 /**
  * The `IModel` interface _plus_ the META property
  */
-export type IModelClass<T extends IModel> = Omit<T, "META"> & { META: ModelMeta<T> };
+export type IModelClass<T extends Model> = Omit<T, "META"> & { META: ModelMeta<T> };
 
 /**
  * **ModelInput**
@@ -44,7 +44,7 @@ export type IModelClass<T extends IModel> = Omit<T, "META"> & { META: ModelMeta<
  * Typescript utility to reduce a given model `IModel<T>` to only the non-managed properties.
  * This means `id`, `lastUpdated`, and `META` are no longer allowed parameters.
  */
-export type ModelInput<T extends IModel> = Omit<T, ModelManagedProps>;
+export type ModelInput<T extends Model> = Omit<T, ModelManagedProps>;
 
 /**
  * **IDbModel**
@@ -53,7 +53,7 @@ export type ModelInput<T extends IModel> = Omit<T, ModelManagedProps>;
  * the database and therefore the `id`, `lastUpdated` and `createdAt` fields are _not_
  * optional.
  */
-export type IDbModel<T extends IModel> = T & Required<IModelManaged> & { META: ModelMeta<T> }
+export type IDbModel<T extends Model> = T & Required<IModelManaged> & { META: ModelMeta<T> }
 
 
 /**
@@ -61,7 +61,7 @@ export type IDbModel<T extends IModel> = T & Required<IModelManaged> & { META: M
  * should in most cases) then it will be recognized once passing this test as the interface
  * `IModelClass<T>` versus simply `IModel<T>`.
  */
-export function isModelClass<T extends IModel>(model: T): model is T & { META: ModelMeta<T> } {
+export function isModelClass<T extends Model>(model: T): model is T & { META: ModelMeta<T> } {
   return (model as any).META !== undefined;
 }
 

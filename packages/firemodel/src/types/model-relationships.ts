@@ -1,7 +1,7 @@
-import { IModel } from "~/types";
+import { Model } from "~/models/Model";
 
 export type IModelConstructor<
-  T extends IModel
+  T extends Model
   > = new () => T;
 
 /**
@@ -9,5 +9,5 @@ export type IModelConstructor<
  * to a `Model` subclass
  */
 export type IFnToModelConstructor<
-  T extends IModel
+  T extends Model
   > = () => IModelConstructor<T>;

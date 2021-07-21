@@ -1,9 +1,9 @@
-import { IFmModelPropertyMeta, IModel } from "~/types";
-
+import { IFmModelPropertyMeta } from "~/types";
+import { Model } from "~/models/Model";
 import { IDictionary } from "common-types";
 import { hashToArray } from "typed-conversions";
 
-export function isProperty<T extends {}>(modelKlass: T) {
+export function isProperty<T extends Model>(modelKlass: T) {
   return (prop: string) => {
     return getModelProperty(modelKlass)(prop) ? true : false;
   };
@@ -15,7 +15,7 @@ export const propertiesByModel: IDictionary<IDictionary<
 >> = {};
 
 /** allows the addition of meta information to be added to a model's properties */
-export function addPropertyToModelMeta<T extends IModel = IModel>(
+export function addPropertyToModelMeta<T extends Model = Model>(
   modelName: string,
   property: string,
   meta: IFmModelPropertyMeta<T>
@@ -25,11 +25,11 @@ export function addPropertyToModelMeta<T extends IModel = IModel>(
   }
 
   // TODO: investigate why we need to genericize to model (from <T>)
-  propertiesByModel[modelName][property] = meta as IFmModelPropertyMeta<IModel>;
+  propertiesByModel[modelName][property] = meta as IFmModelPropertyMeta<Model>;
 }
 
 /** lookup meta data for schema properties */
-export function getModelProperty<T extends IModel>(model: T) {
+export function getModelProperty<T extends Model>(model: T) {
   const className = model.constructor.name;
   const propsForModel = getProperties(model);
 
@@ -45,7 +45,7 @@ export function getModelProperty<T extends IModel>(model: T) {
  *
  * @param modelConstructor the schema object which is being looked up
  */
-export function getProperties<T extends IModel>(model: T) {
+export function getProperties<T extends Model>(model: T) {
   const modelName = model.constructor.name;
   const properties =
     hashToArray(propertiesByModel[modelName], "property") || [];

@@ -11,12 +11,13 @@ import {
 } from "@forest-fire/types";
 import { capitalize } from "~/util";
 import { ConstructorFor, epoch } from "common-types";
+import { Model } from "~/models/Model";
 
 /**
  * Provides a simple API for list based queries that resembles the Firemodel `List` API
  * but which works on the IndexDB using Dexie under the hood.
  */
-export class DexieList<T extends IModel> {
+export class DexieList<T extends Model> {
   constructor(
     private modelConstructor: ConstructorFor<T>,
     private table: Dexie.Table<T, any>,

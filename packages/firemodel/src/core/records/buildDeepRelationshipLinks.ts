@@ -1,15 +1,16 @@
 import { ISdk, } from "@forest-fire/types";
 import { IDictionary } from "common-types";
-import { ForeignKey, IModel } from "~/types";
+import { ForeignKey } from "~/types";
 import { Record } from "~/core";
 import { getModelMeta } from "~/util";
+import { Model } from "~/models/Model";
 
 /**
  * When creating a new record it is sometimes desirable to pass in
  * the "payload" of FK's instead of just the FK. This function facilitates
  * that.
  */
-export async function buildDeepRelationshipLinks<S extends ISdk, T extends IModel>(
+export async function buildDeepRelationshipLinks<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
   property: keyof T & string
 ) {
@@ -19,7 +20,7 @@ export async function buildDeepRelationshipLinks<S extends ISdk, T extends IMode
     : processBelongsTo(rec, property);
 }
 
-async function processHasMany<S extends ISdk, T extends IModel>(
+async function processHasMany<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
   property: keyof T & string
 ) {
@@ -55,7 +56,7 @@ async function processHasMany<S extends ISdk, T extends IModel>(
   return;
 }
 
-async function processBelongsTo<S extends ISdk, T extends IModel>(
+async function processBelongsTo<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
   property: keyof T & string
 ) {

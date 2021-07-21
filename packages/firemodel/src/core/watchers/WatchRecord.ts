@@ -5,9 +5,9 @@ import { FireModelError } from "~/errors";
 import { ISdk } from "@forest-fire/types";
 import { SerializedQuery } from "@forest-fire/serialized-query";
 import { WatchBase } from "./WatchBase";
-
-export class WatchRecord<S extends ISdk = ISdk, T extends IModel = IModel> extends WatchBase<S, T> {
-  public static record<T extends IModel>(
+import { Model } from "~/models/Model";
+export class WatchRecord<S extends ISdk = ISdk, T extends Model = IModel> extends WatchBase<S, T> {
+  public static record<T extends Model>(
     modelConstructor: new () => T,
     pk: PrimaryKey<T>,
     options: IModelOptions = {}

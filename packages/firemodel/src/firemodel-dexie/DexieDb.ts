@@ -15,6 +15,7 @@ import { capitalize } from "~/util";
 import { IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
 import { keys } from "native-dash";
+import { Model } from "~/models/Model";
 
 /**
  * Provides a simple API to convert to/work with **Dexie** models
@@ -248,7 +249,7 @@ export class DexieDb {
    *
    * @param model the `Model` in question
    */
-  public modelIsManagedByDexie<T extends IModel>(model: ConstructorFor<T>): boolean {
+  public modelIsManagedByDexie<T extends Model>(model: ConstructorFor<T>): boolean {
     const r = Record.create(model);
     return this.modelNames.includes(r.modelName);
   }
@@ -256,7 +257,7 @@ export class DexieDb {
   /**
    * Returns a typed **Dexie** `Table` object for a given model class
    */
-  public table<T extends IModel>(
+  public table<T extends Model>(
     model: ConstructorFor<T>
   ): Dexie.Table<T, PrimaryKey<T>> {
     const r = Record.create(model);
@@ -292,7 +293,7 @@ export class DexieDb {
    *
    * @param model the **Firemodel** model (aka, the constructor)
    */
-  public record<T extends IModel>(model: ConstructorFor<T>): DexieRecord<T> {
+  public record<T extends Model>(model: ConstructorFor<T>): DexieRecord<T> {
     const r = Record.create(model);
     if (!this.modelNames.includes(r.modelName)) {
       const isPlural = this.pluralNames.includes(r.modelName);
@@ -322,7 +323,7 @@ export class DexieDb {
    *
    * @param model the **Firemodel** `Model` name
    */
-  public list<T extends IModel>(model: ConstructorFor<T>): DexieList<T> {
+  public list<T extends Model>(model: ConstructorFor<T>): DexieList<T> {
     const r = Record.create(model);
     if (!this.isOpen()) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -341,7 +342,7 @@ export class DexieDb {
    * Returns the META for a given `Model` identified by
    * the model's _plural_ (checked first) or _singular_ name.
    */
-  public meta<T extends IModel = IModel>(name: string): IDexieModelMeta<T> {
+  public meta<T extends Model = IModel>(name: string): IDexieModelMeta<T> {
     return this._lookupMetaWithSingularOrPluralName(this._meta, name) as unknown as IDexieModelMeta<T>;
   }
 
@@ -351,7 +352,7 @@ export class DexieDb {
    * @param name either the _plural_ or _singular_ name of a model
    * managed by the `DexieModel` instance
    */
-  public modelConstructor<T extends IModel>(name: string): ConstructorFor<T> {
+  public modelConstructor<T extends Model>(name: string): ConstructorFor<T> {
     let CTOR = this._constructors[name];
     if (!CTOR) {
       const plural = this._singularToPlural[name];

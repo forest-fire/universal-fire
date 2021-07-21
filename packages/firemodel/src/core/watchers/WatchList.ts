@@ -11,9 +11,10 @@ import { FireModelError } from "~/errors";
 import { WatchBase } from "./WatchBase";
 import { epochWithMilliseconds } from "common-types";
 import { getAllPropertiesFromClassStructure } from "~/util";
+import { Model } from "~/models/Model";
 
-export class WatchList<S extends ISdk, T extends IModel> extends WatchBase<S, T> {
-  public static list<S extends ISdk, T extends IModel>(
+export class WatchList<S extends ISdk, T extends Model> extends WatchBase<S, T> {
+  public static list<S extends ISdk, T extends Model>(
     /**
      * The `Model` underlying the **List**
      */
@@ -305,8 +306,6 @@ export class WatchList<S extends ISdk, T extends IModel> extends WatchBase<S, T>
     }
     this._query = SerializedQuery.create(this.db, this._query.path)
       .orderByChild(property)
-      // TODO: fix typing issue here.
-      // @ts-ignore
       .where(operation, val) as ISerializedQuery<S, T>;
     return this;
   }

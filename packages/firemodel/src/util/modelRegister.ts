@@ -1,11 +1,8 @@
-import { IModel } from "~/types";
-
-// TODO: this is necessitated by the use of `Record` in some error classes
-// which sets up a whole dependency chain
+import { Model } from "~/models/Model";
 import { FireModelError } from "~/errors/FireModelError";
 import { ConstructorFor, IDictionary } from "common-types";
 
-const registeredModels: IDictionary<ConstructorFor<IModel>> = {};
+const registeredModels: IDictionary<ConstructorFor<Model>> = {};
 
 
 
@@ -15,7 +12,7 @@ const registeredModels: IDictionary<ConstructorFor<IModel>> = {};
  *
  * @param model a class constructor derived from `Model`
  */
-export function modelRegister(...models: ConstructorFor<IModel>[]): void {
+export function modelRegister(...models: ConstructorFor<Model>[]): void {
   models.forEach((model) => {
     if (!model) {
       throw new FireModelError(
@@ -42,7 +39,7 @@ export function listRegisteredModels(): string[] {
   return Object.keys(registeredModels);
 }
 
-export function modelRegistryLookup<T extends IModel>(name: string): ConstructorFor<T> {
+export function modelRegistryLookup<T extends Model>(name: string): ConstructorFor<T> {
   const model = registeredModels[name];
   if (!model) {
     throw new FireModelError(
@@ -61,7 +58,7 @@ export function modelRegistryLookup<T extends IModel>(name: string): Constructor
  * that occur when you try to pass in class constructors which depend
  * on one another.
  */
-export const modelNameLookup = <T extends IModel>(name: string) => (): ConstructorFor<T> => {
+export const modelNameLookup = <T extends Model>(name: string) => (): ConstructorFor<T> => {
   return modelRegistryLookup<T>(name);
 };
 
@@ -73,11 +70,11 @@ export const modelNameLookup = <T extends IModel>(name: string) => (): Construct
  * The advantage here is that the external model does not need to be
  * "registered" separately whereas with a string name it would have to be.
  */
-export const modelConstructorLookup = <T extends IModel>(
+export const modelConstructorLookup = <T extends Model>(
   constructor: ConstructorFor<T> | (() => ConstructorFor<T>)
 ): () => ConstructorFor<T> => isConstructable(constructor) ? () => constructor : constructor;
 
-export function isConstructable<T extends IModel>(fn: ConstructorFor<T> | (() => ConstructorFor<T>)): fn is ConstructorFor<T> {
+export function isConstructable<T extends Model>(fn: ConstructorFor<T> | (() => ConstructorFor<T>)): fn is ConstructorFor<T> {
   try {
     new (fn as ConstructorFor<T>)();
     return true;

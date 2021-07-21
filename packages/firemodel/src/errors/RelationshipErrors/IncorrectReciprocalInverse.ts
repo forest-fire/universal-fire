@@ -1,12 +1,11 @@
 import { FireModelError, MissingReciprocalInverse } from "~/errors";
 import { Record } from "~/core";
-import { IModel } from "~/types";
 import { capitalize } from "~/util";
 import { ISdk } from "@forest-fire/types";
-
+import { Model } from "~/models/Model";
 export class IncorrectReciprocalInverse<
   S extends ISdk,
-  T extends IModel
+  T extends Model
   > extends FireModelError {
   constructor(rec: Record<S, T>, property: keyof T & string) {
     super("", "firemodel/missing-reciprocal-inverse");

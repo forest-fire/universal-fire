@@ -10,13 +10,14 @@ import { capitalize } from "~/util";
 import { key as fbKey } from "firebase-key";
 import { IModel } from "~/types";
 import { IDictionary } from "brilliant-errors";
+import { Model } from "~/models/Model";
 
 /**
  * Provides a simple API to do CRUD operations
  * on Dexie/IndexDB which resembles the Firemodel
  * API.
  */
-export class DexieRecord<T extends IModel> {
+export class DexieRecord<T extends Model> {
   constructor(
     private modelConstructor: ConstructorFor<T>,
     private table: Table<any, any>,

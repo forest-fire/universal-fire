@@ -20,13 +20,14 @@ import {
 import { DefaultDbCache, FireModel } from "~/core";
 import { FireModelError } from "~/errors";
 import { firstKey } from "~/util";
+import { Model } from "~/models/Model";
 
 /**
  * A static library for interacting with _watchers_. It
  * provides the entry point into the watcher API and then
  * hands off to either `WatchList` or `WatchRecord`.
  */
-export class Watch<S extends ISdk, T extends IModel = IModel> {
+export class Watch {
   /**
    * Sets the default database for all Firemodel
    * classes such as `FireModel`, `Record`, and `List`
@@ -66,7 +67,7 @@ export class Watch<S extends ISdk, T extends IModel = IModel> {
    *
    * @param hashCode the unique hashcode given for each watcher
    */
-  public static lookup<S extends ISdk = ISdk, T extends IModel = IModel>(hashCode: string): IWatcherEventContext<S, T> {
+  public static lookup<S extends ISdk = ISdk, T extends Model = Model>(hashCode: string): IWatcherEventContext<S, T> {
     const pool = getWatcherPool<S, T>();
     const ctx = pool[hashCode];
     if (!ctx) {
@@ -157,7 +158,7 @@ export class Watch<S extends ISdk, T extends IModel = IModel> {
    * the composite key, or an object representation of the composite
    * key.
    */
-  public static record<S extends ISdk, T extends IModel>(
+  public static record<S extends ISdk, T extends Model>(
     modelConstructor: new () => T,
     pk: PrimaryKey<T>,
     options: IModelOptions = {}
@@ -165,7 +166,7 @@ export class Watch<S extends ISdk, T extends IModel = IModel> {
     return WatchRecord.record(modelConstructor, pk, options) as WatchRecord<S, T>;
   }
 
-  public static list<S extends ISdk, T extends IModel>(
+  public static list<S extends ISdk, T extends Model>(
     /**
      * The **Model** subType which this list watcher will watch
      */

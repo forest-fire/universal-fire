@@ -6,16 +6,16 @@ import { IFmHasId } from "./general";
 import {
   ModelMeta, IFmModelPropertyMeta,
   IFmModelRelationshipMeta,
-  IModel,
   IFmFunctionToConstructor
 } from "~/types";
+import { Model } from "~/models/Model";
 
 /**
  * A simplified interface that represents a `Record`'s shape
  * in reasonable fidelity so that functions that only need this
  * fidelity can use this internally.
  */
-export interface IRecord<S extends ISdk, T extends IModel> {
+export interface IRecord<S extends ISdk, T extends Model> {
   get META(): ModelMeta<T>;
   get<K extends keyof T>(prop: K): Readonly<T[K]>;
   set<K extends keyof T = keyof T>(prop: K, val: T[K], silent?: boolean): void;
@@ -108,7 +108,7 @@ export type IIdWithDynamicPrefix = IDictionary<number | string> & {
 
 export type ICompositeKeyGeneric = IDictionary<string | number | boolean>;
 
-export type ICompositeKey<T extends IModel> = IFmHasId<T> & Partial<T>;
+export type ICompositeKey<T extends Model> = IFmHasId<T> & Partial<T>;
 
 /**
  * A **Composite Key** represented in string form
@@ -127,15 +127,15 @@ export function isCompositeString(input: unknown): input is ICompositeKeyString 
  * A Foreign Key (FK) reference where both object and string notation of simple
  * or composite keys is valid.
  */
-export type ForeignKey<T extends IModel> = fk | ICompositeKeyString | ICompositeKey<T>;
+export type ForeignKey<T extends Model> = fk | ICompositeKeyString | ICompositeKey<T>;
 
 /**
  * The **Primary Key** for a model; represented either as a simple string or as
  * a `ICompositeKey`.
  */
-export type PrimaryKey<T extends IModel> = pk | ICompositeKeyString | ICompositeKey<T>;
+export type PrimaryKey<T extends Model> = pk | ICompositeKeyString | ICompositeKey<T>;
 
-export function isCompositeKey<T extends IModel>(ref: unknown): ref is ICompositeKey<T> {
+export function isCompositeKey<T extends Model>(ref: unknown): ref is ICompositeKey<T> {
   return typeof ref === "object" && typeof (ref as IDictionary)?.id === "string";
 }
 

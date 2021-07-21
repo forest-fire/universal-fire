@@ -2,8 +2,8 @@ import type { IDatabaseSdk, ISdk } from "@forest-fire/types";
 import { IDictionary, datetime, ConstructorFor } from "common-types";
 import { IModel, PrimaryKey } from "~/types";
 import type { FireModelError } from "~/errors";
-
-export interface IUnderlyingError<T extends IModel> {
+import { Model } from "~/models/Model";
+export interface IUnderlyingError<T extends Model> {
   /** an identifying characteristic of the individual error */
   id: string | PrimaryKey<T>;
   /** the error itself */
@@ -11,9 +11,9 @@ export interface IUnderlyingError<T extends IModel> {
 }
 
 /** A property of a record */
-export type PropertyOf<T extends IModel> = keyof T & string;
+export type PropertyOf<T extends Model> = keyof T & string;
 
-export type FmModelConstructor<T extends IModel> = ConstructorFor<T>;
+export type FmModelConstructor<T extends Model> = ConstructorFor<T>;
 
 /** _options_ allowed to modify the behavior/configuration of a `Model` */
 export interface IModelOptions<T extends ISdk = ISdk> {
@@ -34,7 +34,7 @@ export enum SortOrder {
  * provides options to configure `Watch` triggered listeners
  * on Firebase databases.
  */
-export interface IWatchOptions<T extends IModel> extends Omit<IListOptions<ISdk, T>, "paginate"> {
+export interface IWatchOptions<T extends Model> extends Omit<IListOptions<ISdk, T>, "paginate"> {
   /**
    * Filters the results returned by the watched query prior to _dispatch_
    * which allows a way to only send a subset of records to the state management
@@ -60,7 +60,7 @@ export interface IWatchOptions<T extends IModel> extends Omit<IListOptions<ISdk,
  *
  * provides options to configure `List` based queries
  */
-export interface IListOptions<S extends ISdk, T extends IModel>
+export interface IListOptions<S extends ISdk, T extends Model>
   extends IModelOptions {
   offsets?: Partial<T>;
   /**
@@ -137,7 +137,7 @@ export interface IListOptions<S extends ISdk, T extends IModel>
   paginate?: number;
 }
 
-export type IListQueryOptions<S extends ISdk, T extends IModel> = Omit<
+export type IListQueryOptions<S extends ISdk, T extends Model> = Omit<
   IListOptions<S, T>,
   "orderBy" | "limitToFirst" | "limitToLast" | "startAt" | "endAt"
 >;
@@ -216,7 +216,7 @@ export interface IFmPathValuePair {
 /**
  * A record which _does_ have the `id` property set
  */
-export type IFmHasId<T extends IModel = IModel> = {
+export type IFmHasId<T extends Model = IModel> = {
   id: Required<T["id"]>;
 }
 

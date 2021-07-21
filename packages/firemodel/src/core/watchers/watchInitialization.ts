@@ -2,6 +2,7 @@ import { IDictionary, wait } from "common-types";
 
 import { IWatcherEventContext, IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
+import { Model } from "~/models/Model";
 
 /**
  * indicates which watcherId's have returned their initial
@@ -25,7 +26,7 @@ export const hasInitialized = (
  * data from the watcher. This indicates that the frontend
  * and Firebase DB are now in sync.
  */
-export async function waitForInitialization<S extends ISdk, T extends IModel>(
+export async function waitForInitialization<S extends ISdk, T extends Model>(
   watcher: IWatcherEventContext<S, T>,
   timeout = 750
 ): Promise<void> {

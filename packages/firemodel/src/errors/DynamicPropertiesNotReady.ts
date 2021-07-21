@@ -1,10 +1,10 @@
 import { IModel, IRecord } from "~/types";
-
 import { FireModelError } from "~/errors";
 import { ISdk } from "@forest-fire/types";
+import { Model } from "~/models/Model";
 
 export class DynamicPropertiesNotReady<
-  T extends IModel
+  T extends Model
   > extends FireModelError {
   constructor(rec: IRecord<ISdk, T>, message?: string) {
     message = message

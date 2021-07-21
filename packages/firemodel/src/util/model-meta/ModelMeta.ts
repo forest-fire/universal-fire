@@ -3,6 +3,7 @@ import { IDictionary } from "common-types";
 import { keys } from "native-dash";
 import { ISdk } from "@forest-fire/types";
 import { IFmModelMeta, IModel, } from "~/types";
+import { Model } from "~/models/Model";
 
 const meta: IDictionary<IFmModelMeta<IModel>> = {};
 
@@ -22,7 +23,7 @@ export function addModelMeta(
  *
  * @param rec a model or record which exposes META property
  */
-export function getModelMeta<S extends ISdk, T extends IModel>(rec: Record<S, T>): IFmModelMeta<T> {
+export function getModelMeta<S extends ISdk, T extends Model>(rec: Record<S, T>): IFmModelMeta<T> {
   const localMeta = rec.META;
   const modelMeta = keys(meta).includes(rec.modelName) ? meta[rec.modelName] : {};
   return localMeta && localMeta.properties ? localMeta : modelMeta as unknown as IFmModelMeta<T>;
