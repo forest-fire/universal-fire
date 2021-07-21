@@ -16,7 +16,7 @@ export class UnknownRelationshipProblem<
     whileDoing?: string
   ) {
     const message = `An unexpected error occurred while working with a "${operation}" operation on ${rec.modelName
-      }::${property}. ${whileDoing
+      }::${String(property)}. ${whileDoing
         ? `This error was encounted while working on ${whileDoing}. `
         : ""
       }The error reported was [${err.name}]: ${err.message}`;

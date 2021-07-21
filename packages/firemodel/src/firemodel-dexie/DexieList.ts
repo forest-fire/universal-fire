@@ -2,7 +2,7 @@ import Dexie, { IndexableType } from "dexie";
 import {
   IDexieListOptions,
   IDexieModelMeta,
-  PropType, IModel
+  PropType
 } from "~/types";
 
 import { DexieError } from "~/errors";
@@ -49,17 +49,17 @@ export class DexieList<T extends Model> {
         console.info(
           `No records for model ${capitalize(this.meta.modelName)} found!`
         );
-        return [];
+        return [] as T[];
       } else {
         throw new DexieError(
           `Problem with list(${capitalize(
             this.meta.modelName
-          )}).all(${JSON.stringify(options)}): ${e.message}`,
-          `dexie/${e.code || e.name || "list.all"}`
+          )}).all(${JSON.stringify(options)}): ${String(e.message)}`,
+          `dexie/${String(e.code || e.name || "list.all")}`
         );
       }
     });
-    return results || [];
+    return results;
   }
 
   /**
@@ -103,20 +103,20 @@ export class DexieList<T extends Model> {
         throw new DexieError(
           `list.where("${prop}", ${JSON.stringify(value)}, ${JSON.stringify(
             options
-          )}) failed to execute: ${e.message}`,
-          `dexie/${e.code || e.name || "list.where"}`
+          )}) failed to execute: ${String(e.message)}`,
+          `dexie/${String(e.code || e.name || "list.where")}`
         );
       }
     });
 
-    return results || [];
+    return results;
   }
 
   /**
    * Get the "_x_" most recent records of a given type (based on the
    * `lastUpdated` property).
    */
-  async recent(limit: number, skip?: number) {
+  async recent(limit: number, skip?: number): Promise<T[]> {
     const c = skip
       ? this.table.orderBy("lastUpdated").reverse().limit(limit).offset(skip)
       : this.table.orderBy("lastUpdated").reverse().limit(limit);
@@ -151,8 +151,8 @@ export class DexieList<T extends Model> {
       } else {
         throw new DexieError(
           `list.last(${limit}${skip ? `, skip: ${skip}` : ""
-          }) failed to execute: ${e.message}`,
-          `dexie/${e.code || e.name || "list.last"}`
+          }) failed to execute: ${String(e.message)}`,
+          `dexie/${String(e.code || e.name || "list.last")}`
         );
       }
     });
@@ -175,8 +175,8 @@ export class DexieList<T extends Model> {
       } else {
         throw new DexieError(
           `list.first(${limit}${skip ? `, skip: ${skip}` : ""
-          }) failed to execute: ${e.message}`,
-          `dexie/${e.code || e.name || "list.first"}`
+          }) failed to execute: ${String(e.message)}`,
+          `dexie/${String(e.code || e.name || "list.first")}`
         );
       }
     });

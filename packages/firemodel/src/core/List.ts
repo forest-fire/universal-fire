@@ -540,7 +540,6 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
           "errors-in-list-ids"
         );
       }
-    } else {
     }
 
     const obj = new List(model);
@@ -556,11 +555,11 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * **Note:** the optional second parameter lets you pass in any
    * dynamic path segments if that is needed for the given model.
    */
-  public static dbPath<S extends ISdk, T extends Model>(
+  public static dbPath<T extends Model>(
     model: ConstructorFor<T>,
-    offsets?: Partial<T>
-  ) {
-    const obj = offsets ? List.create(model, { offsets }) : List.create(model);
+    offsets?: IModel<T>
+  ): string {
+    const obj = offsets ? List.create<T>(model, { offsets }) : List.create<T>(model);
 
     return obj.dbPath;
   }

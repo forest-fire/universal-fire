@@ -127,13 +127,13 @@ export function isCompositeString(input: unknown): input is ICompositeKeyString 
  * A Foreign Key (FK) reference where both object and string notation of simple
  * or composite keys is valid.
  */
-export type ForeignKey<T extends Model> = fk | ICompositeKeyString | ICompositeKey<T>;
+export type ForeignKey<T extends Model = Model> = fk | ICompositeKeyString | ICompositeKey<T>;
 
 /**
  * The **Primary Key** for a model; represented either as a simple string or as
  * a `ICompositeKey`.
  */
-export type PrimaryKey<T extends Model> = pk | ICompositeKeyString | ICompositeKey<T>;
+export type PrimaryKey<T extends Model = Model> = pk | ICompositeKeyString | ICompositeKey<T>;
 
 export function isCompositeKey<T extends Model>(ref: unknown): ref is ICompositeKey<T> {
   return typeof ref === "object" && typeof (ref as IDictionary)?.id === "string";

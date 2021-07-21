@@ -10,7 +10,7 @@ import { Model } from "~/models/Model";
  * "dynamic segments" as well as an `id`; this function returns
  * an object representation of the composite key.
  */
-export function createCompositeKeyFromRecord<S extends ISdk, T extends Model = IModel>(
+export function createCompositeKeyFromRecord<S extends ISdk, T extends Model = Model>(
   rec: Record<S, T>
 ): ICompositeKey<T> {
   const model = rec.data;

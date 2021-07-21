@@ -6,7 +6,7 @@ import { ISdk } from "@forest-fire/types";
 import { SerializedQuery } from "@forest-fire/serialized-query";
 import { WatchBase } from "./WatchBase";
 import { Model } from "~/models/Model";
-export class WatchRecord<S extends ISdk = ISdk, T extends Model = IModel> extends WatchBase<S, T> {
+export class WatchRecord<S extends ISdk = ISdk, T extends Model = Model> extends WatchBase<S, T> {
   public static record<T extends Model>(
     modelConstructor: new () => T,
     pk: PrimaryKey<T>,

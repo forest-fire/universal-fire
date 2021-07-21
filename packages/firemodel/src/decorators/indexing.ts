@@ -1,9 +1,10 @@
 import "reflect-metadata";
 
-import { IDictionary } from "common-types";
+import { ConstructorFor, IDictionary } from "common-types";
 import { IModelIndexMeta } from "~/types";
 import { hashToArray } from "typed-conversions";
 import { propertyReflector } from "~/decorators";
+import { Model } from "~/models";
 
 /** DB Indexes accumlated by index decorators */
 export const indexesForModel: IDictionary<IDictionary<IModelIndexMeta>> = {};
@@ -11,7 +12,7 @@ export const indexesForModel: IDictionary<IDictionary<IModelIndexMeta>> = {};
 /**
  * Gets all the db indexes for a given model
  */
-export function getDbIndexes<T>(modelKlass: object): IModelIndexMeta[] {
+export function getDbIndexes<T extends Model>(modelKlass: ConstructorFor<T>): IModelIndexMeta[] {
   const modelName = modelKlass.constructor.name;
 
   return modelName === "Model"

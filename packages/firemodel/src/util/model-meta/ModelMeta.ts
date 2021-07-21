@@ -5,11 +5,11 @@ import { ISdk } from "@forest-fire/types";
 import { IFmModelMeta, IModel, } from "~/types";
 import { Model } from "~/models/Model";
 
-const meta: IDictionary<IFmModelMeta<IModel>> = {};
+const meta: IDictionary<IFmModelMeta<any>> = {};
 
 export function addModelMeta(
   modelName: string,
-  props: IFmModelMeta<IModel>
+  props: IFmModelMeta<any>
 ): void {
   meta[modelName] = props;
 }

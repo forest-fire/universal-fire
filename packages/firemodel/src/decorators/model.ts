@@ -14,13 +14,13 @@ import { getPushKeys, modelRegister } from "~/util";
 
 import { ConstructorFor, IDictionary } from "common-types";
 import { getDbIndexes } from "~/decorators";
-import { IModel, IFmModelMeta } from "~/types";
+import { IFmModelMeta } from "~/types";
 import { Model } from "~/models/Model";
 
 export function model<T extends Model>(options: IFmModelMeta<T> = {} as IFmModelMeta<T>) {
   let isDirty = false;
 
-  return function decorateModel<M extends IModel>(
+  return function decorateModel<M extends Model>(
     target: ConstructorFor<M>
   ) {
     // Function to add META to the model
@@ -43,7 +43,7 @@ export function model<T extends Model>(options: IFmModelMeta<T> = {} as IFmModel
         options.audit = false;
       }
 
-      const meta: IFmModelMeta<unknown> = {
+      const meta: IFmModelMeta<M> = {
         ...options,
         ...{ isProperty: isProperty(instance) },
         ...{ property: getModelProperty(instance) },
@@ -79,7 +79,7 @@ export function model<T extends Model>(options: IFmModelMeta<T> = {} as IFmModel
       addModelMeta(target.constructor.name.toLowerCase(), meta);
 
       Object.defineProperty(target.prototype, "META", {
-        get(): IFmModelMeta<unknown> {
+        get(): IFmModelMeta<M> {
           return meta;
         },
         set(prop: IDictionary) {

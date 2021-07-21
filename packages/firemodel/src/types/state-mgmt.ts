@@ -85,7 +85,7 @@ export type IFmServerOrLocalEvent<T extends Model> =
   | IFmLocalEvent<T>
   | IFmWatcherEvent<T>;
 
-export interface IFmWatcherEvent<T extends Model = IModel> {
+export interface IFmWatcherEvent<T extends Model = Model> {
   type: FmEvents;
   kind: "watcher";
   key: string;
@@ -135,7 +135,7 @@ export interface IFmLocalEventBase<T> {
  */
 export interface IFmLocalRelationshipEvent<
   F extends IModel = IModel,
-  T extends Model = IModel
+  T extends Model = Model
   > extends IFmLocalEventBase<F> {
   kind: "relationship";
   operation: IFmRelationshipOperation;
@@ -178,7 +178,7 @@ export interface IFmLocalRelationshipEvent<
 /**
  * Core event properties of a `Record` based change in **Firemodel**
  */
-export interface IFmLocalRecordEvent<T extends Model = IModel>
+export interface IFmLocalRecordEvent<T extends Model = Model>
   extends IFmLocalEventBase<T> {
   kind: "record";
   operation: IFmCrudOperations;
@@ -226,7 +226,7 @@ export type IFmLocalEvent<T extends Model> =
   | IFmLocalRecordEvent<T>
   | IFmLocalRelationshipEvent<T>;
 
-export interface IWatcherEventContextBase<S extends ISdk, T extends Model = IModel>
+export interface IWatcherEventContextBase<S extends ISdk, T extends Model = Model>
   extends IFmRecordMeta<T> {
   watcherId: string;
   /** if defined, pass along the string name off the watcher */
@@ -261,7 +261,7 @@ export interface IWatcherEventContextBase<S extends ISdk, T extends Model = IMod
  * When watching a "list-of-records" you are really watching
  * a basket/array of underlying record watchers.
  */
-export interface IWatcherEventContextListofRecords<S extends ISdk, T extends Model = IModel>
+export interface IWatcherEventContextListofRecords<S extends ISdk, T extends Model = Model>
   extends IWatcherEventContextBase<S, T> {
   watcherSource: "list-of-records";
   /**
@@ -272,7 +272,7 @@ export interface IWatcherEventContextListofRecords<S extends ISdk, T extends Mod
   eventFamily: "child";
 }
 
-export interface IWatcherEventContextList<S extends ISdk, T extends Model = IModel>
+export interface IWatcherEventContextList<S extends ISdk, T extends Model = Model>
   extends IWatcherEventContextBase<S, T> {
   watcherSource: "list";
   /**
@@ -282,7 +282,7 @@ export interface IWatcherEventContextList<S extends ISdk, T extends Model = IMod
   eventFamily: "child";
 }
 
-export interface IWatcherEventContextRecord<S extends ISdk, T extends Model = IModel>
+export interface IWatcherEventContextRecord<S extends ISdk, T extends Model = Model>
   extends IWatcherEventContextBase<S, T> {
   watcherSource: "record";
   /**
@@ -296,7 +296,7 @@ export interface IWatcherEventContextRecord<S extends ISdk, T extends Model = IM
  * The meta information provided when a watcher is started;
  * it is also added to events when they have watcher context.
  */
-export type IWatcherEventContext<S extends ISdk, T extends Model = IModel> =
+export type IWatcherEventContext<S extends ISdk, T extends Model = Model> =
   | IWatcherEventContextList<S, T>
   | IWatcherEventContextRecord<S, T>
   | IWatcherEventContextListofRecords<S, T>;

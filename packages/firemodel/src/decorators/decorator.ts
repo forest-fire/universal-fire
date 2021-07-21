@@ -31,7 +31,7 @@ export const propertyDecorator = <T extends Model>(
   }
 
   if (nameValuePairs.isRelationship) {
-    const meta: IFmModelRelationshipMeta<T> = {
+    const meta: IFmModelRelationshipMeta = {
       ...Reflect.getMetadata(key, target),
       ...{ type: reflect.name },
       ...nameValuePairs,

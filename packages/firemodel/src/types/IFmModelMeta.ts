@@ -1,3 +1,4 @@
+import { Model } from "~/models/Model";
 import { IFmModelRelationshipMeta, IFmModelPropertyMeta, IModelIndexMeta, IModel } from "./index";
 
 /**
@@ -7,7 +8,7 @@ import { IFmModelRelationshipMeta, IFmModelPropertyMeta, IModelIndexMeta, IModel
  * passed in as part of the `@model()` decorator call in the model 
  * definition
  */
-export interface IFmModelMeta<TModel extends IModel> {
+export interface IFmModelMeta<TModel extends Model> {
   /** Optionally specify a root path to store this schema under */
   dbOffset?: string;
   /** Optionally specify an explicit string for the plural name */
@@ -49,18 +50,18 @@ export interface IFmModelMeta<TModel extends IModel> {
    */
   localModelName?: string;
   /** provides a boolean flag on whether the stated name is a property */
-  isProperty?: (prop: keyof TModel & string) => boolean;
+  isProperty?: (prop: keyof IModel<TModel> & string) => boolean;
   /** a function to lookup the meta properties of a given property */
-  property?: (prop: keyof TModel & string) => IFmModelPropertyMeta<TModel>;
+  property?: (prop: keyof IModel<TModel> & string) => IFmModelPropertyMeta<TModel>;
   /** provides a boolean flag on whether the stated name is a property */
-  isRelationship?: (prop: keyof TModel & string) => boolean;
+  isRelationship?: (prop: keyof IModel<TModel> & string) => boolean;
   /** a function to lookup the meta properties of a given relationship */
   relationship?: (prop: string) => IFmModelRelationshipMeta<any>;
   audit?: boolean | "server";
   /** A list of all properties and associated meta-data for the given schema */
   properties?: Array<IFmModelPropertyMeta<TModel>>;
   /** A list of all relationships and associated meta-data for the given schema */
-  relationships?: Array<IFmModelRelationshipMeta<TModel, IModel>>;
+  relationships?: Array<IFmModelRelationshipMeta<TModel>>;
   /** A list of properties which should be pushed using firebase push() */
   pushKeys?: string[];
   /** indicates whether this property has been changed on client but not yet accepted by server */

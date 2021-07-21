@@ -1,30 +1,29 @@
 import { IAuditChange } from "~/types";
 import { IDictionary } from "common-types";
-import { isModelClass } from "~/types";
 import { Model } from "~/models/Model";
 
-export function normalized(...args: string[]) {
+export function normalized(...args: string[]): string[] {
   return args
     .filter((a) => a)
-    .map((a) => a.replace(/$[\.\/]/, "").replace(/[\.\/]^/, ""))
+    .map((a) => a.replace(/$[./]/, "").replace(/[./]^/, ""))
     .map((a) => a.replace(/\./g, "/"));
 }
 
-export function slashNotation(...args: string[]) {
+export function slashNotation(...args: string[]): string {
   return normalized(...args).join("/");
 }
 
-export function firstKey<T extends IDictionary = IDictionary>(thingy: T) {
+export function firstKey<T extends IDictionary = IDictionary>(thingy: T): string {
   return Object.keys(thingy)[0];
 }
 
-export function dotNotation(...args: string[]) {
+export function dotNotation(...args: string[]): string {
   return normalized(...args)
     .join(".")
     .replace("/", ".");
 }
 
-export function updateToAuditChanges<T = any>(
+export function updateToAuditChanges<T>(
   changed: IDictionary,
   prior: IDictionary
 ): IAuditChange[] {
@@ -47,16 +46,12 @@ export function updateToAuditChanges<T = any>(
 }
 
 export function withoutMetaOrPrivate<T extends Model>(model: T): T {
-  if (isModelClass(model)) {
-    delete model.META;
-  }
-  if (model) {
-    Object.keys((key: keyof T & string) => {
-      if (key.slice(0, 1) === "_") {
-        delete model[key];
-      }
-    });
-  }
+  delete model.META;
+  Object.keys((key: keyof T & string) => {
+    if (key.slice(0, 1) === "_") {
+      delete model[key];
+    }
+  });
   return model;
 }
 

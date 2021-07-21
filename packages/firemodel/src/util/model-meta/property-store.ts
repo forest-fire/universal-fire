@@ -4,14 +4,14 @@ import { IDictionary } from "common-types";
 import { hashToArray } from "typed-conversions";
 
 export function isProperty<T extends Model>(modelKlass: T) {
-  return (prop: string) => {
+  return (prop: string): boolean => {
     return getModelProperty(modelKlass)(prop) ? true : false;
   };
 }
 
 /** Properties accumlated by propertyDecorators  */
 export const propertiesByModel: IDictionary<IDictionary<
-  IFmModelPropertyMeta
+  IFmModelPropertyMeta<any>
 >> = {};
 
 /** allows the addition of meta information to be added to a model's properties */
@@ -19,21 +19,19 @@ export function addPropertyToModelMeta<T extends Model = Model>(
   modelName: string,
   property: string,
   meta: IFmModelPropertyMeta<T>
-) {
+): void {
   if (!propertiesByModel[modelName]) {
     propertiesByModel[modelName] = {};
   }
 
-  // TODO: investigate why we need to genericize to model (from <T>)
-  propertiesByModel[modelName][property] = meta as IFmModelPropertyMeta<Model>;
+  propertiesByModel[modelName][property] = meta;
 }
 
 /** lookup meta data for schema properties */
-export function getModelProperty<T extends Model>(model: T) {
-  const className = model.constructor.name;
+export function getModelProperty<T extends Model>(model: T): (prop: string) => IFmModelPropertyMeta<T> {
   const propsForModel = getProperties(model);
 
-  return (prop: string) => {
+  return (prop) => {
     return propsForModel.find((value) => {
       return value.property === prop;
     });
@@ -45,7 +43,7 @@ export function getModelProperty<T extends Model>(model: T) {
  *
  * @param modelConstructor the schema object which is being looked up
  */
-export function getProperties<T extends Model>(model: T) {
+export function getProperties<T extends Model>(model: T): IFmModelPropertyMeta<T>[] {
   const modelName = model.constructor.name;
   const properties =
     hashToArray(propertiesByModel[modelName], "property") || [];
@@ -62,5 +60,5 @@ export function getProperties<T extends Model>(model: T) {
     parent = Object.getPrototypeOf(subClass.constructor);
   }
 
-  return properties;
+  return properties as IFmModelPropertyMeta<T>[];
 }

@@ -13,7 +13,7 @@ import { Model } from "~/models/Model";
 export async function buildDeepRelationshipLinks<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
   property: keyof T & string
-) {
+): Promise<void> {
   const meta = getModelMeta(rec).property(property);
   return meta.relType === "hasMany"
     ? processHasMany(rec, property)
@@ -26,7 +26,6 @@ async function processHasMany<S extends ISdk, T extends Model>(
 ) {
   const meta = getModelMeta(rec).property(property);
   const fks: IDictionary = rec.get(property);
-  const promises = [];
   for (const key of Object.keys(fks)) {
     const fk = fks[key as keyof typeof fks] as true | IDictionary;
     if (fk !== true) {
@@ -59,12 +58,12 @@ async function processHasMany<S extends ISdk, T extends Model>(
 async function processBelongsTo<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
   property: keyof T & string
-) {
+): Promise<void> {
   const fk: ForeignKey<T> = rec.get(property) as any;
   const meta = getModelMeta(rec).property(property);
 
   if (fk && typeof fk === "object") {
-    const fkRecord = Record.add(meta.fkConstructor(), fk, {
+    await Record.add(meta.fkConstructor(), fk, {
       setDeepRelationships: true,
     });
   }

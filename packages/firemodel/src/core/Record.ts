@@ -30,7 +30,7 @@ import {
   PropertyOf,
   PrimaryKey,
   isCompositeString,
-  IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel,
+  IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel, ModelInput, IFmLocalEvent,
 } from "~/types";
 import {
   IDictionary,
@@ -54,11 +54,10 @@ import {
   compareHashes,
   getModelMeta,
   isHasManyRelationship,
-  pathJoin,
   withoutMetaOrPrivate,
 } from "~/util";
 
-import { keys } from "native-dash";
+import { keys, pathJoin } from "native-dash";
 
 import { pluralize } from "native-dash";
 import { UnwatchedLocalEvent } from "~/state-mgmt";
@@ -93,7 +92,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * An array of "dynamic properties" that are derived fom the "dbOffset" to
    * produce the "dbPath". Note: this does NOT include the `id` property.
    */
-  public static dynamicPathProperties<T extends Model = IModel>(
+  public static dynamicPathProperties<T extends Model = Model>(
     /**
      * the **Model** who's properties are being interogated
      */
@@ -130,7 +129,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    */
   public static local<T extends Model, O extends IRecordOptions<ISdk>>(
     model: new () => T,
-    values: Partial<T>,
+    values: ModelInput<T>,
     options: O & { ignoreEmptyValues?: boolean } = {} as O
   ) {
     const rec = Record.create(model, options as O);
@@ -194,7 +193,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       r = Record.createWith(model, payload as Partial<T>, options);
 
       if (!payload.id) {
-        const path = List.dbPath(model, payload);
+        const path = List.dbPath<T>(model, payload);
         payload.id = await r.db.getPushKey(path);
       }
 
@@ -382,7 +381,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     model: ConstructorFor<T>,
     pk: PrimaryKey<T>,
     property: PropertyOf<T>,
-    refs: ForeignKey<unknown> | ForeignKey<unknown>[],
+    refs: ForeignKey | ForeignKey[],
     options: IFmRelationshipOptions<S> = {}
   ) {
     const obj = await Record.get(model, pk);
@@ -534,7 +533,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   //#region INSTANCE DEFINITION
   private _existsOnDB = false;
   private _writeOperations: IWriteOperation[] = [];
-  private _data: Partial<T>;
+  private _data: IModel<T>;
 
   constructor(model: new () => T, protected options: IRecordOptions<S> = {}) {
     super();
@@ -730,7 +729,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * FK relationship to another model
    */
   public getMetaForRelationship(
-    property: string & keyof T
+    property: string & keyof ModelInput<T>
   ): IRecordRelationshipMeta {
     if (!this.META.property(property)?.isRelationship) {
       throw new FireModelError(
@@ -995,7 +994,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   public async associate(
     property: keyof T & string,
     // TODO: ideally stronger typing
-    refs: ForeignKey<unknown> | ForeignKey<unknown>[],
+    refs: ForeignKey | ForeignKey[],
     options: IFmRelationshipOptions<S> = {}
   ) {
     // const meta = getModelMeta(this);
@@ -1049,7 +1048,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   public async disassociate(
     property: keyof T & string,
     // TODO: ideally stronger typing below
-    refs: ForeignKey<unknown> | ForeignKey<unknown>[],
+    refs: ForeignKey | ForeignKey[],
     options: IFmRelationshipOptions<S> = {}
   ) {
     const relType = this.META.relationship(property).relType;
@@ -1075,7 +1074,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    */
   public async addToRelationship(
     property: keyof T & string,
-    fkRefs: ForeignKey<unknown> | ForeignKey<unknown>[],
+    fkRefs: ForeignKey | ForeignKey[],
     options: IFmRelationshipOptionsForHasMany<S> = {}
   ): Promise<void> {
     const altHasManyValue = options.altHasManyValue || true;
@@ -1115,7 +1114,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    */
   public async removeFromRelationship(
     property: keyof T & string,
-    fkRefs: ForeignKey<unknown> | ForeignKey<unknown>[],
+    fkRefs: ForeignKey | ForeignKey[],
     options: IFmRelationshipOptionsForHasMany<S> = {}
   ): Promise<void> {
     if (!isHasManyRelationship(this, property)) {
@@ -1160,7 +1159,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * entity
    */
   public async clearRelationship(
-    property: keyof T & string,
+    property: keyof IModel<T> & string,
     options: IFmRelationshipOptions<S> = {}
   ): Promise<void> {
     const relType = this.META.relationship(property).relType;
@@ -1205,8 +1204,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param ref the FK
    */
   public async setRelationship(
-    property: keyof T & string,
-    fkId: ForeignKey<unknown>,
+    property: keyof IModel<T> & string,
+    fkId: ForeignKey,
     options: IFmRelationshipOptions<S> = {}
   ): Promise<void> {
     if (!fkId) {
@@ -1262,7 +1261,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param data the initial state you want to start with
    */
   public async _initialize(
-    data: Partial<T>,
+    data: IModel<T>,
     options: IRecordOptions<S> = {}
   ): Promise<void> {
     const defaultDb = FireModel.defaultDb;
@@ -1270,8 +1269,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       FireModel.defaultDb = options.db;
     }
     if (data) {
-      Object.keys(data).map((key) => {
-        this._data[key as keyof T] = data[key as keyof T];
+      keys(data).map((key) => {
+        this._data[key] = data[key];
       });
     }
 
@@ -1516,7 +1515,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
               if (rel.relType === "hasOne" && relProperty) {
                 await this.disassociate(
                   rel.property,
-                  this.get(rel.property) as unknown as ForeignKey<unknown>
+                  this.get(rel.property) as unknown as ForeignKey
                 );
               } else if (rel.relType === "hasMany" && relProperty) {
                 for (const relFk of Object.keys(relProperty)) {
@@ -1566,11 +1565,11 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       // send confirm event
       if (!options.silent && !options.silentAcceptance) {
         if (watchers.length === 0) {
-          const evt = {
+          const evt: IFmLocalEvent<T> = {
             type: actionTypeEnd,
             ...event,
             transactionId,
-            value: withoutMetaOrPrivate(this.data),
+            value: withoutMetaOrPrivate<T>(this.data),
           };
           await this.dispatch(UnwatchedLocalEvent(this, evt));
         } else {
@@ -1592,7 +1591,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
           type: actionTypeFailure,
           ...event,
           transactionId,
-          value: withoutMetaOrPrivate(this.data),
+          value: withoutMetaOrPrivate<T>(this.data),
         })
       );
 
@@ -1610,7 +1609,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
 
     while (index !== -1) {
       remaining = remaining.slice(index);
-      const prop = remaining.replace(/\:(\w+).*/, "$1");
+      const prop = remaining.replace(/:(\w+).*/, "$1");
       results.push(prop as keyof T & string);
       remaining = remaining.replace(`:${prop}`, "");
       index = remaining.indexOf(":");

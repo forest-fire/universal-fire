@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { IDictionary } from 'brilliant-errors';
 import { epochWithMilliseconds } from 'common-types';
 import { IFmModelMeta } from '~/types';
 import { Model } from '~/models';
@@ -44,7 +43,7 @@ export type IModelClass<T extends Model> = Omit<T, "META"> & { META: ModelMeta<T
  * Typescript utility to reduce a given model `IModel<T>` to only the non-managed properties.
  * This means `id`, `lastUpdated`, and `META` are no longer allowed parameters.
  */
-export type ModelInput<T extends Model> = Omit<T, ModelManagedProps>;
+export type ModelInput<T extends Model> = Omit<T, ModelManagedProps | "META">;
 
 /**
  * **IDbModel**
@@ -55,20 +54,3 @@ export type ModelInput<T extends Model> = Omit<T, ModelManagedProps>;
  */
 export type IDbModel<T extends Model> = T & Required<IModelManaged> & { META: ModelMeta<T> }
 
-
-/**
- * A type guard that recieves an `IModel` and if the run time data has a META property (which it
- * should in most cases) then it will be recognized once passing this test as the interface
- * `IModelClass<T>` versus simply `IModel<T>`.
- */
-export function isModelClass<T extends Model>(model: T): model is T & { META: ModelMeta<T> } {
-  return (model as any).META !== undefined;
-}
-
-/**
- * A _type guard_ which receives an `IModel` and upgrades it to a `IDbModel` if the 
- * managed properties are set
- */
-export function isDbModel<T extends {}>(model: IModelClass<T>): model is IDbModel<T> {
-  return model.META && (model as IDictionary)?.id && (model as IDictionary)?.createdAt && (model as IDictionary)?.lastUpdated ? true : false;
-}

@@ -9,41 +9,39 @@ export const relationshipsByModel: IDictionary<IDictionary<
 >> = {};
 
 /** allows the addition of meta information to be added to a IModel's relationships */
-export function addRelationshipToModelMeta<T extends {}>(
+export function addRelationshipToModelMeta(
   IModelName: string,
   property: string,
-  meta: IFmModelRelationshipMeta<T>
-) {
+  meta: IFmModelRelationshipMeta
+): void {
   if (!relationshipsByModel[IModelName]) {
     relationshipsByModel[IModelName] = {};
   }
   // TODO: investigate why we need to genericize to IModel (from <T>)
-  relationshipsByModel[IModelName][property] = meta as IFmModelRelationshipMeta<
-    any
-  >;
+  relationshipsByModel[IModelName][property] = meta;
 }
 
-export function isRelationship<T extends {}>(IModelKlass: T) {
-  return (prop: string) => {
+export function isRelationship<T extends Model>(IModelKlass: T): (prop: string) => boolean {
+  return (prop) => {
     return getModelRelationship(IModelKlass)(prop) ? true : false;
   };
 }
 
-export function getModelRelationship<T extends Model>(IModel: T) {
+export function getModelRelationship<T extends Model>(IModel: T): (path: string) => IFmModelRelationshipMeta<T> {
   const relnsForIModel = getRelationships(IModel);
-  const className = IModel.constructor.name;
 
-  return (prop: string) => {
-    return relnsForIModel.find((value) => {
+  return (prop) => {
+    const f = relnsForIModel.find((value) => {
       return value.property === prop;
     });
+    return f as unknown as IFmModelRelationshipMeta<T>
   };
 }
 
 /**
  * Gets all the relationships for a given IModel
  */
-export function getRelationships<T extends {}>(IModel: T) {
+export function getRelationships<T extends Model>(IModel: T): IFmModelRelationshipMeta[] {
   const IModelName = IModel.constructor.name;
   const properties =
     hashToArray(relationshipsByModel[IModelName], "property") || [];

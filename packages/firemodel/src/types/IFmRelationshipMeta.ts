@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IFmModelAttributeBase, IFmRelationshipDirectionality, IModel } from "./index";
+import { IFmModelAttributeBase, IFmRelationshipDirectionality } from "./index";
 import { IFnToModelConstructor } from "./model-relationships";
+import { Model } from "~/models/Model";
 
 export type FmRelationshipType = "hasMany" | "hasOne";
 
-export interface IFmModelRelationshipMeta<TModel extends IModel, TFk extends IModel = IModel>
+export interface IFmModelRelationshipMeta<TModel extends Model = Model, TFk extends Model = Model>
   extends IFmModelAttributeBase<TModel, TFk> {
   isRelationship: true;
   isProperty: false;

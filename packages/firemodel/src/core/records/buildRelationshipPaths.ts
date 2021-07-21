@@ -34,7 +34,7 @@ import { Model } from "~/models/Model";
 export function buildRelationshipPaths<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
   property: keyof T & string,
-  fkRef: ForeignKey<unknown>,
+  fkRef: ForeignKey,
   options: IFmBuildRelationshipOptions<S> = {}
 ): IFmPathValuePair[] {
   try {

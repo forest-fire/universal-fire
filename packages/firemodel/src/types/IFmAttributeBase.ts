@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { FMPropertyType, FmRelationshipType, IModel } from "./index";
+import type { FMPropertyType, FmRelationshipType } from "./index";
 import { FmMockType, IFmFunctionToConstructor } from "./other";
-
+import { Model } from "~/models/Model";
 /**
  * The attributes assigned to all properties on a Model
  */
-export interface IFmModelAttributeBase<TModel extends IModel, TFk extends IModel = IModel> {
+export interface IFmModelAttributeBase<TModel extends Model, TFk extends Model = Model> {
   /** the property name */
   property: Extract<keyof TModel, string>;
   /** the property's "typed value" */

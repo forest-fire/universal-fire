@@ -216,7 +216,7 @@ export interface IFmPathValuePair {
 /**
  * A record which _does_ have the `id` property set
  */
-export type IFmHasId<T extends Model = IModel> = {
+export type IFmHasId<T extends Model = Model> = {
   id: Required<T["id"]>;
 }
 

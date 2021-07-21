@@ -1,7 +1,7 @@
 import type { Dexie, Transaction } from "dexie";
-
+import { Model } from "~/models/Model";
 import { IDictionary } from "common-types";
-import { IFmModelMeta, IModel } from "~/types";
+import { IFmModelMeta } from "~/types";
 
 export interface IDexiePriorVersion {
   /**
@@ -16,7 +16,7 @@ export interface IDexiePriorVersion {
  * incorporates all the standard META properties but adds a
  * few more that are derived from getters of a `Record`.
  */
-export interface IDexieModelMeta<T extends Model> extends IFmModelMeta<T> {
+export interface IDexieModelMeta<T extends Model = Model> extends IFmModelMeta<T> {
   modelName: string;
   pluralName: string;
   hasDynamicPath: boolean;

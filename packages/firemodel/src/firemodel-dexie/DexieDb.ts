@@ -40,7 +40,7 @@ export class DexieDb {
     }
 
     return modelConstructors.reduce(
-      <M extends ConstructorFor<IModel>>(agg: IDictionary<string>, curr: M) => {
+      <M extends Model>(agg: IDictionary<string>, curr: ConstructorFor<M>) => {
         const dexieModel: string[] = [];
         const r = Record.create(curr);
 
@@ -86,6 +86,7 @@ export class DexieDb {
               .filter((i) => i.isMultiEntryIndex)
               .map((i) => i.property)
           )
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           .forEach((i) => dexieModel.push(`*${i}`));
 
         agg[r.pluralName] = dexieModel.join(",").trim();
@@ -178,11 +179,11 @@ export class DexieDb {
 
   /** simple dictionary of Dixie model defn's for indexation */
   private _models: IDictionary<string> = {};
-  private _constructors: IDictionary<ConstructorFor<any>> = {};
+  private _constructors: IDictionary<ConstructorFor<Model>> = {};
   /** the core **Dexie** API surface */
   private _db: Dexie;
   /** META information for each of the `Model`'s */
-  private _meta: IDictionary<IDexieModelMeta<IModel>> = {};
+  private _meta: IDictionary<IDexieModelMeta> = {};
   /** maps `Model`'s singular name to a plural */
   private _singularToPlural: IDictionary<string> = {};
   /** the current version number for the indexDB database */
@@ -193,7 +194,7 @@ export class DexieDb {
 
   private _status = "initialized";
 
-  constructor(private _name: string, ...models: Array<ConstructorFor<unknown>>) {
+  constructor(private _name: string, ...models: Array<ConstructorFor<Model>>) {
     this._models = DexieDb.modelConversion(...models);
 
     this._db = DexieDb._indexedDb
@@ -211,15 +212,15 @@ export class DexieDb {
     });
 
     models.forEach((m) => {
-      const r: Record<ISdk, IModel> = Record.create(m);
+      const r: Record<ISdk, Model> = Record.create(m);
       this._constructors[r.pluralName] = m;
-      const meta: IDexieModelMeta<IModel> = {
+      const meta: IDexieModelMeta = {
         ...r.META,
         modelName: r.modelName,
         hasDynamicPath: r.hasDynamicPath,
         dynamicPathComponents: r.dynamicPathComponents,
         pluralName: r.pluralName,
-      } as unknown as IDexieModelMeta<IModel>;
+      };
       this._meta[r.pluralName] = meta;
       this._singularToPlural[r.modelName] = r.pluralName;
     });
@@ -342,7 +343,7 @@ export class DexieDb {
    * Returns the META for a given `Model` identified by
    * the model's _plural_ (checked first) or _singular_ name.
    */
-  public meta<T extends Model = IModel>(name: string): IDexieModelMeta<T> {
+  public meta<T extends Model = Model>(name: string): IDexieModelMeta<T> {
     return this._lookupMetaWithSingularOrPluralName(this._meta, name) as unknown as IDexieModelMeta<T>;
   }
 
@@ -352,15 +353,14 @@ export class DexieDb {
    * @param name either the _plural_ or _singular_ name of a model
    * managed by the `DexieModel` instance
    */
-  public modelConstructor<T extends Model>(name: string): ConstructorFor<T> {
+  public modelConstructor<T extends Model = Model>(name: string): ConstructorFor<T> {
     let CTOR = this._constructors[name];
     if (!CTOR) {
       const plural = this._singularToPlural[name];
       if (plural) CTOR = this._constructors[plural];
       else throw new FireModelError(`Attempt to get model ${name}'s constructor failed`, "firemodel/invalid-model");
-
-      return CTOR;
     }
+    return CTOR as ConstructorFor<T>;
   }
 
   /**
@@ -374,7 +374,7 @@ export class DexieDb {
    * Sets all the defined models (as well as priors) to the
    * Dexie DB instance.
    */
-  public mapModels() {
+  public mapModels(): void {
     this._mapVersionsToDexie();
     this._status = "mapped";
     this._isMapped = true;
@@ -386,7 +386,7 @@ export class DexieDb {
    * Note: _if the **Firemodel** models haven't yet been mapped to Dexie
    * then they will be prior to openning the connection._
    */
-  public async open() {
+  public async open(): Promise<Dexie> {
     if (this._db.isOpen()) {
       throw new DexieError(
         `Attempt to call DexieDb.open() failed because the database is already open!`,
@@ -412,7 +412,7 @@ export class DexieDb {
     this._db.close();
   }
 
-  private _lookupMetaWithSingularOrPluralName(obj: IDictionary<IDexieModelMeta<IModel>>, name: string) {
+  private _lookupMetaWithSingularOrPluralName(obj: IDictionary<IDexieModelMeta>, name: string) {
     if (keys(obj).includes(name)) {
       return obj[name as keyof typeof obj];
     } else {
