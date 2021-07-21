@@ -10,10 +10,12 @@ import type {
   User,
   IMockUserRecord,
   uid,
-  AdminSdk
+  AdminSdk,
 } from '@forest-fire/types';
 
-export const users: (api: IMockAuthMgmt<AdminSdk>) => Partial<Auth> = (api) => ({
+export const users: (api: IMockAuthMgmt<AdminSdk>) => Partial<Auth> = (
+  api
+) => ({
   // https://firebase.google.com/docs/auth/admin/manage-users#create_a_user
   // eslint-disable-next-line @typescript-eslint/require-await
   async createUser(properties: CreateRequest): Promise<UserRecord> {
@@ -29,6 +31,7 @@ export const users: (api: IMockAuthMgmt<AdminSdk>) => Partial<Auth> = (api) => (
       multiFactor: null as never,
       toJSON: () => null as never,
       providerData: null as never,
+      emailVerified: false,
     };
 
     api.addToUserPool(UserRecord);

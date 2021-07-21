@@ -99,7 +99,7 @@ describe('Query based Read ops:', () => {
       werqerqer: 2,
       erwrewrw: 100,
     });
-    const query = new SerializedRealTimeQuery('ages')
+    const query = new SerializedRealTimeQuery<SDK.RealTimeClient>('ages')
       .orderByKey()
       .limitToFirst(3);
     const ages = await db.getList(query);
@@ -116,7 +116,7 @@ describe('Query based Read ops:', () => {
       werqerqer: 2,
       erwrewrw: 100,
     });
-    const query = new SerializedRealTimeQuery('ages')
+    const query = new SerializedRealTimeQuery<SDK.RealTimeClient>('ages')
       .orderByValue()
       .limitToFirst(3);
     const ages = await db.getList(query);

@@ -5,6 +5,7 @@ import { IMockUserRecord, User } from '@forest-fire/types';
  */
 export function toUser(mockUser: IMockUserRecord): User {
   // TODO: implement
+
   const user: Omit<User, 'toJSON'> = {
     uid: mockUser.uid,
     email: mockUser.email,

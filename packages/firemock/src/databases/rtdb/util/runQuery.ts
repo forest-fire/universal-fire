@@ -40,8 +40,10 @@ const orderByValue = <T extends IDictionary>(
 };
 
 const sortFn: (query: any) => sortFns.ISortFns = (query) =>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   query.identity.orderBy === RtdbOrder.orderByChild
     ? sortFns.orderByChild(query.identity.orderByKey)
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     : (sortFns[
       query.identity.orderBy as keyof typeof sortFns
     ] as sortFns.ISortFns);
@@ -103,7 +105,7 @@ export function runQuery<
   let list: any[];
 
   if (Array.isArray(dataList)) {
-    list = limitFilter(queryFilter(dataList)) as any[];
+    list = limitFilter(queryFilter(dataList.sort(sortFn(query)))) as any[];
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return

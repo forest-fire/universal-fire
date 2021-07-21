@@ -18,15 +18,17 @@ import {
   Unsubscribe,
   UpdateRequest,
   ClientSdk,
+  User,
 } from '@forest-fire/types';
 
 import { FireMockError } from '../../errors';
 import { completeUserCredential, toUser } from '../../auth/util';
 import { createUser } from './createUser';
+import { getIdToken, getIdTokenResult } from './User';
 
-export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth> = (
-  api
-) => ({
+export const implemented: (
+  api: IMockAuthMgmt<ClientSdk>
+) => Partial<IClientAuth> = (api) => ({
   tenantId: '',
 
   languageCode: '',
@@ -115,7 +117,6 @@ export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth
     if (!emailIsValidFormat(api)(email)) {
       throw new FireMockError(`invalid email: ${email}`, 'auth/invalid-email');
     }
-
     const user = api.findKnownUser('email', email);
     if (!user) {
       throw new FireMockError(
@@ -136,6 +137,7 @@ export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth
         'auth/wrong-password'
       );
     }
+
     const partial: IPartialUserCredential = {
       user: {
         email: user.email,
@@ -143,6 +145,7 @@ export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth
         emailVerified: user.emailVerified,
         uid: userUid(api)(email),
         displayName: user.displayName,
+        ...createUser(api, user as unknown as Partial<User>),
       },
       credential: {
         signInMethod: 'signInWithEmailAndPassword',
@@ -152,6 +155,7 @@ export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth
         username: email,
       },
     };
+
     const u = completeUserCredential(partial);
     api.setCurrentUser(u);
 
@@ -191,13 +195,13 @@ export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth
         'auth/invalid-email'
       );
     }
+    const uid = userUid(api)(email);
 
     const partial: IPartialUserCredential = {
       user: {
-        email,
+        ...createUser(api, { email, uid }),
         isAnonymous: false,
         emailVerified: false,
-        uid: userUid(api)(email),
       },
       credential: {
         signInMethod: 'signInWithEmailAndPassword',
@@ -210,7 +214,6 @@ export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth
     const u = completeUserCredential(partial);
     api.addToUserPool({ uid: partial.user.uid, email, password });
     api.setCurrentUser(u);
-
     return u;
   },
 
