@@ -197,8 +197,8 @@ describe('Reference functions', () => {
     });
   });
 
-  it('equalTo() and orderByChild() work', async () => {
-    const f = await Fixture.prepare();
+  it.only('equalTo() and orderByChild() work', async () => {
+    const f = Fixture.prepare();
     // await m.getMockHelper(); // imports faker lib
     const young = (h: SchemaHelper) => () => ({
       first: h.faker.name.firstName(),
@@ -223,8 +223,7 @@ describe('Reference functions', () => {
       .orderByChild('name')
       .equalTo(12, 'age')
       .once('value');
-
-    expect(Object.keys((m.store.getDb() as any).people).length).toBe(20);
+    expect(Object.keys((m.store.getDb('/') as any).people).length).toBe(20);
     expect(snap.numChildren()).toBe(10);
   });
 

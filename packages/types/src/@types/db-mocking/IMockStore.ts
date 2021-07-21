@@ -1,5 +1,5 @@
 import { IDictionary } from 'common-types';
-import { IDatabaseConfig, ISerializedQuery } from '../index';
+import { EventTypePlusChild, IDatabaseConfig, ISerializedQuery } from '../index';
 import { AdminSdk, ApiKind, ISdk } from '../fire-types';
 import { IMockListener } from './IMockListener';
 import { NetworkDelay } from './index';
@@ -62,9 +62,13 @@ export interface IMockStore<
   /**
    * removes a "watcher" from the mock database
    */
-  removeListener(id: string): void;
-
-  removeAllListeners(): void;
+   removeListener(event: string, callback?: (snap: SnapshotFrom<TSdk>, b?: null | string) => unknown,  context?: Record<string, unknown> | null): number;
+   
+  listenerPaths(
+    lookFor?: EventTypePlusChild | EventTypePlusChild[]
+  ): string[];
+  
+  removeAllListeners(): number;
 
 
   /** lists all the watchers currently operating on the mock database */

@@ -8,6 +8,7 @@ import type {
   IRtdbSdk,
   SnapshotFrom,
   EventFrom,
+  EventTypePlusChild,
 } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 import {
@@ -176,8 +177,6 @@ import { EventType } from '@firebase/database-types';
 //     ? _listeners.filter((l) => l.eventType === type).length
 //     : _listeners.length;
 // }
-
-export type EventTypePlusChild = IRtdbDbEvent | 'child';
 
 /**
  * **listenerPaths**

@@ -1,6 +1,5 @@
 import { IRelationship, ISchema, SchemaCallback } from '~/@types';
-import { addException, Queue, SchemaHelper } from '~/index';
-import { pluralize } from 'native-dash';
+import { addException, pluralize, Queue, SchemaHelper } from '~/index';
 import faker from "faker"
 
 /**
@@ -34,7 +33,7 @@ export class Schema<T = any> {
           schema.prefix,
           schema.modelName
             ? pluralize(schema.modelName)
-            : pluralize(newSchemaId || this.schemaId),
+            : pluralize(schema.id),
         ].join('/');
       },
     });
@@ -110,6 +109,7 @@ export class Schema<T = any> {
       this.mock(mock, schema);
     }
 
+    this.schemaId = schema;
     return this;
   }
 }

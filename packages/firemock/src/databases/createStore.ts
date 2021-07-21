@@ -16,6 +16,7 @@ import copy from 'fast-copy';
 import { key as fbKey } from 'firebase-key';
 import {
   ApiKind,
+  EventTypePlusChild,
   IDatabaseConfig,
   IMockDelayedState,
   IMockListener,
@@ -33,6 +34,23 @@ import {
 import { FireMockError } from '../errors';
 import { IMockWatcherGroupEvent } from '../@types';
 import { notify } from './rtdb';
+
+/**
+ * internal function responsible for the actual removal of
+ * a listener.
+ */
+function cancelCallback<TSdk extends ISdk>(
+  removed: IMockListener<TSdk>[]
+): number {
+  let count = 0;
+  removed.forEach((l) => {
+    if (typeof l.cancelCallbackOrContext === 'function') {
+      (l.cancelCallbackOrContext as () => any)();
+      count++;
+    }
+  });
+  return count;
+}
 
 export function createStore<TSdk extends ISdk>(
   sdk: TSdk,
@@ -167,9 +185,12 @@ export function createStore<TSdk extends ISdk>(
     return response;
   };
 
-  const removeListener = (eventType: string) => {
-    _listeners = _listeners.filter((l) => l.eventType !== eventType);
+  const removeAllListeners = () => {
+    const howMany = cancelCallback(_listeners);
+    _listeners = [];
+    return howMany;
   };
+
   const getAllListeners = () => {
     return _listeners;
   };
@@ -186,12 +207,59 @@ export function createStore<TSdk extends ISdk>(
     setNetworkDelay,
 
     addListener,
-    removeListener,
-    removeAllListeners() {
-      _listeners = [];
-    },
-    getAllListeners,
+    removeListener(eventType, callback?, context?: IDictionary) {
+      if (!eventType) {
+        return removeAllListeners();
+      }
 
+      if (!callback) {
+        const removed = _listeners.filter((l) => l.eventType === eventType);
+        _listeners = _listeners.filter((l) => l.eventType !== eventType);
+        return cancelCallback(removed);
+      }
+
+      if (!context) {
+        // use eventType and callback to identify
+        const removed = _listeners
+          .filter((l) => l.callback === callback)
+          .filter((l) => l.eventType === eventType);
+
+        _listeners = _listeners.filter(
+          (l) => l.eventType !== eventType || l.callback !== callback
+        );
+
+        return cancelCallback(removed);
+      } else {
+        // if we have context then we can ignore other params
+        const removed = _listeners
+          .filter((l) => l.callback === callback)
+          .filter((l) => l.eventType === eventType)
+          .filter((l) => l.context === context);
+
+        _listeners = _listeners.filter(
+          (l) =>
+            l.context !== context ||
+            l.callback !== callback ||
+            l.eventType !== eventType
+        );
+        return cancelCallback(removed);
+      }
+    },
+    removeAllListeners,
+    getAllListeners,
+    listenerPaths(lookFor?: EventTypePlusChild | EventTypePlusChild[]) {
+      if (lookFor && !Array.isArray(lookFor)) {
+        lookFor =
+          lookFor === 'child'
+            ? ['child_added', 'child_changed', 'child_removed', 'child_moved']
+            : [lookFor];
+      }
+      return lookFor
+        ? _listeners
+            .filter((l) => lookFor.includes(l.eventType as never))
+            .map((l) => l.query.path)
+        : _listeners.map((l) => l.query.path);
+    },
     silenceEvents: () => {
       _silenceEvents = true;
     },
@@ -207,7 +275,7 @@ export function createStore<TSdk extends ISdk>(
       keys.forEach((key) => delete _state[key]);
     },
     getDb<D extends unknown = never>(path?: string): D {
-      const dotifyPath = dotify(path);
+      const dotifyPath = path ? dotify(path) : undefined;
       return (dotifyPath ? get(_state, dotifyPath) : _state) as D;
     },
     setDb<V extends unknown>(path: string, value: V, silent = false) {
