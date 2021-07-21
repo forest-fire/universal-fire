@@ -4,9 +4,9 @@ import { RealTimeAdmin } from '../src/index';
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
 import * as helpers from './testing/helpers';
 import { Fixture, SchemaCallback } from '@forest-fire/fixture';
-import { IModel, SDK } from '@forest-fire/types';
+import { SDK } from '@forest-fire/types';
 
-interface IPerson extends IModel {
+interface IPerson{
   name: string;
   age: number;
 }

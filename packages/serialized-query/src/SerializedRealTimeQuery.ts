@@ -8,8 +8,6 @@ import {
   IRtdbOrder,
   ISerializedIdentity,
   ISerializedQuery,
-  IRtdbDatabase,
-  IFirebaseRtdbReference,
   IRtdbSdk,
   DbFrom,
   SnapshotFrom,
@@ -44,12 +42,6 @@ export class SerializedRealTimeQuery<
   constructor(path = '/') {
     this._path = slashNotation(path);
   }
-
-  // static create<S extends "RealTimeAdmin" | "RealTimeClient", M extends IModel = IModel, D extends IRtdbDatabase = S extends "RealTimeAdmin" ? IAdminRtdbDatabase : IClientRtdbDatabase>(db: D, path = "/") {
-  //   const q = new SerializedRealTimeQuery<S, M>(path)
-  //   q.setDB(db);
-  //   return q;
-  // }
 
   public get db(): DbFrom<TSdk> {
     if (!this._db) {
