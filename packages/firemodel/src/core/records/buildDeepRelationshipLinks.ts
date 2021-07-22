@@ -1,6 +1,6 @@
 import { ISdk, } from "@forest-fire/types";
 import { IDictionary } from "common-types";
-import { ForeignKey, IModel } from "~/types";
+import { IModel, PropertyOf } from "~/types";
 import { Record } from "~/core";
 import { getModelMeta } from "~/util";
 import { Model } from "~/models/Model";
@@ -46,10 +46,8 @@ async function processHasMany<S extends ISdk, T extends Model>(
     },
     {}
   );
-  // TODO: maybe there's a better way than writing private property?
-  // ambition is to remove the bullshit FKs objects; this record will
-  // not have been saved yet so we're just getting it back to a good
-  // state before it's saved.
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (rec as any)._data[property] = newFks;
 
   return;
@@ -57,9 +55,9 @@ async function processHasMany<S extends ISdk, T extends Model>(
 
 async function processBelongsTo<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
-  property: keyof IModel<T> & string
+  property: PropertyOf<T>
 ): Promise<void> {
-  const fk: ForeignKey<T> = rec.get(property) as any;
+  const fk = rec.get(property);
   const meta = getModelMeta(rec).property(property);
 
   if (fk && typeof fk === "object") {

@@ -18,6 +18,7 @@ export function constrainedProperty(options: IDictionary = {}) {
 }
 
 /** allows the introduction of a new constraint to the metadata of a property */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function constrain(prop: string, value: any) {
   return propertyReflector<IFmModelPropertyMeta<Model>>(
     { [prop]: value },

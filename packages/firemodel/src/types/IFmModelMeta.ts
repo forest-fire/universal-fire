@@ -1,5 +1,5 @@
 import { Model } from "~/models/Model";
-import { IFmModelRelationshipMeta, IFmModelPropertyMeta, IModelIndexMeta, IModel } from "./index";
+import { IFmModelRelationshipMeta, IFmModelPropertyMeta, IModelIndexMeta } from "./index";
 import { PropertyOf } from "./models";
 
 /**

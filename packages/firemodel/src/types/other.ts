@@ -1,6 +1,7 @@
 import type { FakerStatic } from "@forest-fire/types";
 import { NamedFakes } from "~/types/constants";
 import { Model } from "~/models/Model";
+import { ConstructorFor } from "common-types";
 
 export type MockHelper = {
   faker: FakerStatic;
@@ -14,5 +15,5 @@ export type MockHelper = {
 export type MockFunction<T extends Model> = (context: MockHelper) => T | Promise<T>;
 export type FmMockType<T extends Model> = keyof typeof NamedFakes | MockFunction<T>;
 export type IFmHasOne = string;
-export type IFmFunctionToConstructor<X = any> = () => new () => X;
+export type IFmFunctionToConstructor<T extends Model = Model> = () => ConstructorFor<T>;
 export type IFmRelationshipDirectionality = "bi-directional" | "one-way";

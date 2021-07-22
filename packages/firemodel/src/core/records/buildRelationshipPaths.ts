@@ -42,7 +42,7 @@ export function buildRelationshipPaths<S extends ISdk, T extends Model>(
     const now = options.now || new Date().getTime();
     const operation = options.operation || "add";
     const altHasManyValue = options.altHasManyValue || true;
-    const fkModelConstructor = meta.relationship(property).fkConstructor() as ConstructorFor<T, any>;
+    const fkModelConstructor = meta.relationship(property).fkConstructor() as ConstructorFor<T>;
     const inverseProperty = meta.relationship(property).inverseProperty;
     const fkRecord = Record.createWith(fkModelConstructor, fkRef as Partial<T>, {
       db: options.db || rec.db,

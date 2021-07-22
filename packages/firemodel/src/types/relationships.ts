@@ -77,7 +77,7 @@ export interface IFmRelationshipOptionsForHasMany<S extends ISdk>
    * this to something else but the value of NOT having to lookup the relationship
    * in the DB might be valuable sometimes.
    */
-  altHasManyValue?: any;
+  altHasManyValue?: unknown;
 }
 
 /**

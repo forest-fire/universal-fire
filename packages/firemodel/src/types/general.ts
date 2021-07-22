@@ -208,8 +208,8 @@ export interface IFmPathValuePair {
   /** the path in the DB */
   path: string;
   /** the value at the given path */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any;
-
 }
 /**
  * A record which _does_ have the `id` property set

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ForeignKey, IFmLocalRelationshipEvent } from "~/types";
 
 import { Record } from "~/core";

@@ -474,7 +474,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     model: ConstructorFor<T>,
     ...fks: PrimaryKey<T>[]
   ): Promise<List<ISdk, T>> {
-    const promises: Promise<any>[] = [];
+    const promises: Promise<unknown>[] = [];
     const results: T[] = [];
     const errors: Array<{ error: FireModelError; id: PrimaryKey<T> }> = [];
     fks.forEach((id) => {
@@ -552,7 +552,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
 
   //#endregion
 
-  private _data: T[] = [];
+  private _data: IModel<T>[] = [];
   private _query: ISerializedQuery<S, T>;
   private _options: IListOptions<S, T>;
   /** the pagination page size; 0 indicates that pagination is not turned on */
@@ -673,11 +673,11 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     if (data.length < this._pageSize) {
       this._paginationComplete = true;
     }
-    this._data = this._data.concat(...data);
+    this._data = [...this._data, ...data];
   }
 
   /** Returns another List with data filtered down by passed in filter function */
-  public filter(f: ListFilterFunction<T>): List<S, T> {
+  public filter(f: (i: IModel<T>) => boolean): List<S, T> {
     const list = List.create(this._modelConstructor) as List<S, T>;
     list._data = this._data.filter(f);
     return list;
@@ -687,23 +687,22 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * provides a `map` function over the records managed by the List; there
    * will be no mutations to the data managed by the list
    */
-  public map<K = any>(f: ListMapFunction<T, K>): K[] {
+  public map(f: (i: IModel<T>) => IModel<T>): IModel<T>[] {
     return this.data.map(f);
   }
 
   /**
    * provides a `forEach` function to iterate over the records managed by the List
    */
-  public forEach<K = any>(f: ListMapFunction<T, K>): void {
+  public forEach(f: (i: IModel<T>) => IModel<T>): void {
     this.data.forEach(f);
   }
 
   /**
    * runs a `reducer` function across all records in the list
    */
-  public reduce(f: ListReduceFunction<T, IModel<T>>, initialValue = {}): List<S, T> {
-    this.data.reduce(f, initialValue);
-    return this;
+  public reduce<R extends unknown>(f: (acc: Partial<R>, i: IModel<T>) => R, initialValue = {} as R): R {
+    return this.data.reduce<unknown>(f, initialValue) as R;
   }
 
   public paginate(pageSize: number): List<S, T> {
@@ -714,7 +713,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
   /**
    * Gives access to the List's array of records
    */
-  public get data(): T[] {
+  public get data(): IModel<T>[] {
     return this._data;
   }
 
@@ -752,7 +751,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * Allows for records managed by this **List** to be removed from the
    * database.
    */
-  public async remove(id: string, ignoreOnNotFound = false) {
+  public async remove(id: string, ignoreOnNotFound = false): Promise<void> {
     try {
       const rec = this.getRecord(id);
       await rec.remove();
@@ -786,12 +785,12 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
   /**
    * Gets the data from a given record; return _undefined_ if not found
    */
-  public get(id: string): T {
+  public get(id: string): IModel<T> {
     return this.data.find((i) => i.id === id);
   }
 
   /** Deprecated: use `List.get()` instead */
-  public getData(id: string): T {
+  public getData(id: string): IModel<T> {
     console.log("List.getData() is deprecated; use List.get()");
     return this.get(id);
   }
@@ -851,10 +850,3 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     return dbOffset;
   }
 }
-
-export type ListFilterFunction<T> = (fc: T) => boolean;
-export type ListMapFunction<T, K = any> = (fc: T) => K;
-export type ListReduceFunction<T, K = any> = (
-  accumulator: Partial<K>,
-  record: T
-) => K;

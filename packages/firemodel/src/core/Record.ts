@@ -263,12 +263,12 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param property the property on the record
    * @param payload the new payload you want to push into the array
    */
-  public static async pushKey<T extends Model, O extends IRecordOptions<ISdk>>(
+  public static async pushKey<T extends Model, K extends PropertyOf<T>>(
     model: new () => T,
     pk: PrimaryKey<T>,
-    property: keyof IModel<T> & string,
-    payload: any,
-    options: O = {} as O
+    property: K,
+    payload: T[K],
+    options: IRecordOptions<ISdk> = {}
   ) {
     const obj = await Record.get(model, pk, options);
     return obj.pushKey(property, payload);
@@ -298,7 +298,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    */
   public static createWith<T extends Model>(
     model: ConstructorFor<T>,
-    payload: PrimaryKey<T> | Partial<T>,
+    payload: PrimaryKey<T> | Partial<IModel<T>>,
     options: IRecordOptions<ISdk> = {}
   ): Record<ISdk, T> {
     const defaultDb = FireModel.defaultDb;
@@ -415,7 +415,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     }
 
     // TODO: come back and replace "any" with better typing
-    segments.forEach((segment: any, idx: any) => {
+    segments.forEach((segment: string, idx: number) => {
       if (segment.slice(0, 1) === ":") {
         const name = segment.slice(1);
         const value = pathParts[idx];
@@ -487,7 +487,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       }
     }
     const compositeKey = Record.compositeKey(model, object);
-    const nonIdKeys: { prop: string; value: any }[] = Object.keys(
+    const nonIdKeys: { prop: PropertyOf<T>; value: unknown }[] = Object.keys(
       compositeKey
     ).reduce(
       (agg, prop: keyof typeof compositeKey & string) =>
@@ -896,7 +896,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     }
 
     const lastUpdated = new Date().getTime();
-    const changed: any = {
+    const changed = {
       ...props,
       lastUpdated,
     };
@@ -949,7 +949,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       );
     }
     const lastUpdated = new Date().getTime();
-    const changed: any = {
+    const changed = {
       [prop]: value,
       lastUpdated,
     };
@@ -1579,6 +1579,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       this._data.id = id;
     } else {
       for (const [k, v] of entries(id)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (this._data as any)[k] = v;
       }
     }
