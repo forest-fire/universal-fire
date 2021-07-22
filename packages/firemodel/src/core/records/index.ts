@@ -2,17 +2,19 @@
 
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 12:06 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 05:58 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: buildDeepRelationshipLinks, buildRelationshipPaths, createCompositeKeyFromFkString, createCompositeKeyFromRecord, createCompositeKeyString, extractFksFromPaths, locallyUpdateFkOnRecord, reduceCompositeNotationToStringRepresentation, reduceHashToRelativePaths, relationshipOperation.
+// files: buildDeepRelationshipLinks, buildRelationshipPaths, createCompositeKey, createCompositeKeyFromRecord, createCompositeKeyString, extractFksFromPaths, findDynamicModelProperties, getIdFromKey, locallyUpdateFkOnRecord, reduceCompositeNotationToStringRepresentation, reduceHashToRelativePaths, relationshipOperation.
 
 // local file exports
 export * from "./buildDeepRelationshipLinks";
 export * from "./buildRelationshipPaths";
-export * from "./createCompositeKeyFromFkString";
+export * from "./createCompositeKey";
 export * from "./createCompositeKeyFromRecord";
 export * from "./createCompositeKeyString";
 export * from "./extractFksFromPaths";
+export * from "./findDynamicModelProperties";
+export * from "./getIdFromKey";
 export * from "./locallyUpdateFkOnRecord";
 export * from "./reduceCompositeNotationToStringRepresentation";
 export * from "./reduceHashToRelativePaths";

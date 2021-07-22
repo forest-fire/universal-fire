@@ -8,7 +8,7 @@ import { IFmModelRelationshipMeta, IFmModelPropertyMeta, IModelIndexMeta, IModel
  * passed in as part of the `@model()` decorator call in the model 
  * definition
  */
-export interface IFmModelMeta<TModel extends Model> {
+export interface IFmModelMeta<TModel extends Model = Model> {
   /** Optionally specify a root path to store this schema under */
   dbOffset?: string;
   /** Optionally specify an explicit string for the plural name */
@@ -56,18 +56,19 @@ export interface IFmModelMeta<TModel extends Model> {
   /** provides a boolean flag on whether the stated name is a property */
   isRelationship?: (prop: keyof IModel<TModel> & string) => boolean;
   /** a function to lookup the meta properties of a given relationship */
-  relationship?: (prop: string) => IFmModelRelationshipMeta<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  relationship?: (prop: string & IModel<TModel>) => IFmModelRelationshipMeta<TModel, any>;
   audit?: boolean | "server";
   /** A list of all properties and associated meta-data for the given schema */
-  properties?: Array<IFmModelPropertyMeta<TModel>>;
+  properties?: IFmModelPropertyMeta<TModel>[];
   /** A list of all relationships and associated meta-data for the given schema */
-  relationships?: Array<IFmModelRelationshipMeta<TModel>>;
+  relationships?: IFmModelRelationshipMeta<TModel>[];
   /** A list of properties which should be pushed using firebase push() */
   pushKeys?: string[];
   /** indicates whether this property has been changed on client but not yet accepted by server */
   isDirty?: boolean;
   /** get a list the list of database indexes on the given model */
-  dbIndexes?: IModelIndexMeta[];
+  dbIndexes: IModelIndexMeta[];
   /** all the properties on this model; this includes props and relationships */
-  allProperties?: string[];
+  allProperties: (keyof IModel<TModel> & string)[];
 }

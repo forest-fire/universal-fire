@@ -62,7 +62,7 @@ export interface IWatchOptions<T extends Model> extends Omit<IListOptions<ISdk, 
  */
 export interface IListOptions<S extends ISdk, T extends Model>
   extends IModelOptions {
-  offsets?: Partial<T>;
+  offsets?: Partial<IModel<T>>;
   /**
    * optionally use an _explicit_ database connection rather than the
    * _default_ connection located at `FireModel.defaultDb`.

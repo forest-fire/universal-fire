@@ -74,7 +74,8 @@ export const modelConstructorLookup = <T extends Model>(
   constructor: ConstructorFor<T> | (() => ConstructorFor<T>)
 ): () => ConstructorFor<T> => isConstructable(constructor) ? () => constructor : constructor;
 
-export function isConstructable<T extends Model>(fn: ConstructorFor<T> | (() => ConstructorFor<T>)): fn is ConstructorFor<T> {
+
+export function isConstructable<T extends unknown>(fn: unknown): fn is ConstructorFor<T> {
   try {
     new (fn as ConstructorFor<T>)();
     return true;

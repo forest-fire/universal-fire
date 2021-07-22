@@ -1,5 +1,5 @@
 import { FireModel, Record } from "~/core";
-import { IModelOptions, PrimaryKey, IModel } from "~/types";
+import { IModelOptions, PrimaryKey } from "~/types";
 
 import { FireModelError } from "~/errors";
 import { ISdk } from "@forest-fire/types";

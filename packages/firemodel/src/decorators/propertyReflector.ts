@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
-import { get } from "native-dash";
-import { lowercase, set } from "~/util";
+import { get, set } from "native-dash";
+import { lowercase } from "~/util";
 import { IDictionary } from "common-types";
 import { IModel } from "~/types";
 

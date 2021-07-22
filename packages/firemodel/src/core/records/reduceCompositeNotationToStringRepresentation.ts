@@ -1,5 +1,4 @@
 import { ICompositeKey } from "~/types";
-import { IModel } from "~/types";
 import { keys } from "native-dash";
 import { Model } from "~/models/Model";
 /**

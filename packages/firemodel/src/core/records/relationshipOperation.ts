@@ -9,13 +9,13 @@ import {
   IFmRelationshipOptionsForHasMany,
 } from "~/types";
 import { capitalize, getModelMeta } from "~/util";
-import { createCompositeRef, locallyUpdateFkOnRecord } from "./index";
+import { locallyUpdateFkOnRecord } from "./index";
 
 import { ConstructorFor, IDictionary } from "common-types";
-import { IModel } from "~/types";
 import { Record } from "~/core";
 import { ISdk } from "@forest-fire/types";
 import { Model } from "~/models/Model";
+import { createCompositeKey } from "./createCompositeKey";
 /**
  * **relationshipOperation**
  *
@@ -56,7 +56,7 @@ export async function relationshipOperation<
 ): Promise<void> {
   // make sure all FK's are strings
   const fks = fkRefs.map((fk) => {
-    return typeof fk === "object" ? createCompositeRef(fk) : fk;
+    return createCompositeKey(fk);
   });
   const dispatchEvents = {
     set: [
@@ -143,16 +143,16 @@ export async function relationshipOperation<
   }
 }
 
-export async function localRelnOp<S extends ISdk, TFrom extends sModel, TTo extends Model>(
+export async function localRelnOp<S extends ISdk, TFrom extends Model>(
   rec: Record<S, TFrom>,
-  event: Omit<IFmLocalRelationshipEvent<TFrom, TTo>, "type">,
+  event: IFmLocalRelationshipEvent<TFrom>,
   type: FmEvents
 ): Promise<void> {
   try {
     // locally modify Record's values
     // const ids = extractFksFromPaths(rec, event.property, event.paths);
     event.fks.map((fk) => {
-      locallyUpdateFkOnRecord<S, TFrom, TTo>(rec, fk, { ...event, type } as unknown as IFmLocalRelationshipEvent<TFrom, TTo>);
+      locallyUpdateFkOnRecord(rec, fk, { ...event, type } as IFmLocalRelationshipEvent<TFrom>);
     });
     // local optimistic dispatch
     // eslint-disable-next-line @typescript-eslint/no-floating-promises

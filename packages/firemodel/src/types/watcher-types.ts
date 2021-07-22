@@ -5,7 +5,7 @@ export interface IFmWatcherStartOptions {
    * useful as it indicates when the local state has been synced with the
    * server state
    */
-  once?: (evt: any) => void;
+  once?: (evt: unknown) => void;
   /** optionally give the watcher a name to make lookup easier when stopping */
   name?: string;
   /**

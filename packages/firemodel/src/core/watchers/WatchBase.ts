@@ -17,7 +17,7 @@ import {
   IListOptions,
   IReduxDispatch,
   FmModelConstructor,
-  ICompositeKey, IModel
+  ICompositeKey
 } from "~/types";
 import { FireModelError, FireModelProxyError } from "~/errors";
 import { DefaultDbCache } from "../DefaultDbCache";
@@ -173,7 +173,7 @@ export class WatchBase<S extends ISdk, T extends Model> {
    * when this watcher detects a change; by default it will use the "default dispatch"
    * set on FireModel.dispatch.
    */
-  public dispatch(d: IReduxDispatch) {
+  public dispatch(d: IReduxDispatch): WatchBase<S, T> {
     this._dispatcher = d;
     return this;
   }
@@ -208,10 +208,10 @@ export class WatchBase<S extends ISdk, T extends Model> {
         ? this._underlyingRecordWatchers.map((i) => i._query.path)
         : [this._query.path];
     // TODO: fix this bullshit typing; should be: SerializedQuery<T> | Array<SerializedQuery<T>>
-    const query: any =
+    const query: ISerializedQuery<S, T>[] =
       this._watcherSource === "list-of-records"
         ? this._underlyingRecordWatchers.map((i) => i._query)
-        : this._query;
+        : [this._query];
 
     const watchContext: IWatcherEventContext<S, T> = {
       watcherId,
@@ -229,7 +229,7 @@ export class WatchBase<S extends ISdk, T extends Model> {
       pluralName: this._pluralName,
       watcherPaths,
       // TODO: Fix this typing ... the error is nonsensical atm
-      watcherSource: this._watcherSource as any,
+      watcherSource: this._watcherSource,
       createdAt: new Date().getTime(),
     };
 

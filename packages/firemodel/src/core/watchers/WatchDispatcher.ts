@@ -6,12 +6,12 @@ import {
   IFmWatchEvent,
   IReduxDispatch,
   IWatcherEventContext,
+  PrimaryKey,
 } from "~/types/index";
 import { Record, hasInitialized } from "~/core";
 
 import { FireModelError } from "~/errors";
 import { IDictionary } from "common-types";
-import { IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
 import { Model } from "~/models/Model";
 
@@ -49,7 +49,7 @@ export const WatchDispatcher = <S extends ISdk, T extends Model>(
         value: FmEvents.RECORD_CHANGED,
       };
 
-      let eventContext: IEventTimeContext<T>;
+      let eventContext: IEventTimeContext;
 
       if (event.kind === "relationship") {
         eventContext = {
@@ -79,9 +79,10 @@ export const WatchDispatcher = <S extends ISdk, T extends Model>(
             ? { id: event.key, ...event.value }
             : { id: event.key };
 
-        const rec = Record.createWith<any>(
+        const rec = Record.createWith(
           watcherContext.modelConstructor,
-          recordProps
+          // TODO: validate that this casting is reasonable
+          recordProps as PrimaryKey<T>
         );
 
         let type: FmEvents;
@@ -115,6 +116,7 @@ export const WatchDispatcher = <S extends ISdk, T extends Model>(
       // The mock server and client are now in sync
       hasInitialized(watcherContext.watcherId);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return results as IFmWatchEvent<S, T>;
     };
   };

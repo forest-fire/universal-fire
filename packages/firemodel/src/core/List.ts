@@ -23,7 +23,7 @@ import {
   ModelMeta
 } from "~/types";
 import { capitalize } from "~/util";
-import { pathJoin } from "native-dash";
+import { keys, pathJoin } from "native-dash";
 
 import { FireModelError } from "~/errors";
 import { arrayToHash } from "typed-conversions";
@@ -137,14 +137,12 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     query: ISerializedQuery<S, T>,
     options: IListOptions<S, T> = {}
   ): Promise<List<ISdk, T>> {
-    const defaultSdk = DefaultDbCache().sdk;
-    type SDK = typeof defaultSdk extends ISdk ? typeof defaultSdk : S extends ISdk ? S : ISdk;
     const list = List.create(model, options);
 
     const path =
       options && options.offsets
-        ? List.dbPath<SDK, T>(model, options.offsets)
-        : List.dbPath<SDK, T>(model);
+        ? List.dbPath(model, options.offsets)
+        : List.dbPath(model);
 
     query.setPath(path);
 
@@ -557,14 +555,14 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
    */
   public static dbPath<T extends Model>(
     model: ConstructorFor<T>,
-    offsets?: IModel<T>
+    offsets?: Partial<IModel<T>>
   ): string {
     const obj = offsets ? List.create<T>(model, { offsets }) : List.create<T>(model);
 
     return obj.dbPath;
   }
 
-  protected _offsets: Partial<T>;
+  protected _offsets: Partial<IModel<T>>;
 
   //#endregion
 
@@ -839,9 +837,9 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
       this._modelConstructor
     );
 
-    Object.keys(this._offsets || {}).forEach((prop: keyof T & string) => {
+    keys(this._offsets || {}).forEach((prop: keyof IModel<T> & string) => {
       if (dynamicPathProps.includes(prop)) {
-        const value = this._offsets[prop as keyof T];
+        const value = this._offsets[prop];
         if (!["string", "number"].includes(typeof value)) {
           throw new FireModelError(
             `The dynamic dbOffset is using the property "${prop}" on ${this.modelName

@@ -13,6 +13,3 @@ export class AuditLog extends Model {
   /** the changes to properties, typically not represented in a "removed" op */
   @property action: IAuditOperations;
 }
-
-
-

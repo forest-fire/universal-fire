@@ -4,7 +4,7 @@ import {
   ISerializedQuery,
 } from "@forest-fire/types";
 import { SerializedQuery } from "@forest-fire/serialized-query";
-import { ICompositeKey, IListOptions, IModel, PrimaryKey } from "~/types";
+import { ICompositeKey, IListOptions, PrimaryKey } from "~/types";
 import { List, Record, Watch } from "~/core";
 
 import { FireModelError } from "~/errors";
@@ -313,7 +313,7 @@ export class WatchList<S extends ISdk, T extends Model> extends WatchBase<S, T> 
   /**
    * Sets properties that could be effected by _dynamic paths_
    */
-  protected setPathDependantProperties() {
+  protected setPathDependantProperties(): void {
     if (
       this._dynamicProperties.length === 0 ||
       Object.keys(this._offsets).length > 0

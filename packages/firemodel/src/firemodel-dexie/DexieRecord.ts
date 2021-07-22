@@ -8,8 +8,6 @@ import { ConstructorFor } from "common-types";
 import { Table } from "dexie";
 import { capitalize } from "~/util";
 import { key as fbKey } from "firebase-key";
-import { IModel } from "~/types";
-import { IDictionary } from "brilliant-errors";
 import { Model } from "~/models/Model";
 
 /**
@@ -20,6 +18,7 @@ import { Model } from "~/models/Model";
 export class DexieRecord<T extends Model> {
   constructor(
     private modelConstructor: ConstructorFor<T>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private table: Table<any, any>,
     private meta: IDexieModelMeta<T>
   ) { }
@@ -50,7 +49,7 @@ export class DexieRecord<T extends Model> {
    *
    * @param record the dictionary representing the new record
    */
-  async add(record: Partial<T>) {
+  async add(record: Partial<T>): Promise<T> {
     if (this.meta.hasDynamicPath) {
       if (!this.meta.dynamicPathComponents.every((i) => record[i as keyof T])) {
         throw new DexieError(
@@ -66,7 +65,7 @@ export class DexieRecord<T extends Model> {
       }
     }
     if (!record.id) {
-      (record as IDictionary).id = fbKey();
+      (record).id = fbKey();
     }
     const now = new Date().getTime();
     record.createdAt = now;

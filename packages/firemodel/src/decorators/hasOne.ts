@@ -2,7 +2,6 @@
 import {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
-  IModel,
 } from "~/types";
 import {
   modelConstructorLookup,

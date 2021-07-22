@@ -1,4 +1,4 @@
-import { IModel, IRecord } from "~/types";
+import { IRecord } from "~/types";
 import { FireModelError } from "~/errors";
 import { ISdk } from "@forest-fire/types";
 import { Model } from "~/models/Model";

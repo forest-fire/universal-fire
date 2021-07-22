@@ -8,7 +8,7 @@ import { Model } from "~/models/Model";
 /**
  * Allows setting a default value for a given property
  */
-export function defaultValue(value: any) {
+export function defaultValue(value: unknown) {
   return propertyReflector<IFmModelPropertyMeta<Model>>(
     { defaultValue: value },
     propertiesByModel

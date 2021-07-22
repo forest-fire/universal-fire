@@ -1,4 +1,4 @@
-import { IModel, IFmCrudOperation } from "~/types";
+import { IFmCrudOperation } from "~/types";
 import { ISdk } from "@forest-fire/types";
 
 import { FireModelError } from "~/errors";

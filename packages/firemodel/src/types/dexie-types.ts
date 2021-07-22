@@ -9,6 +9,7 @@ export interface IDexiePriorVersion {
    */
   models: IDictionary<string>;
   /** If there is a schema change then  */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   upgrade?: (collection: Transaction) => Dexie.Collection<any, any>;
 }
 

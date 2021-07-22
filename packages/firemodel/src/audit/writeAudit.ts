@@ -1,4 +1,4 @@
-import { DefaultDbCache, FireModel, Record } from "~/core";
+import { DefaultDbCache, Record } from "~/core";
 import { IAuditChange, IAuditOperations, IModelOptions } from "~/types";
 
 import { AuditLog } from "~/models";

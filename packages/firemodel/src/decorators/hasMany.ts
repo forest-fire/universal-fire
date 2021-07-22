@@ -3,7 +3,6 @@ import { ConstructorFor, IDictionary, Omit } from "common-types";
 import {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
-  IModel,
 } from "~/types";
 import { modelConstructorLookup, modelNameLookup } from "~/util";
 

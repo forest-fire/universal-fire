@@ -1,4 +1,4 @@
-import { ICompositeKey, IModel } from "~/types";
+import { ICompositeKey } from "~/types";
 import { FireModelError } from "~/errors";
 import { Record } from "~/core";
 import { capitalize } from "~/util";
@@ -38,11 +38,10 @@ export function createCompositeKeyFromRecord<S extends ISdk, T extends Model = M
     {}
   );
 
-  return rec.dynamicPathComponents.reduce(
-    (prev, key) => ({
-      ...prev,
-      ...dynamicPathComponents,
-    }),
+  return rec.dynamicPathComponents.reduce((prev) => ({
+    ...prev,
+    ...dynamicPathComponents,
+  }),
     { id: rec.id }
   ) as ICompositeKey<T>;
 }

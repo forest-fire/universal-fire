@@ -113,30 +113,41 @@ export type ICompositeKey<T extends Model> = IFmHasId<T> & Partial<T>;
 /**
  * A **Composite Key** represented in string form
  */
-export type ICompositeKeyString = `${string}::${string}`;
+export type CompositeKeyString = `${string}::${string}`;
 
 /**
  * Type guard which tests whether the given input is a Composite Key in
  * string form (aka., `string::string`)
  */
-export function isCompositeString(input: unknown): input is ICompositeKeyString {
+export function isCompositeString(input: unknown): input is CompositeKeyString {
   return typeof (input) === "string" && /\S+::\S+$/.test(input)
 }
+
+/**
+ * Type guard to check whether the input is a Record
+ */
+export function isRecord<T extends Model>(input: unknown | Record<ISdk, T>): input is Record<ISdk, T> {
+  return typeof (input) === "object" && (input as IDictionary).kind === "record";
+}
+
 
 /**
  * A Foreign Key (FK) reference where both object and string notation of simple
  * or composite keys is valid.
  */
-export type ForeignKey<T extends Model = Model> = fk | ICompositeKeyString | ICompositeKey<T>;
+export type ForeignKey<T extends Model = Model> = fk | CompositeKeyString | ICompositeKey<T>;
 
 /**
  * The **Primary Key** for a model; represented either as a simple string or as
  * a `ICompositeKey`.
  */
-export type PrimaryKey<T extends Model = Model> = pk | ICompositeKeyString | ICompositeKey<T>;
+export type PrimaryKey<T extends Model = Model> = pk | CompositeKeyString | ICompositeKey<T>;
 
+/**
+ * Loose type guard that a `PrimaryKey` or `ForeignKey`.
+ */
 export function isCompositeKey<T extends Model>(ref: unknown): ref is ICompositeKey<T> {
-  return typeof ref === "object" && typeof (ref as IDictionary)?.id === "string";
+  return typeof ref === "object" && typeof (ref as IDictionary)?.id === "string"
 }
 
 export interface IFmBuildRelationshipOptions<S extends ISdk> {
@@ -149,7 +160,7 @@ export interface IFmBuildRelationshipOptions<S extends ISdk> {
   /**
    * the "other value" pairing for a _hasMany_ relationship; defaults to `true`
    */
-  altHasManyValue?: true | any;
+  altHasManyValue?: true | unknown;
   /**
    * By default it is assumed the action for paths is to build relationships but
    * if the operation is asking for the removal of relationships this should be
@@ -165,7 +176,7 @@ export interface IFmBuildRelationshipOptions<S extends ISdk> {
 
 export interface IRecordOptions<S extends ISdk> {
   db?: IDatabaseSdk<S>;
-  logging?: any;
+  logging?: unknown;
   id?: string;
   /** if you're working off of a mocking database, there are situations where adding a record silently (aka., not triggering any listener events) is desirable and should be allowed */
   silent?: boolean;
@@ -205,18 +216,18 @@ export interface IRecordOptions<S extends ISdk> {
   pluralizeLocalPath?: boolean;
 }
 
-export interface IWriteOperation {
+export interface IWriteOperation<V extends unknown = unknown> {
   id: string;
   type: "set" | "pushKey" | "update";
   /** The database path being written to */
   path: string;
   /** The new value being written to database */
-  value: any;
+  value: V;
   /** called on positive confirmation received from server */
-  callback: (type: string, value: any) => void;
+  callback: (type: string, value: V) => void;
 }
 
-export interface IMultiPathUpdates {
+export interface IMultiPathUpdates<V extends unknown = unknown> {
   path: string;
-  value: any;
+  value: V;
 }

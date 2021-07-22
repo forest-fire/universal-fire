@@ -5,7 +5,7 @@ import { Model } from "~/models/Model";
 
 export type FmRelationshipType = "hasMany" | "hasOne";
 
-export interface IFmModelRelationshipMeta<TModel extends Model = Model, TFk extends Model = Model>
+export interface IFmModelRelationshipMeta<TModel extends Model, TFk extends Model = Model>
   extends IFmModelAttributeBase<TModel, TFk> {
   isRelationship: true;
   isProperty: false;

@@ -1,5 +1,4 @@
 import { IUnderlyingError } from "~/types";
-import { IModel } from "~/types";
 import { Model } from "~/models/Model";
 
 /**

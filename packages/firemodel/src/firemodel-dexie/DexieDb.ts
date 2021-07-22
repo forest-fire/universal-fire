@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import Dexie, { DexieDOMDependencies, TableSchema } from "dexie";
 import { DexieError, FireModelError } from "~/errors";
@@ -62,32 +63,32 @@ export class DexieDb {
           .forEach((i) => dexieModel.push(`&${i}`));
 
         // NON-UNIQUE Indexes
-        const indexes = []
-          .concat(
-            (r.META.dbIndexes || [])
-              .filter((i) => i.isIndex && !i.isUniqueIndex)
-              .map((i) => i.property)
-          )
-          // include dynamic props (if they're not explicitly marked as indexes)
-          .concat(
-            r.hasDynamicPath
-              ? r.dynamicPathComponents.filter(
-                (i) =>
-                  !r.META.dbIndexes.map((idx) => idx.property).includes(i)
-              )
-              : []
-          )
-          .forEach((i) => dexieModel.push(i));
+        // const indexes = []
+        //   .concat(
+        //     (r.META.dbIndexes || [])
+        //       .filter((i) => i.isIndex && !i.isUniqueIndex)
+        //       .map((i) => i.property)
+        //   )
+        //   // include dynamic props (if they're not explicitly marked as indexes)
+        //   .concat(
+        //     r.hasDynamicPath
+        //       ? r.dynamicPathComponents.filter(
+        //         (i) =>
+        //           !r.META.dbIndexes.map((idx) => idx.property).includes(i)
+        //       )
+        //       : []
+        //   )
+        //   .forEach((i) => dexieModel.push(i));
 
         // MULTI-LEVEL Indexes
-        const multiEntryIndex = []
-          .concat(
-            r.META.dbIndexes
-              .filter((i) => i.isMultiEntryIndex)
-              .map((i) => i.property)
-          )
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-          .forEach((i) => dexieModel.push(`*${i}`));
+        // const multiEntryIndex = []
+        //   .concat(
+        //     r.META.dbIndexes
+        //       .filter((i) => i.isMultiEntryIndex)
+        //       .map((i) => i.property)
+        //   )
+        //   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        //   .forEach((i) => dexieModel.push(`*${i}`));
 
         agg[r.pluralName] = dexieModel.join(",").trim();
 
@@ -104,6 +105,7 @@ export class DexieDb {
    * This allows leveraging libraries such as:
    * - [fakeIndexedDB](https://github.com/dumbmatter/fakeIndexedDB)
    */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public static indexedDB(indexedDB: any, idbKeyRange?: DexieDOMDependencies["IDBKeyRange"]): void {
     // Dexie.dependencies.indexedDB = indexedDB;
     DexieDb._indexedDb = indexedDB;
@@ -113,6 +115,7 @@ export class DexieDb {
   }
 
   /** if set, this library will be used instead of the globally scoped library */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static _indexedDb: any;
 
   //#endregion STATIC
@@ -120,7 +123,7 @@ export class DexieDb {
   /**
    * read access to the **Dexie** model definitions
    */
-  public get models() {
+  public get models(): IDictionary<string> {
     return this._models;
   }
 

@@ -86,7 +86,6 @@ export class AuditRecord extends AuditBase {
       .setPath(this.byId)
       .orderByChild("value")
       .endAt(when);
-    const qr = await this.db.getList<IAuditLogItem>(this._query);
 
     const ids = (await this.db.getList<IAuditLogItem>(this._query)).map((i) =>
       pathJoin(this.auditLogs, i.id)

@@ -11,14 +11,15 @@ export function isProperty<T extends Model>(modelKlass: T) {
 
 /** Properties accumlated by propertyDecorators  */
 export const propertiesByModel: IDictionary<IDictionary<
-  IFmModelPropertyMeta<any>
+  IFmModelPropertyMeta
 >> = {};
 
 /** allows the addition of meta information to be added to a model's properties */
-export function addPropertyToModelMeta<T extends Model = Model>(
+export function addPropertyToModelMeta(
   modelName: string,
   property: string,
-  meta: IFmModelPropertyMeta<T>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  meta: IFmModelPropertyMeta<any>
 ): void {
   if (!propertiesByModel[modelName]) {
     propertiesByModel[modelName] = {};
@@ -45,9 +46,7 @@ export function getModelProperty<T extends Model>(model: T): (prop: string) => I
  */
 export function getProperties<T extends Model>(model: T): IFmModelPropertyMeta<T>[] {
   const modelName = model.constructor.name;
-  const properties =
-    hashToArray(propertiesByModel[modelName], "property") || [];
-
+  const properties = hashToArray(propertiesByModel[modelName], "property") || [];
   let parent = Object.getPrototypeOf(model.constructor);
 
   while (parent.name) {
@@ -60,5 +59,5 @@ export function getProperties<T extends Model>(model: T): IFmModelPropertyMeta<T
     parent = Object.getPrototypeOf(subClass.constructor);
   }
 
-  return properties as IFmModelPropertyMeta<T>[];
+  return properties as unknown as IFmModelPropertyMeta<T>[];
 }

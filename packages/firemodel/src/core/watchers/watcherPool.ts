@@ -1,11 +1,11 @@
-import { IReduxDispatch, IWatcherEventContext, IModel } from "~/types";
+import { IWatcherEventContext } from "~/types";
 
 import { IDictionary } from "common-types";
 import { hashToArray } from "typed-conversions";
 import { ISdk } from "@forest-fire/types";
 import { Model } from "~/models/Model";
 /** a cache of all the watched  */
-let watcherPool: IDictionary<IWatcherEventContext<ISdk, IModel>> = {};
+let watcherPool: IDictionary<IWatcherEventContext<ISdk, Model>> = {};
 
 export function getWatcherPool<S extends ISdk = ISdk, T extends Model = Model>(): IDictionary<IWatcherEventContext<S, T>> {
   return watcherPool as unknown as IDictionary<IWatcherEventContext<S, T>>;
@@ -29,20 +29,9 @@ export function clearWatcherPool(): void {
   watcherPool = {};
 }
 
-/**
- * Each watcher must have it's own `dispatch()` function which
- * is reponsible for capturing the "context". This will be used
- * both by locally originated events (which have more info) and
- * server based events.
- */
-export function addDispatchForWatcher(
-  code: keyof typeof watcherPool,
-  dispatch: IReduxDispatch
-) {
-  //
-}
 
-export function removeFromWatcherPool(code: keyof typeof watcherPool) {
+
+export function removeFromWatcherPool(code: keyof typeof watcherPool): IDictionary<IWatcherEventContext<ISdk, Model>> {
   delete watcherPool[code];
   return watcherPool;
 }

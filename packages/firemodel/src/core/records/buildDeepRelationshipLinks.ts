@@ -1,6 +1,6 @@
 import { ISdk, } from "@forest-fire/types";
 import { IDictionary } from "common-types";
-import { ForeignKey } from "~/types";
+import { ForeignKey, IModel } from "~/types";
 import { Record } from "~/core";
 import { getModelMeta } from "~/util";
 import { Model } from "~/models/Model";
@@ -12,7 +12,7 @@ import { Model } from "~/models/Model";
  */
 export async function buildDeepRelationshipLinks<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
-  property: keyof T & string
+  property: keyof IModel<T> & string
 ): Promise<void> {
   const meta = getModelMeta(rec).property(property);
   return meta.relType === "hasMany"
@@ -22,9 +22,9 @@ export async function buildDeepRelationshipLinks<S extends ISdk, T extends Model
 
 async function processHasMany<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
-  property: keyof T & string
+  property: keyof IModel<T> & string
 ) {
-  const meta = getModelMeta(rec).property(property);
+  const meta = getModelMeta<S, T>(rec).property(property);
   const fks: IDictionary = rec.get(property);
   for (const key of Object.keys(fks)) {
     const fk = fks[key as keyof typeof fks] as true | IDictionary;
@@ -57,7 +57,7 @@ async function processHasMany<S extends ISdk, T extends Model>(
 
 async function processBelongsTo<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
-  property: keyof T & string
+  property: keyof IModel<T> & string
 ): Promise<void> {
   const fk: ForeignKey<T> = rec.get(property) as any;
   const meta = getModelMeta(rec).property(property);

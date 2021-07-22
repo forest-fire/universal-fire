@@ -12,11 +12,11 @@ import {
 
 import { Record } from "~/core";
 import { createCompositeKeyRefFromRecord } from "./index";
-import { getModelMeta, pathJoin } from "~/util";
-import { IModel } from "~/types";
+import { getModelMeta } from "~/util";
 import { ISdk } from "@forest-fire/types";
 import { ConstructorFor } from "common-types";
 import { Model } from "~/models/Model";
+import { pathJoin } from "native-dash";
 
 /**
  * Builds all the DB paths needed to update a pairing of a PK:FK. It is intended
@@ -76,7 +76,6 @@ export function buildRelationshipPaths<S extends ISdk, T extends Model>(
 
     // INVERSE RELATIONSHIP
     if (inverseProperty) {
-      type FK = typeof fkRecord;
       const fkMeta = getModelMeta(fkRecord);
       const inverseReln = fkMeta.relationship(inverseProperty);
 

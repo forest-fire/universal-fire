@@ -2,13 +2,14 @@ import { Record } from "~/core";
 import { IDictionary } from "common-types";
 import { keys } from "native-dash";
 import { ISdk } from "@forest-fire/types";
-import { IFmModelMeta, IModel, } from "~/types";
+import { IFmModelMeta, } from "~/types";
 import { Model } from "~/models/Model";
 
-const meta: IDictionary<IFmModelMeta<any>> = {};
+const meta: IDictionary<IFmModelMeta> = {};
 
 export function addModelMeta(
   modelName: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   props: IFmModelMeta<any>
 ): void {
   meta[modelName] = props;

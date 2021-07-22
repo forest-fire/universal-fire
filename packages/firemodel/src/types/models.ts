@@ -32,10 +32,6 @@ export type IModel<T extends Model = Model> = Omit<T, "META">;
  */
 export type ModelMeta<T extends Model> = IFmModelMeta<T>;
 
-/**
- * The `IModel` interface _plus_ the META property
- */
-export type IModelClass<T extends Model> = Omit<T, "META"> & { META: ModelMeta<T> };
 
 /**
  * **ModelInput**
@@ -52,5 +48,5 @@ export type ModelInput<T extends Model> = Omit<T, ModelManagedProps | "META">;
  * the database and therefore the `id`, `lastUpdated` and `createdAt` fields are _not_
  * optional.
  */
-export type IDbModel<T extends Model> = T & Required<IModelManaged> & { META: ModelMeta<T> }
+export type IDbModel<T extends Model> = T & Required<IModelManaged>
 

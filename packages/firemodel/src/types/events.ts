@@ -2,7 +2,6 @@ import type { ISdk } from "@forest-fire/types";
 
 import {
   FmEvents,
-  IModel,
   ICompositeKey,
   IFmLocalRecordEvent,
   IFmLocalRelationshipEvent,
@@ -31,7 +30,7 @@ export interface IFmWatcherStopped {
 export type IFmWatchEvent<S extends ISdk, T extends Model = Model> = IFmServerOrLocalEvent<
   T
 > &
-  IEventTimeContext<T> &
+  IEventTimeContext &
   IWatcherEventContext<S, T>;
 
 /**
@@ -43,7 +42,7 @@ export type IFmWatchEvent<S extends ISdk, T extends Model = Model> = IFmServerOr
 export type IFmWatchEventLocalRecord<
   S extends ISdk,
   T extends Model = Model
-  > = IFmLocalRecordEvent<T> & IEventTimeContext<T> & IWatcherEventContext<S, T>;
+  > = IFmLocalRecordEvent<T> & IEventTimeContext & IWatcherEventContext<S, T>;
 
 /**
  * **IFmWatchEventLocalRelationship**
@@ -61,7 +60,7 @@ export type IFmWatchEventLocalRelationship<
   S extends ISdk,
   T extends Model = Model
   > = IFmLocalRelationshipEvent<T> &
-  IEventTimeContext<T> &
+  IEventTimeContext &
   IWatcherEventContext<S, T>;
 
 export type IFmWatchEventLocal<S extends ISdk, T extends Model> =
@@ -110,7 +109,7 @@ export interface IFmRecordMeta<T extends Model> {
  * The extra meta-data that comes from combining
  * the _watcher context_ and the _event_
  */
-export interface IEventTimeContext<T = any> {
+export interface IEventTimeContext {
   type: FmEvents;
   dbPath: string;
 }

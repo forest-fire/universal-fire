@@ -4,7 +4,6 @@
 import { IDictionary } from "common-types";
 import {
   IFmChangedProperties,
-  IModel,
   IReduxAction,
   IReduxDispatch,
   ModelMeta

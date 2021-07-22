@@ -9,16 +9,17 @@ import {
   getRelationships,
   isProperty,
   isRelationship,
+  getPushKeys,
+  modelRegister
 } from "~/util";
-import { getPushKeys, modelRegister } from "~/util";
 
-import { ConstructorFor, IDictionary } from "common-types";
+import { ConstructorFor } from "common-types";
 import { getDbIndexes } from "~/decorators";
 import { IFmModelMeta } from "~/types";
 import { Model } from "~/models/Model";
 
-export function model<T extends Model>(options: IFmModelMeta<T> = {} as IFmModelMeta<T>) {
-  let isDirty = false;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function model(options: Partial<IFmModelMeta<any>> = {} as Partial<IFmModelMeta<any>>) {
 
   return function decorateModel<M extends Model>(
     target: ConstructorFor<M>
@@ -51,15 +52,15 @@ export function model<T extends Model>(options: IFmModelMeta<T> = {} as IFmModel
         ...{ isRelationship: isRelationship(instance) },
         ...{ relationship: getModelRelationship(instance) },
         ...{ relationships: getRelationships(instance) },
-        ...{ dbIndexes: getDbIndexes(instance) },
+        ...{ dbIndexes: getDbIndexes(target) },
         ...{ pushKeys: getPushKeys(instance) },
         ...{ dbOffset: options.dbOffset ? options.dbOffset : "" },
         ...{ audit: options.audit ? options.audit : false },
         ...{ plural: options.plural },
         ...{
           allProperties: [
-            ...getProperties(instance),
-            ...getRelationships(instance),
+            ...getProperties(instance).map(i => i.property),
+            ...getRelationships(instance).map(i => i.property),
           ],
         },
         ...{
@@ -73,7 +74,6 @@ export function model<T extends Model>(options: IFmModelMeta<T> = {} as IFmModel
               instance.constructor.name.slice(1)
               : options.localModelName,
         },
-        ...{ isDirty },
       };
 
       addModelMeta(target.constructor.name.toLowerCase(), meta);
@@ -82,14 +82,10 @@ export function model<T extends Model>(options: IFmModelMeta<T> = {} as IFmModel
         get(): IFmModelMeta<M> {
           return meta;
         },
-        set(prop: IDictionary) {
-          if (typeof prop === "object" && prop.isDirty !== undefined) {
-            isDirty = prop.isDirty;
-          } else {
-            throw new Error(
-              "The META properties should only be set with the @model decorator at design time!"
-            );
-          }
+        set() {
+          throw new Error(
+            "The META properties should only be set with the @model decorator at design time!"
+          );
         },
         configurable: false,
         enumerable: false,

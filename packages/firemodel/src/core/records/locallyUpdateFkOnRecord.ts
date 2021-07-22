@@ -1,20 +1,20 @@
-import { IFmLocalRelationshipEvent, IModel } from "~/types";
+import { ForeignKey, IFmLocalRelationshipEvent } from "~/types";
 
 import { Record } from "~/core";
-import { fk } from "common-types";
 import { ISdk } from "@forest-fire/types";
+import { Model } from "~/models/Model";
+import { createCompositeKeyString } from "./createCompositeKeyString";
+import { getIdFromKey } from "./getIdFromKey";
+import { accessPrivateData } from "./accessPrivateData";
 
 /**
- * sets the `Record` property to the optimistic values set
+ * sets a `Record`'s property to the optimistic values set
  * with the relationship CRUD event.
- *
- * This function has no concern with dispatch or the FK model
- * and any updates that may need to take place there.
  */
-export function locallyUpdateFkOnRecord<S extends ISdk, TFrom extends IModel, TTo extends IModel = IModel>(
-  rec: Record<S, TFrom>,
-  fkId: fk,
-  event: IFmLocalRelationshipEvent<TFrom, TTo>
+export function locallyUpdateFkOnRecord<S extends ISdk, T extends Model>(
+  rec: Record<S, T>,
+  fkId: ForeignKey,
+  event: IFmLocalRelationshipEvent<T>
 ): void {
   const relnType = rec.META.relationship(event.property).relType;
 
@@ -23,20 +23,23 @@ export function locallyUpdateFkOnRecord<S extends ISdk, TFrom extends IModel, TT
   // eslint-disable-next-line @typescript-eslint/no-floating-promises
   rec.set("lastUpdated", new Date().getTime(), true);
   // now work on a per-op basis
+  const currentValue = rec.get(event.property);
+  const fk = createCompositeKeyString(fkId);
+  const id = getIdFromKey(fkId);
+
   switch (event.operation) {
     case "set":
     case "add":
-      (rec as any)._data[event.property] =
-        relnType === "hasMany"
-          ? { ...rec.data[event.property], ...{ [fkId]: true } }
-          : fkId;
-      return;
+      accessPrivateData(rec)._data[event.property][id] = relnType === "hasMany"
+        ? { ...currentValue, ...{ [fk]: true } }
+        : fk;
+      break;
     case "remove":
       if (relnType === "hasMany") {
-        delete (rec as any)._data[event.property][fkId];
+        delete (rec as any)._data[event.property][id];
       } else {
         (rec as any)._data[event.property] = "";
       }
-      return;
+      break;
   }
 }

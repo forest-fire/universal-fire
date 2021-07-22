@@ -1,5 +1,4 @@
 import { IFmPathValuePair } from "~/types";
-import { IModel } from "~/types";
 import { ISdk } from "@forest-fire/types";
 import { Record } from "~/core";
 import { pathJoin } from "native-dash";

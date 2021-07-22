@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IFmModelAttributeBase } from "./index";
 import { Model } from "~/models/Model";
+import { IFmModelAttributeBase } from "./index";
 
 export interface IFmModelPropertyMeta<TModel extends Model, TFk extends Model = Model>
   extends IFmModelAttributeBase<TModel, TFk> {

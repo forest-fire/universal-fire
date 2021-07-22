@@ -2,7 +2,7 @@ import { IFmWatchEvent, Record } from "../src";
 import { ISdk, RealTimeAdmin } from "universal-fire";
 import {
   buildRelationshipPaths,
-  createCompositeKeyFromFkString,
+  createCompositeKey,
   extractFksFromPaths,
 } from "~/core/records";
 
@@ -88,25 +88,25 @@ describe("Relationship > ", () => {
   });
 
   it("can build composite key from FK string", async () => {
-    const t1 = createCompositeKeyFromFkString("foo::geo:CT::age:13");
+    const t1 = createCompositeKey("foo::geo:CT::age:13");
     expect(t1.id).toBe("foo");
     expect(t1.geo).toBe("CT");
     expect(t1.age).toBe("13");
 
-    const t2 = createCompositeKeyFromFkString("foo");
+    const t2 = createCompositeKey("foo");
     expect(t2.id).toBe("foo");
     expect(Object.keys(t2)).toHaveLength(1);
   });
 
   it("can build TYPED composite key from Fk string and reference model", async () => {
-    const t1 = createCompositeKeyFromFkString("foo::age:13", Person);
+    const t1 = createCompositeKey("foo::age:13", Person);
     expect(t1.id).toBe("foo");
     expect(t1.age).toBe(13);
   });
 
   it("building a TYPED composite key errors when invalid property is introduced", async () => {
     try {
-      const t1 = createCompositeKeyFromFkString("foo::age:13::geo:CT", Person);
+      const t1 = createCompositeKey("foo::age:13::geo:CT", Person);
 
       throw new Error("Should not reach this point because of invalid prop");
     } catch (e) {

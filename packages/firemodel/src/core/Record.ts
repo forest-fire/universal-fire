@@ -14,7 +14,6 @@ import {
   IAuditChange,
   IAuditOperations,
   ICompositeKey,
-  IFMEventName,
   ForeignKey,
   IFmCrudOperations,
   IFmDispatchOptions,
@@ -45,8 +44,7 @@ import {
   buildDeepRelationshipLinks,
   buildRelationshipPaths,
   createCompositeKeyFromRecord,
-  createCompositeKeyFromFkString,
-  createCompositeKeyRefFromRecord,
+  createCompositeKey,
   relationshipOperation,
 } from "./records";
 import {
@@ -270,7 +268,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   public static async pushKey<T extends Model, O extends IRecordOptions<ISdk>>(
     model: new () => T,
     pk: PrimaryKey<T>,
-    property: keyof T & string,
+    property: keyof IModel<T> & string,
     payload: any,
     options: O = {} as O
   ) {
@@ -321,7 +319,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     }
     const properties: Partial<T> =
       typeof payload === "string"
-        ? createCompositeKeyFromFkString(payload, rec.modelConstructor)
+        ? createCompositeKey(payload, rec.modelConstructor)
         : payload;
     // TODO: build some tests to ensure that ...
     // the async possibilites of this method (only if `options.setDeepRelationships`)
@@ -534,6 +532,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   private _existsOnDB = false;
   private _writeOperations: IWriteOperation[] = [];
   private _data: IModel<T>;
+  public readonly kind: "record";
 
   constructor(model: new () => T, protected options: IRecordOptions<S> = {}) {
     super();
@@ -637,7 +636,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * a composite string (aka, a model which has a dynamic dbOffset)
    */
   public get compositeKeyRef() {
-    return createCompositeKeyRefFromRecord<S, T>(this);
+    return createCompositeKeyFromRecord<S, T>(this);
   }
 
   /**
@@ -729,7 +728,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * FK relationship to another model
    */
   public getMetaForRelationship(
-    property: string & keyof ModelInput<T>
+    property: string & keyof IModel<T>
   ): IRecordRelationshipMeta {
     if (!this.META.property(property)?.isRelationship) {
       throw new FireModelError(
@@ -827,11 +826,11 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * Pushes new values onto properties on the record
    * which have been stated to be a "pushKey"
    */
-  public async pushKey<K extends keyof T & string>(
+  public async pushKey<K extends keyof IModel<T> & string>(
     property: K,
     value: T[K][keyof T[K]] | unknown
   ): Promise<fk> {
-    if (this.META.pushKeys.indexOf(property as any) === -1) {
+    if (this.META.pushKeys.indexOf(property) === -1) {
       throw new FireModelError(
         `Invalid Operation: you can not push to property "${property}" as it has not been declared a pushKey property in the schema`,
         "invalid-operation/not-pushkey"
@@ -875,7 +874,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param props a hash of name value pairs which represent the props being
    * updated and their new values
    */
-  public async update(props: Nullable<Partial<T>>) {
+  public async update(props: Nullable<Partial<IModel<T>>>) {
     // const meta = getModelMeta(this);
     const meta = this.META;
     if (!meta.property) {
@@ -890,9 +889,9 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
 
     // can not update relationship properties
     if (
-      Object.keys(props).some((key: string) => {
-        const root = key.split(".")[0];
-        const rootProperties = meta.property(root as keyof T & string);
+      keys(props).some((key) => {
+        const root = (key as string).split(".")[0];
+        const rootProperties = meta.property(root as keyof IModel<T> & string);
         if (!rootProperties) {
           throw new FireModelError(
             `While this record [ model: ${capitalize(this.modelName)}, id: ${this.id
@@ -902,8 +901,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
         return rootProperties.isRelationship;
       })
     ) {
-      const relProps = Object.keys(props).filter(
-        (p: any) => meta.property(p).isRelationship
+      const relProps = keys(props).filter(
+        (p: keyof IModel<T> & string) => meta.property(p).isRelationship
       );
       throw new FireModelError(
         `You called update on a hash which has relationships included in it. Please only use "update" for updating properties. The relationships you were attempting to update were: ${relProps.join(
@@ -946,7 +945,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param silent a flag to indicate whether the change to the prop should be updated
    * to the database or not
    */
-  public async set<K extends keyof T>(
+  public async set<K extends keyof IModel<T>>(
     prop: K & string,
     value: T[K],
     silent = false
@@ -972,14 +971,12 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       lastUpdated,
     };
     // locally change Record values
-    this.META.isDirty = true;
     this._data = { ...this._data, ...changed };
     // dispatch
     if (!silent) {
       await this._localCrudOperation(IFmCrudOperations.update, rollback, {
         silent,
       });
-      this.META.isDirty = false;
     }
 
     return;
@@ -1046,7 +1043,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * (regardless of the cardinality in the relationship)
    */
   public async disassociate(
-    property: keyof T & string,
+    property: keyof IModel<T> & string,
     // TODO: ideally stronger typing below
     refs: ForeignKey | ForeignKey[],
     options: IFmRelationshipOptions<S> = {}
@@ -1261,7 +1258,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param data the initial state you want to start with
    */
   public async _initialize(
-    data: IModel<T>,
+    data: Partial<IModel<T>>,
     options: IRecordOptions<S> = {}
   ): Promise<void> {
     const defaultDb = FireModel.defaultDb;
@@ -1327,14 +1324,14 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       if (this.META.audit) {
         const deltas = compareHashes<T>(currentValue, priorValue);
         const auditLogEntries: IAuditChange[] = [];
-        const added = deltas.added.forEach((a) =>
-          auditLogEntries.push({
-            action: "added",
-            property: a,
-            before: null,
-            after: currentValue[a],
-          })
-        );
+        // const added = deltas.added.forEach((a) =>
+        //   auditLogEntries.push({
+        //     action: "added",
+        //     property: a,
+        //     before: null,
+        //     after: currentValue[a],
+        //   })
+        // );
         deltas.changed.forEach((c) =>
           auditLogEntries.push({
             action: "updated",
@@ -1343,14 +1340,14 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
             after: currentValue[c],
           })
         );
-        const removed = deltas.removed.forEach((r) =>
-          auditLogEntries.push({
-            action: "removed",
-            property: r,
-            before: priorValue[r],
-            after: null,
-          })
-        );
+        // const removed = deltas.removed.forEach((r) =>
+        //   auditLogEntries.push({
+        //     action: "removed",
+        //     property: r,
+        //     before: priorValue[r],
+        //     after: null,
+        //   })
+        // );
 
         const pastTense = {
           add: "added",
@@ -1398,7 +1395,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * typically a great idea but it can be useful in situations like
    * _mocking_
    */
-  protected async _localCrudOperation<K extends IFMEventName<K>>(
+  protected async _localCrudOperation(
     crudAction: IFmCrudOperations,
     priorValue: T,
     options: IFmDispatchOptions = {}
@@ -1468,7 +1465,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
           UnwatchedLocalEvent(this, {
             type: actionTypeStart,
             ...event,
-            value: withoutMetaOrPrivate(this.data),
+            value: withoutMetaOrPrivate<T>(this.data),
           })
         );
       }
@@ -1493,7 +1490,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       switch (crudAction) {
         case "remove":
           try {
-            const test = this.dbPath;
+            this.dbPath;
           } catch (e) {
             throw new FireModelProxyError(
               e,
@@ -1656,7 +1653,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    */
   private async _getFromDB(id: PrimaryKey<T>) {
     if (isCompositeString(id)) {
-      id = createCompositeKeyFromFkString<T>(id);
+      id = createCompositeKey<T>(id);
     }
 
     if (typeof (id) === "string") {

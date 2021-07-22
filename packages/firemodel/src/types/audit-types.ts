@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { epochWithMilliseconds } from "common-types";
 import { IModel } from "~/types";
 

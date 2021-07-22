@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  IModel,
   FmEvents,
   IFmPathValuePair,
   IFmRecordMeta,
@@ -7,6 +7,7 @@ import {
   IMultiPathUpdates,
   IWatchEventClassification,
   IWatcherSource,
+  IModel,
 } from "~/types";
 import {
   IPathBasedWatchEvent,
@@ -21,11 +22,7 @@ import { IDictionary, epoch, fk, pk } from "common-types";
 
 export type Extractable<T, U> = T extends U ? any : never;
 export type NotString<T> = string extends T ? never : any;
-function promoteStringToFMEvents<
-  K extends string & NotString<K> & Extractable<FmEvents, K>
->(k: K): Extract<FmEvents, K> {
-  return k;
-}
+
 export type IFmCrudOperation = "add" | "update" | "remove";
 export const enum IFmCrudOperations {
   add = "add",
@@ -134,13 +131,13 @@ export interface IFmLocalEventBase<T> {
  * on both effected records.
  */
 export interface IFmLocalRelationshipEvent<
-  F extends IModel = IModel,
+  F extends Model = Model,
   T extends Model = Model
   > extends IFmLocalEventBase<F> {
   kind: "relationship";
   operation: IFmRelationshipOperation;
   /** the property on the `from` model which has a FK ref to `to` model */
-  property: keyof F & string;
+  property: keyof IModel<F> & string;
   /**
    * The foreign key that the `from` model will be operating with on property `property`.
    * If the FK has a dynamic path then the FK will be represented as a composite ref.

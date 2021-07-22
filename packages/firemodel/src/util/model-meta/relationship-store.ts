@@ -41,7 +41,8 @@ export function getModelRelationship<T extends Model>(IModel: T): (path: string)
 /**
  * Gets all the relationships for a given IModel
  */
-export function getRelationships<T extends Model>(IModel: T): IFmModelRelationshipMeta[] {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getRelationships<T extends Model>(IModel: T): IFmModelRelationshipMeta<T, any>[] {
   const IModelName = IModel.constructor.name;
   const properties =
     hashToArray(relationshipsByModel[IModelName], "property") || [];
@@ -57,5 +58,6 @@ export function getRelationships<T extends Model>(IModel: T): IFmModelRelationsh
     parent = Object.getPrototypeOf(subClass.constructor);
   }
 
-  return properties;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return properties as IFmModelRelationshipMeta<T, any>[];
 }

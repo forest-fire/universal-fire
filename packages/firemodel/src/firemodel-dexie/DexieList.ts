@@ -20,6 +20,7 @@ import { Model } from "~/models/Model";
 export class DexieList<T extends Model> {
   constructor(
     private modelConstructor: ConstructorFor<T>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private table: Dexie.Table<T, any>,
     private meta: IDexieModelMeta<T>
   ) { }
@@ -129,6 +130,7 @@ export class DexieList<T extends Model> {
    */
   async since(
     datetime: epoch,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     options: IDexieListOptions<T> = {}
   ): Promise<T[]> {
     return this.where("lastUpdated", [">", datetime]);
