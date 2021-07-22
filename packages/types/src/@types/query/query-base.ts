@@ -1,4 +1,5 @@
 import { DocumentData } from '@firebase/firestore-types';
+import { IRtdbDbEvent } from '../fire-proxies';
 
 /**
  * The direct **Firebase** interface for the RTDB's **Query** from the
@@ -30,3 +31,5 @@ export type IFirebaseFirestoreQuery<
 > = import('@firebase/firestore-types').Query<T>;
 
 export type IComparisonOperator = '=' | '>' | '<';
+
+export type EventTypePlusChild = IRtdbDbEvent | 'child';

@@ -1,7 +1,7 @@
 const { resolve } = require('path');
 module.exports = {
   testMatch: ['**/test/**/?(*[-.])+(spec|test).[jt]s?(x)'],
-  // testMatch: ['**/test/**/client-auth.spec.ts'],
+  // testMatch: ['**/test/**/database.spec.ts'],
 
 
   // Maps a regular expression for a "path" and maps it to a transformer

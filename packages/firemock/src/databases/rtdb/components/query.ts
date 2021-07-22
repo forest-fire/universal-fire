@@ -16,11 +16,13 @@ import { runQuery } from '../util/runQuery';
 import { reference } from './reference';
 import { snapshot } from './snapshot';
 
-
 export const query = <
   TSdk extends IRtdbSdk,
   TData extends unknown = Record<string, unknown>
->(store: IMockStore<TSdk, TData>, serializedQuery: ISerializedQuery<TSdk, TData>): IRtdbQuery => {
+>(
+  store: IMockStore<TSdk, TData>,
+  serializedQuery: ISerializedQuery<TSdk, TData>
+): IRtdbQuery => {
   const partialQuery: IRtdbQuery = {
     endBefore: () => {
       throw new Error('not implemented');
@@ -34,14 +36,17 @@ export const query = <
       const results = runQuery(serializedQuery, data as TData);
 
       // TODO: See how this was implemented before
-      return snapshot(store, leafNode(serializedQuery.path), results ? results : null);
+      return snapshot(
+        store,
+        leafNode(serializedQuery.path),
+        results ? results : null
+      );
     },
     endAt: (value, key) => {
       serializedQuery.endAt(value, key as string & keyof TData);
       return query(store, serializedQuery);
     },
     equalTo: (value, key) => {
-      serializedQuery.equalTo(value, key as string & keyof TData);
       if (key && serializedQuery.identity.orderBy === RtdbOrder.orderByKey) {
         throw new Error(
           `You can not use "equalTo(val, key)" with a "key" property defined when using a key sort!`
@@ -88,9 +93,12 @@ export const query = <
 
       const data = store.getDb(serializedQuery.path);
       const results = runQuery(serializedQuery, data);
-
       // TODO: See how this was implemented before
-      return snapshot(store, leafNode(serializedQuery.path), results ? results : null);
+      return snapshot(
+        store,
+        leafNode(serializedQuery.path),
+        results ? results : null
+      );
     },
     orderByChild: (prop: string & keyof TData) => {
       serializedQuery.orderByChild(prop);
@@ -110,7 +118,7 @@ export const query = <
       return query(store, serializedQuery);
     },
     get ref() {
-      return reference(store, serializedQuery)
+      return reference(store, serializedQuery);
     },
     startAt: (value) => {
       serializedQuery.startAt(value);

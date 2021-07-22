@@ -93,17 +93,14 @@ describe('Database', () => {
       db.store.addListener('/path/to/added', 'child_added', callback);
       db.store.addListener('/path/to/value3', 'value', callback2);
       db.store.addListener('/path/to/moved', 'child_moved', callback);
-      db.store.removeListener('value');
+      db.store.removeListener('value', callback);
       expect(db.store.getAllListeners()).toHaveLength(3);
       expect(
         db.store.getAllListeners().filter((l) => l.eventType === 'value')
-      ).toBe(1);
-      db.store
-        .getAllListeners()
-        .filter((l) => l.eventType === 'value')
-        .forEach((l) => {
-          expect(l).toContain('value3');
-        });
+      ).toHaveLength(1);
+      db.store.listenerPaths('value').forEach((l) => {
+        expect(l).toContain('value3');
+      });
     });
 
     it('can remove listeners of same eventType, callback, and context', () => {
@@ -142,7 +139,7 @@ describe('Database', () => {
         context
       );
       expect(db.store.getAllListeners()).toHaveLength(5);
-      db.store.removeListener(cb2.id);
+      db.store.removeListener('value', callback2, context2);
       expect(db.store.getAllListeners()).toHaveLength(4);
       expect(
         db.store.getAllListeners()?.filter((evt) => evt.eventType === 'value')
@@ -212,10 +209,10 @@ describe('Database', () => {
         age: 5,
       });
       // check directly in DB
-      expect(typeof pushKey).toEqual("string");
+      expect(typeof pushKey).toEqual('string');
       expect(pushKey.includes('-')).toBeTruthy();
-      expect((db.store.getDb() as any).people[pushKey]).toBeInstanceOf(Object);
-      expect((db.store.getDb() as any).people[pushKey].name).toBe('Humpty Dumpty');
+      expect(db.store.getDb<any>().people[pushKey]).toBeInstanceOf(Object);
+      expect(db.store.getDb<any>().people[pushKey].name).toBe('Humpty Dumpty');
     });
 
     it('setDB() works', () => {
@@ -224,8 +221,8 @@ describe('Database', () => {
         name: 'Humpty Dumpty',
         age: 5,
       });
-      expect((db.store.getDb() as any).people.abc).toBeInstanceOf(Object);
-      expect((db.store.getDb() as any).people.abc.name).toBe('Humpty Dumpty');
+      expect(db.store.getDb<any>().people.abc).toBeInstanceOf(Object);
+      expect(db.store.getDb<any>().people.abc.name).toBe('Humpty Dumpty');
     });
 
     it('updateDB() works', () => {
@@ -234,16 +231,16 @@ describe('Database', () => {
         name: 'Humpty Dumpty',
         age: 5,
       });
-      expect((db.store.getDb() as any).people.update).toBeInstanceOf(Object);
-      expect((db.store.getDb() as any).people.update.name).toBe('Humpty Dumpty');
-      expect((db.store.getDb() as any).people.update.age).toBe(5);
+      expect(db.store.getDb<any>().people.update).toBeInstanceOf(Object);
+      expect(db.store.getDb<any>().people.update.name).toBe('Humpty Dumpty');
+      expect(db.store.getDb<any>().people.update.age).toBe(5);
       db.store.updateDb('/people/update', {
         age: 6,
         nickname: 'Humpty',
       });
-      expect((db.store.getDb() as any).people.update.name).toBe('Humpty Dumpty');
-      expect((db.store.getDb() as any).people.update.age).toBe(6);
-      expect((db.store.getDb() as any).people.update.nickname).toBe('Humpty');
+      expect(db.store.getDb<any>().people.update.name).toBe('Humpty Dumpty');
+      expect(db.store.getDb<any>().people.update.age).toBe(6);
+      expect(db.store.getDb<any>().people.update.nickname).toBe('Humpty');
     });
 
     it('removeDB() works', () => {
@@ -252,67 +249,16 @@ describe('Database', () => {
         name: 'Humpty Dumpty',
         age: 5,
       });
-      expect((db.store.getDb() as any).people.remove.name).toBe('Humpty Dumpty');
-      expect((db.store.getDb() as any).people.remove.age).toBe(5);
+      expect(db.store.getDb<any>().people.remove.name).toBe('Humpty Dumpty');
+      expect(db.store.getDb<any>().people.remove.age).toBe(5);
       db.store.removeDb('/people/remove');
 
-      expect((db.store.getDb() as any).people.remove).toBeUndefined();
+      expect(db.store.getDb<any>().people.remove).toBeUndefined();
     });
   });
 
-  describe('Find Listeners', () => {
-    // it('find all child listeners at a path', () => {
-    //   const callback: HandleValueEvent = (snap) => undefined;
-    //   db.store.removeAllListeners();
-    //   db.store.addListener('/auth/people', 'child_removed', callback);
-    //   db.store.addListener('/auth/people', 'child_added', callback);
-    //   db.store.addListener('/auth/people', 'child_moved', callback);
-    //   db.store.addListener('/people', 'child_removed', callback);
-    //   db.store.addListener('/auth/people', 'value', callback);
-    //   db.store.addListener('/auth/company', 'child_removed', callback);
-    //   const listeners = db.store.findChildListeners('/auth/people');
-    //   expect(listeners).toHaveLength(3);
-    // });
-    // it('find all child listeners at a path below the listening path', () => {
-    //   const callback: HandleValueEvent = (snap) => undefined;
-    //   db.store.removeAllListeners();
-    //   db.store.addListener('/auth/people', 'child_removed', callback);
-    //   db.store.addListener('/auth/people', 'child_added', callback);
-    //   db.store.addListener('/auth/people', 'child_moved', callback);
-    //   db.store.addListener('/people', 'child_removed', callback);
-    //   db.store.addListener('/auth/people', 'value', callback);
-    //   db.store.addListener('/auth/company', 'child_removed', callback);
-    //   const listeners = findChildListeners('/auth/people/1234');
-    //   expect(listeners).toHaveLength(3);
-    // });
-    // it('find all child listeners at a path and event type', () => {
-    //   const callback: HandleValueEvent = (snap) => undefined;
-    //   db.store.removeAllListeners();
-    //   db.store.addListener('/auth/people', 'child_removed', callback);
-    //   db.store.addListener('/auth/people', 'child_added', callback);
-    //   db.store.addListener('/auth/people', 'child_moved', callback);
-    //   db.store.addListener('/people', 'child_removed', callback);
-    //   db.store.addListener('/auth/people', 'value', callback);
-    //   db.store.addListener('/auth/company', 'child_removed', callback);
-    //   const listeners = findChildListeners('/auth/people', 'child_added');
-    //   expect(listeners).toHaveLength(1);
-    // });
-    // it('find all value listeners at a path', () => {
-    //   const callback: HandleValueEvent = (snap) => undefined;
-    //   db.store.removeAllListeners();
-    //   db.store.addListener('/auth/people', 'child_removed', callback);
-    //   db.store.addListener('/auth/people', 'child_added', callback);
-    //   db.store.addListener('/auth/people', 'child_moved', callback);
-    //   db.store.addListener('/people', 'child_removed', callback);
-    //   db.store.addListener('/auth/people', 'value', callback);
-    //   db.store.addListener('/auth', 'value', callback);
-    //   db.store.addListener('/auth/company', 'child_removed', callback);
-    //   const listenAtpeople = findValueListeners('/auth/people');
-    //   expect(listenAtpeople).toHaveLength(2);
-    //   const listenAtAuth = findValueListeners('/auth');
-    //   expect(listenAtAuth).toHaveLength(1);
-    // });
-  });
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  describe('Find Listeners', () => {});
 
   describe('Handle Events', () => {
     it('"value" responds to NEW child', () => {
@@ -333,20 +279,23 @@ describe('Database', () => {
     });
 
     it('"value" responds to UPDATED child', async () => {
-      db.store.reset();
-      const f = await Fixture.prepare();
+      const f = Fixture.prepare();
       f.addSchema('person', personMock);
       f.queueSchema('person', 10);
       const fixture = f.generate();
       const m = createDatabase(SDK.RealTimeAdmin, {}, fixture);
 
       let status = 'no-listener';
+      // eslint-disable-next-line prefer-const
+      let firstKey: string;
+      // eslint-disable-next-line prefer-const
+      let firstRecord: any;
 
       const callback: HandleValueEvent = (snap) => {
         if (status === 'has-listener') {
           const list = snap.val();
-          const first = list[firstKey(list) as keyof typeof list];
-          expect(first.age).toBe(helpers.firstRecord(fixture).age + 1);
+          const first = list[firstKey];
+          expect(first.age).toBe(firstRecord.age + 1);
         }
       };
 
@@ -356,10 +305,10 @@ describe('Database', () => {
       status = 'has-listener';
       const people = await m.db.ref('/people').once('value');
 
-      const _firstKey = helpers.firstKey(people.val());
-      const _firstRecord = helpers.firstRecord(people.val());
+      firstKey = helpers.firstKey(people.val());
+      firstRecord = helpers.firstRecord(people.val());
 
-      db.store.updateDb(`/people/${_firstKey}`, { age: _firstRecord.age + 1 });
+      db.store.updateDb(`/people/${firstKey}`, { age: firstRecord.age + 1 });
     });
 
     it('"value" responds to deeply nested CHANGE', () => {
@@ -383,8 +332,7 @@ describe('Database', () => {
     });
 
     it('"value" responds to REMOVED child', async () => {
-      db.store.reset();
-      const f = await Fixture.prepare();
+      const f = Fixture.prepare();
       f.addSchema('person', personMock);
       f.queueSchema('person', 10);
       const fixture = f.generate();
@@ -410,11 +358,11 @@ describe('Database', () => {
         }
       };
 
-      db.store.addListener('/people', 'value', callback);
-      expect(db.store.getAllListeners()).toHaveLength(1);
+      m.store.addListener('/people', 'value', callback);
+      expect(m.store.getAllListeners()).toHaveLength(1);
 
       status = 'after';
-      db.store.removeDb(`/people/${firstPerson}`);
+      m.store.removeDb(`/people/${firstPerson}`);
 
       const andThen = (await m.db.ref('/people').once('value')).val();
 
@@ -427,19 +375,15 @@ describe('Database', () => {
 
   describe('Initialing DB state', () => {
     it('passing in dictionary for db config initializes the DB', () => {
-      db.store.reset();
       const m = createDatabase(
         SDK.RealTimeAdmin,
         {},
-        {
-          db: { foo: { bar: true, baz: true } },
-        }
+        { foo: { bar: true, baz: true } }
       );
-
-      expect(m.store.getDb()).toBeInstanceOf(Object);
-      expect((m.store.getDb() as any).foo).toBeInstanceOf(Object);
-      expect((m.store.getDb() as any).foo.bar).toBe(true);
-      expect((m.store.getDb() as any).foo.baz).toBe(true);
+      expect(typeof m.store.getDb() == 'object').toBeTruthy();
+      expect(typeof m.store.getDb<any>().foo === 'object').toBeTruthy();
+      expect(m.store.getDb<any>().foo.bar).toBe(true);
+      expect(m.store.getDb<any>().foo.baz).toBe(true);
     });
 
     // it('passing in an async function to db config initializes the DB', async () => {
@@ -455,9 +399,9 @@ describe('Database', () => {
     //   });
 
     //   expect (db.store.getDb()).toBeInstanceOf(Object);
-    //   expect ((db.store.getDb() as any).foo).toBeInstanceOf(Object);
-    //   expect ((db.store.getDb() as any).foo.bar).toBe(true);
-    //   expect ((db.store.getDb() as any).foo.baz).toBe(true);
+    //   expect (db.store.getDb<any>().foo).toBeInstanceOf(Object);
+    //   expect (db.store.getDb<any>().foo.bar).toBe(true);
+    //   expect (db.store.getDb<any>().foo.baz).toBe(true);
     // });
   });
 
@@ -535,10 +479,10 @@ describe('Database', () => {
       let ready = false;
       const callback: HandleValueEvent = () => {
         if (ready) {
-          expect((db.store.getDb() as any).people).toBeInstanceOf(Object);
-          expect(Object.keys((db.store.getDb() as any).people)).toHaveLength(0);
+          expect(db.store.getDb<any>().people).toBeInstanceOf(Object);
+          expect(Object.keys(db.store.getDb<any>().people)).toHaveLength(0);
         } else {
-          expect(Object.keys((db.store.getDb() as any).people)).toHaveLength(1);
+          expect(Object.keys(db.store.getDb<any>().people)).toHaveLength(1);
         }
       };
       db.store.addListener('/people', 'child_removed', callback);
