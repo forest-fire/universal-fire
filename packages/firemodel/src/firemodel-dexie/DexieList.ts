@@ -2,6 +2,7 @@ import Dexie, { IndexableType } from "dexie";
 import {
   IDexieListOptions,
   IDexieModelMeta,
+  PropertyOf,
   PropType
 } from "~/types";
 
@@ -31,7 +32,7 @@ export class DexieList<T extends Model> {
    */
   async all(
     options: IDexieListOptions<T> = {
-      orderBy: "lastUpdated",
+      orderBy: "lastUpdated" as PropertyOf<T>,
     }
   ): Promise<T[]> {
     // TODO: had to remove the `orderBy` for models with a composite key; no idea why!

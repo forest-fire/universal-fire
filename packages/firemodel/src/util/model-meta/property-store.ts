@@ -11,7 +11,8 @@ export function isProperty<T extends Model>(modelKlass: T) {
 
 /** Properties accumlated by propertyDecorators  */
 export const propertiesByModel: IDictionary<IDictionary<
-  IFmModelPropertyMeta
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  IFmModelPropertyMeta<any>
 >> = {};
 
 /** allows the addition of meta information to be added to a model's properties */

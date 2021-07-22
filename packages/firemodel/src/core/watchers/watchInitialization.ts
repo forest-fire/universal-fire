@@ -42,7 +42,7 @@ export async function waitForInitialization<S extends ISdk, T extends Model>(
     );
   }
 
-  function ready<T>(watcher: IWatcherEventContext<S, T>) {
+  function ready<T extends Model>(watcher: IWatcherEventContext<S, T>) {
     return hasInitialized()[watcher.watcherId] ? true : false;
   }
 

@@ -6,7 +6,8 @@ import { IFmHasId } from "./general";
 import {
   ModelMeta, IFmModelPropertyMeta,
   IFmModelRelationshipMeta,
-  IFmFunctionToConstructor
+  IFmFunctionToConstructor,
+  IModel
 } from "~/types";
 import { Model } from "~/models/Model";
 
@@ -108,7 +109,7 @@ export type IIdWithDynamicPrefix = IDictionary<number | string> & {
 
 export type ICompositeKeyGeneric = IDictionary<string | number | boolean>;
 
-export type ICompositeKey<T extends Model> = IFmHasId<T> & Partial<T>;
+export type ICompositeKey<T extends Model> = IFmHasId<IModel<T>> & Partial<IModel<T>>;
 
 /**
  * A **Composite Key** represented in string form

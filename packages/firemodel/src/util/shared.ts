@@ -1,4 +1,4 @@
-import { IAuditChange } from "~/types";
+import { IAuditChange, PropertyOf } from "~/types";
 import { IDictionary } from "common-types";
 import { Model } from "~/models/Model";
 
@@ -47,7 +47,7 @@ export function updateToAuditChanges<T>(
 
 export function withoutMetaOrPrivate<T extends Model>(model: T): T {
   delete model.META;
-  Object.keys((key: keyof T & string) => {
+  Object.keys((key: PropertyOf<T>) => {
     if (key.slice(0, 1) === "_") {
       delete model[key];
     }

@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { epochWithMilliseconds } from "common-types";
-import { IModel } from "~/types";
+import { scalar } from "common-types";
+import { Model } from "~/models/Model";
 
-export interface IAuditLogItem extends IModel {
-  createdAt: epochWithMilliseconds;
-  value: any;
+export class AuditLogItem extends Model {
+  value: scalar;
   recordId: string;
-  timestamp: epochWithMilliseconds;
   /** the record-level operation */
   action: IAuditOperations;
   /** the changes to properties, typically not represented in a "removed" op */

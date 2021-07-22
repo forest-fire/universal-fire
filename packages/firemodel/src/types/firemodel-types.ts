@@ -1,7 +1,10 @@
-export interface IFmChangedProperties<T> {
-  added: Array<keyof T & string>;
-  changed: Array<keyof T & string>;
-  removed: Array<keyof T & string>;
+import { Model } from "~/models/Model";
+import { PropertyOf } from "./models";
+
+export interface IFmChangedProperties<T extends Model> {
+  added: PropertyOf<T>[];
+  changed: PropertyOf<T>[];
+  removed: PropertyOf<T>[];
 }
 
 export type FMPropertyType =

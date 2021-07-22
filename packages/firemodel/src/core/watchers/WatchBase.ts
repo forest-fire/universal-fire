@@ -17,7 +17,10 @@ import {
   IListOptions,
   IReduxDispatch,
   FmModelConstructor,
-  ICompositeKey
+  ICompositeKey,
+  IWatcherEventContextList,
+  IWatcherEventContextRecord,
+  IWatcherEventContextListofRecords
 } from "~/types";
 import { FireModelError, FireModelProxyError } from "~/errors";
 import { DefaultDbCache } from "../DefaultDbCache";
@@ -213,13 +216,11 @@ export class WatchBase<S extends ISdk, T extends Model> {
         ? this._underlyingRecordWatchers.map((i) => i._query)
         : [this._query];
 
-    const watchContext: IWatcherEventContext<S, T> = {
+    const partial: Partial<IWatcherEventContext<S, T>> = {
       watcherId,
       watcherName,
-      eventFamily,
       dispatch,
       modelConstructor: this._modelConstructor,
-      query,
       dynamicPathProperties: this._dynamicProperties,
       compositeKey: this._compositeKey,
       localPath: this._localPath,
@@ -228,10 +229,20 @@ export class WatchBase<S extends ISdk, T extends Model> {
       localModelName: this._localModelName || "not-relevant",
       pluralName: this._pluralName,
       watcherPaths,
-      // TODO: Fix this typing ... the error is nonsensical atm
-      watcherSource: this._watcherSource,
       createdAt: new Date().getTime(),
     };
+    let watchContext: IWatcherEventContext<S, T>;
+
+    switch (this._watcherSource) {
+      case "list":
+        watchContext = { ...partial, watcherSource: "list", query: this._query, eventFamily: "child" } as IWatcherEventContextList<S, T>
+        break;
+      case "record":
+        watchContext = { ...partial, watcherSource: "record", query: this._query, eventFamily: "value" } as IWatcherEventContextRecord<S, T>
+        break;
+      case "list-of-records":
+        watchContext = { ...partial, watcherSource: "list-of-records", query, eventFamily: "child" } as IWatcherEventContextListofRecords<S, T>
+    }
 
     return watchContext;
   }

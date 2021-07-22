@@ -3,11 +3,12 @@ import { Record } from "~/core";
 import { capitalize } from "~/util";
 import { ISdk } from "@forest-fire/types";
 import { Model } from "~/models/Model";
+import { PropertyOf } from "~/types";
 export class IncorrectReciprocalInverse<
   S extends ISdk,
   T extends Model
   > extends FireModelError {
-  constructor(rec: Record<S, T>, property: keyof T & string) {
+  constructor(rec: Record<S, T>, property: PropertyOf<T>) {
     super("", "firemodel/missing-reciprocal-inverse");
 
     let message: string;

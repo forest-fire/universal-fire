@@ -1,6 +1,6 @@
 import type { IDatabaseSdk, ISdk } from "@forest-fire/types";
 import { IDictionary, datetime, ConstructorFor } from "common-types";
-import { IModel, PrimaryKey } from "~/types";
+import { IModel, PrimaryKey, PropertyOf } from "~/types";
 import type { FireModelError } from "~/errors";
 import { Model } from "~/models/Model";
 export interface IUnderlyingError<T extends Model> {
@@ -10,8 +10,6 @@ export interface IUnderlyingError<T extends Model> {
   error: FireModelError;
 }
 
-/** A property of a record */
-export type PropertyOf<T extends Model> = keyof T & string;
 
 export type FmModelConstructor<T extends Model> = ConstructorFor<T>;
 
@@ -83,7 +81,7 @@ export interface IListOptions<S extends ISdk, T extends Model>
    * layers like **IndexedDB** you will need to explicit articulation
    * of indexes anyway.
    */
-  orderBy?: keyof T & string;
+  orderBy?: PropertyOf<T>;
   /**
    * **limitToFirst**
    *
@@ -216,7 +214,7 @@ export interface IFmPathValuePair {
 /**
  * A record which _does_ have the `id` property set
  */
-export type IFmHasId<T extends Model = Model> = {
+export type IFmHasId<T extends IModel<Model> = IModel<Model>> = {
   id: Required<T["id"]>;
 }
 

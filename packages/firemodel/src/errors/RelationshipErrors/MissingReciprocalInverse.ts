@@ -3,8 +3,9 @@ import { Record } from "~/core";
 import { FireModelError } from "~/errors";
 import { capitalize } from "~/util";
 import { Model } from "~/models/Model";
+import { PropertyOf } from "~/types";
 export class MissingReciprocalInverse<S extends ISdk, T extends Model> extends FireModelError {
-  constructor(rec: Record<S, T>, property: keyof T & string) {
+  constructor(rec: Record<S, T>, property: PropertyOf<T>) {
     super("", "firemodel/missing-reciprocal-inverse");
     const fkMeta = rec.getMetaForRelationship(property);
 

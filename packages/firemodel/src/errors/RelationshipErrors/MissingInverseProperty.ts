@@ -3,6 +3,7 @@ import { Record } from "~/core";
 import { FireModelError } from "~/errors";
 import { capitalize } from "~/util";
 import { Model } from "~/models/Model";
+import { PropertyOf } from "~/types";
 
 /**
  * When the record's META points to a inverse property on the FK; this error
@@ -13,7 +14,7 @@ export class MissingInverseProperty<S extends ISdk, T extends Model> extends Fir
   public to: string;
   public inverseProperty: string;
 
-  constructor(rec: Record<S, T>, property: keyof T & string) {
+  constructor(rec: Record<S, T>, property: PropertyOf<T>) {
     super("", "firemodel/missing-inverse-property");
 
     const fkMeta = rec.getMetaForRelationship(property);

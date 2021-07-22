@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { IFmChangedProperties, } from "~/types";
+import { IFmChangedProperties, IModel, PropertyOf, } from "~/types";
 import { Model } from "~/models/Model";
 const equal = require("fast-deep-equal/es6");
 
 export function compareHashes<T extends Model>(
-  from: Partial<T>,
-  to: Partial<T>,
+  from: Partial<IModel<T>>,
+  to: Partial<IModel<T>>,
   /**
    * optionally explicitly state properties so that relationships
    * can be filtered away
    */
-  modelProps?: Array<keyof T & string>
+  modelProps?: PropertyOf<T>[]
 ): IFmChangedProperties<T> {
   const results: IFmChangedProperties<T> = {
     added: [],
@@ -21,11 +21,11 @@ export function compareHashes<T extends Model>(
   from = from ? from : {};
   to = to ? to : {};
 
-  let keys: Array<keyof T & string> = Array.from(
-    new Set<keyof T & string>([
-      ...(Object.keys(from) as Array<keyof T & string>),
+  let keys = Array.from(
+    new Set<PropertyOf<T>>([
+      ...(Object.keys(from)),
       ...Object.keys(to),
-    ] as Array<keyof T & string>)
+    ] as PropertyOf<T>[])
   )
     // META should never be part of comparison
     .filter((i) => i !== "META")
@@ -37,11 +37,11 @@ export function compareHashes<T extends Model>(
   }
 
   keys.forEach((i) => {
-    if (!to[i]) {
+    if (!Object.keys(to).includes(i)) {
       results.added.push(i);
-    } else if (from[i] === null) {
+    } else if (from[i as keyof typeof from] === null) {
       results.removed.push(i);
-    } else if (!equal(from[i], to[i])) {
+    } else if (!equal(from[i as keyof typeof from], to[i as keyof typeof to])) {
       results.changed.push(i);
     }
   });

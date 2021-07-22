@@ -30,7 +30,7 @@ export function locallyUpdateFkOnRecord<S extends ISdk, T extends Model>(
   switch (event.operation) {
     case "set":
     case "add":
-      accessPrivateData(rec)._data[event.property][id] = relnType === "hasMany"
+      (rec as any)._data[event.property][id] = relnType === "hasMany"
         ? { ...currentValue, ...{ [fk]: true } }
         : fk;
       break;

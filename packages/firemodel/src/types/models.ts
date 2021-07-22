@@ -12,20 +12,21 @@ export interface IModelManaged {
   createdAt?: epochWithMilliseconds;
 }
 
+
 /**
  * Properties managed by the system and not to be set manually
  */
 export type ModelManagedProps = keyof IModelManaged;
 
-export type IModelProps = Record<string, unknown> & IModelManaged;
-
 /**
- * A base representation of any **Model**.
- * 
- * - the generic `<T>` allows extending the props beyond the managed props like `id`, `lastUpdated`, etc.
- * - the `META` property is masked in this interface and instead exposed in the `IModelClass` interface
+ * An interface which removes the a model's `META` property to reveal
+ * just the data properties of the Model.
  */
 export type IModel<T extends Model = Model> = Omit<T, "META">;
+
+
+/** A property of a given Model `T` */
+export type PropertyOf<T extends Model> = keyof IModel<T> & string;
 
 /**
  * Utility that converts an `IModel` type to the META key/value pair

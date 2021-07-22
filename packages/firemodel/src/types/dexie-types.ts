@@ -1,7 +1,7 @@
 import type { Dexie, Transaction } from "dexie";
 import { Model } from "~/models/Model";
 import { IDictionary } from "common-types";
-import { IFmModelMeta } from "~/types";
+import { IFmModelMeta, PropertyOf } from "~/types";
 
 export interface IDexiePriorVersion {
   /**
@@ -25,7 +25,7 @@ export interface IDexieModelMeta<T extends Model = Model> extends IFmModelMeta<T
 }
 
 export interface IDexieListOptions<T extends Model> {
-  orderBy?: keyof T & string;
+  orderBy?: PropertyOf<T>;
   limit?: number;
   offset?: number;
 }

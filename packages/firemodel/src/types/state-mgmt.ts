@@ -229,11 +229,6 @@ export interface IWatcherEventContextBase<S extends ISdk, T extends Model = Mode
   /** if defined, pass along the string name off the watcher */
   watcherName?: string;
   /**
-   * Indicates whether the watcher is watching a **list**, a **record**,
-   * or a **list of records**.
-   */
-  watcherSource: IWatcherSource;
-  /**
    * Indicates the **Firebase** event type/family; either `value` or `child`
    */
   eventFamily: IWatchEventClassification;
@@ -289,13 +284,14 @@ export interface IWatcherEventContextRecord<S extends ISdk, T extends Model = Mo
   eventFamily: "value";
 }
 
+
 /**
  * The meta information provided when a watcher is started;
  * it is also added to events when they have watcher context.
  */
 export type IWatcherEventContext<S extends ISdk, T extends Model = Model> =
-  | IWatcherEventContextList<S, T>
   | IWatcherEventContextRecord<S, T>
+  | IWatcherEventContextList<S, T>
   | IWatcherEventContextListofRecords<S, T>;
 
 /**

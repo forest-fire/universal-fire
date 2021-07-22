@@ -1,5 +1,6 @@
 import { Model } from "~/models/Model";
 import { IFmModelRelationshipMeta, IFmModelPropertyMeta, IModelIndexMeta, IModel } from "./index";
+import { PropertyOf } from "./models";
 
 /**
  * **IFmModelMeta**
@@ -50,14 +51,20 @@ export interface IFmModelMeta<TModel extends Model = Model> {
    */
   localModelName?: string;
   /** provides a boolean flag on whether the stated name is a property */
-  isProperty?: (prop: keyof IModel<TModel> & string) => boolean;
+  isProperty?: (prop: PropertyOf<TModel>) => boolean;
   /** a function to lookup the meta properties of a given property */
-  property?: (prop: keyof IModel<TModel> & string) => IFmModelPropertyMeta<TModel>;
+  property?: (prop: PropertyOf<TModel>) => IFmModelPropertyMeta<TModel>;
   /** provides a boolean flag on whether the stated name is a property */
-  isRelationship?: (prop: keyof IModel<TModel> & string) => boolean;
-  /** a function to lookup the meta properties of a given relationship */
+  isRelationship?: (prop: string) => boolean;
+  /** 
+   * A function to lookup the meta properties of a given relationship.
+   * 
+   * Note: _typing has been loosened to any string value as we are often dealing with
+   * generic FK relationships and this typing allows easier coding but be aware that
+   * the **prop** must be a valid key of the given model._
+   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  relationship?: (prop: string & IModel<TModel>) => IFmModelRelationshipMeta<TModel, any>;
+  relationship?: (prop: string) => IFmModelRelationshipMeta<TModel, any>;
   audit?: boolean | "server";
   /** A list of all properties and associated meta-data for the given schema */
   properties?: IFmModelPropertyMeta<TModel>[];
@@ -70,5 +77,5 @@ export interface IFmModelMeta<TModel extends Model = Model> {
   /** get a list the list of database indexes on the given model */
   dbIndexes: IModelIndexMeta[];
   /** all the properties on this model; this includes props and relationships */
-  allProperties: (keyof IModel<TModel> & string)[];
+  allProperties: PropertyOf<TModel>[];
 }

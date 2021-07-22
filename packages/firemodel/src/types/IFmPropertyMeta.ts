@@ -2,8 +2,8 @@
 import { Model } from "~/models/Model";
 import { IFmModelAttributeBase } from "./index";
 
-export interface IFmModelPropertyMeta<TModel extends Model, TFk extends Model = Model>
-  extends IFmModelAttributeBase<TModel, TFk> {
+export interface IFmModelPropertyMeta<TModel extends Model>
+  extends IFmModelAttributeBase<TModel, Model> {
   /** constraint: a maximum length */
   length?: number;
   /** the minimum length of the property */

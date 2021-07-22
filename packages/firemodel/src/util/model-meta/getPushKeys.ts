@@ -1,7 +1,5 @@
 import { Model } from "~/models";
-import { getProperties } from "./index";
 
-export function getPushKeys<T extends Model>(target: T): Extract<keyof T, string>[] {
-  const props = getProperties(target);
-  return props.filter((p) => p.pushKey).map((p) => p.property);
+export function getPushKeys<T extends Model>(model: T): string[] {
+  return model.META.pushKeys;
 }

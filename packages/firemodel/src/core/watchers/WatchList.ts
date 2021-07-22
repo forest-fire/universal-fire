@@ -4,12 +4,12 @@ import {
   ISerializedQuery,
 } from "@forest-fire/types";
 import { SerializedQuery } from "@forest-fire/serialized-query";
-import { ICompositeKey, IListOptions, PrimaryKey } from "~/types";
+import { ICompositeKey, IListOptions, IModel, PrimaryKey, PropertyOf } from "~/types";
 import { List, Record, Watch } from "~/core";
 
 import { FireModelError } from "~/errors";
 import { WatchBase } from "./WatchBase";
-import { epochWithMilliseconds } from "common-types";
+import { ConstructorFor, epochWithMilliseconds } from "common-types";
 import { getAllPropertiesFromClassStructure } from "~/util";
 import { Model } from "~/models/Model";
 
@@ -29,11 +29,11 @@ export class WatchList<S extends ISdk, T extends Model> extends WatchBase<S, T> 
     return obj;
   }
 
-  protected _offsets: Partial<T> = {};
+  protected _offsets: Partial<IModel<T>> = {};
   protected _options: IListOptions<S, T> = {};
 
   public list(
-    modelConstructor: new () => T,
+    modelConstructor: ConstructorFor<T>,
     options: IListOptions<S, T> = {}
   ): WatchList<S, T> {
     this._watcherSource = "list";
@@ -292,7 +292,7 @@ export class WatchList<S extends ISdk, T extends Model> extends WatchBase<S, T> 
    * @param property the property which the comparison operater is being compared to
    * @param value either just a value (in which case "equality" is the operator), or a tuple with operator followed by value (e.g., [">", 34])
    */
-  public where<K extends keyof T & string>(
+  public where<K extends PropertyOf<T>>(
     property: K,
     value: T[K] | [IComparisonOperator, T[K]]
   ): WatchList<S, T> {

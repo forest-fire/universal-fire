@@ -17,7 +17,6 @@ import {
 
 import { Record, DefaultDbCache } from "~/core";
 import { IDatabaseSdk, ISdk, } from "@forest-fire/types";
-import { convertModelToModelClass } from "~/util/convertModelToModelClass";
 import { Model } from "~/models/Model";
 
 const defaultDispatch: IReduxDispatch = async (context: IReduxAction) => Promise.resolve(context);
@@ -108,11 +107,11 @@ export class FireModel<S extends ISdk, T extends Model> {
   }
 
   public get META(): ModelMeta<T> {
-    return convertModelToModelClass(new this._modelConstructor).META;
+    return new this._modelConstructor().META;
   }
 
   public get pushKeys() {
-    return convertModelToModelClass(new this._modelConstructor()).META.pushKeys;
+    return new this._modelConstructor().META.pushKeys;
   }
 
   public static auditLogs = "/auditing";

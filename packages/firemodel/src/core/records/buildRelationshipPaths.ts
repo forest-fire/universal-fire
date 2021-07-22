@@ -2,6 +2,7 @@ import {
   ForeignKey,
   IFmBuildRelationshipOptions,
   IFmPathValuePair,
+  PropertyOf,
 } from "~/types";
 import {
   IncorrectReciprocalInverse,
@@ -10,8 +11,7 @@ import {
   UnknownRelationshipProblem,
 } from "~/errors";
 
-import { Record } from "~/core";
-import { createCompositeKeyRefFromRecord } from "./index";
+import { Record, createCompositeKeyFromRecord, createCompositeKeyString } from "~/core";
 import { getModelMeta } from "~/util";
 import { ISdk } from "@forest-fire/types";
 import { ConstructorFor } from "common-types";
@@ -33,7 +33,7 @@ import { pathJoin } from "native-dash";
  */
 export function buildRelationshipPaths<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
-  property: keyof T & string,
+  property: PropertyOf<T>,
   fkRef: ForeignKey,
   options: IFmBuildRelationshipOptions<S> = {}
 ): IFmPathValuePair[] {
@@ -48,7 +48,7 @@ export function buildRelationshipPaths<S extends ISdk, T extends Model>(
       db: options.db || rec.db,
     });
     const results: IFmPathValuePair[] = [];
-    const fkId: string = createCompositeKeyRefFromRecord(fkRecord);
+    const fkId = createCompositeKeyString(createCompositeKeyFromRecord(fkRecord));
 
     /**
      * boolean flag indicating whether current model has a **hasMany** relationship

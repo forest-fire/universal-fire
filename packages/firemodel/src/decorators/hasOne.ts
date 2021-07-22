@@ -2,6 +2,7 @@
 import {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
+  PropertyOf,
 } from "~/types";
 import {
   modelConstructorLookup,
@@ -24,7 +25,7 @@ export function belongsTo<T extends Model = Model>(
    * to a _constructor_. This approach is now deprecated.
    */
   fkClass: ConstructorFor<T> | (() => ConstructorFor<T>) | string,
-  inverse?: string & keyof T | [string & keyof T, IFmRelationshipDirectionality]
+  inverse?: PropertyOf<T> | [PropertyOf<T>, IFmRelationshipDirectionality]
 ) {
   try {
     const fkConstructor: () => ConstructorFor<T> =

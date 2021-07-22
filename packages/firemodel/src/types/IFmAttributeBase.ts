@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { FMPropertyType, FmRelationshipType, IModel } from "./index";
+import type { FMPropertyType, FmRelationshipType, PropertyOf } from "./index";
 import { FmMockType, IFmFunctionToConstructor } from "./other";
 import { Model } from "~/models/Model";
 /**
@@ -7,7 +7,7 @@ import { Model } from "~/models/Model";
  */
 export interface IFmModelAttributeBase<TModel extends Model, TFk extends Model = any> {
   /** the property name */
-  property: keyof IModel<TModel>;
+  property: PropertyOf<TModel>;
   /** the property's "typed value" */
   type: FMPropertyType;
   /** constraint: a maximum length */

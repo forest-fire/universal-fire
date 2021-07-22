@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { ForeignKey, ICompositeKey, isCompositeKey, isCompositeString, PrimaryKey, } from "~/types";
+import { ForeignKey, ICompositeKey, isCompositeKey, isCompositeString, PrimaryKey, PropertyOf, } from "~/types";
 import { FireModelError } from "~/errors";
 import { Model } from "~/models/Model";
 import { findDynamicModelProperties } from "./findDynamicModelProperties";
 import { ConstructorFor } from "common-types";
 import { keys } from "native-dash";
 
-function validate<T extends Model>(composite: ICompositeKey<T>, requiredKeys?: (string & keyof T)[]) {
+function validate<T extends Model>(composite: ICompositeKey<T>, requiredKeys?: PropertyOf<T>[]) {
   if (!requiredKeys) {
     return composite;
   }
@@ -50,5 +50,3 @@ export function createCompositeKey<T extends Model>(
     return validate<T>({ id: key } as ICompositeKey<T>, requiredKeys)
   }
 }
-
-

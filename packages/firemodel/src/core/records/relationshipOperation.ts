@@ -7,15 +7,16 @@ import {
   IFmRelationshipOperation,
   IFmRelationshipOptions,
   IFmRelationshipOptionsForHasMany,
+  PropertyOf,
 } from "~/types";
 import { capitalize, getModelMeta } from "~/util";
 import { locallyUpdateFkOnRecord } from "./index";
 
-import { ConstructorFor, IDictionary } from "common-types";
+import { IDictionary } from "common-types";
 import { Record } from "~/core";
 import { ISdk } from "@forest-fire/types";
 import { Model } from "~/models/Model";
-import { createCompositeKey } from "./createCompositeKey";
+import { createCompositeKeyString } from "./createCompositeKeyString";
 /**
  * **relationshipOperation**
  *
@@ -39,7 +40,7 @@ export async function relationshipOperation<
    *
    * The property on this model which changing its relationship status in some way
    */
-  property: keyof TFrom & string,
+  property: PropertyOf<TFrom>,
   /**
    * The array of _foreign keys_ (of the "from" model) which will be operated on
    */
@@ -56,7 +57,7 @@ export async function relationshipOperation<
 ): Promise<void> {
   // make sure all FK's are strings
   const fks = fkRefs.map((fk) => {
-    return createCompositeKey(fk);
+    return createCompositeKeyString(fk);
   });
   const dispatchEvents = {
     set: [
@@ -88,10 +89,8 @@ export async function relationshipOperation<
 
   try {
     const [localEvent, confirmEvent, rollbackEvent] = dispatchEvents[operation];
-    const fkConstructor = rec.META.relationship(property).fkConstructor() as unknown as ConstructorFor<TTo>;
-    // TODO: fix the typing here to make sure fkConstructor knows it's type
+    const fkConstructor = rec.META.relationship(property).fkConstructor();
     const fkRecord = new Record<S, TTo>(fkConstructor);
-    const fkMeta = getModelMeta(fkRecord);
     const transactionId: string =
       "t-reln-" +
       Math.random().toString(36).substr(2, 5) +
@@ -121,7 +120,7 @@ export async function relationshipOperation<
     }
 
     try {
-      await localRelnOp<S, TFrom, TTo>(rec, event, localEvent);
+      await localRelnOp(rec, event, localEvent);
       await relnConfirmation(rec, event, confirmEvent);
     } catch (e) {
       await relnRollback(rec, event, rollbackEvent);
@@ -143,9 +142,9 @@ export async function relationshipOperation<
   }
 }
 
-export async function localRelnOp<S extends ISdk, TFrom extends Model>(
+export async function localRelnOp<S extends ISdk, TFrom extends Model, TTo extends Model>(
   rec: Record<S, TFrom>,
-  event: IFmLocalRelationshipEvent<TFrom>,
+  event: Omit<IFmLocalRelationshipEvent<TFrom, TTo>, "type">,
   type: FmEvents
 ): Promise<void> {
   try {

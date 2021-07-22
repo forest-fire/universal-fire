@@ -5,14 +5,14 @@ import { hashToArray } from "typed-conversions";
 import { IFmModelRelationshipMeta } from "~/types";
 
 export const relationshipsByModel: IDictionary<IDictionary<
-  IFmModelRelationshipMeta
+  IFmModelRelationshipMeta<any>
 >> = {};
 
 /** allows the addition of meta information to be added to a IModel's relationships */
 export function addRelationshipToModelMeta(
   IModelName: string,
   property: string,
-  meta: IFmModelRelationshipMeta
+  meta: IFmModelRelationshipMeta<any>
 ): void {
   if (!relationshipsByModel[IModelName]) {
     relationshipsByModel[IModelName] = {};
