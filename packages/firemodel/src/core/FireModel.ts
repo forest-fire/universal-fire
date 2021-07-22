@@ -130,10 +130,6 @@ export class FireModel<S extends ISdk, T extends Model> {
 
   //#region STATIC INTERFACE
 
-  public static isBeingWatched(path: string): boolean {
-    // TODO: implement this!
-    return false;
-  }
   private static _defaultDb: IDatabaseSdk<ISdk>;
   private static _dispatchActive = false;
   /** the dispatch function used to interact with frontend frameworks */

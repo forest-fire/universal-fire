@@ -31,7 +31,6 @@ import { queryAdjustForNext, reduceOptionsForQuery } from "./lists";
 import { isString } from "~/util";
 import { Model } from "~/models/Model";
 
-const DEFAULT_IF_NOT_FOUND = Symbol("DEFAULT_IF_NOT_FOUND");
 
 function addTimestamps<T extends Model>(obj: IDictionary) {
   const datetime = new Date().getTime();
@@ -80,24 +79,11 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
   ): Promise<List<S, T>> {
     try {
       const r = Record.create(model, options);
-      // If Auditing is one we must be more careful
-      if (r.META.audit) {
-        const existing = await List.all(model, options);
-        if (existing.length > 0) {
-          // TODO: need to write an appropriate AUDIT EVENT
-          // TODO: implement
-        } else {
-          // LIST_SET event
-          // TODO: need to write an appropriate AUDIT EVENT
-          // TODO: implement
-        }
-      } else {
-        // Without auditing we can just set the payload into the DB
-        await FireModel.defaultDb.set(
-          `${String(r.META.dbOffset)}/${r.pluralName}`,
-          addTimestamps(payload)
-        );
-      }
+
+      await FireModel.defaultDb.set(
+        `${String(r.META.dbOffset)}/${r.pluralName}`,
+        addTimestamps(payload)
+      );
 
       const current = await List.all(model, options);
       return current;
@@ -417,7 +403,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     model: ConstructorFor<T>,
     records: T[] | IDictionary<T>,
     options: IListOptions<S, T> = {}
-  ) {
+  ): Promise<void> {
     if (isClientSdk(DefaultDbCache().get().sdk)) {
       throw new FireModelError(
         `You must use the Admin SDK/API to use the bulkPut feature. This may change in the future but in part because the dispatch functionality is not yet set it is restricted to the Admin API for now.`
@@ -450,7 +436,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     property: K & string,
     value: T[K] | [IComparisonOperator, T[K]],
     options: Omit<IListOptions<S, T>, "orderBy" | "startAt" | "endAt"> = {}
-  ) {
+  ): Promise<List<S, T>> {
     let operation: IComparisonOperator = "=";
     let val = value;
     if (Array.isArray(value)) {
@@ -488,7 +474,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     model: ConstructorFor<T>,
     ...fks: PrimaryKey<T>[]
   ): Promise<List<ISdk, T>> {
-    const promises: any[] = [];
+    const promises: Promise<any>[] = [];
     const results: T[] = [];
     const errors: Array<{ error: FireModelError; id: PrimaryKey<T> }> = [];
     fks.forEach((id) => {
@@ -680,7 +666,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     const data = (
       await List.query(
         this._modelConstructor,
-        (q) => this._query,
+        () => this._query,
         this._options
       )
     ).data;
@@ -715,11 +701,12 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
   /**
    * runs a `reducer` function across all records in the list
    */
-  public reduce<K = any>(f: ListReduceFunction<T, K>, initialValue = {}) {
-    return this.data.reduce(f, initialValue);
+  public reduce(f: ListReduceFunction<T, IModel<T>>, initialValue = {}): List<S, T> {
+    this.data.reduce(f, initialValue);
+    return this;
   }
 
-  public paginate(pageSize: number) {
+  public paginate(pageSize: number): List<S, T> {
     this._pageSize = pageSize;
     return this;
   }
@@ -785,13 +772,13 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
   }
 
   /** deprecated ... use List.remove() instead */
-  public async removeById(id: string, ignoreOnNotFound = false) {
+  public async removeById(id: string, ignoreOnNotFound = false): Promise<void> {
     console.log(`List.removeById() is deprecated; use List.remove() instead`);
     return this.remove(id, ignoreOnNotFound);
   }
 
-  public async add(payload: T) {
-    const newRecord = await Record.add(this._modelConstructor, payload);
+  public async add(payload: T): Promise<Record<S, T>> {
+    const newRecord = await Record.add(this._modelConstructor, payload) as Record<S, T>;
     this._data.push(newRecord.data);
     return newRecord;
   }
@@ -812,7 +799,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
   /**
    * Loads data from a query into the `List` object
    */
-  protected async _loadQuery(query: ISerializedQuery<S, T>) {
+  protected async _loadQuery(query: ISerializedQuery<S, T>): Promise<this> {
     if (!this.db) {
       const e = new Error(
         `The attempt to load data into a List requires that the DB property be initialized first!`

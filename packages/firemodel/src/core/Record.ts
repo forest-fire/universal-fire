@@ -11,8 +11,6 @@ import {
 } from "~/errors";
 import {
   FmEvents,
-  IAuditChange,
-  IAuditOperations,
   ICompositeKey,
   ForeignKey,
   IFmCrudOperations,
@@ -206,7 +204,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
         }
       });
 
-      await r._adding<T>(options);
+      await r._adding(options);
     } catch (e) {
       if (e.code === "permission-denied") {
         const rec = Record.createWith(model, payload as Partial<T>);
@@ -695,10 +693,6 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     return this.data && this.data.id ? true : false;
   }
 
-  /** indicates whether this record is already being watched locally */
-  public get isBeingWatched() {
-    return FireModel.isBeingWatched(this.dbPath);
-  }
 
   public get modelConstructor() {
     return this._modelConstructor;
@@ -1536,7 +1530,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       index = remaining.indexOf(":");
     }
 
-    return results as PropertyOf<T>[];
+    return results;
   }
 
   /**
@@ -1608,7 +1602,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   /**
    * Allows for the static "add" method to add a record
    */
-  private async _adding<T extends Model>(options: IRecordOptions<S>) {
+  private async _adding(options: IRecordOptions<S>) {
     const defaultDb = FireModel.defaultDb;
     if (options.db) {
       FireModel.defaultDb = options.db;

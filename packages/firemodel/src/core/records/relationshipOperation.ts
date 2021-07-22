@@ -9,7 +9,7 @@ import {
   IFmRelationshipOptionsForHasMany,
   PropertyOf,
 } from "~/types";
-import { capitalize, getModelMeta } from "~/util";
+import { capitalize } from "~/util";
 import { locallyUpdateFkOnRecord } from "./index";
 
 import { IDictionary } from "common-types";

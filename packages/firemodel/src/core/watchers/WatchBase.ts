@@ -204,8 +204,6 @@ export class WatchBase<S extends ISdk, T extends Model> {
       : String(this._query.hashCode());
     const watcherId = watchIdPrefix + "-" + watchHashCode;
     const watcherName = name || `${watcherId}`;
-    const eventFamily: IWatchEventClassification =
-      this._watcherSource === "list" ? "child" : "value";
     const watcherPaths =
       this._watcherSource === "list-of-records"
         ? this._underlyingRecordWatchers.map((i) => i._query.path)

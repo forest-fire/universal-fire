@@ -29,7 +29,7 @@ describe("Watch →", () => {
   });
 
   afterEach(async () => {
-    Watch.stop();
+    await Watch.stop();
   });
 
   it("Watching a Record gives back a hashCode which can be looked up", async () => {

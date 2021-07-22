@@ -5,7 +5,6 @@ import { ISdk } from "@forest-fire/types";
 import { Model } from "~/models/Model";
 import { createCompositeKeyString } from "./createCompositeKeyString";
 import { getIdFromKey } from "./getIdFromKey";
-import { accessPrivateData } from "./accessPrivateData";
 
 /**
  * sets a `Record`'s property to the optimistic values set

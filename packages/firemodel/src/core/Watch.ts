@@ -20,6 +20,7 @@ import { DefaultDbCache, FireModel } from "~/core";
 import { FireModelError } from "~/errors";
 import { firstKey } from "~/util";
 import { Model } from "~/models/Model";
+import { IDictionary } from "common-types";
 
 /**
  * A static library for interacting with _watchers_. It
@@ -35,7 +36,7 @@ export class Watch {
     DefaultDbCache().set<IDatabaseSdk<typeof db.sdk>>(db);
   }
 
-  public static get defaultDb() {
+  public static get defaultDb(): IDatabaseSdk<ISdk> {
     return DefaultDbCache().get();
   }
 
@@ -50,11 +51,11 @@ export class Watch {
   /**
    * returns a full list of all watchers
    */
-  public static get inventory() {
+  public static get inventory(): IDictionary<IWatcherEventContext<ISdk>> {
     return getWatcherPool();
   }
 
-  public static toJSON() {
+  public static toJSON(): IDictionary<IWatcherEventContext<ISdk>> {
     return Watch.inventory;
   }
 

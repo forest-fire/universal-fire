@@ -28,5 +28,5 @@ export function findDynamicModelProperties<T extends Model>(model: T | Construct
     index = remaining.indexOf(":");
   }
 
-  return results as PropertyOf<T>[];
+  return results ;
 }

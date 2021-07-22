@@ -6,7 +6,6 @@ import {
   IFmRelationshipOperation,
   IMultiPathUpdates,
   IWatchEventClassification,
-  IWatcherSource,
   IModel,
 } from "~/types";
 import {
