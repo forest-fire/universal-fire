@@ -299,8 +299,8 @@ describe('Database', () => {
         }
       };
 
-      db.store.addListener('/people', 'value', callback);
-      expect(db.store.getAllListeners()).toHaveLength(1);
+      m.store.addListener('/people', 'value', callback);
+      expect(m.store.getAllListeners()).toHaveLength(1);
 
       status = 'has-listener';
       const people = await m.db.ref('/people').once('value');
@@ -308,7 +308,7 @@ describe('Database', () => {
       firstKey = helpers.firstKey(people.val());
       firstRecord = helpers.firstRecord(people.val());
 
-      db.store.updateDb(`/people/${firstKey}`, { age: firstRecord.age + 1 });
+      m.store.updateDb(`/people/${firstKey}`, { age: firstRecord.age + 1 });
     });
 
     it('"value" responds to deeply nested CHANGE', () => {
