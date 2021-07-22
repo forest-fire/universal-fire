@@ -28,7 +28,9 @@
     "eslint": "7.28.0",
     "jest": "^27.0.6",
     "rimraf": "3.0.2",
-    "scripty": "2.0.0"
+    "scripty": "2.0.0",
+    "@forest-fire/fixture": "*",
+    "firemodel": "^0.59.8"
   },
   "license": "MIT",
   "peerDependencies": {
