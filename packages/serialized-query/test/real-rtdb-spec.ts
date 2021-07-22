@@ -5,13 +5,16 @@ import { hashToArray } from 'typed-conversions';
 import { DeepPerson } from './testing/DeepPerson';
 import { peopleDataset } from './data/people';
 import { RealTimeAdmin } from '@forest-fire/real-time-admin';
+import { Mock} from '@forest-fire/fixture';
+import { List } from 'firemodel';
 
 helpers.setupEnv();
 
 describe('Tests using REAL RealTimeAdmin =>', () => {
-  let db: IRealTimeAdmin;
+  let db: RealTimeAdmin;
   beforeAll(async () => {
     db = await RealTimeAdmin.connect();
+    List.defaultDb = db;
     await db.set('/', peopleDataset());
   });
   afterAll(async () => {
@@ -20,7 +23,7 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
   });
 
   it('equalTo() deserializes into valid response', async () => {
-    const q = new SerializedRealTimeQuery("/authenticated/people")
+    const q = new SerializedRealTimeQuery('/authenticated/people')
       .orderByChild('favoriteColor')
       .equalTo('green');
 
@@ -41,7 +44,7 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
   });
 
   it('limit query reduces result set', async () => {
-    const q = new SerializedRealTimeQuery("/authenticated/people")
+    const q = new SerializedRealTimeQuery('/authenticated/people')
       .orderByChild('age')
       .limitToFirst(2);
 
@@ -66,6 +69,7 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
 
   it.skip('Firemodel List.where() reduces the result set to appropriate records (with a dynamic path)', async () => {
     const mockDb = await RealTimeAdmin.connect({ mocking: true });
+
     await Mock(DeepPerson, mockDb).generate(5, {
       favoriteColor: 'green',
       group: 'group1',
@@ -74,6 +78,7 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
       favoriteColor: 'blue',
       group: 'group1',
     });
+
     const peeps = await List.where(Person, 'favoriteColor', 'green');
     const people = hashToArray<Person>(
       peopleDataset().authenticated.people
