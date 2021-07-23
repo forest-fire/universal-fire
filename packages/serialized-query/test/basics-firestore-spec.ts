@@ -14,7 +14,7 @@ describe('SerializedFirestoreQuery', () => {
   });
 
   it('instantiate with path()', () => {
-    const q = SerializedFirestoreQuery.path('foo');
+    const q = new SerializedFirestoreQuery('foo');
     expect(q).toBeInstanceOf(SerializedFirestoreQuery);
   });
 

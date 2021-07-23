@@ -7,6 +7,8 @@ import { peopleDataset } from './data/people';
 import { RealTimeAdmin } from '@forest-fire/real-time-admin';
 import { Mock } from '@forest-fire/fixture';
 import { List } from 'firemodel';
+import { SDK } from '@forest-fire/types';
+import { IDictionary } from 'common-types';
 
 helpers.setupEnv();
 
@@ -23,11 +25,11 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
   });
 
   it('equalTo() deserializes into valid response', async () => {
-    const q = new SerializedRealTimeQuery('/authenticated/people')
+    const q = new SerializedRealTimeQuery<SDK.RealTimeAdmin, Person>('/authenticated/people')
       .orderByChild('favoriteColor')
       .equalTo('green');
 
-    const deserializedQuery = q.deserialize(db);
+    const deserializedQuery = q.deserialize(db.database);
     const manualQuery = db
       .ref('/authenticated/people')
       .orderByChild('favoriteColor')
@@ -49,10 +51,10 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
       .limitToFirst(2);
 
     const deserializedJson: Person[] = hashToArray(
-      (await q.execute(db)).toJSON()
+      (await q.execute(db.database)).toJSON() as IDictionary
     );
     const sortedPeople = hashToArray<Person>(
-      peopleDataset().authenticated.people
+      peopleDataset().authenticated.people as IDictionary
     ).sort((a, b) => (a.age > b.age ? 1 : -1));
 
     expect(deserializedJson.length).toEqual(2);
@@ -62,7 +64,7 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
   it('Firemodel List.where() reduces the result set to appropriate records', async () => {
     const peeps = await List.where(Person, 'favoriteColor', 'green');
     const people = hashToArray<Person>(
-      peopleDataset().authenticated.people
+      peopleDataset().authenticated.people as IDictionary
     ).filter((p) => p.favoriteColor === 'green');
     expect(peeps.length).toEqual(people.length);
   });
@@ -81,7 +83,7 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
 
     const peeps = await List.where(Person, 'favoriteColor', 'green');
     const people = hashToArray<Person>(
-      peopleDataset().authenticated.people
+      peopleDataset().authenticated.people as IDictionary
     ).filter((p) => p.favoriteColor === 'green');
     expect(peeps.length).toEqual(people.length);
   });

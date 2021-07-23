@@ -1,22 +1,23 @@
 import {
   IFmModelRelationshipMeta,
-  IMockRelationshipConfig,
+  IModel,
+  Model,
   Record
 } from "firemodel";
-import {IDatabaseSdk} from "@forest-fire/types"
+import {IDatabaseSdk, ISdk} from "@forest-fire/types"
 import { Mock } from "~/Mock";
-import { IMockResponse } from "./mocking-types";
+import { IMockRelationshipConfig, IMockResponse } from "./mocking-types";
 
-export async function processHasMany<T>(
-  record: Record<T>,
+export async function processHasMany<TSdk extends ISdk, T extends Model>(
+  record: Record<TSdk, T>,
   rel: IFmModelRelationshipMeta<T>,
   config: IMockRelationshipConfig,
-  db: IDatabaseSdk<any>
+  db: IDatabaseSdk<TSdk>
 ): Promise<IMockResponse<T>> {
   // by creating a mock we are giving any dynamic path segments
   // an opportunity to be mocked (this is best practice)
-  const fkMockMeta = (await Mock(rel.fkConstructor(), db).generate(1)).pop();
-  const prop: Extract<keyof T, string> = rel.property as any;
+  const fkMockMeta = (await Mock<TSdk, T>(rel.fkConstructor(), db).generate(1)).pop();
+  const prop: Extract<keyof IModel<T>, string> = rel.property as any;
 
   await record.addToRelationship(prop, fkMockMeta.compositeKey);
   if (config.relationshipBehavior === "link") {

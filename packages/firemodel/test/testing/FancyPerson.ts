@@ -11,9 +11,10 @@ import {
 } from "../../src";
 import { Company } from "./Company";
 import { Car } from "./Car";
+import faker = require("faker");
 
-function bespokeMock(context: import("firemock").MockHelper) {
-  return context.faker.name.firstName() + ", hello to you";
+function bespokeMock() {
+  return faker.name.firstName() + ", hello to you";
 }
 
 @model({ dbOffset: "authenticated" })

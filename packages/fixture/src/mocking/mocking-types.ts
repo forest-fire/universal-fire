@@ -1,4 +1,4 @@
-import { ICompositeKey } from "firemodel";
+import { ICompositeKey, Model } from "firemodel";
 import { IDictionary } from "common-types";
 
 export type ICardinalityConfig<T> = {
@@ -21,7 +21,7 @@ export interface IMockRelationshipConfig {
   cardinality?: IDictionary<number | [number, number] | true>;
 }
 
-export interface IMockResponse<T> {
+export interface IMockResponse<T extends Model> {
   modelName: string;
   pluralName: string;
   id: string;
