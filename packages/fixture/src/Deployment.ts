@@ -22,7 +22,7 @@ export class Deployment<T extends IDictionary = IDictionary> {
     /** A unique reference to the schema being queued for generation */
     schemaId: string,
     /** The number of this schema to generate */
-    quantity: number = 1,
+    quantity = 1,
     /** Properties in the schema template which should be overriden with a static value */
     overrides: Partial<T> = {}
   ) {

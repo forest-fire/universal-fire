@@ -31,7 +31,7 @@
     "publish": "lerna publish --conventional-commits",
     "release": "yarn lerna publish",
     "scripty:prep": "chmod -R +x scripts",
-    "test": "lerna run test --concurrency 4 --stream",
+    "test": "scripty",
     "test:closure": "lerna exec --scope universal-fire yarn test",
     "test:db": "run-p test:firemock test:rtdb",
     "test:db:firemock:rtdb": "lerna exec --scope firemock yarn test",

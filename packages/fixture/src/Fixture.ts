@@ -39,7 +39,7 @@ export class Fixture<T extends IDictionary> {
 
   public queueSchema(
     schemaId: string,
-    quantity: number = 1,
+    quantity = 1,
     overrides: IDictionary = {}
   ) {
     new Deployment<T>().queueSchema(

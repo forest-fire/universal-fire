@@ -6,9 +6,9 @@ if [[ -z "$1" ]]; then
 else
   cd "./packages/$1"
   echo "┏━━━ 🕵️‍♀️ LINT SRC ($1): eslint src --ext ts,js,tsx,jsx ━━━━━━━"
-  eslint src --ext ts,js,tsx,jsx --fix
+  eslint src --ext ts,js,tsx,jsx --fix --no-error-on-unmatched-pattern
   echo "┏━━━ 🕵️‍♀️ LINT TEST ($1): eslint test --ext ts,js,tsx,jsx ━━━━━━━"
-  eslint test --ext ts,js,tsx,jsx --fix
+  eslint test --ext ts,js,tsx,jsx --fix --no-error-on-unmatched-pattern
   cd - > /dev/null
 fi
 

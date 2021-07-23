@@ -5,7 +5,7 @@ import { IDictionary } from 'common-types';
 import { IDatabaseSdk, ISdk } from '@forest-fire/types';
 import { FixtureError } from '~/errors/FixtureError';
 
-let mockPrepared = false;
+const mockPrepared = false;
 
 /**
  * **MockApi**

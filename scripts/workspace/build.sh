@@ -2,7 +2,7 @@
 
 if [[ -z "$1" ]]; then 
   echo "┏━━━ 📦 Build/Bundle Monorepo ━━━━━━━"
-  lerna run build --stream
+  yarn lerna run build --stream
 else
   cd "./packages/$1"
   echo "┏━━━ 🧹 Clean [ packages/$1 ] (es, cjs, types) ━━━━━━━"
