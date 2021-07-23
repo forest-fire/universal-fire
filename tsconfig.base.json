@@ -26,19 +26,5 @@
       { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
   },
-  "exclude": ["**/node_modules/**", "packages/*/dist"],
-  "references": [
-    { "path": "packages/docs" },
-    { "path": "packages/firemock" },
-    { "path": "packages/firestore-admin" },
-    { "path": "packages/firestore-client" },
-    { "path": "packages/firestore-db" },
-    { "path": "packages/real-time-admin" },
-    { "path": "packages/real-time-client" },
-    { "path": "packages/real-time-db" },
-    { "path": "packages/serialized-query" },
-    { "path": "packages/types" },
-    { "path": "packages/universal-fire" },
-    { "path": "packages/utility" }
-  ]
+  "exclude": ["**/node_modules/**", "packages/*/dist"]
 }

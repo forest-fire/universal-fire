@@ -3190,11 +3190,6 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash-es@^4.17.15:
-  version "4.17.21"
-  resolved "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
-  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
-
 lodash.at@^4.6.0:
   version "4.6.0"
   resolved "https://registry.npmjs.org/lodash.at/-/lodash.at-4.6.0.tgz#93cdce664f0a1994ea33dd7cd40e23afd11b0ff8"
@@ -3420,6 +3415,11 @@ nanomatch@^1.2.9:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+native-dash@^1.16.2:
+  version "1.16.2"
+  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.16.2.tgz#7f5db5e9e20ad0dfba36ce060121050db104d35f"
+  integrity sha512-uNZ4o4HjJPQXwdT+w1VqsGXXLQPvnvDrHTBIvRCuSD4Ix24IkpqDOrJxK5TjTr42p3zEcXRPl+uA4zfNntPSfA==
 
 natural-compare@^1.4.0:
   version "1.4.0"
@@ -4299,13 +4299,13 @@ type-fest@^0.21.3:
   resolved "https://registry.npmjs.org/type-fest/-/type-fest-0.21.3.tgz#d260a24b0198436e133fa26a524a6d65fa3b2e37"
   integrity sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==
 
-typed-conversions@^0.11.1:
-  version "0.11.1"
-  resolved "https://registry.npmjs.org/typed-conversions/-/typed-conversions-0.11.1.tgz#06ffbb531027d3ae700419399b54248e86969cfb"
-  integrity sha512-x/5QpXSDY5IrLO2jSxSwZwEFv/sccchDKuP2RsxwzxwUQxBSyZq0IDwCkmuohg0C5rFfLYN5pB8tLF0WBgwJhg==
+typed-conversions@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.12.0.tgz#20efbb2341c26294743941446db4ea1a120564fd"
+  integrity sha512-g8bb74wUmiB7gqTMIulESo6tbEL0Q9W9F8HpNzs+giClhbgjGqq9gDnbaNhqkKCqL9csFReli6cpLLxDrAAcDQ==
   dependencies:
     common-types "^1.15.6"
-    lodash-es "^4.17.15"
+    native-dash "^1.16.2"
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"

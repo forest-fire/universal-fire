@@ -7276,6 +7276,11 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
+native-dash@^1.16.2:
+  version "1.16.2"
+  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.16.2.tgz#7f5db5e9e20ad0dfba36ce060121050db104d35f"
+  integrity sha512-uNZ4o4HjJPQXwdT+w1VqsGXXLQPvnvDrHTBIvRCuSD4Ix24IkpqDOrJxK5TjTr42p3zEcXRPl+uA4zfNntPSfA==
+
 native-dash@~1.15.1:
   version "1.15.1"
   resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.15.1.tgz#1844975783b958e4b072aa5978f0f95b79aa7218"
@@ -9838,6 +9843,14 @@ typed-conversions@^0.11.1, typed-conversions@~0.11.1:
   dependencies:
     common-types "^1.15.6"
     lodash-es "^4.17.15"
+
+typed-conversions@~0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.12.0.tgz#20efbb2341c26294743941446db4ea1a120564fd"
+  integrity sha512-g8bb74wUmiB7gqTMIulESo6tbEL0Q9W9F8HpNzs+giClhbgjGqq9gDnbaNhqkKCqL9csFReli6cpLLxDrAAcDQ==
+  dependencies:
+    common-types "^1.15.6"
+    native-dash "^1.16.2"
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"
