@@ -51,6 +51,7 @@ function toPlugins(dir) {
           baseUrl: dir,
           declarationDir: join(dir, 'dist', 'types'),
           sourceMap: false,
+          rootDir: "src",
         },
         include: ['src'],
         exclude: ['test'],

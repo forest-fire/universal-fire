@@ -24,7 +24,7 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
     await db.remove('/authenticated');
   });
 
-  it('equalTo() deserializes into valid response', async () => {
+  it.only('equalTo() deserializes into valid response', async () => {
     const q = new SerializedRealTimeQuery<SDK.RealTimeAdmin, Person>('/authenticated/people')
       .orderByChild('favoriteColor')
       .equalTo('green');
