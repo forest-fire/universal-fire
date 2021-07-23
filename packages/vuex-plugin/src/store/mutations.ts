@@ -9,8 +9,9 @@ import {
   watcher
 } from "~/store";
 
-import type { IFiremodelState } from "~/types";
+import type { IFiremodelState, StoreWithPlugin } from "~/types";
 import { MutationTree } from "vuex";
+import { Model } from "firemodel";
 
 /**
  * The **mutations** to the `@firemodel` state node; this state node will be off the
@@ -27,6 +28,6 @@ export const mutations = <T>() =>
   ...localCrud<T>(),
   ...relationships<T>(),
   ...watcher<T>()
-} as MutationTree<IFiremodelState<T>>);
+} as MutationTree<T>);
 
 export type IFiremodelMutation = keyof typeof mutations;

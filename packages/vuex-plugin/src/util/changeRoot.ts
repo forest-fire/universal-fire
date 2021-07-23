@@ -1,7 +1,7 @@
 import { FireModelPluginError } from "~/errors";
-import { Model } from "firemodel";
 import Vue from "vue";
 import { getInitialState } from "~/util";
+import { StoreWithPlugin } from "~/types";
 
 /**
  * **changeRoot**
@@ -13,7 +13,7 @@ import { getInitialState } from "~/util";
  * @param state
  * @param updatedProps
  */
-export const changeRoot = <T extends Model = Model>(
+export const changeRoot = <T extends StoreWithPlugin>(
   state: T,
   updatedProps: T | null,
   moduleName: string

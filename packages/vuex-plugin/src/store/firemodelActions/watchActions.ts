@@ -4,14 +4,15 @@ import { FmEvents, IFmWatchEvent, IFmWatcherStopped } from "firemodel";
 import { ActionTree } from "vuex";
 import { determineLocalStateNode } from "~/util";
 import { FmConfigMutation, FmCrudMutation } from "~/enums";
+import { ISdk } from "universal-fire";
 
 export const watchActions = <T>() =>
 ({
-  [FmEvents.WATCHER_STARTING]({ commit }, payload: IFmWatchEvent) {
+  [FmEvents.WATCHER_STARTING]({ commit }, payload: IFmWatchEvent<ISdk>) {
     commit(FmConfigMutation.watcherStarting, payload);
   },
 
-  [FmEvents.WATCHER_STARTED]({ commit }, payload: IFmWatchEvent) {
+  [FmEvents.WATCHER_STARTED]({ commit }, payload: IFmWatchEvent<ISdk>) {
     commit(FmConfigMutation.watcherStarted, payload);
   },
 
@@ -24,7 +25,7 @@ export const watchActions = <T>() =>
     console.warn(`Watcher ${payload.watcherId} failed to start!`);
   },
 
-  [FmEvents.WATCHER_STOPPED_ALL]({ commit }, payload: IFmWatchEvent) {
+  [FmEvents.WATCHER_STOPPED_ALL]({ commit }, payload: IFmWatchEvent<ISdk>) {
     commit(FmConfigMutation.watcherAllStopped, payload);
   },
 
@@ -32,7 +33,7 @@ export const watchActions = <T>() =>
    * When getting a SYNC action from a watcher starting, pass this to the
    * appropriate local state node
    */
-  async [FmEvents.WATCHER_SYNC]({ commit }, payload: IFmWatchEvent) {
+  async [FmEvents.WATCHER_SYNC]({ commit }, payload: IFmWatchEvent<ISdk>) {
     commit(FmConfigMutation.watcherMuted, payload.watcherId);
     commit(
       determineLocalStateNode(payload, FmCrudMutation.serverStateSync),
@@ -43,4 +44,4 @@ export const watchActions = <T>() =>
       commit(FmConfigMutation.watcherUnmuted, payload.watcherId);
     }, 3000);
   }
-} as ActionTree<IFiremodelState<T>, T>);
+} as ActionTree<IFiremodelState, T>);

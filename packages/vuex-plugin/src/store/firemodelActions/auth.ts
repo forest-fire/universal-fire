@@ -317,4 +317,4 @@ export const authActions = <T>() =>
       throw new FireModelPluginError(e.message, "linkWithCredential");
     }
   }
-} as ActionTree<IFiremodelState<T>, T>);
+} as ActionTree<IFiremodelState, T>);

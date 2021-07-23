@@ -3,6 +3,7 @@ import { changeRoot, isRecord, updateList } from '~/util';
 
 import { FmCrudMutation } from '~/enums';
 import { MutationTree } from 'vuex';
+import { ISdk } from 'universal-fire';
 
 /**
  * **serverConfirms**
@@ -15,12 +16,12 @@ import { MutationTree } from 'vuex';
  * back to what it had been before it had been optimistically set by the `local`
  * mutation.
  */
-export function serverRollbacks<T extends Model>(propOffset?: keyof T & string): MutationTree<T> {
+export function serverRollbacks<T>(propOffset?: keyof T & string): MutationTree<T> {
   // default to "all"
   const offset: keyof T & string = !propOffset ? ('all' as keyof T & string) : propOffset;
 
   return {
-    [FmCrudMutation.serverAddRollback](state, payload: IFmWatchEvent<Model>) {
+    [FmCrudMutation.serverAddRollback](state, payload: IFmWatchEvent<ISdk>) {
       if (isRecord(state, payload)) {
         changeRoot<T>(state, payload.value, payload.localPath);
       } else {
@@ -28,7 +29,7 @@ export function serverRollbacks<T extends Model>(propOffset?: keyof T & string):
       }
     },
 
-    [FmCrudMutation.serverChangeRollback](state, payload: IFmWatchEvent<Model>) {
+    [FmCrudMutation.serverChangeRollback](state, payload: IFmWatchEvent<ISdk>) {
       if (isRecord(state, payload)) {
         changeRoot<T>(state, payload.value, payload.localPath);
       } else {
@@ -36,7 +37,7 @@ export function serverRollbacks<T extends Model>(propOffset?: keyof T & string):
       }
     },
 
-    [FmCrudMutation.serverRemoveRollback](state, payload: IFmWatchEvent<Model>) {
+    [FmCrudMutation.serverRemoveRollback](state, payload: IFmWatchEvent<ISdk>) {
       if (isRecord(state, payload)) {
         changeRoot<T>(state, payload.value, payload.localPath);
       } else {

@@ -1,10 +1,10 @@
-import type { Model, IPrimaryKey } from 'firemodel';
-import type { IDatabaseSdk, ISerializedQuery } from 'universal-fire';
+import type { IModel, Model, PrimaryKey } from 'firemodel';
+import type { IDatabaseSdk, ISdk, ISerializedQuery } from 'universal-fire';
 import type { epochWithMilliseconds, IDictionary } from 'common-types';
 import type { AbcApi, AbcResult } from '~/abc';
 import type { AbcMutation, DbSyncOperation, AbcStrategy, QueryType } from '~/enums';
 
-export interface IAbcApiConfig<T extends Model> {
+export interface IAbcApiConfig {
   /**
    * indicates whether the Vuex store is storing a _list_
    * of this type of `Model` or just a single _record_.
@@ -60,20 +60,20 @@ export interface IAbcPostWatcher<T extends Model> {
 
 /** An **ABC** request for discrete primary keys */
 export interface IAbcDiscreteRequest<T extends Model> extends IAbcRequest<T> {
-  (pks: IPrimaryKey<T>[], options?: IAbcOptions<T>): Promise<AbcResult<T>>;
+  (pks: PrimaryKey<T>[], options?: IAbcOptions<T>): Promise<AbcResult<T>>;
 }
 
-export type IAbcParam<T> = IPrimaryKey<T>[] | IAbcQueryRequest<T>;
+export type IAbcParam<T extends Model> = PrimaryKey<T>[] | IAbcQueryRequest<T>;
 
-export interface IAbcFirebaseQueryResult<T> {
-  data: T[];
-  query: ISerializedQuery;
+export interface IAbcFirebaseQueryResult<S extends ISdk, T extends Model> {
+  data: IModel<T>[];
+  query: ISerializedQuery<S, IModel<T>>;
 }
 
 export interface IAbcQueryResults<T extends Model> {
   queryDefn: IAbcQueryDefinition<T>;
   dexieQuery: IGeneralizedQuery<T>;
-  firemodelQuery: () => Promise<IAbcFirebaseQueryResult<T>>;
+  firemodelQuery: () => Promise<IAbcFirebaseQueryResult<ISdk, T>>;
 }
 
 /** An **ABC** request for records using a Query Helper */
@@ -84,15 +84,15 @@ export interface IAbcQueryRequest<T extends Model> {
 /**
  * unknown valid ABC request including both Discrete and Query based requests
  */
-export interface IAbcRequest<T> {
+export interface IAbcRequest<T extends Model> {
   (param: IAbcParam<T>, options?: IAbcOptions<T>): Promise<AbcResult<T>>;
 }
 
 /** The specific **ABC** request command */
 export type AbcRequestCommand = 'get' | 'load';
 
-export interface IQueryLocalResults<T, K = IDictionary> {
-  records: T[];
+export interface IQueryLocalResults<T extends Model> {
+  records: IModel<T>[];
   localPks: string[];
   vuexPks?: string[];
   indexedDbPks: string[];
@@ -101,8 +101,8 @@ export interface IQueryLocalResults<T, K = IDictionary> {
 /**
  * Results from a Query request to Firebase server
  */
-export interface IQueryServerResults<T, K = IDictionary> {
-  records: T[];
+export interface IQueryServerResults<T extends Model> {
+  records: IModel<T>[];
   /** all of the primary keys which were received by the Firebase query */
   serverPks: string[];
   /** the primary keys which were found by Firebase but not known by local state */
@@ -115,7 +115,7 @@ export interface IQueryServerResults<T, K = IDictionary> {
   removeFromIdx: string[];
   /** pks removed from Vuex */
   removeFromVuex: string[];
-  query?: ISerializedQuery;
+  query?: ISerializedQuery<ISdk, IModel<T>>;
   overallCachePerformance: ICachePerformance;
 }
 
@@ -125,7 +125,7 @@ export interface IQueryServerResults<T, K = IDictionary> {
  * presented will favor data in Vuex over IndexedDB if there
  * is ever a conflict.
  */
-export interface IDiscreteLocalResults<T, K = IDictionary> extends IAbcResultsMeta<T> {
+export interface IDiscreteLocalResults<T extends Model> extends IAbcResultsMeta<T> {
   /** How munknown of the records _were_ found locally */
   cacheHits: number;
   /**
@@ -154,7 +154,7 @@ export interface IDiscreteLocalResults<T, K = IDictionary> extends IAbcResultsMe
   /**
    * The records which were gotten from the Vuex and IndexedDB
    */
-  records: T[];
+  records: IModel<T>[];
   /**
    * The primary keys (in string form) which were NOT
    * found in the local caches.
@@ -168,7 +168,7 @@ export interface ICachePerformance {
   ignores: number;
 }
 
-export interface IDiscreteServerResults<T extends Model, K = IDictionary>
+export interface IDiscreteServerResults<T extends Model>
   extends IAbcResultsMeta<T> {
   /**
    * The primary keys being requested from the server
@@ -183,10 +183,10 @@ export interface IDiscreteServerResults<T extends Model, K = IDictionary>
    * unknown keys which were NOT found on the server
    */
   missing: string[];
-  records: T[];
+  records: IModel<T>[];
 }
 
-export interface IAbcResultsMeta<T> {
+export interface IAbcResultsMeta<T extends Model> {
   /**
    * The overall cache performance for the given `Model` to date
    */
@@ -200,12 +200,12 @@ export interface IAbcResultsMeta<T> {
    * The combination of the `Model`'s ABC configuration merged
    * with the options included in the API call
    */
-  modelConfig: IAbcApiConfig<T>;
+  modelConfig: IAbcApiConfig;
 }
 
 export type IAbcMutation = keyof typeof AbcMutation | keyof typeof DbSyncOperation;
 
-export type IAbcQueryDefinition<T> =
+export type IAbcQueryDefinition<T extends Model> =
   | IAbcAllQueryDefinition<T>
   | IAbcWhereQueryDefinition<T>
   | IAbcSinceQueryDefinition<T>;
@@ -265,10 +265,10 @@ export interface IAbcQueryBaseDefinition {
  * a "local" response and optionally also includes a "server" response. Also
  * includes meta for Vuex.
  */
-export interface IDiscreteResult<T, K extends string = string> {
+export interface IDiscreteResult<T extends Model> {
   type: 'discrete';
-  local?: IDiscreteLocalResults<T, K>;
-  server?: IDiscreteServerResults<T, K> | undefined;
+  local?: IDiscreteLocalResults<T>;
+  server?: IDiscreteServerResults<T> | undefined;
   options: IDiscreteOptions<T>;
 }
 
@@ -276,11 +276,11 @@ export interface IDiscreteResult<T, K extends string = string> {
  * A query result (`IQueryLocalResults`) which definitely has a "local" response
  * and optionally also includes a "server" response. Also includes meta for Vuex.
  */
-export interface IQueryResult<T, K extends string = string> {
+export interface IQueryResult<T extends Model> {
   type: 'query';
   queryDefn: IAbcQueryDefinition<T>;
-  local?: IQueryLocalResults<T, K>;
-  server?: IQueryServerResults<T, K>;
+  local?: IQueryLocalResults<T>;
+  server?: IQueryServerResults<T>;
   // query?: ISerializedQuery;
   options: IQueryOptions<T>;
 }
@@ -288,19 +288,19 @@ export interface IQueryResult<T, K extends string = string> {
 /**
  * The results from either a Discrete or Query-based request.
  */
-export type IAbcResult<T, K extends string = string> = IDiscreteResult<T, K> | IQueryResult<T, K>;
+export type IAbcResult<T extends Model> = IDiscreteResult<T> | IQueryResult<T>;
 
-export interface IQueryOptions<T> extends IUniversalOptions<T> {
+export interface IQueryOptions<T extends Model> extends IUniversalOptions<T> {
   watchNew?: boolean;
   /**
    * If the `Model` being queried has a dynamic path then you will need to
    * state the dynamic path segments so the the database path for Firebase
    * can be determined (and so IndexedDB can use a more involved query)
    */
-  offsets?: Partial<T>;
+  offsets?: Partial<IModel<T>>;
 }
 
-export interface IDiscreteOptions<T> extends IUniversalOptions<T> {
+export interface IDiscreteOptions<T extends Model> extends IUniversalOptions<T> {
   /**
    * If the `Model` involved has dynamic paths, you can state the dynamic properties
    * as an option and then just state the `id` properties for the records you want.
@@ -308,14 +308,14 @@ export interface IDiscreteOptions<T> extends IUniversalOptions<T> {
    * **Note:** you may also ignore this option but you must then state the full Composite Key
    * involved in identifying the various Pks.
    */
-  offsets?: Partial<T>;
+  offsets?: Partial<IModel<T>>;
   strategy?: IAbcStrategy;
 }
 
 export type IAbcStrategy = keyof typeof AbcStrategy;
 
 export interface IUniversalOptions<T> {
-  watch?: boolean | IWatchCallback<T>;
+  watch?: boolean | WatchCallback<T>;
   // TODO: this should be more strongly typed AND scoped to get versus load
   strategy?: string;
   /**
@@ -336,20 +336,18 @@ export interface IUniversalOptions<T> {
 //   allLocally?: boolean;
 // }
 
-export type IAbcOptions<T> = IDiscreteOptions<T> | IQueryOptions<T>;
+export type IAbcOptions<T extends Model> = IDiscreteOptions<T> | IQueryOptions<T>;
 
-export interface IWatchCallback<T> {
-  (r: T): boolean;
-}
+export type WatchCallback<T extends unknown = unknown> = (r: T) => boolean;
 
 /** the shape of the get/load endpoints for Discrete requests */
-export interface IAbcDiscreteApi<T> {
-  get: (props: IPrimaryKey<T>[], options: IDiscreteOptions<T>) => Promise<AbcResult<T>>;
-  load: (props: IPrimaryKey<T>[], options: IDiscreteOptions<T>) => Promise<AbcResult<T>>;
+export interface IAbcDiscreteApi<T extends Model> {
+  get: (props: PrimaryKey<T>[], options: IDiscreteOptions<T>) => Promise<AbcResult<T>>;
+  load: (props: PrimaryKey<T>[], options: IDiscreteOptions<T>) => Promise<AbcResult<T>>;
 }
 
 /** the shape of the get/load endpoints for Query requests */
-export interface IAbcQueryApi<T> {
+export interface IAbcQueryApi<T extends Model> {
   get: (defn: IAbcQueryDefinition<T>, options: IQueryOptions<T>) => Promise<AbcResult<T>>;
   load: (props: IAbcQueryDefinition<T>, options: IQueryOptions<T>) => Promise<AbcResult<T>>;
 }
@@ -358,5 +356,5 @@ export interface IGeneralizedQuery<T extends Model> {
   (): Promise<T[]>;
 }
 export interface IGeneralizedFiremodelQuery<T extends Model> {
-  (): Promise<IAbcFirebaseQueryResult<T>>;
+  (): Promise<IAbcFirebaseQueryResult<ISdk, T>>;
 }

@@ -3,6 +3,7 @@ import type { IClientAuth, IDatabaseSdk } from 'universal-fire';
 import { Watch, Record, List, Model, IModelOptions } from 'firemodel';
 import { Commit, Dispatch } from 'vuex';
 import type { IAuthPersistenceStrategy, IFiremodelState } from '~/types';
+import { StoreWithPlugin } from './Store';
 
 export type AsyncMockData = () => Promise<IDictionary>;
 
@@ -15,7 +16,7 @@ export type IFmLifecycleContext<T> =
   | IFmRouteEventContext<T>;
 
 /** the base properties which all events have */
-export interface IFmEventBase<T> {
+export interface IFmEventBase<TStore> {
   Watch: typeof Watch;
   Record: typeof Record;
   List: typeof List;
@@ -24,7 +25,7 @@ export interface IFmEventBase<T> {
   /** commit to Vuex for direct state change */
   commit: Commit;
   /** the root state of Vuex */
-  state: T & { '@firemodel': IFiremodelState<T> };
+  state: StoreWithPlugin<TStore>;
 }
 
 /**
@@ -260,7 +261,7 @@ export type IFmLifecycleEvent =
   | 'user-abandoned'
   | 'route-changed';
 
-export interface IFmQueuedAction<T> {
+export interface IFmQueuedAction<T extends unknown = unknown> {
   /** a descriptive name for the queued action */
   name: string;
   /**

@@ -1,15 +1,16 @@
-import type { IFiremodelState } from "~/types";
+import type { IFiremodelState, StoreWithPlugin } from "~/types";
 import { FmEvents, IFmWatchEvent } from "firemodel";
 import { determineLocalStateNode } from "~/util";
 import { ActionTree } from "vuex";
 import { get } from "native-dash";
 import { FmCrudMutation } from "~/enums";
+import { ISdk } from "../../../../types/dist/types";
 
 export const recordLocal = <T>() =>
 ({
   async [FmEvents.RECORD_CHANGED_LOCALLY](
     { commit, rootState },
-    payload: IFmWatchEvent
+    payload: IFmWatchEvent<ISdk>
   ) {
     const payloadPlus = {
       ...payload,
@@ -27,7 +28,7 @@ export const recordLocal = <T>() =>
 
   async [FmEvents.RECORD_ADDED_LOCALLY](
     { commit, rootState },
-    payload: IFmWatchEvent
+    payload: IFmWatchEvent<ISdk>
   ) {
     const payloadPlus = {
       ...payload,
@@ -53,4 +54,4 @@ export const recordLocal = <T>() =>
       }
     );
   }
-} as ActionTree<IFiremodelState<T>, T>);
+} as ActionTree<IFiremodelState, T>);

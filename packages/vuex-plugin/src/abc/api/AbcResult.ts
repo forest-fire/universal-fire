@@ -3,7 +3,7 @@ import { arrayToHash, hashToArray } from 'typed-conversions';
 
 import { AbcApi } from '~/abc';
 import { AbcError } from '~/errors';
-import type { IAbcResult } from '~/types';
+import type { IAbcResult, StoreWithPlugin } from '~/types';
 import { IDictionary } from 'common-types';
 
 /**
@@ -12,7 +12,7 @@ import { IDictionary } from 'common-types';
  * the result but also certain meta data and a simple means to conditionally
  * watch certain elements of the returned resultset.
  */
-export class AbcResult<T extends IModel> {
+export class AbcResult<T extends Model> {
   constructor(
     private _context: AbcApi<T>,
     private _results: IAbcResult<T>,
@@ -20,12 +20,12 @@ export class AbcResult<T extends IModel> {
   ) { }
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  static async create<T extends IModel>(
+  static async create<T extends Model>(
     _context: AbcApi<T>,
     _results: IAbcResult<T>,
     _performance?: IDictionary
   ) {
-    const obj = new AbcResult(_context, _results, _performance);
+    const obj = new AbcResult<T>(_context, _results, _performance);
     if (obj.serverRecords === undefined) {
       obj.records = obj.localRecords;
       return obj;
@@ -35,20 +35,20 @@ export class AbcResult<T extends IModel> {
     const hasDynamicProperties =
       Record.dynamicPathProperties(obj._context.model.constructor).length > 0;
     if (hasDynamicProperties) {
-      const localPathProps: Partial<T> = Record.compositeKey(
+      const localPathProps = Record.compositeKey(
         obj._context.model.constructor,
         obj.serverRecords[0]
       );
       delete localPathProps.id;
 
       const propKeys = Object.keys(localPathProps);
-      const propValues: string[] = Object.values(localPathProps);
+      const propValues = Object.values(localPathProps);
       const whereClause = propKeys.length > 1 ? propKeys : propKeys.toString();
       const notEqualVal = propValues.length > 1 ? propValues : propValues.toString();
 
       const queryResults = await obj._context.dexieTable
         .where(whereClause)
-        .notEqual(notEqualVal)
+        .notEqual(notEqualVal as string)
         .toArray();
 
       const localOffDynamicPath = arrayToHash(queryResults);
@@ -65,7 +65,7 @@ export class AbcResult<T extends IModel> {
   /**
    * All of the updated records in Vuex that originated from either IndexedDB or Firebase
    */
-  records: T[] = [];
+  records: IModel<T>[] = [];
 
   /**
    * Boolean flag to indicate that the result came from a query (instead of a discrete request)
@@ -78,14 +78,14 @@ export class AbcResult<T extends IModel> {
   /**
    * All of the updated records in Vuex that originated from IndexedDB
    */
-  get localRecords(): T[] {
+  get localRecords(): IModel<T>[] {
     return this._results.local?.records || [];
   }
 
   /**
    * All of the updated records in Vuex that originated from Firebase
    */
-  get serverRecords(): T[] | undefined {
+  get serverRecords(): IModel<T>[] | undefined {
     return this._results.server?.records || undefined;
   }
 

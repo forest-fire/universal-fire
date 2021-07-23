@@ -12,9 +12,9 @@ const sequence = [
   { name: 'types', packages: ['types'] },
   {
     name: 'shared libraries',
-    packages: ['utility', 'serialized-query', 'fixture'],
+    packages: ['utility', 'serialized-query', 'fixture', 'firemock'],
   },
-  { name: 'databases', packages: ['firemock', 'real-time-db', 'firestore-db'] },
+  { name: 'databases', packages: ['real-time-db', 'firestore-db'] },
   {
     name: 'SDKs',
     packages: [
@@ -31,7 +31,7 @@ const sequence = [
   },
   {
     name: 'vuex-plugin',
-    package: ['vuex-plugin-firemodel'],
+    packages: ['vuex-plugin-firemodel'],
   },
 ];
 

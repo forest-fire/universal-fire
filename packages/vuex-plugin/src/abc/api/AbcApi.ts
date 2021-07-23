@@ -9,7 +9,7 @@ import type {
   IQueryLocalResults,
   IQueryOptions,
   IQueryServerResults,
-  IWatchCallback,
+  WatchCallback,
 } from '~/types';
 import { isDiscreteRequest } from '~/type-guards';
 import {
@@ -24,7 +24,7 @@ import {
   saveToIndexedDb,
 } from '~/abc';
 import { DexieDb, FireModel, IFmModelMeta, IPrimaryKey, Model, Record, Watch } from 'firemodel';
-import { IDictionary } from 'common-types';
+import { ConstructorFor, IDictionary } from 'common-types';
 import { pathJoin, capitalize } from 'native-dash';
 import { getStore } from '~/util';
 import { AbcError } from '~/errors';
@@ -60,7 +60,7 @@ export class AbcApi<T extends Model> {
   /**
    * Adds a model to the managed models dictionary that AbcApi manages.
    */
-  public static addModel(model: AbcApi<any>) {
+  public static addModel<TModel extends Model>(model: AbcApi<TModel>) {
     const modelName = model.about.model.pascal;
     if (AbcApi._modelsManaged[modelName]) {
       throw new AbcError(
@@ -94,7 +94,7 @@ export class AbcApi<T extends Model> {
   /**
    * returns an `AbcApi` instance for a given `Model`
    */
-  public static getModelApi<T extends Model>(model: IFmModelConstructor<T>) {
+  public static getModelApi<TModel extends Model>(model: ConstructorFor<TModel>) {
     const r = Record.create(model);
     const name = capitalize(r.modelName);
     if (!AbcApi._modelsManaged[name]) {
@@ -103,14 +103,14 @@ export class AbcApi<T extends Model> {
         'abc-api/invalid-model'
       );
     }
-    return AbcApi._modelsManaged[name] as AbcApi<T>;
+    return AbcApi._modelsManaged[name] as AbcApi<TModel>;
   }
 
   /**
    * Clears the **ABC** API from all models that are being managed and disconnects for IndexedDB
    */
   public static async clear() {
-    const waitFor: any[] = [];
+    const waitFor: Promise<unknown>[] = [];
     Object.keys(AbcApi._modelsManaged).forEach((key) => {
       const ref = AbcApi.getModelApi(AbcApi._modelsManaged[key].model.constructor);
       if (ref.config.useIndexedDb) {
@@ -146,7 +146,7 @@ export class AbcApi<T extends Model> {
     }
   }
 
-  private _config: IAbcApiConfig<T>;
+  private _config: IAbcApiConfig;
   private _modelConstructor: IFmModelConstructor<T>;
   // MODEL INFO
   private _dbOffset: string;
@@ -154,9 +154,9 @@ export class AbcApi<T extends Model> {
   private _modelName: { singular: string; plural: string; pascal: string };
   private _modelMeta: IFmModelMeta<T>;
   // CACHE STATS
-  private _cacheHits: number = 0;
-  private _cacheMisses: number = 0;
-  private _cacheIgnores: number = 0;
+  private _cacheHits = 0;
+  private _cacheMisses = 0;
+  private _cacheIgnores = 0;
 
   cacheHits(hits: number) {
     this._cacheHits += hits;
@@ -166,7 +166,7 @@ export class AbcApi<T extends Model> {
     this._cacheMisses += misses;
   }
 
-  constructor(model: IFmModelConstructor<T>, config: IAbcApiConfig<T> = {}) {
+  constructor(model: IFmModelConstructor<T>, config: IAbcApiConfig = {}) {
     // if (!config.db && FireModel.defaultDb) {
     //   throw new AbcError(`You must provide a way to access the database before you instantiate the ABC API! You can pass it in explicitly as a part of the config or it will pickup the FireModel.defaultDb if that's available.`, 'not-ready')
     // }
@@ -398,7 +398,7 @@ export class AbcApi<T extends Model> {
     // query types all() | where() | since()
     const { firemodelQuery, queryDefn } = request(this, options);
 
-    let local: IQueryLocalResults<T, any> = {
+    const local: IQueryLocalResults<T> = {
       records: [],
       indexedDbPks: [],
       localPks: [],
@@ -658,7 +658,9 @@ export class AbcApi<T extends Model> {
   async watch(serverResponse: AbcResult<T>, options: IAbcOptions<T>) {
     const { watch } = options;
     if (watch) {
-      const isFunction = (x: any): x is IWatchCallback<T> => typeof x === 'function';
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      const isFunction = (x: unknown): x is WatchCallback => typeof x === 'function';
+
       const watcher = Watch.list(this._modelConstructor);
       if (isFunction(watch)) {
         const watchIds = serverResponse.records.filter((p) => watch(p)).map((p) => p.id!);

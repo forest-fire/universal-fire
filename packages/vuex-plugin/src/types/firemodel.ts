@@ -1,6 +1,6 @@
-import { AuthCredential, IClientConfig, IdTokenResult, User } from 'universal-fire';
+import { AuthCredential, IClientConfig, IdTokenResult, ISdk, User } from 'universal-fire';
 import type { ICurrentUser, IFmQueuedAction } from '~/types';
-import { IFmLocalEvent, IWatcherEventContext } from 'firemodel';
+import { IFmLocalEvent, IWatcherEventContext, Model } from 'firemodel';
 
 import { IDictionary } from 'common-types';
 
@@ -12,7 +12,7 @@ export interface IFiremodelAbbreviatedUser {
   fullProfile: User;
 }
 
-export interface IFiremodelState<T> {
+export interface IFiremodelState {
   /** the configuration used to connect to the Firebase DB */
   config?: IClientConfig;
   /** a list of custom claims that this user has */
@@ -33,15 +33,15 @@ export interface IFiremodelState<T> {
   /**
    * callbacks which are queued to be executed when a lifecycle state is achieved
    */
-  queued: IFmQueuedAction<T>[];
+  queued: IFmQueuedAction[];
   /** which DB paths are being watched */
-  watching: IWatcherEventContext[];
+  watching: IWatcherEventContext<ISdk>[];
   /**
    * Records or relationships which have been updated _locally_ but are awaiting
    * confirmation from the database. Each entry is offset by the `transactionId`
    * which **Firemodel** provides.
    */
-  localOnly: IDictionary<IFmLocalEvent<T>>;
+  localOnly: IDictionary<IFmLocalEvent<any>>;
   /** if there was an error the the message will be displayed here */
   errors?: string[];
 

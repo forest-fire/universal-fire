@@ -14,7 +14,8 @@ import type { IAuthProfile, IFiremodelState } from "~/types";
 import { getAuth, getStore } from "~/util";
 
 import { FireModelPluginError } from "~/errors";
-import { IModelConstructor } from "firemodel";
+import { IModelConstructor, Model } from "firemodel";
+import { ConstructorFor } from "common-types";
 
 /**
  * Log into the Firebase AUTH sytem using email/password. If successful it returns
@@ -52,11 +53,11 @@ export async function createUserWithEmailAndPassword(
  * optionally send a **reset** to the `Model` which stores the
  * user profile of the user.
  */
-export async function signOut(payload: {
+export async function signOut<T extends Model = Model>(payload: {
   uid?: string;
   email?: string;
   /** model constructor or db path */
-  model?: IModelConstructor | string;
+  model?: ConstructorFor<T> | string;
 }) {
   return getStore().dispatch({
     type: "@firemodel/signOut",
@@ -67,7 +68,7 @@ export async function signOut(payload: {
 export async function getIdToken(
   forceRefresh?: boolean
 ): Promise<IdTokenResult> {
-  const fmState = getStore().state["@firemodel"] as IFiremodelState<unknown>;
+  const fmState = getStore().state["@firemodel"];
   if (fmState.token && forceRefresh !== true) {
     return fmState.token;
   }

@@ -4,6 +4,7 @@ import type {
   IDiscreteLocalResults,
   IDiscreteResult,
   IDiscreteServerResults,
+  StoreWithPlugin,
 } from '~/types';
 import { AbcMutation, DbSyncOperation } from '~/enums';
 import { arrayToHash, hashToArray } from 'typed-conversions';
@@ -12,13 +13,13 @@ import { get } from 'native-dash';
 
 import { AbcError } from '~/errors';
 import { IDictionary } from 'common-types';
-import { MutationTree } from 'vuex';
+import { MutationTree, Store } from 'vuex';
 import Vue from 'vue';
 
 export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): MutationTree<T> {
   return {
-    [AbcMutation.ABC_VUEX_UPDATE_FROM_IDX]<T extends IDictionary>(
-      state: T,
+    [AbcMutation.ABC_VUEX_UPDATE_FROM_IDX]<TState extends IDictionary>(
+      state: TState,
       payload: AbcResult<any>
     ) {
       if (payload.vuex.isList) {
@@ -27,19 +28,19 @@ export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): Mutation
         if (!validResultSize(payload, 'local')) {
           return;
         }
-        changeRoot<T>(state, payload.records[0], payload.vuex.moduleName);
+        changeRoot(state, payload.records[0], payload.vuex.moduleName);
       }
     },
 
-    [AbcMutation.ABC_INDEXED_SKIPPED]<T extends IDictionary>(
-      state: T,
+    [AbcMutation.ABC_INDEXED_SKIPPED]<TState extends IDictionary>(
+      state: TState,
       payload: IDiscreteLocalResults<any>
     ) {
       // nothing to do; mutation is purely for informational/debugging purposes
     },
 
-    [DbSyncOperation.ABC_FIREBASE_SET_VUEX]<T extends IDictionary>(
-      state: T,
+    [DbSyncOperation.ABC_FIREBASE_SET_VUEX]<TState extends StoreWithPlugin>(
+      state: TState,
       payload: AbcResult<T>
     ) {
       if (payload.vuex.isList) {
@@ -54,20 +55,20 @@ export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): Mutation
         if (!validResultSize(payload, 'server')) {
           return;
         }
-        changeRoot<T>(state, payload.records[0], payload.vuex.moduleName);
+        changeRoot(state, payload.records[0], payload.vuex.moduleName);
       }
     },
 
-    [DbSyncOperation.ABC_FIREBASE_SET_DYNAMIC_PATH_VUEX]<T extends IDictionary>(
-      state: T,
-      payload: AbcResult<T>
+    [DbSyncOperation.ABC_FIREBASE_SET_DYNAMIC_PATH_VUEX]<TState extends IDictionary>(
+      state: TState,
+      payload: AbcResult<TState>
     ) {
       // TODO: add code for dynamic path strategy here
     },
 
-    [DbSyncOperation.ABC_FIREBASE_MERGE_VUEX]<T extends IDictionary>(
-      state: T,
-      payload: AbcResult<T>
+    [DbSyncOperation.ABC_FIREBASE_MERGE_VUEX]<TState extends IDictionary>(
+      state: TState,
+      payload: AbcResult<TState>
     ) {
       if (payload.vuex.isList) {
         const vuexRecords = state[payload.vuex.modulePostfix];
@@ -81,27 +82,27 @@ export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): Mutation
         if (!validResultSize(payload, 'server')) {
           return;
         }
-        changeRoot<T>(state, payload.records[0], payload.vuex.moduleName);
+        changeRoot<TState>(state, payload.records[0], payload.vuex.moduleName);
       }
     },
 
-    [DbSyncOperation.ABC_FIREBASE_SET_INDEXED_DB]<T>(state: T, payload: AbcResult<any>) {
+    [DbSyncOperation.ABC_FIREBASE_SET_INDEXED_DB]<TState>(state: TState, payload: AbcResult<any>) {
       // nothing to do; mutation is purely for informational/debugging purposes
     },
 
-    [DbSyncOperation.ABC_FIREBASE_MERGE_INDEXED_DB]<T>(state: T, payload: AbcResult<any>) {
+    [DbSyncOperation.ABC_FIREBASE_MERGE_INDEXED_DB]<TState>(state: TState, payload: AbcResult<any>) {
       // nothing to do; mutation is purely for informational/debugging purposes
     },
 
-    [DbSyncOperation.ABC_FIREBASE_SET_DYNAMIC_PATH_INDEXED_DB]<T>(
-      state: T,
+    [DbSyncOperation.ABC_FIREBASE_SET_DYNAMIC_PATH_INDEXED_DB]<TState>(
+      state: TState,
       payload: AbcResult<any>
     ) {
       // nothing to do; mutation is purely for informational/debugging purposes
     },
 
-    [DbSyncOperation.ABC_INDEXED_DB_SET_VUEX]<T extends IDictionary>(
-      state: T,
+    [DbSyncOperation.ABC_INDEXED_DB_SET_VUEX]<TState extends IDictionary>(
+      state: TState,
       payload: AbcResult<any>
     ) {
       if (payload.vuex.isList) {
@@ -118,7 +119,7 @@ export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): Mutation
             `You are using a query on a singular model ${payload.vuex.moduleName}; this typically should be avoided.`
           );
         }
-        changeRoot<T>(state, payload.records[0], payload.vuex.moduleName);
+        changeRoot(state, payload.records[0], payload.vuex.moduleName);
       }
     },
 
@@ -137,11 +138,11 @@ export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): Mutation
             `You are using a query on a singular model ${payload.vuex.moduleName}; this typically should be avoided.`
           );
         }
-        changeRoot<T>(state, payload.records[0], payload.vuex.moduleName);
+        changeRoot(state, payload.records[0], payload.vuex.moduleName);
       }
     },
 
-    [DbSyncOperation.ABC_INDEXED_DB_MERGE_VUEX]<T>(state: T, payload: AbcResult<any>) {
+    [DbSyncOperation.ABC_INDEXED_DB_MERGE_VUEX]<TState extends IDictionary>(state: TState, payload: AbcResult<any>) {
       console.log(payload.options.offsets);
       if (payload.vuex.isList) {
         console.log(`Is a list`);
@@ -161,8 +162,8 @@ export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): Mutation
       }
     },
 
-    [AbcMutation.ABC_INDEXED_DB_REFRESH_FAILED]<T extends IDictionary>(
-      state: T,
+    [AbcMutation.ABC_INDEXED_DB_REFRESH_FAILED]<TState extends IDictionary>(
+      state: TState,
       payload: IDiscreteServerResults<any> & {
         errorMessage: string;
         errorStack: any;
@@ -175,16 +176,16 @@ export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): Mutation
       console.groupEnd();
     },
 
-    [AbcMutation.ABC_NO_CACHE]<T>(state: T, payload: IDiscreteResult<any>) {
+    [AbcMutation.ABC_NO_CACHE]<TState>(state: TState, payload: IDiscreteResult<any>) {
       // nothing to do; mutation is purely for informational/debugging purposes
     },
-    [AbcMutation.ABC_LOCAL_QUERY_EMPTY]<T>(state: T, payload: IDiscreteResult<any>) {
+    [AbcMutation.ABC_LOCAL_QUERY_EMPTY]<TState>(state: TState, payload: IDiscreteResult<any>) {
       // nothing to do; mutation is purely for informational/debugging purposes
     },
 
-    [DbSyncOperation.ABC_INDEXED_DB_SET_VUEX]<T extends IDictionary>(
-      state: T,
-      payload: AbcResult<T>
+    [DbSyncOperation.ABC_INDEXED_DB_SET_VUEX]<TState extends StoreWithPlugin>(
+      state: TState,
+      payload: AbcResult<TState>
     ) {
       if (payload.vuex.isList) {
         Vue.set(state, payload.vuex.modulePostfix, payload.records);
@@ -192,11 +193,11 @@ export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): Mutation
         if (!validResultSize(payload)) {
           return;
         }
-        changeRoot<T>(state, payload.records[0], payload.vuex.moduleName);
+        changeRoot(state, payload.records[0], payload.vuex.moduleName);
       }
     },
 
-    [AbcMutation.ABC_PRUNE_STALE_IDX_RECORDS]<T extends IDictionary>(
+    [AbcMutation.ABC_PRUNE_STALE_IDX_RECORDS]<T extends Store<StoreWithPlugin>>(
       state: T,
       payload: { pks: string[]; vuex: AbcApi<T>['vuex'] }
     ) {

@@ -1,13 +1,13 @@
-import type { IFiremodelState } from "~/types";
+import type { IFiremodelState, StoreWithPlugin } from "~/types";
 import { FmEvents, IFmWatchEvent } from "firemodel";
-
 import { ActionTree } from "vuex";
 import { determineLocalStateNode } from "~/util";
 import { FmCrudMutation } from "~/enums";
+import { ISdk } from "universal-fire";
 
 export const recordServerChanges = <T>() =>
 ({
-  [FmEvents.RECORD_ADDED]({ commit, state }, payload: IFmWatchEvent) {
+  [FmEvents.RECORD_ADDED]({ commit, state }, payload: IFmWatchEvent<ISdk>) {
     if (!state.muted.includes(payload.watcherId)) {
       try {
         commit(
@@ -42,7 +42,7 @@ export const recordServerChanges = <T>() =>
     console.info("A RECORD_MOVED action was received", payload);
   },
 
-  [FmEvents.RECORD_CHANGED]({ commit }, payload: IFmWatchEvent) {
+  [FmEvents.RECORD_CHANGED]({ commit }, payload: IFmWatchEvent<ISdk>) {
     try {
       commit(
         determineLocalStateNode(payload, FmCrudMutation.serverChange),
@@ -60,4 +60,4 @@ export const recordServerChanges = <T>() =>
       );
     }
   }
-} as ActionTree<IFiremodelState<T>, T>);
+} as ActionTree<IFiremodelState, T>);

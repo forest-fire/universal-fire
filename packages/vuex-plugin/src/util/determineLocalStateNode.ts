@@ -1,5 +1,7 @@
 import { IFmWatchEvent } from "firemodel";
 import { pathJoin } from "native-dash";
+import { ISdk } from "universal-fire";
+import { Model } from "firemodel";
 
 /**
  * **pathToState**
@@ -7,8 +9,8 @@ import { pathJoin } from "native-dash";
  * Takes a **Firemodel** server event and determines the
  * appropriate path to the local state node.
  */
-export function determineLocalStateNode(
-  payload: IFmWatchEvent,
+export function determineLocalStateNode<S extends ISdk = ISdk, T extends Model = Model>(
+  payload: IFmWatchEvent<S, T>,
   mutation: string
 ) {
   return pathJoin(

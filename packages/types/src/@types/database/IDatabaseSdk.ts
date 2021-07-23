@@ -10,7 +10,7 @@ import { AppFrom, AuthFrom, AuthProviders, DbTypeFrom, IsAdminSdk } from './db-u
  * The basic contract required to be considered a "database"
  * within the **Universal Fire** universe.
  */
-export type IDatabaseSdk<TSdk extends ISdk> = IDatabaseApi<TSdk> & {
+export type IDatabaseSdk<TSdk extends ISdk = ISdk> = IDatabaseApi<TSdk> & {
   /** the SDK which is being used (aka, "admin", "client", ...) */
   sdk: Readonly<TSdk>;
 

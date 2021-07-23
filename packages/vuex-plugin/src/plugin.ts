@@ -1,9 +1,8 @@
-import type { IFiremodelConfig, IFiremodelState } from '~/types';
+import type { IFiremodelConfig, IFiremodelState, StoreWithPlugin } from '~/types';
 import { addNamespace, setInitialState, storeDatabase, storePluginConfig } from '~/util';
 
 import { FireModel } from 'firemodel';
-import type { IDatabaseSdk, IRealTimeClient, IFirestoreClient } from 'universal-fire';
-import type { Store } from 'vuex';
+import type { IDatabaseSdk, ISdk } from 'universal-fire';
 import copy from 'fast-copy';
 import { preserveStore } from '~/util';
 import { queueLifecycleEvents } from './queueLifecycleEvents';
@@ -11,8 +10,8 @@ import { coreServices } from './coreServices';
 import { FireModelPluginError } from './errors';
 import { FmConfigAction } from './enums';
 import { FiremodelModule } from './store';
-
-export type IFiremodelVuexModule<T> = { '@firemodel': IFiremodelState<T> };
+import { IDictionary } from 'common-types';
+import { Store } from 'vuex';
 
 /**
  * **FiremodelPlugin**
@@ -20,21 +19,20 @@ export type IFiremodelVuexModule<T> = { '@firemodel': IFiremodelState<T> };
  * @param db the database connection (provided by SDK from `universal-fire`)
  * @param config the configuration of the core services this plugin provides
  */
-export const FiremodelPlugin = <T>(
+export const FiremodelPlugin = <TSdk extends ISdk, TStore extends IDictionary = IDictionary>(
   /**
    * Provide a connection to the database with one of the SDK's provided
    * by the `universal-fire` library.
    */
-  db: IRealTimeClient | IFirestoreClient | IDatabaseSdk,
+  db: IDatabaseSdk<TSdk>,
   /**
    * Specify the configuration of the "core services" this plugin provides
    */
-  config: IFiremodelConfig<T & IFiremodelVuexModule<T>>
+  config: IFiremodelConfig<StoreWithPlugin<TStore>>
 ) => {
-  storeDatabase(db as IDatabaseSdk);
+  storeDatabase(db);
   storePluginConfig(config);
-  type IRootState = T & { '@firemodel': IFiremodelState<T> };
-  return (store: Store<IRootState>) => {
+  return (store: Store<StoreWithPlugin<TStore>>) => {
     setInitialState(copy(store.state));
     preserveStore(store);
     FireModel.dispatch = store.dispatch;
@@ -47,9 +45,9 @@ export const FiremodelPlugin = <T>(
       }
     });
 
-    store.registerModule('@firemodel', FiremodelModule<IRootState>());
+    store.registerModule('@firemodel', FiremodelModule<StoreWithPlugin<TStore>>());
 
-    queueLifecycleEvents<IRootState>(store, config)
+    queueLifecycleEvents<StoreWithPlugin<TStore>>(store, config)
       .then(() => coreServices(store, { ...{ connect: true }, ...config }))
       .catch((e) => {
         throw new FireModelPluginError(

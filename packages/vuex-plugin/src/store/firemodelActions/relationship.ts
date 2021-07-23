@@ -1,5 +1,5 @@
 import { FmCrudMutation } from "~/enums";
-import type { IFiremodelState } from "~/types";
+import type { IFiremodelState, StoreWithPlugin } from "~/types";
 import { FmEvents, IFmLocalRelationshipEvent } from "firemodel";
 
 import { ActionTree } from "vuex";
@@ -65,4 +65,4 @@ export const relationship = <T>() =>
     // TODO: implement
     console.log("relationship set rolled back", payload);
   }
-} as ActionTree<IFiremodelState<T>, T>);
+} as ActionTree<IFiremodelState, T>);

@@ -9,4 +9,4 @@ export const other = <T>() =>
   async RESET({ commit }, module: string) {
     commit(`${module}/RESET`, { module }, { root: true });
   }
-} as ActionTree<IFiremodelState<T>, T>);
+} as ActionTree<IFiremodelState, T>);

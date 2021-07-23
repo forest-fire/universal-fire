@@ -7,4 +7,4 @@ export const actions = <T>() =>
 ({
   ...firemodelActions<T>(),
   ...pluginActions<T>()
-} as ActionTree<IFiremodelState<T>, T>);
+} as ActionTree<IFiremodelState, T>);

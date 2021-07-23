@@ -6,11 +6,11 @@ let _db: IDatabaseSdk;
 /**
  * provides access to the database that was passed in by the consuming application
  */
-export function getDatabase(): IDatabaseSdk {
+export function getDatabase<T extends IDatabaseSdk>(): T {
   if (!_db) {
     throw new FireModelPluginError(`A call to database() failed because the database was not set!`)
   }
-  return _db;
+  return _db as T;
 }
 
 export function storeDatabase(db: IDatabaseSdk) {

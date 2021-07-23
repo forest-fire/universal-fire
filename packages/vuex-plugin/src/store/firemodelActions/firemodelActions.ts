@@ -11,7 +11,7 @@ import {
 } from "~/store";
 
 import { ActionTree } from "vuex";
-import type { IFiremodelState } from "~/types";
+import type { IFiremodelState, StoreWithPlugin } from "~/types";
 
 export const firemodelActions = <T>() =>
   stripNamespaceFromKeys<T>({
@@ -24,10 +24,10 @@ export const firemodelActions = <T>() =>
     ...watchActions<T>(),
     ...relationship<T>(),
     ...other<T>()
-  }) as ActionTree<IFiremodelState<T>, T>;
+  }) as ActionTree<IFiremodelState, T>;
 
-function stripNamespaceFromKeys<T>(global: ActionTree<IFiremodelState<T>, T>) {
-  const local: ActionTree<IFiremodelState<T>, T> = {};
+function stripNamespaceFromKeys<T>(global: ActionTree<IFiremodelState, T>) {
+  const local: ActionTree<IFiremodelState, T> = {};
   Object.keys(global).forEach(key => {
     local[key.replace("@firemodel/", "")] = global[key];
   });

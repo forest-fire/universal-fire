@@ -2,12 +2,13 @@
 
 // #region autoindexed files
 
-// index last changed at: 1st Jan, 2021, 10:36 AM ( GMT-8 )
+// index last changed at: 7th Jul, 2021, 02:39 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: abc, auth, config, firemodel.
+// files: Store, abc, auth, config, firemodel.
 // directories: actions.
 
 // local file exports
+export * from "./Store";
 export * from "./abc";
 export * from "./auth";
 export * from "./config";
@@ -18,7 +19,7 @@ export * from "./actions/index";
 
 // Note:
 // -----
-// This file was created by running: "do devops autoindex"; it assumes you have
+// This file was created by running: "dd devops autoindex"; it assumes you have
 // the 'do-devops' pkg installed as a dev dep.
 //
 // By default it assumes that exports are named exports but this can be changed by

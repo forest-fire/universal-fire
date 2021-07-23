@@ -1,6 +1,6 @@
 import { FireModelPluginError } from "../errors/FiremodelPluginError";
 import { IDictionary } from "common-types";
-import { Model } from "firemodel";
+import { IModel, Model, PropertyOf } from "firemodel";
 import Vue from "vue";
 
 interface IDictionaryWithId extends IDictionary {
@@ -21,14 +21,15 @@ interface IDictionaryWithId extends IDictionary {
  * @param value the value of the record which has changed
  */
 export function updateList<
-  T extends Model,
-  M extends IDictionary = IDictionary<T[]>
->(
-  moduleState: M,
-  offset: keyof M & string,
-  /** the new record value OR "null" if removing the record */
-  value: T | null
-): void {
+  TModel extends Model,
+  TState extends IDictionary<IModel<TModel>[]> = IDictionary<IModel<TModel>[]>,
+  TId extends keyof TState & string = keyof TState & string,
+  >(
+    moduleState: TState,
+    offset: TId,
+    /** the new record value OR "null" if removing the record */
+    value: IModel<TModel> | null
+  ): void {
   if (!offset) {
     throw new FireModelPluginError(
       '"updateList" was passed a falsy value for an offset; this is not currently allowed',
@@ -36,10 +37,10 @@ export function updateList<
     );
   }
 
-  const existing: T[] = ((moduleState[offset] as unknown) as T[]) || [];
+  const existing: IModel<TModel>[] = moduleState[offset] || [];
 
   let found = false;
-  const updated: T[] = existing.map(i => {
+  const updated: IModel<TModel>[] = existing.map(i => {
     if (value && i.id === value.id) {
       found = true;
     }
@@ -49,7 +50,7 @@ export function updateList<
   Vue.set(
     moduleState as Record<string, unknown>,
     offset,
-    found ? updated : existing.concat(value as T)
+    found ? updated : existing.concat(value as TModel)
   );
 
   // set<IDictionaryWithId>(

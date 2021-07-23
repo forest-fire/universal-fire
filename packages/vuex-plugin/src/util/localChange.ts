@@ -1,12 +1,13 @@
 import { FmEvents, IFmWatchEvent, Record } from 'firemodel';
 import type { IFmEventActions, IFmLocalChange } from '~/types';
-
+import { ISdk } from "universal-fire";
+import { Model } from "firemodel";
 import { IDictionary } from 'common-types';
 
 /**
  * converts a "local change" event into the right data structure
  */
-export function localChange(event: IFmWatchEvent): IFmLocalChange {
+export function localChange<S extends ISdk = ISdk, T extends Model = Model>(event: IFmWatchEvent<S, T>): IFmLocalChange {
   const record = Record.createWith(event.modelConstructor, event.value);
   return {
     dbPath: record.dbPath,

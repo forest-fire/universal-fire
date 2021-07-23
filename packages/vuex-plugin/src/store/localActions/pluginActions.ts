@@ -5,6 +5,7 @@ import type {
   IFmConnectedContext,
   IFmRouteEventContext,
   IFiremodelState,
+  StoreWithPlugin,
 } from '~/types';
 import { authChanged, getDatabase, getPluginConfig, runQueue } from '~/util';
 
@@ -45,7 +46,7 @@ export const pluginActions = <T>() =>
         db,
         config,
 
-        state: rootState as T & { '@firemodel': IFiremodelState<T> },
+        state: rootState as StoreWithPlugin<T>,
       };
 
       await runQueue(ctx, 'connected');
@@ -103,7 +104,7 @@ export const pluginActions = <T>() =>
 
         dispatch,
         commit,
-        state: rootState as T & { '@firemodel': IFiremodelState<T> },
+        state: rootState as StoreWithPlugin<T>,
       };
 
       auth.onAuthStateChanged(authChanged(ctx));
@@ -130,7 +131,7 @@ export const pluginActions = <T>() =>
 
         dispatch,
         commit,
-        state: rootState as T & { '@firemodel': IFiremodelState<T> },
+        state: rootState as StoreWithPlugin<T>,
 
         leaving: payload.from.path,
         entering: payload.to.path,
@@ -139,4 +140,4 @@ export const pluginActions = <T>() =>
       await runQueue(ctx, 'route-changed');
     }
   },
-} as ActionTree<IFiremodelState<T>, T>);
+} as ActionTree<IFiremodelState, T>);
