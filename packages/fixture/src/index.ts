@@ -13,6 +13,7 @@ export * from "./Fixture";
 export * from "./Queue";
 export * from "./Schema";
 export * from "./schema-helper";
+export * from "./Mock";
 
 // directory exports
 export * from "./utils/index";

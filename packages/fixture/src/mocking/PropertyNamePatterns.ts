@@ -1,5 +1,5 @@
 import { IDictionary } from "common-types";
-import { NamedFakes } from "~/types";
+import { NamedFakes } from "firemodel";
 
 export const PropertyNamePatterns: IDictionary<keyof typeof NamedFakes> = {
   id: "id",

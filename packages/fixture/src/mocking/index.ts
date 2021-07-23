@@ -7,7 +7,6 @@
 // files: Mock, MockApi, PropertyNamePatterns, addRelationships, fakeIt, mockProperties, mockValue, mocking-types, processHasMany, processHasOne, types.
 
 // local file exports
-export * from "./Mock";
 export * from "./MockApi";
 export * from "./PropertyNamePatterns";
 export * from "./addRelationships";

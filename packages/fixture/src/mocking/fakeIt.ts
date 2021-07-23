@@ -1,9 +1,9 @@
 import { IDictionary } from "common-types";
-import { MockHelper } from "firemock";
-import { NamedFakes } from "~/types";
+import { NamedFakes } from "firemodel";
 // TODO: bring in this functionality again
 import { key as fbKey } from "firebase-key";
 import { format } from "date-fns";
+import faker from "faker";
 
 const sequence: IDictionary<number> = {};
 
@@ -37,7 +37,7 @@ function getDistribution<T = any>(...distribution: Array<[number, T]>) {
 }
 
 export function fakeIt<T = any>(
-  helper: MockHelper,
+  context: IDictionary,
   type: keyof typeof NamedFakes,
   ...rest: any[]
 ) {
@@ -47,8 +47,8 @@ export function fakeIt<T = any>(
     precision?: number;
   }) {
     return numOptions && typeof numOptions === "object"
-      ? helper.faker.random.number(numOptions)
-      : helper.faker.random.number({ min: 1, max: 100 });
+      ? faker.random.number(numOptions)
+      : faker.random.number({ min: 1, max: 100 });
   }
 
   /** for mocks which use a hash-based second param */
@@ -61,7 +61,7 @@ export function fakeIt<T = any>(
     case "fbKey":
       return fbKey();
     case "String":
-      return helper.faker.lorem.words(5);
+      return faker.lorem.words(5);
     case "number":
     case "Number":
       return getNumber(options({ min: 0, max: 1000 }));
@@ -85,7 +85,7 @@ export function fakeIt<T = any>(
         }
       }
 
-      const priceAmt = helper.faker.commerce.price(
+      const priceAmt = faker.commerce.price(
         price.min,
         price.max,
         price.precision,
@@ -100,55 +100,55 @@ export function fakeIt<T = any>(
     case "Object":
       return {};
     case "name":
-      return helper.faker.name.firstName() + " " + helper.faker.name.lastName();
+      return faker.name.firstName() + " " + faker.name.lastName();
     case "firstName":
-      return helper.faker.name.firstName();
+      return faker.name.firstName();
     case "lastName":
-      return helper.faker.name.lastName();
+      return faker.name.lastName();
     case "company":
     case "companyName":
-      return helper.faker.company.companyName();
+      return faker.company.companyName();
     case "address":
       return (
-        helper.faker.address.secondaryAddress() +
+        faker.address.secondaryAddress() +
         ", " +
-        helper.faker.address.city() +
+        faker.address.city() +
         ", " +
-        helper.faker.address.stateAbbr() +
+        faker.address.stateAbbr() +
         "  " +
-        helper.faker.address.zipCode()
+        faker.address.zipCode()
       );
     case "streetAddress":
-      return helper.faker.address.streetAddress(false);
+      return faker.address.streetAddress(false);
     case "fullAddress":
-      return helper.faker.address.streetAddress(true);
+      return faker.address.streetAddress(true);
     case "city":
-      return helper.faker.address.city();
+      return faker.address.city();
     case "state":
-      return helper.faker.address.state();
+      return faker.address.state();
     case "zipCode":
-      return helper.faker.address.zipCode();
+      return faker.address.zipCode();
     case "stateAbbr":
-      return helper.faker.address.stateAbbr();
+      return faker.address.stateAbbr();
     case "country":
-      return helper.faker.address.country();
+      return faker.address.country();
     case "countryCode":
-      return helper.faker.address.countryCode();
+      return faker.address.countryCode();
     case "latitude":
-      return helper.faker.address.latitude();
+      return faker.address.latitude();
     case "longitude":
-      return helper.faker.address.longitude();
+      return faker.address.longitude();
     case "coordinate":
       return {
-        latitude: Number(helper.faker.address.latitude()),
-        longitude: Number(helper.faker.address.longitude()),
+        latitude: Number(faker.address.latitude()),
+        longitude: Number(faker.address.longitude()),
       };
     /**
      * Adds a gender of "male", "female" or "other" but with more likelihood of
      * male or female.
      */
     case "gender":
-      return helper.faker.helpers.shuffle([
+      return faker.helpers.shuffle([
         "male",
         "female",
         "male",
@@ -158,93 +158,93 @@ export function fakeIt<T = any>(
         "other",
       ]);
     case "age":
-      return helper.faker.random.number({ min: 1, max: 99 });
+      return faker.random.number({ min: 1, max: 99 });
     case "ageChild":
-      return helper.faker.random.number({ min: 1, max: 10 });
+      return faker.random.number({ min: 1, max: 10 });
     case "ageAdult":
-      return helper.faker.random.number({ min: 21, max: 99 });
+      return faker.random.number({ min: 21, max: 99 });
     case "ageOlder":
-      return helper.faker.random.number({ min: 60, max: 99 });
+      return faker.random.number({ min: 60, max: 99 });
     case "jobTitle":
-      return helper.faker.name.jobTitle;
+      return faker.name.jobTitle;
     case "date":
     case "dateRecent":
-      return helper.faker.date.recent();
+      return faker.date.recent();
     case "dateRecentString":
-      return format(helper.faker.date.recent(), "yyyy-MM-dd");
+      return format(faker.date.recent(), "yyyy-MM-dd");
     case "dateMiliseconds":
     case "dateRecentMiliseconds":
-      return helper.faker.date.recent().getTime();
+      return faker.date.recent().getTime();
     case "datePast":
-      return helper.faker.date.past();
+      return faker.date.past();
     case "datePastString":
-      return format(helper.faker.date.past(), "yyyy-MM-dd");
+      return format(faker.date.past(), "yyyy-MM-dd");
     case "datePastMiliseconds":
-      return helper.faker.date.past().getTime();
+      return faker.date.past().getTime();
     case "dateFuture":
-      return helper.faker.date.future();
+      return faker.date.future();
     /** returns string based date in format of "YYYY-MM-DD" */
     case "dateFutureString":
-      return format(helper.faker.date.future(), "yyyy-MM-dd");
+      return format(faker.date.future(), "yyyy-MM-dd");
     case "dateFutureMiliseconds":
-      return helper.faker.date.future().getTime();
+      return faker.date.future().getTime();
     case "dateSoon":
-      return helper.faker.date.between(
+      return faker.date.between(
         new Date(),
         new Date(new Date().getTime() + 5 * 24 * 60 * 1000)
       );
     case "dateSoonString":
       return format(
-        helper.faker.date.between(
+        faker.date.between(
           new Date(),
           new Date(new Date().getTime() + 5 * 24 * 60 * 1000)
         ),
         "yyyy-MM-dd"
       );
     case "dateSoonMiliseconds":
-      return helper.faker.date
+      return faker.date
         .between(
           new Date(),
           new Date(new Date().getTime() + 5 * 24 * 60 * 1000)
         )
         .getTime();
     case "imageAvatar":
-      return helper.faker.image.avatar();
+      return faker.image.avatar();
     case "imageAnimal":
-      return helper.faker.image.animals();
+      return faker.image.animals();
     case "imagePeople":
-      return helper.faker.image.people();
+      return faker.image.people();
     case "imageNature":
-      return helper.faker.image.nature();
+      return faker.image.nature();
     case "imageTransport":
-      return helper.faker.image.transport();
+      return faker.image.transport();
     case "phoneNumber":
-      return helper.faker.phone.phoneNumber();
+      return faker.phone.phoneNumber();
     case "email":
-      return helper.faker.internet.email;
+      return faker.internet.email;
     case "word":
-      return helper.faker.lorem.word();
+      return faker.lorem.word();
     case "words":
-      return helper.faker.lorem.words();
+      return faker.lorem.words();
     case "sentence":
-      return helper.faker.lorem.sentence();
+      return faker.lorem.sentence();
     case "slug":
-      return helper.faker.lorem.slug();
+      return faker.lorem.slug();
     case "paragraph":
-      return helper.faker.lorem.paragraph();
+      return faker.lorem.paragraph();
     case "paragraphs":
-      return helper.faker.lorem.paragraphs();
+      return faker.lorem.paragraphs();
     case "url":
-      return helper.faker.internet.url();
+      return faker.internet.url();
     case "uuid":
-      return helper.faker.random.uuid();
+      return faker.random.uuid();
     case "random":
-      return helper.faker.random.arrayElement(rest);
+      return faker.random.arrayElement(rest);
     case "distribution":
       return getDistribution(...rest);
 
     case "sequence":
-      const prop = helper.context.property;
+      const prop = context.property; 
       const items = rest;
 
       if (typeof sequence[prop] === "undefined") {
@@ -274,6 +274,6 @@ export function fakeIt<T = any>(
       }
       return url;
     default:
-      return helper.faker.lorem.slug();
+      return faker.lorem.slug();
   }
 }

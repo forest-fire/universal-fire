@@ -1,17 +1,17 @@
 import {
   IFmModelRelationshipMeta,
   IMockRelationshipConfig,
-  IMockResponse,
-} from "~/types";
-import { Mock, Record } from "~/core";
-
-import { IDatabaseSdk } from "universal-fire";
+  Record
+} from "firemodel";
+import { IDatabaseSdk } from "@forest-fire/types";
+import { IMockResponse } from "./mocking-types";
+import { Mock } from "~/Mock";
 
 export async function processHasOne<T>(
   source: Record<T>,
   rel: IFmModelRelationshipMeta<T>,
   config: IMockRelationshipConfig,
-  db: IDatabaseSdk
+  db: IDatabaseSdk<any>
 ): Promise<IMockResponse<T>> {
   const fkMock = Mock(rel.fkConstructor(), db);
   const fkMockMeta = (await fkMock.generate(1)).pop();

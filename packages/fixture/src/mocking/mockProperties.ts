@@ -1,9 +1,5 @@
-import { IMockRelationshipConfig, IModel } from "~/types";
-import { IDatabaseSdk } from "universal-fire";
+import { IMockRelationshipConfig, Model, IDatabaseSdk, Record, getModelMeta } from "firemodel";
 import { IDictionary } from "common-types";
-import { Record } from "~/core";
-import { getMockHelper } from "firemock";
-import { getModelMeta } from "~/util";
 import { mockValue } from "./index";
 
 /** adds mock values for all the properties on a given model */
@@ -18,11 +14,11 @@ export function mockProperties<T extends Record<string, unknown>>(
 
     const recProps: Partial<T> = {};
     // set properties on the record with mocks
-    const mh = await getMockHelper(db);
+    const context: IDictionary = {};
 
     for (const prop of props) {
       const p = prop.property as keyof T;
-      recProps[p] = await mockValue<T>(db, prop, mh);
+      recProps[p] = await mockValue<T>(db, prop, context);
     }
 
     // use mocked values but allow exceptions to override
