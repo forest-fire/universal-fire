@@ -5,7 +5,7 @@ import { hashToArray } from 'typed-conversions';
 import { DeepPerson } from './testing/DeepPerson';
 import { peopleDataset } from './data/people';
 import { RealTimeAdmin } from '@forest-fire/real-time-admin';
-import { Mock} from '@forest-fire/fixture';
+import { Mock } from '@forest-fire/fixture';
 import { List } from 'firemodel';
 
 helpers.setupEnv();
