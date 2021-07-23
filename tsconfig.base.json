@@ -12,7 +12,6 @@
     "noImplicitAny": true,
     "sourceMap": false,
     "noEmit": true,
-
     "composite": true,
     "paths": {
       "~/*": ["src/*"],
