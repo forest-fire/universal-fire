@@ -28,7 +28,8 @@
   },
   "devDependencies": {
     "eslint": "^7.29.0",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.3",
+    "jest": "^27.0.6"
   },
   "dependencies": {
     "@forest-fire/firestore-admin": "^0.59.2",
