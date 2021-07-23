@@ -24,13 +24,16 @@
   },
   "devDependencies": {
     "@forest-fire/types": "^0.59.2",
+    "@types/lodash": "^4.14.171",
     "brilliant-errors": "^0.3.1",
     "eslint": "7.28.0",
     "jest": "^27.0.6",
     "rimraf": "3.0.2",
     "scripty": "2.0.0",
     "@forest-fire/fixture": "*",
-    "firemodel": "^0.59.8"
+    "firemodel": "^0.59.8",
+    "@forest-fire/real-time-admin": "0.59.2",
+    "typed-conversions": "^0.12.0"
   },
   "license": "MIT",
   "peerDependencies": {

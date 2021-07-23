@@ -1,9 +1,10 @@
-import { FireModel, IMockOptions } from 'firemodel';
+import { FireModel } from 'firemodel';
 import { IDatabaseSdk, ISdk } from '@forest-fire/types';
 import { Model } from 'firemodel';
 import { MockApi } from '~/mocking/MockApi';
 import { capitalize } from 'native-dash';
 import { FixtureError } from './errors/FixtureError';
+import { IMockOptions } from './mocking';
 
 /**
  * Provides a _Model_ aware means of mocking your data.
@@ -18,7 +19,7 @@ export function Mock<TSdk extends ISdk, T extends Model>(
 ) {
   if (!db) {
     if (FireModel.defaultDb) {
-      db = FireModel.defaultDb;
+      db = FireModel.defaultDb as any;
     } else {
       throw new FixtureError(
         `You must either explicitly add a database on call to Mock() or ensure that the default database for Firemodel is set!`,
@@ -36,5 +37,5 @@ export function Mock<TSdk extends ISdk, T extends Model>(
     );
   }
 
-  return new MockApi<TSdk, T>(db, modelConstructor);
+  return new MockApi<TSdk,T>(db, modelConstructor);
 }

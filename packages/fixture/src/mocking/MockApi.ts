@@ -1,6 +1,6 @@
 import { IMockRelationshipConfig, IMockResponse } from './';
 import { addRelationships, mockProperties } from './index';
-import { FmModelConstructor,Record } from 'firemodel';
+import { FmModelConstructor,IModel,Model,Record } from 'firemodel';
 import { IDictionary } from 'common-types';
 import { IDatabaseSdk, ISdk } from '@forest-fire/types';
 import { FixtureError } from '~/errors/FixtureError';
@@ -14,7 +14,7 @@ let mockPrepared = false;
  * based on property types but getting more refined where a model has
  * a `@mock()` function defined for it.
  */
-export class MockApi<TSdk extends ISdk, T> {
+export class MockApi<TSdk extends ISdk, T extends Model> {
   public config: IMockRelationshipConfig = {
     relationshipBehavior: 'ignore',
     exceptionPassthrough: false,
@@ -39,8 +39,8 @@ export class MockApi<TSdk extends ISdk, T> {
     count: number,
     exceptions: Partial<T> = {}
   ): Promise<Array<IMockResponse<T>>> {
-    const props = mockProperties<T>(this._db, this.config, exceptions);
-    const relns = addRelationships<T, IDatabaseSdk<TSdk>>(
+    const props = mockProperties<TSdk, T>(this._db, this.config, exceptions);
+    const relns = addRelationships<TSdk, T, IDatabaseSdk<TSdk>>(
       this._db,
       this.config,
       exceptions
@@ -52,7 +52,7 @@ export class MockApi<TSdk extends ISdk, T> {
       this._modelConstructor,
       exceptions as Partial<T>,
       { db: this._db }
-    );
+    ) as Record<TSdk, T>;
 
     if (record.hasDynamicPath) {
       // which props -- required for compositeKey -- are not yet
@@ -67,7 +67,7 @@ export class MockApi<TSdk extends ISdk, T> {
       const validMocks = ['sequence', 'random', 'distribution'];
       notCovered.forEach((key) => {
         const prop: IDictionary =
-          record.META.property(key as keyof T & string) || {};
+          record.META.property(key as keyof IModel<T> & string) || {};
         const mock = prop.mockType;
         if (
           !mock ||
@@ -92,7 +92,8 @@ export class MockApi<TSdk extends ISdk, T> {
     let mocks: Array<IMockResponse<T>> = [];
 
     for (const i of Array(count)) {
-      mocks = mocks.concat(await relns(await props(record)));
+      const a = await relns(await props(record));
+      mocks = mocks.concat();
     }
 
     return mocks;

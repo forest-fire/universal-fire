@@ -1,6 +1,6 @@
 import { FireModelError } from "~/errors";
 import { Record } from "~/core";
-import { ISdk } from "universal-fire";
+import { ISdk } from "@forest-fire/types";
 import { Model } from "~/models/Model";
 export class FkDoesNotExist<
   S extends ISdk,

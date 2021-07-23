@@ -1,11 +1,10 @@
-import { Mock as FireMock, MockHelper } from "firemock";
+import { Mock as FireMock, } from "firemock";
 import { FireModel, List, Mock } from "../src";
 
 import { Product } from "./testing/Product";
 import { RealTimeAdmin } from "@forest-fire/real-time-admin";
 import { fakeIt } from "~/index";
 
-const helper = new MockHelper();
 
 describe("Test parameterized mock built-in fakes", () => {
   beforeAll(async () => {

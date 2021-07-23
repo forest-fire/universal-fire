@@ -12,10 +12,6 @@ import {
 import { Company } from "./Company";
 import { IDictionary } from "common-types";
 
-function bespokeMock(context: import("firemock").MockHelper) {
-  return context.faker.name.firstName() + ", hello to you";
-}
-
 @model({ dbOffset: "authenticated", audit: true })
 export class Person extends Model<Person> {
   // prettier-ignore

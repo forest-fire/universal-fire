@@ -1,14 +1,19 @@
-import { IMockRelationshipConfig, Model, IDatabaseSdk, Record, getModelMeta } from "firemodel";
-import { IDictionary } from "common-types";
-import { mockValue } from "./index";
+import {
+  Model,
+  Record
+} from 'firemodel';
+import { IDatabaseSdk, ISdk } from '@forest-fire/types';
+import { IDictionary } from 'common-types';
+import { IMockRelationshipConfig, mockValue } from './index';
+import { getModelMeta } from '~/utils';
 
 /** adds mock values for all the properties on a given model */
-export function mockProperties<T extends Record<string, unknown>>(
-  db: IDatabaseSdk,
-  config: IMockRelationshipConfig = { relationshipBehavior: "ignore" },
+export function mockProperties<TSdk extends ISdk,T extends Model>(
+  db: IDatabaseSdk<TSdk>,
+  config: IMockRelationshipConfig = { relationshipBehavior: 'ignore' },
   exceptions: IDictionary
 ) {
-  return async (record: Record<T>): Promise<Record<T>> => {
+  return async (record: Record<TSdk, T>): Promise<Record<TSdk, T>> => {
     const meta = getModelMeta(record);
     const props = meta.properties;
 
@@ -27,7 +32,7 @@ export function mockProperties<T extends Record<string, unknown>>(
     // write to mock db and retain a reference to same model
     record = await Record.add(record.modelConstructor, finalized, {
       silent: true,
-    });
+    }) as Record<TSdk, T>;
 
     return record;
   };

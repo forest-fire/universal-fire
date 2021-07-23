@@ -1,42 +1,42 @@
-import { Record, IModel } from "firemodel";
-import { IDatabaseSdk  } from "@forest-fire/types";
-import { IMockRelationshipConfig, IMockResponse } from "~/mocking/index"
-import { processHasMany, processHasOne } from "./index";
+import { Record, IModel, Model } from 'firemodel';
+import { IDatabaseSdk, ISdk } from '@forest-fire/types';
+import { IMockRelationshipConfig, IMockResponse } from '~/mocking/index';
+import { processHasMany, processHasOne } from './index';
 
-import { IDictionary } from "common-types";
+import { IDictionary } from 'common-types';
 
 /**
  * Adds relationships to mocked records
  */
-export function addRelationships<M extends IModel, D extends IDatabaseSdk<any>>(
-  db: D,
-  config: IMockRelationshipConfig,
-  exceptions: IDictionary = {}
-) {
-  return async (record: Record<M>): Promise<Array<IMockResponse<M>>> => {
+export function addRelationships<
+  TSdk extends ISdk,
+  M extends Model,
+  D extends IDatabaseSdk<TSdk>
+>(db: D, config: IMockRelationshipConfig, exceptions: IDictionary = {}) {
+  return async (record: Record<TSdk, M>): Promise<Array<IMockResponse<M>>> => {
     const relns = record.META.relationships;
     const relnResults: Array<IMockResponse<M>> = [];
 
-    if (config.relationshipBehavior !== "ignore") {
+    if (config.relationshipBehavior !== 'ignore') {
       for (const rel of relns) {
         if (
           !config.cardinality ||
           Object.keys(config.cardinality).includes(rel.property)
         ) {
-          if (rel.relType === "hasOne") {
-            const fkRec = await processHasOne<M>(record, rel, config, db);
-            if (config.relationshipBehavior === "follow") {
+          if (rel.relType === 'hasOne') {
+            const fkRec = await processHasOne<TSdk,M>(record, rel, config, db);
+            if (config.relationshipBehavior === 'follow') {
               relnResults.push(fkRec);
             }
           } else {
             const cardinality = config.cardinality
-              ? typeof config.cardinality[rel.property] === "number"
+              ? typeof config.cardinality[rel.property] === 'number'
                 ? config.cardinality[rel.property]
                 : NumberBetween(config.cardinality[rel.property] as any)
               : 2;
             for (const i of Array(cardinality)) {
-              const fkRec = await processHasMany<M>(record, rel, config, db);
-              if (config.relationshipBehavior === "follow") {
+              const fkRec = await processHasMany<TSdk, M>(record, rel, config, db);
+              if (config.relationshipBehavior === 'follow') {
                 relnResults.push(fkRec);
               }
             }
