@@ -37,6 +37,7 @@ function getDistribution<T = any>(...distribution: Array<[number, T]>) {
 }
 
 export function fakeIt<T = any>(
+  context: IDictionary,
   type: keyof typeof NamedFakes,
   ...rest: any[]
 ) {
@@ -243,9 +244,7 @@ export function fakeIt<T = any>(
       return getDistribution(...rest);
 
     case "sequence":
-      // TODO: Sequences are not yet implemented
-      // faker.context.property;
-      const prop = "todo"; 
+      const prop = context.property; 
       const items = rest;
 
       if (typeof sequence[prop] === "undefined") {

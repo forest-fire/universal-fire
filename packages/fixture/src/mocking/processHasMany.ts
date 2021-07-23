@@ -1,17 +1,17 @@
 import {
   IFmModelRelationshipMeta,
   IMockRelationshipConfig,
-  IMockResponse,
-} from "~/types";
-import { Mock, Record } from "~/core";
-
-import { IDatabaseSdk } from "universal-fire";
+  Record
+} from "firemodel";
+import {IDatabaseSdk} from "@forest-fire/types"
+import { Mock } from "~/Mock";
+import { IMockResponse } from "./mocking-types";
 
 export async function processHasMany<T>(
   record: Record<T>,
   rel: IFmModelRelationshipMeta<T>,
   config: IMockRelationshipConfig,
-  db: IDatabaseSdk
+  db: IDatabaseSdk<any>
 ): Promise<IMockResponse<T>> {
   // by creating a mock we are giving any dynamic path segments
   // an opportunity to be mocked (this is best practice)

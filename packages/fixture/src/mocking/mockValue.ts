@@ -1,24 +1,23 @@
-import { IFmModelPropertyMeta, IModel, NamedFakes } from "~/types";
+import { IFmModelPropertyMeta, Model, NamedFakes } from "firemodel";
 import { PropertyNamePatterns, fakeIt } from "./index";
+import { IDatabaseSdk } from "@forest-fire/types";
+import { IDictionary } from "brilliant-errors";
 
-import { IDatabaseSdk } from "universal-fire";
-import { MockHelper } from "firemock";
-
-export function mockValue<T extends IModel>(
-  db: IDatabaseSdk,
+export function mockValue<T extends Model>(
+  db: IDatabaseSdk<any>,
   propMeta: IFmModelPropertyMeta<T>,
-  mockHelper: MockHelper,
+  context: IDictionary,
   ...rest: any[]
 ) {
-  mockHelper.context = propMeta;
+  context = propMeta;
   const { type, mockType, mockParameters } = propMeta;
 
   if (mockType) {
     // MOCK is defined
     return typeof mockType === "function"
-      ? mockType(mockHelper)
+      ? mockType(context)
       : fakeIt(
-        mockHelper,
+        context,
         mockType as keyof typeof NamedFakes,
         ...(mockParameters || [])
       );
@@ -27,6 +26,6 @@ export function mockValue<T extends IModel>(
     const fakedMockType = (Object.keys(NamedFakes).includes(propMeta.property)
       ? PropertyNamePatterns[propMeta.property]
       : type) as keyof typeof NamedFakes;
-    return fakeIt<T>(mockHelper, fakedMockType, ...(mockParameters || []));
+    return fakeIt<T>(context, fakedMockType, ...(mockParameters || []));
   }
 }
