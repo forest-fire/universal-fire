@@ -12,7 +12,7 @@ const sequence = [
   { name: 'types', packages: ['types'] },
   {
     name: 'shared libraries',
-    packages: ['utility', 'serialized-query', 'fixture', 'firemock'],
+    packages: ['utility', 'serialized-query', 'firemock'],
   },
   { name: 'databases', packages: ['real-time-db', 'firestore-db'] },
   {
@@ -31,7 +31,7 @@ const sequence = [
   },
   {
     name: 'vuex-plugin',
-    packages: ['vuex-plugin-firemodel'],
+    packages: ['vuex-plugin-firemodel', 'fixture'],
   },
 ];
 
@@ -47,6 +47,8 @@ function toPlugins(dir) {
         compilerOptions: {
           module: 'ESNext',
           declaration: true,
+          rootDir: join(dir, 'src'),
+          baseUrl: dir,
           declarationDir: join(dir, 'dist', 'types'),
           sourceMap: false,
         },

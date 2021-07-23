@@ -51,11 +51,12 @@
     "watch": "run-p watch:rtdb watch:firestore watch:autoindex",
     "watch:autoindex": "yarn autoindex -a --watch",
     "watch:firestore": "run-s 'yarn lerna exec --scope @forest-fire/firestore-db yarn watch' 'yarn lerna exec --scope @forest-fire/firestore-client yarn watch' 'yarn lerna exec --scope @forest-fire/firestore-admin yarn watch'",
-    "watch:rtdb": "run-s 'yarn lerna exec --scope @forest-fire/real-time-db yarn watch' 'yarn lerna exec --scope @forest-fire/real-time-client yarn watch' 'yarn lerna exec --scope @forest-fire/real-time-admin yarn watch'"
+    "watch:rtdb": "run-s 'yarn lerna exec --scope @forest-fire/real-time-db yarn watch' 'yarn lerna exec --scope @forest-fire/real-time-client yarn watch' 'yarn lerna exec --scope @forest-fire/real-time-admin yarn watch'",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "npx --no-install commitlint --edit $1"
     }
   },
   "dependencies": {},
@@ -82,7 +83,7 @@
     "eslint": "^7.16.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-promise": "^5.1.0",
-    "husky": "^7.0.1",
+    "husky": "^7.0.0",
     "jest": "^27.0.6",
     "jest-extended": "^0.11.5",
     "lerna": "^4.0.0",
