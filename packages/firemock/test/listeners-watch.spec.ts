@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
 import { Fixture, SchemaHelper } from '@forest-fire/fixture';
-
 import { IDictionary } from 'common-types';
 import { IRtdbDataSnapshot, SDK } from '@forest-fire/types';
 import { firstKey } from 'native-dash';

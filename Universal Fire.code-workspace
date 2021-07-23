@@ -68,10 +68,20 @@
     }
   ],
   "settings": {
-    "monorepoWorkspace.folders.prefix.unknown": "📦"
+    "monorepoWorkspace.folders.prefix.unknown": "⚠️ ",
+    "files.exclude": {
+      "node_modules/": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/*.code-search": true
+    },
+    "jest.disabledWorkspaceFolders": ["/", "/packages/vuex-plugin"],
+    "jest.enableCodeLens": true
   },
   "extensions": {
-    "recommendations": []
+    "recommendations": ["q.typescript-mono-repo-import-helper"]
   },
   "name": "Universal Fire"
 }

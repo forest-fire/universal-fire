@@ -1,7 +1,7 @@
 import * as helpers from './testing/helpers';
 
 // tslint:disable:no-implicit-dependencies
-import { RealTimeClient } from '../src';
+import { RealTimeClient } from '~/index';
 import config from './testing/fb-config';
 import { wait } from 'common-types';
 

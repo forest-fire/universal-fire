@@ -1,25 +1,17 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "declaration": false,
-    "module": "commonjs",
-    "target": "es2018",
+    "composite": true,
     "lib": ["es2015.reflect", "DOM"],
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "noEmit": true,
-    "removeComments": false,
-    "strictNullChecks": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
     },
     "plugins": [
+      // Transform paths in output .js files
       { "transform": "typescript-transform-paths" },
+
+      // Transform paths in output .d.ts files (Include this line if you output declarations files)
       { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
   },

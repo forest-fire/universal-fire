@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/import-style */
+
 import { resolve } from "path";
 import type { Config } from "@jest/types";
 

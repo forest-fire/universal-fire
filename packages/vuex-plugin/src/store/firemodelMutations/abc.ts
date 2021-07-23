@@ -18,7 +18,7 @@ import Vue from 'vue';
 
 export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): MutationTree<T> {
   return {
-    [AbcMutation.ABC_VUEX_UPDATE_FROM_IDX]<TState extends IDictionary>(
+    [AbcMutation.ABC_VUEX_UPDATE_FROM_IDX]<TState extends StoreWithPlugin>(
       state: TState,
       payload: AbcResult<any>
     ) {
@@ -32,7 +32,7 @@ export function AbcFiremodelMutation<T>(propOffset?: keyof T & string): Mutation
       }
     },
 
-    [AbcMutation.ABC_INDEXED_SKIPPED]<TState extends IDictionary>(
+    [AbcMutation.ABC_INDEXED_SKIPPED]<TState extends StoreWithPlugin>(
       state: TState,
       payload: IDiscreteLocalResults<any>
     ) {

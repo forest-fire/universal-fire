@@ -3,7 +3,7 @@ import type {
   IDiscreteLocalResults,
   IDiscreteOptions
 } from "~/types";
-import { IPrimaryKey, Model, Record } from "firemodel";
+import { PrimaryKey, Model, Record } from "firemodel";
 import { getStore } from "~/util";
 import { AbcApi } from "~/abc";
 import { get } from "native-dash";
@@ -18,7 +18,7 @@ import { get } from "native-dash";
  */
 export async function localRecords<T extends Model>(
   command: AbcRequestCommand,
-  requestPks: IPrimaryKey<T>[],
+  requestPks: PrimaryKey<T>[],
   options: IDiscreteOptions<T>,
   context: AbcApi<T>
 ): Promise<Omit<IDiscreteLocalResults<T>, "overallCachePerformance">> {
