@@ -30,8 +30,8 @@ const sequence = [
     packages: ['firemodel'],
   },
   {
-    name: 'vuex-plugin',
-    packages: ['vuex-plugin-firemodel', 'fixture'],
+    name: 'Closure (plugin, fixture)',
+    packages: ['vuex-plugin', 'fixture'],
   },
 ];
 

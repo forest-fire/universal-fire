@@ -28,7 +28,7 @@
   "scripts": {
     "autoindex": "yarn do autoindex",
     "build": "run-s clean build:bundle",
-    "build:bundle": "rollup -c",
+    "build:bundle": "scripty",
     "build:docs": "vuepress build docs",
     "build:tsc": "yarn ttsc -P tsconfig.es.json && yarn ttsc -P tsconfig.cjs.json",
     "circular": "yarn madge src --extensions ts --circular",
@@ -86,6 +86,7 @@
     "native-dash": "> 1.16.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
+    "scripty": "2.0.0",
     "rimraf": "^3.0.0",
     "rollup": "^2.36.1",
     "ts-jest": "^27.0.3",
