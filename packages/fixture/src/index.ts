@@ -1,19 +1,19 @@
 // #autoindex, exclude: mocking
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 02:13 PM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 12:42 PM ( GMT-7 )
 // export: named; exclusions: mocking, index, private.
-// files: @types, Deployment, Fixture, Queue, Schema, schema-helper.
+// files: @types, Deployment, Fixture, Mock, Queue, Schema, schema-helper.
 // directories: utils.
 
 // local file exports
 export * from "./@types";
 export * from "./Deployment";
 export * from "./Fixture";
+export * from "./Mock";
 export * from "./Queue";
 export * from "./Schema";
 export * from "./schema-helper";
-export * from "./Mock";
 
 // directory exports
 export * from "./utils/index";

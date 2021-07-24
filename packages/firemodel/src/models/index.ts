@@ -5,12 +5,11 @@ export * from "./Model";
 
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 11:09 AM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 12:43 PM ( GMT-7 )
 // export: named; exclusions: model, index, private.
-// files: AuditLog, Model.
+// files: Model.
 
 // local file exports
-export * from "./AuditLog";
 export * from "./Model";
 
 // Note:

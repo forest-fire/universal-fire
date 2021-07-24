@@ -1,15 +1,21 @@
-import { AuditLog, Model } from "~/models";
+import { Model } from "~/models/Model";
+import { SimpleCar } from "./fixtures/SimpleCar";
 
 describe("basic tests on a model", () => {
 
-  it("Model itself can be instantiated", () => {
+  it("The base Model can be instantiated and has appropriate META properties", () => {
     const m = new Model();
     expect(m.id).toBe(undefined);
+    expect(typeof m.META).toBe("object");
+    expect(m.META.allProperties).toContainAllValues(["id", "lastUpdated", "createdAt"]);
+    console.log({ props: m.META.properties });
+    expect(m.META.property('id').type).toBe("string")
   });
 
-  it.only("AuditLog META", () => {
-    const a = new AuditLog();
-    expect(a.META.property("modelName").property).toBe("modelName");
+  it("A Model with no Relationships has appropriate META properties", () => {
+    const m = new SimpleCar();
+    expect(m.META.allProperties).toContainAllValues(["make", "model", "id", "lastUpdated", "createdAt"]);
+    expect(m.META.property("make").type).toBe("string");
   });
 
 });

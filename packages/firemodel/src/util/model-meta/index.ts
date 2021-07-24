@@ -2,13 +2,14 @@
 
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 11:09 AM ( GMT-7 )
+// index last changed at: 7th Jul, 2021, 12:52 PM ( GMT-7 )
 // export: named; exclusions: index, private.
-// files: ModelMeta, getPushKeys, property-store, relationship-store.
+// files: ModelMeta, getPushKeys, modelRegister, property-store, relationship-store.
 
 // local file exports
 export * from "./ModelMeta";
 export * from "./getPushKeys";
+export * from "./modelRegister";
 export * from "./property-store";
 export * from "./relationship-store";
 
