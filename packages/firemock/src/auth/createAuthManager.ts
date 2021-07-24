@@ -28,7 +28,7 @@ import {
 import { toUser } from './util';
 import { networkDelay as delay } from '../util';
 import _authProviders from './client-sdk/AuthProviders';
-import { randomString } from 'native-dash';
+import { randomUUID } from 'crypto';
 
 const toMockUser = (
   user: User,
@@ -218,7 +218,7 @@ export function createAuthManager<TSdk extends ISdk>(
     } else if ('email' in user) {
       mockUser = {
         kind: 'MockUserRecord',
-        uid: user.uid || randomString(),
+        uid: user.uid || randomUUID(),
         emailVerified: true,
         disabled: false,
         customClaims: {},

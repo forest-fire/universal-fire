@@ -23,7 +23,7 @@
     "test": "scripty"
   },
   "devDependencies": {
-    "@forest-fire/types": "^0.59.2",
+    "@forest-fire/types": "*",
     "@types/lodash": "^4.14.171",
     "brilliant-errors": "^0.3.1",
     "eslint": "7.28.0",
@@ -31,13 +31,13 @@
     "rimraf": "3.0.2",
     "scripty": "2.0.0",
     "@forest-fire/fixture": "*",
-    "firemodel": "^0.59.8",
-    "@forest-fire/real-time-admin": "0.59.2",
+    "firemodel": "*",
+    "universal-fire": "*",
     "typed-conversions": "^0.12.0"
   },
   "license": "MIT",
   "peerDependencies": {
-    "@forest-fire/types": "^0.59.2",
+    "@forest-fire/types": "*",
     "brilliant-errors": "^0.3.1"
   }
 }

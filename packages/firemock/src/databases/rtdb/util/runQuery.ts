@@ -2,7 +2,6 @@
 import * as limitFilters from '~/databases/rtdb/util/limitFilters';
 import * as queryFilters from '~/databases/rtdb/util/queryFilters';
 import * as sortFns from '~/util/sortFns';
-import { keys } from 'native-dash';
 
 import { arrayToHash, hashToArray } from 'typed-conversions';
 
@@ -83,9 +82,9 @@ export function runQuery<
         : false;
 
     if (limitToKeys) {
-      keys(data).forEach((k) => {
+      Object.keys(data).forEach((k) => {
         if (!limitToKeys.includes(k as string)) {
-          delete data[k];
+          delete (data as any)[k];
         }
       });
     }
