@@ -4,7 +4,7 @@ import { ConstructorFor, IDictionary } from "common-types";
 import { IModelIndexMeta } from "~/types";
 import { hashToArray } from "typed-conversions";
 import { propertyReflector } from "~/decorators";
-import { Model } from "~/models";
+import { Model } from "~/models/Model";
 
 /** DB Indexes accumlated by index decorators */
 export const indexesForModel: IDictionary<IDictionary<IModelIndexMeta>> = {};

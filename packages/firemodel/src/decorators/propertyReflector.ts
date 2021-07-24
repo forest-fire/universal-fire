@@ -1,47 +1,42 @@
 import "reflect-metadata";
-
 import { get, set } from "native-dash";
-import { lowercase } from "~/util";
 import { IDictionary } from "common-types";
-import { IModel } from "~/types";
+import { lowercase } from "~/util/shared";
+import { Model } from "~/models/Model";
+import { IFmModelPropertyMeta } from "~/types";
 
 /**
- * Adds meta data to a given "property" on a model. In this
- * case we mean property to be either a strict property or
- * a relationship.
- *
- * @param context The meta information as a dictionary/hash
- * @param modelRollup a collection object which maintains
- * a dictionary of properties
+ * A higher order function used by other decorators to provide the core decoration of
+ * property attributes.
+ * ```ts
+ * // decorator with options hash
+ * const min = (value: number) => propertyReflector({ min: value });
+ * // decorator with no options
+ * const property = propertyReflector({ isRelationship: false, isProperty: true });
+ * ```
  */
-export const propertyReflector = <R>(
-  context: IDictionary = {},
-  /**
-   * if you want this to be rollup up as an dictionary by prop;
-   * to be exposed in the model (or otherwise)
-   */
-  modelRollup?: IDictionary<IDictionary<R>>
-) => (modelKlass: IModel, key: string): void => {
+export const propertyReflector = <O extends IFmModelPropertyMeta<Model>>(options: Partial<O> = {}) => <TModel extends Model, TProp extends keyof TModel>(modelKlass: TModel, key: TProp): void => {
   const modelName = modelKlass.constructor.name;
 
-  const reflect: IDictionary =
-    Reflect.getMetadata("design:type", modelKlass, key) || {};
+  const classReflection = Reflect.getMetadata("design:type", modelKlass) || {};
+  const propertyReflection = Reflect.getMetadata("design:type", modelKlass, key as string) || {};
+  const propertyReflection2 = Reflect.getMetadata("model:prop", modelKlass, key as string) || {};
+  console.log({ key, class: classReflection, prop: propertyReflection, prop2: propertyReflection2 });
 
-  const meta: IDictionary = {
-    ...(Reflect.getMetadata(key, modelKlass) || {}),
-    type: lowercase(reflect.name),
-    ...context,
+  const propMeta = {
+    type: lowercase(classReflection.name),
+    ...propertyReflection,
     property: key,
-  };
+  } as IFmModelPropertyMeta<any>;
 
-  Reflect.defineMetadata(key, meta, modelKlass);
+  Reflect.defineMetadata(key, propMeta, modelKlass);
 
-  if (modelRollup) {
-    const modelAndProp = modelName + "." + key;
+  // if (modelRollup) {
+  //   const modelAndProp = modelName + "." + key;
 
-    set(modelRollup, modelAndProp, {
-      ...get(modelRollup, modelAndProp),
-      ...meta,
-    });
-  }
+  //   set(modelRollup, modelAndProp, {
+  //     ...get(modelRollup, modelAndProp),
+  //     ...propMeta,
+  //   });
+  // }
 };

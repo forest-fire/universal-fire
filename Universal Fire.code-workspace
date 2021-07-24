@@ -78,7 +78,8 @@
       "**/*.code-search": true
     },
     "jest.disabledWorkspaceFolders": ["/", "/packages/vuex-plugin"],
-    "jest.enableCodeLens": true
+    "jest.enableCodeLens": true,
+    "jest.autoRun": { "watch": false }
   },
   "extensions": {
     "recommendations": ["q.typescript-mono-repo-import-helper"]

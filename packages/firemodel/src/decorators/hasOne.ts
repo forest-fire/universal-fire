@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import {
+import type {
   IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
   PropertyOf,
@@ -10,9 +10,9 @@ import {
   relationshipsByModel,
 } from "~/util";
 
-import { DecoratorProblem } from "~/errors";
+import { DecoratorProblem } from "~/errors/DecoratorProblem";
 import { ConstructorFor, Omit } from "common-types";
-import { propertyReflector } from "~/decorators";
+import { propertyReflector } from "~/decorators/propertyReflector";
 import { Model } from "~/models/Model";
 
 export function belongsTo<T extends Model = Model>(

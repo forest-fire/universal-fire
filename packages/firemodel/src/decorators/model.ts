@@ -43,7 +43,7 @@ export function model(options: Partial<IFmModelMeta<any>> = {} as Partial<IFmMod
         );
         options.audit = false;
       }
-
+      // Build the model's META property
       const meta: IFmModelMeta<M> = {
         ...options,
         ...{ isProperty: isProperty(instance) },
@@ -76,8 +76,9 @@ export function model(options: Partial<IFmModelMeta<any>> = {} as Partial<IFmMod
         },
       };
 
+      // add the META to the registry
       addModelMeta(target.constructor.name.toLowerCase(), meta);
-
+      // assign the META property to the class
       Object.defineProperty(target.prototype, "META", {
         get(): IFmModelMeta<M> {
           return meta;
