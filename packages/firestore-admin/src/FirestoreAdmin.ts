@@ -17,16 +17,16 @@ import {
   IAdminFirebaseNamespace,
   IAdminFirestoreDatabase,
   ApiKind,
-  DbTypeFrom,
+  Database,
 } from '@forest-fire/types';
 
 import { FirestoreDb } from '@forest-fire/firestore-db';
 
 export class FirestoreAdmin extends FirestoreDb<"FirestoreAdmin">  {
   public readonly sdk: SDK.FirestoreAdmin = SDK.FirestoreAdmin;
-  public readonly dbType: DbTypeFrom<"FirestoreAdmin">;
   public readonly apiKind: ApiKind.admin = ApiKind.admin;
   public readonly isAdminApi = true;
+  public dbType: "Firestore" = Database.Firestore;
 
   static async connect(config: IAdminConfig | IMockConfig): Promise<FirestoreAdmin> {
     const obj = new FirestoreAdmin(config);
