@@ -1,5 +1,5 @@
 import type { UserCredential, ConfirmationResult } from '@forest-fire/types';
-import { randomUUID } from 'crypto';
+import { uuid } from 'native-dash';
 import merge from 'deepmerge';
 
 import { IPartialUserCredential } from '../../@types';
@@ -27,7 +27,7 @@ export function completeUserCredential(
       providerId: '',
       refreshToken: '',
       // TODO: Check if this util method work as expected
-      uid: randomUUID()
+      uid: uuid()
     },
     additionalUserInfo: {
       isNewUser: false,
