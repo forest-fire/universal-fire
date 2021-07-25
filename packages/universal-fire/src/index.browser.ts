@@ -71,14 +71,14 @@ export const RealTimeClient: ISdkFactory<"RealTimeClient"> = {
 export const FirestoreAdmin: ISdkFactory<"FirestoreAdmin"> = {
   create() {
     throw new Error(
-      'You are using the client/browser entry point for universal-fire; use RealTimeClient instead.'
+      'You are using the client/browser entry point for universal-fire; use FirestoreClient instead.'
     );
   },
 
   // eslint-disable-next-line @typescript-eslint/require-await
   async connect() {
     throw new Error(
-      'You are using the client/browser entry point for universal-fire; use RealTimeClient instead.'
+      'You are using the client/browser entry point for universal-fire; use FirestoreClient instead.'
     );
   },
 };

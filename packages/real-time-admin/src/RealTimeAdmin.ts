@@ -17,6 +17,7 @@ import {
   isMockConfig,
   IAdminFirebaseNamespace,
   ApiKind,
+  Database,
 } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 
@@ -57,6 +58,7 @@ export class RealTimeAdmin extends RealTimeDb<SDK.RealTimeAdmin> {
   protected _config: IAdminConfig | IMockConfig;
   protected _app!: IAdminApp;
   protected _database?: IAdminRtdbDatabase;
+  public dbType: "RTDB" = Database.RTDB;
 
   constructor(config?: IAdminConfig | IMockConfig) {
     super();

@@ -17,6 +17,7 @@ import {
   IClientFirestoreDatabase,
   ApiKind,
   DbTypeFrom,
+  Database,
 } from '@forest-fire/types';
 
 export class FirestoreClient extends FirestoreDb<"FirestoreClient">  {
@@ -32,14 +33,10 @@ export class FirestoreClient extends FirestoreDb<"FirestoreClient">  {
 
   protected _auth?: IClientAuth;
   protected _app!: IClientApp;
-  protected _dbType!: Readonly<DbTypeFrom<'FirestoreClient'>>;
-  protected _firestore: any;
   protected _config: IClientConfig | IMockConfig;
   protected _authProviders: FirebaseNamespace['auth'];
 
-  get dbType(): "Firestore" {
-    return this._dbType;
-  }
+  public dbType: "Firestore" = Database.Firestore;
 
   constructor(config?: IClientConfig | IMockConfig) {
     super();
