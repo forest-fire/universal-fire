@@ -1,15 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { FMPropertyType, FmRelationshipType, PropertyOf } from "./index";
-import { FmMockType, IFmFunctionToConstructor } from "./other";
+import type { FmRelationshipType, IFmPropertyType, PropertyOf } from "../index";
+import { FmMockType, IFmFunctionToConstructor } from "../other";
 import { Model } from "~/models/Model";
 /**
  * The attributes assigned to all properties on a Model
  */
 export interface IFmModelAttributeBase<TModel extends Model, TFk extends Model = any> {
+  modelName: string;
+  isIndex?: boolean;
+  isUniqueIndex?: boolean;
+  isMultiEntryIndex?: boolean;
+  desc?: string;
   /** the property name */
   property: PropertyOf<TModel>;
   /** the property's "typed value" */
-  type: FMPropertyType;
+  type: IFmPropertyType;
   /** constraint: a maximum length */
   length?: number;
   /** constraint: a minimum value */

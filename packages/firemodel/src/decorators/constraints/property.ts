@@ -1,4 +1,4 @@
-import { propertyReflector } from "../propertyReflector";
+import { propertyReflector } from "../utils/propertyReflector";
 
 export const property = propertyReflector(
   {

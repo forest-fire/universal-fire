@@ -1,3 +1,3 @@
-import { propertyReflector } from "../propertyReflector";
+import { propertyReflector } from "../utils/propertyReflector";
 
 export const pushKey = propertyReflector({ pushKey: true });

@@ -10,6 +10,7 @@ import { PropertyOf } from "./models";
  * definition
  */
 export interface IFmModelMeta<TModel extends Model = Model> {
+  modelName: string;
   /** Optionally specify a root path to store this schema under */
   dbOffset?: string;
   /** Optionally specify an explicit string for the plural name */

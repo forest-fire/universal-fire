@@ -45,9 +45,7 @@ export class WatchList<S extends ISdk, T extends Model> extends WatchBase<S, T> 
     }
 
     this._modelConstructor = modelConstructor;
-    this._classProperties = getAllPropertiesFromClassStructure<T>(
-      new this._modelConstructor()
-    ).map(i => i.property);
+    this._classProperties = new this._modelConstructor().META.allProperties;
     this._dynamicProperties = Record.dynamicPathProperties(modelConstructor);
     this.setPathDependantProperties();
 

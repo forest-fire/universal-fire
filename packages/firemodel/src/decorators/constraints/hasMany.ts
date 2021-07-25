@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { ConstructorFor, IDictionary, Omit } from "common-types";
+import { ConstructorFor, IDictionary } from "common-types";
 import {
-  IFmModelRelationshipMeta,
   IFmRelationshipDirectionality,
+  FmPropertyType
 } from "~/types";
 import { modelConstructorLookup, modelNameLookup } from "~/util";
 
 import { DecoratorProblem } from "~/errors";
-import { propertyReflector } from "~/decorators";
-import { relationshipsByModel } from "~/util";
+import { propertyReflector } from "~/decorators/utils/propertyReflector";
+
 import { Model } from "~/models/Model";
 
 export type IFmHasMany<T = true> = IDictionary<T>;
@@ -38,7 +38,8 @@ export function hasMany<T extends Model>(
       inverseProperty = inverse;
       directionality = inverse ? "bi-directional" : "one-way";
     }
-    const payload: Omit<IFmModelRelationshipMeta<T>, "type" | "property"> = {
+
+    return propertyReflector({
       isRelationship: true,
       isProperty: false,
       relType: "hasMany",
@@ -46,12 +47,8 @@ export function hasMany<T extends Model>(
       fkConstructor,
       inverseProperty,
       hasInverse: inverseProperty !== undefined ? true : false,
-    };
-
-    return propertyReflector(
-      { ...payload, type: "Object" },
-      relationshipsByModel
-    );
+      type: FmPropertyType.object
+    });
   } catch (e) {
     throw new DecoratorProblem("hasMany", e, { inverse });
   }

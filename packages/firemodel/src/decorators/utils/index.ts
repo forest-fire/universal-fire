@@ -1,33 +1,14 @@
-// #autoindex:named, exclude: iso-path-join
-
+// #autoindex
 // #region autoindexed files
 
-// index last changed at: 7th Jul, 2021, 08:38 PM ( GMT-7 )
-// export: named; exclusions: iso-path-join, index, private.
-// files: IFmModelMeta, actions, constants, dexie-types, events, firemodel-types, general, model-relationships, models, other, proxy, queries, record-types, relationships, state-mgmt, utility-types, watcher-types.
-// directories: property-meta.
+// index last changed at: 7th Jul, 2021, 08:41 PM ( GMT-7 )
+// export: named; exclusions: index, private.
+// files: determineType, propertyReflector, reflect.
 
 // local file exports
-export * from "./IFmModelMeta";
-export * from "./actions";
-export * from "./constants";
-export * from "./dexie-types";
-export * from "./events";
-export * from "./firemodel-types";
-export * from "./general";
-export * from "./model-relationships";
-export * from "./models";
-export * from "./other";
-export * from "./proxy";
-export * from "./queries";
-export * from "./record-types";
-export * from "./relationships";
-export * from "./state-mgmt";
-export * from "./utility-types";
-export * from "./watcher-types";
-
-// directory exports
-export * from "./property-meta/index";
+export * from "./determineType";
+export * from "./propertyReflector";
+export * from "./reflect";
 
 // Note:
 // -----

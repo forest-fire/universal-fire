@@ -1,1 +1,0 @@
-export type ReflectKey = "custom:annotation" | "design:type";

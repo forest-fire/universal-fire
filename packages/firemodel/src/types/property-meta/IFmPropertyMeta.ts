@@ -4,6 +4,7 @@ import { IFmModelAttributeBase } from "./index";
 
 export interface IFmModelPropertyMeta<TModel extends Model>
   extends IFmModelAttributeBase<TModel, Model> {
+  desc?: string;
   /** constraint: a maximum length */
   length?: number;
   /** the minimum length of the property */

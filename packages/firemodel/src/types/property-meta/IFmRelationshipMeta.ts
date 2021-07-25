@@ -1,14 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IFmModelAttributeBase, IFmRelationshipDirectionality } from "./index";
-import { IFnToModelConstructor } from "./model-relationships";
+import { IFmModelAttributeBase } from "./index";
+import { IFnToModelConstructor } from "../model-relationships";
 import { Model } from "~/models/Model";
+import { IFmRelationshipDirectionality } from "../other";
 
-export type FmRelationshipType = "hasMany" | "hasOne";
+export enum FmRelationshipType {
+  hasMany = "hasMany",
+  hasOne = "hasOne"
+}
+export type IFmRelationshipType = "hasMany" | "hasOne";
 
 export interface IFmModelRelationshipMeta<TModel extends Model = any, TFk extends Model = any>
   extends IFmModelAttributeBase<TModel, TFk> {
   isRelationship: true;
   isProperty: false;
+
   /** the general cardinality type of the relationship (aka, hasMany, hasOne) */
   relType: FmRelationshipType;
   /**

@@ -1,4 +1,4 @@
-import { IAuditChange, PropertyOf } from "~/types";
+import { PropertyOf } from "~/types";
 import { IDictionary } from "common-types";
 import { Model } from "~/models/Model";
 
@@ -21,28 +21,6 @@ export function dotNotation(...args: string[]): string {
   return normalized(...args)
     .join(".")
     .replace("/", ".");
-}
-
-export function updateToAuditChanges<T>(
-  changed: IDictionary,
-  prior: IDictionary
-): IAuditChange[] {
-  return Object.keys(changed).reduce<IAuditChange[]>(
-    (prev: IAuditChange[], curr: Extract<keyof T, string>) => {
-      const after = changed[curr];
-      const before = prior[curr];
-      const propertyAction = !before ? "added" : !after ? "removed" : "updated";
-      const payload: IAuditChange = {
-        before,
-        after,
-        property: curr,
-        action: propertyAction,
-      };
-      prev.push(payload);
-      return prev;
-    },
-    []
-  );
 }
 
 export function withoutMetaOrPrivate<T extends Model>(model: T): T {

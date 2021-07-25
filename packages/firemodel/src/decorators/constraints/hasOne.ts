@@ -1,19 +1,18 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import type {
-  IFmModelRelationshipMeta,
+import {
+  FmPropertyType,
   IFmRelationshipDirectionality,
   PropertyOf,
 } from "~/types";
 import {
   modelConstructorLookup,
   modelNameLookup,
-  relationshipsByModel,
 } from "~/util";
-
 import { DecoratorProblem } from "~/errors/DecoratorProblem";
-import { ConstructorFor, Omit } from "common-types";
-import { propertyReflector } from "~/decorators/propertyReflector";
+import { ConstructorFor } from "common-types";
 import { Model } from "~/models/Model";
+import { propertyReflector } from "~/decorators/utils/propertyReflector";
+
 
 export function belongsTo<T extends Model = Model>(
   /**
@@ -41,22 +40,18 @@ export function belongsTo<T extends Model = Model>(
       inverseProperty = inverse;
       directionality = inverse ? "bi-directional" : "one-way";
     }
-    const payload: Omit<IFmModelRelationshipMeta<T>, "type" | "property"> = {
+
+
+    return propertyReflector({
       isRelationship: true,
       isProperty: false,
       relType: "hasOne",
+      inverseProperty,
       directionality,
       fkConstructor,
-      inverseProperty,
       hasInverse: inverseProperty !== undefined ? true : false,
-    };
-    if (inverseProperty) {
-      payload.inverseProperty = inverseProperty;
+      type: FmPropertyType.string
     }
-
-    return propertyReflector(
-      { ...payload, type: "String" },
-      relationshipsByModel
     );
   } catch (e) {
     throw new DecoratorProblem("hasOne", e, { inverse });
