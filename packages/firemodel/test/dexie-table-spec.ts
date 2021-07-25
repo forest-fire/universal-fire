@@ -1,6 +1,6 @@
 import "./testing/fake-indexeddb";
 
-import { carData, peopleData } from "./dexie-test-data";
+import { carData, peopleData } from "./fixtures/dexie-test-data";
 
 import { Car } from "./testing/Car";
 import DeepPerson from "./testing/dynamicPaths/DeepPerson";

@@ -1,12 +1,12 @@
 import {
-  Model,
-  fk,
   hasOne,
   index,
   model,
   property,
   mock,
-} from "../../src/index";
+} from "../../src/decorators";
+import { Model } from "../../src/models";
+import { fk } from "../../src/types";
 
 import { FancyPerson } from "./FancyPerson";
 

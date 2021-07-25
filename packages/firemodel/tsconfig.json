@@ -8,6 +8,5 @@
       "~/*": ["src/*"]
     }
   },
-  "files": ["global.d.ts"],
   "include": ["src", "global.d.ts", "test"]
 }

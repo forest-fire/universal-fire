@@ -1,7 +1,8 @@
-import DeepPerson from "./testing/dynamicPaths/DeepPerson";
-import { Car } from "./testing/Car";
+import DeepPerson from "../testing/dynamicPaths/DeepPerson";
+import { Car } from "../testing/Car";
+import { IModel } from "~/types";
 
-export const carData: Array<Car & { id: string }> = [
+export const carData: IModel<Car>[] = [
   {
     id: "123",
     model: "Volt",

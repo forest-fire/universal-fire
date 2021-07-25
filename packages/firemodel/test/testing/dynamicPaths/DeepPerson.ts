@@ -1,5 +1,4 @@
 import {
-  Model,
   fk,
   fks,
   hasMany,
@@ -9,6 +8,8 @@ import {
   model,
   property,
 } from "../../../src";
+
+import { Model } from "~/models/Model";
 
 import Car from "./Car";
 import Company from "./Company";
@@ -30,7 +31,7 @@ export default class DeepPerson extends Model {
   // prettier-ignore
   @property @mock("random", "The Dude", "Jackass", "Boomer", "Buster") nickname?: string;
   // prettier-ignore
-  @property @mock("random", "CT","MA","CA") group: string;
+  @property @mock("random", "CT", "MA", "CA") group: string;
   // prettier-ignore
   @property @mock("placeImage", 640, 480) photo?: string;
   // prettier-ignore

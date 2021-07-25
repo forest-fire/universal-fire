@@ -10,7 +10,6 @@ import { List, Record, Watch } from "~/core";
 import { FireModelError } from "~/errors";
 import { WatchBase } from "./WatchBase";
 import { ConstructorFor, epochWithMilliseconds } from "common-types";
-import { getAllPropertiesFromClassStructure } from "~/util";
 import { Model } from "~/models/Model";
 
 export class WatchList<S extends ISdk, T extends Model> extends WatchBase<S, T> {
