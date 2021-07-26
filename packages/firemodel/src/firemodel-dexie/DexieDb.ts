@@ -197,7 +197,7 @@ export class DexieDb {
 
   private _status = "initialized";
 
-  constructor(private _name: string, ...models: Array<ConstructorFor<Model>>) {
+  constructor(private _name: string, ...models: Array<ConstructorFor<IModel>>) {
     this._models = DexieDb.modelConversion(...models);
 
     this._db = DexieDb._indexedDb
@@ -215,8 +215,8 @@ export class DexieDb {
     });
 
     models.forEach((m) => {
-      const r: Record<ISdk, Model> = Record.create(m);
-      this._constructors[r.pluralName] = m;
+      const r: Record<ISdk, Model> = Record.create(m as any);
+      this._constructors[r.pluralName] = m as any;
       const meta: IDexieModelMeta = {
         ...r.META,
         modelName: r.modelName,
@@ -263,7 +263,7 @@ export class DexieDb {
    */
   public table<T extends Model>(
     model: ConstructorFor<T>
-  ): Dexie.Table<T, PrimaryKey<T>> {
+  ): Dexie.Table<IModel<T>, PrimaryKey<T>> {
     const r = Record.create(model);
 
     if (!this.isOpen()) {
