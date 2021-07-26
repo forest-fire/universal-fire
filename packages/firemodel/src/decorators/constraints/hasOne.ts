@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
   FmPropertyType,
+  FmRelationshipType,
   IFmRelationshipDirectionality,
   PropertyOf,
 } from "~/types";
@@ -45,7 +46,7 @@ export function belongsTo<T extends Model = Model>(
     return propertyReflector({
       isRelationship: true,
       isProperty: false,
-      relType: "hasOne",
+      relType: FmRelationshipType.hasOne,
       inverseProperty,
       directionality,
       fkConstructor,

@@ -2,7 +2,8 @@
 import { ConstructorFor, IDictionary } from "common-types";
 import {
   IFmRelationshipDirectionality,
-  FmPropertyType
+  FmPropertyType,
+  FmRelationshipType
 } from "~/types";
 import { modelConstructorLookup, modelNameLookup } from "~/util";
 
@@ -42,7 +43,7 @@ export function hasMany<T extends Model>(
     return propertyReflector({
       isRelationship: true,
       isProperty: false,
-      relType: "hasMany",
+      relType: FmRelationshipType.hasMany,
       directionality,
       fkConstructor,
       inverseProperty,
