@@ -6,6 +6,7 @@ import { createDatabase } from '~/databases';
 import { SDK } from '~/auth/admin-sdk';
 import { first } from 'native-dash';
 import { firstProp, lastProp } from '~/util';
+import { SchemaCallback } from '~/@types';
 
 const employeeMocker: SchemaCallback = (h: SchemaHelper) => () => ({
   first: h.faker.name.firstName(),
@@ -20,10 +21,10 @@ describe('Mock class()', () => {
   it('Mock a Schema API structured correctly', async () => {
     const m = await Fixture.prepare();
     const schemaApi = m.addSchema('foo');
-    expect(schemaApi.mock).toBeFunction();
-    expect(schemaApi.belongsTo).toBeFunction();
-    expect(schemaApi.hasMany).toBeFunction();
-    expect(schemaApi.pluralName).toBeFunction();
+    expect(typeof schemaApi.mock).toEqual("function");
+    expect(typeof schemaApi.belongsTo).toEqual("function");
+    expect(typeof schemaApi.hasMany).toEqual("function");
+    expect(typeof schemaApi.pluralName).toEqual("function");
   });
 
   it('Mock → Deployment API structured correctly', async () => {
@@ -31,10 +32,10 @@ describe('Mock class()', () => {
     m.addSchema('foo').mock(() => () => 'testing');
     const deployApi = m.deploy.queueSchema('foo');
 
-    expect(deployApi.queueSchema).toBeFunction();
-    expect(deployApi.quantifyHasMany).toBeFunction();
-    expect(deployApi.fulfillBelongsTo).toBeFunction();
-    expect(deployApi.generate).toBeFunction();
+    expect(typeof deployApi.queueSchema).toEqual("function");
+    expect(typeof deployApi.quantifyHasMany).toEqual("function");
+    expect(typeof deployApi.fulfillBelongsTo).toEqual("function");
+    expect(typeof deployApi.generate).toEqual("function");
   });
 
   describe('Building and basic config of database', () => {
@@ -49,7 +50,7 @@ describe('Mock class()', () => {
         },
       });
 
-      expect(m.store.getDb().monkeys).toBeInstanceOf(Object);
+      expect(typeof  m.store.getDb().monkeys).toEqual("object");
       expect(m.store.getDb().monkeys.a.name).toBe('abbey');
       const result = await m.db.ref('/monkeys').once('value');
       expect(result.numChildren()).toBe(3);
@@ -96,9 +97,9 @@ describe('Mock class()', () => {
       const keys = Object.keys(listOfFoos);
       const firstFoo = listOfFoos[first(keys)];
 
-      expect(listOfFoos).toBeInstanceOf(Object);
-      expect(firstFoo.first).toBeString();
-      expect(firstFoo.last).toBeString();
+      expect(typeof listOfFoos).toEqual("object");
+      expect(firstFoo.first).toEqual("string");
+      expect(firstFoo.last).toEqual("string");
       expect(keys.length).toBe(5);
     });
 
@@ -153,18 +154,18 @@ describe('Mock class()', () => {
     it('Mocking function that returns a scalar works as intended', async () => {
       const f
         = await Fixture.prepare();
-      f.addSchema('number', (h) => async () => h.faker.datatype.number({ min: 0, max: 1000 })
+      f.addSchema('number', (h: SchemaCallback) => async () => h.faker.datatype.number({ min: 0, max: 1000 })
       );
-      f.addSchema('string', (h) => async () => h.faker.random.words(3));
+      f.addSchema('string', (h: SchemaCallback) => async () => h.faker.random.words(3));
       f.queueSchema('number', 10);
       f.queueSchema('string', 10);
       const fixture = f.generate();
       const m = createDatabase(SDK.RealTimeAdmin, {}, fixture);
 
-      expect(firstProp(m.store.getDb().strings)).toBeString();
-      expect(lastProp(m.store.getDb().strings)).toBeString();
-      expect(firstProp(m.store.getDb().numbers)).toBeNumber();
-      expect(lastProp(m.store.getDb().numbers)).toBeNumber();
+      expect(typeof firstProp(m.store.getDb().strings)).toEqual("string");
+      expect(typeof lastProp(m.store.getDb().strings)).toEqual("string");
+      expect(typeof firstProp(m.store.getDb().numbers)).toEqual("number");
+      expect(typeof lastProp(m.store.getDb().numbers)).toEqual("number");
     });
   });
 

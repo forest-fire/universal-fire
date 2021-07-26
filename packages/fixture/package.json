@@ -32,7 +32,8 @@
     "scripty": "2.0.0",
     "jest": "^27.0.6",
     "@forest-fire/types": "*",
-    "firemodel": "*"
+    "firemodel": "*",
+    "universal-fire": "*"
   },
   "peerDependencies": {
     "native-dash": "1.15.1",
