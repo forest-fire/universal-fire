@@ -16,7 +16,7 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
   let db: RealTimeAdmin;
   beforeAll(async () => {
     db = await RealTimeAdmin.connect();
-    // List.defaultDb = db;
+    List.defaultDb = db;
     await db.set('/', peopleDataset());
   });
   afterAll(async () => {
@@ -24,7 +24,7 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
     await db.remove('/authenticated');
   });
 
-  it.only('equalTo() deserializes into valid response', async () => {
+  it('equalTo() deserializes into valid response', async () => {
     const q = new SerializedRealTimeQuery<SDK.RealTimeAdmin, any>('/authenticated/people')
       .orderByChild('favoriteColor')
       .equalTo('green');
@@ -61,30 +61,30 @@ describe('Tests using REAL RealTimeAdmin =>', () => {
     expect(deserializedJson[0].age).toEqual(sortedPeople[0].age);
   });
 
-  // it('Firemodel List.where() reduces the result set to appropriate records', async () => {
-  //   const peeps = await List.where(Person, 'favoriteColor', 'green');
-  //   const people = hashToArray<Person>(
-  //     peopleDataset().authenticated.people as IDictionary
-  //   ).filter((p) => p.favoriteColor === 'green');
-  //   expect(peeps.length).toEqual(people.length);
-  // });
+  it('Firemodel List.where() reduces the result set to appropriate records', async () => {
+    const peeps = await List.where(Person, 'favoriteColor', 'green');
+    const people = hashToArray<Person>(
+      peopleDataset().authenticated.people as IDictionary
+    ).filter((p) => p.favoriteColor === 'green');
+    expect(peeps.length).toEqual(people.length);
+  });
 
-  // it.skip('Firemodel List.where() reduces the result set to appropriate records (with a dynamic path)', async () => {
-  //   const mockDb = await RealTimeAdmin.connect({ mocking: true });
+  it.skip('Firemodel List.where() reduces the result set to appropriate records (with a dynamic path)', async () => {
+    const mockDb = await RealTimeAdmin.connect({ mocking: true });
 
-  //   await Mock(DeepPerson, mockDb).generate(5, {
-  //     favoriteColor: 'green',
-  //     group: 'group1',
-  //   });
-  //   await Mock(DeepPerson, mockDb).generate(5, {
-  //     favoriteColor: 'blue',
-  //     group: 'group1',
-  //   });
+    await Mock(DeepPerson, mockDb).generate(5, {
+      favoriteColor: 'green',
+      group: 'group1',
+    });
+    await Mock(DeepPerson, mockDb).generate(5, {
+      favoriteColor: 'blue',
+      group: 'group1',
+    });
 
-  //   const peeps = await List.where(Person, 'favoriteColor', 'green');
-  //   const people = hashToArray<Person>(
-  //     peopleDataset().authenticated.people as IDictionary
-  //   ).filter((p) => p.favoriteColor === 'green');
-  //   expect(peeps.length).toEqual(people.length);
-  // });
+    const peeps = await List.where(Person, 'favoriteColor', 'green');
+    const people = hashToArray<Person>(
+      peopleDataset().authenticated.people as IDictionary
+    ).filter((p) => p.favoriteColor === 'green');
+    expect(peeps.length).toEqual(people.length);
+  });
 });
