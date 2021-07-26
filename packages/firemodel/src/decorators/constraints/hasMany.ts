@@ -23,7 +23,7 @@ export function hasMany<T extends Model>(
    * possibility that a user of this API will pass in a _function_
    * to a _constructor_. This approach is now deprecated.
    */
-  fkClass: () => ConstructorFor<T> | (() => ConstructorFor<T>) | string,
+  fkClass: ConstructorFor<T> | (() => ConstructorFor<T>) | (() => ConstructorFor<T>) | string ,
   inverse?: string & keyof T | [string & keyof T, IFmRelationshipDirectionality]
 ) {
   try {
