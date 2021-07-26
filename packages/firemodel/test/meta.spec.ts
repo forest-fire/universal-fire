@@ -1,7 +1,7 @@
 import { Klass } from "./testing/klass";
 import { Person } from "./testing/Person";
-import { RealTimeAdmin } from "@forest-fire/real-time-admin";
 import { Record } from "../src";
+import { RealTimeAdmin } from "universal-fire";
 
 describe("schema() decorator: ", () => {
   it("can read Schema meta properties", () => {
@@ -12,7 +12,7 @@ describe("schema() decorator: ", () => {
 
   it("can read Property meta properties off of META.property", () => {
     const myclass = new Klass();
-    expect(myclass.META.property("foo").type).toBeString();
+    expect(myclass.META.property("foo").type).toEqual("string");
     expect(myclass.META.property("bar").type).toBe("number");
     expect(myclass.META.property("bar3").max).toBe(10);
   });
@@ -33,11 +33,11 @@ describe("schema() decorator: ", () => {
 describe("property decorator: ", () => {
   it("can discover type for properties on class", () => {
     const myclass = new Klass();
-    expect(Reflect.getMetadata("foo", myclass).type).toBeString();
+    expect(Reflect.getMetadata("foo", myclass).type).toEqual("string");
     expect(Reflect.getMetadata("bar", myclass).type).toBe("number");
     expect(Reflect.getMetadata("bar2", myclass).type).toBe("number");
-    expect(Reflect.getMetadata("sub", myclass).type).toBeString();
-    expect(Reflect.getMetadata("id", myclass).type).toBeString();
+    expect(Reflect.getMetadata("sub", myclass).type).toEqual("string");
+    expect(Reflect.getMetadata("id", myclass).type).toEqual("string");
   });
 
   it("constraint() decorator-factory adds constrain metadata", () => {
@@ -146,7 +146,7 @@ describe("relationship decorators: ", () => {
 
     person.META.relationships.map((p) => {
       if (p.relType === "hasOne") {
-        expect(p.type).toBeString();
+        expect(p.type).toEqual("string");
       }
       if (p.relType === "hasMany") {
         expect(p.type).toBe("Object");

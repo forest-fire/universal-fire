@@ -17,7 +17,7 @@ import { Concert } from "./Concert";
 import { Pay } from "./Pay";
 
 @model({ localModelName: "userProfile", localPrefix: "peeps" })
-export class PersonWithLocalAndPrefix extends Model<PersonWithLocalAndPrefix> {
+export class PersonWithLocalAndPrefix extends Model {
   // prettier-ignore
   @property @length(20) public name: string;
   // prettier-ignore

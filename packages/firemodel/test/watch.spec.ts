@@ -12,12 +12,13 @@ import {
   getWatcherPool,
 } from "~/index";
 import { IDictionary, wait } from "common-types";
-import { IDatabaseSdk } from "@forest-fire/types";
-import { RealTimeAdmin } from "universal-fire";
+import { IDatabaseSdk, ISerializedQuery, SDK } from "@forest-fire/types";
+import { RealTimeAdmin,  } from "universal-fire";
 import { DeeperPerson } from "./testing/dynamicPaths/DeeperPerson";
 import { Person } from "./testing/Person";
 import { PersonWithLocalAndPrefix } from "./testing/PersonWithLocalAndPrefix";
 import { setupEnv } from "./testing/helpers";
+import { Mock } from "@forest-fire/fixture"
 
 setupEnv();
 
@@ -37,9 +38,9 @@ describe("Watch →", () => {
       mocking: true,
     });
     const { watcherId } = await Watch.record(Person, "12345")
-      .dispatch(async () => "")
+      .dispatch(async () => "" as IReduxAction)
       .start();
-    expect(watcherId).toBeString();
+    expect(watcherId).toEqual("string");
 
     expect(Watch.lookup(watcherId)).toBeObject();
     expect(Watch.lookup(watcherId)).toHaveProperty("eventFamily");
@@ -50,13 +51,13 @@ describe("Watch →", () => {
   it("Watching CRUD actions on Record", async () => {
     FireModel.defaultDb = realDB;
     const events: IReduxAction[] = [];
-    const cb = async (event: IReduxAction) => {
+    const cb: any = async (event: IReduxAction) => {
       events.push(event);
     };
     FireModel.dispatch = cb;
     const w = await Watch.record(Person, "1234").start();
 
-    expect(Watch.inventory[w.watcherId]).toBeInstanceOf(Object);
+    expect(Watch.inventory[w.watcherId]).toEqual("object");
     expect(Watch.inventory[w.watcherId].eventFamily).toBe("value");
     expect(Watch.inventory[w.watcherId].watcherPaths[0]).toBe(
       "authenticated/people/1234"
@@ -84,7 +85,7 @@ describe("Watch →", () => {
   it("Watching CRUD actions on List", async () => {
     FireModel.defaultDb = realDB;
     const events: Array<IFmLocalEvent<Person>> = [];
-    const cb = async (event: IFmLocalEvent<Person>) => {
+    const cb: any = async (event: IFmLocalEvent<Person>) => {
       events.push(event);
     };
     await realDB.remove("/authenticated/people");
@@ -124,14 +125,14 @@ describe("Watch →", () => {
 
   it("start() increases watcher count, stop() decreases it", async () => {
     Watch.reset();
-    FireModel.dispatch = async () => "";
+    FireModel.dispatch = async () => "" as IReduxAction;
     expect(Watch.watchCount).toBe(0);
     const { watcherId: hc1 } = await Watch.record(Person, "989898").start();
     const { watcherId: hc2 } = await Watch.record(Person, "45645645").start();
     expect(Watch.watchCount).toBe(2);
     Watch.stop(hc1);
     expect(Watch.watchCount).toBe(1);
-    expect(Watch.lookup(hc2)).toBeInstanceOf(Object);
+    expect(Watch.lookup(hc2)).toEqual("object");
     try {
       Watch.lookup(hc1);
       throw new Error("looking up an invalid hashcode should produce error!");
@@ -151,7 +152,7 @@ describe("Watch →", () => {
 
     const events: IDictionary[] = [];
     FireModel.dispatch = async (evt) => {
-      events.push(evt);
+      return events.push(evt) as any;
     };
     await Watch.list(PersonWithLocalAndPrefix).all().start();
     await Record.add(PersonWithLocalAndPrefix, person.data);
@@ -174,7 +175,7 @@ describe("Watch →", () => {
     const person = await Record.get(PersonWithLocalAndPrefix, personId);
     const events: IDictionary[] = [];
     FireModel.dispatch = async (evt) => {
-      events.push(evt);
+      return events.push(evt) as any;
     };
     await Watch.record(PersonWithLocalAndPrefix, personId).start();
     await Record.add(PersonWithLocalAndPrefix, person.data);
@@ -226,7 +227,7 @@ describe("Watch.list(XXX).ids()", () => {
     });
     const events: Array<IFmWatchEvent<Person>> = [];
     const cb = async (event: IFmWatchEvent<Person>) => {
-      events.push(event);
+      return events.push(event) as any;
     };
     const watcher = await Watch.list(Person)
       .ids("1234", "4567")
@@ -260,10 +261,11 @@ describe("Watch.list(XXX).ids()", () => {
 
     recordsChanged.forEach((i) => {
       expect(i.watcherSource).toBe("list-of-records");
-      expect(i.dbPath).toBeString();
+      expect(i.dbPath).toEqual("string");
       expect(i.query).toBeInstanceOf(Array);
       expect(i.query).toHaveLength(2);
-      expect((i.query as BaseSerializer[])[0]).toBeInstanceOf(BaseSerializer);
+      // TODO:
+      // expect((i.query as unknown as ISerializedQuery<SDK.RealTimeAdmin, Person>[])[0]).toBeInstanceOf(ISerializedQuery<SDK.RealTimeAdmin, Person>);
     });
 
     expect(recordIdsChanged).toEqual(expect.arrayContaining(["1234"]));
@@ -277,7 +279,7 @@ describe("Watch.list(XXX).ids()", () => {
     });
     const events: Array<IFmWatchEvent<Person>> = [];
     const cb = async (event: IFmWatchEvent<Person>) => {
-      events.push(event);
+      return events.push(event) as any;
     };
     const watcher = Watch.list(DeeperPerson);
     watcher
@@ -317,10 +319,11 @@ describe("Watch.list(XXX).ids()", () => {
 
     recordsChanged.forEach((i) => {
       expect(i.watcherSource).toBe("list-of-records");
-      expect(i.dbPath).toBeString();
+      expect(i.dbPath).toEqual("string");
       expect(i.query).toBeInstanceOf(Array);
       expect(i.query).toHaveLength(2);
-      expect((i.query as BaseSerializer[])[0]).toBeInstanceOf(BaseSerializer);
+      // TODO:
+      // expect((i.query as BaseSerializer[])[0]).toBeInstanceOf(BaseSerializer);
     });
   });
 });

@@ -13,7 +13,7 @@ import { Company } from "./Company";
 import { IDictionary } from "common-types";
 
 @model({ dbOffset: "authenticated", audit: true })
-export class Person extends Model<Person> {
+export class Person extends Model {
   // prettier-ignore
   @property @length(20) public name: string;
   // prettier-ignore

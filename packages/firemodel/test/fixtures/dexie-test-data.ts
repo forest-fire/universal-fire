@@ -29,7 +29,7 @@ export const carData: IModel<Car>[] = [
   }
 ];
 
-export const peopleData: DeepPerson[] = [
+export const peopleData: IModel<DeepPerson>[] = [
   {
     id: "123",
     name: { first: "Bob", last: "Marley" },

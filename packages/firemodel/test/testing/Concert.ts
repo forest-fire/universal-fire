@@ -1,7 +1,7 @@
 import { model, Model, property } from "../../src";
 
 @model({ dbOffset: "authenticated" })
-export class Concert extends Model<Concert> {
+export class Concert extends Model {
   // prettier-ignore
   @property public name: string;
   @property public employees?: number;

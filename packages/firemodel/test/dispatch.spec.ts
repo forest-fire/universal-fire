@@ -81,7 +81,7 @@ describe("Dispatch →", () => {
     // 2nd EVENT
     event = events[1];
     expect(event.type).toBe(FmEvents.RECORD_CHANGED_CONFIRMATION);
-    expect(event.value).toBeInstanceOf(Object);
+    expect(event.value).toEqual("object");
     expect(event.value.name).toBe("Carol");
     expect(event.value.age).toBe(18);
   });

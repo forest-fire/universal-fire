@@ -28,7 +28,7 @@ describe("Dexie - Record API", () => {
   it("Able to get the Record API from DexieDb", async () => {
     const car = d.record(Car);
     expect(car).toBeInstanceOf(DexieRecord);
-    expect(car.add).toBeInstanceOf(Function);
+    expect(car.add).toEqual("function");
   });
 
   it("Able to call add() and then get() to show lifecycle", async () => {
@@ -53,7 +53,7 @@ describe("Dexie - Record API", () => {
       group: "testing",
     });
     expect(addPerson).toBeInstanceOf(DeepPerson);
-    expect(typeof addPerson.id).toBeString();
+    expect(typeof addPerson.id).toEqual("string");
     expect(addPerson.group).toBe("testing");
     expect(addPerson.lastUpdated).toBeNumber();
     expect(addPerson.createdAt).toBeNumber();
@@ -62,7 +62,7 @@ describe("Dexie - Record API", () => {
       group: addPerson.group,
     });
     expect(personResult).toBeInstanceOf(DeepPerson);
-    expect(typeof personResult.id).toBeString();
+    expect(typeof personResult.id).toEqual("string");
     expect(personResult.group).toBe("testing");
     expect(personResult.lastUpdated).toBeNumber();
     expect(personResult.createdAt).toBeNumber();
@@ -74,7 +74,7 @@ describe("Dexie - Record API", () => {
       cost: 22000,
     });
     expect(car).toBeInstanceOf(Car);
-    expect(typeof car.id).toBeString();
+    expect(typeof car.id).toEqual("string");
   });
 
   it("Calls to update() update the record correctly", async () => {

@@ -11,12 +11,11 @@ import {
 } from "../../src";
 import { IDictionary } from "common-types";
 import { pushKey } from "../../src/decorators/constraints";
-import { IModelProps } from "../../../types/dist/types";
 
 /* tslint:disable:max-classes-per-file */
 export type Callback = (m: string) => boolean;
 
-export class SubKlass extends Model<IModelProps> {
+export class SubKlass extends Model {
   @property public sub = "subklass";
 }
 

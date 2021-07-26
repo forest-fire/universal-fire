@@ -18,7 +18,7 @@ import { Concert } from "./Concert";
 import { Pay } from "./Pay";
 
 @model({ dbOffset: "authenticated" })
-export class Person extends Model<Person> {
+export class Person extends Model {
   // prettier-ignore
   @property @length(20) public name: string;
   // prettier-ignore

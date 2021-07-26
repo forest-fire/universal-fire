@@ -1,7 +1,8 @@
-import { FireModel, List, Mock, Record } from "../src";
+import { FireModel, List, Record } from "../src";
 
 import { Person } from "./testing/default-values/Person";
-import { RealTimeAdmin } from "@forest-fire/types";
+import { RealTimeAdmin } from "universal-fire";
+import { Mock } from "@forest-fire/fixture";
 
 describe("defaultValue() → ", () => {
   beforeAll(async () => {
@@ -35,6 +36,7 @@ describe("defaultValue() → ", () => {
     people.map((person) => {
       expect(person.currentDeliveryAddress).toBe("work");
       expect(person.priorDeliveryAddress).toBe("home");
+      return person;
     });
   });
 });

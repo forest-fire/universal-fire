@@ -5,7 +5,7 @@ import { IDatabaseSdk, RealTimeAdmin } from "universal-fire";
 
 import { FireModel } from "~/index";
 import { FmEvents } from "~/index";
-import { Mock } from "~/index";
+import { Mock } from "@forest-fire/fixture";
 import { Person as Peeps } from "./testing/PersonAsPeeps";
 import { Person } from "./testing/Person";
 
@@ -29,12 +29,12 @@ describe("Record > ", () => {
     });
     expect(r).toBeInstanceOf(Record);
     expect(r.get("name")).toBe("Bob Marley");
-    expect(r.id).toBeString();
+    expect(r.id).toEqual("string");
     // test DB too
     const fromDb = await Record.get(Person, r.id);
     expect(fromDb).toBeInstanceOf(Record);
     expect(fromDb.get("name")).toBe("Bob Marley");
-    expect(fromDb.id).toBeString();
+    expect(fromDb.id).toEqual("string");
   });
 
   it(`Record's static add() fires client events`, async () => {

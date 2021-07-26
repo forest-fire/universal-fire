@@ -2,7 +2,7 @@ import { FireModel, Record } from "../src";
 
 import { Car } from "./testing/permissions/Car";
 import { IDictionary } from "common-types";
-import { RealTimeClient } from "@forest-fire/real-time-client";
+import { RealTimeClient } from "universal-fire";
 
 const clientConfig = {
   apiKey: "AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM",

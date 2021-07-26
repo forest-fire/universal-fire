@@ -5,11 +5,10 @@ import {
   hasOne,
   index,
   mock,
+  Model,
   model,
   property,
 } from "../../../src";
-
-import { Model } from "~/models/Model";
 
 import Car from "./Car";
 import Company from "./Company";

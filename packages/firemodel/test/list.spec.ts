@@ -3,7 +3,12 @@ import "reflect-metadata";
 import * as helpers from "./testing/helpers";
 
 import { IFmWatchEvent, List, Record } from "~/index";
-import { RealTimeAdmin, SDK, SerializedQuery, IDatabaseSdk } from "universal-fire";
+import {
+  RealTimeAdmin,
+  SDK,
+  SerializedQuery,
+  IDatabaseSdk,
+} from "universal-fire";
 
 import { Car } from "./testing/Car";
 import Company from "./testing/dynamicPaths/Company";
@@ -13,10 +18,11 @@ import { Mock } from "@forest-fire/fixture";
 import { Person } from "./testing/Person";
 
 describe("List class: ", () => {
-  let db: IDatabaseSdk<SDK.RealTimeAdmin>;
+  let db: IDatabaseSdk<"RealTimeAdmin">;
   beforeEach(async () => {
     db = await RealTimeAdmin.connect({ mocking: true });
     FireModel.defaultDb = db;
+    List.defaultDb = db;
   });
   it("can instantiate with new operator", () => {
     const list = new List<Person>(Person);
@@ -28,7 +34,7 @@ describe("List class: ", () => {
   });
 
   it("can instantiate with create() method", () => {
-    const list = List.create(Person, { db });
+    const list = List.create(Person);
     expect(list).toBeInstanceOf(List);
     expect(list.length).toBe(0);
     expect(list.modelName).toBe("person");
@@ -117,12 +123,13 @@ describe("List class: ", () => {
   });
 
   it("can instantiate with first() and last() methods", async () => {
-    (db.mock as IMockApi).addSchema<Person>("person", (h) => () => ({
-      name: h.faker.name.firstName(),
-      age: h.faker.random.number({ min: 1, max: 50 }),
-      createdAt: h.faker.date.past().valueOf(),
-      lastUpdated: h.faker.date.recent().valueOf(),
-    }))
+    (db.mock as IMockApi)
+      .addSchema<Person>("person", (h) => () => ({
+        name: h.faker.name.firstName(),
+        age: h.faker.random.number({ min: 1, max: 50 }),
+        createdAt: h.faker.date.past().valueOf(),
+        lastUpdated: h.faker.date.recent().valueOf(),
+      }))
       .pathPrefix("authenticated");
     db.mock.queueSchema("person", 30).generate();
     const first = await List.first(Person, 5);
@@ -187,13 +194,15 @@ describe("List class: ", () => {
       }))
       .pathPrefix("authenticated");
     db.mock.queueSchema("person", 30).generate();
-    const firstPersonId = helpers.firstKey(db.mock.db.authenticated.people);
+    const firstPersonId = helpers.firstKey(
+      db.mock.store.state.authenticated.people
+    );
     const list = await List.all(Person);
     const record = list.getRecord(firstPersonId);
-    expect(record).toBeInstanceOf(Object);
+    expect(record).toEqual("object");
     expect(record).toBeInstanceOf(Record);
     expect(record.data).toBeInstanceOf(Person);
-    expect(record.data.name).toBeString();
+    expect(record.data.name).toEqual("string");
   });
 
   it("list.get() with a valid ID retrieves the model data for that record", async () => {
@@ -206,11 +215,13 @@ describe("List class: ", () => {
       }))
       .pathPrefix("authenticated");
     db.mock.queueSchema("person", 30).generate();
-    const firstPersonId = helpers.firstKey(db.mock.db.authenticated.people);
+    const firstPersonId = helpers.firstKey(
+      db.mock.store.state.authenticated.people
+    );
     const list = await List.all(Person);
     const person = list.get(firstPersonId);
-    expect(person).toBeInstanceOf(Object);
-    expect(person.name).toBeString();
+    expect(person).toEqual("object");
+    expect(person.name).toEqual("string");
   });
 
   it("an instantiated List calling get() with an invalid ID throws an error", async () => {

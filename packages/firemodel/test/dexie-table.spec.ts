@@ -33,7 +33,7 @@ describe("Dexie Table API", () => {
       });
 
     const lastCar = carData.slice(-1).pop();
-    expect(response).toBeString();
+    expect(response).toEqual("string");
     expect(response).toBe(lastCar.id);
 
     const all = await db.table(Car).toArray();

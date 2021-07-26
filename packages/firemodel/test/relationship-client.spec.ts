@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { IFmLocalRelationshipEvent, IFmWatchEvent, Record } from "../src";
+import { IFmLocalRelationshipEvent, IFmWatchEvent, IReduxAction, Record } from "../src";
 import { RealTimeAdmin } from "universal-fire";
 
 import { Company } from "./testing/Company";
@@ -24,7 +24,7 @@ const addFatherAndChildren = async () => {
     age: 46,
   });
   const events: IFmWatchEvent[] = [];
-  Record.dispatch = async (evt: IFmWatchEvent) => events.push(evt);
+  Record.dispatch = async (evt: IFmWatchEvent) => events.push(evt) as IReduxAction;
   await father.addToRelationship("children", [bob.id, chrissy.id]);
 
   return {
@@ -56,11 +56,11 @@ describe("Relationship > ", () => {
       age: 23,
     });
     expect(person.id).toBeDefined();
-    expect(person.id).toBeString();
+    expect(person.id).toEqual("string");
     const lastUpdated = person.data.lastUpdated;
     const events: IFmLocalRelationshipEvent[] = [];
     Record.dispatch = async (evt: IFmLocalRelationshipEvent) =>
-      events.push(evt);
+      events.push(evt) as IReduxAction;
 
     await person.addToRelationship("cars", "car12345");
 
@@ -101,7 +101,7 @@ describe("Relationship > ", () => {
     });
     const events: IFmLocalRelationshipEvent[] = [];
     Record.dispatch = async (evt: IFmLocalRelationshipEvent) =>
-      events.push(evt);
+      events.push(evt) as IReduxAction;
     await bob.addToRelationship("parents", father.id);
     // local person record is updated
     expect(bob.data.parents[father.id]).toBe(true);

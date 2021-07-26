@@ -100,7 +100,8 @@
     "universal-fire": "*",
     "vue-property-decorator": "^9.1.2",
     "vuepress": "^1.5.0",
-    "vuepress-plugin-autometa": "^0.1.13"
+    "vuepress-plugin-autometa": "^0.1.13",
+    "@forest-fire/fixture": "*"
   },
   "peerDependencies": {
     "@forest-fire/serialized-query": "*",

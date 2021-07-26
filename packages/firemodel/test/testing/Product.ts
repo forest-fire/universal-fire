@@ -1,4 +1,4 @@
-import { model, Model, property, hasMany, mock } from "../../src";
+import { model, Model, property, mock } from "../../src";
 
 @model({ dbOffset: "authenticated" })
 export class Product extends Model {

@@ -1,4 +1,4 @@
-import { IFmWatchEvent, Record } from "../src";
+import { IFmWatchEvent, IReduxAction, Record } from "../src";
 import { ISdk, RealTimeAdmin } from "universal-fire";
 import {
   buildRelationshipPaths,
@@ -88,7 +88,7 @@ describe("Relationship > ", () => {
   });
 
   it("can build composite key from FK string", async () => {
-    const t1 = createCompositeKey("foo::geo:CT::age:13");
+    const t1 = createCompositeKey<any>("foo::geo:CT::age:13");
     expect(t1.id).toBe("foo");
     expect(t1.geo).toBe("CT");
     expect(t1.age).toBe("13");
@@ -170,10 +170,10 @@ describe("Relationship > ", () => {
       age: 23,
     });
     expect(person.id).toBeDefined();
-    expect(person.id).toBeString();
+    expect(person.id).toEqual("string");
     const lastUpdated = person.data.lastUpdated;
     const events: IFmWatchEvent[] = [];
-    Record.dispatch = async (evt: IFmWatchEvent) => events.push(evt);
+    Record.dispatch = async (evt: IFmWatchEvent) => events.push(evt) as IReduxAction;
     await person.addToRelationship("cars", "12345");
 
     const eventTypes = Array.from(new Set(events.map((e) => e.type)));
