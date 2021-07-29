@@ -1,7 +1,5 @@
 import "reflect-metadata";
-
 import * as helpers from "./testing/helpers";
-
 import {
   FmEvents,
   IFmLocalEvent,
@@ -9,12 +7,12 @@ import {
   List,
   Record,
   Watch,
-} from "../src";
+  FireModel
+} from "~/index";
 import { IDictionary, wait } from "common-types";
 import { IDatabaseSdk, RealTimeAdmin } from "universal-fire";
 
 import { FancyPerson } from "./testing/FancyPerson";
-import { FireModel } from "~/index";
 import { Person } from "./testing/Person";
 import { pathJoin } from "native-dash";
 
@@ -34,30 +32,26 @@ describe("Tests using REAL db =>�", () => {
     }
   });
   it("List.since() works", async () => {
-    try {
-      await Record.add(Person, {
-        name: "Carl Yazstrimski",
-        age: 99,
-      });
-      const timestamp = new Date().getTime();
-      await helpers.wait(50);
-      await Record.add(Person, {
-        name: "Bob Geldof",
-        age: 65,
-      });
-      const since = List.since(Person, timestamp);
+    await Record.add(Person, {
+      name: "Carl Yazstrimski",
+      age: 99,
+    });
+    const timestamp = new Date().getTime();
+    await helpers.wait(50);
+    await Record.add(Person, {
+      name: "Bob Geldof",
+      age: 65,
+    });
+    const since = List.since(Person, timestamp);
 
-      // cleanup
-      await db.remove("/authenticated");
-    } catch (e) {
-      throw e;
-    }
+    // cleanup
+    await db.remove("/authenticated");
   });
 
   it("Adding a record to the database creates the appropriate number of dispatch events", async () => {
     const events: IDictionary[] = [];
     FireModel.dispatch = async (e: IReduxAction) => {
-      events.push(e);
+      return events.push(e) as IReduxAction;
     };
     const w = await Watch.list(FancyPerson)
       .all()
@@ -98,7 +92,7 @@ describe("Tests using REAL db =>�", () => {
     const w = await Watch.list(FancyPerson)
       .all()
       .start({ name: "my-update-watcher" });
-    FireModel.dispatch = async (e: IReduxAction) => events.push(e);
+    FireModel.dispatch = async (e: IReduxAction) => events.push(e) as IReduxAction;
     await Record.update(FancyPerson, bob.id, { name: "Bob Marley" });
     await wait(50);
     const eventTypes: string[] = Array.from(new Set(events.map((e) => e.type)));
@@ -115,12 +109,13 @@ describe("Tests using REAL db =>�", () => {
   });
 
   it("Detects changes at various nested levels of the watch/listener", async () => {
-    let events: Array<IFmLocalEvent<FancyPerson>> = [];
+    const fancyPerson = new FancyPerson();
+    console.log(fancyPerson);
+    let events: IFmLocalEvent[] = [];
     const jack = await Record.add(FancyPerson, {
       name: "Jack Johnson",
     });
-    FireModel.dispatch = async (e: IFmLocalEvent<FancyPerson>) =>
-      events.push(e);
+    FireModel.dispatch = async (e: IFmLocalEvent) => events.push(e) as IReduxAction;
     const w = await Watch.list(FancyPerson)
       .all()
       .start({ name: "path-depth-test" });
@@ -162,7 +157,7 @@ describe("Tests using REAL db =>�", () => {
 
   it.skip("value listener returns correct key and value", async () => {
     const events: IDictionary[] = [];
-    FireModel.dispatch = async (e: IReduxAction) => events.push(e);
+    FireModel.dispatch = async (e: IReduxAction) => events.push(e) as IReduxAction;
     const w = await Watch.record(FancyPerson, "abcd").start({
       name: "value-listener",
     });

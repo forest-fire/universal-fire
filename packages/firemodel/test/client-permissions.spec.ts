@@ -2,7 +2,7 @@ import { FireModel, Record } from "../src";
 
 import { Car } from "./testing/permissions/Car";
 import { IDictionary } from "common-types";
-import { RealTimeClient } from "universal-fire";
+import { IDatabaseSdk, RealTimeClient } from "universal-fire";
 
 const clientConfig = {
   apiKey: "AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM",
@@ -14,7 +14,7 @@ const clientConfig = {
 };
 
 describe("Validating client permissions with an anonymous user", () => {
-  let db: RealTimeClient;
+  let db: IDatabaseSdk<"RealTimeClient">;
 
   beforeAll(async () => {
     db = await RealTimeClient.connect(clientConfig);
@@ -24,7 +24,7 @@ describe("Validating client permissions with an anonymous user", () => {
   it("Writing to an area without permissions fails and rolls local changes back", async () => {
     const events: IDictionary = [];
     const dispatch = async (payload: IDictionary) => {
-      events.push(payload);
+      return events.push(payload) as any;
     };
     FireModel.dispatch = dispatch;
 

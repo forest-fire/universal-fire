@@ -7,7 +7,7 @@ import {
   min,
   max,
   length,
-  model
+  model,
 } from "../../src";
 import { IDictionary } from "common-types";
 import { pushKey } from "../../src/decorators/constraints";
@@ -15,7 +15,7 @@ import { pushKey } from "../../src/decorators/constraints";
 /* tslint:disable:max-classes-per-file */
 export type Callback = (m: string) => boolean;
 
-export class SubKlass extends Model {
+export class SubKlass<C> extends Model<C> {
   @property public sub = "subklass";
 }
 
@@ -27,7 +27,7 @@ export class ContainedKlass {
 
 /** a schema class */
 @model({ dbOffset: "authenticated", localPrefix: "foobar" })
-export class Klass extends SubKlass {
+export class Klass extends SubKlass<Klass> {
   // prettier-ignore
   @desc("who doesn't love a foobar?") @property @length(15) public foobar: string;
   @property public foo: string;

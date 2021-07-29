@@ -12,9 +12,9 @@ describe("schema() decorator: ", () => {
 
   it("can read Property meta properties off of META.property", () => {
     const myclass = new Klass();
-    expect(myclass.META.property("foo").type).toEqual("string");
-    expect(myclass.META.property("bar").type).toBe("number");
-    expect(myclass.META.property("bar3").max).toBe(10);
+    expect(typeof myclass.META.property("foo").type).toEqual("string");
+    expect(typeof myclass.META.property("bar").type).toBe("number");
+    expect(typeof myclass.META.property("bar3").max).toBe(10);
   });
 
   it("setting meta throws error", () => {

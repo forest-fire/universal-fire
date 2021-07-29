@@ -12,11 +12,11 @@ describe("Client state management", () => {
   });
 
   it("when using a RECORD, the localPath is equal to the prefix plus 'localModelName' if there are no dynamic components", async () => {
-    const person = await Record.create(Person);
+    const person = Record.create(Person);
     expect(person.localPath).toBe(
       person.localPrefix + "/" + person.META.localModelName
     );
-    expect(person.localDynamicComponents).toBeArray();
+    expect(Array.isArray(person.localDynamicComponents)).toBeTruthy();
     expect(person.localDynamicComponents).toHaveLength(0);
   });
   it("when using a RECORD, dynamic components from localPrefix are expanded in localPath", async () => {
