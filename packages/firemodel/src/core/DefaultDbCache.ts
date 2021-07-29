@@ -1,4 +1,3 @@
-import { FireModelError } from "~/errors";
 import { IDatabaseSdk, ISdk } from "@forest-fire/types";
 
 export type IDefaultDbCache<D extends IDatabaseSdk<ISdk>> = {
@@ -25,6 +24,7 @@ export function DefaultDbCache<D extends IDatabaseSdk<S>, S extends ISdk>(db?: D
       return DefaultDbCache(db);
     },
     get() {
+      // TODO:
       // if (!cache) {
       //   throw new FireModelError(`Attempt to use default database as it was not set!`, "not-ready/no-default-db")
       // }

@@ -24,7 +24,7 @@ export function dotNotation(...args: string[]): string {
 }
 
 export function withoutMetaOrPrivate<T extends Model>(model: T): T {
-  delete model.META;
+  delete model?.META;
   Object.keys((key: PropertyOf<T>) => {
     if (key.slice(0, 1) === "_") {
       delete model[key];

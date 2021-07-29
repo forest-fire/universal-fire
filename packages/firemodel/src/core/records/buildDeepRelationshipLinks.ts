@@ -1,5 +1,5 @@
-import { ISdk, } from "@forest-fire/types";
-import { IDictionary } from "common-types";
+import { ISdk } from "@forest-fire/types";
+import { ConstructorFor, IDictionary } from "common-types";
 import { IModel, PropertyOf } from "~/types";
 import { Record } from "~/core";
 import { getModelMeta } from "~/util";
@@ -10,10 +10,10 @@ import { Model } from "~/models/Model";
  * the "payload" of FK's instead of just the FK. This function facilitates
  * that.
  */
-export async function buildDeepRelationshipLinks<S extends ISdk, T extends Model>(
-  rec: Record<S, T>,
-  property: keyof IModel<T> & string
-): Promise<void> {
+export async function buildDeepRelationshipLinks<
+  S extends ISdk,
+  T extends Model<T>
+>(rec: Record<S, T>, property: keyof IModel<T> & string): Promise<void> {
   const meta = getModelMeta(rec).property(property);
   return meta.relType === "hasMany"
     ? processHasMany(rec, property)
@@ -61,7 +61,7 @@ async function processBelongsTo<S extends ISdk, T extends Model>(
   const meta = getModelMeta(rec).property(property);
 
   if (fk && typeof fk === "object") {
-    await Record.add(meta.fkConstructor(), fk, {
+    await Record.add(meta.fkConstructor() as new () => T[PropertyOf<T>], fk, {
       setDeepRelationships: true,
     });
   }

@@ -189,7 +189,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       r = Record.createWith(model, payload as Partial<T>, options);
 
       if (!payload.id) {
-        const path = List.dbPath<T>(model, payload);
+        const path = List.dbPath<Model<T>>(model, payload);
         payload.id = await r.db.getPushKey(path);
       }
 
