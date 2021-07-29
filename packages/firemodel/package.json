@@ -61,6 +61,7 @@
     "@types/node": "^14.0.0",
     "@types/rimraf": "^3.0.0",
     "@types/stack-trace": "^0.0.29",
+    "@types/pluralize": "^0.0.29",
     "@vuepress/plugin-back-to-top": "^1.5.0",
     "@vuepress/plugin-last-updated": "^1.5.0",
     "@vuepress/plugin-medium-zoom": "^1.5.0",
@@ -103,7 +104,8 @@
     "vuepress-plugin-autometa": "^0.1.13",
     "@forest-fire/fixture": "*",
     "faker": "5.5.3",
-    "@type-challenges/utils": "0.1.1"
+    "@type-challenges/utils": "0.1.1",
+    "pluralize": "^8.0.0"
   },
   "peerDependencies": {
     "@forest-fire/serialized-query": "*",
@@ -117,7 +119,8 @@
     "native-dash": "1.16.2",
     "reflect-metadata": "^0.1.13",
     "typed-conversions": "^0.12.0",
-    "universal-fire": "*"
+    "universal-fire": "*",
+    "pluralize": "^8.0.0"
   },
   "engines": {
     "node": ">=10.0.0"

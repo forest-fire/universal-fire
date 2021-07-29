@@ -27,15 +27,13 @@ import {
   PropertyOf,
   PrimaryKey,
   isCompositeString,
-  IFmModelPropertyMeta, IFmModelRelationshipMeta, IModel, ModelInput, IFmLocalEvent,
+  IFmModelPropertyMeta,
+  IFmModelRelationshipMeta,
+  IModel,
+  ModelInput,
+  IFmLocalEvent,
 } from "~/types";
-import {
-  IDictionary,
-  Nullable,
-  Omit,
-  fk,
-  ConstructorFor,
-} from "common-types";
+import { IDictionary, Nullable, Omit, fk, ConstructorFor } from "common-types";
 import { entries } from "inferred-types";
 import { WatchDispatcher, findWatchers } from "./watchers";
 import {
@@ -56,13 +54,13 @@ import {
 
 import { keys, pathJoin } from "native-dash";
 
-import { pluralize } from "native-dash";
 import { UnwatchedLocalEvent } from "~/state-mgmt";
 import { default as copy } from "fast-copy";
 import { key as fbKey } from "firebase-key";
 import { IDatabaseSdk, ISdk } from "@forest-fire/types";
 import { Error } from "@firebase/auth-types";
 import { Model } from "~/models/Model";
+import pluralize from "pluralize";
 
 //#endregion
 
@@ -75,7 +73,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public static get defaultDb() {
     const db = DefaultDbCache().get();
-    return db as unknown as IDatabaseSdk<typeof db.sdk>
+    return db as unknown as IDatabaseSdk<typeof db.sdk>;
   }
 
   public static set dispatch(fn: IReduxDispatch) {
@@ -247,7 +245,9 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       r = await Record.get(model, pk, options);
       await r.update(updates);
     } catch (e) {
-      const err = new Error(`Problem adding new Record: ${(e as Error).message}`);
+      const err = new Error(
+        `Problem adding new Record: ${(e as Error).message}`
+      );
       err.name = e.name !== "Error" ? e.name : "FireModel";
       throw e;
     }
@@ -324,8 +324,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     // are not negatively impacting this method
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     rec._initialize(properties, options);
-    if (DefaultDbCache().get())
-      DefaultDbCache().set(defaultDb);
+    if (DefaultDbCache().get()) DefaultDbCache().set(defaultDb);
     return rec;
   }
 
@@ -409,7 +408,9 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       pathParts.length - 2 > segments.length
     ) {
       throw new FireModelError(
-        `Attempt to get the composite key from a path failed due to the diparity of segments in the path [ ${pathParts.length} ] versus the dynamic path [ ${String(segments.length)} ]`,
+        `Attempt to get the composite key from a path failed due to the diparity of segments in the path [ ${
+          pathParts.length
+        } ] versus the dynamic path [ ${String(segments.length)} ]`,
         "firemodel/not-allowed"
       );
     }
@@ -425,8 +426,9 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
           throw new FireModelError(
             `The attempt to build a composite key for the model ${capitalize(
               r.modelName
-            )} failed because the static parts of the path did not match up. Specifically where the "dbOffset" states the segment "${JSON.stringify(segment)}" the path passed in had "${pathParts[idx]
-            }" instead.`
+            )} failed because the static parts of the path did not match up. Specifically where the "dbOffset" states the segment "${JSON.stringify(
+              segment
+            )}" the path passed in had "${pathParts[idx]}" instead.`
           );
         }
       }
@@ -537,13 +539,17 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * The plural name of the model
    */
   public get pluralName(): string {
+    console.log("pluralName", {
+      meta: this.META,
+      model: this.modelName,
+      pluralized: pluralize(this.modelName),
+    });
     return this.META.plural || pluralize(this.modelName);
   }
 
   public get properties(): IFmModelPropertyMeta<T>[] {
     return this.META.properties as unknown as IFmModelPropertyMeta<T>[];
   }
-
 
   public get relationships(): IFmModelRelationshipMeta<T>[] {
     return this.META.relationships as unknown as IFmModelRelationshipMeta<T>[];
@@ -553,14 +559,20 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @deprecated
    */
   public get isDirty(): boolean {
-    throw new FireModelError("Call to isDirty() should be avoided; this functionality is deprecated", "firemodel/invalid");
+    throw new FireModelError(
+      "Call to isDirty() should be avoided; this functionality is deprecated",
+      "firemodel/invalid"
+    );
   }
 
   /**
    * @deprecated
    */
   public set isDirty(value: boolean) {
-    throw new FireModelError("Call to isDirty() should be avoided; this functionality is deprecated", "firemodel/invalid");
+    throw new FireModelError(
+      "Call to isDirty() should be avoided; this functionality is deprecated",
+      "firemodel/invalid"
+    );
   }
 
   /**
@@ -674,8 +686,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       this.META.localModelName !== this.modelName
         ? this.META.localModelName
         : this.options.pluralizeLocalPath
-          ? this.pluralName
-          : this.modelName
+        ? this.pluralName
+        : this.modelName
     );
   }
 
@@ -692,7 +704,6 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   public get existsOnDB() {
     return this.data && this.data.id ? true : false;
   }
-
 
   public get modelConstructor() {
     return this._modelConstructor;
@@ -731,21 +742,22 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     const fkInverseProperty = this.META.relationship(property).inverseProperty;
     const fkRec = Record.create(this.META.property(property).fkConstructor());
     const inverseIsMissing = pkHasInverse
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ? fkRec.META.relationship(fkInverseProperty as any).inverseProperty === property
+      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        fkRec.META.relationship(fkInverseProperty as any).inverseProperty ===
+        property
       : false;
 
     const pkCardinality =
       this.META.relationship(property).relType === `hasMany` ? "M" : "1";
     const fkCardinality =
       pkHasInverse &&
-        fkRec.META.relationship(fkInverseProperty).relType === `hasMany`
+      fkRec.META.relationship(fkInverseProperty).relType === `hasMany`
         ? "M"
         : "1";
     const cardinality = `${pkCardinality}:${fkCardinality}`;
     const inversePointsToWrongModel = pkHasInverse
       ? fkRec.META.relationship(fkInverseProperty).fkModelName !==
-      this.modelName
+        this.modelName
       : false;
     const fkReciprocalInverseProperty =
       pkHasInverse && fkRec.META.relationship(property).hasInverse
@@ -753,8 +765,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
         : undefined;
     const fkHasInvalidInverse =
       pkHasInverse &&
-        fkRec.META.relationship(property).hasInverse &&
-        fkRec.META.relationship(property).inverseProperty !== property
+      fkRec.META.relationship(property).hasInverse &&
+      fkRec.META.relationship(property).inverseProperty !== property
         ? true
         : false;
 
@@ -864,7 +876,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       throw new FireModelError(
         `There is a problem with this record's META information [ model: ${capitalize(
           this.modelName
-        )}, id: ${this.id
+        )}, id: ${
+          this.id
         } ]. The property() method -- used to dig into properties on any given model appears to be missing!`,
         "firemodel/meta-missing"
       );
@@ -877,7 +890,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
         const rootProperties = meta.property(root as keyof IModel<T> & string);
         if (!rootProperties) {
           throw new FireModelError(
-            `While this record [ model: ${capitalize(this.modelName)}, id: ${this.id
+            `While this record [ model: ${capitalize(this.modelName)}, id: ${
+              this.id
             } ] does return a "META.property" function, looking up the property "${root}" has resulted in an invalid response [${typeof rootProperties}]`
           );
         }
@@ -939,7 +953,9 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       throw new FireModelError(
         `There was a problem getting the meta data for the model ${capitalize(
           this.modelName
-        )} while attempting to set the "${prop}" property to: ${JSON.stringify(value)}`
+        )} while attempting to set the "${prop}" property to: ${JSON.stringify(
+          value
+        )}`
       );
     }
     if (meta.isRelationship) {
@@ -1148,8 +1164,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
           ? Object.keys(this.get(property))
           : []
         : this._data[property]
-          ? [(this.get(property) as unknown) as string]
-          : [];
+        ? [this.get(property) as unknown as string]
+        : [];
 
     let paths: IFmPathValuePair[] = [];
     const now = new Date().getTime();
@@ -1208,7 +1224,9 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    *
    * @param prop the property being retrieved
    */
-  public get<K extends PropertyOf<T> | "lastUpdated" | "createdAt">(prop: K): Readonly<T[K]> {
+  public get<K extends PropertyOf<T> | "lastUpdated" | "createdAt">(
+    prop: K
+  ): Readonly<T[K]> {
     return this.data[prop] as Readonly<T[K]>;
   }
 
@@ -1348,9 +1366,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
         FmEvents.RECORD_REMOVED_ROLLBACK,
       ],
     };
-    const [actionTypeStart, actionTypeEnd, actionTypeFailure] = lookup[
-      crudAction
-    ];
+    const [actionTypeStart, actionTypeEnd, actionTypeFailure] =
+      lookup[crudAction];
 
     // Set aside prior value
     const { changed, added, removed } = compareHashes<T>(
@@ -1408,7 +1425,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       }
       this._data.lastUpdated = new Date().getTime();
       const path = this.dbPath;
-
+      console.log(path);
       switch (crudAction) {
         case "remove":
           try {
@@ -1418,7 +1435,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
               e,
               `The attempt to "remove" the ${capitalize(
                 this.modelName
-              )} with ID of "${this.id
+              )} with ID of "${
+                this.id
               }" has been aborted. This is often because you don't have the right properties set for the dynamic path. This model requires the following dynamic properties to uniquely define (and remove) it: ${this.dynamicPathComponents.join(
                 ", "
               )}`
@@ -1444,13 +1462,18 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
             } catch (e) {
               throw new FireModelProxyError(
                 e,
-                `While trying to remove ${capitalize(this.modelName)}.${this.id
-                } from the database, problems were encountered removing the relationship defined by the "${rel.property
-                } property (which relates to the model ${rel.fkModelName
-                }). This relationship has a cardinality of "${rel.relType
-                }" and the value(s) were: ${rel.relType === "hasOne"
-                  ? JSON.stringify(Object.keys(this.get(rel.property)))
-                  : JSON.stringify(this.get(rel.property))
+                `While trying to remove ${capitalize(this.modelName)}.${
+                  this.id
+                } from the database, problems were encountered removing the relationship defined by the "${
+                  rel.property
+                } property (which relates to the model ${
+                  rel.fkModelName
+                }). This relationship has a cardinality of "${
+                  rel.relType
+                }" and the value(s) were: ${
+                  rel.relType === "hasOne"
+                    ? JSON.stringify(Object.keys(this.get(rel.property)))
+                    : JSON.stringify(this.get(rel.property))
                 }`
               );
             }
@@ -1466,14 +1489,17 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
               e,
               `Problem setting the "${path}" database path. Data passed in was of type ${typeof this
                 .data}. Error message encountered was: ${String(e.message)}`,
-              `firemodel/${(e.code === "PERMISSION_DENIED"
-                ? "permission-denied"
-                : "set-db")}`
+              `firemodel/${
+                e.code === "PERMISSION_DENIED" ? "permission-denied" : "set-db"
+              }`
             );
           }
           break;
         case "update":
-          await this.db.update("/", this._getPaths(this, { changed, added, removed }));
+          await this.db.update(
+            "/",
+            this._getPaths(this, { changed, added, removed })
+          );
           break;
       }
 
@@ -1545,7 +1571,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
 
       if (value ? false : true) {
         throw new FireModelError(
-          `You can not ask for the ${forProp} on a model like "${this.modelName
+          `You can not ask for the ${forProp} on a model like "${
+            this.modelName
           }" which has a dynamic property of "${prop}" before setting that property [ data: ${JSON.stringify(
             this.data
           )} ].`,
@@ -1554,7 +1581,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       }
       if (!["string", "number"].includes(typeof value)) {
         throw new FireModelError(
-          `The path is using the property "${prop}" on ${this.modelName
+          `The path is using the property "${prop}" on ${
+            this.modelName
           } as a part of the route path but that property must be either a string or a number and instead was a ${typeof prop}`,
           "record/not-allowed"
         );
@@ -1575,7 +1603,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     }
 
     // set PK value(s)
-    if (typeof (id) === "string") {
+    if (typeof id === "string") {
       this._data.id = id;
     } else {
       for (const [k, v] of entries(id)) {
@@ -1591,7 +1619,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       await this._initialize(data);
     } else {
       throw new FireModelError(
-        `Failed to load the Record "${this.modelName}::${this.id
+        `Failed to load the Record "${this.modelName}::${
+          this.id
         }" with composite key of:\n ${JSON.stringify(keys, null, 2)}`,
         "firebase/no-record-found"
       );
@@ -1666,7 +1695,8 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     } catch (e) {
       throw new FireModelProxyError(
         e,
-        `An ${capitalize(this.modelName)} [${this.id
+        `An ${capitalize(this.modelName)} [${
+          this.id
         }] model was being added but when attempting to add in the relationships which were inferred by the record payload it ran into problems. The relationship(s) which had properties defined -- and which had a bi-lateral FK relationship (e.g., both models will track the relationship versus just the ${capitalize(
           this.modelName
         )} [${this.id} model) --  were: ${relationshipsTouched.join(", ")}`
