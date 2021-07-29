@@ -1,10 +1,9 @@
 import { IFmModelPropertyMeta, Model, NamedFakes } from "firemodel";
 import { PropertyNamePatterns, fakeIt } from "./index";
-import { IDatabaseSdk } from "@forest-fire/types";
 import { IDictionary } from "brilliant-errors";
+import faker from "faker";
 
 export function mockValue<T extends Model>(
-  db: IDatabaseSdk<any>,
   propMeta: IFmModelPropertyMeta<T>,
   context: IDictionary,
   ...rest: any[]
@@ -15,7 +14,7 @@ export function mockValue<T extends Model>(
   if (mockType) {
     // MOCK is defined
     return typeof mockType === "function"
-      ? mockType(context)
+      ? mockType(faker)
       : fakeIt(
         context,
         mockType as keyof typeof NamedFakes,

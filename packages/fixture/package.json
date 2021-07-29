@@ -33,12 +33,14 @@
     "jest": "^27.0.6",
     "@forest-fire/types": "*",
     "firemodel": "*",
-    "universal-fire": "*"
+    "universal-fire": "*",
+    "firemock": "*"
   },
   "peerDependencies": {
     "native-dash": "1.15.1",
     "@forest-fire/types": "*",
-    "firemodel": "*"
+    "firemodel": "*",
+    "firemock": "*"
   },
   "dependencies": {
     "firebase-key": "2.0.2",

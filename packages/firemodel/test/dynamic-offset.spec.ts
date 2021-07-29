@@ -307,24 +307,25 @@ describe("MOCK uses dynamic dbOffsets", () => {
       db.mock.store.state.group.test.testing.deepPeople
     );
     const last = lastRecord(db.mock.store.state.group.test.testing.deepPeople);
-    expect(first.hobbies).toEqual("object");
+    expect(typeof first.hobbies).toEqual("object");
     expect(Object.keys(first.hobbies)).toHaveLength(0);
-    expect(last.hobbies).toEqual("object");
+    expect(typeof last.hobbies).toEqual("object");
     expect(Object.keys(last.hobbies)).toHaveLength(0);
   });
 
-  it("Mock() with 'createRelationshipLinks' adds fks but records it points does not exist", async () => {
+  it.only("Mock() with 'createRelationshipLinks' adds fks but records it points does not exist", async () => {
     const results = await Mock(DeepPerson, db)
       .createRelationshipLinks()
       .generate(2, { group: "test" });
-
+     
+      
     const first = firstRecord(
       db.mock.store.state.group.test.testing.deepPeople
     );
     const last = lastRecord(db.mock.store.state.group.test.testing.deepPeople);
-    expect(first.hobbies).toEqual("object");
+    expect(typeof first.hobbies).toEqual("object");
     expect(Object.keys(first.hobbies)).toHaveLength(2);
-    expect(last.hobbies).toEqual("object");
+    expect(typeof last.hobbies).toEqual("object");
     expect(Object.keys(last.hobbies)).toHaveLength(2);
   });
 
@@ -341,7 +342,7 @@ describe("MOCK uses dynamic dbOffsets", () => {
     const firstAttribute = attributes[firstKey(attributes)];
     // eslint-disable-next-line no-prototype-builtins
     expect(firstAttribute.hasOwnProperty("attribute")).toBeTruthy();
-    expect(db.mock.store.state.test.testing.companies).toEqual("object");
+    expect(typeof db.mock.store.state.test.testing.companies).toEqual("object");
   });
 
   it("Mock() mocks on dynamic path without relationships rendered", async () => {

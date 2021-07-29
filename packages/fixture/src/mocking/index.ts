@@ -16,7 +16,6 @@ export * from "./mockValue";
 export * from "./mocking-types";
 export * from "./processHasMany";
 export * from "./processHasOne";
-export * from "./types";
 
 // Note:
 // -----

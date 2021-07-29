@@ -301,10 +301,6 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     payload: PrimaryKey<T> | Partial<IModel<T>>,
     options: IRecordOptions<ISdk> = {}
   ): Record<ISdk, T> {
-    const defaultDb = FireModel.defaultDb;
-    if (options.db) {
-      FireModel.defaultDb = options.db;
-    }
     const rec = Record.create(model, options);
 
     if (options.setDeepRelationships === true) {
@@ -324,7 +320,9 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     // are not negatively impacting this method
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     rec._initialize(properties, options);
-    if (DefaultDbCache().get()) DefaultDbCache().set(defaultDb);
+    if (!FireModel.defaultDb) {
+      FireModel.defaultDb = options.db;
+    }
     return rec;
   }
 
@@ -539,11 +537,6 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * The plural name of the model
    */
   public get pluralName(): string {
-    console.log("pluralName", {
-      meta: this.META,
-      model: this.modelName,
-      pluralized: pluralize(this.modelName),
-    });
     return this.META.plural || pluralize(this.modelName);
   }
 
@@ -1261,10 +1254,6 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     data: Partial<IModel<T>>,
     options: IRecordOptions<S> = {}
   ): Promise<void> {
-    const defaultDb = FireModel.defaultDb;
-    if (options.db) {
-      FireModel.defaultDb = options.db;
-    }
     if (data) {
       keys(data).map((key) => {
         this._data[key] = data[key];
@@ -1295,7 +1284,9 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       }
     }
     await Promise.all(promises).finally(() => {
-      FireModel.defaultDb = defaultDb;
+      if (!FireModel.defaultDb) {
+        FireModel.defaultDb = options.db;
+      }
     });
 
     const now = new Date().getTime();
@@ -1633,11 +1624,6 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * Allows for the static "add" method to add a record
    */
   private async _adding(options: IRecordOptions<S>) {
-    const defaultDb = FireModel.defaultDb;
-    if (options.db) {
-      FireModel.defaultDb = options.db;
-    }
-
     if (!this.id) {
       this.id = fbKey();
     }
@@ -1702,7 +1688,9 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
         )} [${this.id} model) --  were: ${relationshipsTouched.join(", ")}`
       );
     } finally {
-      FireModel.defaultDb = defaultDb;
+      if (!FireModel.defaultDb) {
+        FireModel.defaultDb = options.db;
+      }
     }
 
     return this;

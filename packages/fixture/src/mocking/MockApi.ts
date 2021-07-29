@@ -1,6 +1,6 @@
 import { IMockRelationshipConfig, IMockResponse } from './';
 import { addRelationships, mockProperties } from './index';
-import { FmModelConstructor,IModel,Model,Record } from 'firemodel';
+import { FmModelConstructor, IModel, Model, Record } from 'firemodel';
 import { IDictionary } from 'common-types';
 import { IDatabaseSdk, ISdk } from '@forest-fire/types';
 import { FixtureError } from '~/errors/FixtureError';
@@ -14,17 +14,17 @@ const mockPrepared = false;
  * based on property types but getting more refined where a model has
  * a `@mock()` function defined for it.
  */
-export class MockApi<TSdk extends ISdk, T extends Model> {
+export class MockApi<T extends Model> {
   public config: IMockRelationshipConfig = {
     relationshipBehavior: 'ignore',
     exceptionPassthrough: false,
   };
 
-  constructor(db: IDatabaseSdk<TSdk>, modelConstructor: FmModelConstructor<T>) {
+  constructor(db: IDatabaseSdk<ISdk>, modelConstructor: FmModelConstructor<T>) {
     this._db = db;
     this._modelConstructor = modelConstructor;
   }
-  private _db: IDatabaseSdk<TSdk>;
+  private _db: IDatabaseSdk<ISdk>;
   private _modelConstructor: FmModelConstructor<T>;
 
   /**
@@ -39,8 +39,11 @@ export class MockApi<TSdk extends ISdk, T extends Model> {
     count: number,
     exceptions: Partial<T> = {}
   ): Promise<Array<IMockResponse<T>>> {
-    const props = mockProperties<TSdk, T>(this._db, this.config, exceptions);
-    const relns = addRelationships<TSdk, T, IDatabaseSdk<TSdk>>(
+    if (!this._db.isConnected) { 
+      await this._db.connect();
+    }
+    const props = mockProperties<ISdk, T>(this.config, exceptions);
+    const relns = addRelationships<ISdk, T, IDatabaseSdk<ISdk>>(
       this._db,
       this.config,
       exceptions
@@ -52,7 +55,7 @@ export class MockApi<TSdk extends ISdk, T extends Model> {
       this._modelConstructor,
       exceptions as Partial<T>,
       { db: this._db }
-    ) as Record<TSdk, T>;
+    ) as Record<ISdk, T>;
 
     if (record.hasDynamicPath) {
       // which props -- required for compositeKey -- are not yet
@@ -93,10 +96,12 @@ export class MockApi<TSdk extends ISdk, T extends Model> {
 
     for (const i of Array(count)) {
       const a = await relns(await props(record));
-      mocks = mocks.concat();
+
+      mocks = [...mocks, ...a]
     }
 
-    return mocks;
+
+    return mocks
   }
 
   /**

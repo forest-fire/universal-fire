@@ -28,4 +28,5 @@ export interface IMockResponse<T extends Model> {
   compositeKey: ICompositeKey<T>;
   dbPath: string;
   localPath: string;
+  data: T
 }

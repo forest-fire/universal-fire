@@ -8,7 +8,7 @@ import {
   Model,
   model,
   property,
-} from "../../../src";
+} from "~/index";
 
 import Car from "./Car";
 import Company from "./Company";
@@ -46,9 +46,9 @@ export default class DeepPerson extends Model<DeepPerson> {
   // prettier-ignore
   @hasMany(Car, "owners") cars?: fks;
   // prettier-ignore
-  @hasMany('DeepPerson', "children") parents?: fks;
+  @hasMany(DeepPerson, "children") parents?: fks;
   // prettier-ignore
-  @hasMany('DeepPerson', "parents") children?: fks;
+  @hasMany(DeepPerson, "parents") children?: fks;
   // prettier-ignore
   @hasMany(HumanAttribute) attributes?: fks;
 }

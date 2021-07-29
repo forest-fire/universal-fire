@@ -4,7 +4,7 @@ import {
   Model,
   Record
 } from "firemodel";
-import { IDatabaseSdk, ISdk } from "@forest-fire/types";
+import { IDatabaseSdk, IMockDatabase, ISdk } from "@forest-fire/types";
 import { IMockRelationshipConfig, IMockResponse } from "./mocking-types";
 import { Mock } from "~/Mock";
 
@@ -14,7 +14,7 @@ export async function processHasOne<TSdk extends ISdk, T extends Model>(
   config: IMockRelationshipConfig,
   db: IDatabaseSdk<TSdk>
 ): Promise<IMockResponse<T>> {
-  const fkMock = Mock<TSdk, T>(rel.fkConstructor(), db);
+  const fkMock = Mock<T>(rel.fkConstructor());
   const fkMockMeta = (await fkMock.generate(1)).pop();
   const prop: Extract<keyof IModel<T>, string> = rel.property as any;
 
@@ -26,7 +26,7 @@ export async function processHasOne<TSdk extends ISdk, T extends Model>(
       .split("/")
       .filter((i) => i);
 
-    await db.remove(fkMockMeta.dbPath);
+    db.remove(fkMockMeta.dbPath);
   }
 
   return fkMockMeta;

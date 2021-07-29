@@ -63,6 +63,7 @@ async function processBelongsTo<S extends ISdk, T extends Model>(
   if (fk && typeof fk === "object") {
     await Record.add(meta.fkConstructor() as new () => T[PropertyOf<T>], fk, {
       setDeepRelationships: true,
+      db: rec.db
     });
   }
 }

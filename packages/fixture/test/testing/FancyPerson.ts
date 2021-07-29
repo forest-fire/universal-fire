@@ -8,7 +8,7 @@ import {
   hasMany,
   mock,
   fks
-} from "~/index";
+} from "firemodel";
 import { Company } from "./Company";
 import { Car } from "./Car";
 

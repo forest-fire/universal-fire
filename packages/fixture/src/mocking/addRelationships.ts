@@ -1,7 +1,11 @@
 import { Record, IModel, Model } from 'firemodel';
-import { IDatabaseSdk, ISdk } from '@forest-fire/types';
-import { IMockRelationshipConfig, IMockResponse } from '~/mocking/index';
-import { processHasMany, processHasOne } from './index';
+import { IDatabaseSdk, IMockDatabase, ISdk } from '@forest-fire/types';
+import {
+  IMockRelationshipConfig,
+  IMockResponse,
+  processHasMany,
+  processHasOne,
+} from '~/mocking/index';
 
 import { IDictionary } from 'common-types';
 
@@ -24,7 +28,7 @@ export function addRelationships<
           Object.keys(config.cardinality).includes(rel.property)
         ) {
           if (rel.relType === 'hasOne') {
-            const fkRec = await processHasOne<TSdk,M>(record, rel, config, db);
+            const fkRec = await processHasOne<TSdk, M>(record, rel, config, db);
             if (config.relationshipBehavior === 'follow') {
               relnResults.push(fkRec);
             }
@@ -35,7 +39,11 @@ export function addRelationships<
                 : NumberBetween(config.cardinality[rel.property] as any)
               : 2;
             for (const i of Array(cardinality)) {
-              const fkRec = await processHasMany<TSdk, M>(record, rel, config, db);
+              const fkRec = await processHasMany<TSdk, M>(
+                record,
+                rel,
+                config,
+              );
               if (config.relationshipBehavior === 'follow') {
                 relnResults.push(fkRec);
               }
@@ -53,6 +61,8 @@ export function addRelationships<
         pluralName: record.pluralName,
         dbPath: record.dbPath,
         localPath: record.localPath,
+        data: record.data,
+        ...record
       },
       ...relnResults,
     ];
