@@ -17,7 +17,6 @@ export async function processHasMany<TSdk extends ISdk, T extends Model>(
   // an opportunity to be mocked (this is best practice)
   const fkMockMeta = (await Mock<T>(rel.fkConstructor()).generate(1)).pop();
   const prop: Extract<keyof IModel<T>, string> = rel.property as any;
-  console.log("processHasMany", { fkMockMeta, prop });
   await record.addToRelationship(prop, fkMockMeta.compositeKey);
   if (config.relationshipBehavior === "link") {
     await record.db.remove(fkMockMeta.dbPath);

@@ -13,7 +13,7 @@ import { Company } from "./Company";
 import { Car } from "./Car";
 
 @model({ dbOffset: "authenticated" })
-export class FancyPerson extends Model {
+export class FancyPerson extends Model<FancyPerson> {
   @property public name: string;
   // prettier-ignore
   @property @min(0) public age?: number;

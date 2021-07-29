@@ -1416,7 +1416,6 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
       }
       this._data.lastUpdated = new Date().getTime();
       const path = this.dbPath;
-      console.log(path);
       switch (crudAction) {
         case "remove":
           try {

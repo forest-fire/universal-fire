@@ -1,15 +1,9 @@
-import {
-  FireModel,
-  List,
-  Model,
-  Record,
-  model,
-  property,
-} from 'firemodel';
+import { FireModel, List, Model, Record, model, property } from 'firemodel';
 import { IDatabaseSdk, RealTimeAdmin } from 'universal-fire';
 
 import { FancyPerson } from './testing/FancyPerson';
 import { Mock } from '~/Mock';
+import { Car } from './testing/Car';
 
 @model({})
 export class SimplePerson extends Model {
@@ -69,6 +63,8 @@ describe('Mocking:', () => {
     const fancyPeople = (await Mock(FancyPerson).generate(10)).map(
       (s) => s.data
     );
+    const people = await List.all(Car);
+    console.log(people);
     expect(fancyPeople).toHaveLength(10);
     expect(fancyPeople).toHaveLength(10);
     fancyPeople.map((person) => {
@@ -79,42 +75,41 @@ describe('Mocking:', () => {
 
   it('using createRelationshipLinks() sets fake links to all relns', async () => {
     const numberOfFolks = 2;
-    await Mock(FancyPerson).createRelationshipLinks().generate(numberOfFolks);
 
-    const people = await List.all(FancyPerson);
+    const people = (
+      await Mock(FancyPerson).createRelationshipLinks().generate(numberOfFolks)
+    ).map((d) => d.data);
+
     expect(people).toHaveLength(numberOfFolks);
 
     people.map((person) => {
-      expect(person.employer).toEqual('string');
-      expect(person.cars).toEqual('object');
-      return person;
+      expect(typeof person.employer).toEqual('string');
+      expect(typeof person.cars).toEqual('object');
     });
   });
 
   it('using followRelationshipLinks() sets links and adds those models', async () => {
     const numberOfFolks = 10;
-    let mockData;
-    try {
-      mockData = await Mock(FancyPerson)
-        // .followRelationshipLinks()
-        .generate(numberOfFolks);
-    } catch (e) {
-      console.error(e.errors);
-      throw e;
-    }
-    const people = mockData.filter(m => m.dbPath === "fancyPerson").map(d => d.data);
-    const cars = mockData.filter(m => m.dbPath === "car").map(d => d.data);
-    const company = mockData.filter(m => m.dbPath === "company").map(d => d.data);
-    console.log({mockData, people, cars, company});
+    const mockData = await Mock(FancyPerson)
+      .followRelationshipLinks()
+      .generate(numberOfFolks);
+
+    const people = mockData
+      .filter((m) => m.modelName === 'fancyPerson')
+      .map((d) => d.data);
+    const cars = mockData.filter((m) => m.modelName === 'car').map((d) => d.data);
+    const company = mockData
+      .filter((m) => m.modelName === 'company')
+      .map((d) => d.data);
 
     expect(cars.length).toBe(numberOfFolks * 2);
     expect(company.length).toBe(numberOfFolks);
     expect(people).toHaveLength(numberOfFolks * 5);
 
-    const carIds = cars.data.map((car) => car.id);
+    const carIds = cars.map((car) => car.id);
     carIds.map((id) => people.filter((i) => i.id === id));
 
-    const companyIds = company.data.map((c) => c.id);
+    const companyIds = company.map((c) => c.id);
     companyIds.map((id) => people.filter((i) => i.id === id));
   });
 

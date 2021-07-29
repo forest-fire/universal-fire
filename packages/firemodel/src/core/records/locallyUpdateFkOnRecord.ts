@@ -26,14 +26,16 @@ export function locallyUpdateFkOnRecord<S extends ISdk, T extends Model>(
   const currentValue = rec.get(event.property);
   const fk = createCompositeKeyString(fkId);
   const id = getIdFromKey(fkId);
-
   switch (event.operation) {
     case "set":
-    case "add":
-      (rec as any)._data[event.property][id] = relnType === "hasMany"
+    case "add":{
+      const record = (rec as any)._data;
+      record[event.property] = record[event.property] || {}
+      record[event.property] = relnType === "hasMany"
         ? { ...currentValue, ...{ [fk]: true } }
         : fk;
       break;
+    }
     case "remove":
       if (relnType === "hasMany") {
         delete (rec as any)._data[event.property][id];

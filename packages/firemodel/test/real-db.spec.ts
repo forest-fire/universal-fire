@@ -110,7 +110,6 @@ describe("Tests using REAL db =>�", () => {
 
   it("Detects changes at various nested levels of the watch/listener", async () => {
     const fancyPerson = new FancyPerson();
-    console.log(fancyPerson);
     let events: IFmLocalEvent[] = [];
     const jack = await Record.add(FancyPerson, {
       name: "Jack Johnson",
