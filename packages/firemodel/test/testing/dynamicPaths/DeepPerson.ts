@@ -24,7 +24,7 @@ export interface IDeepName {
 }
 
 @model({ dbOffset: "/group/:group/testing" })
-export default class DeepPerson extends Model {
+export default class DeepPerson extends Model<DeepPerson> {
   @property name: IDeepName;
   @property @mock("number", { min: 18, max: 75 }) @index age: number;
   // prettier-ignore

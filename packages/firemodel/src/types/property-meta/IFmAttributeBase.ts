@@ -29,10 +29,10 @@ export interface IFmModelAttributeBase<TModel extends Model, TFk extends Model =
   pushKey?: boolean;
   /**
    * a name or function of a type of data which can be mocked
-   * in a more complete way than just it's stict "type". Examples
+   * in a more complete way than just it's strict "type". Examples
    * would include "telephone", "name", etc.
    */
-  mockType?: FmMockType<TModel>;
+  mockType?: FmMockType<any>;
   /** a named mock can optionally recieve a set of parameters as additional input */
   mockParameters?: any[];
   /** what kind of relationship does this foreign key contain */

@@ -8,14 +8,9 @@ import {
   hasMany,
   mock,
   fks
-} from "../../src";
+} from "~/index";
 import { Company } from "./Company";
 import { Car } from "./Car";
-import faker = require("faker");
-
-function bespokeMock() {
-  return faker.name.firstName() + ", hello to you";
-}
 
 @model({ dbOffset: "authenticated" })
 export class FancyPerson extends Model {
@@ -26,7 +21,7 @@ export class FancyPerson extends Model {
   // prettier-ignore
   @property @mock("phoneNumber") public otherPhone?: string;
   // prettier-ignore
-  @property @mock(bespokeMock) public foobar?: string;
+  @property @mock(h => h.faker.name.firstName() + ", hello to you") public foobar?: string;
   // prettier-ignore
   @belongsTo(() => Company) public employer?: fk;
   // prettier-ignore

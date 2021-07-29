@@ -4,7 +4,7 @@ import { index, mock, model, property } from "~/decorators";
 import { epochWithMilliseconds } from "common-types";
 
 @model()
-export class Model {
+export class Model<C extends unknown = any> {
   // prettier-ignore
   // TODO: This should be made required and the API updated to make it optional where appropriate
   /** The primary-key for the record */
@@ -16,5 +16,5 @@ export class Model {
   /** The datetime at which this record was first created */
   @property @mock("datePastMiliseconds") @index public createdAt?: epochWithMilliseconds;
   /** Metadata properties of the given schema */
-  public META: IFmModelMeta<this>;
+  public META?: IFmModelMeta<C>;
 }

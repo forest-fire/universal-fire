@@ -13,7 +13,7 @@ export enum ReflectKind {
   returnType = "design:returntype"
 }
 
-export type Reflector<T extends Model | ConstructorFor<Model>> = T extends ConstructorFor<Model>
+export type Reflector<T extends Model<T> | ConstructorFor<Model<T>>> = T extends ConstructorFor<Model<T>>
   ? ClassReflection
   : T extends Model ? (prop: string) => PropertyReflection : never;
 
@@ -35,7 +35,7 @@ export interface PropertyReflection {
  * A utility for decoractors to extract reflection data
  */
 export const reflect = <
-  T extends Model | ConstructorFor<Model>
+  T extends Model<T> | ConstructorFor<Model<T>>
 >(model: T): Reflector<T> => {
   let result: ((prop: string) => PropertyReflection) | ClassReflection;
 

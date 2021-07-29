@@ -31,7 +31,7 @@ export class DexieDb {
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public static modelConversion(
-    ...modelConstructors: Array<ConstructorFor<IModel>>
+    ...modelConstructors: Array<ConstructorFor<IModel<Model>>>
   ) {
     if (modelConstructors.length === 0) {
       throw new FireModelError(
@@ -197,7 +197,7 @@ export class DexieDb {
 
   private _status = "initialized";
 
-  constructor(private _name: string, ...models: Array<ConstructorFor<IModel>>) {
+  constructor(private _name: string, ...models: Array<ConstructorFor<IModel<Model>>>) {
     this._models = DexieDb.modelConversion(...models);
 
     this._db = DexieDb._indexedDb

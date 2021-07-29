@@ -25,9 +25,9 @@ export function DefaultDbCache<D extends IDatabaseSdk<S>, S extends ISdk>(db?: D
       return DefaultDbCache(db);
     },
     get() {
-      if (!cache) {
-        throw new FireModelError(`Attempt to use default database as it was not set!`, "not-ready/no-default-db")
-      }
+      // if (!cache) {
+      //   throw new FireModelError(`Attempt to use default database as it was not set!`, "not-ready/no-default-db")
+      // }
       return cache ;
     },
     sdk: db ? db.sdk as D["sdk"] : undefined

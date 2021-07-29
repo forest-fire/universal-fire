@@ -346,7 +346,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   ): Promise<Record<ISdk, T>> {
     const record = Record.create<T>(model, options);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (record as any)._getFromDB(pk);
+    await (record as any)._getFromDatabase(pk);
     return record;
   }
 
@@ -801,7 +801,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     return newRecord;
   }
 
-  public isSameModelAs<M extends IModel>(model: new () => M): boolean {
+  public isSameModelAs<M extends IModel<M>>(model: new () => M): boolean {
     return this._modelConstructor.name === model.name;
   }
 

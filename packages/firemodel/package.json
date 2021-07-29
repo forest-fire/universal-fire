@@ -101,7 +101,9 @@
     "vue-property-decorator": "^9.1.2",
     "vuepress": "^1.5.0",
     "vuepress-plugin-autometa": "^0.1.13",
-    "@forest-fire/fixture": "*"
+    "@forest-fire/fixture": "*",
+    "faker": "5.5.3",
+    "@type-challenges/utils": "0.1.1"
   },
   "peerDependencies": {
     "@forest-fire/serialized-query": "*",

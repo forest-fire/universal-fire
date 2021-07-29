@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
+import type{
   FmEvents,
   IFmPathValuePair,
   IFmRecordMeta,
@@ -218,7 +218,7 @@ export interface IFmLocalRecordEvent<T extends Model = Model>
  * Meta information for events that are originated from **Firemodel**. This event
  * type is then extended with _watcher context_
  */
-export type IFmLocalEvent<T extends Model> =
+export type IFmLocalEvent<T extends Model = Model> =
   | IFmLocalRecordEvent<T>
   | IFmLocalRelationshipEvent<T>;
 
