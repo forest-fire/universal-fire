@@ -146,10 +146,10 @@ describe("relationship decorators: ", () => {
 
     person.META.relationships.map((p) => {
       if (p.relType === "hasOne") {
-        expect(p.type).toEqual("string");
+        expect(typeof p.type).toEqual("string");
       }
       if (p.relType === "hasMany") {
-        expect(p.type).toBe("Object");
+        expect(typeof p.type).toBe("object");
       }
     });
 

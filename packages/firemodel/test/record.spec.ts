@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { IFmLocalEvent, IFmWatchEvent, List, Record } from "../src";
+import { IFmLocalEvent, IFmWatchEvent, IReduxAction, List, Record } from "../src";
 import { IDatabaseSdk, RealTimeAdmin } from "universal-fire";
 
 import { FireModel } from "~/index";
@@ -194,14 +194,16 @@ describe("Record > ", () => {
   });
 
   it("calling remove() removes from DB and notifies FE state-mgmt", async () => {
-    jest.setTimeout(3000);
-    await Mock(Person).generate(10);
+    const mockData = await Mock(Person).generate(10);
+    mockData.forEach((m) => {
+      db.mock.store.updateDb(m.dbPath, m.data);
+    });
     const peeps = await List.all(Person);
     expect(peeps.length).toBe(10);
     const person = Record.createWith(Person, peeps.data[0]);
     const id = person.id;
     const events: IFmWatchEvent[] = [];
-    FireModel.dispatch = async (evt: IFmWatchEvent) => events.push(evt);
+    FireModel.dispatch = async (evt: IFmWatchEvent) => events.push(evt) as IReduxAction;
     await person.remove();
 
     expect(events).toHaveLength(2);
@@ -214,16 +216,18 @@ describe("Record > ", () => {
     expect(peeps2).toHaveLength(9);
     const ids = peeps2.map((p) => p.id);
     expect(ids.includes(id)).toBe(false);
-  });
+  }, 3000);
 
   it("calling static remove() removes from DB, notifies FE state-mgmt", async () => {
-    jest.setTimeout(3000);
-    await Mock(Person).generate(10);
+    const mockData = await Mock(Person).generate(10);
+    mockData.forEach((m) => {
+      db.mock.store.updateDb(m.dbPath, m.data);
+    });
     const peeps = await List.all(Person);
     const id = peeps.data[0].id;
     expect(peeps.length).toBe(10);
     const events: IFmWatchEvent[] = [];
-    FireModel.dispatch = async (evt: IFmWatchEvent) => events.push(evt);
+    FireModel.dispatch = async (evt: IFmWatchEvent) => events.push(evt) as IReduxAction;
     const removed = await Record.remove(Person, id);
     expect(removed.id).toBe(id);
     expect(events).toHaveLength(2);
@@ -235,7 +239,7 @@ describe("Record > ", () => {
     expect(peeps2).toHaveLength(9);
     const ids = peeps2.map((p) => p.id);
     expect(ids.includes(id)).toBe(false);
-  });
+  }, 3000);
 
   it("setting an explicit value for plural is picked up by Record", async () => {
     const p = Record.create(Peeps);

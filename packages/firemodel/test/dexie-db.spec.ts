@@ -54,15 +54,15 @@ describe("DexieModel => ", () => {
 
   it("meta information lookup works with singular and plural model name", async () => {
     const d = new DexieDb("testing", Car);
-    expect(d.meta("car")).toEqual("object");
-    expect(d.meta("car").allProperties).toBeArray();
-    expect(d.meta("cars")).toEqual("object");
-    expect(d.meta("cars").allProperties).toBeArray();
+    expect(typeof d.meta("car")).toEqual("object");
+    expect(Array.isArray(d.meta("car").allProperties)).toBeTruthy();
+    expect(typeof d.meta("cars")).toEqual("object");
+    expect(Array.isArray(d.meta("cars").allProperties)).toBeTruthy();
   });
 
   it("Dexie model definition works for static pathed model with non-unique index", async () => {
     const d = new DexieDb("testing", Car);
-    expect(d.models.cars).toEqual("string");
+    expect(typeof d.models.cars).toEqual("string");
     expect(d.models.cars).toContain("&id");
     expect(d.models.cars).toContain("modelYear");
     expect(d.models.cars).toEqual(expect.not.arrayContaining(["&modelYear"]));
@@ -72,7 +72,7 @@ describe("DexieModel => ", () => {
 
   it("Dexie model definition works for dynamically pathed model", async () => {
     const d = new DexieDb("testing", DeeperPerson);
-    expect(d.models.deeperPeople).toEqual("string");
+    expect(typeof d.models.deeperPeople).toEqual("string");
     expect(d.models.deeperPeople).toContain("[id+group+subGroup]");
     expect(d.models.deeperPeople).toEqual(expect.not.arrayContaining(["&id"]));
     expect(d.models.deeperPeople).toContain("lastUpdated");
@@ -90,17 +90,17 @@ describe("DexieModel => ", () => {
   it("table() method returns a Dexie.Table class", async () => {
     const d = new DexieDb("testing", Car);
     const t = d.table(Car);
-    expect(t).toEqual("object");
-    expect(t.add).toEqual("function");
-    expect(t.bulkAdd).toEqual("function");
-    expect(t.bulkPut).toEqual("function");
+    expect(typeof t).toEqual("object");
+    expect(typeof t.add).toEqual("function");
+    expect(typeof t.bulkAdd).toEqual("function");
+    expect(typeof t.bulkPut).toEqual("function");
   });
 
   it("table() gets back valid schema properties", async () => {
     const d = new DexieDb("testing", Car);
     const t = d.table(Car);
     expect(t.schema.name).toBe("cars");
-    expect(t.schema.mappedClass).toEqual("function");
+    expect(typeof t.schema.mappedClass).toEqual("function");
     expect(t.schema.primKey.name).toBe("id");
   });
 

@@ -144,10 +144,12 @@ describe("Watch →", () => {
   it("Watching a List uses pluralName for localPath unless localModelName is set", async () => {
     Watch.reset();
     const [mockPerson] = await Mock(PersonWithLocalAndPrefix).generate(1)
-    FireModel.defaultDb = await RealTimeAdmin.connect({
+
+    const db = await RealTimeAdmin.connect({
       mocking: true,
-      mockData: {mockPerson}
     });
+    db.mock.store.updateDb(mockPerson.dbPath, mockPerson.data);
+
     const person = await Record.get(PersonWithLocalAndPrefix, mockPerson.id);
     
     const events: IDictionary[] = [];
@@ -319,7 +321,7 @@ describe("Watch.list(XXX).ids()", () => {
 
     recordsChanged.forEach((i) => {
       expect(i.watcherSource).toBe("list-of-records");
-      expect(i.dbPath).toEqual("string");
+      expect(typeof i.dbPath).toEqual("string");
       expect(i.query).toBeInstanceOf(Array);
       expect(i.query).toHaveLength(2);
       // TODO:

@@ -56,7 +56,7 @@ describe("Relationship > ", () => {
       age: 23,
     });
     expect(person.id).toBeDefined();
-    expect(person.id).toEqual("string");
+    expect(typeof person.id).toEqual("string");
     const lastUpdated = person.data.lastUpdated;
     const events: IFmLocalRelationshipEvent[] = [];
     Record.dispatch = async (evt: IFmLocalRelationshipEvent) =>

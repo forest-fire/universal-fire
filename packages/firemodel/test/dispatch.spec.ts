@@ -1,6 +1,7 @@
 import {
   IFmChangedProperties,
   IFmWatchEvent,
+  IReduxAction,
   IVuexDispatch,
   Record,
   VeuxWrapper,
@@ -61,12 +62,12 @@ describe("Dispatch →", () => {
 
 
   it("waiting for set() fires the appropriate Redux event; and inProgress is set", async () => {
-    const events: Array<IFmWatchEvent<Person>> = [];
+    const events: Array<IFmWatchEvent> = [];
     const person = await Record.add(Person, {
       name: "Jane",
       age: 18,
     });
-    Record.dispatch = async (e: IFmWatchEvent<Person>) => events.push(e);
+    Record.dispatch = async (e: IFmWatchEvent) => events.push(e) as IReduxAction;
 
     await person.set("name", "Carol");
     expect(person.get("name")).toBe("Carol"); // local change took place
@@ -81,13 +82,13 @@ describe("Dispatch →", () => {
     // 2nd EVENT
     event = events[1];
     expect(event.type).toBe(FmEvents.RECORD_CHANGED_CONFIRMATION);
-    expect(event.value).toEqual("object");
+    expect(typeof event.value).toEqual("object");
     expect(event.value.name).toBe("Carol");
     expect(event.value.age).toBe(18);
   });
 
   it("VuexWrapper converts calling structure to what Vuex expects", async () => {
-    const events: Array<IFmWatchEvent<Person>> = [];
+    const events: Array<IFmWatchEvent> = [];
     const types = new Set<string>();
     const vueDispatch: IVuexDispatch = async (type, payload: any) => {
       types.add(type);
@@ -128,9 +129,9 @@ describe("Dispatch →", () => {
   });
 
   it("When @model decorator and setting localModelName we can override the localPath", async () => {
-    const events: Array<IFmWatchEvent<Person>> = [];
+    const events: Array<IFmWatchEvent> = [];
     const types = new Set<string>();
-    const vueDispatch: IVuexDispatch<IFmWatchEvent<Person>> = async (
+    const vueDispatch: IVuexDispatch<IFmWatchEvent> = async (
       type,
       payload
     ) => {
@@ -150,7 +151,7 @@ describe("Dispatch →", () => {
   });
 
   it("The when dispatching events without a listener the source is 'unknown'", async () => {
-    const events: Array<IFmWatchEvent<Person>> = [];
+    const events: Array<IFmWatchEvent> = [];
     const types = new Set<string>();
     const vueDispatch: IVuexDispatch = async (type, payload: any) => {
       types.add(type);

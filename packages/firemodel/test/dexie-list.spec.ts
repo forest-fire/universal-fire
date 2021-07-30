@@ -26,7 +26,7 @@ describe("Dexie List API", () => {
   it("DexieDb.list hands off to DexieList instance", async () => {
     const dl = db.list(Car);
     expect(dl).toBeInstanceOf(DexieList);
-    expect(dl.all).toEqual("function");
+    expect(typeof dl.all).toEqual("function");
   });
 
   it("list.all() gets all records", async () => {

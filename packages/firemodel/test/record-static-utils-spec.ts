@@ -14,7 +14,7 @@ describe("Record static utils", () => {
       group: "my-group",
     });
 
-    expect(result).toEqual("object");
+    expect(typeof result).toEqual("object");
     expect(result.group).toBe("my-group");
   });
 
@@ -25,7 +25,7 @@ describe("Record static utils", () => {
       subGroup: "my-sub-group",
     });
 
-    expect(result).toEqual("object");
+    expect(typeof result).toEqual("object");
     expect(result.id).toBe("1234");
     expect(result.group).toBe("my-group");
     expect(result.subGroup).toBe("my-sub-group");
@@ -50,7 +50,7 @@ describe("Record static utils", () => {
       group: "my-group",
     });
 
-    expect(result).toEqual("string");
+    expect(typeof result).toEqual("string");
     expect(result).toBe("1234::group:my-group");
   });
 
@@ -61,7 +61,7 @@ describe("Record static utils", () => {
       subGroup: "my-sub-group",
     });
 
-    expect(result).toEqual("string");
+    expect(typeof result).toEqual("string");
     expect(result).toBe("1234::group:my-group::subGroup:my-sub-group");
   });
 });

@@ -226,7 +226,6 @@ describe("Dynamic offsets work with relationships", () => {
       group: "test",
       employees: {},
     });
-    console.log({keyRef: company.compositeKeyRef, company, person});
     person.setRelationship("employer", company.compositeKeyRef);
 
     company = await Record.get(Company, company.compositeKey);
