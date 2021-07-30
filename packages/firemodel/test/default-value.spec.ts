@@ -32,7 +32,7 @@ describe("defaultValue() → ", () => {
 
   // TODO: Look at this test, it is exhibiting odd async behaviour
   it("mocking ignores defaultValue", async () => {
-    await Mock(Person, db).generate(10);
+    await Mock(Person).generate(10);
     const people = await List.all(Person);
     people.map((person) => {
       expect(person.currentDeliveryAddress).toBe("work");

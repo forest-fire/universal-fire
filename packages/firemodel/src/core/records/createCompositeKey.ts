@@ -1,19 +1,36 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { ForeignKey, ICompositeKey, isCompositeKey, isCompositeString, PrimaryKey, PropertyOf, } from "~/types";
+import {
+  ForeignKey,
+  ICompositeKey,
+  isCompositeKey,
+  isCompositeString,
+  PrimaryKey,
+  PropertyOf,
+} from "~/types";
 import { FireModelError } from "~/errors";
 import { Model } from "~/models/Model";
 import { findDynamicModelProperties } from "./findDynamicModelProperties";
 import { ConstructorFor } from "common-types";
 import { keys } from "native-dash";
 
-function validate<T extends Model>(composite: ICompositeKey<T>, requiredKeys?: PropertyOf<T>[]) {
+function validate<T extends Model>(
+  composite: ICompositeKey<T>,
+  requiredKeys?: PropertyOf<T>[]
+) {
   if (!requiredKeys) {
     return composite;
   }
   const compositeKeys = keys(composite);
-
-  if (!requiredKeys.every(k => compositeKeys.includes(k)) || requiredKeys.length !== compositeKeys.length) {
-    throw new FireModelError(`Cannot generate a valid CompositeKey from the given FK composite reference. The required keys are: [ ${requiredKeys.join(', ')} ] but the only ones supplied were [ ${compositeKeys.join(', ')} ]`)
+  console.log({ requiredKeys, compositeKeys, composite });
+  if (
+    !requiredKeys.every((k) => compositeKeys.includes(k)) ||
+    requiredKeys.length !== compositeKeys?.filter((r) => r !== "id").length
+  ) {
+    throw new FireModelError(
+      `Cannot generate a valid CompositeKey from the given FK composite reference. The required keys are: [ ${requiredKeys.join(
+        ", "
+      )} ] but the only ones supplied were [ ${compositeKeys.join(", ")} ]`
+    );
   } else {
     return composite;
   }
@@ -29,7 +46,6 @@ export function createCompositeKey<T extends Model>(
   model?: T | ConstructorFor<T>
 ): ICompositeKey<T> {
   const requiredKeys = model ? findDynamicModelProperties(model) : undefined;
-
   if (isCompositeKey(key)) {
     return validate<T>(key, requiredKeys);
   } else if (isCompositeString(key)) {
@@ -45,8 +61,10 @@ export function createCompositeKey<T extends Model>(
         },
         { id }
       ) as ICompositeKey<T>;
+    console.log({ requiredKeys, composite, key });
+
     return validate<T>(composite, requiredKeys);
   } else {
-    return validate<T>({ id: key } as ICompositeKey<T>, requiredKeys)
+    return validate<T>({ id: key } as ICompositeKey<T>, requiredKeys);
   }
 }

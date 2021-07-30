@@ -6,8 +6,8 @@ import { Mock } from "@forest-fire/fixture";
 describe("List Options: ", () => {
   beforeEach(async () => {
     const db = await RealTimeAdmin.connect({ mocking: true });
-    await Mock(Car, db).generate(12, { model: "Mustang" });
-    await Mock(Car, db).generate(12, { model: "Camaro" });
+    await Mock(Car).generate(12, { model: "Mustang" });
+    await Mock(Car).generate(12, { model: "Camaro" });
     FireModel.defaultDb = db;
   });
 

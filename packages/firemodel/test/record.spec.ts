@@ -195,7 +195,7 @@ describe("Record > ", () => {
 
   it("calling remove() removes from DB and notifies FE state-mgmt", async () => {
     jest.setTimeout(3000);
-    await Mock(Person, db).generate(10);
+    await Mock(Person).generate(10);
     const peeps = await List.all(Person);
     expect(peeps.length).toBe(10);
     const person = Record.createWith(Person, peeps.data[0]);
@@ -218,7 +218,7 @@ describe("Record > ", () => {
 
   it("calling static remove() removes from DB, notifies FE state-mgmt", async () => {
     jest.setTimeout(3000);
-    await Mock(Person, db).generate(10);
+    await Mock(Person).generate(10);
     const peeps = await List.all(Person);
     const id = peeps.data[0].id;
     expect(peeps.length).toBe(10);

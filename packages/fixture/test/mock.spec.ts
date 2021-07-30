@@ -64,7 +64,6 @@ describe('Mocking:', () => {
       (s) => s.data
     );
     const people = await List.all(Car);
-    console.log(people);
     expect(fancyPeople).toHaveLength(10);
     expect(fancyPeople).toHaveLength(10);
     fancyPeople.map((person) => {

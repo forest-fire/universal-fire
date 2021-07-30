@@ -259,7 +259,7 @@ describe("List class: ", () => {
   });
 
   it("using remove() able to change local state, db state, and state mgmt", async () => {
-    await Mock(Person, db).generate(10);
+    await Mock(Person).generate(10);
     const events: Array<IFmWatchEvent<Person>> = [];
     Record.dispatch = async (evt: IFmWatchEvent<Person>) => events.push(evt);
     const peeps = await List.all(Person);
@@ -278,7 +278,7 @@ describe("List class: ", () => {
   });
 
   it("using add() changes local state, db state, and state mgmt", async () => {
-    await Mock(Person, db).generate(10);
+    await Mock(Person).generate(10);
     const events: Array<IFmWatchEvent<Person>> = [];
     Record.dispatch = async (evt: IFmWatchEvent<Person>) => events.push(evt);
     const peeps = await List.all(Person);

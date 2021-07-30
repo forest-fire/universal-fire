@@ -14,7 +14,7 @@ export function findDynamicModelProperties<T extends Model>(model: T | Construct
   const path = m.META.dbOffset;
 
   if (!path.includes(":")) {
-    return [];
+    return undefined;
   }
   const results: Array<PropertyOf<T>> = [];
   let remaining = path;
@@ -28,5 +28,5 @@ export function findDynamicModelProperties<T extends Model>(model: T | Construct
     index = remaining.indexOf(":");
   }
 
-  return results ;
+  return results === [] ? undefined : results;
 }

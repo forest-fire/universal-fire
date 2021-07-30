@@ -39,6 +39,7 @@
   "peerDependencies": {
     "native-dash": "1.15.1",
     "@forest-fire/types": "*",
+    "universal-fire": "*",
     "firemodel": "*",
     "firemock": "*"
   },

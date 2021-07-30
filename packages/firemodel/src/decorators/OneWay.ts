@@ -1,4 +1,5 @@
-import { IFmRelationshipDirectionality } from "~/types";
+import { Model } from "~/models";
+import { IFmRelationshipDirectionality, PropertyOf } from "~/types";
 
 /**
  * A helper method when designing relationships. In most cases when you
@@ -15,8 +16,8 @@ export default MyModel extends Model {
 }
 ```
  */
-export function OneWay(
-  inverseProperty: string
-): [string, IFmRelationshipDirectionality] {
+export function OneWay<T extends Model>(
+  inverseProperty: PropertyOf<T>
+): [PropertyOf<T>, IFmRelationshipDirectionality] {
   return [inverseProperty, "one-way"];
 }

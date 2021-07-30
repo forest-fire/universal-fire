@@ -40,9 +40,9 @@ describe("Watch →", () => {
     const { watcherId } = await Watch.record(Person, "12345")
       .dispatch(async () => "" as IReduxAction)
       .start();
-    expect(watcherId).toEqual("string");
+    expect(typeof watcherId).toEqual("string");
 
-    expect(Watch.lookup(watcherId)).toBeObject();
+    expect(typeof Watch.lookup(watcherId)).toBe("object");
     expect(Watch.lookup(watcherId)).toHaveProperty("eventFamily");
     expect(Watch.lookup(watcherId)).toHaveProperty("query");
     expect(Watch.lookup(watcherId)).toHaveProperty("createdAt");
@@ -57,7 +57,7 @@ describe("Watch →", () => {
     FireModel.dispatch = cb;
     const w = await Watch.record(Person, "1234").start();
 
-    expect(Watch.inventory[w.watcherId]).toEqual("object");
+    expect(typeof Watch.inventory[w.watcherId]).toEqual("object");
     expect(Watch.inventory[w.watcherId].eventFamily).toBe("value");
     expect(Watch.inventory[w.watcherId].watcherPaths[0]).toBe(
       "authenticated/people/1234"
@@ -132,7 +132,7 @@ describe("Watch →", () => {
     expect(Watch.watchCount).toBe(2);
     Watch.stop(hc1);
     expect(Watch.watchCount).toBe(1);
-    expect(Watch.lookup(hc2)).toEqual("object");
+    expect(typeof Watch.lookup(hc2)).toEqual("object");
     try {
       Watch.lookup(hc1);
       throw new Error("looking up an invalid hashcode should produce error!");
@@ -143,13 +143,13 @@ describe("Watch →", () => {
 
   it("Watching a List uses pluralName for localPath unless localModelName is set", async () => {
     Watch.reset();
+    const [mockPerson] = await Mock(PersonWithLocalAndPrefix).generate(1)
     FireModel.defaultDb = await RealTimeAdmin.connect({
       mocking: true,
+      mockData: {mockPerson}
     });
-    const personId = (await Mock(PersonWithLocalAndPrefix).generate(1)).pop()
-      .id;
-    const person = await Record.get(PersonWithLocalAndPrefix, personId);
-
+    const person = await Record.get(PersonWithLocalAndPrefix, mockPerson.id);
+    
     const events: IDictionary[] = [];
     FireModel.dispatch = async (evt) => {
       return events.push(evt) as any;
@@ -225,8 +225,8 @@ describe("Watch.list(XXX).ids()", () => {
     FireModel.defaultDb = await RealTimeAdmin.connect({
       mocking: true,
     });
-    const events: Array<IFmWatchEvent<Person>> = [];
-    const cb = async (event: IFmWatchEvent<Person>) => {
+    const events: Array<IFmWatchEvent> = [];
+    const cb = async (event: IFmWatchEvent) => {
       return events.push(event) as any;
     };
     const watcher = await Watch.list(Person)
@@ -277,8 +277,8 @@ describe("Watch.list(XXX).ids()", () => {
     FireModel.defaultDb = await RealTimeAdmin.connect({
       mocking: true,
     });
-    const events: Array<IFmWatchEvent<Person>> = [];
-    const cb = async (event: IFmWatchEvent<Person>) => {
+    const events: Array<IFmWatchEvent> = [];
+    const cb = async (event: IFmWatchEvent) => {
       return events.push(event) as any;
     };
     const watcher = Watch.list(DeeperPerson);
