@@ -130,14 +130,14 @@ describe("Watch →", () => {
     const { watcherId: hc1 } = await Watch.record(Person, "989898").start();
     const { watcherId: hc2 } = await Watch.record(Person, "45645645").start();
     expect(Watch.watchCount).toBe(2);
-    Watch.stop(hc1);
+    await Watch.stop(hc1);
     expect(Watch.watchCount).toBe(1);
     expect(typeof Watch.lookup(hc2)).toEqual("object");
     try {
       Watch.lookup(hc1);
       throw new Error("looking up an invalid hashcode should produce error!");
     } catch (e) {
-      expect(e.name).toBe("FireModel::InvalidHashcode");
+      expect(e.name).toBe("firemodel/invalid-code");
     }
   });
 

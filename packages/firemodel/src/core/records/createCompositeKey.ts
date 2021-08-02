@@ -21,7 +21,6 @@ function validate<T extends Model>(
     return composite;
   }
   const compositeKeys = keys(composite);
-  console.log({ requiredKeys, compositeKeys, composite });
   if (
     !requiredKeys.every((k) => compositeKeys.includes(k)) ||
     requiredKeys.length !== compositeKeys?.filter((r) => r !== "id").length
@@ -29,7 +28,8 @@ function validate<T extends Model>(
     throw new FireModelError(
       `Cannot generate a valid CompositeKey from the given FK composite reference. The required keys are: [ ${requiredKeys.join(
         ", "
-      )} ] but the only ones supplied were [ ${compositeKeys.join(", ")} ]`
+      )} ] but the only ones supplied were [ ${compositeKeys.join(", ")} ]`,
+      "firemodel/not-ready"
     );
   } else {
     return composite;
@@ -61,7 +61,6 @@ export function createCompositeKey<T extends Model>(
         },
         { id }
       ) as ICompositeKey<T>;
-    console.log({ requiredKeys, composite, key });
 
     return validate<T>(composite, requiredKeys);
   } else {
