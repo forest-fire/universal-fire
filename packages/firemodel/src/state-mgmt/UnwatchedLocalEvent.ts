@@ -1,16 +1,12 @@
 import { ISdk } from "@forest-fire/types";
-import {
-  IFmLocalEvent,
-  IFmRecordMeta,
-  IWatcherUnwatchedContext,
-} from "~/types";
+import { IFmLocalEvent, IFmRecordMeta, IUnwatchedLocalEvent } from "~/types";
 import { Model } from "~/models/Model";
 import { Record } from "~/core";
 
 export function UnwatchedLocalEvent<S extends ISdk, T extends Model>(
   rec: Record<S, T>,
   event: IFmLocalEvent<T>
-): IWatcherUnwatchedContext<T> {
+): IUnwatchedLocalEvent<T> {
   const meta: IFmRecordMeta<T> = {
     dynamicPathProperties: rec.dynamicPathComponents,
     compositeKey: rec.compositeKey,

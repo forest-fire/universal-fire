@@ -3,6 +3,7 @@ import type { ISdk } from "@forest-fire/types";
 import {
   FmEvents,
   ICompositeKey,
+  IFmLocalEvent,
   IFmLocalRecordEvent,
   IFmLocalRelationshipEvent,
   IFmServerOrLocalEvent,
@@ -20,6 +21,12 @@ export interface IFmWatcherStopped {
     }
   ];
 }
+
+export type IUnwatchedLocalEvent<T extends Model = Model> = IFmLocalEvent<T> &
+  IEventTimeContext &
+  IFmRecordMeta<T> & {
+    watcherSource: "unknown";
+  };
 
 /**
  * **IFmWatchEvent**

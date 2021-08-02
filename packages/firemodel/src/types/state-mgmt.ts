@@ -291,19 +291,13 @@ export interface IWatcherEventContextRecord<
   eventFamily: "value";
 }
 
-export type IWatcherUnwatchedContext<T extends Model = Model> =
-  IFmLocalEvent<T> &
-    IFmRecordMeta<T> & {
-      watcherSource: "unknown";
-      dbPath: string;
-    };
+
 
 /**
  * The meta information provided when a watcher is started;
  * it is also added to events when they have watcher context.
  */
 export type IWatcherEventContext<S extends ISdk, T extends Model = Model> =
-  | IWatcherUnwatchedContext<T>
   | IWatcherEventContextRecord<S, T>
   | IWatcherEventContextList<S, T>
   | IWatcherEventContextListofRecords<S, T>;

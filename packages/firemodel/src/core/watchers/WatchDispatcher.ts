@@ -32,98 +32,93 @@ export const WatchDispatcher = <S extends ISdk, T extends Model>(
   /** context provided by the watcher at the time in which the watcher was setup */
   watcherContext: IWatcherEventContext<S, T>
 ) => {
-    if (typeof coreDispatchFn !== "function") {
-      throw new FireModelError(
-        `A watcher is being setup but the dispatch function is not a valid function!`,
-        "firemodel/not-allowed"
-      );
-    }
-  
-  if (watcherContext.watcherSource === "unknown") {
+  if (typeof coreDispatchFn !== "function") {
     throw new FireModelError(
-      `An unknown watcher has been passed`,
-      "firemodel/unknown-watcher-source"
+      `A watcher is being setup but the dispatch function is not a valid function!`,
+      "firemodel/not-allowed"
     );
   }
 
-    // Handle incoming events ...
-    return async (event: IFmServerOrLocalEvent<T>): Promise<IFmWatchEvent<S, T>> => {
-      const typeLookup: IDictionary<FmEvents> = {
-        child_added: FmEvents.RECORD_ADDED,
-        child_removed: FmEvents.RECORD_REMOVED,
-        child_changed: FmEvents.RECORD_CHANGED,
-        child_moved: FmEvents.RECORD_MOVED,
-        value: FmEvents.RECORD_CHANGED,
+  // Handle incoming events ...
+  return async (
+    event: IFmServerOrLocalEvent<T>
+  ): Promise<IFmWatchEvent<S, T>> => {
+    const typeLookup: IDictionary<FmEvents> = {
+      child_added: FmEvents.RECORD_ADDED,
+      child_removed: FmEvents.RECORD_REMOVED,
+      child_changed: FmEvents.RECORD_CHANGED,
+      child_moved: FmEvents.RECORD_MOVED,
+      value: FmEvents.RECORD_CHANGED,
+    };
+
+    let eventContext: IEventTimeContext;
+
+    if (event.kind === "relationship") {
+      eventContext = {
+        type: event.type,
+        dbPath: "not-relevant, use toLocal and fromLocal",
       };
-
-      let eventContext: IEventTimeContext;
-
-      if (event.kind === "relationship") {
-        eventContext = {
-          type: event.type,
-          dbPath: "not-relevant, use toLocal and fromLocal",
-        };
-      } else if (event.kind === "watcher") {
-        // do nothing
-      } else {
-        // in the case of a watcher list-of records; when the database has no
-        // records yet there is no way to fulfill the dynamic path segments without
-        // reaching into the watcher context
-        if (watcherContext.watcherPaths) {
-          const fullPath = watcherContext.watcherPaths.find((i) =>
-            i.includes(event.key)
-          );
-          const compositeKey = Record.getCompositeKeyFromPath(
-            watcherContext.modelConstructor,
-            fullPath
-          );
-          event.value = { ...(event.value || {}), ...compositeKey };
-        }
-
-        // record events (both server and local)
-        const recordProps =
-          typeof event.value === "object"
-            ? { id: event.key, ...event.value }
-            : { id: event.key };
-
-        const rec = Record.createWith(
-          watcherContext.modelConstructor,
-          // TODO: validate that this casting is reasonable
-          recordProps as PrimaryKey<T>
+    } else if (event.kind === "watcher") {
+      // do nothing
+    } else {
+      // in the case of a watcher list-of records; when the database has no
+      // records yet there is no way to fulfill the dynamic path segments without
+      // reaching into the watcher context
+      if (watcherContext.watcherPaths) {
+        const fullPath = watcherContext.watcherPaths.find((i) =>
+          i.includes(event.key)
         );
-
-        let type: FmEvents;
-        switch (event.kind) {
-          case "record":
-            type = event.type;
-            break;
-          case "server-event":
-            type =
-              event.value === null
-                ? FmEvents.RECORD_REMOVED
-                : typeLookup[event.eventType];
-            break;
-          default:
-            type = FmEvents.UNEXPECTED_ERROR;
-        }
-
-        eventContext = {
-          type,
-          dbPath: rec.dbPath,
-        };
+        const compositeKey = Record.getCompositeKeyFromPath(
+          watcherContext.modelConstructor,
+          fullPath
+        );
+        event.value = { ...(event.value || {}), ...compositeKey };
       }
 
-      const reduxAction: IFmWatchEvent<S, T> = {
-        ...watcherContext,
-        ...event,
-        ...eventContext,
+      // record events (both server and local)
+      const recordProps =
+        typeof event.value === "object"
+          ? { id: event.key, ...event.value }
+          : { id: event.key };
+
+      const rec = Record.createWith(
+        watcherContext.modelConstructor,
+        // TODO: validate that this casting is reasonable
+        recordProps as PrimaryKey<T>
+      );
+
+      let type: FmEvents;
+      switch (event.kind) {
+        case "record":
+          type = event.type;
+          break;
+        case "server-event":
+          type =
+            event.value === null
+              ? FmEvents.RECORD_REMOVED
+              : typeLookup[event.eventType];
+          break;
+        default:
+          type = FmEvents.UNEXPECTED_ERROR;
+      }
+
+      eventContext = {
+        type,
+        dbPath: rec.dbPath,
       };
+    }
 
-      const results = await coreDispatchFn(reduxAction);
-      // The mock server and client are now in sync
-      hasInitialized(watcherContext.watcherId);
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return results as IFmWatchEvent<S, T>;
+    const reduxAction: IFmWatchEvent<S, T> = {
+      ...watcherContext,
+      ...event,
+      ...eventContext,
     };
+
+    const results = await coreDispatchFn(reduxAction);
+    // The mock server and client are now in sync
+    hasInitialized(watcherContext.watcherId);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return results as IFmWatchEvent<S, T>;
   };
+};
