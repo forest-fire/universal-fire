@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type{
+import type {
   FmEvents,
   IFmPathValuePair,
   IFmRecordMeta,
@@ -132,7 +132,7 @@ export interface IFmLocalEventBase<T> {
 export interface IFmLocalRelationshipEvent<
   F extends Model = Model,
   T extends Model = Model
-  > extends IFmLocalEventBase<F> {
+> extends IFmLocalEventBase<F> {
   kind: "relationship";
   operation: IFmRelationshipOperation;
   /** the property on the `from` model which has a FK ref to `to` model */
@@ -222,8 +222,10 @@ export type IFmLocalEvent<T extends Model = Model> =
   | IFmLocalRecordEvent<T>
   | IFmLocalRelationshipEvent<T>;
 
-export interface IWatcherEventContextBase<S extends ISdk, T extends Model = Model>
-  extends IFmRecordMeta<T> {
+export interface IWatcherEventContextBase<
+  S extends ISdk,
+  T extends Model = Model
+> extends IFmRecordMeta<T> {
   watcherId: string;
   /** if defined, pass along the string name off the watcher */
   watcherName?: string;
@@ -252,8 +254,10 @@ export interface IWatcherEventContextBase<S extends ISdk, T extends Model = Mode
  * When watching a "list-of-records" you are really watching
  * a basket/array of underlying record watchers.
  */
-export interface IWatcherEventContextListofRecords<S extends ISdk, T extends Model = Model>
-  extends IWatcherEventContextBase<S, T> {
+export interface IWatcherEventContextListofRecords<
+  S extends ISdk,
+  T extends Model = Model
+> extends IWatcherEventContextBase<S, T> {
   watcherSource: "list-of-records";
   /**
    * The underlying _record queries_ used to achieve
@@ -263,8 +267,10 @@ export interface IWatcherEventContextListofRecords<S extends ISdk, T extends Mod
   eventFamily: "child";
 }
 
-export interface IWatcherEventContextList<S extends ISdk, T extends Model = Model>
-  extends IWatcherEventContextBase<S, T> {
+export interface IWatcherEventContextList<
+  S extends ISdk,
+  T extends Model = Model
+> extends IWatcherEventContextBase<S, T> {
   watcherSource: "list";
   /**
    * The query setup to watch a `List`
@@ -273,8 +279,10 @@ export interface IWatcherEventContextList<S extends ISdk, T extends Model = Mode
   eventFamily: "child";
 }
 
-export interface IWatcherEventContextRecord<S extends ISdk, T extends Model = Model>
-  extends IWatcherEventContextBase<S, T> {
+export interface IWatcherEventContextRecord<
+  S extends ISdk,
+  T extends Model = Model
+> extends IWatcherEventContextBase<S, T> {
   watcherSource: "record";
   /**
    * The query setup to watch a `Record`
@@ -283,12 +291,19 @@ export interface IWatcherEventContextRecord<S extends ISdk, T extends Model = Mo
   eventFamily: "value";
 }
 
+export type IWatcherUnwatchedContext<T extends Model = Model> =
+  IFmLocalEvent<T> &
+    IFmRecordMeta<T> & {
+      watcherSource: "unknown";
+      dbPath: string;
+    };
 
 /**
  * The meta information provided when a watcher is started;
  * it is also added to events when they have watcher context.
  */
 export type IWatcherEventContext<S extends ISdk, T extends Model = Model> =
+  | IWatcherUnwatchedContext<T>
   | IWatcherEventContextRecord<S, T>
   | IWatcherEventContextList<S, T>
   | IWatcherEventContextListofRecords<S, T>;

@@ -67,7 +67,8 @@ describe("Dispatch →", () => {
       name: "Jane",
       age: 18,
     });
-    Record.dispatch = async (e: IFmWatchEvent) => events.push(e) as IReduxAction;
+    Record.dispatch = async (e: IFmWatchEvent) =>
+      events.push(e) as IReduxAction;
 
     await person.set("name", "Carol");
     expect(person.get("name")).toBe("Carol"); // local change took place

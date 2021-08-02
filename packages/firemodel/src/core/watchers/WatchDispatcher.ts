@@ -38,6 +38,13 @@ export const WatchDispatcher = <S extends ISdk, T extends Model>(
         "firemodel/not-allowed"
       );
     }
+  
+  if (watcherContext.watcherSource === "unknown") {
+    throw new FireModelError(
+      `An unknown watcher has been passed`,
+      "firemodel/unknown-watcher-source"
+    );
+  }
 
     // Handle incoming events ...
     return async (event: IFmServerOrLocalEvent<T>): Promise<IFmWatchEvent<S, T>> => {

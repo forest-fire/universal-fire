@@ -1395,7 +1395,6 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
           UnwatchedLocalEvent(this, {
             type: actionTypeStart,
             ...event,
-            value: withoutMetaOrPrivate<T>(this.data),
           })
         );
       }

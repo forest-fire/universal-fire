@@ -27,11 +27,10 @@ export interface IFmWatcherStopped {
  * This represents the payload which **Firemodel** will dispatch when
  * _watcher context_ is available.
  */
-export type IFmWatchEvent<S extends ISdk = ISdk, T extends Model = Model> = IFmServerOrLocalEvent<
-  T
-> &
-  IEventTimeContext &
-  IWatcherEventContext<S, T>;
+export type IFmWatchEvent<
+  S extends ISdk = ISdk,
+  T extends Model = Model
+> = IFmServerOrLocalEvent<T> & IEventTimeContext & IWatcherEventContext<S, T>;
 
 /**
  * **IFmWatchEventLocalRecord**
@@ -42,7 +41,7 @@ export type IFmWatchEvent<S extends ISdk = ISdk, T extends Model = Model> = IFmS
 export type IFmWatchEventLocalRecord<
   S extends ISdk,
   T extends Model = Model
-  > = IFmLocalRecordEvent<T> & IEventTimeContext & IWatcherEventContext<S, T>;
+> = IFmLocalRecordEvent<T> & IEventTimeContext & IWatcherEventContext<S, T>;
 
 /**
  * **IFmWatchEventLocalRelationship**
@@ -59,7 +58,7 @@ export type IFmWatchEventLocalRecord<
 export type IFmWatchEventLocalRelationship<
   S extends ISdk,
   T extends Model = Model
-  > = IFmLocalRelationshipEvent<T> &
+> = IFmLocalRelationshipEvent<T> &
   IEventTimeContext &
   IWatcherEventContext<S, T>;
 
