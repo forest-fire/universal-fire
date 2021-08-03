@@ -13,7 +13,7 @@ import {
 } from "~/index";
 import { IDictionary, wait } from "common-types";
 import { IDatabaseSdk, ISerializedQuery, SDK } from "@forest-fire/types";
-import { RealTimeAdmin,  } from "universal-fire";
+import { RealTimeAdmin, } from "universal-fire";
 import { DeeperPerson } from "./testing/dynamicPaths/DeeperPerson";
 import { Person } from "./testing/Person";
 import { PersonWithLocalAndPrefix } from "./testing/PersonWithLocalAndPrefix";
@@ -151,7 +151,7 @@ describe("Watch →", () => {
     db.mock.store.updateDb(mockPerson.dbPath, mockPerson.data);
 
     const person = await Record.get(PersonWithLocalAndPrefix, mockPerson.id);
-    
+
     const events: IDictionary[] = [];
     FireModel.dispatch = async (evt) => {
       return events.push(evt) as any;
@@ -223,29 +223,33 @@ describe("Watch.list(XXX).ids()", () => {
     expect(wId.watcherPaths).toBeInstanceOf(Array);
   });
 
-  it('An event, when encountered, is correctly associated with the "list of records" watcher', async () => {
+  it.only('An event, when encountered, is correctly associated with the "list of records" watcher', async () => {
     FireModel.defaultDb = await RealTimeAdmin.connect({
       mocking: true,
     });
     const events: Array<IFmWatchEvent> = [];
     const cb = async (event: IFmWatchEvent) => {
-      return events.push(event) as any;
+      events.push(event);
+      return event;
     };
-    const watcher = await Watch.list(Person)
+    // setup watcher
+    await Watch.list(Person)
       .ids("1234", "4567")
       .dispatch(cb)
       .start();
-
+    // add record of interest
     await Record.add(Person, {
       id: "1234",
       name: "Peggy Sue",
       age: 14,
     });
+    // add record of interest
     await Record.add(Person, {
       id: "4567",
       name: "Johnny Rotten",
       age: 65,
     });
+    // add record which is not being watched
     await Record.add(Person, {
       id: "who-cares",
       name: "John Smith",
@@ -255,8 +259,12 @@ describe("Watch.list(XXX).ids()", () => {
     const recordsChanged = events.filter(
       (e) => e.type === FmEvents.RECORD_CHANGED
     );
-    const recordIdsChanged = recordsChanged.map((i) => i.key);
 
+    const recordIdsChanged = recordsChanged.map((i) => i.key);
+    // watcher is not setup to hear events with this ID
+    const shouldBeFiltered = events.filter(e => e.key === "who-cares")
+
+    expect(shouldBeFiltered).toHaveLength(0);
     // two events when the watcher is turned on;
     // two more when change takes place on a watched path
     expect(recordsChanged).toHaveLength(4);

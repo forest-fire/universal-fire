@@ -73,7 +73,7 @@ describe("List class: ", () => {
     fixture
       .addSchema("person", (h: any) => () => ({
         name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 50 }),
+        age: h.faker.dataType.number({ min: 1, max: 50 }),
       }))
       .pathPrefix("authenticated");
     const mockData = fixture.queueSchema("person", 25).generate();
@@ -91,7 +91,7 @@ describe("List class: ", () => {
     fixture
       .addSchema("person", (h: any) => () => ({
         name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 50 }),
+        age: h.faker.dataType.number({ min: 1, max: 50 }),
       }))
       .pathPrefix("authenticated");
     const mockData = fixture.queueSchema("person", 25).generate();
@@ -109,7 +109,7 @@ describe("List class: ", () => {
     fixture
       .addSchema("person", (h: any) => () => ({
         name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 50 }),
+        age: h.faker.dataType.number({ min: 1, max: 50 }),
       }))
       .pathPrefix("authenticated");
     const mockData = fixture
@@ -132,7 +132,7 @@ describe("List class: ", () => {
     fixture
       .addSchema("person", (h) => () => ({
         name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 50 }),
+        age: h.faker.dataType.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
         lastUpdated: h.faker.date.recent().valueOf(),
       }))
@@ -155,7 +155,7 @@ describe("List class: ", () => {
     fixture
       .addSchema("person", (h: any) => () => ({
         name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 50 }),
+        age: h.faker.dataType.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
         lastUpdated: h.faker.date.recent().valueOf(),
       }))
@@ -179,7 +179,7 @@ describe("List class: ", () => {
     fixture
       .addSchema("person", (h: any) => () => ({
         name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 49 }),
+        age: h.faker.dataType.number({ min: 1, max: 49 }),
         createdAt: h.faker.date.past().valueOf(),
         lastUpdated: timestamp,
       }))
@@ -203,7 +203,7 @@ describe("List class: ", () => {
     fixture
       .addSchema("person", (h: any) => () => ({
         name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 50 }),
+        age: h.faker.dataType.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
         lastUpdated: h.faker.date.recent().valueOf(),
       }))
@@ -227,7 +227,7 @@ describe("List class: ", () => {
     fixture
       .addSchema("person", (h: any) => () => ({
         name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 50 }),
+        age: h.faker.dataType.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
         lastUpdated: h.faker.date.recent().valueOf(),
       }))
@@ -249,7 +249,7 @@ describe("List class: ", () => {
     fixture
       .addSchema("person", (h: any) => () => ({
         name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 50 }),
+        age: h.faker.dataType.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
         lastUpdated: h.faker.date.recent().valueOf(),
       }))
@@ -270,7 +270,7 @@ describe("List class: ", () => {
     fixture
       .addSchema("person", (h: any) => () => ({
         name: h.faker.name.firstName(),
-        age: h.faker.random.number({ min: 1, max: 50 }),
+        age: h.faker.dataType.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
         lastUpdated: h.faker.date.recent().valueOf(),
       }))

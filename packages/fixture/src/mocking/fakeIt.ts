@@ -47,8 +47,8 @@ export function fakeIt<T = any>(
     precision?: number;
   }) {
     return numOptions && typeof numOptions === "object"
-      ? faker.random.number(numOptions)
-      : faker.random.number({ min: 1, max: 100 });
+      ? faker.datatype.number(numOptions)
+      : faker.datatype.number({ min: 1, max: 100 });
   }
 
   /** for mocks which use a hash-based second param */
@@ -158,13 +158,13 @@ export function fakeIt<T = any>(
         "other",
       ]);
     case "age":
-      return faker.random.number({ min: 1, max: 99 });
+      return faker.datatype.number({ min: 1, max: 99 });
     case "ageChild":
-      return faker.random.number({ min: 1, max: 10 });
+      return faker.datatype.number({ min: 1, max: 10 });
     case "ageAdult":
-      return faker.random.number({ min: 21, max: 99 });
+      return faker.datatype.number({ min: 21, max: 99 });
     case "ageOlder":
-      return faker.random.number({ min: 60, max: 99 });
+      return faker.datatype.number({ min: 60, max: 99 });
     case "jobTitle":
       return faker.name.jobTitle;
     case "date":
@@ -244,7 +244,7 @@ export function fakeIt<T = any>(
       return getDistribution(...rest);
 
     case "sequence":
-      const prop = context.property; 
+      const prop = context.property;
       const items = rest;
 
       if (typeof sequence[prop] === "undefined") {
