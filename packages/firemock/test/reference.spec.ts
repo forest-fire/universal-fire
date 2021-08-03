@@ -197,7 +197,7 @@ describe('Reference functions', () => {
     });
   });
 
-  it.only('equalTo() and orderByChild() work', async () => {
+  it('equalTo() and orderByChild() work', async () => {
     const f = Fixture.prepare();
     // await m.getMockHelper(); // imports faker lib
     const young = (h: SchemaHelper) => () => ({

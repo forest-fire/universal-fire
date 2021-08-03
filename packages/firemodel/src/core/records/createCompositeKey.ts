@@ -50,7 +50,6 @@ export function createCompositeKey<T extends Model>(
     return validate<T>(key, requiredKeys);
   } else if (isCompositeString(key)) {
     const [id, ...paramsHash] = key.split("::");
-
     const composite = paramsHash
       .map((i) => i.split(":"))
       .reduce(

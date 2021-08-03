@@ -53,8 +53,10 @@ describe('Admin Auth => ', () => {
     expect(response.user.providerId);
   });
 
-  it.only('using admin API ... can create, update, then delete two users; listing at every step', async () => {
-    const m = createDatabase(SDK.RealTimeAdmin,{ auth: { providers: [AuthProviderName.emailPassword] } });
+  it('using admin API ... can create, update, then delete two users; listing at every step', async () => {
+    const m = createDatabase(SDK.RealTimeAdmin, {
+      auth: { providers: [AuthProviderName.emailPassword] },
+    });
 
     const admin = m.auth;
     await admin.createUser({

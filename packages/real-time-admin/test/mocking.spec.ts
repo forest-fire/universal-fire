@@ -97,7 +97,7 @@ describe('Mocking', () => {
     expect(animals[0]).toHaveProperty('age');
   });
 
-  it.only('set() sets to the mock DB', async () => {
+  it('set() sets to the mock DB', async () => {
     const db = new RealTimeAdmin({ mocking: true });
     await db.connect();
     await db.set('/people/abcd', {

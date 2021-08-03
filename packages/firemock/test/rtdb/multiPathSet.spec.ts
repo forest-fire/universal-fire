@@ -1,7 +1,7 @@
 import { createDatabase } from '~/databases/createDatabase';
 
 describe('multiPathSet() => ', () => {
-  it.only('setting properties shallowly works as expected', async () => {
+  it('setting properties shallowly works as expected', async () => {
     const m = createDatabase('RealTimeAdmin');
     await m.db.ref('/').update({
       '/baz': 1,
@@ -12,7 +12,7 @@ describe('multiPathSet() => ', () => {
 
     expect(db.baz).toBe(1);
     expect(db.bar).toBe(2);
-    expect(typeof db.foo).toEqual("object");
+    expect(typeof db.foo).toEqual('object');
     expect(db.foo.baz).toBe(5);
   });
 

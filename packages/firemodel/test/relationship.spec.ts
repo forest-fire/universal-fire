@@ -42,10 +42,18 @@ describe("Relationship > ", () => {
     const hasMany = hasManyPaths(person.id, now);
     const hasOne = hasOnePaths(person.id, now);
 
-    const extractedHasMany = extractFksFromPaths<ISdk, Person>(person, "children", hasMany);
-    const extractedHasOne = extractFksFromPaths<ISdk, Person>(person, "company", hasOne);
+    const extractedHasMany = extractFksFromPaths<ISdk, Person>(
+      person,
+      "children",
+      hasMany
+    );
+    const extractedHasOne = extractFksFromPaths<ISdk, Person>(
+      person,
+      "company",
+      hasOne
+    );
 
-    expect(extractedHasMany).toBeArray();
+    expect(extractedHasMany).toBeInstanceOf(Array);
     expect(extractedHasMany).toHaveLength(2);
     expect(extractedHasOne).toBeInstanceOf(Array);
     expect(extractedHasOne).toHaveLength(1);
@@ -98,7 +106,7 @@ describe("Relationship > ", () => {
     expect(Object.keys(t2)).toHaveLength(1);
   });
 
-  it.only("can build TYPED composite key from Fk string and reference model", async () => {
+  it("can build TYPED composite key from Fk string and reference model", async () => {
     const t1 = createCompositeKey("foo::age:13", Person);
     expect(t1.id).toBe("foo");
     expect(t1.age).toBe(13);
@@ -110,7 +118,6 @@ describe("Relationship > ", () => {
 
       throw new Error("Should not reach this point because of invalid prop");
     } catch (e) {
-      expect(e.firemodel).toBe(true);
       expect(e.code).toBe("invalid-composite-key");
     }
   });
