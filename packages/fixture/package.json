@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@types/faker": "5.5.7",
-    "native-dash": "1.15.1",
+    "native-dash": "1.18.0",
     "scripty": "2.0.0",
     "jest": "^27.0.6",
     "@forest-fire/types": "*",
@@ -37,7 +37,7 @@
     "firemock": "*"
   },
   "peerDependencies": {
-    "native-dash": "1.15.1",
+    "native-dash": "1.18.0",
     "@forest-fire/types": "*",
     "universal-fire": "*",
     "firemodel": "*",

@@ -6081,6 +6081,16 @@ inferred-types@^0.5.0:
   optionalDependencies:
     common-types "^1.26.0"
 
+inferred-types@^0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/inferred-types/-/inferred-types-0.9.2.tgz#6927059e7581e1f19ef2fe508491a0dd6f4a1a9d"
+  integrity sha512-H7l53Sdau6IFTMVVaChjnCko2t/Ql/oBUdvh6/BfNqmmkCa9be/z3X4JjwQ7jfxDjEn8tIHiPmNyHM30q7XPkQ==
+  dependencies:
+    brilliant-errors "^0.3.1"
+    native-dash "^1.15.1"
+  optionalDependencies:
+    common-types "^1.26.0"
+
 inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
@@ -8020,7 +8030,14 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-native-dash@1.16.2, native-dash@^1.15.1, native-dash@^1.16.2:
+native-dash@1.18.0:
+  version "1.18.0"
+  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.18.0.tgz#5e4586f215102b08ca6bc0eeed3952dd28f82594"
+  integrity sha512-LVZ9+UYoJC0gjpJ0cJUHgERcX18hjVM+hFQCQyW4/ey42kVtEe00oLPscwGHTnR256NshJWIUjLSOaDoKKv36w==
+  optionalDependencies:
+    inferred-types "^0.9.2"
+
+native-dash@^1.15.1, native-dash@^1.16.2:
   version "1.16.2"
   resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.16.2.tgz#7f5db5e9e20ad0dfba36ce060121050db104d35f"
   integrity sha512-uNZ4o4HjJPQXwdT+w1VqsGXXLQPvnvDrHTBIvRCuSD4Ix24IkpqDOrJxK5TjTr42p3zEcXRPl+uA4zfNntPSfA==

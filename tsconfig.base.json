@@ -11,7 +11,7 @@
     "emitDecoratorMetadata": true,
     "removeComments": false,
     "noImplicitAny": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "noEmit": true,
     "composite": true,
     "paths": {
