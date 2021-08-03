@@ -7,7 +7,7 @@ export function determineType(type: ReflectionType): FmPropertyType {
     case "Boolean":
       return FmPropertyType.boolean;
     case "Number":
-      return FmPropertyType.boolean;
+      return FmPropertyType.number;
     case "Object":
       return FmPropertyType.object;
     case "String":

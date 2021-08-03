@@ -12,9 +12,9 @@ describe("schema() decorator: ", () => {
 
   it("can read Property meta properties off of META.property", () => {
     const myclass = new Klass();
-    expect(typeof myclass.META.property("foo").type).toEqual("string");
-    expect(typeof myclass.META.property("bar").type).toBe("number");
-    expect(typeof myclass.META.property("bar3").max).toBe(10);
+    expect(myclass.META.property("foo").type).toEqual("string");
+    expect(myclass.META.property("bar").type).toBe("number");
+    expect(myclass.META.property("bar3").max).toBe(10);
   });
 
   it("setting meta throws error", () => {
@@ -146,10 +146,10 @@ describe("relationship decorators: ", () => {
 
     person.META.relationships.map((p) => {
       if (p.relType === "hasOne") {
-        expect(typeof p.type).toEqual("string");
+        expect(p.type).toEqual("string");
       }
       if (p.relType === "hasMany") {
-        expect(typeof p.type).toBe("object");
+        expect(p.type).toBe("object");
       }
     });
 

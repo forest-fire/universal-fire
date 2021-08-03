@@ -98,7 +98,7 @@ describe("Relationship > ", () => {
     expect(Object.keys(t2)).toHaveLength(1);
   });
 
-  it("can build TYPED composite key from Fk string and reference model", async () => {
+  it.only("can build TYPED composite key from Fk string and reference model", async () => {
     const t1 = createCompositeKey("foo::age:13", Person);
     expect(t1.id).toBe("foo");
     expect(t1.age).toBe(13);
@@ -170,10 +170,11 @@ describe("Relationship > ", () => {
       age: 23,
     });
     expect(person.id).toBeDefined();
-    expect(person.id).toEqual("string");
+    expect(typeof person.id).toEqual("string");
     const lastUpdated = person.data.lastUpdated;
     const events: IFmWatchEvent[] = [];
-    Record.dispatch = async (evt: IFmWatchEvent) => events.push(evt) as IReduxAction;
+    Record.dispatch = async (evt: IFmWatchEvent) =>
+      events.push(evt) as IReduxAction;
     await person.addToRelationship("cars", "12345");
 
     const eventTypes = Array.from(new Set(events.map((e) => e.type)));
