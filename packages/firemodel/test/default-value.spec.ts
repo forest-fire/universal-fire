@@ -6,7 +6,7 @@ import { Mock } from "@forest-fire/fixture";
 
 describe("defaultValue() → ", () => {
   let db: IDatabaseSdk<"RealTimeAdmin">
-  beforeAll(async () => {
+  beforeEach(async () => {
     db = await RealTimeAdmin.connect({ mocking: true });
     FireModel.defaultDb = db;
   });
