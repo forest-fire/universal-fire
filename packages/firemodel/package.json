@@ -80,7 +80,7 @@
     "jest-extended": "^0.11.5",
     "js-yaml": "^4.0.0",
     "madge": "^4.0.2",
-    "native-dash": "1.18.0",
+    "native-dash": "^1.18.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
     "reflect-metadata": "^0.1.13",
@@ -104,8 +104,7 @@
     "vuepress-plugin-autometa": "^0.1.13",
     "@forest-fire/fixture": "*",
     "faker": "5.5.3",
-    "@type-challenges/utils": "0.1.1",
-    "pluralize": "^8.0.0"
+    "@type-challenges/utils": "0.1.1"
   },
   "peerDependencies": {
     "@forest-fire/serialized-query": "*",
@@ -116,11 +115,10 @@
     "firebase-key": "^2.0.2",
     "firemock": "*",
     "inferred-types": "0.6.0",
-    "native-dash": "1.18.0",
+    "native-dash": "^1.18.2",
     "reflect-metadata": "^0.1.13",
     "typed-conversions": "^0.12.0",
-    "universal-fire": "*",
-    "pluralize": "^8.0.0"
+    "universal-fire": "*"
   },
   "engines": {
     "node": ">=10.0.0"

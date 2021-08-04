@@ -12,7 +12,7 @@ import {
   getWatcherPool,
 } from "~/index";
 import { IDictionary, wait } from "common-types";
-import { IDatabaseSdk, ISerializedQuery, SDK } from "@forest-fire/types";
+import { IDatabaseSdk } from "@forest-fire/types";
 import { RealTimeAdmin, } from "universal-fire";
 import { DeeperPerson } from "./testing/dynamicPaths/DeeperPerson";
 import { Person } from "./testing/Person";
@@ -38,7 +38,7 @@ describe("Watch →", () => {
       mocking: true,
     });
     const { watcherId } = await Watch.record(Person, "12345")
-      .dispatch(async () => "" as IReduxAction)
+      .dispatch(async () => ({ type: "NADA" }))
       .start();
     expect(typeof watcherId).toEqual("string");
 
@@ -51,8 +51,9 @@ describe("Watch →", () => {
   it("Watching CRUD actions on Record", async () => {
     FireModel.defaultDb = realDB;
     const events: IReduxAction[] = [];
-    const cb: any = async (event: IReduxAction) => {
+    const cb = async (event: IReduxAction) => {
       events.push(event);
+      return event
     };
     FireModel.dispatch = cb;
     const w = await Watch.record(Person, "1234").start();
@@ -85,8 +86,9 @@ describe("Watch →", () => {
   it("Watching CRUD actions on List", async () => {
     FireModel.defaultDb = realDB;
     const events: Array<IFmLocalEvent<Person>> = [];
-    const cb: any = async (event: IFmLocalEvent<Person>) => {
+    const cb = async (event: IFmLocalEvent<Person>) => {
       events.push(event);
+      return event;
     };
     await realDB.remove("/authenticated/people");
     Watch.list(Person).all().dispatch(cb).start();

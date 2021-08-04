@@ -12,7 +12,7 @@ import indexedDB from "fake-indexeddb";
 
 DexieDb.indexedDB(indexedDB, fdbKeyRange);
 
-describe("Dexie Table API", () => {
+describe.skip("Dexie Table API", () => {
   let db: DexieDb;
   beforeEach(async () => {
     db = new DexieDb("testing", Car, DeepPerson);

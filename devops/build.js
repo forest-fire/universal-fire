@@ -29,10 +29,10 @@ const sequence = [
     name: 'firemodel',
     packages: ['firemodel'],
   },
-  {
-    name: 'Closure (plugin, fixture)',
-    packages: ['vuex-plugin', 'fixture'],
-  },
+  // {
+  //   name: 'Closure (plugin, fixture)',
+  //   packages: ['vuex-plugin', 'fixture'],
+  // },
 ];
 
 function toPlugins(dir) {
@@ -51,7 +51,7 @@ function toPlugins(dir) {
           baseUrl: dir,
           declarationDir: join(dir, 'dist', 'types'),
           sourceMap: false,
-          rootDir: "src",
+          rootDir: 'src',
         },
         include: ['src'],
         exclude: ['test'],

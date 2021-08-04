@@ -8030,17 +8030,17 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-native-dash@1.18.0:
-  version "1.18.0"
-  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.18.0.tgz#5e4586f215102b08ca6bc0eeed3952dd28f82594"
-  integrity sha512-LVZ9+UYoJC0gjpJ0cJUHgERcX18hjVM+hFQCQyW4/ey42kVtEe00oLPscwGHTnR256NshJWIUjLSOaDoKKv36w==
-  optionalDependencies:
-    inferred-types "^0.9.2"
-
 native-dash@^1.15.1, native-dash@^1.16.2:
   version "1.16.2"
   resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.16.2.tgz#7f5db5e9e20ad0dfba36ce060121050db104d35f"
   integrity sha512-uNZ4o4HjJPQXwdT+w1VqsGXXLQPvnvDrHTBIvRCuSD4Ix24IkpqDOrJxK5TjTr42p3zEcXRPl+uA4zfNntPSfA==
+
+native-dash@^1.18.2:
+  version "1.18.2"
+  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.18.2.tgz#38d5600d949838d2f57f32f0120a6026a8df6c3f"
+  integrity sha512-2SW1U7XvdPumcn7VXZtlNcVQYvnZmLIOt9JQQLmLdppSEMfW0UrunUgZjjSF18RrdHS82GvgIrVXPRG5tTUhNQ==
+  optionalDependencies:
+    inferred-types "^0.9.2"
 
 natural-compare@^1.4.0:
   version "1.4.0"

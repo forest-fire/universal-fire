@@ -310,6 +310,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
         "not-allowed"
       );
     }
+
     const properties =
       typeof payload === "string"
         ? createCompositeKey(payload, rec.modelConstructor)
@@ -446,10 +447,11 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    */
   public static compositeKey<T extends Model>(
     model: ConstructorFor<T>,
-    obj: Partial<IModel<T>>
+    obj: ICompositeKey<T>
   ): ICompositeKey<T> {
     // this will validate the `obj` to ensure proper properties are present
-    return createCompositeKey(obj as unknown as ICompositeKey<T>, model);
+    // while at the same time allowing extraneous props to pass through
+    return createCompositeKey(obj, model, true);
   }
 
   /**

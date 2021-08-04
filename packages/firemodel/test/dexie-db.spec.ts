@@ -62,6 +62,7 @@ describe("DexieModel => ", () => {
 
   it("Dexie model definition works for static pathed model with non-unique index", async () => {
     const d = new DexieDb("testing", Car);
+
     expect(typeof d.models.cars).toEqual("string");
     expect(d.models.cars).toContain("&id");
     expect(d.models.cars).toContain("modelYear");
@@ -138,11 +139,12 @@ describe("DexieModel => ", () => {
     expect(nonUniqueIndexes).toHaveLength(4);
   });
 
-  it("table() allows for bulkAdd() then get()", async () => {
+  it.skip("table() allows for bulkAdd() then get()", async () => {
     const db = new DexieDb("foobar", Car);
     if (db.isOpen()) {
       db.close();
     }
+
     await db.open().catch((e) => {
       console.log(e);
     });

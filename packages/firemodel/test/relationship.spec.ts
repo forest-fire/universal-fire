@@ -1,4 +1,4 @@
-import { IFmWatchEvent, IReduxAction, Record } from "../src";
+import { IFmWatchEvent, Record } from "../src";
 import { ISdk, RealTimeAdmin } from "universal-fire";
 import {
   buildRelationshipPaths,
@@ -96,7 +96,7 @@ describe("Relationship > ", () => {
   });
 
   it("can build composite key from FK string", async () => {
-    const t1 = createCompositeKey<any>("foo::geo:CT::age:13");
+    const t1 = createCompositeKey("foo::geo:CT::age:13");
     expect(t1.id).toBe("foo");
     expect(t1.geo).toBe("CT");
     expect(t1.age).toBe("13");
@@ -106,18 +106,18 @@ describe("Relationship > ", () => {
     expect(Object.keys(t2)).toHaveLength(1);
   });
 
-  it("can build TYPED composite key from Fk string and reference model", async () => {
-    const t1 = createCompositeKey("foo::age:13", Person);
-    expect(t1.id).toBe("foo");
-    expect(t1.age).toBe(13);
+  it("can build a composite key from Fk string and reference model", async () => {
+    const t1 = createCompositeKey("1234", Person);
+
+    expect(t1.id).toBe("1234");
   });
 
   it("building a TYPED composite key errors when invalid property is introduced", async () => {
     try {
-      const t1 = createCompositeKey("foo::age:13::geo:CT", Person);
-
+      createCompositeKey("foo::age:13::geo:CT", Person);
       throw new Error("Should not reach this point because of invalid prop");
     } catch (e) {
+      console.log(e.message);
       expect(e.code).toBe("invalid-composite-key");
     }
   });
@@ -178,10 +178,12 @@ describe("Relationship > ", () => {
     });
     expect(person.id).toBeDefined();
     expect(typeof person.id).toEqual("string");
-    const lastUpdated = person.data.lastUpdated;
     const events: IFmWatchEvent[] = [];
-    Record.dispatch = async (evt: IFmWatchEvent) =>
-      events.push(evt) as IReduxAction;
+    Record.dispatch = async (evt: IFmWatchEvent) => {
+      events.push(evt);
+      return evt;
+    }
+
     await person.addToRelationship("cars", "12345");
 
     const eventTypes = Array.from(new Set(events.map((e) => e.type)));
@@ -248,7 +250,7 @@ describe("Relationship > ", () => {
     await company.addToRelationship("employees", [person.id, person2.id]);
     await company.associate("employees", [person.id, person2.id]);
 
-    expect((company.data.employees as any)[person.id]).toBe(true);
+    expect((company.data.employees)[person.id]).toBe(true);
   });
 
   it("testing removing relationships with disassociate()", async () => {
@@ -280,9 +282,9 @@ describe("Relationship > ", () => {
     await company.disassociate("employees", person2.id);
     await person.disassociate("pays", pay.id);
 
-    expect(company.data.employees[person.id as any]).toBe(true);
-    expect(company.data.employees[person2.id as any]).not.toBe(true);
-    expect((person.data.pays as any)[pay.id]).not.toBe(true);
+    expect(company.data.employees[person.id]).toBe(true);
+    expect(company.data.employees[person2.id]).not.toBe(true);
+    expect((person.data.pays)[pay.id]).not.toBe(true);
   });
 
   it("testing it should throw an error when incorrect refs is passed in with associate", async () => {

@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as process from "process";
 import * as yaml from "js-yaml";
 
-import { first, last } from "native-dash";
+import { first, keys, last } from "native-dash";
 import { stderr, stdout } from "test-console";
 
 import { IDictionary } from "common-types";
@@ -134,39 +134,42 @@ export function ignoreBoth() {
 /**
  * The first key in a Hash/Dictionary
  */
-export function firstKey<T = any>(dictionary: IDictionary<T>) {
-  return first(Object.keys(dictionary));
+export function firstKey<T = any>(dictionary: IDictionary<T>): string {
+  return first(Object.keys(dictionary || {}));
 }
 
 /**
  * The first record in a Hash/Dictionary of records
  */
-export function firstRecord<T = any>(dictionary: IDictionary<T>) {
-  return dictionary[this.firstKey(dictionary)];
+export function firstRecord<T extends IDictionary>(dictionary: T): T[keyof T] {
+  if (!dictionary) {
+    throw new Error("firstRecord() test util used but dictionary passed in was undefined!")
+  }
+  return dictionary[this.firstKey(dictionary || {})];
 }
 
 /**
  * The last key in a Hash/Dictionary
  */
-export function lastKey<T = any>(listOf: IDictionary<T>) {
-  return last(Object.keys(listOf));
+export function lastKey<T extends IDictionary>(listOf: T): string & keyof T {
+  return last(Object.keys(listOf || {}));
 }
 
 /**
  * The last record in a Hash/Dictionary of records
  */
-export function lastRecord<T = any>(dictionary: IDictionary<T>): T {
+export function lastRecord<T extends IDictionary>(dictionary: T): T[keyof T] {
   return dictionary[this.lastKey(dictionary)];
 }
 
-export function valuesOf<T = any>(listOf: IDictionary<T>, property: string) {
-  const keys: any[] = Object.keys(listOf);
-  return keys.map((key: any) => {
-    const item: IDictionary = listOf[key];
+export function valuesOf<T extends IDictionary>(listOf: T, property: keyof T): T[keyof T][keyof T][] {
+  const k = keys(listOf);
+  return k.map((key) => {
+    const item = listOf[key];
     return item[property];
   });
 }
 
-export function length(listOf: IDictionary) {
+export function length(listOf: IDictionary): number {
   return listOf ? Object.keys(listOf).length : 0;
 }

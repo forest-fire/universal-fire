@@ -92,7 +92,11 @@ describe("Tests using REAL db =>�", () => {
     const w = await Watch.list(FancyPerson)
       .all()
       .start({ name: "my-update-watcher" });
-    FireModel.dispatch = async (e: IReduxAction) => events.push(e) as IReduxAction;
+
+    FireModel.dispatch = async (e: IReduxAction) => {
+      events.push(e)
+      return e;
+    };
     await Record.update(FancyPerson, bob.id, { name: "Bob Marley" });
     await wait(50);
     const eventTypes: string[] = Array.from(new Set(events.map((e) => e.type)));
@@ -109,15 +113,21 @@ describe("Tests using REAL db =>�", () => {
   });
 
   it("Detects changes at various nested levels of the watch/listener", async () => {
-    const fancyPerson = new FancyPerson();
     let events: IFmLocalEvent[] = [];
+
+    FireModel.dispatch = async (e: IFmLocalEvent) => {
+      events.push(e);
+      return e;
+    };
+    // start watcher
+    await Watch.list(FancyPerson)
+      .all()
+      .start({ name: "path-depth-test" });
+
     const jack = await Record.add(FancyPerson, {
       name: "Jack Johnson",
     });
-    FireModel.dispatch = async (e: IFmLocalEvent) => events.push(e) as IReduxAction;
-    const w = await Watch.list(FancyPerson)
-      .all()
-      .start({ name: "path-depth-test" });
+
     // deep path set
     const deepPath = pathJoin(jack.dbPath, "/favorite/sports/basketball");
     await db.set(deepPath, true);

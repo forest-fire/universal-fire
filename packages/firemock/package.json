@@ -39,7 +39,7 @@
     "eledoc": "^0.2.1",
     "firebase-key": "^2.0.2",
     "jest": "^27.0.6",
-    "native-dash": "^1.16.2",
+    "native-dash": "^1.18.2",
     "firemock": "*",
     "scripty": "^2.0.0",
     "test-console": "^2.0.0",
@@ -62,7 +62,7 @@
   "peerDependencies": {
     "firebase-key": "^2.0.2",
     "firemock": "*",
-    "native-dash": "^1.16.2",
+    "native-dash": "^1.18.2",
     "typed-conversions": "~0.12.0"
   },
   "engines": {

@@ -13,7 +13,7 @@ import { wait } from "common-types";
 
 DexieDb.indexedDB(indexedDB, fdbKeyRange);
 
-describe("Dexie - Record API", () => {
+describe.skip("Dexie - Record API", () => {
   let d: DexieDb;
   beforeEach(async () => {
     d = new DexieDb("testing", Car, DeepPerson);

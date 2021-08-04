@@ -3247,6 +3247,11 @@ common-types@^1.15.6, common-types@^1.25.0:
   resolved "https://registry.npmjs.org/common-types/-/common-types-1.26.0.tgz#e2ab2a40aec9999cae1729b27336e89303655db3"
   integrity sha512-qrjJc8td9XsfScJqGYLDvrBpIiKsy0F8pekCRsZAUYlbnz1k9xiIf2J24iFTjcMnLiUyS/GQS8Il+dA6NgH9wQ==
 
+common-types@^1.26.0:
+  version "1.28.2"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.28.2.tgz#09b6bcf48c5aede67f06adc050b63cd5371cc8c7"
+  integrity sha512-NyxLB6VzJ1RhTbtZ56mOa5m7bhjhw6Bb59DEF+Qwt6yne2KKtFV8L7GCVv/fJjltOuuNJAUwpajMjBx7q31rgg==
+
 common-types@~1.25.0:
   version "1.25.2"
   resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.25.2.tgz#44f5191b6048acafe65c3cd5691d6d98686a64d5"
@@ -5531,6 +5536,16 @@ infer-owner@^1.0.3:
   resolved "https://registry.npmjs.org/infer-owner/-/infer-owner-1.0.4.tgz#c4cefcaa8e51051c2a40ba2ce8a3d27295af9467"
   integrity sha512-IClj+Xz94+d7irH5qRyfJonOdfTzuDaifE6ZPWfx0N0+/ATZCbuTPq2prFl526urkQd90WyUKIh1DfBQ2hMz9A==
 
+inferred-types@^0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/inferred-types/-/inferred-types-0.9.2.tgz#6927059e7581e1f19ef2fe508491a0dd6f4a1a9d"
+  integrity sha512-H7l53Sdau6IFTMVVaChjnCko2t/Ql/oBUdvh6/BfNqmmkCa9be/z3X4JjwQ7jfxDjEn8tIHiPmNyHM30q7XPkQ==
+  dependencies:
+    brilliant-errors "^0.3.1"
+    native-dash "^1.15.1"
+  optionalDependencies:
+    common-types "^1.26.0"
+
 inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
@@ -7275,6 +7290,13 @@ nanomatch@^1.2.9:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+native-dash@^1.15.1, native-dash@^1.18.0:
+  version "1.18.0"
+  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.18.0.tgz#5e4586f215102b08ca6bc0eeed3952dd28f82594"
+  integrity sha512-LVZ9+UYoJC0gjpJ0cJUHgERcX18hjVM+hFQCQyW4/ey42kVtEe00oLPscwGHTnR256NshJWIUjLSOaDoKKv36w==
+  optionalDependencies:
+    inferred-types "^0.9.2"
 
 native-dash@^1.16.2:
   version "1.16.2"

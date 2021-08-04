@@ -71,6 +71,7 @@ describe("Dynamic offsets reflected in path", () => {
       phoneNumber: "555-1212",
     });
 
+
     expect(typeof db.mock.store.state.foo.bar.testing).toEqual("object");
     const pathToRecord =
       db.mock.store.state.foo.bar.testing.deeperPeople[person.id];
@@ -256,7 +257,7 @@ describe("Dynamic offsets work with relationships", () => {
       attribute: "smart",
       category: "abc",
     });
-  
+
     person.addToRelationship("attributes", attribute.compositeKeyRef);
 
     attribute = await Record.get(HumanAttribute, attribute.compositeKeyRef);

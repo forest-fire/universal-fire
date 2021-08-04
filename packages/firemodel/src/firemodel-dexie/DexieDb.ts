@@ -27,11 +27,11 @@ export class DexieDb {
   /**
    * Takes a _deconstructed_ array of **Firemodel** `Model` constructors and converts
    * them into a dictionary of Dexie-compatible model definitions where the _key_ to
-   * the dictionary is the plural name of the model
+   * the dictionary is the plural name of the model and _value_ is the index definition
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public static modelConversion(
-    ...modelConstructors: Array<ConstructorFor<IModel<Model>>>
+    ...modelConstructors: Array<ConstructorFor<Model>>
   ) {
     if (modelConstructors.length === 0) {
       throw new FireModelError(
@@ -63,32 +63,32 @@ export class DexieDb {
           .forEach((i) => dexieModel.push(`&${i}`));
 
         // NON-UNIQUE Indexes
-        // const indexes = []
-        //   .concat(
-        //     (r.META.dbIndexes || [])
-        //       .filter((i) => i.isIndex && !i.isUniqueIndex)
-        //       .map((i) => i.property)
-        //   )
-        //   // include dynamic props (if they're not explicitly marked as indexes)
-        //   .concat(
-        //     r.hasDynamicPath
-        //       ? r.dynamicPathComponents.filter(
-        //         (i) =>
-        //           !r.META.dbIndexes.map((idx) => idx.property).includes(i)
-        //       )
-        //       : []
-        //   )
-        //   .forEach((i) => dexieModel.push(i));
+        (r.hasDynamicPath ? [] : ["id"])
+          .concat(
+            (r.META.dbIndexes || [])
+              .filter((i) => i.isIndex && !i.isUniqueIndex)
+              .map((i) => i.property)
+          )
+          // include dynamic props (if they're not explicitly marked as indexes)
+          .concat(
+            r.hasDynamicPath
+              ? r.dynamicPathComponents.filter(
+                (i) =>
+                  !r.META.dbIndexes.map((idx) => idx.property).includes(i)
+              )
+              : []
+          )
+          .forEach((i) => dexieModel.push(i));
 
         // MULTI-LEVEL Indexes
-        // const multiEntryIndex = []
-        //   .concat(
-        //     r.META.dbIndexes
-        //       .filter((i) => i.isMultiEntryIndex)
-        //       .map((i) => i.property)
-        //   )
-        //   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        //   .forEach((i) => dexieModel.push(`*${i}`));
+        (r.hasDynamicPath ? [] : ["id"])
+          .concat(
+            r.META.dbIndexes
+              .filter((i) => i.isMultiEntryIndex)
+              .map((i) => i.property)
+          )
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          .forEach((i) => dexieModel.push(`*${i}`));
 
         agg[r.pluralName] = dexieModel.join(",").trim();
 

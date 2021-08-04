@@ -31,7 +31,6 @@ import { queryAdjustForNext, reduceOptionsForQuery } from "./lists";
 import { isString } from "~/util";
 import { Model } from "~/models/Model";
 
-
 function addTimestamps<T extends Model>(obj: IDictionary) {
   const datetime = new Date().getTime();
   const output: IDictionary = {};

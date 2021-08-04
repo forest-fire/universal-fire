@@ -1,4 +1,4 @@
-import DeepPerson, { IDeepName } from "./testing/dynamicPaths/DeepPerson";
+import DeepPerson from "./testing/dynamicPaths/DeepPerson";
 
 import { DeeperPerson } from "./testing/dynamicPaths/DeeperPerson";
 import { Record } from "../src";
@@ -33,14 +33,13 @@ describe("Record static utils", () => {
 
   it("Record.compositeKey() fails when not enough info", async () => {
     try {
-      const result = Record.compositeKey(DeepPerson, {
+      Record.compositeKey(DeepPerson, {
         id: "1234",
       });
       throw new Error("should have thrown error due to lack of props");
     } catch (e) {
-      expect(e.code).toBe("not-ready");
-      expect(e.name).toBe("firemodel/not-ready");
-      expect(e.message).toContain("group");
+      console.log(e.message);
+      expect(e.code).toBe("invalid-composite-key");
     }
   });
 
