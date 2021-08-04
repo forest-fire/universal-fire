@@ -2,12 +2,11 @@ import "reflect-metadata";
 import * as helpers from "./testing/helpers";
 import { IFmWatchEvent, List, Record } from "~/index";
 import { RealTimeAdmin, SerializedQuery, IDatabaseSdk } from "universal-fire";
-import { Fixture } from "@forest-fire/fixture";
+import { Fixture, Mock } from "@forest-fire/fixture";
 import { Car } from "./testing/Car";
 import Company from "./testing/dynamicPaths/Company";
 import { FireModel } from "~/index";
 import { FmEvents } from "~/index";
-import { Mock } from "@forest-fire/fixture";
 import { Person } from "./testing/Person";
 
 describe("List class: ", () => {
