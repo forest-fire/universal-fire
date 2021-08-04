@@ -84,7 +84,7 @@ export class MockApi<T extends Model> {
             } which is deemed valid. Valid named mocks are ${JSON.stringify(
               validMocks
             )}; all bespoke mocks are accepted as valid.`,
-            `firemodel/mock-not-ready`
+            `fixture/mock-not-ready`
           );
         }
       });

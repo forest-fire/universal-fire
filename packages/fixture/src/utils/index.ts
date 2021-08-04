@@ -1,4 +1,3 @@
-export * from "./ModelMeta";
-export * from "./pluralize";
-export * from "./others";
-export * from "./set"
+export * from './ModelMeta';
+export * from './others';
+export * from './set';

@@ -19,7 +19,7 @@ export function set(
   if (!dotPath) {
     throw new FixtureError(
       `Attempt to set value into a dotPath but the dotPath was empty!`,
-      'not-allowed'
+      'fixture/not-allowed'
     );
   }
   const parts = dotPath.split(/\??\./);
@@ -35,13 +35,13 @@ export function set(
       } else {
         throw new FixtureError(
           `The dotPath -- ${dotPath} -- does not exist in the passed in object. You must either expressly state that you want the object structure created or this a real error that must be addressed otherwise. The part of the path which this failed on was "${p}".`,
-          'not-allowed'
+          'fixture/not-allowed'
         );
       }
     } else if (typeof ref[p] !== 'object') {
       throw new FixtureError(
         `Failed to set the path of "${dotPath}" of the passed in base object because the base object had a scalar value along that path and setting this would have changed the object's data structure in way which is not allowed! The scalar value was found in the "${p}" component of the path.`,
-        'not-allowed'
+        'fixture/not-allowed'
       );
     }
 

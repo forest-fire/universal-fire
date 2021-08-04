@@ -1,3 +1,3 @@
-import { createLibraryError } from "brilliant-errors";
+import { createError } from 'brilliant-errors';
 
-export const FixtureError = createLibraryError("@forest-fire/fixture");
+export const FixtureError = createError('FixtureError', '@forest-fire/fixture');
