@@ -235,11 +235,11 @@ describe('Listener events ->', () => {
     const fixture = Fixture.prepare();
     fixture
       .addSchema('company')
-      .mock((h: SchemaHelper) => () => {
+      .mock((h: SchemaHelper) => {
         return { name: h.faker.company.companyName() };
       })
       .hasMany('employee');
-    fixture.addSchema('employee').mock((h: SchemaHelper) => () => {
+    fixture.addSchema('employee').mock((h: SchemaHelper) => {
       return {
         first: h.faker.name.firstName(),
         last: h.faker.name.lastName(),

@@ -20,12 +20,10 @@ export function limitToFirst<TSdk extends IRtdbSdk, TData extends unknown = Reco
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function limitToLast<TSdk extends IRtdbSdk, TData extends unknown = Record<string, unknown>>(query: ISerializedQuery<TSdk, TData>) {
   const value = query.identity.limitToLast;
-
   return <T>(list: T[]) => {
     if (value === undefined) {
       return list;
     }
-
     return list.slice(-1 * value);
   };
 }

@@ -35,6 +35,9 @@ import { FireMockError } from '../errors';
 import { IMockWatcherGroupEvent } from '../@types';
 import { notify } from './rtdb';
 
+function getFromDotPath(obj: IDictionary<any>, dotPath: string) {
+  return ['', '/'].includes(dotPath) ? obj : get(obj, dotPath);
+}
 /**
  * internal function responsible for the actual removal of
  * a listener.
@@ -176,8 +179,8 @@ export function createStore<TSdk extends ISdk>(
             : api.getDb(key),
         priorValue:
           listener.eventType === 'value'
-            ? get(dbSnapshot, listener.query.path)
-            : justValue(get(dbSnapshot, listener.query.path)),
+            ? getFromDotPath(dbSnapshot, listener.query.path)
+            : justValue(getFromDotPath(dbSnapshot, listener.query.path)),
       };
 
       response.push(newResponse);
@@ -276,11 +279,11 @@ export function createStore<TSdk extends ISdk>(
     },
     getDb<D extends unknown = never>(path?: string): D {
       const dotifyPath = path ? dotify(path) : undefined;
-      return (dotifyPath ? get(_state, dotifyPath) : _state) as D;
+      return (dotifyPath ? getFromDotPath(_state, dotifyPath) : _state) as D;
     },
     setDb<V extends unknown>(path: string, value: V, silent = false) {
       const dotPath = join(path);
-      const oldRef = get(_state, dotPath);
+      const oldRef = getFromDotPath(_state, dotPath);
       const oldValue =
         typeof oldRef === 'object' ? { ...oldRef, ...{} } : oldRef;
       const isReference = ['object', 'array'].includes(typeof value);
@@ -295,7 +298,7 @@ export function createStore<TSdk extends ISdk>(
       }
 
       if (value === null) {
-        const parentValue: any = get(_state, getParent(dotPath));
+        const parentValue: any = getFromDotPath(_state, getParent(dotPath));
         if (typeof parentValue === 'object') {
           delete parentValue[getKey(dotPath)];
 
@@ -313,12 +316,15 @@ export function createStore<TSdk extends ISdk>(
       }
     },
     mergeDb<T extends unknown>(path: string, value: T) {
-      const old = get(_state, path);
-      this.setDb(path, deepmerge(old, value));
+      const dotPath = join(path);
+
+      const old = getFromDotPath(_state, dotPath);
+      const merge = deepmerge(old, value);
+      this.setDb(path || '', merge);
     },
     updateDb<T extends unknown>(path: string, value: T) {
       const dotPath = join(path);
-      const oldValue: T = get(_state, dotPath);
+      const oldValue: T = getFromDotPath(_state, dotPath);
       let changed = true;
       if (
         typeof value === 'object' &&
@@ -352,7 +358,7 @@ export function createStore<TSdk extends ISdk>(
       Object.keys(data).map((key) => {
         const value = data[key];
         const path = key;
-        if (get(_state, path) !== value) {
+        if (getFromDotPath(_state, path) !== value) {
           // silent set
           this.setDb(path, value, true);
         }
@@ -373,7 +379,6 @@ export function createStore<TSdk extends ISdk>(
       const fullPath = join(path, pushId);
       const valuePlusId =
         typeof value === 'object' ? { ...value, id: pushId } : value;
-
       this.setDb(fullPath, valuePlusId);
       return pushId;
     },

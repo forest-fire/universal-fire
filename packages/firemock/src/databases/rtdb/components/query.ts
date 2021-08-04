@@ -7,7 +7,6 @@ import {
   IRtdbDbEvent,
   IRtdbQuery,
   IRtdbSdk,
-  ISdk,
   ISerializedQuery,
   RtdbOrder,
 } from '@forest-fire/types';
@@ -93,6 +92,7 @@ export const query = <
 
       const data = store.getDb(serializedQuery.path);
       const results = runQuery(serializedQuery, data);
+      console.log(serializedQuery, results);
       // TODO: See how this was implemented before
       return snapshot(
         store,
@@ -120,8 +120,8 @@ export const query = <
     get ref() {
       return reference(store, serializedQuery);
     },
-    startAt: (value) => {
-      serializedQuery.startAt(value);
+    startAt: (value, key) => {
+      serializedQuery.startAt(value, key as string & keyof TData);
       return query(store, serializedQuery);
     },
     toJSON: () => ({

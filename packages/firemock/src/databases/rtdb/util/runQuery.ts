@@ -78,8 +78,8 @@ export function runQuery<
     const limitToKeys = query.identity.limitToFirst
       ? Object.keys(data).slice(0, query.identity.limitToFirst)
       : query.identity.limitToLast
-        ? Object.keys(data).slice(-1 * query.identity.limitToLast)
-        : false;
+      ? Object.keys(data).slice(-1 * query.identity.limitToLast)
+      : false;
 
     if (limitToKeys) {
       Object.keys(data).forEach((k) => {
@@ -102,17 +102,18 @@ export function runQuery<
   const queryFilter = _queryFilter<TSdk, TData>(query);
 
   let list: any[];
+  console.log(dataList);
 
   if (Array.isArray(dataList)) {
     list = limitFilter(queryFilter(dataList.sort(sortFn(query)))) as any[];
   }
-
+  console.log(list);
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return isListOfObjects
     ? // this is list of records to convert back to hash for Firebase compatability
-    arrayToHash(list)
+      arrayToHash(list)
     : dataIsAnObject
-      ? // if it was an Object but values weren't objects then this is probably
+    ? // if it was an Object but values weren't objects then this is probably
       // a key/value pairing
       list.reduce((agg: IDictionary, curr: IDictionary<any>) => {
         if (curr.id && curr.value) {
@@ -135,10 +136,13 @@ export function runQuery<
 
         return agg;
       }, {})
-      : list;
+    : list;
 }
 
-function _limitFilter<TSdk extends IRtdbSdk, TData extends unknown = Record<string, unknown>>(query: ISerializedQuery<TSdk, TData>) {
+function _limitFilter<
+  TSdk extends IRtdbSdk,
+  TData extends unknown = Record<string, unknown>
+>(query: ISerializedQuery<TSdk, TData>) {
   const first = limitFilters.limitToFirst(query);
   const last = limitFilters.limitToLast(query);
 
@@ -147,7 +151,10 @@ function _limitFilter<TSdk extends IRtdbSdk, TData extends unknown = Record<stri
   };
 }
 
-function _queryFilter<TSdk extends IRtdbSdk, TData extends unknown = Record<string, unknown>>(query: ISerializedQuery<TSdk, TData>) {
+function _queryFilter<
+  TSdk extends IRtdbSdk,
+  TData extends unknown = Record<string, unknown>
+>(query: ISerializedQuery<TSdk, TData>) {
   return (list: unknown[]) => {
     return list
       .filter(queryFilters.equalTo(query))

@@ -26,7 +26,7 @@ import { RealTimeDb } from '@forest-fire/real-time-db';
 
 import { firebase } from '@firebase/app';
 import { wait } from 'common-types';
-import { IDictionary } from 'brilliant-errors';
+import { IDictionary } from 'common-types';
 
 export const MOCK_LOADING_TIMEOUT = 200;
 export { IEmitter } from './private';

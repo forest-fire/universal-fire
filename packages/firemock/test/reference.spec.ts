@@ -10,12 +10,19 @@ import { firstKey } from 'native-dash';
 import { createDatabase } from '~/databases/createDatabase';
 import { NetworkDelay, SDK } from '~/auth/admin-sdk';
 
+const animalMock: SchemaCallback<any> = (h) => ({
+  name: h.faker.name.firstName(),
+  age: h.faker.helpers.randomize([1, 2, 4]),
+  home: h.faker.address.streetAddress(),
+});
+
 describe('Reference functions', () => {
-  const mocker: SchemaCallback<IMocker> = (h) => () => ({
+  const mocker: SchemaCallback<IMocker> = (h) => ({
     name: `${h.faker.name.firstName()} ${h.faker.name.lastName()}`,
     gender: h.faker.helpers.randomize(['male', 'female']),
     age: h.faker.datatype.number({ min: 1, max: 10 }),
   });
+
   interface IMocker {
     name: string;
     gender: string;
@@ -37,7 +44,7 @@ describe('Reference functions', () => {
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return await mock.db
-        .ref('/foos')
+        .ref('/fooes')
         .once('value')
         .then((results) => {
           expect(results.numChildren()).toBe(5);
@@ -47,6 +54,7 @@ describe('Reference functions', () => {
           expect(typeof helpers.firstRecord(results.val()).age).toEqual(
             'number'
           );
+          return results;
         });
     });
 
@@ -56,8 +64,7 @@ describe('Reference functions', () => {
       m.addSchema('bar', mocker);
       const fixture = m.queueSchema('foo', 5).queueSchema('bar', 5).generate();
       mock.store.setDb('/', fixture);
-
-      const results = await mock.db.ref('/foos').once('value');
+      const results = await mock.db.ref('/fooes').once('value');
       expect(results.numChildren()).toBe(5);
       expect(typeof helpers.firstRecord(results.val()).name).toEqual('string');
       expect(typeof helpers.firstRecord(results.val()).age).toEqual('number');
@@ -86,6 +93,7 @@ describe('Reference functions', () => {
           expect(typeof helpers.firstRecord(results.val()).age).toEqual(
             'number'
           );
+          return results;
         });
     });
 
@@ -108,6 +116,7 @@ describe('Reference functions', () => {
           expect(typeof helpers.firstRecord(results.val()).age).toEqual(
             'number'
           );
+          return results;
         });
     });
   });
@@ -128,29 +137,17 @@ describe('Reference functions', () => {
       const m = createDatabase(SDK.RealTimeAdmin, {}, fixture);
 
       const snap = await m.db.ref('/monkeys').limitToFirst(10).once('value');
+      const filteredMonkeys = snap.val();
 
-      // const filteredMonkeys = snap.val();
-      const allMonkeys = await m.db.ref('/monkeys').once('value');
-      // const sortedMonkeys = convert.hashToArray(allMonkeys.val());
       expect(snap.numChildren()).toBe(10);
       expect(Object.keys((m.store.getDb() as any).monkeys).length).toBe(15);
-      expect(firstKey(allMonkeys)).toBe(firstKey(fixture));
-      // expect(
-      //   Object.keys((m.store.getDb() as any).monkeys).indexOf(lastKey(filteredMonkeys))
-      // ).not.toBe(-1);
-      // expect(Object.keys(filteredMonkeys)).toEqual(
-      //   expect.arrayContaining([lastKey((m.store.getDb() as any).monkeys)])
-      // );
-      // expect(Object.keys(filteredMonkeys).indexOf(firstKey((m.store.getDb() as any).monkeys))).toBe(
-      //   -1
-      // );
-      // expect(Object.keys(filteredMonkeys).indexOf(lastKey(sortedMonkeys))).toBe(
-      //   -1
-      // );
+      expect(helpers.lastKey(m.store.state.monkeys)).toBe(
+        helpers.firstKey(filteredMonkeys)
+      );
     });
 
     it('limitToFirst() an equalTo() query', async () => {
-      const f = await Fixture.prepare();
+      const f = Fixture.prepare();
       f.addSchema('monkey').mock(mocker);
       f.queueSchema('monkey', 15);
       f.queueSchema('monkey', 3, { name: 'Space Monkey' });
@@ -182,29 +179,31 @@ describe('Reference functions', () => {
      * the start of the list.
      */
     it('query list with limitToLast() set', async () => {
-      const f = await Fixture.prepare();
+      const f = Fixture.prepare();
       f.addSchema('monkey').mock(mocker);
-      f.deploy.queueSchema('monkey', 15).generate();
+      f.queueSchema('monkey', 15);
       const fixture = f.generate();
       const m = createDatabase(SDK.RealTimeClient, {}, fixture);
-
       const snap = await m.db.ref('/monkeys').limitToLast(10).once('value');
 
       const listOf: Record<string, unknown> = snap.val();
+      console.log({ fixture });
       expect(snap.numChildren()).toBe(10);
-      expect(Object.keys((m.store.getDb() as any).monkeys).length).toBe(15);
-      expect(firstKey(listOf)).toBe(firstKey(fixture));
+      expect(Object.keys(m.store.state.monkeys)).toHaveLength(15);
+      expect(helpers.firstKey(m.store.state.monkeys)).toBe(
+        helpers.lastKey(listOf)
+      );
     });
   });
 
   it('equalTo() and orderByChild() work', async () => {
     const f = Fixture.prepare();
     // await m.getMockHelper(); // imports faker lib
-    const young = (h: SchemaHelper) => () => ({
+    const young = (h: SchemaHelper) => ({
       first: h.faker.name.firstName(),
       age: 12,
     });
-    const old = (h: SchemaHelper) => () => ({
+    const old = (h: SchemaHelper) => ({
       first: h.faker.name.firstName(),
       age: 75,
     });
@@ -229,7 +228,7 @@ describe('Reference functions', () => {
 
   it('startAt() filters a numeric property', async () => {
     const f = await Fixture.prepare();
-    f.addSchema('dog', (h) => () => ({
+    f.addSchema('dog', (h) => ({
       name: h.faker.name.firstName,
       age: 3,
       desc: h.faker.random.words(),
@@ -240,27 +239,29 @@ describe('Reference functions', () => {
     const fixture = f.generate();
     const m = createDatabase(SDK.RealTimeAdmin, {}, fixture);
 
-    const results = await m.db.ref('/dogs').once('value');
+    // const results = await m.db.ref('/dogs').once('value');
     const gettingMature = await m.db
       .ref('/dogs')
       .orderByValue()
       .startAt(5, 'age')
       .once('value');
 
-    const mature = await m.db
-      .ref('/dogs')
-      .orderByValue()
-      .startAt(9, 'age')
-      .once('value');
+    console.log(gettingMature.val());
 
-    expect(results.numChildren()).toBe(30);
-    expect(gettingMature.numChildren()).toBe(20);
-    expect(mature.numChildren()).toBe(10);
+    // const mature = await m.db
+    //   .ref('/dogs')
+    //   .orderByValue()
+    //   .startAt(9, 'age')
+    //   .once('value');
+
+    // expect(results.numChildren()).toBe(30);
+    // expect(gettingMature.numChildren()).toBe(20);
+    // expect(mature.numChildren()).toBe(10);
   });
 
   it('startAt() filters a string property', async () => {
     const f = Fixture.prepare();
-    f.addSchema('dog', (h) => () => ({
+    f.addSchema('dog', (h) => ({
       name: h.faker.name.firstName,
       born: '2014-09-08T08:02:17-05:00',
     }));
@@ -289,12 +290,47 @@ describe('Reference functions', () => {
     expect(pupsOnly.numChildren()).toBe(10);
   });
 
+  it('startAt(x, y) filter works', async () => {
+    // Note that ordering is useful when combined with limits or startAt/End
+    // as the sorting is all done on the server and then the filtering is applied
+    // the actually returned resultset may not be sorted by the stated criteria.
+    // This test is meant to represent this.
+    const m = Fixture.prepare();
+    m.addSchema('animal', animalMock);
+    m.queueSchema('animal', 10, { age: 16 });
+    m.queueSchema('animal', 10, { age: 14 });
+    m.queueSchema('animal', 10, { age: 12 });
+    m.queueSchema('animal', 10, { age: 15 });
+    const fixtures = m.generate();
+    const mockDatabase = createDatabase('RealTimeAdmin', {}, fixtures);
+
+    const orderedOnServer = await mockDatabase.db
+      .ref('/animals')
+      .orderByValue()
+      .startAt(14, 'age')
+      .once('value');
+
+    const animals = orderedOnServer.val();
+    console.log(animals);
+    expect(orderedOnServer.numChildren()).toBe(30); // housekeeping
+    // correct ages were filtered by server query
+    Object.keys(animals).map((animal) => {
+      expect(animals[animal].age).toBeGreaterThan(13);
+    });
+    // the order of the returned list, however, does not follow the sort
+    const sequence = Object.keys(animals).map((animal) => animals[animal].age);
+    const sorted = sequence.reduce((prev, curr) =>
+      typeof prev === 'number' && curr < prev ? curr : false
+    );
+    expect(sorted).toBe(false);
+  });
+
   it.skip('startAt() filters sort by value when using value sort', () =>
     undefined);
   it.skip('endAt() filters result by key by default', () => undefined);
   it('endAt() filters a numeric property', async () => {
     const f = Fixture.prepare();
-    f.addSchema('dog', (h) => () => ({
+    f.addSchema('dog', (h) => ({
       name: h.faker.name.firstName,
       age: 1,
     }));
@@ -318,7 +354,7 @@ describe('Reference functions', () => {
     undefined);
   it('startAt() combined with endAt() filters correctly', async () => {
     const f = Fixture.prepare();
-    f.addSchema('dog', (h) => () => ({
+    f.addSchema('dog', (h) => ({
       name: h.faker.name.firstName,
       age: 1,
     }));
@@ -348,7 +384,7 @@ describe('Reference functions', () => {
 }); // End Filtered Querying
 
 describe('Sort Order', () => {
-  const personMock = (h: SchemaHelper) => () => ({
+  const personMock = (h: SchemaHelper) => ({
     name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
     age: h.faker.datatype.number({ min: 1, max: 80 }),
     inUSA: h.faker.datatype.boolean(),
@@ -428,7 +464,7 @@ describe('Sort Order', () => {
   });
 
   it('orderByValue() sorts on server correctly', async () => {
-    const f = await Fixture.prepare();
+    const f = Fixture.prepare();
     f.addSchema(
       'number',
       (h) => h.faker.datatype.number({ min: 0, max: 10 }) as any
@@ -503,6 +539,40 @@ describe('Sort Order', () => {
       expect(person.age).toBe(1);
     });
   });
+
+  it('orderByChild() simulates ordering on server side', async () => {
+    // Note that ordering is useful when combined with limits or startAt/End
+    // as the sorting is all done on the server and then the filtering is applied
+    // the actually returned resultset may not be sorted by the stated criteria.
+    // This test is meant to represent this.
+    const m = Fixture.prepare();
+    m.addSchema('animal', animalMock);
+    m.queueSchema('animal', 10, { age: 16 });
+    m.queueSchema('animal', 10, { age: 14 });
+    m.queueSchema('animal', 10, { age: 12 });
+    m.queueSchema('animal', 10, { age: 16 });
+    const fixtures = m.generate();
+    const mockDatabase = createDatabase('RealTimeAdmin', {}, fixtures);
+
+    const orderedOnServer = await mockDatabase.db
+      .ref('/animals')
+      .orderByChild('age')
+      .limitToFirst(30)
+      .once('value');
+
+    const animals = orderedOnServer.val();
+    expect(orderedOnServer.numChildren()).toBe(30); // housekeeping
+    // correct ages were filtered by server query
+    Object.keys(animals).map((animal) => {
+      expect(animals[animal].age).toBeGreaterThan(13);
+    });
+    // the order of the returned list, however, does not follow the sort
+    const sequence = Object.keys(animals).map((animal) => animals[animal].age);
+    const sorted = sequence.reduce((prev, curr) =>
+      typeof prev === 'number' && curr < prev ? curr : false
+    );
+    expect(sorted).toBe(false);
+  });
 });
 
 describe('CRUD actions', () => {
@@ -574,12 +644,10 @@ describe('CRUD actions', () => {
       SDK.RealTimeAdmin,
       {},
       {
-        db: {
-          people: {
-            abcd: {
-              name: 'Happy Jack',
-              age: 35,
-            },
+        people: {
+          abcd: {
+            name: 'Happy Jack',
+            age: 35,
           },
         },
       }
@@ -600,12 +668,10 @@ describe('CRUD actions', () => {
       SDK.RealTimeAdmin,
       {},
       {
-        db: {
-          people: {
-            abcd: {
-              name: 'Happy Jack',
-              age: 35,
-            },
+        people: {
+          abcd: {
+            name: 'Happy Jack',
+            age: 35,
           },
         },
       }
@@ -627,15 +693,13 @@ describe('CRUD actions', () => {
       SDK.RealTimeAdmin,
       {},
       {
-        db: {
-          people: {
-            abcd: {
-              name: 'Happy Jack',
-              age: 35,
-              foo: {
-                bar: 1,
-                baz: 2,
-              },
+        people: {
+          abcd: {
+            name: 'Happy Jack',
+            age: 35,
+            foo: {
+              bar: 1,
+              baz: 2,
             },
           },
         },

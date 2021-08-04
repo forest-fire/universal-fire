@@ -4,7 +4,6 @@ import { QueryFunction } from '~/@types';
 export function startAt<TSdk extends IRtdbSdk, TData extends unknown = Record<string, unknown>>(query: ISerializedQuery<TSdk, TData>): QueryFunction {
   const key = query.identity.startAtKey || query.identity.orderByKey;
   const value = query.identity.startAt;
-
   return (record) => {
     if (value === undefined) {
       return true;
