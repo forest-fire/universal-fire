@@ -8,12 +8,8 @@ describe("Rolling back a record => ", () => {
   });
 
   // TODO: write test
-  it.skip("local Record value is reset to the rolled-back state when handling the error", async () => {
-    throw new Error("test not written");
-  });
+  it.todo("local Record value is reset to the rolled-back state when handling the error");
 
   // TODO: write test
-  it.skip("dispatch() sends the original value on rollback", async () => {
-    throw new Error("test not written");
-  });
+  it.todo("dispatch() sends the original value on rollback");
 });

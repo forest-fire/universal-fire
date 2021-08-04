@@ -132,9 +132,7 @@ describe("Relationship > ", () => {
     );
   });
 
-  it.skip("building relationship paths that point to non-existing records throws error when option is set", async () => {
-    throw new Error("test not written");
-  });
+  it.todo("building relationship paths that point to non-existing records throws error when option is set");
 
   it("build paths 1:M", async () => {
     const person = Record.createWith(FancyPerson, {

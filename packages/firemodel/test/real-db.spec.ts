@@ -164,10 +164,10 @@ describe("Tests using REAL db =>�", () => {
     expect(replaced.key).toBe(jack.id);
   });
 
-  it.skip("value listener returns correct key and value", async () => {
+  it("value listener returns correct key and value", async () => {
     const events: IDictionary[] = [];
-    FireModel.dispatch = async (e: IReduxAction) => events.push(e) as IReduxAction;
-    const w = await Watch.record(FancyPerson, "abcd").start({
+    FireModel.dispatch = async (e: IReduxAction) => { events.push(e); return e; };
+    await Watch.record(FancyPerson, "abcd").start({
       name: "value-listener",
     });
 

@@ -54,7 +54,7 @@ describe.skip("Dexie Table API", () => {
     }
   });
 
-  it.skip("bulkPut() of a model which has a composite key / dynamic path", async () => {
+  it("bulkPut() of a model which has a composite key / dynamic path", async () => {
     const tbl = db.table(DeepPerson);
     await tbl.bulkPut(peopleData);
     const response = await tbl.toArray();
