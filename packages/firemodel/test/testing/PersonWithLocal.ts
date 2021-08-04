@@ -8,7 +8,6 @@ import {
   fk,
   hasMany,
   belongsTo,
-  IFmHasMany,
   fks
 } from "../../src";
 import { Company } from "./Company";

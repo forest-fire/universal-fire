@@ -218,7 +218,7 @@ describe("Relationship > ", () => {
     await company.addToRelationship("employees", person.id);
     await person.addToRelationship("pays", pay.id);
 
-    expect((company.data.employees as any)[person.id]).toBe(true);
+    expect((company.data.employees)[person.id]).toBe(true);
   });
 
   it("testing adding relationships with associate", async () => {

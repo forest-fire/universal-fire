@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import "./test-console"; // TS declaration
 
 import * as fs from "fs";
@@ -29,15 +31,15 @@ interface Console {
 
 declare let console: Console;
 
-export function restoreStdoutAndStderr() {
+export function restoreStdoutAndStderr(): void {
   console._restored = true;
 }
 
-export async function wait(ms: number) {
+export async function wait(ms: number): Promise<unknown> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function timeout(ms: number) {
+export async function timeout(ms: number): Promise<unknown> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 

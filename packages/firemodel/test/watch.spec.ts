@@ -156,7 +156,8 @@ describe("Watch →", () => {
 
     const events: IDictionary[] = [];
     FireModel.dispatch = async (evt) => {
-      return events.push(evt) as any;
+      events.push(evt)
+      return evt;
     };
     await Watch.list(PersonWithLocalAndPrefix).all().start();
     await Record.add(PersonWithLocalAndPrefix, person.data);
@@ -179,7 +180,8 @@ describe("Watch →", () => {
     const person = await Record.get(PersonWithLocalAndPrefix, personId);
     const events: IDictionary[] = [];
     FireModel.dispatch = async (evt) => {
-      return events.push(evt) as any;
+      events.push(evt);
+      return evt;
     };
     await Watch.record(PersonWithLocalAndPrefix, personId).start();
     await Record.add(PersonWithLocalAndPrefix, person.data);
@@ -208,6 +210,7 @@ describe("Watch.list(XXX).ids()", () => {
   it("WatchList instantiated with ids() method", async () => {
     const wl = Watch.list(Person).ids("1234", "4567", "8989");
     expect(wl).toBeInstanceOf(WatchList);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((wl as any)._underlyingRecordWatchers).toHaveLength(3);
   });
 
@@ -286,7 +289,8 @@ describe("Watch.list(XXX).ids()", () => {
     });
     const events: Array<IFmWatchEvent> = [];
     const cb = async (event: IFmWatchEvent) => {
-      return events.push(event) as any;
+      events.push(event);
+      return event;
     };
     const watcher = Watch.list(DeeperPerson);
     watcher

@@ -24,7 +24,7 @@ describe("Validating client permissions with an anonymous user", () => {
   it("Writing to an area without permissions fails and rolls local changes back", async () => {
     const events: IDictionary = [];
     const dispatch = async (payload: IDictionary) => {
-      return events.push(payload) as any;
+      return events.push(payload);
     };
     FireModel.dispatch = dispatch;
 
@@ -40,7 +40,7 @@ describe("Validating client permissions with an anonymous user", () => {
     }
 
     expect(
-      events.filter((i: any) => i.type === "@firemodel/RECORD_ADDED_ROLLBACK")
+      events.filter((i: IDictionary) => i.type === "@firemodel/RECORD_ADDED_ROLLBACK")
     ).toHaveLength(1);
   });
 });

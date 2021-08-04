@@ -103,7 +103,7 @@ describe.skip("Dexie - Record API", () => {
     });
     await car.remove("666");
     try {
-      const fail = await car.get("666");
+      await car.get("666");
       throw new Error(`The record 666 should have been removed from database!`);
     } catch (e) {
       expect(e.code === "add");

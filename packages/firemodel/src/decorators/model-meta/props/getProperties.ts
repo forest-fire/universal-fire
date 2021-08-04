@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ClassReflection } from "~/decorators/utils";
 import { IFmModelPropertyMeta } from "~/types";
 

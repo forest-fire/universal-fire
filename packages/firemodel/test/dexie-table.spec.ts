@@ -47,6 +47,7 @@ describe.skip("Dexie Table API", () => {
     try {
       await db
         .table(Car)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .bulkAdd(carData.concat({ foo: "dfadfasd", bar: "asdfsdf" } as any));
       throw new Error("invalid data should have thrown error");
     } catch (e) {

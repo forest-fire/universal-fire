@@ -5,7 +5,7 @@ import { RealTimeAdmin } from "universal-fire";
 
 describe("schema() decorator: ", () => {
   it("can read Schema meta properties", () => {
-    const myclass: any = new Klass();
+    const myclass = new Klass();
     expect(myclass.META.dbOffset).toBe("authenticated");
     expect(myclass.META.localPrefix).toBe("foobar");
   });
@@ -18,6 +18,7 @@ describe("schema() decorator: ", () => {
   });
 
   it("setting meta throws error", () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const myclass: any = new Klass();
     try {
       myclass.META = { foo: "bar" };
@@ -64,9 +65,6 @@ describe("property decorator: ", () => {
     expect(myRecord.pushKeys).toEqual(expect.arrayContaining(["tags"]));
   });
 
-  it("@min(), @max(), @length(), and @desc() decorator-factories work", () => {
-    const myclass = new Klass();
-  });
 
   it("all base meta keys are represented", () => {
     const myclass = new Klass();

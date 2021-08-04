@@ -113,9 +113,9 @@ describe("DexieModel => ", () => {
     expect(fancyCars.schema.primKey.name).toBe("id");
     expect(fancyCars.schema.primKey.keyPath).toBe("id");
 
-    let uniqueIndexes = fancyCars.schema.indexes
-      .filter((i) => i.unique)
-      .map((i) => i.name);
+    // const uniqueIndexes = fancyCars.schema.indexes
+    //   .filter((i) => i.unique)
+    //   .map((i) => i.name);
     let nonUniqueIndexes = fancyCars.schema.indexes
       .filter((i) => !i.unique)
       .map((i) => i.name);
@@ -127,9 +127,9 @@ describe("DexieModel => ", () => {
       expect.arrayContaining(["group"])
     );
 
-    uniqueIndexes = people.schema.indexes
-      .filter((i) => i.unique)
-      .map((i) => i.name);
+    // uniqueIndexes = people.schema.indexes
+    //   .filter((i) => i.unique)
+    //   .map((i) => i.name);
     nonUniqueIndexes = people.schema.indexes
       .filter((i) => !i.unique)
       .map((i) => i.name);

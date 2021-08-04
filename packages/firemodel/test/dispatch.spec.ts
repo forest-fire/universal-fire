@@ -1,7 +1,6 @@
 import {
   IFmChangedProperties,
   IFmWatchEvent,
-  IReduxAction,
   IVuexDispatch,
   Record,
   VeuxWrapper,
@@ -34,9 +33,10 @@ describe("Dispatch →", () => {
     });
     const validProperties = person.META.properties.map(
       (i) => i.property
-    ) as Array<keyof Person & string>;
+    );
 
     const deltas = compareHashes(p2.data, person.data, validProperties);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: IFmChangedProperties<Person> = (person as any)._getPaths(
       p2,
       deltas
@@ -67,8 +67,10 @@ describe("Dispatch →", () => {
       name: "Jane",
       age: 18,
     });
-    Record.dispatch = async (e: IFmWatchEvent) =>
-      events.push(e) as IReduxAction;
+    Record.dispatch = async (e: IFmWatchEvent) => {
+      events.push(e);
+      return e;
+    }
 
     await person.set("name", "Carol");
     expect(person.get("name")).toBe("Carol"); // local change took place
@@ -91,6 +93,7 @@ describe("Dispatch →", () => {
   it("VuexWrapper converts calling structure to what Vuex expects", async () => {
     const events: Array<IFmWatchEvent> = [];
     const types = new Set<string>();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const vueDispatch: IVuexDispatch = async (type, payload: any) => {
       types.add(type);
       events.push({ ...payload, ...{ type } });
@@ -111,8 +114,10 @@ describe("Dispatch →", () => {
   });
 
   it("By default the localPath is the singular modelName", async () => {
-    const events: Array<IFmWatchEvent<Person>> = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const events: Array<IFmWatchEvent<any>> = [];
     const types = new Set<string>();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const vueDispatch: IVuexDispatch = async (type, payload: any) => {
       types.add(type);
       events.push({ ...payload, ...{ type } });
@@ -137,6 +142,7 @@ describe("Dispatch →", () => {
       payload
     ) => {
       types.add(type);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       events.push({ ...payload, ...{ type } } as any);
     };
     const person = await Record.add(PersonWithLocal, {
@@ -154,6 +160,7 @@ describe("Dispatch →", () => {
   it("The when dispatching events without a listener the source is 'unknown'", async () => {
     const events: Array<IFmWatchEvent> = [];
     const types = new Set<string>();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const vueDispatch: IVuexDispatch = async (type, payload: any) => {
       types.add(type);
       events.push({ ...payload, ...{ type } });

@@ -24,7 +24,10 @@ const addFatherAndChildren = async () => {
     age: 46,
   });
   const events: IFmWatchEvent[] = [];
-  Record.dispatch = async (evt: IFmWatchEvent) => events.push(evt) as IReduxAction;
+  Record.dispatch = async (evt: IFmWatchEvent) => {
+    events.push(evt);
+    return evt;
+  }
   await father.addToRelationship("children", [bob.id, chrissy.id]);
 
   return {
@@ -59,12 +62,14 @@ describe("Relationship > ", () => {
     expect(typeof person.id).toEqual("string");
     const lastUpdated = person.data.lastUpdated;
     const events: IFmLocalRelationshipEvent[] = [];
-    Record.dispatch = async (evt: IFmLocalRelationshipEvent) =>
-      events.push(evt) as IReduxAction;
+    Record.dispatch = async (evt: IFmLocalRelationshipEvent) => {
+      events.push(evt);
+      return evt;
+    }
 
     await person.addToRelationship("cars", "car12345");
 
-    expect((person.data.cars as any)["car12345"]).toBe(true);
+    expect((person.data.cars)["car12345"]).toBe(true);
     expect(events).toHaveLength(2);
 
     const eventTypes = new Set(events.map((e) => e.type));
@@ -120,11 +125,11 @@ describe("Relationship > ", () => {
     const results = await addFatherAndChildren();
 
     const pops = await Record.get(FancyPerson, results.fatherId);
-    expect((pops.data.children as any)[results.bobId]).toBe(true);
-    expect((pops.data.children as any)[results.chrissyId]).toBe(true);
+    expect((pops.data.children)[results.bobId]).toBe(true);
+    expect((pops.data.children)[results.chrissyId]).toBe(true);
 
     const bob2 = await Record.get(FancyPerson, results.bobId);
-    expect((bob2.data.parents as any)[results.fatherId]).toBe(true);
+    expect((bob2.data.parents)[results.fatherId]).toBe(true);
   });
 
   it("using removeFromRelationship() works with inverse (M:M)", async () => {
@@ -155,10 +160,7 @@ describe("Relationship > ", () => {
       name: "Bob",
       age: 23,
     });
-    const abc = await Record.add(Company, {
-      id: "e8899",
-      name: "ABC Inc",
-    });
+
     const dbWasUpdated = bob.setRelationship("employer", "e8899");
     // locally changed immediately
     expect(bob.get("employer")).toBe("e8899");
@@ -170,7 +172,7 @@ describe("Relationship > ", () => {
     const bob2 = people.getRecord(bob.id);
     people.get("1234");
     expect(bob2.get("employer")).toBe("e8899");
-    const company = await Record.get(Company, "e8899");
+    await Record.get(Company, "e8899");
   });
 
   it("using clearRelationship() on an hasOne prop sets relationship", async () => {

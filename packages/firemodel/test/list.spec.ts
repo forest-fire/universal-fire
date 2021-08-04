@@ -1,8 +1,6 @@
 import "reflect-metadata";
-
 import * as helpers from "./testing/helpers";
-
-import { IFmWatchEvent, IReduxAction, List, Record } from "~/index";
+import { IFmWatchEvent, List, Record } from "~/index";
 import { RealTimeAdmin, SerializedQuery, IDatabaseSdk } from "universal-fire";
 import { Fixture } from "@forest-fire/fixture";
 import { Car } from "./testing/Car";
@@ -71,7 +69,7 @@ describe("List class: ", () => {
   it("can instantiate with all() method", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h: any) => () => ({
+      .addSchema("person", (h) => () => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
       }))
@@ -89,7 +87,7 @@ describe("List class: ", () => {
   it("can instantiate with from() method", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h: any) => () => ({
+      .addSchema("person", (h) => () => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
       }))
@@ -153,7 +151,7 @@ describe("List class: ", () => {
   it("can instantiate with recent(), and inactive() methods", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h: any) => () => ({
+      .addSchema("person", (h) => () => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -177,7 +175,7 @@ describe("List class: ", () => {
     const timestamp = new Date().getTime();
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h: any) => () => ({
+      .addSchema("person", (h) => () => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 49 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -201,7 +199,7 @@ describe("List class: ", () => {
   it("an instantiated List can call get() with a valid ID and get a Record", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h: any) => () => ({
+      .addSchema("person", (h) => () => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -225,7 +223,7 @@ describe("List class: ", () => {
   it("list.get() with a valid ID retrieves the model data for that record", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h: any) => () => ({
+      .addSchema("person", (h) => () => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -247,7 +245,7 @@ describe("List class: ", () => {
   it("an instantiated List calling get() with an invalid ID throws an error", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h: any) => () => ({
+      .addSchema("person", (h) => () => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -258,17 +256,17 @@ describe("List class: ", () => {
     db.mock.store.setDb("", mockData);
     const list = await List.all(Person);
     try {
-      const record = list.getRecord("not-there");
+      list.getRecord("not-there");
       throw new Error("Invalid ID should have thrown error");
-    } catch (e) {
-      expect(e.code).toBe("not-found");
+    } catch (error) {
+      expect(error.code).toBe("not-found");
     }
   });
 
   it("list.get() returns undefined when non-existent id is passed", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h: any) => () => ({
+      .addSchema("person", (h) => () => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -288,10 +286,14 @@ describe("List class: ", () => {
       db.mock.store.updateDb(m.dbPath, m.data);
     });
     const events: Array<IFmWatchEvent> = [];
-    Record.dispatch = async (evt: IFmWatchEvent) => events.push(evt) as IReduxAction;
+    Record.dispatch = async (evt: IFmWatchEvent) => {
+      events.push(evt);
+      return evt;
+    }
+
     const peeps = await List.all(Person);
     const id = peeps.data[1].id;
-    const removed = await peeps.remove(id);
+    await peeps.remove(id);
     expect(peeps).toHaveLength(9);
     const eventTypes = new Set(events.map((e) => e.type));
 
@@ -310,7 +312,10 @@ describe("List class: ", () => {
       db.mock.store.updateDb(m.dbPath, m.data);
     });
     const events: Array<IFmWatchEvent> = [];
-    Record.dispatch = async (evt: IFmWatchEvent) => events.push(evt) as IReduxAction;
+    Record.dispatch = async (evt: IFmWatchEvent) => {
+      events.push(evt);
+      return evt;
+    }
     const peeps = await List.all(Person);
     expect(peeps).toHaveLength(10);
     const newRec = await peeps.add({

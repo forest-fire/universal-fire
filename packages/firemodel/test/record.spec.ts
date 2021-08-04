@@ -39,9 +39,12 @@ describe("Record > ", () => {
 
   it(`Record's static add() fires client events`, async () => {
     const events: Array<IFmLocalEvent<Person>> = [];
-    Record.dispatch = async (payload: IFmLocalEvent<Person>) =>
+    Record.dispatch = async (payload: IFmLocalEvent<Person>) => {
       events.push(payload);
-    const r = await Record.add(Person, {
+      return payload;
+    }
+
+    await Record.add(Person, {
       name: "Bob",
       age: 40,
     });
@@ -184,7 +187,7 @@ describe("Record > ", () => {
     const record = Record.create(Person, { db });
 
     try {
-      const foo = record.dbPath;
+      record.dbPath;
       throw new Error("Error should have happened");
     } catch (e) {
       expect(e.code).toBe("not-ready");

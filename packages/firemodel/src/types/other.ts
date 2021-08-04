@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NamedFakes } from "~/types/constants";
 import { Model } from "~/models/Model";
-import { ConstructorFor, IDictionary } from "common-types";
+import { ConstructorFor } from "common-types";
 import type { FakerStatic } from "@forest-fire/types"
 
 /**
@@ -10,7 +11,7 @@ import type { FakerStatic } from "@forest-fire/types"
  */
 export type BespokeMock = (faker: FakerStatic) => any
 
-export type FmMockType<T extends any> =
+export type FmMockType<_T extends unknown> =
   | keyof typeof NamedFakes
   | BespokeMock;
 

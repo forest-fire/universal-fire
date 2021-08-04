@@ -1,5 +1,5 @@
 import { ISdk } from "@forest-fire/types";
-import { ConstructorFor, IDictionary } from "common-types";
+import { IDictionary } from "common-types";
 import { IModel, PropertyOf } from "~/types";
 import { Record } from "~/core";
 import { getModelMeta } from "~/util";

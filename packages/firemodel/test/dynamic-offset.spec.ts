@@ -475,7 +475,10 @@ describe("WATCHers work with dynamic dbOffsets", () => {
   it("Watching a RECORD with a dbOffset works", async () => {
     const events: IReduxAction[] = [];
     const dispatch = async (evt: IReduxAction) => {
-      return events.push(evt) as IReduxAction;
+      {
+        events.push(evt);
+        return evt;
+      }
     };
     FireModel.dispatch = dispatch;
     const watchRecord = Watch.record(DeepPerson, {
@@ -492,7 +495,7 @@ describe("WATCHers work with dynamic dbOffsets", () => {
     expect(watcher.watcherSource).toBe("record");
     expect(watcher.eventFamily).toBe("value");
     expect(watcher.watcherPaths[0]).toBe("/group/CA/testing/deepPeople/12345");
-    const person = await Record.add(DeepPerson, {
+    await Record.add(DeepPerson, {
       id: "12345",
       group: "CA",
       age: 23,
@@ -507,7 +510,8 @@ describe("WATCHers work with dynamic dbOffsets", () => {
   it("Watching a LIST with a dbOffset works", async () => {
     const events: IReduxAction[] = [];
     const dispatch = async (evt: IReduxAction) => {
-      return events.push(evt) as IReduxAction;
+      events.push(evt);
+      return evt;
     };
     FireModel.dispatch = dispatch;
 
