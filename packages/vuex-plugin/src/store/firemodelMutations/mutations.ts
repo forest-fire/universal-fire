@@ -7,10 +7,8 @@ import {
   watchEvents
 } from "~/store";
 
-import { AbcFiremodelMutation } from "./abc";
-import { IDictionary } from "common-types";
-import { Model } from "firemodel";
-import { MutationTree } from "vuex";
+import { Model } from 'firemodel';
+import { MutationTree } from 'vuex';
 
 export type ListPropertyCandidates<T> = Pick<
   T,
@@ -39,7 +37,7 @@ const vuexModule: Module<IMyStateModule, IRootState> = {
 }
 ```
 */
-export function firemodelMutations<T extends IDictionary>(
+export function firemodelMutations<T extends Model>(
   /**
    * If you are using a **list** based watcher you will almost always want
    * the list of records to be "offset" from the root of the local state
@@ -55,12 +53,11 @@ export function firemodelMutations<T extends IDictionary>(
 ): MutationTree<T> {
   const mutations: MutationTree<T> = {
     ...addedLocally<T>(propOffset),
-    ...AbcFiremodelMutation<T>(propOffset),
     ...serverEvents<T>(propOffset),
     ...serverRollbacks<T>(propOffset),
     ...serverConfirms<T>(propOffset),
     ...watchEvents<T>(propOffset),
-    ...reset<T>(propOffset)
+    ...reset<T>(propOffset),
   };
 
   return mutations;

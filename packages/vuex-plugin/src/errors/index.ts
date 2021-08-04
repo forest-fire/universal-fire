@@ -1,2 +1,1 @@
-export * from './AbcError';
-export * from './FiremodelPluginError'
+export * from './FiremodelPluginError';

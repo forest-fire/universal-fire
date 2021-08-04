@@ -168,8 +168,7 @@ export interface ICachePerformance {
   ignores: number;
 }
 
-export interface IDiscreteServerResults<T extends Model>
-  extends IAbcResultsMeta<T> {
+export interface IDiscreteServerResults<T extends Model> extends IAbcResultsMeta<T> {
   /**
    * The primary keys being requested from the server
    */

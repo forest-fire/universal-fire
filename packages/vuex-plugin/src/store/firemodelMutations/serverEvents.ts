@@ -1,8 +1,9 @@
-import { IFmWatchEvent, IModel, Model } from 'firemodel';
-import { changeRoot, isRecord, updateList } from '~/util';
+import { IFmWatchEvent, IModel } from 'firemodel';
+import { changeRoot, isList, updateList } from '~/util';
 
 import { FmCrudMutation } from '~/enums';
 import { MutationTree } from 'vuex';
+import { ISdk } from 'universal-fire';
 
 export function serverEvents<T extends IModel>(propOffset?: keyof T & string): MutationTree<T> {
   const offset = !propOffset ? ('all' as keyof T & string) : propOffset;
@@ -13,12 +14,12 @@ export function serverEvents<T extends IModel>(propOffset?: keyof T & string): M
        * of records at the root of the state structure
        */
       state: T,
-      payload: IFmWatchEvent<T>
+      payload: IFmWatchEvent<ISdk, T>
     ) {
-      if (isRecord(state, payload)) {
-        changeRoot<T>(state, payload.value, payload.localPath);
-      } else {
+      if (isList(state, payload)) {
         updateList<T>(state, offset, payload.value);
+      } else {
+        changeRoot<T>(state, payload.value, payload.localPath);
       }
     },
 
@@ -28,7 +29,7 @@ export function serverEvents<T extends IModel>(propOffset?: keyof T & string): M
        * of records at the root of the state structure
        */
       state: T,
-      payload: IFmWatchEvent<Model>
+      payload: IFmWatchEvent<ISdk, T>
     ) {
       if (payload.value === null) {
         // a "remove" event will also be picked up by the "change" event
@@ -37,10 +38,10 @@ export function serverEvents<T extends IModel>(propOffset?: keyof T & string): M
         // change.
         return;
       }
-      if (isRecord(state, payload)) {
-        changeRoot<T>(state, payload.value, payload.localPath);
-      } else {
+      if (isList(state, payload)) {
         updateList<T>(state, offset, payload.value);
+      } else {
+        changeRoot<T>(state, payload.value, payload.localPath);
       }
     },
 
@@ -50,12 +51,12 @@ export function serverEvents<T extends IModel>(propOffset?: keyof T & string): M
        * of records at the root of the state structure
        */
       state: T,
-      payload: IFmWatchEvent<Model>
+      payload: IFmWatchEvent<ISdk, T>
     ) {
-      if (isRecord(state, payload)) {
-        changeRoot(state, null, payload.localPath);
-      } else {
+      if (isList(state, payload)) {
         updateList<T>(state, offset, payload.value);
+      } else {
+        changeRoot(state, null, payload.localPath);
       }
     },
   };

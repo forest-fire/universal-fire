@@ -22,25 +22,25 @@ interface IDictionaryWithId extends IDictionary {
  */
 export function updateList<
   TModel extends Model,
-  TState extends IDictionary<IModel<TModel>[]> = IDictionary<IModel<TModel>[]>,
-  TId extends keyof TState & string = keyof TState & string,
-  >(
-    moduleState: TState,
-    offset: TId,
-    /** the new record value OR "null" if removing the record */
-    value: IModel<TModel> | null
-  ): void {
+  TState extends IDictionary<TModel[]> = IDictionary<TModel[]>,
+  TId extends keyof TState & string = keyof TState & string
+>(
+  moduleState: TState,
+  offset: TId,
+  /** the new record value OR "null" if removing the record */
+  value: TModel | null
+): void {
   if (!offset) {
     throw new FireModelPluginError(
       '"updateList" was passed a falsy value for an offset; this is not currently allowed',
-      "not-allowed"
+      'not-allowed'
     );
   }
 
   const existing: IModel<TModel>[] = moduleState[offset] || [];
 
   let found = false;
-  const updated: IModel<TModel>[] = existing.map(i => {
+  const updated: IModel<TModel>[] = existing.map((i) => {
     if (value && i.id === value.id) {
       found = true;
     }

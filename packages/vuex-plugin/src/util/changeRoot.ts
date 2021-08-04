@@ -2,6 +2,7 @@ import { FireModelPluginError } from "~/errors";
 import Vue from "vue";
 import { getInitialState } from "~/util";
 import { StoreWithPlugin } from "~/types";
+import { IModel, Model } from 'firemodel';
 
 /**
  * **changeRoot**
@@ -13,16 +14,14 @@ import { StoreWithPlugin } from "~/types";
  * @param state
  * @param updatedProps
  */
-export const changeRoot = <T extends StoreWithPlugin>(
+export const changeRoot = <T extends Model>(
   state: T,
-  updatedProps: T | null,
+  updatedProps: IModel<T> | null,
   moduleName: string
 ) => {
   /** the full set of props defined by both current and new state */
   const properties = Array.from(
-    new Set(
-      Object.keys(state).concat(updatedProps ? Object.keys(updatedProps) : [])
-    )
+    new Set(Object.keys(state).concat(updatedProps ? Object.keys(updatedProps) : []))
   );
 
   if (getInitialState()[moduleName] === undefined) {
@@ -31,8 +30,8 @@ export const changeRoot = <T extends StoreWithPlugin>(
     );
   }
 
-  properties.forEach(prop => {
-    const newState = updatedProps ? updatedProps[prop as keyof T] : null;
+  properties.forEach((prop) => {
+    const newState = updatedProps ? updatedProps[prop as keyof IModel<T>] : null;
     const oldState = state[prop as keyof T];
     const defaultState = getInitialState()[moduleName][prop];
 

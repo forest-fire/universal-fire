@@ -21,7 +21,7 @@ export function serverRollbacks<T>(propOffset?: keyof T & string): MutationTree<
   const offset: keyof T & string = !propOffset ? ('all' as keyof T & string) : propOffset;
 
   return {
-    [FmCrudMutation.serverAddRollback](state, payload: IFmWatchEvent<ISdk>) {
+    [FmCrudMutation.serverAddRollback](state, payload: IFmWatchEvent<ISdk, T>) {
       if (isRecord(state, payload)) {
         changeRoot<T>(state, payload.value, payload.localPath);
       } else {
@@ -29,7 +29,7 @@ export function serverRollbacks<T>(propOffset?: keyof T & string): MutationTree<
       }
     },
 
-    [FmCrudMutation.serverChangeRollback](state, payload: IFmWatchEvent<ISdk>) {
+    [FmCrudMutation.serverChangeRollback](state, payload: IFmWatchEvent<ISdk, T>) {
       if (isRecord(state, payload)) {
         changeRoot<T>(state, payload.value, payload.localPath);
       } else {
@@ -37,7 +37,7 @@ export function serverRollbacks<T>(propOffset?: keyof T & string): MutationTree<
       }
     },
 
-    [FmCrudMutation.serverRemoveRollback](state, payload: IFmWatchEvent<ISdk>) {
+    [FmCrudMutation.serverRemoveRollback](state, payload: IFmWatchEvent<ISdk, T>) {
       if (isRecord(state, payload)) {
         changeRoot<T>(state, payload.value, payload.localPath);
       } else {

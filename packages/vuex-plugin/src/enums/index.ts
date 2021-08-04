@@ -7,9 +7,6 @@
 // files: AbcDataSource, AbcMutation, AbcStrategy, DbSyncOperation, FmConfigActions, FmConfigMutation, FmCrudMutation, QueryType.
 
 // local file exports
-export * from "./AbcDataSource";
-export * from "./AbcMutation";
-export * from "./AbcStrategy";
 export * from "./DbSyncOperation";
 export * from "./FmConfigActions";
 export * from "./FmConfigMutation";

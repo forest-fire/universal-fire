@@ -16,15 +16,15 @@ import { MutationTree } from 'vuex';
  */
 export function serverConfirms<T extends Model>(propOffset?: keyof T): MutationTree<T> {
   return {
-    [FmCrudMutation.serverAddConfirm](state, payload: IFmWatchEvent<Model>) {
+    [FmCrudMutation.serverAddConfirm](state, payload: IFmWatchEvent) {
       // console.log("server add confirmed", payload.value.id);
     },
 
-    [FmCrudMutation.serverChangeConfirm](state, payload: IFmWatchEvent<Model>) {
+    [FmCrudMutation.serverChangeConfirm](state, payload: IFmWatchEvent) {
       //
     },
 
-    [FmCrudMutation.serverRemoveConfirm](state, payload: IFmWatchEvent<Model>) {
+    [FmCrudMutation.serverRemoveConfirm](state, payload: IFmWatchEvent) {
       // console.log("server remove confirmed", payload);
     },
   };

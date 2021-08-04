@@ -8,8 +8,7 @@
 // directories: actions.
 
 // local file exports
-export * from "./Store";
-export * from "./abc";
+export * from './Store';
 export * from "./auth";
 export * from "./config";
 export * from "./firemodel";

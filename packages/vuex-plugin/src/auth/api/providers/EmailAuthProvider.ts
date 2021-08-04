@@ -1,8 +1,9 @@
 import { FireModelPluginError } from "~/errors/";
 import { getDatabase } from "~/util/state-mgmt/database";
+import type { AuthCredential } from 'universal-fire';
 
 export class EmailAuthProvider {
-  static credential(email: string, password: string) {
+  static credential(email: string, password: string): AuthCredential {
     const db = getDatabase();
     if (!db.authProviders) {
       throw new FireModelPluginError(
