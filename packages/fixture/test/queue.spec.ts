@@ -140,11 +140,12 @@ describe('Queue Class', () => {
       { id: 'bar', value: 10 },
       { id: 'baz', value: 20 },
     ]);
-    expect(q.toHash()).toBeInstanceOf(Object);
-    expect(q.toHash().foo).toBeInstanceOf(Object);
-    expect(q.toHash().foo.value).toBe(5);
-    expect(q.toHash().foo.id).toBeUndefined();
-    expect(q.toHash().uno).toBeUndefined();
+    const hash = q.toHash();
+    expect(hash).toBeInstanceOf(Object);
+    expect(hash.foo).toBeInstanceOf(Object);
+    expect(hash.foo.value).toBe(5);
+    expect(hash.foo.id).toBeUndefined();
+    expect(hash.uno).toBeUndefined();
   });
 
   it('toHash() for object queue returns hash keyed on pkProperty', () => {

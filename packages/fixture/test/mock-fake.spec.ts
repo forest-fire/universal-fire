@@ -121,7 +121,8 @@ describe('Test parameterized mock built-in fakes', () => {
   it('datePastString returns a proper string notation', async () => {
     const response = fakeIt({}, 'datePastString');
     expect(typeof response).toEqual('string');
-    expect(response.replace(/[0-9]{4}\\-[0-9]{2}\\-[0-9]{2}/, 'replaced')).toBe(
+    // eslint-disable-next-line no-useless-escape
+    expect(response.replace(/[0-9]{4}\-[0-9]{2}\-[0-9]{2}/, 'replaced')).toBe(
       'replaced'
     );
   });

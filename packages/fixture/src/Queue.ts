@@ -142,7 +142,7 @@ export class Queue<T = any> {
       return new Object();
     }
 
-    return typeof firstKey(queue) === 'object'
+    return typeof queue[0] === 'object'
       ? queue.reduce((obj: IDictionary, item: any) => {
           const pk: string = item[this.pkProperty];
           // tslint:disable-next-line

@@ -1,4 +1,4 @@
-import { Fixture } from '~/index';
+import { createDatabase } from 'firemock';
 
 const ages = () => ({
   asdfasdfas1: 13,
@@ -29,9 +29,10 @@ const MyPony = () => ({
 
 describe('Query →', () => {
   it('limit queries with orderByKey() on scalar valued dictionary', async () => {
-    const m = await Fixture.prepare();
-    m.updateDB({ ages: ages() });
-    const result = await m
+    const m = createDatabase('RealTimeAdmin', {});
+
+    m.store.updateDb('/', { ages: ages() });
+    const result = await m.db
       .ref('ages')
       .orderByKey()
       .limitToFirst(3)
@@ -45,10 +46,10 @@ describe('Query →', () => {
   });
 
   it('limit queries with orderByChild() on Firemodel model', async () => {
-    const m = await Fixture.prepare();
+    const m = createDatabase('RealTimeAdmin', {});
 
-    m.updateDB({ ponies: MyPony() });
-    const result = await m
+    m.store.updateDb('/', { ponies: MyPony() });
+    const result = await m.db
       .ref('ponies')
       .orderByChild('favoriteColor')
       .equalTo('green')
@@ -59,10 +60,11 @@ describe('Query →', () => {
   });
 
   it('limit queries with orderByValue() on scalar valued dictionary', async () => {
-    const m = await Fixture.prepare();
-    m.updateDB({ ages: ages() });
+    const m = createDatabase('RealTimeAdmin', {});
 
-    const result = await m
+    m.store.updateDb('/', { ages: ages() });
+
+    const result = await m.db
       .ref('ages')
       .orderByValue()
       .limitToLast(3)
@@ -82,15 +84,16 @@ describe('Query →', () => {
   });
 
   it('getValue() of a scalar returns a scalar', async () => {
-    const m = await Fixture.prepare();
-    m.updateDB({
+    const m = createDatabase('RealTimeAdmin', {});
+
+    m.store.updateDb('/', {
       foo: 5,
       bar: 10,
       baz: {
         bar: 'monkey',
       },
     });
-    const snap = await m.ref(`/foo`).once('value');
+    const snap = await m.db.ref(`/foo`).once('value');
     expect(snap.val()).toBe(5);
   });
 });

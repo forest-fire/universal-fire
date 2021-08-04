@@ -52,8 +52,8 @@ export interface IQueue {
 
 /** A Schema's mock callback generator must conform to this type signature */
 export type SchemaCallback<T extends unknown = unknown> = (
-  helper: ISchemaHelper<T>
-) => () => T;
+  helper: ISchemaHelper<IDictionary>
+) => T;
 
 export type EventHandler =
   | HandleValueEvent

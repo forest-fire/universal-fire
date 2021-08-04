@@ -12,7 +12,7 @@ export type SourceProperty = string;
 export class Schema<T = any> {
   private _schemas = new Queue<ISchema>('schemas');
   private _relationships = new Queue<IRelationship>('relationships');
-  private _pluralizeExceptions: [pattern: RegExp, plural: string][] = [];
+  private _pluralizeExceptions: Record<string, string> = {};
 
   constructor(public schemaId: string, mockFn?: SchemaCallback<T>) {
     if (mockFn) {
@@ -27,19 +27,20 @@ export class Schema<T = any> {
     const schemaId = newSchemaId || this.schemaId;
     this._schemas.enqueue({
       id: schemaId,
-      fn: cb(new SchemaHelper<T>({} as T, faker)), // TODO: pass in support for DB lookups
+      fn: () => cb(new SchemaHelper<T>({} as T, faker)), // TODO: pass in support for DB lookups
       path: () => {
         const schema: ISchema = this._schemas.find(schemaId);
+
+        const pluralizeWrapper = (a: string) =>
+          a in this._pluralizeExceptions
+            ? this._pluralizeExceptions[a]
+            : pluralize(a);
 
         return [
           schema.prefix,
           schema.modelName
-            ? pluralize(schema.modelName, {
-                bespokeExceptions: this._pluralizeExceptions,
-              })
-            : pluralize(schema.id, {
-                bespokeExceptions: this._pluralizeExceptions,
-              }),
+            ? pluralizeWrapper(schema.modelName)
+            : pluralizeWrapper(schema.id),
         ].join('/');
       },
     });
@@ -77,7 +78,7 @@ export class Schema<T = any> {
     const model = this._schemas.find(this.schemaId).modelName
       ? this._schemas.find(this.schemaId).modelName
       : this.schemaId;
-    this._pluralizeExceptions.concat([model, plural]);
+    this._pluralizeExceptions[model] = plural;
     return this;
   }
 

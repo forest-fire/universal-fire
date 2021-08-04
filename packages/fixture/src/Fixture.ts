@@ -6,7 +6,7 @@ import {
   SchemaCallback,
 } from '~/index';
 
-export class Fixture<T extends IDictionary> {
+export class Fixture<T extends any> {
   private _schema: Schema;
   private store: Partial<T>;
 
@@ -28,7 +28,7 @@ export class Fixture<T extends IDictionary> {
     this.store = {};
   }
 
-  public addSchema(schema: string, mock?: SchemaCallback<T>) {
+  public addSchema<T extends any>(schema: string, mock?: SchemaCallback<T>) {
     if (!this._schema) {
       this._schema = new Schema(schema, mock);
     } else {
@@ -42,11 +42,7 @@ export class Fixture<T extends IDictionary> {
     quantity = 1,
     overrides: IDictionary = {}
   ) {
-    new Deployment<T>().queueSchema(
-      schemaId,
-      quantity,
-      overrides
-    );
+    new Deployment<T>().queueSchema(schemaId, quantity, overrides);
     return this;
   }
 
