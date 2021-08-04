@@ -16,6 +16,7 @@ import OffsetCar from "./testing/dynamicPaths/Car";
 import { Pay } from "./testing/Pay";
 import { Person } from "./testing/Person";
 import { pathJoin } from "native-dash";
+import { IDictionary } from "common-types";
 
 const hasManyPaths = (id: string, now: number) => [
   { path: `/authenticated/people/${id}/children/janet`, value: true },
@@ -98,8 +99,8 @@ describe("Relationship > ", () => {
   it("can build composite key from FK string", async () => {
     const t1 = createCompositeKey("foo::geo:CT::age:13");
     expect(t1.id).toBe("foo");
-    expect(t1.geo).toBe("CT");
-    expect(t1.age).toBe("13");
+    expect((t1 as IDictionary).geo).toBe("CT");
+    expect((t1 as IDictionary).age).toBe("13");
 
     const t2 = createCompositeKey("foo");
     expect(t2.id).toBe("foo");

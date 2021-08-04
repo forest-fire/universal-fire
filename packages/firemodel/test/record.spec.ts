@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import "reflect-metadata";
 
 import { IFmLocalEvent, IFmWatchEvent, IReduxAction, List, Record } from "../src";
@@ -168,7 +169,10 @@ describe("Record > ", () => {
     });
     const roger = await Record.get(Person, "8888");
     const events: IFmWatchEvent[] = [];
-    FireModel.dispatch = async (evt: IFmWatchEvent) => events.push(evt);
+    FireModel.dispatch = async (evt: IFmWatchEvent) => {
+      events.push(evt);
+      return evt;
+    }
     expect(roger.dispatchIsActive).toBe(true);
     await roger.update({
       name: "Roger Rabbit, III",
@@ -206,7 +210,10 @@ describe("Record > ", () => {
     const person = Record.createWith(Person, peeps.data[0]);
     const id = person.id;
     const events: IFmWatchEvent[] = [];
-    FireModel.dispatch = async (evt: IFmWatchEvent) => events.push(evt) as IReduxAction;
+    FireModel.dispatch = async (evt: IFmWatchEvent) => {
+      events.push(evt);
+      return evt;
+    }
     await person.remove();
 
     expect(events).toHaveLength(2);
@@ -217,8 +224,8 @@ describe("Record > ", () => {
     const peeps2 = await List.all(Person);
 
     expect(peeps2).toHaveLength(9);
-    const ids = peeps2.map((p) => p.id);
-    expect(ids.includes(id)).toBe(false);
+    const ids = peeps2.map((p) => p.id as any);
+    expect(ids.includes(id as any)).toBe(false);
   }, 3000);
 
   it("calling static remove() removes from DB, notifies FE state-mgmt", async () => {
@@ -230,7 +237,10 @@ describe("Record > ", () => {
     const id = peeps.data[0].id;
     expect(peeps.length).toBe(10);
     const events: IFmWatchEvent[] = [];
-    FireModel.dispatch = async (evt: IFmWatchEvent) => events.push(evt) as IReduxAction;
+    FireModel.dispatch = async (evt: IFmWatchEvent) => {
+      events.push(evt);
+      return evt;
+    }
     const removed = await Record.remove(Person, id);
     expect(removed.id).toBe(id);
     expect(events).toHaveLength(2);
@@ -240,8 +250,9 @@ describe("Record > ", () => {
 
     const peeps2 = await List.all(Person);
     expect(peeps2).toHaveLength(9);
-    const ids = peeps2.map((p) => p.id);
-    expect(ids.includes(id)).toBe(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ids = peeps2.map((p) => p.id as any);
+    expect(ids.includes(id as any)).toBe(false);
   }, 3000);
 
   it("setting an explicit value for plural is picked up by Record", async () => {

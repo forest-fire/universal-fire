@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IDictionary } from "common-types";
 import { NamedFakes } from "firemodel";
 // TODO: bring in this functionality again
@@ -22,7 +23,6 @@ function getDistribution<T = any>(...distribution: Array<[number, T]>) {
   d.forEach((i) => {
     if (num >= i.start && num <= i.end) {
       outcome = i.value;
-      // console.log("set", num, `${start} => ${start + percentage}`);
     }
   });
   if (!outcome) {
@@ -40,7 +40,7 @@ export function fakeIt<T = any>(
   context: IDictionary,
   type: keyof typeof NamedFakes,
   ...rest: any[]
-) {
+): any {
   function getNumber(numOptions: {
     min?: number;
     max?: number;

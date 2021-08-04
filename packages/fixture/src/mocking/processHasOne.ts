@@ -1,5 +1,5 @@
-import { IFmModelRelationshipMeta, IModel, Model, Record } from 'firemodel';
-import { IDatabaseSdk, IMockDatabase, ISdk } from '@forest-fire/types';
+import { IFmModelRelationshipMeta, Model, PropertyOf, Record } from 'firemodel';
+import { IDatabaseSdk, ISdk } from '@forest-fire/types';
 import { IMockRelationshipConfig, IMockResponse } from './mocking-types';
 import { Mock } from '~/Mock';
 
@@ -11,12 +11,11 @@ export async function processHasOne<TSdk extends ISdk, T extends Model>(
 ): Promise<IMockResponse<T>> {
   const fkMock = Mock<T>(rel.fkConstructor());
   const fkMockMeta = (await fkMock.generate(1)).pop();
-  const prop: Extract<keyof IModel<T>, string> = rel.property as any;
-  console.log({prop, meta: fkMockMeta.compositeKey});
+  const prop: PropertyOf<T> = rel.property;
   source.setRelationship(prop, fkMockMeta.compositeKey);
 
   if (config.relationshipBehavior === 'link') {
-    const predecessors = fkMockMeta.dbPath
+    fkMockMeta.dbPath
       .replace(fkMockMeta.id, '')
       .split('/')
       .filter((i) => i);

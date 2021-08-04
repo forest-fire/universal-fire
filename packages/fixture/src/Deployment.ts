@@ -18,14 +18,14 @@ export class Deployment<T extends IDictionary = IDictionary> {
   /**
    * Queue a schema for deployment to the mock DB
    */
-  public queueSchema<T = any>(
+  public queueSchema<T extends any = any>(
     /** A unique reference to the schema being queued for generation */
     schemaId: string,
     /** The number of this schema to generate */
     quantity = 1,
     /** Properties in the schema template which should be overriden with a static value */
     overrides: Partial<T> = {}
-  ) {
+  ): this {
     this.schemaId = schemaId;
     this.queueId = fbKey.key();
     const schema = this.schemas.find(schemaId);
@@ -50,7 +50,7 @@ export class Deployment<T extends IDictionary = IDictionary> {
    * "hasMany" relationship should be fulfilled of
    * the schema currently being queued.
    */
-  public quantifyHasMany(targetSchema: string, quantity: number) {
+  public quantifyHasMany(targetSchema: string, quantity: number): string {
     const hasMany = this.relationships.filter(
       (r) => r.type === 'hasMany' && r.source === this.schemaId
     );
