@@ -1,10 +1,7 @@
-import { EventFrom, FakerStatic, ISdk, SnapshotFrom } from "@forest-fire/types";
+import { FakerStatic } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 
-import type {
-  IRtdbDbEvent,
-  IRtdbDataSnapshot,
-} from '@forest-fire/types';
+import type { IRtdbDataSnapshot } from '@forest-fire/types';
 
 export interface ISchemaHelper<T extends unknown> {
   context: T;
@@ -54,9 +51,9 @@ export interface IQueue {
 }
 
 /** A Schema's mock callback generator must conform to this type signature */
-export type SchemaCallback<T extends unknown = unknown> = (helper: ISchemaHelper<T>) => () => T;
-
-
+export type SchemaCallback<T extends unknown = unknown> = (
+  helper: ISchemaHelper<T>
+) => () => T;
 
 export type EventHandler =
   | HandleValueEvent

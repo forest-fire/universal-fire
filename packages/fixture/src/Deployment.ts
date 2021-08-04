@@ -4,14 +4,14 @@ import { IQueue, IRelationship, ISchema } from '~/@types';
 
 import { IDictionary } from 'common-types';
 import { Queue } from './Queue';
-import { dotNotation, getRandomInt, pluralize, set } from './utils';
-import { first, get } from 'native-dash';
+import { dotNotation, getRandomInt, set } from './utils';
+import { get, pluralize } from 'native-dash';
 
 export class Deployment<T extends IDictionary = IDictionary> {
   private schemaId: string;
   private queueId: string;
   private queue: Queue<IQueue> = new Queue('queue');
-  private schemas: Queue<ISchema> = new Queue("schemas");
+  private schemas: Queue<ISchema> = new Queue('schemas');
   private relationships: Queue<IRelationship> = new Queue('relationships');
   private store: T = {} as T;
 
@@ -50,7 +50,7 @@ export class Deployment<T extends IDictionary = IDictionary> {
    * "hasMany" relationship should be fulfilled of
    * the schema currently being queued.
    */
-  public quantifyHasMany(targetSchema: string, quantity: number): string {
+  public quantifyHasMany(targetSchema: string, quantity: number): this {
     const hasMany = this.relationships.filter(
       (r) => r.type === 'hasMany' && r.source === this.schemaId
     );
@@ -81,15 +81,7 @@ export class Deployment<T extends IDictionary = IDictionary> {
    * Indicates the a given "belongsTo" should be fulfilled with a
    * valid FK reference when this queue is generated.
    */
-  public fulfillBelongsTo(targetSchema: string) {
-    const schema = this.schemas.find(this.schemaId);
-    const relationship = first(
-      this.relationships
-        .filter((r) => r.source === this.schemaId)
-        .filter((r) => r.target === targetSchema)
-    );
-
-    const sourceProperty = schema.path();
+  public fulfillBelongsTo(targetSchema: string): this {
     const queue = this.queue.find(this.queueId);
     this.queue.update(this.queueId, {
       belongsTo: {
@@ -133,8 +125,8 @@ export class Deployment<T extends IDictionary = IDictionary> {
       typeof mock === 'object'
         ? { ...mock, ...overrides }
         : overrides && typeof overrides !== 'object'
-          ? overrides
-          : mock;
+        ? overrides
+        : mock;
 
     set(this.store, dbPath, payload);
 
@@ -154,7 +146,6 @@ export class Deployment<T extends IDictionary = IDictionary> {
           .filter((v) => queue.belongsTo[v] === true)
           .indexOf(r.sourceProperty) !== -1;
       const source = this.schemas.find(r.source);
-      const target = this.schemas.find(r.target);
       let getID: () => string;
 
       if (fulfill) {
@@ -162,7 +153,6 @@ export class Deployment<T extends IDictionary = IDictionary> {
         const available = Object.keys(this.store[pluralize(r.target)] || {});
         const generatedAvailable = available.length > 0;
 
-        const numChoices = (this.store[r.target] || []).length;
         const choice = () =>
           generatedAvailable
             ? available[getRandomInt(0, available.length - 1)]
@@ -179,7 +169,6 @@ export class Deployment<T extends IDictionary = IDictionary> {
       }
 
       const property = r.sourceProperty;
-      const path = source.path();
       const recordList: IDictionary = get(
         this.store,
         dotNotation(source.path()),
@@ -201,15 +190,12 @@ export class Deployment<T extends IDictionary = IDictionary> {
       const howMany = fulfill ? queue.hasMany[r.sourceProperty] : 0;
 
       const source = this.schemas.find(r.source);
-      const target = this.schemas.find(r.target);
       let getID: () => string;
 
       if (fulfill) {
         const mockAvailable = this.schemas.find(r.target) ? true : false;
         const available = Object.keys(this.store[pluralize(r.target)] || {});
         const used: string[] = [];
-        const generatedAvailable = available.length > 0;
-        const numChoices = (this.store[pluralize(r.target)] || []).length;
 
         const choice = (pool: string[]) => {
           if (pool.length > 0) {
@@ -231,7 +217,6 @@ export class Deployment<T extends IDictionary = IDictionary> {
 
       const property = r.sourceProperty;
 
-      const path = source.path();
       const sourceRecords: IDictionary = get(
         this.store,
         dotNotation(source.path()),

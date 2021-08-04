@@ -3,7 +3,6 @@ import { IDatabaseSdk, RealTimeAdmin } from 'universal-fire';
 
 import { FancyPerson } from './testing/FancyPerson';
 import { Mock } from '~/Mock';
-import { Car } from './testing/Car';
 
 @model({})
 export class SimplePerson extends Model {
@@ -63,7 +62,6 @@ describe('Mocking:', () => {
     const fancyPeople = (await Mock(FancyPerson).generate(10)).map(
       (s) => s.data
     );
-    const people = await List.all(Car);
     expect(fancyPeople).toHaveLength(10);
     expect(fancyPeople).toHaveLength(10);
     fancyPeople.map((person) => {
@@ -96,7 +94,9 @@ describe('Mocking:', () => {
     const people = mockData
       .filter((m) => m.modelName === 'fancyPerson')
       .map((d) => d.data);
-    const cars = mockData.filter((m) => m.modelName === 'car').map((d) => d.data);
+    const cars = mockData
+      .filter((m) => m.modelName === 'car')
+      .map((d) => d.data);
     const company = mockData
       .filter((m) => m.modelName === 'company')
       .map((d) => d.data);

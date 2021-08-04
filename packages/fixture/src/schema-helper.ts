@@ -13,8 +13,9 @@ export class SchemaHelper<T = any> implements ISchemaHelper<T> {
    * ensure that faker is ready before the faker getter is
    * used.
    */
-  static async create<T = any>(context: T, faker?: FakerStatic) {
+  static create<T = any>(context: T, faker?: FakerStatic): SchemaHelper<T> {
     const obj = new SchemaHelper(context, faker);
+    return obj;
   }
 
   private _faker: FakerStatic;

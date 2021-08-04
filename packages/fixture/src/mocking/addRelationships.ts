@@ -1,5 +1,5 @@
-import { Record, IModel, Model } from 'firemodel';
-import { IDatabaseSdk, IMockDatabase, ISdk } from '@forest-fire/types';
+import { Record, Model } from 'firemodel';
+import { IDatabaseSdk, ISdk } from '@forest-fire/types';
 import {
   IMockRelationshipConfig,
   IMockResponse,
@@ -16,7 +16,7 @@ export function addRelationships<
   TSdk extends ISdk,
   M extends Model,
   D extends IDatabaseSdk<TSdk>
->(db: D, config: IMockRelationshipConfig, exceptions: IDictionary = {}) {
+>(db: D, config: IMockRelationshipConfig, _exceptions: IDictionary = {}) {
   return async (record: Record<TSdk, M>): Promise<Array<IMockResponse<M>>> => {
     const relns = record.META.relationships;
     const relnResults: Array<IMockResponse<M>> = [];
@@ -36,14 +36,12 @@ export function addRelationships<
             const cardinality = config.cardinality
               ? typeof config.cardinality[rel.property] === 'number'
                 ? config.cardinality[rel.property]
-                : NumberBetween(config.cardinality[rel.property] as any)
+                : NumberBetween(
+                    config.cardinality[rel.property] as [number, number]
+                  )
               : 2;
-            for (const i of Array(cardinality)) {
-              const fkRec = await processHasMany<TSdk, M>(
-                record,
-                rel,
-                config,
-              );
+            for (const _ of Array(cardinality)) {
+              const fkRec = await processHasMany<TSdk, M>(record, rel, config);
               if (config.relationshipBehavior === 'follow') {
                 relnResults.push(fkRec);
               }
@@ -62,7 +60,7 @@ export function addRelationships<
         dbPath: record.dbPath,
         localPath: record.localPath,
         data: record.data,
-        ...record
+        ...record,
       },
       ...relnResults,
     ];

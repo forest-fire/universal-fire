@@ -4,7 +4,7 @@ import {
   Model,
   Record
 } from "firemodel";
-import {IDatabaseSdk, ISdk} from "@forest-fire/types"
+import { ISdk } from '@forest-fire/types';
 import { Mock } from "~/Mock";
 import { IMockRelationshipConfig, IMockResponse } from "./mocking-types";
 

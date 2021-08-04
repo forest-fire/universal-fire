@@ -2,7 +2,9 @@ import { Queue } from '~/index';
 
 describe('Queue Class', () => {
   it('can instantiate', () => {
-    const q = new Queue('testing');
+    const action = () => new Queue('testing');
+    expect(action).not.toThrowError();
+    expect(action()).not.toBeUndefined();
   });
 
   it('simple queue can add items', () => {

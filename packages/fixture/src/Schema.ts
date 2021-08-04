@@ -1,6 +1,7 @@
 import { IRelationship, ISchema, SchemaCallback } from '~/@types';
-import { addException, pluralize, Queue, SchemaHelper } from '~/index';
-import faker from "faker"
+import { Queue, SchemaHelper } from '~/index';
+import faker from 'faker';
+import { pluralize } from 'native-dash';
 
 /**
  * The property that exists on the source scheme as a FK reference
@@ -11,6 +12,7 @@ export type SourceProperty = string;
 export class Schema<T = any> {
   private _schemas = new Queue<ISchema>('schemas');
   private _relationships = new Queue<IRelationship>('relationships');
+  private _pluralizeExceptions: [pattern: RegExp, plural: string][] = [];
 
   constructor(public schemaId: string, mockFn?: SchemaCallback<T>) {
     if (mockFn) {
@@ -21,7 +23,7 @@ export class Schema<T = any> {
   /**
    * Add a mocking function to be used to generate the schema in mock DB
    */
-  public mock(cb: SchemaCallback<T>, newSchemaId?: string) {
+  public mock(cb: SchemaCallback<T>, newSchemaId?: string): this {
     const schemaId = newSchemaId || this.schemaId;
     this._schemas.enqueue({
       id: schemaId,
@@ -32,8 +34,12 @@ export class Schema<T = any> {
         return [
           schema.prefix,
           schema.modelName
-            ? pluralize(schema.modelName)
-            : pluralize(schema.id),
+            ? pluralize(schema.modelName, {
+                bespokeExceptions: this._pluralizeExceptions,
+              })
+            : pluralize(schema.id, {
+                bespokeExceptions: this._pluralizeExceptions,
+              }),
         ].join('/');
       },
     });
@@ -47,13 +53,13 @@ export class Schema<T = any> {
    * your schema is emulating. If you don't state this property it assumes
    * the schema name IS the model name
    */
-  public modelName(value: string) {
+  public modelName(value: string): this {
     this._schemas.update(this.schemaId, { modelName: value });
     return this;
   }
 
   /** prefixes a static path to the beginning of the  */
-  public pathPrefix(prefix: string) {
+  public pathPrefix(prefix: string): this {
     prefix = prefix.replace(/\./g, '/'); // slash reference preferred over dot
     prefix =
       prefix.slice(-1) === '/' ? prefix.slice(0, prefix.length - 1) : prefix;
@@ -67,18 +73,18 @@ export class Schema<T = any> {
    * the plural name.
    */
 
-  public pluralName(plural: string) {
+  public pluralName(plural: string): this {
     const model = this._schemas.find(this.schemaId).modelName
       ? this._schemas.find(this.schemaId).modelName
       : this.schemaId;
-    addException(model, plural);
+    this._pluralizeExceptions.concat([model, plural]);
     return this;
   }
 
   /**
    * Configures a "belongsTo" relationship with another schema/entity
    */
-  public belongsTo(target: string, sourceProperty?: SourceProperty) {
+  public belongsTo(target: string, sourceProperty?: SourceProperty): this {
     this._relationships.push({
       type: 'belongsTo',
       source: this.schemaId,
@@ -92,7 +98,7 @@ export class Schema<T = any> {
   /**
    * Configures a "hasMany" relationship with another schema/entity
    */
-  public hasMany(target: string, sourceProperty?: SourceProperty) {
+  public hasMany(target: string, sourceProperty?: SourceProperty): this {
     this._relationships.push({
       type: 'hasMany',
       source: this.schemaId,
@@ -104,7 +110,7 @@ export class Schema<T = any> {
   }
 
   /** Add another schema */
-  public addSchema<D>(schema: string, mock?: SchemaCallback<any>) {
+  public addSchema(schema: string, mock?: SchemaCallback<any>): this {
     if (mock) {
       this.mock(mock, schema);
     }

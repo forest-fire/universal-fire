@@ -1,4 +1,4 @@
-import { RealTimeAdmin, SDK } from 'universal-fire';
+import { RealTimeAdmin } from 'universal-fire';
 import { fakeIt } from '~/mocking';
 import { Mock } from '~/Mock';
 import { FireModel, List } from 'firemodel';
@@ -39,7 +39,7 @@ describe('Test parameterized mock built-in fakes', () => {
         precision: 0.01,
       });
 
-      const rightOfDecimal = String(val).replace(/.*\./, '');
+      const _ = String(val).replace(/.*\./, '');
     }
   });
 

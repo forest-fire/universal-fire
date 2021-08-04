@@ -5,8 +5,6 @@ import { IDictionary } from 'common-types';
 import { IDatabaseSdk, ISdk } from '@forest-fire/types';
 import { FixtureError } from '~/errors/FixtureError';
 
-const mockPrepared = false;
-
 /**
  * **MockApi**
  *
@@ -94,7 +92,7 @@ export class MockApi<T extends Model> {
 
     let mocks: Array<IMockResponse<T>> = [];
 
-    for (const i of Array(count)) {
+    for (const _ of Array(count)) {
       const a = await relns(await props(record));
 
       mocks = [...mocks, ...a]
@@ -111,9 +109,7 @@ export class MockApi<T extends Model> {
    *
    * @param cardinality an optional param which allows you to have fine grained control over how many of each type of relationship should be added
    */
-  createRelationshipLinks(
-    cardinality?: IDictionary<[number, number] | number | true>
-  ) {
+  createRelationshipLinks(): this {
     this.config.relationshipBehavior = 'link';
     return this;
   }
@@ -121,7 +117,7 @@ export class MockApi<T extends Model> {
   /**
    * Allows variation in how dynamic paths are configured on FK relationships
    */
-  dynamicPathBehavior(options: string) {
+  dynamicPathBehavior(): this {
     //
     return this;
   }
@@ -129,7 +125,7 @@ export class MockApi<T extends Model> {
   /**
    * All overrides for the primary model are passed along to FK's as well
    */
-  overridesPassThrough() {
+  overridesPassThrough(): this {
     this.config.exceptionPassthrough = true;
     return this;
   }
@@ -144,7 +140,7 @@ export class MockApi<T extends Model> {
    */
   followRelationshipLinks(
     cardinality?: IDictionary<[number, number] | number | true>
-  ) {
+  ): this {
     // TODO: would like to move back to ICardinalityConfig<T> when I can figure out why Partial doesn't work
     this.config.relationshipBehavior = 'follow';
     if (cardinality) {

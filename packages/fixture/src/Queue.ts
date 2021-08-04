@@ -87,12 +87,12 @@ export class Queue<T = any> {
   }
 
   public find(key: Key) {
-    const [obj, index] = this._find(key);
+    const [obj] = this._find(key);
     return obj;
   }
 
   public indexOf(key: Key) {
-    const [obj, index] = this._find(key);
+    const [_, index] = this._find(key);
     return index;
   }
 

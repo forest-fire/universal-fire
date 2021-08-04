@@ -13,9 +13,9 @@ import { FixtureError } from '~/errors/FixtureError';
 export function set(
   obj: IDictionary,
   dotPath: string,
-  value: any,
+  value: unknown,
   createIfNonExistant = true
-) {
+): void {
   if (!dotPath) {
     throw new FixtureError(
       `Attempt to set value into a dotPath but the dotPath was empty!`,

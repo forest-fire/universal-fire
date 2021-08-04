@@ -1,4 +1,5 @@
-import { SchemaCallback, Fixture } from "~/index""
+import { createDatabase } from 'firemock';
+import { SchemaCallback, Fixture } from '~/index';
 
 describe('Deployment', () => {
   const animalMock: SchemaCallback<any> = (h) => () => ({
@@ -8,16 +9,16 @@ describe('Deployment', () => {
   });
 
   it('Overriding the mock at deployment works', async () => {
-    const f = await Fixture.prepare();
+    const f = Fixture.prepare();
     f.addSchema('animal', animalMock);
     f.queueSchema('animal', 2, { age: 12 });
     f.queueSchema('animal', 2, { age: 14 });
     f.queueSchema('animal', 2, { age: 16 });
     const fixtures = f.generate() as Record<string, { age: number }>;
-    const m = createDatabase(SDK.RealTimeAdmin, {}, fixtures);
+    const mockDatabase = createDatabase('RealTimeAdmin', {}, fixtures);
 
-    const results = await f.ref('/animals').once('value');
-    const filtered = await f
+    const results = await mockDatabase.db.ref('/animals').once('value');
+    const filtered = await mockDatabase.db
       .ref('/animals')
       .orderByChild('age')
       .equalTo(12, 'age')
@@ -32,15 +33,16 @@ describe('Deployment', () => {
     // as the sorting is all done on the server and then the filtering is applied
     // the actually returned resultset may not be sorted by the stated criteria.
     // This test is meant to represent this.
-    const m = await Fixture.prepare();
+    const m = Fixture.prepare();
     m.addSchema('animal', animalMock);
     m.queueSchema('animal', 10, { age: 16 });
     m.queueSchema('animal', 10, { age: 14 });
     m.queueSchema('animal', 10, { age: 12 });
     m.queueSchema('animal', 10, { age: 16 });
-    m.generate();
+    const fixtures = m.generate();
+    const mockDatabase = createDatabase('RealTimeAdmin', {}, fixtures);
 
-    const orderedOnServer = await m
+    const orderedOnServer = await mockDatabase.db
       .ref('/animals')
       .orderByChild('age')
       .limitToFirst(30)
@@ -65,15 +67,16 @@ describe('Deployment', () => {
     // as the sorting is all done on the server and then the filtering is applied
     // the actually returned resultset may not be sorted by the stated criteria.
     // This test is meant to represent this.
-    const m = await Fixture.prepare();
+    const m = Fixture.prepare();
     m.addSchema('animal', animalMock);
     m.queueSchema('animal', 10, { age: 16 });
     m.queueSchema('animal', 10, { age: 14 });
     m.queueSchema('animal', 10, { age: 12 });
     m.queueSchema('animal', 10, { age: 15 });
-    m.generate();
+    const fixtures = m.generate();
+    const mockDatabase = createDatabase('RealTimeAdmin', {}, fixtures);
 
-    const orderedOnServer = await m
+    const orderedOnServer = await mockDatabase.db
       .ref('/animals')
       .orderByValue()
       .startAt(14, 'age')
@@ -94,19 +97,21 @@ describe('Deployment', () => {
   });
 
   it('using modelName() changes path in DB', async () => {
-    const m = await Fixture.prepare();
+    const m = Fixture.prepare();
     m.addSchema('cat', animalMock);
     m.addSchema('dog', animalMock).modelName('animal');
     m.queueSchema('cat', 10);
     m.queueSchema('dog', 10);
-    m.generate();
-    expect((m.db.cats)).toHaveLength(10);
-    expect((m.db.dogs)).toHaveLength(0);
-    expect((m.db.animals)).toHaveLength(10);
+    const fixtures = m.generate();
+    const mockDatabase = createDatabase('RealTimeAdmin', {}, fixtures);
+
+    expect(mockDatabase.store.state.cats).toHaveLength(10);
+    expect(mockDatabase.store.state.dogs).toHaveLength(0);
+    expect(mockDatabase.store.state.animals).toHaveLength(10);
   });
 
   it('offset property is incorporated into DB path', async () => {
-    const m = await Fixture.prepare();
+    const m = Fixture.prepare();
     m.addSchema('cat', animalMock)
       .modelName('animal')
       .pathPrefix('auth/anonymous');
@@ -116,13 +121,14 @@ describe('Deployment', () => {
       .pathPrefix('auth/anonymous/');
     m.queueSchema('cat', 10, { kind: 'cat' });
     m.queueSchema('dog', 10, { kind: 'dog' });
-    m.generate();
+    const fixtures = m.generate();
+    const mockDatabase = createDatabase('RealTimeAdmin', {}, fixtures);
 
-    expect((m.db.dogs)).toHaveLength(0);
-    expect((m.db.cats)).toHaveLength(0);
-    expect((m.db.animals)).toHaveLength(0);
-    expect((m.db.auth)).toHaveLength(1);
-    expect((m.db.auth.anonymous)).toHaveLength(1);
-    expect((m.db.auth.anonymous.animals)).toHaveLength(20);
+    expect(mockDatabase.store.state.dogs).toHaveLength(0);
+    expect(mockDatabase.store.state.cats).toHaveLength(0);
+    expect(mockDatabase.store.state.animals).toHaveLength(0);
+    expect(mockDatabase.store.state.auth).toHaveLength(1);
+    expect(mockDatabase.store.state.auth.anonymous).toHaveLength(1);
+    expect(mockDatabase.store.state.auth.anonymous.animals).toHaveLength(20);
   });
 });
