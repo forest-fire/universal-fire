@@ -68,7 +68,7 @@ describe("List class: ", () => {
   it("can instantiate with all() method", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h) => () => ({
+      .addSchema("person", (h) => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
       }))
@@ -86,7 +86,7 @@ describe("List class: ", () => {
   it("can instantiate with from() method", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h) => () => ({
+      .addSchema("person", (h) => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
       }))
@@ -104,7 +104,7 @@ describe("List class: ", () => {
   it("can instantiate with a where() method", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h) => () => ({
+      .addSchema("person", (h) => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
       }))
@@ -127,7 +127,7 @@ describe("List class: ", () => {
   it("can instantiate with first() and last() methods", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h) => () => ({
+      .addSchema("person", (h) => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -150,7 +150,7 @@ describe("List class: ", () => {
   it("can instantiate with recent(), and inactive() methods", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h) => () => ({
+      .addSchema("person", (h) => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -174,7 +174,7 @@ describe("List class: ", () => {
     const timestamp = new Date().getTime();
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h) => () => ({
+      .addSchema("person", (h) => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 49 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -198,7 +198,7 @@ describe("List class: ", () => {
   it("an instantiated List can call get() with a valid ID and get a Record", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h) => () => ({
+      .addSchema("person", (h) => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -222,7 +222,7 @@ describe("List class: ", () => {
   it("list.get() with a valid ID retrieves the model data for that record", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h) => () => ({
+      .addSchema("person", (h) => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -244,7 +244,7 @@ describe("List class: ", () => {
   it("an instantiated List calling get() with an invalid ID throws an error", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h) => () => ({
+      .addSchema("person", (h) => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),
@@ -265,7 +265,7 @@ describe("List class: ", () => {
   it("list.get() returns undefined when non-existent id is passed", async () => {
     const fixture = Fixture.prepare();
     fixture
-      .addSchema("person", (h) => () => ({
+      .addSchema("person", (h) => ({
         name: h.faker.name.firstName(),
         age: h.faker.datatype.number({ min: 1, max: 50 }),
         createdAt: h.faker.date.past().valueOf(),

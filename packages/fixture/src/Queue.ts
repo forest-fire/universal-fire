@@ -1,7 +1,6 @@
 import * as fbKey from 'firebase-key';
 
 import { IDictionary } from 'common-types';
-import { firstKey } from 'native-dash';
 
 export type Key = string | number;
 

@@ -456,7 +456,7 @@ describe("MOCK uses dynamic dbOffsets", () => {
       await Mock(DeeperPerson).generate(3);
       throw new Error("Should have failed");
     } catch (e) {
-      expect(e.code).toBe("firemodel/mock-not-ready");
+      expect(e.classification).toBe("fixture/mock-not-ready");
     }
   });
 });
