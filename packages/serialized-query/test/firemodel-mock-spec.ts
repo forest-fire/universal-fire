@@ -1,16 +1,9 @@
 import { SerializedRealTimeQuery } from '../src/index';
-import {RealTimeAdmin} from "@forest-fire/real-time-admin";
 import * as helpers from './testing/helpers';
 
 helpers.setupEnv();
 
 describe('SerializedRealTimeQuery', () => {
-  let mockDb: RealTimeAdmin;
-  beforeAll(async () => {
-    mockDb = await RealTimeAdmin.connect({ mocking: true });
-    // TODO: remove the comment below when we update FireModel to use the new
-    // version if `universal-fire`.
-  });
   it('instantiates', () => {
     const q = new SerializedRealTimeQuery('foo');
     expect(q).toBeInstanceOf(SerializedRealTimeQuery);

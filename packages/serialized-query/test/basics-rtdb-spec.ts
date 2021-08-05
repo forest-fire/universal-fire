@@ -1,14 +1,9 @@
 import { SerializedRealTimeQuery } from '../src/index';
 import * as helpers from './testing/helpers';
-import { RealTimeAdmin } from '@forest-fire/real-time-admin';
 
 helpers.setupEnv();
 
 describe('SerializedRealTimeQuery', () => {
-  let mockDb: RealTimeAdmin;
-  beforeAll(async () => {
-    mockDb = await RealTimeAdmin.connect({ mocking: true });
-  });
   it('instantiates', () => {
     const q = new SerializedRealTimeQuery('foo');
     expect(q).toBeInstanceOf(SerializedRealTimeQuery);
@@ -48,7 +43,7 @@ describe('SerializedRealTimeQuery', () => {
 
   it('identity property provides appropriate details', () => {
     const foo = new SerializedRealTimeQuery('/foo/bar').orderByChild('goober');
-    expect(typeof foo.identity === "object").toBeTruthy();
+    expect(typeof foo.identity === 'object').toBeTruthy();
     expect(foo.identity.orderBy).toEqual('orderByChild');
     expect(foo.identity.orderByKey).toEqual('goober');
     expect(foo.identity.limitToFirst).toEqual(undefined);
