@@ -7,7 +7,7 @@ export type ISortFns = (a: any, b: any) => number;
 
 export const orderByChild = (child: string | number) => {
   return (a: IDictionary, b: IDictionary): -1 | 0 | 1 => {
-    return a[child] > b[child] ? -1 : a[child] === b[child] ? 0 : 1;
+    return a[child] > b[child] ? 1 : a[child] === b[child] ? 0 : -1;
   };
 };
 

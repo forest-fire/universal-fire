@@ -3,9 +3,9 @@ module.exports = function (wallaby)  {
   return {
     autoDetect: true,
     testFramework: {
-      configFile: './jest.config.js',
+      configFile: './jest.config.ts',
     },
     debug: true,
-    reportConsoleErrorAsError: true
+    reportConsoleErrorAsError: true,
   };
 };

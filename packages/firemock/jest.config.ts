@@ -1,10 +1,8 @@
-
 import { resolve } from "path";
 import type { Config } from "@jest/types";
 
 const config: Config.InitialOptions = {
-  verbose: true,
-  testMatch: ['**/packages/**/test/?(*[-.])+(spec|test).[jt]s?(x)'],
+  testMatch: ['./test/?(*[-.])+(spec|test).[jt]s?(x)'],
 
   // Maps a regular expression for a "path" and maps it to a transformer
   // https://jestjs.io/docs/en/configuration#transform-objectstring-pathtotransformer--pathtotransformer-object
@@ -15,8 +13,7 @@ const config: Config.InitialOptions = {
   // https://jestjs.io/docs/en/configuration#transformignorepatterns-arraystring
   transformIgnorePatterns: [
     // "<rootDir>/node_modules/(?!(universal-fire|@forest-fire)).+\\.js$",
-    resolve(process.cwd(), 'node_modules') +
-      `/(?!(universal-fire|@forest-fire)).+\\.js$`,
+    resolve(process.cwd(), 'node_modules') + `/(?!(universal-fire|@forest-fire)).+\\.js$`,
   ],
 
   // modules which do NOT export CJS must have an entry to

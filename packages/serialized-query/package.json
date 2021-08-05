@@ -33,7 +33,9 @@
     "@forest-fire/fixture": "*",
     "firemodel": "*",
     "universal-fire": "*",
-    "typed-conversions": "^0.12.0"
+    "typed-conversions": "^0.12.0",
+    "@forest-fire/real-time-client": "*",
+    "@forest-fire/firestore-client": "*"
   },
   "license": "MIT",
   "peerDependencies": {
