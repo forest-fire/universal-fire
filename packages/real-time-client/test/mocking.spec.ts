@@ -10,16 +10,8 @@ import {
 } from '@forest-fire/types';
 
 helpers.setupEnv();
-const config = {
-  apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',
-  authDomain: 'abstracted-admin.firebaseapp.com',
-  databaseURL: 'https://abstracted-admin.firebaseio.com',
-  projectId: 'abstracted-admin',
-  storageBucket: 'abstracted-admin.appspot.com',
-  messagingSenderId: '547394508788',
-};
 
-const animalMocker = (h: any) => () => ({
+const animalMocker = (h: any) => ({
   type: h.faker.random.arrayElement(['cat', 'dog', 'parrot']),
   name: h.faker.name.firstName(),
   age: h.faker.datatype.number({ min: 1, max: 15 }),
