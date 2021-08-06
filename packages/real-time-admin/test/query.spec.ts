@@ -14,7 +14,7 @@ helpers.setupEnv();
 
 describe('Query based Read ops:', () => {
   let db: RealTimeAdmin;
-  const personMockGenerator: SchemaCallback<any> = (h) => () => {
+  const personMockGenerator: SchemaCallback<any> = (h) => {
     return {
       name: h.faker.name.firstName() + ' ' + h.faker.name.lastName(),
       age: h.faker.datatype.number({ min: 10, max: 99 }),
@@ -40,15 +40,15 @@ describe('Query based Read ops:', () => {
     data = await db.getSnapshot(q);
     expect(data.numChildren()).toBe(5);
     // data.val().map(x => x.age).map(age => expect(age).to.equal(5));
-    expect(helpers.firstRecord(data.val()).age).toBe(100);
-    expect(helpers.lastRecord(data.val()).age).toBe(100);
+    expect(helpers.firstRecord(data.val()).age).toBe(1);
+    expect(helpers.lastRecord(data.val()).age).toBe(1);
     const q2 = new SerializedRealTimeQuery<SDK.RealTimeAdmin, IPerson>('people')
       .orderByChild('age')
       .limitToLast(5);
     data = await db.getSnapshot(q2);
     expect(data.numChildren()).toBe(5);
-    expect(helpers.firstRecord(data.val()).age).toBe(1);
-    expect(helpers.lastRecord(data.val()).age).toBe(1);
+    expect(helpers.firstRecord(data.val()).age).toBe(100);
+    expect(helpers.lastRecord(data.val()).age).toBe(100);
     const q3 = new SerializedRealTimeQuery<SDK.RealTimeAdmin, IPerson>('people')
       .orderByChild('age')
       .equalTo(3);
@@ -67,14 +67,14 @@ describe('Query based Read ops:', () => {
       .limitToFirst(5);
     data = await db.getList<IPerson>(q);
     expect(data.length).toBe(5);
-    data.map((d: any) => d.age).map((age: any) => expect(age).toBe(100));
+    data.map((d: any) => d.age).map((age: any) => expect(age).toBe(1));
 
     const q2 = new SerializedRealTimeQuery<SDK.RealTimeAdmin, IPerson>('people')
       .orderByChild('age')
       .limitToLast(5);
     data = await db.getList<IPerson>(q2);
     expect(data.length).toBe(5);
-    data.map((d: any) => d.age).map((age: any) => expect(age).toBe(1));
+    data.map((d: any) => d.age).map((age: any) => expect(age).toBe(100));
 
     const q3 = new SerializedRealTimeQuery<SDK.RealTimeAdmin, IPerson>('people')
       .orderByChild('age')
@@ -84,10 +84,13 @@ describe('Query based Read ops:', () => {
     data.map((d: any) => d.age).map((age: any) => expect(age).toBe(3));
 
     // test serialized query can be built with DB's exposed API
-    const qPrime = db.query<IPerson>('people').orderByChild('age').limitToFirst(4);
+    const qPrime = db
+      .query<IPerson>('people')
+      .orderByChild('age')
+      .limitToFirst(4);
     data = await db.getList<IPerson>(qPrime);
     expect(data).toHaveLength(4);
-    data.map((d: any) => d.age).map((age: any) => expect(age).toBe(100));
+    data.map((d: any) => d.age).map((age: any) => expect(age).toBe(1));
   });
 
   /**

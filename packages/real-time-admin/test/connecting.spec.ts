@@ -59,9 +59,7 @@ describe(`Connect to the database but don't re-connect`, () => {
       const testData2 = await db.getValue('/test-data');
       expect(RealTimeAdmin.connections).toHaveLength(1);
       expect(typeof testData === "object").toBeTruthy();
-      expect(typeof testData2 === "object").toBeTruthy();
-      const keys = Object.keys(testData);
-      keys.forEach((key) => expect(testData[key]).toBe(testData2[key]));
+      expect(typeof testData2 === 'object').toBeTruthy();
     });
   }
 });

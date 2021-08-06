@@ -3,9 +3,10 @@ import { RealTimeAdmin } from '../src/index';
 import * as helpers from './testing/helpers';
 import { IMockConfig } from '@forest-fire/types';
 import { Fixture, SchemaCallback } from '@forest-fire/fixture';
+import { hashToArray } from 'typed-conversions';
 helpers.setupEnv();
 
-const animalMocker: SchemaCallback<any> = (h) => () => ({
+const animalMocker: SchemaCallback<any> = (h) => ({
   type: h.faker.random.arrayElement(['cat', 'dog', 'parrot']),
   name: h.faker.name.firstName(),
   age: h.faker.datatype.number({ min: 1, max: 15 }),
@@ -31,7 +32,7 @@ describe('Mocking', () => {
 
     const animals = await db.getSnapshot('/animals');
     expect(animals.numChildren()).toBe(10);
-    animals.forEach((animal) => {
+    hashToArray(animals.val()).forEach((animal) => {
       expect(animal).toHaveProperty('type');
       expect(animal).toHaveProperty('name');
       expect(animal).toHaveProperty('age');
@@ -169,7 +170,7 @@ describe('Mocking', () => {
 });
 
 async function addAnimals(count: number) {
-  const fixture = await Fixture.prepare();
+  const fixture = Fixture.prepare();
   fixture.addSchema('animal', animalMocker);
   fixture.queueSchema('animal', count);
   return fixture.generate();
