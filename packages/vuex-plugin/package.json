@@ -104,7 +104,8 @@
     "vuepress-plugin-container": "^2.1.4",
     "vuex": "^3.5.1",
     "@forest-fire/types": "*",
-    "firemodel": "*"
+    "firemodel": "*",
+    "@forest-fire/real-time-client": "*"
 
   },
   "peerDependencies": {

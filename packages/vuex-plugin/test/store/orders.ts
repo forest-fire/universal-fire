@@ -1,7 +1,7 @@
 import { GetterTree, Module } from "vuex";
 
-import { IRootState } from "../index";
-import { Order } from "../../models/Order";
+import { IRootState } from './index';
+import { Order } from '../models/Order';
 import { firemodelMutations } from "~/index";
 
 export type IOrdersState = {

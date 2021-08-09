@@ -1,13 +1,13 @@
 import { Store } from 'vuex';
 import { IRootState, setupStore } from './store';
-import { firemodelMutations } from '~/store/firemodelMutations/mutations';
 
 describe('local change effects @firemodel state', () => {
   let store: Store<IRootState>;
-  beforeAll(() => {
-    store = setupStore({ foo: 'bar' });
+  beforeEach(() => {
+    store = setupStore();
   });
-  it('adding a new record results in addition to "onlyLocal"', async () => {
+  it('adding a new record results in addition to "onlyLocal"', () => {
+    console.log(store);
     expect(store).not.toBeUndefined();
   });
 

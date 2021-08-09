@@ -10,7 +10,7 @@ import userProfile, { IUserProfileState } from './userProfile';
 import { FiremodelPlugin } from '~/plugin';
 import { IDictionary } from 'common-types';
 
-import { RealTimeClient } from 'universal-fire';
+import { RealTimeClient } from '@forest-fire/real-time-client';
 import Vue from 'vue';
 import { config } from './config';
 
@@ -33,7 +33,7 @@ export let store: Store<IRootState>;
  * as a parameter
  */
 export const setupStore = (data?: IDictionary | AsyncMockData) => {
-  const db = RealTimeClient.create(config(data));
+  const db = new RealTimeClient(config(data));
   store = new Vuex.Store<IRootState>({
     modules: {
       products,

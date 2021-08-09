@@ -1,5 +1,5 @@
 import { GetterTree, Module } from 'vuex';
-import { firemodelMutations } from '~/index';
+import { firemodelMutations } from '../../src/index';
 
 import { Company } from '../models/Company';
 import { IRootState } from './index';
