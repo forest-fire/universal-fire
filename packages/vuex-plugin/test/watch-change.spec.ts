@@ -5,7 +5,7 @@ import { IRootState, setupStore } from './store';
 import { stub } from 'sinon';
 import { productData } from './data/productData';
 
-describe('local change effects @firemodel state', () => {
+describe('watching local change triggers @firemodel and its module mutations', () => {
   let store: Store<IRootState>;
   beforeEach(async () => {
     const task = new Promise((resolve) => {
@@ -33,7 +33,7 @@ describe('local change effects @firemodel state', () => {
     store = undefined;
     FireModel.defaultDb = undefined;
   });
-  it('adding a new record results in addition to "onlyLocal"', async () => {
+  it('adding a new record triggers ADDED mutation and its confirmation', async () => {
     const action = () => Record.add(Product, { name: 'fooProduct', price: 10, store: 'fooStore' });
     store.subscribe((payload, state) => {
       expect([
@@ -48,7 +48,7 @@ describe('local change effects @firemodel state', () => {
     await action();
   });
 
-  it('adding a new record results in addition to "onlyLocal"', async () => {
+  it('error in adding a new record triggers ROLLBACK mutations next to ADDED mutation', async () => {
     const action = () => Record.add(Product, { name: 'foo', store: 'fooStore', price: 10 });
     const db = FireModel.defaultDb;
 
@@ -69,7 +69,7 @@ describe('local change effects @firemodel state', () => {
     }
   });
 
-  it('adding a new record results in addition to "onlyLocal"', async () => {
+  it('updating a record trigger CHANGED mutation and its confirmation', async () => {
     const action = () =>
       Record.update(Product, 'abcd', { name: 'fooProduct', price: 10, store: 'fooStore' });
     store.subscribe((payload, state) => {
@@ -85,7 +85,7 @@ describe('local change effects @firemodel state', () => {
     await action();
   });
 
-  it('adding a new record results in addition to "onlyLocal"', async () => {
+  it('error in updating a record triggers a ROLLBACK mutation next to CHANGED', async () => {
     const action = () =>
       Record.update(Product, 'abcd', { name: 'foo', store: 'fooStore', price: 10 });
     const db = FireModel.defaultDb;
@@ -107,7 +107,7 @@ describe('local change effects @firemodel state', () => {
     }
   });
 
-  it('adding a new record results in addition to "onlyLocal"', async () => {
+  it('removing a record triggers REMOVE_CONFIRMATION', async () => {
     const action = () => Record.remove(Product, 'abcd');
     store.subscribe((payload, state) => {
       console.log(payload.type);
@@ -122,7 +122,7 @@ describe('local change effects @firemodel state', () => {
     await action();
   });
 
-  it('adding a new record results in addition to "onlyLocal"', async () => {
+  it('error in removing a record triggers ROLLBACK mutation', async () => {
     const action = () => Record.remove(Product, 'abcd');
     const db = FireModel.defaultDb;
 
