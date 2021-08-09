@@ -32,7 +32,7 @@ export let store: Store<IRootState>;
  * Sets up a Vuex store for testing purposes; note that DB data can be passed in
  * as a parameter
  */
-export const setupStore = (data?: IDictionary | AsyncMockData) => {
+export const setupStore = (data?: IDictionary | AsyncMockData, listeners?: {}) => {
   const db = new RealTimeClient(config(data));
   store = new Vuex.Store<IRootState>({
     modules: {
@@ -46,6 +46,7 @@ export const setupStore = (data?: IDictionary | AsyncMockData) => {
         connect: true,
         auth: true,
         ...lifecycle,
+        ...listeners,
       }),
     ],
   });
