@@ -2,7 +2,7 @@ import { resolve } from 'path';
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-  testMatch: ['./test/**/?(*[-.])+(spec|test).[jt]s?(x)'],
+  testMatch: ['**/test/**/?(*[-.])+(spec|test).[jt]s?(x)'],
 
   // Maps a regular expression for a "path" and maps it to a transformer
   // https://jestjs.io/docs/en/configuration#transform-objectstring-pathtotransformer--pathtotransformer-object
