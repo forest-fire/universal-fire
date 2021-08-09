@@ -4,8 +4,8 @@ import {
   serverConfirms,
   serverEvents,
   serverRollbacks,
-  watchEvents
-} from "~/store";
+  watchEvents,
+} from '~/store';
 
 import { Model } from 'firemodel';
 import { MutationTree } from 'vuex';
@@ -37,7 +37,7 @@ const vuexModule: Module<IMyStateModule, IRootState> = {
 }
 ```
 */
-export function firemodelMutations<T extends Model>(
+export function firemodelMutations<T extends Record<string, unknown>>(
   /**
    * If you are using a **list** based watcher you will almost always want
    * the list of records to be "offset" from the root of the local state

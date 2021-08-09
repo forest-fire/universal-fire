@@ -13,10 +13,9 @@ import { IDictionary } from "common-types";
 import { Order } from "../models/Order";
 import { Person } from "../models/Person";
 import { Product } from "../models/Product";
-import { RealTimeClient } from "@forest-fire/real-time-client";
-import Vue from "vue";
-import { abc } from "~/abc";
-import { config } from "./config";
+import { RealTimeClient } from 'universal-fire';
+import Vue from 'vue';
+import { config } from './config';
 
 Vue.use(Vuex);
 
@@ -25,7 +24,7 @@ export interface IRootState {
   userProfiles: IUserProfileState;
   companies: ICompaniesState;
   orders: IOrdersState;
-  ["@firemodel"]: IFiremodelState<IRootState>;
+  ['@firemodel']: IFiremodelState;
 }
 
 export let store: Store<IRootState>;
@@ -37,41 +36,22 @@ export let store: Store<IRootState>;
  * as a parameter
  */
 export const setupStore = (data?: IDictionary | AsyncMockData) => {
-  const db = new RealTimeClient(config(data));
+  const db = RealTimeClient.create(config(data));
   store = new Vuex.Store<IRootState>({
     modules: {
       products,
       userProfile,
       companies,
-      orders
+      orders,
     },
     plugins: [
       FiremodelPlugin(db, {
         connect: true,
         auth: true,
-        ...lifecycle
-      })
-    ]
+        ...lifecycle,
+      }),
+    ],
   });
   return store;
 };
 
-export const getAbc = () => {
-  const [getOrders, loadOrders] = abc(Order, { useIndexedDb: true });
-  const [getProducts, loadProducts] = abc(Product, { useIndexedDb: true });
-  const [getCompanies, loadCompanies] = abc(Company, {
-    useIndexedDb: false
-  });
-  const [getUserProfile, loadUserProfile] = abc(Person, { isList: false });
-
-  return {
-    getProducts,
-    loadProducts,
-    getOrders,
-    loadOrders,
-    getCompanies,
-    loadCompanies,
-    getUserProfile,
-    loadUserProfile
-  };
-};
