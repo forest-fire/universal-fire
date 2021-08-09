@@ -4,7 +4,7 @@ import { determineLocalStateNode } from "~/util";
 import { ActionTree } from "vuex";
 import { get } from "native-dash";
 import { FmCrudMutation } from "~/enums";
-import { ISdk } from "../../../../types/dist/types";
+import { ISdk } from '@forest-fire/types';
 
 export const recordLocal = <T>() =>
 ({

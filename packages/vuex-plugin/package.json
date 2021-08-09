@@ -25,9 +25,12 @@
   "files": [
     "dist"
   ],
+  "scripty": {
+    "path": "../../scripts/packages"
+  },
   "scripts": {
-    "autoindex": "yarn do autoindex",
-    "build": "run-s clean build:bundle",
+    "autoindex": "yarn dd autoindex",
+    "build": "scripty",
     "build:bundle": "scripty",
     "build:docs": "vuepress build docs",
     "build:tsc": "yarn ttsc -P tsconfig.es.json && yarn ttsc -P tsconfig.cjs.json",
@@ -58,6 +61,8 @@
     "@babel/preset-typescript": "^7.10.1",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
+    "@rollup/plugin-typescript": "^8.0.0",
+    "@types/node": "^14.0.0",
     "@types/jest": "^26.0.0",
     "@types/js-cookie": "^2.2.6",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
@@ -78,8 +83,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-vue": "^7.4.1",
     "fake-indexeddb": "^3.0.0",
-    "firemodel": "*",
-    "jest": "^26.1.0",
+    "jest": "^27.0.6",
     "jest-extended": "^0.11.5",
     "js-cookie": "^3.0.0-rc.0",
     "madge": "*",
@@ -94,12 +98,14 @@
     "ttypescript": "^1.5.12",
     "typed-conversions": "^0.12.0",
     "typescript": "^4.3.5",
-    "typescript-transform-paths": "^3.1.0",
+    "typescript-transform-paths": "^1.1.14",
     "universal-fire": "*",
     "vuepress": "^1.8.2",
     "vuepress-plugin-container": "^2.1.4",
     "vuex": "^3.5.1",
-    "@forest-fire/types": "*"
+    "@forest-fire/types": "*",
+    "firemodel": "*"
+
   },
   "peerDependencies": {
     "common-types": "^1.27.0",
@@ -110,9 +116,10 @@
     "universal-fire": "*",
     "vue": "^2.6.11",
     "vuex": "^3.5.1",
-    "@forest-fire/types": "*"
-  },
-  "optionalDependencies": {
+    "@forest-fire/types": "*",
     "firemock": "*"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }

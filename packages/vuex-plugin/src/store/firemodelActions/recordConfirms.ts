@@ -4,7 +4,7 @@ import { FmEvents, IFmWatchEvent } from "firemodel";
 import { ActionTree } from "vuex";
 import { determineLocalStateNode } from "~/util";
 import { FmCrudMutation } from "~/enums";
-import { ISdk } from "../../../../types/dist/types";
+import { ISdk } from '@forest-fire/types';
 
 export const recordConfirms = <T>() =>
 ({

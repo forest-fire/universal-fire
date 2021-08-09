@@ -10,11 +10,11 @@ import {
   IdTokenResult,
   UserCredential
 } from "@firebase/auth-types";
-import type { IAuthProfile, IFiremodelState } from "~/types";
-import { getAuth, getStore } from "~/util";
+import type { IAuthProfile } from '~/types';
+import { getAuth, getStore } from '~/util';
 
-import { FireModelPluginError } from "~/errors";
-import { IModelConstructor, Model } from "firemodel";
+import { FireModelPluginError } from '~/errors';
+import { Model } from 'firemodel';
 import { ConstructorFor } from "common-types";
 
 /**

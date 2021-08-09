@@ -1,18 +1,15 @@
-import * as lifecycle from "./lifecycle";
+import * as lifecycle from './lifecycle';
 
-import { AsyncMockData, IFiremodelState } from "~/types";
-import Vuex, { Store } from "vuex";
-import companies, { ICompaniesState } from "./modules/companies";
-import orders, { IOrdersState } from "./modules/orders";
-import products, { IProductsState } from "./modules/products";
-import userProfile, { IUserProfileState } from "./modules/userProfile";
+import { AsyncMockData, IFiremodelState } from '~/types';
+import Vuex, { Store } from 'vuex';
+import companies, { ICompaniesState } from './companies';
+import orders, { IOrdersState } from './orders';
+import products, { IProductsState } from './products';
+import userProfile, { IUserProfileState } from './userProfile';
 
-import { Company } from "../models/Company";
-import { FiremodelPlugin } from "~/plugin";
-import { IDictionary } from "common-types";
-import { Order } from "../models/Order";
-import { Person } from "../models/Person";
-import { Product } from "../models/Product";
+import { FiremodelPlugin } from '~/plugin';
+import { IDictionary } from 'common-types';
+
 import { RealTimeClient } from 'universal-fire';
 import Vue from 'vue';
 import { config } from './config';
@@ -54,4 +51,3 @@ export const setupStore = (data?: IDictionary | AsyncMockData) => {
   });
   return store;
 };
-

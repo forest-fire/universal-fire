@@ -1,5 +1,5 @@
 import { IDictionary } from "common-types";
-import { IFmWatchEvent, IModel, Model } from 'firemodel';
+import { IFmWatchEvent, Model } from 'firemodel';
 import { ISdk } from 'universal-fire';
 
 /**

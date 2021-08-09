@@ -1,7 +1,6 @@
 import { FireModelPluginError } from "~/errors";
 import Vue from "vue";
-import { getInitialState } from "~/util";
-import { StoreWithPlugin } from "~/types";
+import { getInitialState } from '~/util';
 import { IModel, Model } from 'firemodel';
 
 /**

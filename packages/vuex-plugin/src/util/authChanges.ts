@@ -6,7 +6,7 @@ import {
 } from '~/types';
 
 import { User } from '@firebase/auth-types';
-import { getPluginConfig } from '~/util';
+import { getPluginConfig } from './index';
 import { runQueue } from './runQueue';
 import { FmConfigMutation } from '~/enums';
 

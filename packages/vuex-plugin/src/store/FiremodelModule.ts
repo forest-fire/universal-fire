@@ -1,5 +1,5 @@
 import { ICompositeKey, Model } from 'firemodel';
-import type { IFmEventActions, IFiremodelState, StoreWithPlugin } from '~/types';
+import type { IFmEventActions, IFiremodelState } from '~/types';
 import { actions, mutations, state } from '~/store';
 import { Module } from 'vuex';
 
