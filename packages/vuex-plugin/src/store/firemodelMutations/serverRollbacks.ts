@@ -4,6 +4,7 @@ import { changeRoot, isRecord, updateList } from '~/util';
 import { FmCrudMutation } from '~/enums';
 import { MutationTree } from 'vuex';
 import { ISdk } from 'universal-fire';
+import { IDictionary } from 'common-types';
 
 /**
  * **serverConfirms**
@@ -16,16 +17,18 @@ import { ISdk } from 'universal-fire';
  * back to what it had been before it had been optimistically set by the `local`
  * mutation.
  */
-export function serverRollbacks<T>(propOffset?: keyof T & string): MutationTree<T> {
+export function serverRollbacks<TState extends IDictionary<T[]>, T extends Model>(
+  propOffset?: keyof TState & string
+): MutationTree<TState> {
   // default to "all"
-  const offset: keyof T & string = !propOffset ? ('all' as keyof T & string) : propOffset;
+  const offset: keyof TState & string = !propOffset ? ('all' as keyof TState & string) : propOffset;
 
   return {
     [FmCrudMutation.serverAddRollback](state, payload: IFmWatchEvent<ISdk, T>) {
       if (isRecord(state, payload)) {
         changeRoot<T>(state, payload.value, payload.localPath);
       } else {
-        updateList<T>(state, offset, payload.value);
+        updateList<T, TState>(state, offset, payload.value);
       }
     },
 

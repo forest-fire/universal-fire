@@ -25,7 +25,7 @@ export enum FmEvents {
   /** a record removed locally has now been confirmed by Firebase */
   RECORD_REMOVED_CONFIRMATION = "@firemodel/RECORD_REMOVED_CONFIRMATION",
   /** A record removed locally failed to be saved to Firebase */
-  RECORD_REMOVED_ROLLBACK = "@firemodel/RECORD_REMOVED_LOCALLY",
+  RECORD_REMOVED_ROLLBACK = "@firemodel/RECORD_REMOVED_ROLLBACK",
   /** A record has been removed from a given Model list being watched */
   RECORD_REMOVED = "@firemodel/RECORD_REMOVED",
   /** An attempt to access the database was refused to lack of permissions */
@@ -78,5 +78,5 @@ export enum FmEvents {
   APP_CONNECTED = "@firemodel/APP_CONNECTED",
   APP_DISCONNECTED = "@firemodel/APP_DISCONNECTED",
 
-  UNEXPECTED_ERROR = "@firemodel/UNEXPECTED_ERROR"
+  UNEXPECTED_ERROR = "@firemodel/UNEXPECTED_ERROR",
 }

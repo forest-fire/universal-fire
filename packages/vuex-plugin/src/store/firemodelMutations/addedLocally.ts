@@ -6,8 +6,10 @@ import { IFmWatchEvent, Model } from 'firemodel';
 import { MutationTree } from 'vuex';
 import { ISdk } from 'universal-fire';
 
-export function addedLocally<T extends Model>(propOffset?: keyof T & string): MutationTree<T> {
-  const offset = !propOffset ? ('all' as keyof T & string) : propOffset;
+export function addedLocally<TState extends IDictionary<T[]>, T extends Model>(
+  propOffset?: keyof TState & string
+): MutationTree<TState> {
+  const offset = !propOffset ? ('all' as keyof TState & string) : propOffset;
 
   return {
     [FmCrudMutation.addedLocally](state: T | IDictionary<T[]>, payload: IFmWatchEvent<ISdk, T>) {
@@ -26,9 +28,9 @@ export function addedLocally<T extends Model>(propOffset?: keyof T & string): Mu
       }
     },
 
-    [FmCrudMutation.removedLocally](state: T, payload: IFmWatchEvent<ISdk, T>) {
+    [FmCrudMutation.removedLocally](state, payload: IFmWatchEvent<ISdk, T>) {
       if (isList(state, payload)) {
-        updateList(state, offset, null);
+        updateList<T, TState>(state, offset, { kind: 'remove', id: payload.value?.id });
       } else {
         changeRoot(state, null, payload.localPath);
       }

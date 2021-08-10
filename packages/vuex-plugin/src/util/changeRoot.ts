@@ -33,7 +33,6 @@ export const changeRoot = <T extends Model>(
     const newState = updatedProps ? updatedProps[prop as keyof IModel<T>] : null;
     const oldState = state[prop as keyof T];
     const defaultState = getInitialState()[moduleName][prop];
-
     Vue.set(state, prop, newState === null ? defaultState : newState);
     // state[prop as keyof T] = newState === null ? defaultState : newState;
   });

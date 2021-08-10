@@ -1,5 +1,5 @@
 import { Store } from 'vuex';
-import { FireModel, Record, Watch } from '~/index';
+import { FireModel, List, Record, Watch } from '~/index';
 import { Product } from './models/Product';
 import { IRootState, setupStore } from './store';
 import { stub } from 'sinon';
@@ -29,8 +29,9 @@ describe('watching local change triggers @firemodel and its module mutations', (
     });
 
     await task;
-    await Watch.list(Product).start();
+    await Watch.list(Product).all().start();
   });
+
   afterEach(async () => {
     store = undefined;
     FireModel.defaultDb = undefined;
@@ -110,12 +111,11 @@ describe('watching local change triggers @firemodel and its module mutations', (
   it('removing a record triggers REMOVE_CONFIRMATION', async () => {
     const action = () => Record.remove(Product, 'abcd');
     store.subscribe((payload, state) => {
-      console.log(payload.type);
       expect([
-        '@firemodel/ROLLBACK_REMOVE',
-        'products/ROLLBACK_REMOVE',
+        '@firemodel/REMOVED_LOCALLY',
+        'products/REMOVED_LOCALLY',
         'products/SERVER_REMOVE',
-        'products/ROLLBACK_CHANGE',
+        'products/REMOVE_CONFIRMATION',
         '@firemodel/REMOVE_CONFIRMATION',
       ]).toContain(payload.type);
     });
@@ -128,8 +128,11 @@ describe('watching local change triggers @firemodel and its module mutations', (
 
     db.remove = stub().throwsException({ message: 'This is a custom error' });
     store.subscribe((payload, state) => {
-      console.log(payload.type);
-      expect(['@firemodel/ROLLBACK_REMOVE', 'products/ROLLBACK_REMOVE']).toContain(payload.type);
+      expect([
+        '@firemodel/REMOVED_LOCALLY',
+        'products/REMOVED_LOCALLY',
+        '@firemodel/ROLLBACK_REMOVE',
+      ]).toContain(payload.type);
     });
 
     try {

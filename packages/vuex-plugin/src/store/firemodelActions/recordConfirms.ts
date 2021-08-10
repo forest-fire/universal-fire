@@ -40,13 +40,10 @@ export const recordConfirms = <T>() =>
     { commit, state },
     payload: IFmWatchEvent<ISdk>
   ) {
+    console.log(payload);
     commit(FmCrudMutation.serverRemoveConfirm, payload);
-    commit(
-      determineLocalStateNode(payload, FmCrudMutation.serverChangeRollback),
-      payload,
-      {
-        root: true
-      }
-    );
+    commit(determineLocalStateNode(payload, FmCrudMutation.serverRemoveConfirm), payload, {
+      root: true,
+    });
   }
 } as ActionTree<StoreWithPlugin<T>, T>);

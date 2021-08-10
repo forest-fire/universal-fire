@@ -38,7 +38,7 @@ const vuexModule: Module<IMyStateModule, IRootState> = {
 }
 ```
 */
-export function firemodelMutations<T extends IDictionary>(
+export function firemodelMutations<TState extends IDictionary<T[]>, T extends Model>(
   /**
    * If you are using a **list** based watcher you will almost always want
    * the list of records to be "offset" from the root of the local state
@@ -50,15 +50,15 @@ export function firemodelMutations<T extends IDictionary>(
    * `undefined` but if you have an edge case then you can set it to whatever you like
    * and it will honored.
    */
-  propOffset?: keyof T & string
-): MutationTree<T> {
-  const mutations: MutationTree<T> = {
-    ...addedLocally<T>(propOffset),
-    ...serverEvents<T>(propOffset),
-    ...serverRollbacks<T>(propOffset),
-    ...serverConfirms<T>(propOffset),
-    ...watchEvents<T>(propOffset),
-    ...reset<T>(propOffset),
+  propOffset?: keyof TState & string
+): MutationTree<TState> {
+  const mutations: MutationTree<TState> = {
+    ...addedLocally<TState, T>(propOffset),
+    ...serverEvents<TState, T>(propOffset),
+    ...serverRollbacks<TState, T>(propOffset),
+    ...serverConfirms<TState, T>(propOffset),
+    ...watchEvents<TState, T>(propOffset),
+    ...reset<TState, T>(propOffset),
   };
 
   return mutations;

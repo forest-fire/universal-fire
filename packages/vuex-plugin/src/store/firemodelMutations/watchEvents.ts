@@ -2,13 +2,15 @@ import { changeRoot, isRecord } from "~/util";
 
 import { FmCrudMutation } from "~/enums";
 import { IDictionary } from "common-types";
-import { IFmWatchEvent } from "firemodel";
-import { MutationTree } from "vuex";
-import Vue from "vue";
+import { IFmWatchEvent, Model } from 'firemodel';
+import { MutationTree } from 'vuex';
+import Vue from 'vue';
 import { ISdk } from 'universal-fire';
 
-export function watchEvents<T>(propOffset?: keyof T & string): MutationTree<T> {
-  const offset = !propOffset ? ('all' as keyof T & string) : propOffset;
+export function watchEvents<TState extends IDictionary<T[]>, T extends Model>(
+  propOffset?: keyof TState & string
+): MutationTree<TState> {
+  const offset = !propOffset ? ('all' as keyof TState & string) : propOffset;
 
   return {
     /**

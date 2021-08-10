@@ -71,8 +71,7 @@ describe('local change triggers @firemodel mutations', () => {
   it('removing a record triggers REMOVE_CONFIRMATION', async () => {
     const action = () => Record.remove(Product, 'abcd');
     store.subscribe((payload, state) => {
-      console.log(payload.type);
-      expect(['@firemodel/ROLLBACK_REMOVE', '@firemodel/REMOVE_CONFIRMATION']).toContain(
+      expect(['@firemodel/REMOVED_LOCALLY', '@firemodel/REMOVE_CONFIRMATION']).toContain(
         payload.type
       );
     });
@@ -85,8 +84,7 @@ describe('local change triggers @firemodel mutations', () => {
 
     db.remove = stub().throwsException({ message: 'This is a custom error' });
     store.subscribe((payload, state) => {
-      console.log(payload.type);
-      expect(['@firemodel/ROLLBACK_REMOVE']).toContain(payload.type);
+      expect(['@firemodel/REMOVED_LOCALLY', '@firemodel/ROLLBACK_REMOVE']).toContain(payload.type);
     });
 
     try {

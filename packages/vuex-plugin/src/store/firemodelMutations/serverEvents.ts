@@ -1,11 +1,14 @@
-import { IFmWatchEvent, IModel } from 'firemodel';
+import { IFmWatchEvent, IModel, Model } from 'firemodel';
 import { changeRoot, isList, updateList } from '~/util';
 
 import { FmCrudMutation } from '~/enums';
 import { MutationTree } from 'vuex';
 import { ISdk } from 'universal-fire';
+import { IDictionary } from 'common-types';
 
-export function serverEvents<T extends IModel>(propOffset?: keyof T & string): MutationTree<T> {
+export function serverEvents<TState extends IDictionary<T[]>, T extends Model>(
+  propOffset?: keyof TState & string
+): MutationTree<TState> {
   const offset = !propOffset ? ('all' as keyof T & string) : propOffset;
   return {
     [FmCrudMutation.serverAdd](
@@ -13,7 +16,7 @@ export function serverEvents<T extends IModel>(propOffset?: keyof T & string): M
        * either a dictionary which includes the "offsetProp" or the array
        * of records at the root of the state structure
        */
-      state: T,
+      state: TState,
       payload: IFmWatchEvent<ISdk, T>
     ) {
       if (isList(state, payload)) {
@@ -28,7 +31,7 @@ export function serverEvents<T extends IModel>(propOffset?: keyof T & string): M
        * Either a dictionary which includes the "offsetProp" or the array
        * of records at the root of the state structure
        */
-      state: T,
+      state: TState,
       payload: IFmWatchEvent<ISdk, T>
     ) {
       if (payload.value === null) {
@@ -50,11 +53,11 @@ export function serverEvents<T extends IModel>(propOffset?: keyof T & string): M
        * either a dictionary which includes the "offsetProp" or the array
        * of records at the root of the state structure
        */
-      state: T,
+      state: TState,
       payload: IFmWatchEvent<ISdk, T>
     ) {
       if (isList(state, payload)) {
-        updateList<T>(state, offset, payload.value);
+        updateList<T, TState>(state, offset, { kind: 'remove', id: payload.key });
       } else {
         changeRoot(state, null, payload.localPath);
       }

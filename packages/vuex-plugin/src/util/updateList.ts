@@ -1,10 +1,16 @@
-import { FireModelPluginError } from "../errors/FiremodelPluginError";
-import { IDictionary } from "common-types";
-import { IModel, Model, PropertyOf } from "firemodel";
-import Vue from "vue";
+import { FireModelPluginError } from '../errors/FiremodelPluginError';
+import { IDictionary } from 'common-types';
+import { IModel, Model, PropertyOf } from 'firemodel';
+import Vue from 'vue';
 
 interface IDictionaryWithId extends IDictionary {
   id: string;
+}
+
+function isRemoveHash(
+  obj: IDictionary | { kind: 'remove'; id: string }
+): obj is { kind: 'remove'; id: string } {
+  return 'kind' in obj && obj.kind === 'remove';
 }
 
 /**
@@ -28,7 +34,7 @@ export function updateList<
   moduleState: TState,
   offset: TId,
   /** the new record value OR "null" if removing the record */
-  value: TModel | null
+  value: TModel | { kind: 'remove'; id: string }
 ): void {
   if (!offset) {
     throw new FireModelPluginError(
@@ -39,18 +45,27 @@ export function updateList<
 
   const existing: IModel<TModel>[] = moduleState[offset] || [];
 
-  let found = false;
-  const updated: IModel<TModel>[] = existing.map((i) => {
-    if (value && i.id === value.id) {
-      found = true;
-    }
-    return value && i.id === value.id ? value : i;
-  });
+  let isNotAddOperation = false;
+  const updated: IModel<TModel>[] = existing
+    .map((i) => {
+      const found = value && i.id === value.id;
+
+      if (!isNotAddOperation && found) {
+        isNotAddOperation = true;
+      }
+
+      if (isRemoveHash(value)) {
+        return found ? null : i;
+      }
+      return found ? value : i;
+    })
+    ?.filter((f) => f !== null);
+  console.log({ isNotAddOperation, value, updated, existing });
 
   Vue.set(
     moduleState as Record<string, unknown>,
     offset,
-    found ? updated : existing.concat(value as TModel)
+    isNotAddOperation ? updated : existing.concat(value as TModel)
   );
 
   // set<IDictionaryWithId>(
