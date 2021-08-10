@@ -24,7 +24,6 @@ import {
 import { FireMockError } from '../../errors';
 import { completeUserCredential, toUser } from '../../auth/util';
 import { createUser } from './createUser';
-import { getIdToken, getIdTokenResult } from './User';
 
 export const implemented: (
   api: IMockAuthMgmt<ClientSdk>
@@ -51,7 +50,7 @@ export const implemented: (
     completed?: Unsubscribe
   ): Unsubscribe {
     api.addAuthObserver(observer);
-    observer(toUser(api.getCurrentUser()));
+    observer(createUser(api, toUser(api.getCurrentUser())));
     return undefined;
   },
 

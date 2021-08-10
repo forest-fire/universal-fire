@@ -1,5 +1,8 @@
-import type { IdTokenResult, IMockAuthMgmt } from '@forest-fire/types';
-import { ClientSdk } from '@forest-fire/types';
+import type {
+  IdTokenResult,
+  IMockAuthMgmt,
+  ClientSdk,
+} from '@forest-fire/types';
 import { getIdToken } from './getIdToken';
 
 export function getIdTokenResult(api: IMockAuthMgmt<ClientSdk>) {

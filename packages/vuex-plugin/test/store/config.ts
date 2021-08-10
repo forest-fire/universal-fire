@@ -11,7 +11,7 @@ export const config = (data?: IDictionary | AsyncMockData) => {
     mocking: true,
     mockAuth: {
       providers: [AuthProviderName.emailPassword],
-      users: [{ email: 'test@test.com', password: 'foobar' }],
+      users: [{ email: 'test@test.com', password: 'foobar', uid: 'foobar', emailVerified: true }],
     },
     mockData: data || defaultData || {},
   };

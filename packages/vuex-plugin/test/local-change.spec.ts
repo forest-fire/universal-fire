@@ -4,11 +4,13 @@ import { Product } from './models/Product';
 import { IRootState, setupStore } from './store';
 import { stub } from 'sinon';
 import { productData } from './data/productData';
+import { companyData } from './data/companyData';
+import { orderData } from './data/orderData';
 
 describe('local change triggers @firemodel mutations', () => {
   let store: Store<IRootState>;
   beforeEach(() => {
-    store = setupStore({ ...productData });
+    store = setupStore({ ...productData, ...companyData, ...orderData });
   });
   afterEach(() => {
     FireModel.defaultDb = undefined;
@@ -40,8 +42,7 @@ describe('local change triggers @firemodel mutations', () => {
   });
 
   it('updating a record trigger CHANGED mutation and its confirmation', async () => {
-    const action = () =>
-      Record.update(Product, 'abcd', { name: 'fooProduct', price: 10, store: 'fooStore' });
+    const action = () => Record.update(Product, 'abcd', { name: 'fooProduct', price: 10 });
     store.subscribe((payload, state) => {
       expect(['@firemodel/CHANGED_LOCALLY', '@firemodel/CHANGE_CONFIRMATION']).toContain(
         payload.type

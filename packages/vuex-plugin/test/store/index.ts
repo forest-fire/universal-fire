@@ -1,6 +1,6 @@
 import * as lifecycle from './lifecycle';
 
-import { AsyncMockData, IFiremodelState } from '~/types';
+import { AsyncMockData, IAuthConfig, IFiremodelState } from '~/types';
 import Vuex, { Store } from 'vuex';
 import companies, { ICompaniesState } from './companies';
 import orders, { IOrdersState } from './orders';
@@ -32,7 +32,7 @@ export let store: Store<IRootState>;
  * Sets up a Vuex store for testing purposes; note that DB data can be passed in
  * as a parameter
  */
-export const setupStore = (data?: IDictionary | AsyncMockData, listeners?: {}) => {
+export const setupStore = (data?: IDictionary | AsyncMockData, users?: IAuthConfig) => {
   const db = new RealTimeClient(config(data));
   store = new Vuex.Store<IRootState>({
     modules: {
@@ -44,9 +44,8 @@ export const setupStore = (data?: IDictionary | AsyncMockData, listeners?: {}) =
     plugins: [
       FiremodelPlugin(db, {
         connect: true,
-        auth: true,
+        auth: users || true,
         ...lifecycle,
-        ...listeners,
       }),
     ],
   });

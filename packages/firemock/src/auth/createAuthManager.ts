@@ -29,6 +29,7 @@ import { toUser } from './util';
 import { networkDelay as delay } from '../util';
 import _authProviders from './client-sdk/AuthProviders';
 import { uuid } from 'native-dash';
+import { createUser } from './client-sdk';
 
 const toMockUser = (
   user: User,
@@ -138,7 +139,11 @@ export function createAuthManager<TSdk extends ISdk>(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       getAuthObservers()?.map((o) => {
         const currentUser = getCurrentUser();
-        return o(currentUser ? toUser(currentUser) : undefined);
+        return o(
+          currentUser
+            ? createUser(createAuthManager(sdk), toUser(currentUser))
+            : undefined
+        );
       });
     }
 
@@ -152,7 +157,7 @@ export function createAuthManager<TSdk extends ISdk>(
         'not-allowed'
       );
     }
-    return toUser(setCurrentUser(user));
+    return createUser(createAuthManager(sdk), toUser(setCurrentUser(user)));
   };
 
   const logout = () => {

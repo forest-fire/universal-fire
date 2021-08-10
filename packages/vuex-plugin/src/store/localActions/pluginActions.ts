@@ -106,7 +106,6 @@ export const pluginActions = <T>() =>
         commit,
         state: rootState as StoreWithPlugin<T>,
       };
-
       auth.onAuthStateChanged(authChanged(ctx));
       auth.setPersistence(
         typeof config.auth === 'object' ? config.auth.persistence || 'session' : 'session'

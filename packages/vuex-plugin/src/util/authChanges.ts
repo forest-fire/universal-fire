@@ -30,12 +30,19 @@ export const authChanged = <T>(context: IFmAuthenticatatedContext<T>) => async (
     }
     console.group('Login Event');
     console.info(`Login detected [uid: ${user.uid}, anonymous: ${user.isAnonymous}]`);
-
-    context.commit(FmConfigMutation.userLoggedIn, extractUserInfo(user));
+    const extracted = extractUserInfo(user);
+    context.commit(FmConfigMutation.userLoggedIn, extracted);
 
     console.log('Getting auth token');
-    const token = await user.getIdTokenResult();
-    context.commit('SET_AUTH_TOKEN', token);
+    console.log(user);
+    try {
+      const token = await user.getIdTokenResult();
+
+      console.log(token.token);
+      context.commit('SET_AUTH_TOKEN', token);
+    } catch (error) {
+      console.log(error);
+    }
     _uid = user.uid;
     _isAnonymous = user.isAnonymous;
     await runQueue(
@@ -85,27 +92,27 @@ export const authChanged = <T>(context: IFmAuthenticatatedContext<T>) => async (
 function extractUserInfo(input: User | null): ICurrentUser {
   return input
     ? {
-      uid: input.uid,
-      isAnonymous: input.isAnonymous,
-      isLoggedIn: true,
-      displayName: input.displayName,
-      email: input.email,
-      emailVerified: input.emailVerified,
-      phoneNumber: input.phoneNumber,
-      photoUrl: input.photoURL,
-      refreshToken: input.refreshToken,
-      lastSignIn: input.metadata.lastSignInTime,
-      createdAt: input.metadata.creationTime,
-    }
+        uid: input.uid,
+        isAnonymous: input.isAnonymous,
+        isLoggedIn: true,
+        displayName: input.displayName,
+        email: input.email,
+        emailVerified: input.emailVerified,
+        phoneNumber: input.phoneNumber,
+        photoUrl: input.photoURL,
+        refreshToken: input.refreshToken,
+        lastSignIn: input.metadata?.lastSignInTime,
+        createdAt: input.metadata?.creationTime,
+      }
     : {
-      uid: '',
-      isAnonymous: false,
-      isLoggedIn: false,
-      displayName: null,
-      email: null,
-      emailVerified: false,
-      phoneNumber: null,
-      photoUrl: null,
-      refreshToken: '',
-    };
+        uid: '',
+        isAnonymous: false,
+        isLoggedIn: false,
+        displayName: null,
+        email: null,
+        emailVerified: false,
+        phoneNumber: null,
+        photoUrl: null,
+        refreshToken: '',
+      };
 }

@@ -4,12 +4,14 @@ import { Product } from './models/Product';
 import { IRootState, setupStore } from './store';
 import { stub } from 'sinon';
 import { productData } from './data/productData';
+import { companyData } from './data/companyData';
+import { orderData } from './data/orderData';
 
 describe('watching local change triggers @firemodel and its module mutations', () => {
   let store: Store<IRootState>;
   beforeEach(async () => {
     const task = new Promise((resolve) => {
-      store = setupStore({ ...productData });
+      store = setupStore({ ...productData, ...companyData, ...orderData });
       const expectedMutations = [
         '@firemodel/LIFECYCLE_EVENT_COMPLETED',
         '@firemodel/CONFIGURE',
@@ -70,8 +72,7 @@ describe('watching local change triggers @firemodel and its module mutations', (
   });
 
   it('updating a record trigger CHANGED mutation and its confirmation', async () => {
-    const action = () =>
-      Record.update(Product, 'abcd', { name: 'fooProduct', price: 10, store: 'fooStore' });
+    const action = () => Record.update(Product, 'abcd', { name: 'fooProduct', price: 10 });
     store.subscribe((payload, state) => {
       expect([
         '@firemodel/CHANGED_LOCALLY',
@@ -86,8 +87,7 @@ describe('watching local change triggers @firemodel and its module mutations', (
   });
 
   it('error in updating a record triggers a ROLLBACK mutation next to CHANGED', async () => {
-    const action = () =>
-      Record.update(Product, 'abcd', { name: 'foo', store: 'fooStore', price: 10 });
+    const action = () => Record.update(Product, 'abcd', { name: 'foo', price: 10 });
     const db = FireModel.defaultDb;
 
     db.update = stub().throwsException({ message: 'This is a custom error' });
