@@ -23,20 +23,30 @@ export function hasMany<T extends Model>(
    * possibility that a user of this API will pass in a _function_
    * to a _constructor_. This approach is now deprecated.
    */
-  fkClass: ConstructorFor<T> | (() => ConstructorFor<T>) | (() => ConstructorFor<T>) | string ,
-  inverse?: string & keyof T | [string & keyof T, IFmRelationshipDirectionality]
+  fkClass:
+    | ConstructorFor<T>
+    | (() => ConstructorFor<T>)
+    | (() => ConstructorFor<T>)
+    | string,
+  inverse?:
+    | string
+    | (string & keyof T)
+    | [string & keyof T, IFmRelationshipDirectionality]
 ) {
   try {
-    const fkConstructor: () => ConstructorFor<T> = typeof fkClass === "string"
-      ? modelNameLookup(fkClass)
-      : modelConstructorLookup(fkClass as ConstructorFor<T> | (() => ConstructorFor<T>));
+    const fkConstructor: () => ConstructorFor<T> =
+      typeof fkClass === "string"
+        ? modelNameLookup(fkClass)
+        : modelConstructorLookup(
+            fkClass as ConstructorFor<T> | (() => ConstructorFor<T>)
+          );
 
-    let inverseProperty: string & keyof T | undefined;
+    let inverseProperty: (string & keyof T) | undefined;
     let directionality: IFmRelationshipDirectionality;
     if (Array.isArray(inverse)) {
       [inverseProperty, directionality] = inverse;
     } else {
-      inverseProperty = inverse;
+      inverseProperty = inverse as string & keyof T;
       directionality = inverse ? "bi-directional" : "one-way";
     }
 
@@ -48,7 +58,7 @@ export function hasMany<T extends Model>(
       fkConstructor,
       inverseProperty,
       hasInverse: inverseProperty !== undefined ? true : false,
-      type: FmPropertyType.object
+      type: FmPropertyType.object,
     });
   } catch (e) {
     throw new DecoratorProblem("hasMany", e, { inverse });

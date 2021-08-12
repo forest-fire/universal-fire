@@ -25,13 +25,13 @@ export type {
   IRtdbSdk,
   IDatabaseSdk,
   IDatabaseApi,
-  FakerStatic,
+  IFakerStatic,
 } from '@forest-fire/types';
 
-export {
-  isClientSdk,
-  isAdminSdk
-} from "@forest-fire/types"
+export { isClientSdk, isAdminSdk } from '@forest-fire/types';
 
-export { SerializedQuery } from '@forest-fire/serialized-query';
+export type {
+  SerializedRealTimeQuery,
+  SerializedFirestoreQuery,
+} from '@forest-fire/serialized-query';
 

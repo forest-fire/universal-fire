@@ -8,7 +8,7 @@ import type {
 } from '../index';
 import { IMockDelayedState, IMockServerOptions } from './db-mocking/index';
 
-export type FakerStatic = typeof import('faker');
+export type IFakerStatic = typeof import('faker');
 
 export const enum AuthProviderName {
   emailPassword = 'emailPassword',
@@ -39,7 +39,7 @@ export interface IAuthProviders {
  * avoid the circular dependency.
  */
 export interface ISimplifiedMockApi extends IDictionary {
-  faker: FakerStatic;
+  faker: IFakerStatic;
   generate: () => void;
 }
 

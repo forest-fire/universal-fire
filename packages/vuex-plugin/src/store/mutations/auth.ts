@@ -2,7 +2,7 @@ import type { ICurrentUser, IFiremodelState } from '~/types';
 
 import { IDictionary } from 'common-types';
 import { MutationTree } from 'vuex';
-import { UserCredential } from '@firebase/auth-types';
+import { UserCredential } from '@forest-fire/types';
 import Vue from 'vue';
 
 /**

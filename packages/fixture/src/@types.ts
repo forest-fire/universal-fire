@@ -1,11 +1,11 @@
-import { FakerStatic } from '@forest-fire/types';
+import { IFakerStatic } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 
 import type { IRtdbDataSnapshot } from '@forest-fire/types';
 
 export interface ISchemaHelper<T extends unknown> {
   context: T;
-  faker: FakerStatic;
+  faker: IFakerStatic;
 }
 
 export interface ISchema {

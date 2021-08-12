@@ -1,5 +1,5 @@
 import type { ICurrentUser, IFmLifecycleEvent, IFmQueuedAction, IFiremodelState } from '~/types';
-import { User, UserCredential } from '@firebase/auth-types';
+import { User, UserCredential } from '@forest-fire/types';
 
 import { MutationTree } from 'vuex';
 import Vue from 'vue';

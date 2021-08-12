@@ -11,7 +11,17 @@ describe('watching local change triggers @firemodel and its module mutations', (
   let store: Store<IRootState>;
   beforeEach(async () => {
     const task = new Promise((resolve) => {
-      store = setupStore({ ...productData, ...companyData, ...orderData });
+      store = setupStore(
+        { ...productData, ...companyData, ...orderData }
+        // {
+        //   apiKey: 'AIzaSyBSb9fWAT_0_XWO1_wgmWnCY3L0Lvs6Vmk',
+        //   authDomain: 'utran-1b289.firebaseapp.com',
+        //   databaseURL: 'https://utran-1b289.firebaseio.com',
+        //   projectId: 'utran-1b289',
+        //   storageBucket: 'utran-1b289.appspot.com',
+        //   messagingSenderId: '1004514286086',
+        // }
+      );
       const expectedMutations = [
         '@firemodel/LIFECYCLE_EVENT_COMPLETED',
         '@firemodel/CONFIGURE',
@@ -30,6 +40,7 @@ describe('watching local change triggers @firemodel and its module mutations', (
 
     await task;
     await Watch.list(Product).all().start();
+    await FireModel.defaultDb.update('/', { ...productData, ...companyData, ...orderData });
   });
 
   afterEach(async () => {
@@ -88,7 +99,7 @@ describe('watching local change triggers @firemodel and its module mutations', (
   });
 
   it('error in updating a record triggers a ROLLBACK mutation next to CHANGED', async () => {
-    const action = () => Record.update(Product, 'abcd', { name: 'foo', price: 10 });
+    const action = () => Record.update(Product, 'abcd', { name: 'foo', price: 30 });
     const db = FireModel.defaultDb;
 
     db.update = stub().throwsException({ message: 'This is a custom error' });
@@ -111,6 +122,7 @@ describe('watching local change triggers @firemodel and its module mutations', (
   it('removing a record triggers REMOVE_CONFIRMATION', async () => {
     const action = () => Record.remove(Product, 'abcd');
     store.subscribe((payload, state) => {
+      console.log(payload.type);
       expect([
         '@firemodel/REMOVED_LOCALLY',
         'products/REMOVED_LOCALLY',
@@ -120,6 +132,7 @@ describe('watching local change triggers @firemodel and its module mutations', (
       ]).toContain(payload.type);
     });
     await action();
+    console.log(store.state.products.all);
   });
 
   it('error in removing a record triggers ROLLBACK mutation', async () => {

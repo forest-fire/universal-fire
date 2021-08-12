@@ -1,6 +1,6 @@
-import type { FakerStatic } from '@forest-fire/types';
+import type { IFakerStatic } from '@forest-fire/types';
 
 export interface ISchemaHelper<T extends unknown> {
   context: T;
-  faker: FakerStatic;
+  faker: IFakerStatic;
 }

@@ -5,7 +5,7 @@ import {
   IFmLogoutEventContext,
 } from '~/types';
 
-import { User } from '@firebase/auth-types';
+import { User } from '@forest-fire/types';
 import { getPluginConfig } from './index';
 import { runQueue } from './runQueue';
 import { FmConfigMutation } from '~/enums';

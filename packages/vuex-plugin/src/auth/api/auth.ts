@@ -8,8 +8,8 @@ import {
   ActionCodeSettings,
   AuthCredential,
   IdTokenResult,
-  UserCredential
-} from "@firebase/auth-types";
+  UserCredential,
+} from '@forest-fire/types';
 import type { IAuthProfile } from '~/types';
 import { getAuth, getStore } from '~/util';
 

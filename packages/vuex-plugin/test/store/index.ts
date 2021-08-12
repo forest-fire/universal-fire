@@ -13,6 +13,7 @@ import { IDictionary } from 'common-types';
 import { RealTimeClient } from '@forest-fire/real-time-client';
 import Vue from 'vue';
 import { config } from './config';
+import { IClientConfig } from 'universal-fire';
 
 Vue.use(Vuex);
 
@@ -32,8 +33,8 @@ export let store: Store<IRootState>;
  * Sets up a Vuex store for testing purposes; note that DB data can be passed in
  * as a parameter
  */
-export const setupStore = (data?: IDictionary | AsyncMockData, users?: IAuthConfig) => {
-  const db = new RealTimeClient(config(data));
+export const setupStore = (data?: IDictionary | AsyncMockData, customConfig?: IClientConfig) => {
+  const db = new RealTimeClient(customConfig || config(data));
   store = new Vuex.Store<IRootState>({
     modules: {
       products,
@@ -44,7 +45,7 @@ export const setupStore = (data?: IDictionary | AsyncMockData, users?: IAuthConf
     plugins: [
       FiremodelPlugin(db, {
         connect: true,
-        auth: users || true,
+        auth: true,
         ...lifecycle,
       }),
     ],

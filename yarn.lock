@@ -471,33 +471,6 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@firebase/app-types@0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@firebase/app-types/-/app-types-0.6.1.tgz#dcbd23030a71c0c74fc95d4a3f75ba81653850e9"
-  integrity sha512-L/ZnJRAq7F++utfuoTKX4CLBG5YR7tFO3PLzG1/oXXKEezJ0kRL3CMRoueBEmTCzVb/6SIs2Qlaw++uDgi5Xyg==
-
-"@firebase/app-types@^0.6.1":
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/@firebase/app-types/-/app-types-0.6.3.tgz#3f10514786aad846d74cd63cb693556309918f4b"
-  integrity sha512-/M13DPPati7FQHEQ9Minjk1HGLm/4K4gs9bR4rzLCWJg64yGtVC0zNg9gDpkw9yc2cvol/mNFxqTtd4geGrwdw==
-
-"@firebase/auth-types@^0.10.1":
-  version "0.10.3"
-  resolved "https://registry.yarnpkg.com/@firebase/auth-types/-/auth-types-0.10.3.tgz#2be7dd93959c8f5304c63e09e98718e103464d8c"
-  integrity sha512-zExrThRqyqGUbXOFrH/sowuh2rRtfKHp9SBVY2vOqKWdCX1Ztn682n9WLtlUDsiYVIbBcwautYWk2HyCGFv0OA==
-
-"@firebase/database-types@^0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@firebase/database-types/-/database-types-0.6.1.tgz#cf1cfc03e617ed4c2561703781f85ba4c707ff65"
-  integrity sha512-JtL3FUbWG+bM59iYuphfx9WOu2Mzf0OZNaqWiQ7lJR8wBe7bS9rIm9jlBFtksB7xcya1lZSQPA/GAy2jIlMIkA==
-  dependencies:
-    "@firebase/app-types" "0.6.1"
-
-"@firebase/firestore-types@^1.12.0":
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/@firebase/firestore-types/-/firestore-types-1.14.0.tgz#4516249d3c181849fd3c856831944dbd5c8c55fc"
-  integrity sha512-WF8IBwHzZDhwyOgQnmB0pheVrLNP78A8PGxk1nxb/Nrgh1amo4/zYvFMGgSsTeaQK37xMYS/g7eS948te/dJxw==
-
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.5.0.tgz#1407967d4c6eecd7388f83acf1eaf4d0c6e58ef9"
@@ -3411,9 +3384,9 @@ commitlint@^12.1.4:
     "@commitlint/cli" "^12.1.4"
     "@commitlint/types" "^12.1.4"
 
-"common-types@> 1.15.0", common-types@^1.15.8, common-types@^1.25.0, common-types@^1.26.0, common-types@^1.26.2, common-types@^1.27.0:
+"common-types@> 1.15.0", common-types@^1.15.8, common-types@^1.25.0, common-types@^1.26.0, common-types@^1.26.2, common-types@^1.28.2:
   version "1.28.2"
-  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.28.2.tgz#09b6bcf48c5aede67f06adc050b63cd5371cc8c7"
+  resolved "https://registry.npmjs.org/common-types/-/common-types-1.28.2.tgz#09b6bcf48c5aede67f06adc050b63cd5371cc8c7"
   integrity sha512-NyxLB6VzJ1RhTbtZ56mOa5m7bhjhw6Bb59DEF+Qwt6yne2KKtFV8L7GCVv/fJjltOuuNJAUwpajMjBx7q31rgg==
 
 commondir@^1.0.1:

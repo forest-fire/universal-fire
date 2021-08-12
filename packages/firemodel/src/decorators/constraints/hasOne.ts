@@ -25,7 +25,10 @@ export function belongsTo<T extends Model = Model>(
    * to a _constructor_. This approach is now deprecated.
    */
   fkClass: ConstructorFor<T> | (() => ConstructorFor<T>) | string,
-  inverse?: PropertyOf<T> | [PropertyOf<T>, IFmRelationshipDirectionality]
+  inverse?:
+    | string
+    | PropertyOf<T>
+    | [PropertyOf<T>, IFmRelationshipDirectionality]
 ) {
   try {
     const fkConstructor: () => ConstructorFor<T> =
@@ -33,15 +36,14 @@ export function belongsTo<T extends Model = Model>(
         ? modelNameLookup(fkClass)
         : modelConstructorLookup(fkClass);
 
-    let inverseProperty: string & keyof T | null;
+    let inverseProperty: (string & keyof T) | null;
     let directionality: IFmRelationshipDirectionality;
     if (Array.isArray(inverse)) {
       [inverseProperty, directionality] = inverse;
     } else {
-      inverseProperty = inverse;
+      inverseProperty = inverse as PropertyOf<T>;
       directionality = inverse ? "bi-directional" : "one-way";
     }
-
 
     return propertyReflector({
       isRelationship: true,
@@ -51,9 +53,8 @@ export function belongsTo<T extends Model = Model>(
       directionality,
       fkConstructor,
       hasInverse: inverseProperty !== undefined ? true : false,
-      type: FmPropertyType.string
-    }
-    );
+      type: FmPropertyType.string,
+    });
   } catch (e) {
     throw new DecoratorProblem("hasOne", e, { inverse });
   }

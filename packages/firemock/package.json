@@ -39,7 +39,7 @@
     "eledoc": "^0.2.1",
     "firebase-key": "^2.0.2",
     "jest": "^27.0.6",
-    "native-dash": "^1.18.2",
+    "native-dash": "^1.18.4",
     "firemock": "*",
     "scripty": "^2.0.0",
     "test-console": "^2.0.0",
@@ -51,8 +51,8 @@
     "vuepress": "^1.7.1"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.59.2",
-    "@forest-fire/types": "^0.59.2",
+    "@forest-fire/serialized-query": "*",
+    "@forest-fire/types": "*",
     "brilliant-errors": "^0.3.1",
     "deepmerge": "^4.2.2",
     "email-validator": "^2.0.4",
@@ -62,7 +62,7 @@
   "peerDependencies": {
     "firebase-key": "^2.0.2",
     "firemock": "*",
-    "native-dash": "^1.18.2",
+    "native-dash": "^1.18.4",
     "typed-conversions": "~0.12.0"
   },
   "engines": {

@@ -19,6 +19,7 @@ export type IUserProfileState = {
       zipcode: string;
     };
   };
+  all: any[];
 };
 
 export const state: IUserProfileState = {

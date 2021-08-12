@@ -1,5 +1,5 @@
 import { ISchemaHelper } from '~/@types';
-import type { FakerStatic } from '@forest-fire/types';
+import type { IFakerStatic } from '@forest-fire/types';
 
 export class SchemaHelper<T = any> implements ISchemaHelper<T> {
   /**
@@ -13,14 +13,14 @@ export class SchemaHelper<T = any> implements ISchemaHelper<T> {
    * ensure that faker is ready before the faker getter is
    * used.
    */
-  static create<T = any>(context: T, faker?: FakerStatic): SchemaHelper<T> {
+  static create<T = any>(context: T, faker?: IFakerStatic): SchemaHelper<T> {
     const obj = new SchemaHelper(context, faker);
     return obj;
   }
 
-  private _faker: FakerStatic;
+  private _faker: IFakerStatic;
 
-  constructor(public context: T, faker?: FakerStatic) {
+  constructor(public context: T, faker?: IFakerStatic) {
     if (faker) {
       this._faker = faker;
     }

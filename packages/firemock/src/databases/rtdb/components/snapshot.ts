@@ -6,14 +6,10 @@ import { getKey, join } from '~/util';
 import { get } from "native-dash";
 import { reference } from './reference';
 
-export const snapshot = <
+export function snapshot<
   TSdk extends IRtdbSdk = IRtdbSdk,
   T extends unknown = unknown
->(
-  store: IMockStore<TSdk>,
-  key: string,
-  value: T[] | T
-): IRtdbDataSnapshot => {
+>(store: IMockStore<TSdk>, key: string, value: T[] | T): IRtdbDataSnapshot {
   const val = () => (Array.isArray(value) ? arrayToHash(value) : value);
   let sortingFunction: SortingFunction;
 
