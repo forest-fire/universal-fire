@@ -16,7 +16,7 @@ describe('local change triggers @firemodel mutations', () => {
     FireModel.defaultDb = undefined;
     store = undefined;
   });
-  it.only('adding a new record triggers ADDED mutation and its confirmation', async () => {
+  it('adding a new record triggers ADDED mutation and its confirmation', async () => {
     const action = () => Record.add(Product, { name: 'fooProduct', price: 10, store: 'fooStore' });
     store.subscribe((payload, state) => {
       expect(['@firemodel/ADDED_LOCALLY', '@firemodel/ADD_CONFIRMATION']).toContain(payload.type);

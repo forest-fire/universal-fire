@@ -21,18 +21,20 @@ export function addedLocally<TState extends IDictionary<T[]>, T extends Model>(
     },
 
     [FmCrudMutation.changedLocally](state, payload: IFmWatchEvent<ISdk, T>) {
-      if (isList(state, payload)) {
-        updateList(state, offset, payload.value);
-      } else {
+      if (isRecord(state, payload)) {
         changeRoot(state, payload.value, payload.localPath);
+
+      } else {
+        updateList(state, offset, payload.value);
+      
       }
     },
 
     [FmCrudMutation.removedLocally](state, payload: IFmWatchEvent<ISdk, T>) {
-      if (isList(state, payload)) {
-        updateList<T, TState>(state, offset, { kind: 'remove', id: payload.value?.id });
-      } else {
+      if (isRecord(state, payload)) {
         changeRoot(state, null, payload.localPath);
+      } else {
+        updateList<T, TState>(state, offset, { kind: 'remove', id: payload.value?.id });
       }
     },
   };

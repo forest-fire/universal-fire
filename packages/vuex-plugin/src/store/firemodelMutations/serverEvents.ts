@@ -1,5 +1,5 @@
 import { IFmWatchEvent, IModel, Model } from 'firemodel';
-import { changeRoot, isList, updateList } from '~/util';
+import { changeRoot, isList, isRecord, updateList } from '~/util';
 
 import { FmCrudMutation } from '~/enums';
 import { MutationTree } from 'vuex';
@@ -41,10 +41,10 @@ export function serverEvents<TState extends IDictionary<T[]>, T extends Model>(
         // change.
         return;
       }
-      if (isList(state, payload)) {
-        updateList<T>(state, offset, payload.value);
-      } else {
+      if (isRecord(state, payload)) {
         changeRoot<T>(state, payload.value, payload.localPath);
+      } else {
+        updateList<T>(state, offset, payload.value);
       }
     },
 

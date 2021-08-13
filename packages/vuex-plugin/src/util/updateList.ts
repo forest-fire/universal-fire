@@ -60,12 +60,12 @@ export function updateList<
       return found ? value : i;
     })
     ?.filter((f) => f !== null);
-  console.log({ isNotAddOperation, value, updated, existing });
+  console.log({ isNotAddOperation, value, existing, updated });
 
   Vue.set(
     moduleState as Record<string, unknown>,
     offset,
-    isNotAddOperation ? updated : existing.concat(value as TModel)
+    isNotAddOperation ? updated : isRemoveHash(value) ? existing : existing.concat(value as TModel)
   );
 
   // set<IDictionaryWithId>(
