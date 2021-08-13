@@ -47,6 +47,7 @@ function toPlugins(dir) {
         compilerOptions: {
           module: 'ESNext',
           declaration: true,
+          target: 'ES2018',
           rootDir: join(dir, 'src'),
           baseUrl: dir,
           declarationDir: join(dir, 'dist', 'types'),

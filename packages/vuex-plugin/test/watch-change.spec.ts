@@ -122,7 +122,6 @@ describe('watching local change triggers @firemodel and its module mutations', (
   it('removing a record triggers REMOVE_CONFIRMATION', async () => {
     const action = () => Record.remove(Product, 'abcd');
     store.subscribe((payload, state) => {
-      console.log(payload.type);
       expect([
         '@firemodel/REMOVED_LOCALLY',
         'products/REMOVED_LOCALLY',
@@ -131,6 +130,7 @@ describe('watching local change triggers @firemodel and its module mutations', (
         '@firemodel/REMOVE_CONFIRMATION',
       ]).toContain(payload.type);
     });
+
     await action();
     console.log(store.state.products.all);
   });

@@ -7,20 +7,13 @@ import type {
   IMockListener,
   IRtdbSdk,
   SnapshotFrom,
-  EventFrom,
   EventTypePlusChild,
 } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
-import {
-  join,
-  stripLeadingDot,
-  removeDots,
-  dotify,
-} from '~/util';
+import { join, stripLeadingDot, removeDots, dotify } from '~/util';
 import { get } from 'native-dash';
 
 import { snapshot } from '..';
-import { EventType } from '@firebase/database-types';
 
 // TODO: Removed because this state is going to hanlded in `createStore.ts`
 // let _listeners: IListener[] = [];
@@ -200,8 +193,8 @@ export function listenerPaths<TSdk extends ISdk>(store: IMockStore<TSdk>) {
     }
     return lookFor
       ? _listeners
-        .filter((l) => lookFor.includes(l.eventType as IRtdbDbEvent))
-        .map((l) => l.query.path)
+          .filter((l) => lookFor.includes(l.eventType as IRtdbDbEvent))
+          .map((l) => l.query.path)
       : _listeners.map((l) => l.query.path);
   };
 }
@@ -217,19 +210,18 @@ export function listenerPaths<TSdk extends ISdk>(store: IMockStore<TSdk>) {
  */
 export function getListeners<TSdk extends IRtdbSdk>(store: IMockStore<TSdk>) {
   const _listeners = store.getAllListeners();
-  return (
-    ...lookFor: EventTypePlusChild[]
-  ): IMockListener<TSdk>[] => {
-    const childEvents: Omit<EventType, "child">[] = [
+  return (...lookFor: EventTypePlusChild[]): IMockListener<TSdk>[] => {
+    const childEvents: Omit<IRtdbDbEvent, 'child'>[] = [
       'child_added',
       'child_changed',
       'child_removed',
       'child_moved',
     ];
     const allEvents = childEvents.concat(['value']);
-    const events = lookFor.length === 0
-      ? allEvents
-      : lookFor.length === 1 && lookFor[0] === 'child'
+    const events =
+      lookFor.length === 0
+        ? allEvents
+        : lookFor.length === 1 && lookFor[0] === 'child'
         ? childEvents
         : lookFor;
 

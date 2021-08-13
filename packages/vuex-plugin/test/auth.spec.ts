@@ -26,6 +26,7 @@ describe('Auth spec', () => {
       ];
       const mutationsCommited: string[] = [];
       store.subscribe((payload, state) => {
+        console.log(payload.type);
         if (expectedMutations.includes(payload.type)) {
           mutationsCommited.push(payload.type);
         }

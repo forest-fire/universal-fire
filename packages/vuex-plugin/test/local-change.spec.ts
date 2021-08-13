@@ -16,12 +16,13 @@ describe('local change triggers @firemodel mutations', () => {
     FireModel.defaultDb = undefined;
     store = undefined;
   });
-  it('adding a new record triggers ADDED mutation and its confirmation', async () => {
+  it.only('adding a new record triggers ADDED mutation and its confirmation', async () => {
     const action = () => Record.add(Product, { name: 'fooProduct', price: 10, store: 'fooStore' });
     store.subscribe((payload, state) => {
       expect(['@firemodel/ADDED_LOCALLY', '@firemodel/ADD_CONFIRMATION']).toContain(payload.type);
     });
     await action();
+    console.log(store.state.products.all);
   });
 
   it('error in adding a new record triggers ROLLBACK mutations next to ADDED mutation', async () => {
