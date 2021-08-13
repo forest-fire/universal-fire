@@ -22,7 +22,6 @@ describe('local change triggers @firemodel mutations', () => {
       expect(['@firemodel/ADDED_LOCALLY', '@firemodel/ADD_CONFIRMATION']).toContain(payload.type);
     });
     await action();
-    console.log(store.state.products.all);
   });
 
   it('error in adding a new record triggers ROLLBACK mutations next to ADDED mutation', async () => {

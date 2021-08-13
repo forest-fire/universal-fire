@@ -60,7 +60,6 @@ export function updateList<
       return found ? value : i;
     })
     ?.filter((f) => f !== null);
-  console.log({ isNotAddOperation, value, existing, updated });
 
   Vue.set(
     moduleState as Record<string, unknown>,
