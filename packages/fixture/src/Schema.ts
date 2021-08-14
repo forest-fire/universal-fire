@@ -1,15 +1,7 @@
-<<<<<<< HEAD:packages/firemock/src/mocking/Schema.ts
-import { IRelationship, ISchema, SchemaCallback } from '@/@types';
-import { Queue, SchemaHelper } from '@/mocking';
-import { addException, pluralize } from '@/util';
-
-import { getFakerLibrary } from './fakerInitialiation';
-=======
 import { IRelationship, ISchema, SchemaCallback } from '~/@types';
 import { Queue, SchemaHelper } from '~/index';
 import faker from 'faker';
 import { pluralize } from 'native-dash';
->>>>>>> feature/refresh_ext:packages/fixture/src/Schema.ts
 
 /**
  * The property that exists on the source scheme as a FK reference

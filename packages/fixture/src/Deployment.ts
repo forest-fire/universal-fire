@@ -1,21 +1,11 @@
 import * as fbKey from 'firebase-key';
 
-<<<<<<< HEAD:packages/firemock/src/mocking/Deployment.ts
-import { IQueue, IRelationship, ISchema } from '@/@types';
-import { dotNotation, getRandomInt, pluralize } from '@/util';
-import { first, get, set } from '@/util';
-import { getDb, setDB } from '@/rtdb';
-
-import { IDictionary } from 'common-types';
-import { Queue } from '@/mocking/index';
-=======
 import { IQueue, IRelationship, ISchema } from '~/@types';
 
 import { IDictionary } from 'common-types';
 import { Queue } from './Queue';
 import { dotNotation, getRandomInt, set } from './utils';
 import { get, pluralize } from 'native-dash';
->>>>>>> feature/refresh_ext:packages/fixture/src/Deployment.ts
 
 export class Deployment<T extends IDictionary = IDictionary> {
   private schemaId: string;
