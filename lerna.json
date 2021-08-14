@@ -1,7 +1,8 @@
 {
   "npmClient": "yarn",
-  "packages": [
-    "packages/*"
-  ],
+  "packages": ["packages/*"],
+  "publish": {
+    "ignoreChanges": ["packages/vuex-plugin"]
+  },
   "version": "0.59.7"
 }
