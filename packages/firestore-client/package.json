@@ -13,33 +13,13 @@
     "type": "git",
     "url": "git+https://github.com/forest-fire/universal-fire.git"
   },
-  "scripts": {
-    "clean": "rimraf dist/**/*",
-    "watch": "run-p 'watch:es' 'watch:cjs'",
-    "watch:es": "tsc -P tsconfig.es.json -w",
-    "watch:cjs": "tsc -P tsconfig.es.json -w",
-    "test": "yarn dd test",
-    "test:watch": "mocha --require ts-node/register --extensions ts --watch --watch-files src src/**/*-spec.ts",
-    "test:coverage": "nyc --reporter=text mocha -require ts-node/register src/**/*-spec.ts",
-    "test:e2e": "mocha --require ts-node/register test/*-e2e.ts"
+  "scripty": {
+    "path": "../../scripts/packages"
   },
-  "devDependencies": {
-    "@firebase/app": "0.6.11",
-    "@firebase/auth": "^0.15.0",
-    "@firebase/firestore": "^1.16.0",
-    "@firebase/firestore-types": "^1.12.0",
-    "@forest-fire/firestore-db": "^0.59.2",
-    "@types/chai": "^4.2.18",
-    "@types/mocha": "^8.2.2",
-    "chai": "^4.3.4",
-    "dd": "^0.11.3",
-    "firemock": "^0.59.2",
-    "mocha": "^8.4.0",
-    "npm-run-all": "^4.1.5",
-    "nyc": "^15.0.0",
-    "rimraf": "^3.0.2",
-    "ts-node": "^10.0.0",
-    "typescript": "^4.3.2"
+  "scripts": {
+    "clean": "rimraf dist/**/* *.tsbuildinfo",
+    "build": "scripty",
+    "lint": "scripty"
   },
   "optionalDependencies": {
     "@firebase/app": "0.6.11",
@@ -52,5 +32,5 @@
     "firemock": "^0.59.7"
   },
   "license": "MIT",
-  "gitHead": "17c21f30b0bc51984dd3e24d14f87f742b8fe0bc"
+  "gitHead": "79d0cb2e966ae213f21991b08bf40f61f212275e"
 }

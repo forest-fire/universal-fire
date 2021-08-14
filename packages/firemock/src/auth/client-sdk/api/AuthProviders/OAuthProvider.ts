@@ -7,15 +7,19 @@ import type {
 export class OAuthProvider implements GoogleOAuthProvider {
   public providerId: string;
   // tslint:disable-next-line: no-empty
-  constructor(providerId: string) {}
-  public addScope(scope: string): AuthProvider {
+  constructor(providerId: string) {
+    this.providerId = providerId;
+  }
+  public addScope(_scope: string): AuthProvider {
     throw new Error('not implemented');
   }
-  public credential(idToken?: string, accessToken?: string): OAuthCredential {
+  public credential(_idToken?: string, _accessToken?: string): OAuthCredential {
     throw new Error('not implemented');
   }
   // tslint:disable-next-line: ban-types
-  public setCustomParameters(customOAuthParameters: Object): AuthProvider {
+  public setCustomParameters(
+    _customOAuthParameters: Record<string, unknown>
+  ): AuthProvider {
     throw new Error('not implemented');
   }
 }

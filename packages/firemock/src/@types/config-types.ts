@@ -1,7 +1,8 @@
-import type { IDictionary } from "common-types";
+import type { IDictionary } from 'common-types';
 
-export interface IMockFirebaseUidOnlyPath<T extends object = IDictionary>
-  extends IMockFirebasePathPermission {
+export interface IMockFirebaseUidOnlyPath<
+  T extends Record<string, unknown> = IDictionary
+> extends IMockFirebasePathPermission {
   /**
    * the _property_ on the list of records which holds
    * a reference to the `uid` property. If not stated
@@ -10,7 +11,7 @@ export interface IMockFirebaseUidOnlyPath<T extends object = IDictionary>
   uidProperty?: keyof T;
 }
 
-export interface IMockFirebaseCustomClaimPath<T extends object = IDictionary>
+export interface IMockFirebaseCustomClaimPath
   extends IMockFirebasePathPermission {
   /**
    * The claim which will unlock this permission grant

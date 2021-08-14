@@ -8,14 +8,14 @@ export interface IRtdbSnapshot extends _IRtdbSnapshot_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.DataSnapshot#child)
    * [~rest~]() ]
    *
-   * Gets another DataSnapshot for the location at the specified relative path.
+   * Gets another DataSnapshot for the location at the specified relative path.
    *
-   * Passing a relative path to the child() method of a DataSnapshot returns
-   * another DataSnapshot for the location at the specified relative path. The
+   * Passing a relative path to the child() method of a DataSnapshot returns
+   * another DataSnapshot for the location at the specified relative path. The
    * relative path can either be a simple child name (for example, "ada") or a
    * deeper, slash-separated path (for example, "ada/name/first"). If the child
-   * location has no data, an empty DataSnapshot (that is, a DataSnapshot whose
-   * value is null) is returned.
+   * location has no data, an empty DataSnapshot (that is, a DataSnapshot whose
+   * value is null) is returned.
    */
   child: import('@firebase/database-types').DataSnapshot['child'];
 
@@ -26,8 +26,8 @@ export interface IRtdbSnapshot extends _IRtdbSnapshot_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.DataSnapshot#exists
    * [~rest~]() ]
    *
-   * Returns true if this DataSnapshot contains any data. It is slightly more efficient
-   * than using snapshot.val() !== null.
+   * Returns true if this DataSnapshot contains any data. It is slightly more efficient
+   * than using snapshot.val() !== null.
    */
   exists: import('@firebase/database-types').DataSnapshot['exists'];
 
@@ -40,7 +40,7 @@ export interface IRtdbSnapshot extends _IRtdbSnapshot_ {
    *
    * Exports the entire contents of the DataSnapshot as a JavaScript object.
    *
-   * The exportVal() method is similar to val(), except priority information is included
+   * The exportVal() method is similar to val(), except priority information is included
    * (if available), making it suitable for backing up your data.
    */
   exportVal: import('@firebase/database-types').DataSnapshot['exportVal'];
@@ -52,12 +52,12 @@ export interface IRtdbSnapshot extends _IRtdbSnapshot_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.DataSnapshot#forEach
    * [~rest~]() ]
    *
-   * Enumerates the top-level children in the DataSnapshot.
+   * Enumerates the top-level children in the DataSnapshot.
    *
    * Because of the way JavaScript objects work, the ordering of data in the JavaScript object
-   * returned by val() is not guaranteed to match the ordering on the server nor the ordering
-   * of child_added events. That is where forEach() comes in handy. It guarantees the children
-   * of a DataSnapshot will be iterated in their query order.
+   * returned by val() is not guaranteed to match the ordering on the server nor the ordering
+   * of child_added events. That is where forEach() comes in handy. It guarantees the children
+   * of a DataSnapshot will be iterated in their query order.
    */
   forEach: import('@firebase/database-types').DataSnapshot['forEach'];
 
@@ -89,7 +89,7 @@ export interface IRtdbSnapshot extends _IRtdbSnapshot_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.DataSnapshot#hasChildren
    * [~rest~]() ]
    *
-   * Returns whether or not the DataSnapshot has any non-null child properties.
+   * Returns whether or not the DataSnapshot has any non-null child properties.
    *
    * You can use hasChildren() to determine if a DataSnapshot has any children. If it
    * does, you can enumerate them using forEach(). If it doesn't, then either this
@@ -105,12 +105,12 @@ export interface IRtdbSnapshot extends _IRtdbSnapshot_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.DataSnapshot#key
    * [~rest~]() ]
    *
-   * The key (last part of the path) of the location of this DataSnapshot.
+   * The key (last part of the path) of the location of this DataSnapshot.
    *
    * The last token in a Database location is considered its key. For example, "ada" is the key
-   * for the /users/ada/ node. Accessing the key on any DataSnapshot will return the key for the
+   * for the /users/ada/ node. Accessing the key on any DataSnapshot will return the key for the
    * location that generated it. However, accessing the key on the root URL of a Database will
-   * return null.
+   * return null.
    */
   key: import('@firebase/database-types').DataSnapshot['key'];
 
@@ -130,7 +130,7 @@ export interface IRtdbSnapshot extends _IRtdbSnapshot_ {
    * [admin](https://firebase.google.com/docs/reference/admin/node/admin.database.DataSnapshot#val
    * [~rest~]() ]
    *
-   * Extracts a JavaScript value from a DataSnapshot.
+   * Extracts a JavaScript value from a DataSnapshot.
    *
    * Depending on the data in a DataSnapshot, the val() method may return a scalar type
    * (string, number, or boolean), an array, or an object. It may also return `null`,

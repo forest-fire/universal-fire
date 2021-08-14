@@ -1,12 +1,8 @@
 import { IDictionary } from 'common-types';
-import {
-  IAbstractedDatabase,
-  IMockAuthConfig,
-  IMockData,
-  IMockDatabase,
-  INoAuth,
-} from '../index';
-import { IAuthApi, IMockServerOptions } from './index';
+import { IDatabaseSdk } from '../database';
+import { ISdk } from '../fire-types';
+import { IMockAuthConfig, IMockData, IMockDatabase } from '../index';
+import { IMockServerOptions } from './index';
 
 /**
  * **IMockDbFactory**
@@ -15,10 +11,10 @@ import { IAuthApi, IMockServerOptions } from './index';
  * and optionally an Auth service
  */
 export interface IMockDbFactory {
-  (
-    container: IAbstractedDatabase,
+  <T extends IDatabaseSdk<TSdk>, TSdk extends ISdk>(
+    container: T,
     mockData: IMockData<IDictionary>,
     mockAuth: IMockAuthConfig,
     options: IMockServerOptions
-  ): Promise<IMockDatabase>;
+  ): Promise<IMockDatabase<TSdk>>;
 }

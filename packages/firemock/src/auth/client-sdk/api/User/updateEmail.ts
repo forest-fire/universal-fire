@@ -1,7 +1,6 @@
-import { currentUser, updateUser } from '@/auth/user-mgmt/index';
-
-import { FireMockError } from '@/errors/index';
-import { networkDelay } from '@/util/other';
+import { FireMockError } from '~/errors/index';
+import { ClientSdk, IMockAuthMgmt, NetworkDelay } from '@forest-fire/types';
+import { networkDelay } from '~/util';
 
 /**
  * **updateEmail**
@@ -19,7 +18,7 @@ import { networkDelay } from '@/util/other';
  * > Note: The `forceLogin` is not part of Firebase API but allows mock user to force the
  * error condition associated with a user who's been logged in a long time.
  */
-export async function updateEmail(
+export const updateEmail = (api: IMockAuthMgmt<ClientSdk>) => async (
   newEmail: string,
   forceLogin?: boolean
 ): Promise<void> {
@@ -29,6 +28,6 @@ export async function updateEmail(
       'auth/requires-recent-login'
     );
   }
-  await networkDelay();
-  updateUser(currentUser().uid, { email: newEmail });
-}
+  await networkDelay(NetworkDelay.wifi);
+  api.updateUser(api.getCurrentUser(), { email: newEmail });
+};

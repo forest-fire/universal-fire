@@ -1,37 +1,41 @@
-import { IPartialUserCredential, IAuthObserver } from '@/@types/index';
-import { networkDelay } from '@/util/index';
-import { Omit } from 'common-types';
-import { completeUserCredential } from '../helpers/index';
+/* eslint-disable @typescript-eslint/require-await */
+import { IPartialUserCredential } from '~/@types/index';
 import {
-  notImplemented,
   emailExistsAsUserInAuth,
   emailHasCorrectPassword,
   userUid,
   emailValidationAllowed,
   emailIsValidFormat,
-  clientApiUser,
-} from '@/auth/client-sdk/index';
-import type {
+} from '~/auth/client-sdk/index';
+import {
   ActionCodeSettings,
   UserCredential,
   AuthCredential,
-  User,
   IClientAuth,
+  IAuthObserver,
+  IMockAuthMgmt,
+  AuthProviderName,
+  Unsubscribe,
+  UpdateRequest,
+  ClientSdk,
+  User,
 } from '@forest-fire/types';
 
-import { FireMockError } from '@/errors';
-import {
-  authProviders,
-  setCurrentUser,
-  clearCurrentUser,
-  addAuthObserver,
-  getAnonymousUid,
-  currentUser,
-  findKnownUser,
-  addToUserPool,
-} from '@/auth/user-mgmt';
+import { FireMockError } from '~/errors';
+import { networkDelay } from '~/util';
+import { uuid } from 'native-dash';
+import { clientApiUser } from './User';
 
-export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
+export const implemented: (
+  api: IMockAuthMgmt<ClientSdk>
+) => Partial<IClientAuth> = (api) => ({
+  tenantId: '',
+
+  languageCode: '',
+  settings: {
+    appVerificationDisabledForTesting: false,
+  },
+
   app: {
     name: 'mocked-app',
     options: {},
@@ -40,24 +44,30 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
     },
     automaticDataCollectionEnabled: false,
   },
-  onAuthStateChanged(observer: IAuthObserver) {
-    addAuthObserver(observer);
-    // TODO: the typing in Firemock must be changed to convert a `currentUser` to either client or admin SDK; right now we're getting an
-    observer((currentUser() as unknown) as User);
+
+  onAuthStateChanged(
+    observer: IAuthObserver,
+    error?: (a: Error & { code: string }) => any,
+    completed?: Unsubscribe
+  ): Unsubscribe {
+    api.addAuthObserver(observer);
+    observer(api.createUser(api, api.toUser(api.getCurrentUser())));
+    return undefined;
   },
   async setPersistence() {
     console.warn(
       `currently firemock accepts calls to setPersistence() but it doesn't support it.`
     );
+    return;
   },
   signInAnonymously: async (): Promise<UserCredential> => {
     await networkDelay();
 
-    if (authProviders().includes('anonymous')) {
+    if (api.authProviders().includes('anonymous')) {
       const user: User = {
         ...clientApiUser,
         isAnonymous: true,
-        uid: getAnonymousUid(),
+        uid: uuid(),
       };
       const credential: AuthCredential = {
         signInMethod: 'anonymous',
@@ -69,9 +79,9 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
         credential,
       };
 
-      const userCredential = completeUserCredential(credentials);
-      addToUserPool(userCredential.user);
-      setCurrentUser(userCredential);
+      const userCredential = api.completeUserCredential(credentials);
+      api.addToUserPool(userCredential.user);
+      api.setCurrentUser(userCredential);
 
       return userCredential;
     } else {
@@ -94,7 +104,7 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
   async signInWithEmailAndPassword(email: string, password: string) {
     await networkDelay();
 
-    if (!emailValidationAllowed()) {
+    if (!api.emailValidationAllowed()) {
       throw new FireMockError(
         'email authentication not allowed',
         'auth/operation-not-allowed'
@@ -103,8 +113,7 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
     if (!emailIsValidFormat(email)) {
       throw new FireMockError(`invalid email: ${email}`, 'auth/invalid-email');
     }
-
-    const user = findKnownUser('email', email);
+    const user = api.findKnownUser('email', email);
     if (!user) {
       throw new FireMockError(
         `The email "${email}" is not a known user in the mock database`,
@@ -118,12 +127,13 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
       );
     }
 
-    if (!emailHasCorrectPassword(email, password)) {
+    if (!emailHasCorrectPassword(api)(email, password)) {
       throw new FireMockError(
         `Invalid password for ${email}`,
         'auth/wrong-password'
       );
     }
+
     const partial: IPartialUserCredential = {
       user: {
         email: user.email,
@@ -131,6 +141,7 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
         emailVerified: user.emailVerified,
         uid: userUid(email),
         displayName: user.displayName,
+        ...api.createUser(api, user as unknown as Partial<User>),
       },
       credential: {
         signInMethod: 'signInWithEmailAndPassword',
@@ -140,8 +151,9 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
         username: email,
       },
     };
-    const u = completeUserCredential(partial);
-    setCurrentUser(u);
+
+    const u = api.completeUserCredential(partial);
+    api.setCurrentUser(u);
 
     return u;
   },
@@ -159,7 +171,7 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
    */
   async createUserWithEmailAndPassword(email: string, password: string) {
     await networkDelay();
-    if (!emailValidationAllowed()) {
+    if (!api.emailValidationAllowed()) {
       throw new FireMockError(
         'email authentication not allowed',
         'auth/operation-not-allowed'
@@ -179,13 +191,13 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
         'auth/invalid-email'
       );
     }
+    const uid = userUid(api)(email);
 
     const partial: IPartialUserCredential = {
       user: {
-        email,
+        ...api.createUser(api, { email, uid }),
         isAnonymous: false,
         emailVerified: false,
-        uid: userUid(email),
       },
       credential: {
         signInMethod: 'signInWithEmailAndPassword',
@@ -195,10 +207,9 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
         username: email,
       },
     };
-    const u = completeUserCredential(partial);
-    addToUserPool({ uid: partial.user.uid, email, password });
-    setCurrentUser(u);
-
+    const u = api.completeUserCredential(partial);
+    api.addToUserPool({ uid: partial.user.uid, email, password });
+    api.setCurrentUser(u);
     return u;
   },
 
@@ -214,18 +225,14 @@ export const implemented: Omit<IClientAuth, keyof typeof notImplemented> = {
   },
 
   async signOut() {
-    clearCurrentUser();
+    api.clearCurrentUser();
   },
 
   get currentUser() {
-    return completeUserCredential({}).user;
+    return api.completeUserCredential({}).user;
   },
 
-  languageCode: '',
   async updateCurrentUser() {
     return;
   },
-  settings: {
-    appVerificationDisabledForTesting: false,
-  },
-};
+});

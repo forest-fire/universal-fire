@@ -1,8 +1,15 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src", "test"],
   "compilerOptions": {
+<<<<<<< HEAD
     "strictNullChecks": false,
     "strict": false,
   }
+=======
+    "composite": true,
+    "rootDir": "src",
+    "strict": false
+  },
+  "include": ["src", "test"]
+>>>>>>> feature/refresh_ext
 }

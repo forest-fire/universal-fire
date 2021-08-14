@@ -1,4 +1,5 @@
-import { updateUser, currentUser } from '../../../user-mgmt/index';
+import { networkDelay } from '~/util';
+import { IMockAuthMgmt, NetworkDelay, ClientSdk } from '@forest-fire/types';
 
 /**
  * Updates a user's profile data.
@@ -14,9 +15,9 @@ import { updateUser, currentUser } from '../../../user-mgmt/index';
 
  [Documentation](https://firebase.google.com/docs/reference/js/firebase.User#updateprofile)
  */
-export async function updateProfile(profile: {
-  displayName?: string;
-  photoUrl?: string;
-}) {
-  updateUser(currentUser().uid, profile);
-}
+export const updateProfile =
+  (api: IMockAuthMgmt<ClientSdk>) =>
+  async (profile: { displayName?: string; photoUrl?: string }) => {
+    await networkDelay(NetworkDelay.wifi);
+    api.updateUser(api.getCurrentUser(), profile);
+  };

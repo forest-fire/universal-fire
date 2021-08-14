@@ -16,19 +16,19 @@ import {
   isMockConfig,
   IAdminFirebaseNamespace,
   IAdminFirestoreDatabase,
-  IFirestoreAdmin,
   ApiKind,
+  Database,
 } from '@forest-fire/types';
 
 import { FirestoreDb } from '@forest-fire/firestore-db';
-import type { Mock as IMockApi } from 'firemock';
 
-export class FirestoreAdmin extends FirestoreDb implements IFirestoreAdmin {
+export class FirestoreAdmin extends FirestoreDb<"FirestoreAdmin">  {
   public readonly sdk: SDK.FirestoreAdmin = SDK.FirestoreAdmin;
   public readonly apiKind: ApiKind.admin = ApiKind.admin;
   public readonly isAdminApi = true;
+  public dbType: "Firestore" = Database.Firestore;
 
-  static async connect(config: IAdminConfig | IMockConfig) {
+  static async connect(config: IAdminConfig | IMockConfig): Promise<FirestoreAdmin> {
     const obj = new FirestoreAdmin(config);
     await obj.connect();
     return obj;
@@ -78,12 +78,11 @@ export class FirestoreAdmin extends FirestoreDb implements IFirestoreAdmin {
    * for the Admin API. This is all that is needed to be considered
    * "connected" in an Admin SDK.
    */
-  public async connect(): Promise<FirestoreAdmin> {
+  public async connect(): Promise<void> {
     if (this._isConnected) {
       console.info(
         `Firestore already connected to app name "${this.config.name}"`
       );
-      return this;
     }
     if (isAdminConfig(this._config)) {
       await this._connectRealDb(this._config);
@@ -100,6 +99,7 @@ export class FirestoreAdmin extends FirestoreDb implements IFirestoreAdmin {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   public async auth(): Promise<IAdminAuth> {
     if (this._config.mocking) {
       throw new FireError(
@@ -113,17 +113,17 @@ export class FirestoreAdmin extends FirestoreDb implements IFirestoreAdmin {
       );
     }
 
-    return this._admin.auth(this._app) as IAdminAuth;
+    return this._admin.auth(this._app);
   }
 
-  protected async _loadAdminApi() {
+  protected async _loadAdminApi(): Promise<IAdminFirebaseNamespace> {
     const api = ((await import(
       'firebase-admin'
     )) as unknown) as IAdminFirebaseNamespace;
     return api;
   }
 
-  protected async _connectRealDb(config: IAdminConfig) {
+  protected async _connectRealDb(config: IAdminConfig): Promise<void> {
     if (!this._admin) {
       this._admin = ((await import(
         'firebase-admin'
@@ -142,16 +142,16 @@ export class FirestoreAdmin extends FirestoreDb implements IFirestoreAdmin {
     if (!this._isConnected) {
       this._app = runningApps.includes(config.name)
         ? getRunningFirebaseApp<IAdminApp>(
-            config.name,
-            (this._admin.apps as unknown) as IAdminApp[]
-          )
+          config.name,
+          (this._admin.apps as unknown) as IAdminApp[]
+        )
         : this._admin.initializeApp(
-            {
-              credential,
-              databaseURL: config.databaseURL,
-            },
-            config.name
-          );
+          {
+            credential,
+            databaseURL: config.databaseURL,
+          },
+          config.name
+        );
 
       // this._firestore = this._admin.firestore(this._app);
     }
@@ -160,10 +160,8 @@ export class FirestoreAdmin extends FirestoreDb implements IFirestoreAdmin {
    * The steps needed to connect a database to a Firemock
    * mocked DB.
    */
-  protected async _connectMockDb(config: IMockConfig) {
-    await this.getFiremock({
-      db: config.mockData || {},
-      auth: { providers: [], ...config.mockAuth },
-    });
+  // eslint-disable-next-line @typescript-eslint/require-await
+  protected async _connectMockDb(_config: IMockConfig): Promise<void> {
+    throw new FireError("Firemock is not implemented for Firestore yet!", "FirestoreAdmin/not-implemented");
   }
 }

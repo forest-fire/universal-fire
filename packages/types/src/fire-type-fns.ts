@@ -36,8 +36,8 @@ export function isAdminConfig(
 ): config is IAdminConfig {
   return config &&
     config.mocking !== true &&
-    (config as any).apiKey === undefined &&
-    (config as any).databaseURL !== undefined
+    config.apiKey === undefined &&
+    config.databaseURL !== undefined
     ? true
     : false;
 }

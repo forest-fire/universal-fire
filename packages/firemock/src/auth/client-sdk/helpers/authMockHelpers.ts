@@ -1,47 +1,53 @@
-import type { User } from '@forest-fire/types';
-import { validate } from 'email-validator';
+import { getRandomMockUid } from '~/auth/user-mgmt';
 import {
-  allUsers,
-  authProviders,
-  getRandomMockUid,
-  getAuthObservers,
-} from '@/auth/user-mgmt/index';
+  AuthProviderName,
+  ClientSdk,
+  IMockAuthMgmt,
+  User,
+} from '@forest-fire/types';
+import { validate } from 'email-validator';
 
-export function emailExistsAsUserInAuth(email: string) {
-  const emails = allUsers().map((i) => i.email);
+export const emailExistsAsUserInAuth =
+  (api: IMockAuthMgmt<ClientSdk>) => (email: string) => {
+    const emails = api.knownUsers().map((i) => i.email);
 
-  return emails.includes(email);
-}
+    return emails.includes(email);
+  };
 
-export function emailIsValidFormat(email: string) {
-  return validate(email);
-}
+export const emailIsValidFormat =
+  (api: IMockAuthMgmt<ClientSdk>) => (email: string) => {
+    return validate(email);
+  };
 
-export function emailHasCorrectPassword(email: string, password: string) {
-  const config = allUsers().find((i) => i.email === email);
+export const emailHasCorrectPassword =
+  (api: IMockAuthMgmt<ClientSdk>) => (email: string, password: string) => {
+    const config = api.knownUsers().find((i) => i.email === email);
 
-  return config ? config.password === password : false;
-}
+    return config ? config.password === password : false;
+  };
 
-export function emailVerified(email: string) {
-  const user = allUsers().find((i) => i.email === email);
-  return user ? user.emailVerified || false : false;
-}
+export const emailVerified =
+  (api: IMockAuthMgmt<ClientSdk>) => (email: string) => {
+    const user = api.knownUsers().find((i) => i.email === email);
+    return user ? user.emailVerified || false : false;
+  };
 
-export function userUid(email: string) {
-  const config = allUsers().find((i) => i.email === email);
+export const userUid = (api: IMockAuthMgmt<ClientSdk>) => (email: string) => {
+  const user = api.findKnownUser('email', email);
 
-  return config ? config.uid || getRandomMockUid() : getRandomMockUid();
-}
+  return user ? user.uid || getRandomMockUid() : getRandomMockUid();
+};
 
-export function emailValidationAllowed() {
-  return authProviders().includes('emailPassword');
-}
+export const emailValidationAllowed = (api: IMockAuthMgmt<ClientSdk>) => () => {
+  return api.hasProvider(AuthProviderName.emailPassword);
+};
 
-export function loggedIn(user: User) {
-  getAuthObservers().map((o) => o(user));
-}
+export const loggedIn = (api: IMockAuthMgmt<ClientSdk>) => (user: User) => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  api.getAuthObservers().map((o) => o(user));
+};
 
-export function loggedOut() {
-  getAuthObservers().map((o) => o(null));
-}
+export const loggedOut = (api: IMockAuthMgmt<ClientSdk>) => () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  api.getAuthObservers().map((o) => o(null));
+};

@@ -1,7 +1,7 @@
 // tslint:disable:no-implicit-dependencies
 import { RealTimeAdmin as Admin } from '../src/RealTimeAdmin';
 import { setupEnv } from './testing/helpers';
-import { expect } from 'chai';
+
 import { IFirebaseWatchEvent } from '@forest-fire/real-time-db';
 
 setupEnv();
@@ -21,6 +21,6 @@ describe('Watch →', () => {
     });
     await db.remove('/foo2/bar4');
 
-    expect(events).to.have.lengthOf(3);
+    expect(events).toHaveLength(3);
   });
 });

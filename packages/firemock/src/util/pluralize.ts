@@ -11,17 +11,8 @@ const exceptions: IDictionary<string> = {
   company: 'companies',
 };
 
-/**
- * Exceptions when moving from plural to singular
- */
-const singularExceptions = () => {
-  return Object.keys(pluralize).reduce(
-    (agg: IDictionary, k: string) => (agg[exceptions[k]] = k),
-    new Object()
-  );
-};
 
-export function pluralize(singular: string) {
+export function pluralize(singular: string): string {
   const rules = [
     { find: /(.*)(ch|sh|ax|ss)$/, replace: '$1$2es' },
     { find: /(.*)(fe|f)$/, replace: '$1ves' },
@@ -36,10 +27,7 @@ export function pluralize(singular: string) {
   return exceptions[singular] ? exceptions[singular] : `${singular}s`;
 }
 
-export const addException = (singular: string, plural: string) => {
+export const addException = (singular: string, plural: string): void => {
   exceptions[singular] = plural;
 };
 
-export const singularize = (plural: string) => {
-  //
-};

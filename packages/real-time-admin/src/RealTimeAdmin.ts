@@ -16,10 +16,8 @@ import {
   isAdminConfig,
   isMockConfig,
   IAdminFirebaseNamespace,
-  IRealTimeAdmin,
   ApiKind,
-  IAbstractedDatabase,
-  IBaseAbstractedDatabase,
+  Database,
 } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 
@@ -27,7 +25,7 @@ import { EventManager } from './EventManager';
 import { RealTimeAdminError } from './errors/RealTimeAdminError';
 import { debug } from './util';
 
-export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
+export class RealTimeAdmin extends RealTimeDb<SDK.RealTimeAdmin> {
   public readonly sdk: SDK.RealTimeAdmin = SDK.RealTimeAdmin;
   public readonly apiKind: ApiKind.admin = ApiKind.admin;
   public readonly isAdminApi = true;
@@ -55,11 +53,12 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
   protected _admin?: IAdminFirebaseNamespace;
   protected _eventManager: EventManager;
   protected _clientType = 'admin';
-  protected _isAuthorized: boolean = true;
+  protected _isAuthorized = true;
   protected _auth?: IAdminAuth;
-  declare protected _config: IAdminConfig | IMockConfig;
-  declare protected _app: IAdminApp;
-  declare protected _database?: IAdminRtdbDatabase;
+  protected _config: IAdminConfig | IMockConfig;
+  protected _app!: IAdminApp;
+  protected _database?: IAdminRtdbDatabase;
+  public dbType: "RTDB" = Database.RTDB;
 
   constructor(config?: IAdminConfig | IMockConfig) {
     super();
@@ -107,7 +106,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
     if (this._config.mocking) {
       // TODO: Fix Firemock to export just the admin API; auth management should be done through a different
       // entry point. Also the name should be something more like `adminAuth` not `adminSdk`
-      return (this._mock.adminSdk as unknown) as IAdminAuth;
+      return this._mock.auth;
     }
 
     if (!this._admin) {
@@ -122,7 +121,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
       try {
         this._database.goOnline();
       } catch (e) {
-        debug('There was an error going online:' + e);
+        debug(`There was an error going online: ${JSON.stringify(e)}`);
       }
     } else {
       console.warn(
@@ -154,7 +153,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
     );
   }
 
-  public async connect(): Promise<RealTimeAdmin> {
+  public async connect(): Promise<void> {
     if (isMockConfig(this._config)) {
       await this._connectMockDb(this._config);
     } else if (isAdminConfig(this._config)) {
@@ -165,28 +164,25 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
         'invalid-configuration'
       );
     }
-
-    return this;
   }
 
   protected async _connectMockDb(config: IMockConfig) {
-    await this.getFiremock({
-      db: config.mockData || {},
-      auth: { providers: [], ...config.mockAuth },
-    });
+    await this.getFiremock(config);
     this._isConnected = true;
     return this;
   }
 
   protected async _loadAdminApi() {
     try {
-      const api = ((await import(
+      const api = (await import(
         'firebase-admin'
-      )) as unknown) as IAdminFirebaseNamespace;
+      )) as unknown as IAdminFirebaseNamespace;
       return api;
     } catch (e) {
       throw new FireError(
-        `Attempt to instantiate Firebase's admin SDK failed. This is likely because you have not installed the "firebase-admin" npm package as a dependency of your project. The precise error received when trying to instantiate was:\n\n${e.message}`,
+        `Attempt to instantiate Firebase's admin SDK failed. This is likely because you have not installed the "firebase-admin" npm package as a dependency of your project. The precise error received when trying to instantiate was:\n\n${
+          (e as Error).message
+        }`,
         'invalid-import'
       );
     }
@@ -194,7 +190,7 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
 
   protected async _connectRealDb(config: IAdminConfig) {
     if (!this._admin) {
-      this._admin = (await this._loadAdminApi()) as IAdminFirebaseNamespace;
+      this._admin = await this._loadAdminApi();
     }
     if (this.isConnected && this._database) {
       return;
@@ -217,7 +213,9 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
         throw e;
       }
       throw new FireError(
-        `An unexpected error was encountered while trying to setup Firebase's database API!\n\n${e.message}`,
+        `An unexpected error was encountered while trying to setup Firebase's database API!\n\n${
+          (e as Error).message
+        }`,
         'no-database-api'
       );
     }
@@ -234,8 +232,9 @@ export class RealTimeAdmin extends RealTimeDb implements IRealTimeAdmin {
    * we remain connected; this is unlike the client API
    * which provides an endpoint to lookup
    */
-  protected async _listenForConnectionStatus() {
+  protected _listenForConnectionStatus(): Promise<void> {
     this._setupConnectionListener();
     this._eventManager.connection(true);
+    return;
   }
 }
