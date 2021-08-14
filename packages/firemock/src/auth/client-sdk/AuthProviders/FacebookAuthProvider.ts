@@ -4,6 +4,7 @@ import type {
   AuthProvider,
   FacebookAuthProvider_Instance,
 } from '@forest-fire/types';
+import { AuthProviderName } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 
 export class FacebookAuthProvider
@@ -13,7 +14,7 @@ export class FacebookAuthProvider
   public static credential(token: string): AuthCredential {
     throw new Error('FacebookAuthProvider not implemented yet');
   }
-  public providerId: string;
+  public providerId: string = AuthProviderName.facebook;
   public addScope(scope: string): AuthProvider {
     throw new Error('not implemented');
   }

@@ -8,7 +8,7 @@ import {
   join,
   networkDelay as delay,
   set,
-} from '../util';
+} from '~/util';
 
 import { get } from 'native-dash';
 import { deepEqual } from 'fast-equals';

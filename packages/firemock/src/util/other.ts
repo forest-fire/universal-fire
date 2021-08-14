@@ -107,57 +107,7 @@ export function getKey(dotPath: string): string {
   return keyAndParent(dotPath).key;
 }
 
-<<<<<<< HEAD
-let _delay: IDictionary | number | number[] | Delays = 5;
-
-export function setNetworkDelay(
-  value: IDictionary | number | number[] | Delays
-) {
-  _delay = value;
-}
-
-export async function networkDelay<T = any>(returnValue?: T): Promise<T> {
-  await wait(calcDelay());
-  return returnValue;
-}
-
-function calcDelay(): number {
-  const delay = _delay as IDictionary | number | number[] | Delays;
-  if (typeof delay === 'number') {
-    return delay;
-  }
-
-  if (Array.isArray(delay)) {
-    const [min, max] = delay;
-    return getRandomInt(min, max);
-  }
-
-  if (typeof delay === 'object' && !Array.isArray(delay)) {
-    const { min, max } = delay;
-    return getRandomInt(min, max);
-  }
-
-  // these numbers need some reviewing
-  if (delay === 'random') {
-    return getRandomInt(10, 300);
-  }
-  // if (delay === "weak") {
-  //   return getRandomInt(400, 900);
-  // }
-  if (delay === 'mobile') {
-    return getRandomInt(300, 500);
-  }
-  if (delay === 'WIFI') {
-    return getRandomInt(10, 100);
-  }
-
-  throw new Error('Delay property is of unknown format: ' + delay);
-}
-
-export function stripLeadingDot(str: string) {
-=======
 export function stripLeadingDot(str: string): string {
->>>>>>> feature/refresh_ext
   return str.slice(0, 1) === '.' ? str.slice(1) : str;
 }
 

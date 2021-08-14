@@ -24,12 +24,12 @@ import {
   isUser,
   isUserCredential,
   isUserRecord,
-} from './type-guards/index';
+} from '~/auth/type-guards/index';
 import { toUser } from './util';
-import { networkDelay as delay } from '../util';
+import { networkDelay as delay } from '~/util';
 import _authProviders from './client-sdk/AuthProviders';
 import { uuid } from 'native-dash';
-import { createUser } from './client-sdk';
+import { createUser } from './client-sdk/createUser';
 
 const toMockUser = (
   user: User,

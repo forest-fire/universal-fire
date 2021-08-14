@@ -17,4 +17,4 @@ export const tokens: (api: IMockAuthMgmt<AdminSdk>) => Partial<Auth> = (api) => 
   ): Promise<DecodedIdToken> {
     throw new Error('not implemented');
   },
-};
+});

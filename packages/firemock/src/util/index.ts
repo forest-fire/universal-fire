@@ -1,16 +1,5 @@
 //#autoindex
-//#region autoindexed files
 
-<<<<<<< HEAD
-// index last changed at: 8th Aug, 2020, 07:15 PM ( GMT-7 )
-// export: named; exclusions: index, private.
-// files: dotify, limitFilters, other, pluralize, queryFilters, runQuery, sortFns.
-// directories: lodash-replacement.
-
-// local file exports
-export * from "./dotify";
-export * from "./limitFilters";
-=======
 // #region autoindexed files
 
 // index last changed at: 7th Jul, 2021, 10:59 AM ( GMT-7 )
@@ -20,18 +9,11 @@ export * from "./limitFilters";
 // local file exports
 export * from "./dotify";
 export * from "./networkDelay";
->>>>>>> feature/refresh_ext
 export * from "./other";
 export * from "./pluralize";
 export * from "./set";
 export * from "./sortFns";
 
-<<<<<<< HEAD
-// directory exports
-export * from "./lodash-replacement/index";
-
-//#endregion
-=======
 // Note:
 // -----
 // This file was created by running: "dd devops autoindex"; it assumes you have
@@ -59,4 +41,3 @@ export * from "./lodash-replacement/index";
 // Keep on being awesome.
 
 // #endregion
->>>>>>> feature/refresh_ext

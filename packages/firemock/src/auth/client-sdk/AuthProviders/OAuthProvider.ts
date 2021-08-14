@@ -1,11 +1,12 @@
-import type {
+import {
   OAuthProvider as GoogleOAuthProvider,
   AuthProvider,
   OAuthCredential,
+  AuthProviderName,
 } from '@forest-fire/types';
 
 export class OAuthProvider implements GoogleOAuthProvider {
-  public providerId: string;
+  public providerId: string = AuthProviderName.oauth;
   // tslint:disable-next-line: no-empty
   constructor(providerId: string) {
     this.providerId = providerId;

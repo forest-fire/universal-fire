@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/require-await */
-import { IPartialUserCredential } from '~/@types/index';
+import { IPartialUserCredential } from '../../@types/index';
 import {
   emailExistsAsUserInAuth,
   emailHasCorrectPassword,
   userUid,
   emailValidationAllowed,
   emailIsValidFormat,
-} from '~/auth/client-sdk/index';
+} from '../../auth/client-sdk/index';
 import {
   ActionCodeSettings,
   UserCredential,
@@ -21,10 +21,9 @@ import {
   User,
 } from '@forest-fire/types';
 
-import { FireMockError } from '~/errors';
-import { networkDelay } from '~/util';
-import { uuid } from 'native-dash';
-import { clientApiUser } from './User';
+import { FireMockError } from '../../errors';
+import { completeUserCredential, toUser } from '../../auth/util';
+import { createUser } from './createUser';
 
 export const implemented: (
   api: IMockAuthMgmt<ClientSdk>
@@ -51,39 +50,38 @@ export const implemented: (
     completed?: Unsubscribe
   ): Unsubscribe {
     api.addAuthObserver(observer);
-    observer(api.createUser(api, api.toUser(api.getCurrentUser())));
+    observer(createUser(api, toUser(api.getCurrentUser())));
     return undefined;
   },
+
   async setPersistence() {
     console.warn(
       `currently firemock accepts calls to setPersistence() but it doesn't support it.`
     );
     return;
   },
+
   signInAnonymously: async (): Promise<UserCredential> => {
-    await networkDelay();
-
-    if (api.authProviders().includes('anonymous')) {
-      const user: User = {
-        ...clientApiUser,
+    await api.networkDelay();
+    if (api.hasProvider(AuthProviderName.anonymous)) {
+      const user = createUser(api, {
         isAnonymous: true,
-        uid: uuid(),
-      };
+        uid: api.getAnonymousUid(),
+      });
       const credential: AuthCredential = {
-        signInMethod: 'anonymous',
-        providerId: 'anonymous',
-        toJSON: () => '', // recently added
-      };
-      const credentials = {
-        user,
-        credential,
+        signInMethod: AuthProviderName.anonymous,
+        providerId: AuthProviderName.anonymous,
+        toJSON: () => ({
+          signInMethod: AuthProviderName.anonymous,
+          providerId: AuthProviderName.anonymous,
+        }),
       };
 
-      const userCredential = api.completeUserCredential(credentials);
-      api.addToUserPool(userCredential.user);
-      api.setCurrentUser(userCredential);
+      const userCredentials = completeUserCredential({ user, credential });
+      api.addToUserPool(userCredentials);
+      api.setCurrentUser(userCredentials);
 
-      return userCredential;
+      return userCredentials;
     } else {
       throw new FireMockError(
         'you must enable anonymous auth in the Firebase Console',
@@ -91,6 +89,11 @@ export const implemented: (
       );
     }
   },
+
+  async updateCurrentUser(updates: UpdateRequest) {
+    api.updateUser(api.getCurrentUser().uid, updates);
+  },
+
   /**
    * Sign into Firebase with Email and Password:
    * [Docs](https://firebase.google.com/docs/reference/js/firebase.auth.Auth#signinwithemailandpassword)
@@ -102,15 +105,15 @@ export const implemented: (
    *  - auth/wrong-password
    */
   async signInWithEmailAndPassword(email: string, password: string) {
-    await networkDelay();
+    await api.networkDelay();
 
-    if (!api.emailValidationAllowed()) {
+    if (!emailValidationAllowed(api)()) {
       throw new FireMockError(
         'email authentication not allowed',
         'auth/operation-not-allowed'
       );
     }
-    if (!emailIsValidFormat(email)) {
+    if (!emailIsValidFormat(api)(email)) {
       throw new FireMockError(`invalid email: ${email}`, 'auth/invalid-email');
     }
     const user = api.findKnownUser('email', email);
@@ -139,9 +142,9 @@ export const implemented: (
         email: user.email,
         isAnonymous: false,
         emailVerified: user.emailVerified,
-        uid: userUid(email),
+        uid: userUid(api)(email),
         displayName: user.displayName,
-        ...api.createUser(api, user as unknown as Partial<User>),
+        ...createUser(api, user as unknown as Partial<User>),
       },
       credential: {
         signInMethod: 'signInWithEmailAndPassword',
@@ -152,7 +155,7 @@ export const implemented: (
       },
     };
 
-    const u = api.completeUserCredential(partial);
+    const u = completeUserCredential(partial);
     api.setCurrentUser(u);
 
     return u;
@@ -170,22 +173,22 @@ export const implemented: (
    * [Docs](https://firebase.google.com/docs/reference/js/firebase.auth.Auth#createuserwithemailandpassword)
    */
   async createUserWithEmailAndPassword(email: string, password: string) {
-    await networkDelay();
-    if (!api.emailValidationAllowed()) {
+    await api.networkDelay();
+    if (!emailValidationAllowed(api)()) {
       throw new FireMockError(
         'email authentication not allowed',
         'auth/operation-not-allowed'
       );
     }
 
-    if (emailExistsAsUserInAuth(email)) {
+    if (emailExistsAsUserInAuth(api)(email)) {
       throw new FireMockError(
         `"${email}" user already exists`,
         'auth/email-already-in-use'
       );
     }
 
-    if (!emailIsValidFormat(email)) {
+    if (!emailIsValidFormat(api)(email)) {
       throw new FireMockError(
         `"${email}" is not a valid email format`,
         'auth/invalid-email'
@@ -195,7 +198,7 @@ export const implemented: (
 
     const partial: IPartialUserCredential = {
       user: {
-        ...api.createUser(api, { email, uid }),
+        ...createUser(api, { email, uid }),
         isAnonymous: false,
         emailVerified: false,
       },
@@ -207,7 +210,7 @@ export const implemented: (
         username: email,
       },
     };
-    const u = api.completeUserCredential(partial);
+    const u = completeUserCredential(partial);
     api.addToUserPool({ uid: partial.user.uid, email, password });
     api.setCurrentUser(u);
     return u;
@@ -221,18 +224,17 @@ export const implemented: (
     email: string,
     actionCodeSetting: ActionCodeSettings
   ) {
-    return;
+    console.group('Firemock: sendPasswordResetEmail()');
+    console.log(`an email is being sent to "${email}".`);
+    console.log(`the "action code settings" are:`, actionCodeSetting);
+    console.groupEnd();
   },
 
   async signOut() {
-    api.clearCurrentUser();
+    api.logout();
   },
 
   get currentUser() {
-    return api.completeUserCredential({}).user;
-  },
-
-  async updateCurrentUser() {
-    return;
+    return completeUserCredential({}).user;
   },
 });

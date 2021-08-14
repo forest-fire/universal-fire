@@ -2,11 +2,12 @@ import type {
   GoogleAuthProvider as GoogleGoogleAuthProvider,
   AuthCredential,
   AuthProvider,
+  AuthProviderName,
 } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 
 export class GoogleAuthProvider implements GoogleGoogleAuthProvider {
-  public static PROVIDER_ID: string;
+  public static PROVIDER_ID: AuthProviderName.google;
   public static GOOGLE_SIGN_IN_METHOD: string;
 
   public static credential(

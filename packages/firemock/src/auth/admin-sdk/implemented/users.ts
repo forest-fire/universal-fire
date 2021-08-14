@@ -1,3 +1,5 @@
+import { isMockUserRecord, isUser } from '../../../auth/type-guards';
+import { toUserRecord } from '../../../auth/util';
 import type {
   Auth,
   CreateRequest,
@@ -10,15 +12,6 @@ import type {
   uid,
   AdminSdk,
 } from '@forest-fire/types';
-import {
-  addToUserPool,
-  updateUser,
-  getUserById,
-  removeUser,
-  getUserByEmail,
-  allUsers,
-} from '~/auth/user-mgmt';
-import { networkDelay } from '~/util';
 
 export const users: (api: IMockAuthMgmt<AdminSdk>) => Partial<Auth> = (
   api
@@ -26,7 +19,6 @@ export const users: (api: IMockAuthMgmt<AdminSdk>) => Partial<Auth> = (
   // https://firebase.google.com/docs/auth/admin/manage-users#create_a_user
   // eslint-disable-next-line @typescript-eslint/require-await
   async createUser(properties: CreateRequest): Promise<UserRecord> {
-    // addToUserPool();
     const UserRecord: UserRecord = {
       ...(properties as Required<CreateRequest>),
       metadata: {
@@ -42,44 +34,48 @@ export const users: (api: IMockAuthMgmt<AdminSdk>) => Partial<Auth> = (
       emailVerified: false,
     };
 
-    addToUserPool(UserRecord);
+    api.addToUserPool(UserRecord);
 
     return UserRecord;
   },
 
-  /** Updates an existing user. */
+  /** Updates an existing user (admin-sdk). */
   async updateUser(
-    uid: string,
+    user: string | User | IMockUserRecord,
     properties: UpdateRequest
   ): Promise<UserRecord> {
-    // let uid: uid;
-    // if (typeof user !== 'string' && (isUser(user) || isMockUserRecord(user))) {
-    //   uid = user.uid;
-    // } else {
-    //   uid = user;
-    // }
+    let uid: uid;
+    if (typeof user !== 'string' && (isUser(user) || isMockUserRecord(user))) {
+      uid = user.uid;
+    } else {
+      uid = user;
+    }
 
     api.updateUser(uid, properties);
-    return Promise.resolve(api.toUserRecord(api.getCurrentUser()));
+    return Promise.resolve(toUserRecord(api.getCurrentUser()));
   },
   async deleteUser(uid: string): Promise<void> {
-    await networkDelay();
-    removeUser(uid);
+    await api.networkDelay();
+    api.removeFromUserPool(uid);
   },
   async getUserByEmail(email: string): Promise<UserRecord> {
-    await networkDelay();
-    return getUserByEmail(email);
+    await api.networkDelay();
+    return toUserRecord(api.findKnownUser('email', email));
   },
   async getUserByPhoneNumber(phoneNumber: string): Promise<UserRecord> {
     return Promise.resolve(
-      api.toUserRecord(api.findKnownUser('phoneNumber', phoneNumber))
+      toUserRecord(api.findKnownUser('phoneNumber', phoneNumber))
     );
   },
   async listUsers(
     maxResults?: undefined | number,
     pageToken?: undefined | string
   ): Promise<ListUsersResult> {
-    await networkDelay();
-    return { users: maxResults ? allUsers().slice(0, maxResults) : allUsers() };
+    await api.networkDelay();
+    return {
+      users: maxResults
+        ? api.knownUsers().slice(0, maxResults)
+        : api.knownUsers(),
+    };
   },
-};
+});

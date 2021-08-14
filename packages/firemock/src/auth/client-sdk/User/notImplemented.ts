@@ -6,7 +6,7 @@ import type {
   ActionCodeSettings,
   UserCredential,
 } from '@forest-fire/types';
-import { fakeApplicationVerifier } from '../../helpers/completeUserCredential';
+import { fakeApplicationVerifier } from '../../util/completeUserCredential';
 
 export const notImplemented: Partial<User> = {
   /** Deletes and signs out the user. */

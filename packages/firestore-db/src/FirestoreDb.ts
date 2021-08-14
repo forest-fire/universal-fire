@@ -23,16 +23,6 @@ import {
   VALID_FIRESTORE_EVENTS,
 } from './index';
 
-<<<<<<< HEAD
-export abstract class FirestoreDb extends AbstractedDatabase {
-  declare public readonly dbType: Database.Firestore;
-  declare protected _database?: IFirestoreDatabase;
-  // protected _app!: IClientApp | IAdminApp;
-
-  protected get database() {
-    if (this._database) {
-      return this._database;
-=======
 export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
   implements IDatabaseSdk<TSdk>
 {
@@ -47,7 +37,6 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
       throw new Error(
         `[not-ready] - Failed to return the Firebase "app" as this has not yet been asynchronously loaded yet`
       );
->>>>>>> feature/refresh_ext
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._app;
@@ -71,7 +60,7 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
   protected _database?: IFirestoreDatabase;
   protected _app!: AppFrom<TSdk>;
   protected _isConnected = false;
-  protected _config: IDatabaseConfig
+  protected _config: IDatabaseConfig;
   public isMockDb = false;
 
   protected get database(): IFirestoreDatabase {
@@ -132,7 +121,10 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     throw new Error('Not implemented');
   }
 
-  public async update<T extends unknown = unknown>(path: string, value: T): Promise<void> {
+  public async update<T extends unknown = unknown>(
+    path: string,
+    value: T
+  ): Promise<void> {
     await this.database.doc(path).update(value);
   }
 
@@ -177,7 +169,10 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
     throw new Error('Not implemented');
   }
 
-  public unWatch(events?: IAbstractedEvent | IAbstractedEvent[], _cb?: any): void {
+  public unWatch(
+    events?: IAbstractedEvent | IAbstractedEvent[],
+    _cb?: any
+  ): void {
     if (events && !isFirestoreEvent(events)) {
       throw new FirestoreDbError(
         `An attempt was made to unwatch an event type which is not valid for the Firestore database. Events passed in were: ${JSON.stringify(
@@ -202,17 +197,9 @@ export abstract class FirestoreDb<TSdk extends IFirestoreSdk>
 
   private async _removeCollection(path: string) {
     const batch = this.database.batch();
-<<<<<<< HEAD
-    // @ts-ignore
-    this.database.collection(path).onSnapshot((snapshot: QuerySnapshot<any>) => {
-      // @ts-ignore
-      (snapshot.docs).forEach((doc) => {
-        batch.delete(doc.ref);
-=======
     this.database.collection(path).onSnapshot((snapshot) => {
       snapshot.docs.forEach((doc) => {
         batch.delete(doc.ref as never);
->>>>>>> feature/refresh_ext
       });
     });
     // All or nothing.

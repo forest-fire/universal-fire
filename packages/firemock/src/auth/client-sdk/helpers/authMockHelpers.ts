@@ -1,4 +1,3 @@
-import { getRandomMockUid } from '~/auth/user-mgmt';
 import {
   AuthProviderName,
   ClientSdk,
@@ -6,6 +5,7 @@ import {
   User,
 } from '@forest-fire/types';
 import { validate } from 'email-validator';
+import { uuid } from 'native-dash';
 
 export const emailExistsAsUserInAuth =
   (api: IMockAuthMgmt<ClientSdk>) => (email: string) => {
@@ -15,7 +15,7 @@ export const emailExistsAsUserInAuth =
   };
 
 export const emailIsValidFormat =
-  (api: IMockAuthMgmt<ClientSdk>) => (email: string) => {
+  (_api: IMockAuthMgmt<ClientSdk>) => (email: string) => {
     return validate(email);
   };
 
@@ -35,7 +35,7 @@ export const emailVerified =
 export const userUid = (api: IMockAuthMgmt<ClientSdk>) => (email: string) => {
   const user = api.findKnownUser('email', email);
 
-  return user ? user.uid || getRandomMockUid() : getRandomMockUid();
+  return user ? user.uid : uuid();
 };
 
 export const emailValidationAllowed = (api: IMockAuthMgmt<ClientSdk>) => () => {

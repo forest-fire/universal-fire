@@ -7,7 +7,6 @@ import {
   getRunningFirebaseApp,
 } from '@forest-fire/utility';
 import {
-  FirebaseNamespace,
   IClientApp,
   IClientAuth,
   IClientAuthProviders,
@@ -137,14 +136,10 @@ export class RealTimeClient extends RealTimeDb<SDK.RealTimeClient> {
           'missing-auth'
         );
       }
-<<<<<<< HEAD
-      this._authProviders = (firebase as any).auth;
-=======
       const providers = (firebase as IDictionary)?.auth
         ? (firebase as IDictionary)?.auth
         : undefined;
       this._authProviders = providers;
->>>>>>> feature/refresh_ext
     }
 
     return this._authProviders;
@@ -158,11 +153,7 @@ export class RealTimeClient extends RealTimeDb<SDK.RealTimeClient> {
       return this._auth;
     }
     if (this.isMockDb) {
-<<<<<<< HEAD
-      this._auth = (await this.mock.auth()) as IClientAuth;
-=======
       this._auth = this.mock.auth as unknown as IClientAuth;
->>>>>>> feature/refresh_ext
       return this._auth;
     } else {
       await this._loadAuthApi();
@@ -176,19 +167,10 @@ export class RealTimeClient extends RealTimeDb<SDK.RealTimeClient> {
    * The steps needed to connect a database to a Firemock
    * mocked DB.
    */
-<<<<<<< HEAD
-  protected async _connectMockDb(config: IMockConfig) {
-    await this.getFiremock({
-      db: config.mockData || {},
-      auth: { providers: [], users: [], ...config.mockAuth },
-    });
-    this._authProviders = this._mock.authProviders;
-=======
   protected async _connectMockDb(config: IMockConfig): Promise<void> {
     this.getFiremock(config);
     //TODO:
     // this._authProviders = mock.authProviders;
->>>>>>> feature/refresh_ext
     await this._listenForConnectionStatus();
   }
 

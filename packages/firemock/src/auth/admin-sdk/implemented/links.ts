@@ -13,4 +13,4 @@ export const links: (api: IMockAuthMgmt<AdminSdk>) => Partial<IAdminAuth> = (api
   ): Promise<string> {
     throw new Error('not implemented');
   },
-};
+});

@@ -1,6 +1,7 @@
 import {
   IMockUser,
   IMockUserRecord,
+  UpdateRequest,
   User,
   UserCredential,
   UserRecord,
@@ -8,8 +9,10 @@ import {
 import { IDictionary } from 'common-types';
 
 export function isUserCredential(
-  u: UserCredential | User | UserRecord | IMockUser
+  u: string | UserCredential | User | UserRecord | IMockUser
 ): u is UserCredential {
+  if (typeof u !== 'object') return false;
+
   const check = (u as unknown) as IDictionary;
   return check.user && check.credential && check.additionalUserInfo
     ? true
@@ -21,8 +24,9 @@ export function isUserCredential(
  * definition.
  */
 export function isMockUserRecord(
-  u: UserCredential | User | UserRecord | IMockUser
+  u: string | UserCredential | User | UserRecord | IMockUser | UpdateRequest
 ): u is IMockUserRecord {
+  if (typeof u !== 'object') return false;
   const check = (u as unknown) as IDictionary;
   return check.kind && check.kind === 'MockUserRecord';
 }

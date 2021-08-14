@@ -1,4 +1,4 @@
-import { networkDelay } from '~/util';
+import { networkDelay } from '../../../util';
 import { IMockAuthMgmt, NetworkDelay, ClientSdk } from '@forest-fire/types';
 
 /**
@@ -15,9 +15,10 @@ import { IMockAuthMgmt, NetworkDelay, ClientSdk } from '@forest-fire/types';
 
  [Documentation](https://firebase.google.com/docs/reference/js/firebase.User#updateprofile)
  */
-export const updateProfile =
-  (api: IMockAuthMgmt<ClientSdk>) =>
-  async (profile: { displayName?: string; photoUrl?: string }) => {
-    await networkDelay(NetworkDelay.wifi);
-    api.updateUser(api.getCurrentUser(), profile);
-  };
+export const updateProfile = (api: IMockAuthMgmt<ClientSdk>) => async (profile: {
+  displayName?: string;
+  photoUrl?: string;
+}) => {
+  await networkDelay(NetworkDelay.wifi);
+  api.updateUser(api.getCurrentUser(), profile);
+};

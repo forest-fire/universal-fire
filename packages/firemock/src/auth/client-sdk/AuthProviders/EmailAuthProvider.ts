@@ -1,12 +1,13 @@
-import type {
+import {
   AuthCredential,
+  AuthProviderName,
   EmailAuthProvider_Instance,
   GoogleEmailAuthProvider,
 } from '@forest-fire/types';
 
 const data = {
-  providerId: 'mock-provider-id-for-EmailAuthProvider',
-  signInMethod: 'email-and-password',
+  providerId: AuthProviderName.emailPassword,
+  signInMethod: AuthProviderName.emailPassword,
 };
 
 /**
@@ -15,7 +16,7 @@ const data = {
  */
 export class EmailAuthProvider
   implements EmailAuthProvider_Instance, GoogleEmailAuthProvider {
-  public static PROVIDER_ID: string;
+  public static PROVIDER_ID: string = AuthProviderName.emailPassword;
   public static EMAIL_PASSWORD_SIGN_IN_METHOD: string;
   public static EMAIL_LINK_SIGN_IN_METHOD: string;
 

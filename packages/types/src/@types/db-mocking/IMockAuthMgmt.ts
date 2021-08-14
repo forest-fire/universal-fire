@@ -8,7 +8,7 @@ import {
   uid,
 } from '../../index';
 import { AuthProviderFrom } from '../database';
-import { IClientAuthProviders, UpdateRequest } from '../fire-proxies';
+import { UpdateRequest } from '../fire-proxies';
 import { AuthProviderName, ISdk } from '../fire-types';
 import { NetworkDelay } from './network';
 

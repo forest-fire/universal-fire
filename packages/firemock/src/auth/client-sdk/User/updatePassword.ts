@@ -1,6 +1,6 @@
-import { FireMockError } from '~/errors/FireMockError';
+import { FireMockError } from '../../../errors/FireMockError';
 import { IMockAuthMgmt, NetworkDelay,ClientSdk} from '@forest-fire/types';
-import { networkDelay } from '~/util';
+import { networkDelay } from '../../../util';
 
 /**
  * **updatePassword**
@@ -21,7 +21,7 @@ import { networkDelay } from '~/util';
 export const updatePassword = (api: IMockAuthMgmt<ClientSdk>) => async (
   newPassword: string,
   notRecentLogin?: boolean
-): Promise<void> {
+): Promise<void> => {
   if (notRecentLogin) {
     throw new FireMockError(
       "updating a user's password requires that the user have recently logged in; use 'reauthenticateWithCredential' to address this error.",
@@ -30,7 +30,7 @@ export const updatePassword = (api: IMockAuthMgmt<ClientSdk>) => async (
   }
   await networkDelay(NetworkDelay.wifi);
 
-  api.updateUser(api.currentUser().uid, {
+  api.updateUser(api.getCurrentUser(), {
     password: newPassword,
   });
-}
+};

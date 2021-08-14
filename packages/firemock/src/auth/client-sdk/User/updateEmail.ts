@@ -1,6 +1,6 @@
-import { FireMockError } from '~/errors/index';
+import { FireMockError } from '../../../errors/index';
 import { ClientSdk, IMockAuthMgmt, NetworkDelay } from '@forest-fire/types';
-import { networkDelay } from '~/util';
+import { networkDelay } from '../../../util';
 
 /**
  * **updateEmail**
@@ -21,7 +21,7 @@ import { networkDelay } from '~/util';
 export const updateEmail = (api: IMockAuthMgmt<ClientSdk>) => async (
   newEmail: string,
   forceLogin?: boolean
-): Promise<void> {
+): Promise<void> => {
   if (forceLogin) {
     throw new FireMockError(
       "updating a user's email address requires that the user have recently logged in; use 'reauthenticateWithCredential' to address this error.",
