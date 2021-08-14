@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/universal-fire",
-  "version": "0.60.0",
+  "version": "0.59.7",
   "description": "monorepo for UniversalFire, Firemock, and supporting repos",
   "repository": {
     "type": "git",
