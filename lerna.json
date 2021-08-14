@@ -1,8 +1,19 @@
 {
   "npmClient": "yarn",
-  "packages": ["packages/*"],
-  "publish": {
-    "ignoreChanges": ["packages/vuex-plugin"]
-  },
+  "packages": [
+    "packages/universal-fire",
+    "packages/firemodel",
+    "packages/firemock",
+    "packages/@forest-fire/fixture",
+    "packages/@forest-fire/firestore-db",
+    "packages/@forest-fire/real-time-db",
+    "packages/@forest-fire/firestore-admin",
+    "packages/@forest-fire/firestore-client",
+    "packages/@forest-fire/real-time-client",
+    "packages/@forest-fire/real-time-admin",
+    "packages/@forest-fire/types",
+    "packages/@forest-fire/serialized-query",
+    "packages/@forest-fire/utility"
+  ],
   "version": "0.59.7"
 }
