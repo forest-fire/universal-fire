@@ -4,16 +4,16 @@
     "packages/universal-fire",
     "packages/firemodel",
     "packages/firemock",
-    "packages/@forest-fire/fixture",
-    "packages/@forest-fire/firestore-db",
-    "packages/@forest-fire/real-time-db",
-    "packages/@forest-fire/firestore-admin",
-    "packages/@forest-fire/firestore-client",
-    "packages/@forest-fire/real-time-client",
-    "packages/@forest-fire/real-time-admin",
-    "packages/@forest-fire/types",
-    "packages/@forest-fire/serialized-query",
-    "packages/@forest-fire/utility"
+    "packages/fixture",
+    "packages/firestore-db",
+    "packages/real-time-db",
+    "packages/firestore-admin",
+    "packages/firestore-client",
+    "packages/real-time-client",
+    "packages/real-time-admin",
+    "packages/types",
+    "packages/serialized-query",
+    "packages/utility"
   ],
   "version": "0.59.7"
 }
