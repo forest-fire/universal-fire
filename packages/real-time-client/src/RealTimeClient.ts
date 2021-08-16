@@ -16,10 +16,10 @@ import {
   SDK,
   isClientConfig,
   isMockConfig,
-  IRtdbDatabase,
   ApiKind,
   Database,
   DebuggingCallback,
+  IClientRtdbDatabase,
 } from '@forest-fire/types';
 import { RealTimeDb } from '@forest-fire/real-time-db';
 
@@ -54,7 +54,7 @@ export class RealTimeClient extends RealTimeDb<SDK.RealTimeClient> {
 
   public CONNECTION_TIMEOUT = 5000;
   protected _eventManager: EventManager;
-  protected declare _database?: IRtdbDatabase;
+  protected declare _database?: IClientRtdbDatabase;
   protected _auth?: IClientAuth;
   protected declare _config: IClientConfig | IMockConfig;
   protected _fbClass: any;

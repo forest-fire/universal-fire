@@ -13,6 +13,10 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forest-fire/universal-fire.git"
+  },
   "module": "dist/es/index.js",
   "types": "dist/types/index.d.ts",
   "main": "dist/cjs/index.js",
@@ -37,11 +41,11 @@
     "universal-fire": "^0.60.0"
   },
   "peerDependencies": {
-    "@forest-fire/types": "*",
-    "firemock": "*",
-    "firemodel": "*",
+    "@forest-fire/types": "^0.60.0",
+    "firemock": "^0.60.0",
+    "firemodel": "^0.60.0",
     "native-dash": "1.18.2",
-    "universal-fire": "*"
+    "universal-fire": "^0.60.0"
   },
   "dependencies": {
     "faker": "5.5.3",
