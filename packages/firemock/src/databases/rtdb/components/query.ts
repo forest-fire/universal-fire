@@ -23,24 +23,18 @@ export const query = <
   serializedQuery: ISerializedQuery<TSdk, TData>
 ): IRtdbQuery => {
   const partialQuery: IRtdbQuery = {
-    endBefore: () => {
-      throw new Error('not implemented');
-    },
-    startAfter: () => {
-      throw new Error('not implemented');
-    },
-    get: async () => {
-      await store.networkDelay();
-      const data = store.getDb<TData>(serializedQuery.path);
-      const results = runQuery(serializedQuery, data as TData);
+    // get: async () => {
+    //   await store.networkDelay();
+    //   const data = store.getDb<TData>(serializedQuery.path);
+    //   const results = runQuery(serializedQuery, data as TData);
 
-      // TODO: See how this was implemented before
-      return snapshot(
-        store,
-        leafNode(serializedQuery.path),
-        results ? results : null
-      );
-    },
+    //   // TODO: See how this was implemented before
+    //   return snapshot(
+    //     store,
+    //     leafNode(serializedQuery.path),
+    //     results ? results : null
+    //   );
+    // },
     endAt: (value, key) => {
       serializedQuery.endAt(value, key as string & keyof TData);
       return query(store, serializedQuery);
