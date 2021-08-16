@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/firestore-client",
-  "version": "0.60.1",
+  "version": "0.60.2",
   "description": "The univeral-fire SDK to connect to Firebase's Firestore database using the Client SDK",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -26,10 +26,10 @@
     "@firebase/auth": "^0.15.0",
     "@firebase/firestore": "^1.16.3",
     "@firebase/firestore-types": "^1.14.0",
-    "@forest-fire/firestore-db": "^0.60.1",
-    "@forest-fire/types": "^0.60.1",
-    "@forest-fire/utility": "^0.60.1",
-    "firemock": "^0.60.1"
+    "@forest-fire/firestore-db": "^0.60.2",
+    "@forest-fire/types": "^0.60.2",
+    "@forest-fire/utility": "^0.60.2",
+    "firemock": "^0.60.2"
   },
   "license": "MIT",
   "gitHead": "79d0cb2e966ae213f21991b08bf40f61f212275e"
