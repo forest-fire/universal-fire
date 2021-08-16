@@ -24,7 +24,6 @@
     "test": "scripty"
   },
   "dependencies": {
-    "@firebase/app-types": "^0.6.1",
     "@firebase/auth-types": "^0.10.1",
     "@firebase/database-types": "^0.5.2",
     "@firebase/firestore-types": "^1.14.0",
