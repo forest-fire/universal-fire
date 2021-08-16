@@ -1,6 +1,6 @@
 {
   "name": "firemock",
-  "version": "0.60.0",
+  "version": "0.60.1",
   "description": "firemock",
   "license": "MIT",
   "repository": "git@github.com:forest-fire/firemock.git",
@@ -28,8 +28,8 @@
     "test": "scripty"
   },
   "devDependencies": {
-    "@forest-fire/fixture": "^0.60.0",
-    "@forest-fire/real-time-client": "^0.60.0",
+    "@forest-fire/fixture": "^0.60.1",
+    "@forest-fire/real-time-client": "^0.60.1",
     "@types/deepmerge": "^2.2.0",
     "@types/test-console": "^1.1.1",
     "@vuepress/plugin-back-to-top": "^1.7.1",
@@ -38,7 +38,7 @@
     "@vuepress/plugin-pwa": "^1.7.1",
     "eledoc": "^0.2.1",
     "firebase-key": "^2.0.2",
-    "firemock": "^0.60.0",
+    "firemock": "^0.60.1",
     "jest": "^27.0.6",
     "native-dash": "1.18.4",
     "scripty": "^2.0.0",
@@ -51,8 +51,8 @@
     "vuepress": "^1.7.1"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.60.0",
-    "@forest-fire/types": "^0.60.0",
+    "@forest-fire/serialized-query": "^0.60.1",
+    "@forest-fire/types": "^0.60.1",
     "brilliant-errors": "^0.3.1",
     "deepmerge": "^4.2.2",
     "email-validator": "^2.0.4",
