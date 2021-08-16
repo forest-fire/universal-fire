@@ -35,7 +35,7 @@
     "@types/lodash": "^4.14.171",
     "@types/test-console": "^1.1.1",
     "firebase-admin": "9.4.1",
-    "firemock": "^0.60.1",
+    "firemock": "^0.60.2",
     "jest": "^27.0.6",
     "jest-extended": "^0.11.5",
     "js-yaml": "^4.1.0",
@@ -46,9 +46,7 @@
   },
   "peerDependencies": {
     "firebase-admin": "9.4.1",
-    "typed-conversions": "^0.12.0"
-  },
-  "optionalDependencies": {
+    "typed-conversions": "^0.12.0",
     "firemock": "^0.60.2"
   },
   "dependencies": {

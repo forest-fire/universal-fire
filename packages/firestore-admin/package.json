@@ -22,14 +22,12 @@
     "lint": "scripty"
   },
   "peerDependencies": {
-    "firebase-admin": "9.4.1"
-  },
-  "optionalDependencies": {
+    "firebase-admin": "9.4.1",
     "firemock": "^0.60.2"
   },
   "devDependencies": {
     "firebase-admin": "9.4.1",
-    "firemock": "^0.60.1"
+    "firemock": "^0.60.2"
   },
   "dependencies": {
     "@forest-fire/firestore-db": "^0.60.2",
