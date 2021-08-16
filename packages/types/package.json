@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/types",
-  "version": "0.60.0",
+  "version": "0.60.1",
   "description": "@forest-fire/* Types",
   "module": "dist/es/index.js",
   "main": "dist/cjs/index.js",
@@ -26,7 +26,7 @@
   "dependencies": {
     "@firebase/app-types": "^0.6.2",
     "@firebase/auth-types": "^0.10.1",
-    "@firebase/database-types": "^0.7.2",
+    "@firebase/database-types": "^0.5.2",
     "@firebase/firestore-types": "^1.12.0",
     "@types/faker": "^5.5.7",
     "firebase-admin": "9.4.1"

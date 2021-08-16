@@ -38,10 +38,10 @@ export function reference<TSdk extends IRtdbSdk, TData extends unknown = Record<
     orderByKey: query_.orderByKey,
     endAt: query_.endAt,
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    endBefore: query_.endBefore,
+    // endBefore: query_.endBefore,
     equalTo: query_.equalTo,
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    get: query_.get,
+    // get: query_.get,
     isEqual: query_.isEqual,
     limitToFirst: query_.limitToFirst,
     limitToLast: query_.limitToLast,
@@ -56,7 +56,7 @@ export function reference<TSdk extends IRtdbSdk, TData extends unknown = Record<
       return query_.ref;
     },
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    startAfter: query_.startAfter,
+    // startAfter: query_.startAfter,
     startAt: query_.startAt,
     get key() {
       return serializedQuery.path
@@ -75,9 +75,9 @@ export function reference<TSdk extends IRtdbSdk, TData extends unknown = Record<
         !serializedQuery.path || serializedQuery.path.split('/').length === 1
           ? null
           : serializedQuery.path
-            .split('/')
-            .slice(0, serializedQuery.path.split('/').length - 1)
-            .join('/')
+              .split('/')
+              .slice(0, serializedQuery.path.split('/').length - 1)
+              .join('/')
       );
     },
     push: (value, onComplete) => {
@@ -130,7 +130,9 @@ export function reference<TSdk extends IRtdbSdk, TData extends unknown = Record<
       };
     },
     toString: () => {
-      return `FireMock::Query@${process.env.FIREBASE_DATA_ROOT_URL}/${JSON.stringify(serializedQuery.identity)}`;
+      return `FireMock::Query@${
+        process.env.FIREBASE_DATA_ROOT_URL
+      }/${JSON.stringify(serializedQuery.identity)}`;
     },
     transaction: async () => {
       return Promise.resolve({

@@ -68,6 +68,7 @@
     }
   ],
   "settings": {
+    "search.followSymlinks": false,
     "monorepoWorkspace.folders.prefix.unknown": "⚠️ ",
     "files.exclude": {
       "node_modules/": true
