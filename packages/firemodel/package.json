@@ -107,18 +107,18 @@
     "vuepress-plugin-autometa": "^0.1.13"
   },
   "peerDependencies": {
-    "@forest-fire/serialized-query": "*",
-    "@forest-fire/types": "*",
+    "@forest-fire/serialized-query": "^0.60.0",
+    "@forest-fire/types": "^0.60.0",
     "common-types": "^1.27.0",
     "date-fns": "^2.15.0",
     "dexie": "^3.0.2",
     "firebase-key": "^2.0.2",
-    "firemock": "*",
+    "firemock": "^0.60.0",
     "inferred-types": "0.6.0",
     "native-dash": "^1.18.4",
     "reflect-metadata": "^0.1.13",
     "typed-conversions": "^0.12.0",
-    "universal-fire": "*"
+    "universal-fire": "^0.60.0"
   },
   "engines": {
     "node": ">=10.0.0"
