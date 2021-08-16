@@ -40,7 +40,7 @@
     "@firebase/util" "0.3.2"
     tslib "^1.11.1"
 
-"@firebase/firestore-types@1.14.0", "@firebase/firestore-types@^1.12.0":
+"@firebase/firestore-types@1.14.0", "@firebase/firestore-types@^1.14.0":
   version "1.14.0"
   resolved "https://registry.npmjs.org/@firebase/firestore-types/-/firestore-types-1.14.0.tgz#4516249d3c181849fd3c856831944dbd5c8c55fc"
   integrity sha512-WF8IBwHzZDhwyOgQnmB0pheVrLNP78A8PGxk1nxb/Nrgh1amo4/zYvFMGgSsTeaQK37xMYS/g7eS948te/dJxw==

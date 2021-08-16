@@ -307,7 +307,7 @@
   resolved "https://registry.npmjs.org/@firebase/app-types/-/app-types-0.6.1.tgz#dcbd23030a71c0c74fc95d4a3f75ba81653850e9"
   integrity sha512-L/ZnJRAq7F++utfuoTKX4CLBG5YR7tFO3PLzG1/oXXKEezJ0kRL3CMRoueBEmTCzVb/6SIs2Qlaw++uDgi5Xyg==
 
-"@firebase/app-types@^0.6.2":
+"@firebase/app-types@^0.6.1":
   version "0.6.3"
   resolved "https://registry.npmjs.org/@firebase/app-types/-/app-types-0.6.3.tgz#3f10514786aad846d74cd63cb693556309918f4b"
   integrity sha512-/M13DPPati7FQHEQ9Minjk1HGLm/4K4gs9bR4rzLCWJg64yGtVC0zNg9gDpkw9yc2cvol/mNFxqTtd4geGrwdw==
@@ -350,7 +350,7 @@
     faye-websocket "0.11.3"
     tslib "^1.11.1"
 
-"@firebase/firestore-types@^1.12.0":
+"@firebase/firestore-types@^1.14.0":
   version "1.14.0"
   resolved "https://registry.npmjs.org/@firebase/firestore-types/-/firestore-types-1.14.0.tgz#4516249d3c181849fd3c856831944dbd5c8c55fc"
   integrity sha512-WF8IBwHzZDhwyOgQnmB0pheVrLNP78A8PGxk1nxb/Nrgh1amo4/zYvFMGgSsTeaQK37xMYS/g7eS948te/dJxw==
@@ -1577,7 +1577,7 @@ globals@^11.1.0:
   resolved "https://registry.npmjs.org/globals/-/globals-11.12.0.tgz#ab8795338868a0babd8525758018c2a7eb95c42e"
   integrity sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==
 
-google-auth-library@^7.0.0, google-auth-library@^7.0.2, google-auth-library@^7.3.0:
+google-auth-library@^7.0.0, google-auth-library@^7.0.2, google-auth-library@^7.6.1:
   version "7.6.1"
   resolved "https://registry.npmjs.org/google-auth-library/-/google-auth-library-7.6.1.tgz#be3d393212fc9dafee7d05975c4ebe88efecc16d"
   integrity sha512-aP/WTx+rE3wQ3zPgiCZsJ1EIb2v7P+QwxVwAqrKjcPz4SK57kyAfcX75VoAgjtwZzl70upcNlvFn8FSmC4nMBQ==
@@ -1593,9 +1593,9 @@ google-auth-library@^7.0.0, google-auth-library@^7.0.2, google-auth-library@^7.3
     lru-cache "^6.0.0"
 
 google-gax@^2.17.1:
-  version "2.24.0"
-  resolved "https://registry.npmjs.org/google-gax/-/google-gax-2.24.0.tgz#659ea97ec6758eb03d7de73d0019644789367ac0"
-  integrity sha512-PtE/Zk3jPrUIAL9YsIq5e+04U3aqEg6/0DmtR/tXKhbcS7SRA1sbPZja+vevuUavIdCXEiBbaKkrBqcQvSxXmw==
+  version "2.24.1"
+  resolved "https://registry.npmjs.org/google-gax/-/google-gax-2.24.1.tgz#470480ab4968c4ca224ba3ebb9e5f6fefc5d4531"
+  integrity sha512-/oBk3S2jKZO5e85Dnqe0Zo3iAkQuMhy3BfczU6LoLxsoY99E/8EmOPiT7gHxb5KWZzghjo5HyITExLiuIjJ+0A==
   dependencies:
     "@grpc/grpc-js" "~1.3.0"
     "@grpc/proto-loader" "^0.6.1"
@@ -1603,7 +1603,7 @@ google-gax@^2.17.1:
     abort-controller "^3.0.0"
     duplexify "^4.0.0"
     fast-text-encoding "^1.0.3"
-    google-auth-library "^7.3.0"
+    google-auth-library "^7.6.1"
     is-stream-ended "^0.1.4"
     node-fetch "^2.6.1"
     object-hash "^2.1.1"

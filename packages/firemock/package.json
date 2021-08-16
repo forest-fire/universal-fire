@@ -61,7 +61,7 @@
   },
   "peerDependencies": {
     "firebase-key": "^2.0.2",
-    "firemock": "*",
+    "firemock": "^0.60.1",
     "native-dash": "1.18.4",
     "typed-conversions": "~0.12.0"
   },
