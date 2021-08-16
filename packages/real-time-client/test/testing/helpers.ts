@@ -1,4 +1,4 @@
-import './test-console'; // TS declaration
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 
 import * as fs from 'fs';
 import * as process from 'process';
@@ -28,14 +28,14 @@ interface Console {
   warn(message?: any, ...optionalParams: any[]): void;
 }
 
-declare var console: Console;
+declare let console: Console;
 
 export function restoreStdoutAndStderr() {
   console._restored = true;
 }
 
 export async function timeout(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms, {}));
 }
 
 export function setupEnv() {
@@ -48,7 +48,7 @@ export function setupEnv() {
   }
 
   const current = process.env;
-  const yamlConfig = yaml.load(fs.readFileSync('./env.yml', 'utf8')) as IDictionary;
+  const yamlConfig = yaml.load(fs.readFileSync('./env.yml', 'utf8')) as Record<string, any>;
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env,
@@ -69,7 +69,7 @@ export function ignoreStdout() {
 }
 
 export function captureStdout(): () => any {
-  const rStdout: IAsyncStreamCallback = stdout.inspect();
+  const rStdout = stdout.inspect();
   const restore = () => {
     rStdout.restore();
     console._restored = true;
@@ -80,7 +80,7 @@ export function captureStdout(): () => any {
 }
 
 export function captureStderr(): () => any {
-  const rStderr: IAsyncStreamCallback = stderr.inspect();
+  const rStderr  = stderr.inspect();
   const restore = () => {
     rStderr.restore();
     console._restored = true;
@@ -142,7 +142,7 @@ export function lastRecord<T = any>(dictionary: IDictionary<T>) {
 
 export function valuesOf<T = any>(listOf: IDictionary<T>, property: string) {
   const keys: any[] = Object.keys(listOf);
-  return keys.map((key: any) => {
+  return keys.map((key: never) => {
     const item: IDictionary = listOf[key];
     return item[property];
   });

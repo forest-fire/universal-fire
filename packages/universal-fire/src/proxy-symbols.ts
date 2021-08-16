@@ -14,20 +14,24 @@ export type {
   IClientConfig,
   IClientAuth,
   IAdminAuth,
-} from '@forest-fire/types';
-export { SDK } from '@forest-fire/types';
-
-export { SerializedQuery } from '@forest-fire/serializer-factory';
-export type {
+  SDK,
   IComparisonOperator,
   ISerializedQuery,
   ISerializedIdentity,
-  IAbstractedDatabase,
-  IFirestoreAdmin,
-  IFirestoreClient,
-  IRealTimeAdmin,
-  IRealTimeClient,
+  DbFrom,
+  DbTypeFrom,
+  AppFrom,
+  ISdk,
+  IRtdbSdk,
+  IDatabaseSdk,
+  IDatabaseApi,
+  IFakerStatic,
 } from '@forest-fire/types';
 
-import type { Mock as IMockApi } from 'firemock';
-export type { IMockApi };
+export { isClientSdk, isAdminSdk, AuthProviderName } from '@forest-fire/types';
+
+export type {
+  SerializedRealTimeQuery,
+  SerializedFirestoreQuery,
+} from '@forest-fire/serialized-query';
+

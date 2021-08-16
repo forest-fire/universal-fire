@@ -1,0 +1,8 @@
+{
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist/*": true,
+    "**/*.code-search": true,
+    "**/*.d.ts": true
+  }
+}

@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - '10'
+  - '8'
+script:
+  - npm install codecov -g
+  - npm install -g typescript ts-node tslint
+  - yarn test  # test
+after_success:
+  - codecov

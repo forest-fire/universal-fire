@@ -1,8 +1,5 @@
-import { IAdminAuth } from '@forest-fire/types';
-import { implemented } from './implemented';
-import { notImplemented } from './notImplemented';
+export * from '@forest-fire/types';
+export * from './implemented';
+export * from './notImplemented';
 
-export const adminAuthSdk: IAdminAuth = {
-  ...implemented,
-  ...notImplemented,
-} as IAdminAuth;
+

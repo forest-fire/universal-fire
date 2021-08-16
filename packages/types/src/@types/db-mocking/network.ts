@@ -1,5 +1,3 @@
-import { IDictionary } from 'common-types';
-
 export enum NetworkDelay {
   /** can be fast but can be very, very slow */
   lifi = 'lifi',

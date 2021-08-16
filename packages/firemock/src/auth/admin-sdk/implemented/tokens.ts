@@ -1,6 +1,6 @@
-import type { DecodedIdToken, Auth } from '@forest-fire/types';
+import type { DecodedIdToken, Auth, IMockAuthMgmt, AdminSdk } from '@forest-fire/types';
 
-export const tokens: Partial<Auth> = {
+export const tokens: (api: IMockAuthMgmt<AdminSdk>) => Partial<Auth> = (api) => ({
   /**
    * Verifies a Firebase ID token (JWT). If the token is valid, the promise is fulfilled
    * with the token's decoded claims; otherwise, the promise is rejected. An optional
@@ -11,10 +11,10 @@ export const tokens: Partial<Auth> = {
    * extra request to the Firebase Auth backend to check the tokensValidAfterTime time
    * for the corresponding user. When not specified, this additional check is not applied.
    */
-  async verifyIdToken(
+  verifyIdToken(
     idToken: string,
     checkRevoked?: undefined | boolean
   ): Promise<DecodedIdToken> {
-    return;
+    throw new Error('not implemented');
   },
-};
+});

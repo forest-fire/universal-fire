@@ -1,17 +1,30 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "lib": [],
-    "target": "esnext",
+    "lib": ["es2015.reflect", "esnext.asynciterable"],
+    "target": "es2020",
     "module": "commonjs",
-    "esModuleInterop": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "removeComments": false,
     "noImplicitAny": true,
     "sourceMap": true,
-    "noEmit": true
+    "noEmit": true,
+    "composite": true,
+    "paths": {
+      "~/*": ["src/*"],
+      "firemodel": ["packages/firemodel"]
+    },
+    "plugins": [
+      // Transform paths in output .js files
+      { "transform": "typescript-transform-paths" },
+
+      // Transform paths in output .d.ts files (Include this line if you output declarations files)
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ]
   },
-  "exclude": ["**/node_modules/**", "packages/*/dist" ]
+  "exclude": ["**/node_modules/**", "packages/*/dist"]
 }

@@ -1,0 +1,12 @@
+.DS_Store
+coverage/
+node_modules/
+npm-debug.log
+.nyc_output
+lib
+lib_test
+serverless-package/
+docs/.vuepress/dist/*
+.git
+.rpt2_cache
+dist/*

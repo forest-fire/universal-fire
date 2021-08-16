@@ -55,7 +55,7 @@ import { Mock, SchemaCallback } from 'firemock';
 
 const personMock: SchemaCallback = (h) => () => ({
   name: h.faker.name.firstName + ' ' + h.faker.name.lastName,
-  age: h.faker.random.number({ min: 1, max: 80 }),
+  age: h.faker.datatype.number({ min: 1, max: 80 }),
 });
 ```
 
@@ -71,7 +71,7 @@ export interface IPerson {
 
 const personMock: SchemaCallback<IPerson> = (h) => () => ({
   name: h.faker.name.firstName + ' ' + h.faker.name.lastName,
-  age: h.faker.random.number({ min: 1, max: 80 }),
+  age: h.faker.datatype.number({ min: 1, max: 80 }),
 });
 ```
 

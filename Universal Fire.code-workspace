@@ -1,0 +1,88 @@
+{
+  "folders": [
+    {
+      "name": "✨ root",
+      "path": "."
+    },
+    {
+      "name": "🔥 universal-fire",
+      "path": "packages/universal-fire"
+    },
+    {
+      "name": "🚀 firemodel",
+      "path": "packages/firemodel"
+    },
+    {
+      "name": "🎁 vuex-plugin-firemodel",
+      "path": "packages/vuex-plugin"
+    },
+    {
+      "name": "🤖 firemock",
+      "path": "packages/firemock"
+    },
+    {
+      "name": "🗳 @forest-fire/fixture",
+      "path": "packages/fixture"
+    },
+    {
+      "name": "📦 @forest-fire/firestore-db",
+      "path": "packages/firestore-db"
+    },
+    {
+      "name": "📦 @forest-fire/real-time-db",
+      "path": "packages/real-time-db"
+    },
+    {
+      "name": "📦 @forest-fire/firestore-admin",
+      "path": "packages/firestore-admin"
+    },
+    {
+      "name": "📦 @forest-fire/firestore-client",
+      "path": "packages/firestore-client"
+    },
+
+    {
+      "name": "📦 @forest-fire/real-time-admin",
+      "path": "packages/real-time-admin"
+    },
+    {
+      "name": "📦 @forest-fire/real-time-client",
+      "path": "packages/real-time-client"
+    },
+    {
+      "name": "🏷 @forest-fire/types",
+      "path": "packages/types"
+    },
+
+    {
+      "name": "⚙️ @forest-fire/serialized-query",
+      "path": "packages/serialized-query"
+    },
+    {
+      "name": "⚙️ @forest-fire/utility",
+      "path": "packages/utility"
+    },
+    {
+      "name": "📔 Documentation",
+      "path": "packages/docs"
+    }
+  ],
+  "settings": {
+    "monorepoWorkspace.folders.prefix.unknown": "⚠️ ",
+    "files.exclude": {
+      "node_modules/": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/*.code-search": true
+    },
+    "jest.disabledWorkspaceFolders": ["/", "/packages/vuex-plugin"],
+    "jest.enableCodeLens": true,
+    "jest.autoRun": { "watch": false }
+  },
+  "extensions": {
+    "recommendations": ["q.typescript-mono-repo-import-helper"]
+  },
+  "name": "Universal Fire"
+}

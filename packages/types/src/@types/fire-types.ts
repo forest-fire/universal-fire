@@ -1,4 +1,4 @@
-import { User, UserInfo } from '@firebase/auth-types';
+import { User } from '@firebase/auth-types';
 import type { IDictionary } from 'common-types';
 import type {
   IServiceAccount,
@@ -8,7 +8,7 @@ import type {
 } from '../index';
 import { IMockDelayedState, IMockServerOptions } from './db-mocking/index';
 
-export type FakerStatic = typeof import('faker');
+export type IFakerStatic = typeof import('faker');
 
 export const enum AuthProviderName {
   emailPassword = 'emailPassword',
@@ -39,7 +39,7 @@ export interface IAuthProviders {
  * avoid the circular dependency.
  */
 export interface ISimplifiedMockApi extends IDictionary {
-  faker: FakerStatic;
+  faker: IFakerStatic;
   generate: () => void;
 }
 
@@ -56,12 +56,7 @@ export interface IMockAuthConfig {
 
 export interface IMockConfigOptions {
   auth?: IMockAuthConfig;
-  /**
-   * Sets the initial state of the mock database, or optionally you can
-   * pass in an async function which will resolve into the state of the
-   * database.
-   */
-  db?: IDictionary | AsyncMockData;
+  db?: IDatabaseConfig;
 }
 
 /**
@@ -114,7 +109,7 @@ export interface IMockUserRecord extends UserRecord {
  * parts are un-implementated currently) as well as extending
  * to add an "administrative" API for mocking.
  */
-export interface IMockAuth extends IClientAuth, IAuthProviders {}
+export interface IMockAuth extends IClientAuth, IAuthProviders { }
 
 /**
  * A basic configuration for a user that allows default values to fill in some of
@@ -140,9 +135,9 @@ export type IMockUser = Omit<
 export type DebuggingCallback = (message: string) => void;
 
 /** an _async_ mock function which returns a dictionary data structure */
-export type AsyncMockData<T extends IDictionary = IDictionary> = () => Promise<
-  T
->;
+export type AsyncMockData<
+  T extends IDictionary = IDictionary
+  > = () => Promise<T>;
 
 export interface IFirebaseBaseConfig {
   /** Flag to set debugging override from logging configuration. */
@@ -156,7 +151,7 @@ export interface IFirebaseBaseConfig {
    */
   databaseURL?: string;
   apiKey?: string;
-  logging?: any;
+  logging?: unknown;
   /** Override the default timeout of 5 seconds. */
   timeout?: number;
   /**
@@ -225,9 +220,9 @@ export type IDatabaseConfig = IAdminConfig | IClientConfig | IMockConfig;
  * provided by the `event-emitter` **npm** module are are abstracted away.
  */
 export interface IEmitter {
-  emit: (event: string | symbol, ...args: any[]) => boolean;
-  on: (event: string, value: any) => any;
-  once: (event: string, value: any) => any;
+  emit: (event: string | symbol, ...args: unknown[]) => boolean;
+  on: (event: string, value: unknown) => unknown;
+  once: (event: string, value: unknown) => unknown;
 }
 
 /**
@@ -241,10 +236,26 @@ export enum SDK {
   RealTimeClient = 'RealTimeClient',
 }
 
+/**
+ * SDK's that Universal-Fire supports
+ */
+export type ISdk = keyof typeof SDK;
+
+export type IFirestoreSdk = "FirestoreAdmin" | "FirestoreClient";
+export type IRtdbSdk = "RealTimeAdmin" | "RealTimeClient";
+/**
+ * The SDK types which support a _admin_ API connection to the
+ * underlying database.
+ */
+export type AdminSdk = "FirestoreAdmin" | "RealTimeAdmin";
+export type ClientSdk = "FirestoreClient" | "RealTimeClient";
+
 export enum Database {
   Firestore = 'Firestore',
   RTDB = 'RTDB',
 }
+
+export type IDb = keyof typeof Database;
 
 export enum ApiKind {
   admin = 'admin',

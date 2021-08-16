@@ -1,32 +1,27 @@
 import { timestring } from 'common-types';
-import {
-  IFirestoreDbEvent,
-  IFirestoreQuerySnapshot,
-  IRtdbDataSnapshot,
-  IRtdbDbEvent,
-} from '../fire-proxies';
-import { ISerializedQuery } from '../serialized-query';
+import { ISerializedQuery } from '../query';
+import { ISdk } from '../fire-types';
+import { EventFrom, SnapshotFrom } from '../database';
 
 export interface IMockListener<
-  TEvent extends IRtdbDbEvent | IFirestoreDbEvent,
-  TSnap extends IRtdbDataSnapshot | IFirestoreQuerySnapshot
-> {
+  TSdk extends ISdk,
+  > {
   /** string uniquely identifying the listener */
   id: string;
   /** a timestamp indicating when listener was created */
   timestamp: timestring;
   /** the _query_ the listener is based off of */
-  query: ISerializedQuery;
+  query: ISerializedQuery<TSdk>;
   /**
    * The event type -- which is specific the database type -- which this listener
    * will respond to.
    */
-  eventType: TEvent;
+  eventType: EventFrom<TSdk>;
   /**
    * The callback which will be called if the `query` has the record/path "in scope"
    * and the `eventType` matches.
    */
-  callback: (snap: TSnap, b?: null | string) => any;
+  callback: <T = unknown>(snap: SnapshotFrom<TSdk>, b?: null | string) => T;
   /**
    * Conditionally cancel the callback with _another_ callback function that responds to errors
    */
@@ -34,5 +29,5 @@ export interface IMockListener<
   /**
    * Provide any additional context needed to the primary event callback
    */
-  context?: object | null;
+  context?: Record<string, unknown> | null;
 }

@@ -1,5 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
-  "files": ["global.d.ts"],
-  "include": ["src", "global.d.ts", "test"]
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  },
+  "include": ["src", "test"]
 }

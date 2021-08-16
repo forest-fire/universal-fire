@@ -1,6 +1,10 @@
 import type { FirestoreDb } from './index';
-import type { AbstractedDatabase } from '@forest-fire/abstracted-database';
-import { IFirestoreDbEvent, IAbstractedEvent } from '@forest-fire/types';
+import {
+  IFirestoreDbEvent,
+  IAbstractedEvent,
+  IDatabaseSdk,
+  IFirestoreSdk,
+} from '@forest-fire/types';
 
 export const VALID_FIRESTORE_EVENTS = ['added', 'removed', 'modified'];
 
@@ -8,7 +12,8 @@ export const VALID_FIRESTORE_EVENTS = ['added', 'removed', 'modified'];
  * Because Typescript can't type a _chain_ of dependencies (aka., A => B => C),
  * we have created this type represents the full typing of `RealTimeDb`
  */
-export type IFirestoreDb = FirestoreDb & AbstractedDatabase;
+export type IFirestoreDb<TSdk extends IFirestoreSdk> = FirestoreDb<TSdk> &
+  IDatabaseSdk<IFirestoreSdk>;
 
 /**
  * Validates that all events passed in are valid events for

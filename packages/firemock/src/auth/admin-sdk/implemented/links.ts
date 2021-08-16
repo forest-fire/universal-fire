@@ -1,11 +1,16 @@
-import type { ActionCodeSettings, IAdminAuth } from "@forest-fire/types";
+import type {
+  ActionCodeSettings,
+  IAdminAuth,
+  IMockAuthMgmt,
+  AdminSdk
+} from '@forest-fire/types';
 
-export const links: Partial<IAdminAuth> = {
+export const links: (api: IMockAuthMgmt<AdminSdk>) => Partial<IAdminAuth> = (api) => ({
   // https://firebase.google.com/docs/reference/admin/node/admin.auth.Auth#generate-email-verification-link
-  async generateEmailVerificationLink(
-    email: string,
-    actionCodeSetting?: ActionCodeSettings
+  generateEmailVerificationLink(
+    _email: string,
+    _actionCodeSetting?: ActionCodeSettings
   ): Promise<string> {
-    return "";
+    throw new Error('not implemented');
   },
-};
+});

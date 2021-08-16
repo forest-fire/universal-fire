@@ -1,0 +1,16 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "test/**/*.js": { "when": "$(basename).ts" },
+    "lib/*": true,
+    ".rpt2_cache/": true,
+    ".nyc_output/": true,
+    "coverage": true
+  },
+  "[markdown]": {
+    "togglequotes.chars": ["\"", "'", "`"],
+    "editor.formatOnSave": false
+  }
+}

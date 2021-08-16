@@ -15,26 +15,29 @@ import {
   isMockConfig,
   FirebaseNamespace,
   IClientFirestoreDatabase,
-  IFirestoreClient,
   ApiKind,
+  Database,
 } from '@forest-fire/types';
 
-export class FirestoreClient extends FirestoreDb implements IFirestoreClient {
+export class FirestoreClient extends FirestoreDb<'FirestoreClient'> {
   public readonly sdk: SDK.FirestoreClient = SDK.FirestoreClient;
   public readonly apiKind: ApiKind.client = ApiKind.client;
   public readonly isAdminApi = false;
 
-  static async connect(config: IClientConfig | IMockConfig) {
+  static async connect(
+    config: IClientConfig | IMockConfig
+  ): Promise<FirestoreClient> {
     const obj = new FirestoreClient(config);
     await obj.connect();
     return obj;
   }
 
   protected _auth?: IClientAuth;
-  declare protected _app: IClientApp;
-  protected _firestore: any;
-  declare protected _config: IClientConfig | IMockConfig;
+  protected _app!: IClientApp;
+  protected _config: IClientConfig | IMockConfig;
   protected _authProviders: FirebaseNamespace['auth'];
+
+  public dbType: 'Firestore' = Database.Firestore;
 
   constructor(config?: IClientConfig | IMockConfig) {
     super();
@@ -52,7 +55,7 @@ export class FirestoreClient extends FirestoreDb implements IFirestoreClient {
     this._config = config;
   }
 
-  public async connect(): Promise<FirestoreClient> {
+  public async connect(): Promise<void> {
     if (isMockConfig(this._config)) {
       await this._connectMockDb(this._config);
     } else if (isClientConfig(this._config)) {
@@ -64,8 +67,6 @@ export class FirestoreClient extends FirestoreDb implements IFirestoreClient {
         )}`
       );
     }
-
-    return this;
   }
 
   public async auth(): Promise<IClientAuth> {
@@ -79,16 +80,17 @@ export class FirestoreClient extends FirestoreDb implements IFirestoreClient {
     if (!this._app.auth) {
       await this.loadAuthApi();
     }
-    this._auth = this._app.auth!() as IClientAuth;
+    this._auth = this._app.auth() as IClientAuth;
     return this._auth;
   }
 
-  protected async loadFirebaseAppApi() {
-    return ((await import('@firebase/app')) as unknown) as IClientApp;
+  protected async loadFirebaseAppApi(): Promise<IClientApp> {
+    return (await import('@firebase/app')) as unknown as IClientApp;
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   protected async loadAuthApi(): Promise<IClientAuth> {
-    return (import('@firebase/auth') as unknown) as IClientAuth;
+    return import('@firebase/auth') as unknown as IClientAuth;
   }
 
   /**
@@ -96,11 +98,12 @@ export class FirestoreClient extends FirestoreDb implements IFirestoreClient {
    * firestore function available off the Firebase App API which provides
    * us instances of the of the Firestore API.
    */
+  // eslint-disable-next-line @typescript-eslint/require-await
   protected async _loadFirestoreApi(): Promise<IClientFirestoreDatabase> {
     try {
-      return (import(
+      return import(
         '@firebase/firestore'
-      ) as unknown) as IClientFirestoreDatabase;
+      ) as unknown as IClientFirestoreDatabase;
     } catch (e) {
       throw new FireError(
         `An attempt to load the "@firebase/firestore" peer dependency failed, this probably means that your application has not installed this required dependency!`,
@@ -113,39 +116,38 @@ export class FirestoreClient extends FirestoreDb implements IFirestoreClient {
    * The steps needed to connect a database to a Firemock
    * mocked DB.
    */
-  protected async _connectMockDb(config: IMockConfig) {
-    await this.getFiremock({
-      db: config.mockData || {},
-      auth: { providers: [], ...config.mockAuth },
-    });
-    this._authProviders = this._mock.authProviders;
+  // eslint-disable-next-line @typescript-eslint/require-await
+  protected async _connectMockDb(_config: IMockConfig): Promise<unknown> {
+    throw new FireError(
+      'The mock database is not currently available for Firestore!',
+      'FirestoreClient/not-implemented'
+    );
   }
 
-  protected async _connectRealDb(config: IClientConfig) {
+  protected async _connectRealDb(config: IClientConfig): Promise<void> {
     if (!this._isConnected) {
       await this._loadFirestoreApi();
       let firebase: FirebaseNamespace & {
-        firestore: (appOptions?: any) => IClientFirestoreDatabase;
+        firestore: (appOptions?: unknown) => IClientFirestoreDatabase;
         auth: () => IClientAuth | undefined;
       };
       if (config.useAuth) {
         this._auth = await this.loadAuthApi();
-        firebase = ((await this.loadFirebaseAppApi()) as unknown) as FirebaseNamespace & {
-          firestore: (appOptions?: any) => IClientFirestoreDatabase;
-          auth: () => IClientAuth;
-        };
+        firebase =
+          (await this.loadFirebaseAppApi()) as unknown as FirebaseNamespace & {
+            firestore: (appOptions?: unknown) => IClientFirestoreDatabase;
+            auth: () => IClientAuth;
+          };
       } else {
-        firebase = ((await this.loadFirebaseAppApi()) as unknown) as FirebaseNamespace & {
-          firestore: (appOptions?: any) => IClientFirestoreDatabase;
-          auth: undefined;
-        };
+        firebase =
+          (await this.loadFirebaseAppApi()) as unknown as FirebaseNamespace & {
+            firestore: (appOptions?: unknown) => IClientFirestoreDatabase;
+            auth: undefined;
+          };
       }
       const runningApps = getRunningApps(firebase.apps);
       this._app = runningApps.includes(config.name)
-        ? (getRunningFirebaseApp<IClientApp>(
-            config.name,
-            firebase.apps
-          ) as IClientApp)
+        ? getRunningFirebaseApp<IClientApp>(config.name, firebase.apps)
         : firebase.initializeApp(config, config.name);
       this._database = firebase.firestore(this._app);
     } else {

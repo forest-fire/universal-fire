@@ -60,17 +60,24 @@ export type IClientApp = import('@firebase/app-types').FirebaseApp;
 
 //#region Client Rtdb API
 export type IClientRtdbDatabase = import('@firebase/database-types').FirebaseDatabase;
-export type IRealTimeQuery = import('@firebase/database-types').Query;
-export type IRtdbDataSnapshot = import('@firebase/database-types').DataSnapshot;
+
 export type IRtdbDbEvent = import('@firebase/database-types').EventType;
 export type IRtdbThenableReference = import('@firebase/database-types').ThenableReference;
 //#endregion Client Rtdb API
 
 //#region Client Firestore API
-export type IClientFirestoreDatabase = import('@firebase/firestore-types').FirebaseFirestore;
-export type IFirestoreDbEvent = import('@firebase/firestore-types').DocumentChangeType;
-export type IFirestoreQuery = import('@firebase/firestore-types').Query;
-export type IFirestoreQuerySnapshot = import('@firebase/firestore-types').QuerySnapshot;
+import {
+  FirebaseFirestore,
+  DocumentChangeType,
+  CollectionReference,
+  DocumentData,
+} from '@firebase/firestore-types';
+
+export type IDocumentData = DocumentData;
+export type IClientFirestoreDatabase = FirebaseFirestore;
+export type IFirestoreDbEvent = DocumentChangeType;
+export type IFirestoreCollectionRef<T> = CollectionReference<T>;
+
 //#endregion Client Firestore API
 
 //#region Admin Auth API
@@ -96,7 +103,7 @@ export interface IAdminDatabaseApi {
 }
 /** the Admin SDK's typing for `Reference` */
 export type IRtdbAdminReference = admin.database.Reference;
-export type IRtdbAdminQuery = admin.database.Reference;
+// export type IRtdbAdminQuery = admin.database.Query;
 
 export interface IAdminAuthApi {
   ActionCodeSettings: admin.auth.ActionCodeSettings;
@@ -186,8 +193,8 @@ export interface IAdminFirebaseNamespace {
   initializeApp: (options?: admin.AppOptions, name?: string) => admin.app.App;
   AppOptions: admin.AppOptions;
   database: () => IAdminDatabaseApi;
-  firestore: (app?: any) => IAdminFirestoreApi;
-  auth: ((app?: any) => IAdminAuth) & IAdminAuthApi;
+  firestore: (app?: unknown) => IAdminFirestoreApi;
+  auth: ((app?: unknown) => IAdminAuth) & IAdminAuthApi;
   messaging: () => IAdminMessagingApi;
   serviceAccount: admin.ServiceAccount;
   GoogleOAuthAccessToken: admin.GoogleOAuthAccessToken;
