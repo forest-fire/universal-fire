@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-admin",
-  "version": "0.60.1",
+  "version": "0.60.2",
   "description": "Helpful abstraction on the Firebase admin API",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
@@ -30,7 +30,7 @@
     "docs": "vuepress docs"
   },
   "devDependencies": {
-    "@forest-fire/fixture": "^0.60.1",
+    "@forest-fire/fixture": "^0.60.2",
     "@types/js-yaml": "^4.0.2",
     "@types/lodash": "^4.14.171",
     "@types/test-console": "^1.1.1",
@@ -49,13 +49,13 @@
     "typed-conversions": "^0.12.0"
   },
   "optionalDependencies": {
-    "firemock": "^0.60.1"
+    "firemock": "^0.60.2"
   },
   "dependencies": {
-    "@forest-fire/real-time-db": "^0.60.1",
-    "@forest-fire/serialized-query": "^0.60.1",
-    "@forest-fire/types": "^0.60.1",
-    "@forest-fire/utility": "^0.60.1",
+    "@forest-fire/real-time-db": "^0.60.2",
+    "@forest-fire/serialized-query": "^0.60.2",
+    "@forest-fire/types": "^0.60.2",
+    "@forest-fire/utility": "^0.60.2",
     "is-gzip": "^2.0.0"
   },
   "engines": {
