@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "firebase-admin": ">= 8.13.0",
-    "firemock": "^0.59.2"
+    "firemock": "^0.60.0"
   },
   "dependencies": {
     "@forest-fire/firestore-db": "^0.60.0",
