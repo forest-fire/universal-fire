@@ -1,7 +1,6 @@
 {
   "name": "vuex-plugin-firemodel",
   "version": "1.0.0-beta.138",
-  "private": true,
   "description": "A Vuex plugin which reponds to all FireModel actions as well as providing mutations which can be imported by your state tree.",
   "keywords": [
     "firebase",
@@ -53,7 +52,7 @@
   "dependencies": {
     "fast-copy": "^2.1.0",
     "fast-equals": "^2.0.0",
-    "firemock": "*"
+    "firemock": "^0.60.0"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
@@ -76,7 +75,7 @@
     "@vuepress/plugin-medium-zoom": "^1.8.1",
     "@vuepress/plugin-pwa": "^1.8.1",
     "async-shelljs": "^0.1.4",
-    "common-types": "*",
+    "common-types": "1.28.2",
     "dd": "^0.12.3",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
@@ -88,7 +87,7 @@
     "jest": "^27.0.6",
     "jest-extended": "^0.11.5",
     "js-cookie": "^3.0.0-rc.0",
-    "madge": "*",
+    "madge": "5.0.1",
     "native-dash": "^1.18.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1",
@@ -101,26 +100,26 @@
     "typed-conversions": "^0.12.0",
     "typescript": "^4.3.5",
     "typescript-transform-paths": "^1.1.14",
-    "universal-fire": "*",
+    "universal-fire": "^0.60.0",
     "vuepress": "^1.8.2",
     "vuepress-plugin-container": "^2.1.4",
     "vuex": "^3.5.1",
     "sinon": "^11.1.2",
-    "@forest-fire/types": "*",
-    "firemodel": "*",
-    "@forest-fire/real-time-client": "*"
+    "@forest-fire/types": "^0.60.0",
+    "firemodel": "^0.60.0",
+    "@forest-fire/real-time-client": "^0.60.0"
   },
   "peerDependencies": {
-    "common-types": "^1.27.0",
-    "firemodel": "*",
+    "common-types": "^1.28.2",
+    "firemodel": "^0.60.0",
     "js-cookie": "^3.0.0-rc.0",
     "native-dash": "^1.18.4",
     "typed-conversions": "^0.12.0",
-    "universal-fire": "*",
+    "universal-fire": "^0.60.0",
     "vue": "^2.6.11",
     "vuex": "^3.5.1",
-    "@forest-fire/types": "*",
-    "firemock": "*"
+    "@forest-fire/types": "^0.60.0",
+    "firemock": "^0.60.0"
   },
   "engines": {
     "node": ">=10.0.0"
