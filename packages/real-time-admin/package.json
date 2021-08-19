@@ -30,7 +30,6 @@
     "docs": "vuepress docs"
   },
   "peerDependencies": {
-    "firebase-admin": "9.4.1",
     "firemock": "^0.60.3",
     "typed-conversions": "^0.12.0",
     "@forest-fire/serialized-query": "^0.60.3",
@@ -39,7 +38,8 @@
   },
   "dependencies": {
     "@forest-fire/real-time-db": "^0.60.3",
-    "is-gzip": "^2.0.0"
+    "is-gzip": "^2.0.0",
+    "firebase-admin": "9.4.1"
   },
   "engines": {
     "node": ">=12"
