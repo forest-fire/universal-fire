@@ -21,16 +21,9 @@
     "build": "scripty"
   },
   "peerDependencies": {
-    "@forest-fire/types": "^0.60.2",
-    "is-gzip": "^2.0.0",
-    "reflect-metadata": "0.1.13"
-  },
-  "devDependencies": {
     "@forest-fire/types": "^0.60.3",
     "is-gzip": "^2.0.0",
-    "jest": "^27.0.6",
-    "reflect-metadata": "0.1.13",
-    "typescript": "^4.3.5"
+    "reflect-metadata": "0.1.13"
   },
   "license": "MIT",
   "gitHead": "17c21f30b0bc51984dd3e24d14f87f742b8fe0bc"

@@ -29,32 +29,17 @@
     "test": "scripty",
     "docs": "vuepress docs"
   },
-  "devDependencies": {
-    "@forest-fire/fixture": "^0.60.3",
-    "@types/js-yaml": "^4.0.2",
-    "@types/lodash": "^4.14.171",
-    "@types/test-console": "^1.1.1",
-    "firebase-admin": "9.4.1",
-    "firemock": "^0.60.3",
-    "jest": "^27.0.6",
-    "jest-extended": "^0.11.5",
-    "js-yaml": "^4.1.0",
-    "lodash": "^4.17.21",
-    "test-console": "^2.0.0",
-    "ts-jest": "^27.0.3",
-    "typed-conversions": "^0.12.0"
-  },
   "peerDependencies": {
-    "firebase-admin": "9.4.1",
-    "firemock": "^0.60.2",
-    "typed-conversions": "^0.12.0"
+    "firemock": "^0.60.3",
+    "typed-conversions": "^0.12.0",
+    "@forest-fire/serialized-query": "^0.60.3",
+    "@forest-fire/types": "^0.60.3",
+    "@forest-fire/utility": "^0.60.3"
   },
   "dependencies": {
     "@forest-fire/real-time-db": "^0.60.3",
-    "@forest-fire/serialized-query": "^0.60.3",
-    "@forest-fire/types": "^0.60.3",
-    "@forest-fire/utility": "^0.60.3",
-    "is-gzip": "^2.0.0"
+    "is-gzip": "^2.0.0",
+    "firebase-admin": "9.4.1"
   },
   "engines": {
     "node": ">=12"

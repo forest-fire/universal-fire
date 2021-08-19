@@ -3609,7 +3609,7 @@ common-tags@^1.8.0:
   resolved "https://registry.npmjs.org/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
   integrity sha512-6P6g0uetGpW/sdyUy/iQQCbFF0kWVMSIVSyYz7Zgjcgh8mgw8PQzDNZeyZ5DQ2gM7LBoZPHmnjz8rUthkBG5tw==
 
-common-types@*, "common-types@> 1.15.0", common-types@^1.15.6, common-types@^1.15.8, common-types@^1.25.0, common-types@^1.26.0, common-types@^1.26.2:
+common-types@1.28.2, "common-types@> 1.15.0", common-types@^1.15.6, common-types@^1.15.8, common-types@^1.25.0, common-types@^1.26.0, common-types@^1.26.2:
   version "1.28.2"
   resolved "https://registry.npmjs.org/common-types/-/common-types-1.28.2.tgz#09b6bcf48c5aede67f06adc050b63cd5371cc8c7"
   integrity sha512-NyxLB6VzJ1RhTbtZ56mOa5m7bhjhw6Bb59DEF+Qwt6yne2KKtFV8L7GCVv/fJjltOuuNJAUwpajMjBx7q31rgg==
@@ -7894,7 +7894,7 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-madge@*:
+madge@5.0.1:
   version "5.0.1"
   resolved "https://registry.npmjs.org/madge/-/madge-5.0.1.tgz#2096d9006558ea0669b3ade89c2cda708a24e22b"
   integrity sha512-krmSWL9Hkgub74bOjnjWRoFPAJvPwSG6Dbta06qhWOq6X/n/FPzO3ESZvbFYVIvG2g4UHXvCJN1b+RZLaSs9nA==
