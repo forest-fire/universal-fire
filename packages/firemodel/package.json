@@ -1,6 +1,6 @@
 {
   "name": "firemodel",
-  "version": "0.60.3",
+  "version": "0.60.4",
   "description": "Modeling, Access, and Mocking for Firebase Projects",
   "keywords": [
     "typescript",
