@@ -1,7 +1,7 @@
 import type { IClientAuth } from 'universal-fire';
-import type { IMockAuth } from 'firemock';
 import { getDatabase } from './database';
 
+type IMockAuth = import('firemock').IMockAuth;
 let _auth: IClientAuth | IMockAuth;
 
 export async function getAuth(): Promise<IClientAuth | IMockAuth> {

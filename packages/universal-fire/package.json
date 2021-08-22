@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.60.3",
+  "version": "0.60.4",
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -26,18 +26,13 @@
     "lint": "scripty",
     "test": "scripty"
   },
-  "devDependencies": {
-    "eslint": "^7.29.0",
-    "jest": "^27.0.6",
-    "typescript": "^4.1.3"
-  },
   "dependencies": {
-    "@forest-fire/firestore-admin": "^0.60.3",
-    "@forest-fire/firestore-client": "^0.60.3",
-    "@forest-fire/real-time-admin": "^0.60.3",
-    "@forest-fire/real-time-client": "^0.60.3",
-    "@forest-fire/serialized-query": "^0.60.3",
-    "@forest-fire/types": "^0.60.3"
+    "@forest-fire/firestore-admin": "^0.60.4",
+    "@forest-fire/firestore-client": "^0.60.4",
+    "@forest-fire/real-time-admin": "^0.60.4",
+    "@forest-fire/real-time-client": "^0.60.4",
+    "@forest-fire/serialized-query": "^0.60.4",
+    "@forest-fire/types": "^0.60.4"
   },
   "license": "MIT",
   "gitHead": "17c21f30b0bc51984dd3e24d14f87f742b8fe0bc"

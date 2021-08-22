@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-db",
-  "version": "0.60.3",
+  "version": "0.60.4",
   "description": "Core functional library supporting 'abstracted-admin' and 'abstracted-client'",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/abstracted-firebase",
@@ -30,14 +30,14 @@
     "watch:cjs": "tsc -P tsconfig.es.json -w"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.60.3",
-    "@forest-fire/types": "^0.60.3",
-    "@forest-fire/utility": "^0.60.3",
+    "@forest-fire/utility": "^0.60.4",
     "brilliant-errors": "^0.3.1",
-    "firemock": "^0.60.3"
+    "typed-conversions": "^0.12.0"
   },
   "peerDependencies": {
-    "typed-conversions": "^0.12.0"
+    "@forest-fire/serialized-query": "^0.60.3",
+    "@forest-fire/types": "^0.60.3",
+    "firemock": "^0.60.3"
   },
   "engines": {
     "node": ">=12"
@@ -57,15 +57,5 @@
     ],
     "reporter": [],
     "all": true
-  },
-  "devDependencies": {
-    "@types/js-yaml": "^4.0.2",
-    "@types/lodash": "^4.14.171",
-    "@types/test-console": "^1.1.1",
-    "jest": "^27.0.6",
-    "js-yaml": "^4.1.0",
-    "lodash": "^4.17.21",
-    "test-console": "^2.0.0",
-    "typed-conversions": "^0.12.0"
   }
 }

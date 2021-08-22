@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/fixture",
-  "version": "0.60.3",
+  "version": "0.60.4",
   "description": "Build fixtures files/data for your firebase database",
   "license": "MIT",
   "author": "Ken Snyder<ken@ken.net>",
@@ -30,25 +30,15 @@
     "lint": "scripty",
     "test": "scripty"
   },
-  "devDependencies": {
+  "peerDependencies": {
     "@forest-fire/types": "^0.60.3",
-    "@types/faker": "5.5.7",
+    "faker": "5.5.3",
     "firemock": "^0.60.3",
     "firemodel": "^0.60.3",
-    "jest": "^27.0.6",
     "native-dash": "1.18.2",
-    "scripty": "2.0.0",
     "universal-fire": "^0.60.3"
   },
-  "peerDependencies": {
-    "@forest-fire/types": "^0.60.2",
-    "firemock": "^0.60.2",
-    "firemodel": "^0.60.2",
-    "native-dash": "1.18.2",
-    "universal-fire": "^0.60.2"
-  },
   "dependencies": {
-    "faker": "5.5.3",
     "firebase-key": "2.0.2"
   }
 }

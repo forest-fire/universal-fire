@@ -1,6 +1,6 @@
 {
   "name": "firemock",
-  "version": "0.60.3",
+  "version": "0.60.4",
   "description": "firemock",
   "license": "MIT",
   "repository": "git@github.com:forest-fire/firemock.git",
@@ -28,31 +28,10 @@
     "test": "scripty"
   },
   "devDependencies": {
-    "@forest-fire/fixture": "^0.60.3",
-    "@forest-fire/real-time-client": "^0.60.3",
-    "@types/deepmerge": "^2.2.0",
-    "@types/test-console": "^1.1.1",
-    "@vuepress/plugin-back-to-top": "^1.7.1",
-    "@vuepress/plugin-last-updated": "^1.7.1",
-    "@vuepress/plugin-medium-zoom": "^1.7.1",
-    "@vuepress/plugin-pwa": "^1.7.1",
-    "eledoc": "^0.2.1",
-    "firebase-key": "^2.0.2",
-    "firemock": "^0.60.3",
-    "jest": "^27.0.6",
-    "native-dash": "1.18.4",
-    "scripty": "^2.0.0",
-    "test-console": "^2.0.0",
-    "ttypescript": "^1.5.12",
-    "typed-conversions": "~0.12.0",
-    "typedoc": "^0.19.0",
-    "typescript": "^4.0.2",
-    "typescript-transform-paths": "^1.1.14",
-    "vuepress": "^1.7.1"
+    "@forest-fire/fixture": "file:../fixture",
+    "@forest-fire/real-time-client": "file:../real-time-client"
   },
   "dependencies": {
-    "@forest-fire/serialized-query": "^0.60.3",
-    "@forest-fire/types": "^0.60.3",
     "brilliant-errors": "^0.3.1",
     "deepmerge": "^4.2.2",
     "email-validator": "^2.0.4",
@@ -60,6 +39,8 @@
     "fast-equals": "^2.0.0"
   },
   "peerDependencies": {
+    "@forest-fire/serialized-query": "^0.60.3",
+    "@forest-fire/types": "^0.60.3",
     "firebase-key": "^2.0.2",
     "native-dash": "1.18.4",
     "typed-conversions": "~0.12.0"
