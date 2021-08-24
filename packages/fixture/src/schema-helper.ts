@@ -25,7 +25,7 @@ export class SchemaHelper<T = any> implements ISchemaHelper<T> {
       this._faker = faker;
     }
   }
-  public get faker(): Faker.FakerStatic {
+  public get faker(): IFakerStatic {
     return this._faker;
   }
 }
