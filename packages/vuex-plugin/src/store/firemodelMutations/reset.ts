@@ -4,8 +4,9 @@ import { MutationTree } from "vuex";
 import Vue from "vue";
 import { getInitialState } from "~/util";
 import { IDictionary } from 'common-types';
+import { IState } from '~/types';
 
-export function reset<TState extends IDictionary<T[]>, T extends Model>(
+export function reset<TState extends IState<T>, T extends Model>(
   propOffset?: keyof TState & string
 ): MutationTree<TState> {
   const offset = !propOffset ? ('all' as keyof TState & string) : propOffset;

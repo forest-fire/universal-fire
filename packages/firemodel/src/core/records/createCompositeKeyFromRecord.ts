@@ -10,9 +10,10 @@ import { Model } from "~/models/Model";
  * "dynamic segments" as well as an `id`; this function returns
  * an object representation of the composite key.
  */
-export function createCompositeKeyFromRecord<S extends ISdk, T extends Model = Model>(
-  rec: Record<S, T>
-): ICompositeKey<T> {
+export function createCompositeKeyFromRecord<
+  T extends Model = Model,
+  S extends ISdk = "RealTimeClient"
+>(rec: Record<T, S>): ICompositeKey<T> {
   const model = rec.data;
   if (!rec.id) {
     throw new FireModelError(
@@ -38,10 +39,11 @@ export function createCompositeKeyFromRecord<S extends ISdk, T extends Model = M
     {}
   );
 
-  return rec.dynamicPathComponents.reduce((prev) => ({
-    ...prev,
-    ...dynamicPathComponents,
-  }),
+  return rec.dynamicPathComponents.reduce(
+    (prev) => ({
+      ...prev,
+      ...dynamicPathComponents,
+    }),
     { id: rec.id }
   ) as ICompositeKey<T>;
 }

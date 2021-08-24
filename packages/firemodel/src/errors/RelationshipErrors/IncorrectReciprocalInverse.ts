@@ -5,10 +5,10 @@ import { ISdk } from "@forest-fire/types";
 import { Model } from "~/models/Model";
 import { PropertyOf } from "~/types";
 export class IncorrectReciprocalInverse<
-  S extends ISdk,
-  T extends Model
+  T extends Model,
+  S extends ISdk = "RealTimeClient"
   > extends FireModelError {
-  constructor(rec: Record<S, T>, property: PropertyOf<T>) {
+  constructor(rec: Record<T, S>, property: PropertyOf<T>) {
     super("", "firemodel/missing-reciprocal-inverse");
 
     let message: string;

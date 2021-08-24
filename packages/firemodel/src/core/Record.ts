@@ -62,7 +62,10 @@ import { Model } from "~/models/Model";
 
 //#endregion
 
-export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
+export class Record<
+  T extends Model,
+  S extends ISdk = "RealTimeClient"
+> extends FireModel<S, T> {
   //#region STATIC INTERFACE
   public static set defaultDb(db: IDatabaseSdk<ISdk>) {
     DefaultDbCache().set<IDatabaseSdk<typeof db.sdk>>(db);
@@ -99,12 +102,12 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * creates a new -- and empty -- Record object; often used in
    * conjunction with the Record's initialize() method
    */
-  public static create<T extends Model>(
+  public static create<T extends Model, S extends ISdk = "RealTimeClient">(
     model: new () => T,
-    options: IRecordOptions<ISdk> = {}
+    options: IRecordOptions<S> = {}
   ) {
-    const defaultSdk = DefaultDbCache().sdk;
-    const r = new Record<typeof defaultSdk, T>(model, options);
+    // const defaultSdk = DefaultDbCache().sdk;
+    const r = new Record<T, S>(model, options);
     if (options.silent && !r.db.isMockDb) {
       throw new FireModelError(
         `You can only add new records to the DB silently when using a Mock database!`,
@@ -161,14 +164,13 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param payload the data for the new record; this optionally can include the "id" but if left off the new record will use a firebase pushkey
    * @param options
    */
-  public static async add<T extends Model, O extends IRecordOptions<ISdk>>(
-    model: (new () => T) | string,
-    payload: IModel<T>,
-    options: O = {} as O
-  ) {
-    const defaultSdk = DefaultDbCache().sdk;
-    type SDK = typeof defaultSdk extends ISdk ? typeof defaultSdk : ISdk;
-    let r: Record<SDK, T>;
+  public static async add<
+    T extends Model,
+    O extends IRecordOptions<S>,
+    S extends ISdk = "RealTimeClient"
+  >(model: (new () => T) | string, payload: IModel<T>, options: O = {} as O) {
+    // const defaultSdk = DefaultDbCache().sdk;
+    let r: Record<T, S>;
     if (typeof model === "string") {
       model = FireModel.lookupModel(model);
     }
@@ -182,7 +184,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
           )}`
         );
       }
-      r = Record.createWith(model, payload as Partial<T>, options);
+      r = Record.createWith<T, S>(model, payload as Partial<T>, options);
 
       if (!payload.id) {
         const path = List.dbPath<Model<T>>(model, payload);
@@ -232,7 +234,11 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param updates properties to update; this is a non-destructive operation so properties not expressed will remain unchanged. Also, because values are _nullable_ you can set a property to `null` to REMOVE it from the database.
    * @param options
    */
-  public static async update<T extends Model, O extends IRecordOptions<ISdk>>(
+  public static async update<
+    T extends Model,
+    O extends IRecordOptions<S>,
+    S extends ISdk = "RealTimeClient"
+  >(
     model: new () => T,
     pk: PrimaryKey<T>,
     updates: Nullable<Partial<IModel<T>>>,
@@ -240,7 +246,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
   ) {
     let r;
     try {
-      r = await Record.get(model, pk, options);
+      r = await Record.get<T, IRecordOptions<S>, S>(model, pk, options);
       await r.update(updates);
     } catch (e) {
       const err = new Error(
@@ -261,14 +267,18 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param property the property on the record
    * @param payload the new payload you want to push into the array
    */
-  public static async pushKey<T extends Model, K extends PropertyOf<T>>(
+  public static async pushKey<
+    T extends Model,
+    K extends PropertyOf<T>,
+    S extends ISdk = "RealTimeClient"
+  >(
     model: new () => T,
     pk: PrimaryKey<T>,
     property: K,
     payload: T[K][keyof T[K]],
-    options: IRecordOptions<ISdk> = {}
+    options: IRecordOptions<S> = {}
   ) {
-    const obj = await Record.get(model, pk, options);
+    const obj = await Record.get<T, IRecordOptions<S>, S>(model, pk, options);
     return obj.pushKey(property, payload);
   }
 
@@ -294,11 +304,11 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @payload either a string representing an `id` or Composite Key or alternatively
    * a hash/dictionary of attributes that are to be set as a starting point
    */
-  public static createWith<T extends Model>(
+  public static createWith<T extends Model, S extends ISdk = "RealTimeClient">(
     model: ConstructorFor<T>,
     payload: PrimaryKey<T> | Partial<IModel<T>>,
-    options: IRecordOptions<ISdk> = {}
-  ): Record<ISdk, T> {
+    options: IRecordOptions<S> = {}
+  ): Record<T, S> {
     const rec = Record.create(model, options);
 
     if (options.setDeepRelationships === true) {
@@ -335,25 +345,34 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param id either just an "id" string or in the case of models with dynamic path prefixes you can pass in an object with the id and all dynamic prefixes
    * @param options
    */
-  public static async get<T extends Model, O extends IRecordOptions<ISdk>>(
+  public static async get<
+    T extends Model,
+    O extends IRecordOptions<S>,
+    S extends ISdk = "RealTimeClient"
+  >(
     model: new () => T,
     pk: PrimaryKey<T>,
     options: O = {} as O
-  ): Promise<Record<ISdk, T>> {
-    const record = Record.create<T>(model, options);
+  ): Promise<Record<T, S>> {
+    const record = Record.create<T, S>(model, options);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (record as any)._getFromDatabase(pk);
     return record;
   }
 
-  public static async remove<S extends ISdk, T extends Model>(
+  public static async remove<
+    T extends Model,
+    S extends ISdk = "RealTimeClient"
+  >(
     model: new () => T,
     pk: PrimaryKey<T>,
     /** if there is a known current state of this model you can avoid a DB call to get it */
-    currentState?: Record<S, T>
+    currentState?: Record<T, S>
   ) {
     // TODO: add lookup in local state to see if we can avoid DB call
-    const record = currentState ? currentState : await Record.get(model, pk);
+    const record = currentState
+      ? currentState
+      : await Record.get<T, IRecordOptions<S>, S>(model, pk);
     await record.remove();
     return record;
   }
@@ -369,14 +388,20 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param property the _property_ on the primary model which relates to another model(s)
    * @param refs one or more FK references
    */
-  public static async associate<S extends ISdk, T extends Model>(
+  public static async associate<
+    T extends Model,
+    S extends ISdk = "RealTimeClient"
+  >(
     model: ConstructorFor<T>,
     pk: PrimaryKey<T>,
     property: PropertyOf<T>,
     refs: ForeignKey | ForeignKey[],
     options: IFmRelationshipOptions<S> = {}
   ) {
-    const obj = await Record.get(model, pk);
+    const obj: Record<T, S> = await Record.get<T, IRecordOptions<S>, S>(
+      model,
+      pk
+    );
     await obj.associate(property, refs, options);
     return obj;
   }
@@ -620,7 +645,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * the composite key of a model.
    */
   public get compositeKey(): ICompositeKey<T> {
-    return createCompositeKeyFromRecord<S, T>(this);
+    return createCompositeKeyFromRecord<T, S>(this);
   }
 
   /**
@@ -798,7 +823,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * @param payload the payload of the new record
    */
   public async addAnother(payload: T, options: IRecordOptions<S> = {}) {
-    const newRecord = await Record.add(
+    const newRecord = await Record.add<T, IRecordOptions<S>, S>(
       this._modelConstructor,
       payload,
       options
@@ -1081,7 +1106,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     const now = new Date().getTime();
     fkRefs.map((ref: ForeignKey<T>) => {
       paths = [
-        ...buildRelationshipPaths(this, property, ref, {
+        ...buildRelationshipPaths<T, S>(this, property, ref, {
           now,
           altHasManyValue,
         }),
@@ -1206,7 +1231,7 @@ export class Record<S extends ISdk, T extends Model> extends FireModel<S, T> {
     if (isHasManyRelationship<S, T>(this, property)) {
       throw new NotHasOneRelationship<S, T>(this, property, "setRelationship");
     }
-    const paths = buildRelationshipPaths<S, T>(this, property, fkId, options);
+    const paths = buildRelationshipPaths<T, S>(this, property, fkId, options);
     await relationshipOperation(this, "set", property, [fkId], paths, options);
   }
 
