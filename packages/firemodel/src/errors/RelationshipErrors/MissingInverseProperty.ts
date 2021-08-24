@@ -9,12 +9,15 @@ import { PropertyOf } from "~/types";
  * When the record's META points to a inverse property on the FK; this error
  * presents when that `FK[inverseProperty]` doesn't exist in the FK's meta.
  */
-export class MissingInverseProperty<S extends ISdk, T extends Model> extends FireModelError {
+export class MissingInverseProperty<
+  T extends Model,
+  S extends ISdk = "RealTimeClient"
+> extends FireModelError {
   public from: string;
   public to: string;
   public inverseProperty: string;
 
-  constructor(rec: Record<S, T>, property: PropertyOf<T>) {
+  constructor(rec: Record<T, S>, property: PropertyOf<T>) {
     super("", "firemodel/missing-inverse-property");
 
     const fkMeta = rec.getMetaForRelationship(property);
@@ -24,7 +27,15 @@ export class MissingInverseProperty<S extends ISdk, T extends Model> extends Fir
     const pkInverse = rec.META.relationship(property).inverseProperty;
     this.inverseProperty = pkInverse;
 
-    const message = `Missing Inverse Property: the model "${this.from}" has defined a relationship with the "${this.to}" model where the FK property is "${property}" and it states that the "inverse property" is "${String(pkInverse)}" on the ${this.to} model. Unfortunately the ${this.to} model does NOT define a property called "${this.inverseProperty}".`;
+    const message = `Missing Inverse Property: the model "${
+      this.from
+    }" has defined a relationship with the "${
+      this.to
+    }" model where the FK property is "${property}" and it states that the "inverse property" is "${String(
+      pkInverse
+    )}" on the ${this.to} model. Unfortunately the ${
+      this.to
+    } model does NOT define a property called "${this.inverseProperty}".`;
     this.message = message;
   }
 }

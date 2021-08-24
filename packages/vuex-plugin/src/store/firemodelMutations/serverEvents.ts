@@ -5,8 +5,9 @@ import { FmCrudMutation } from '~/enums';
 import { MutationTree } from 'vuex';
 import { ISdk } from 'universal-fire';
 import { IDictionary } from 'common-types';
+import { IState } from '~/types';
 
-export function serverEvents<TState extends IDictionary<T[]>, T extends Model>(
+export function serverEvents<TState extends IState<T>, T extends Model>(
   propOffset?: keyof TState & string
 ): MutationTree<TState> {
   const offset = !propOffset ? ('all' as keyof T & string) : propOffset;

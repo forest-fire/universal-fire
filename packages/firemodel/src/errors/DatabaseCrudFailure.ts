@@ -5,9 +5,12 @@ import { FireModelError } from "~/errors";
 import { Record } from "~/core";
 import { capitalize } from "~/util";
 import { Model } from "~/models/Model";
-export class RecordCrudFailure<T extends Model> extends FireModelError<T> {
+export class RecordCrudFailure<
+  T extends Model,
+  S extends ISdk = "RealTimeClient"
+> extends FireModelError<T> {
   constructor(
-    rec: Record<ISdk, T>,
+    rec: Record<T, S>,
     crudAction: IFmCrudOperation,
     transactionId: string,
     e?: Error
@@ -18,8 +21,9 @@ export class RecordCrudFailure<T extends Model> extends FireModelError<T> {
     );
     const message = `Attempt to "${crudAction}" "${capitalize(
       rec.modelName
-    )}::${rec.id}" failed [ ${transactionId} ] ${e ? e.message : "for unknown reasons"
-      }`;
+    )}::${rec.id}" failed [ ${transactionId} ] ${
+      e ? e.message : "for unknown reasons"
+    }`;
     this.message = message;
     this.stack = e.stack;
   }

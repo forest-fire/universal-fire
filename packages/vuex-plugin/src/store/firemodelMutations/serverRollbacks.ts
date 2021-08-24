@@ -5,6 +5,7 @@ import { FmCrudMutation } from '~/enums';
 import { MutationTree } from 'vuex';
 import { ISdk } from 'universal-fire';
 import { IDictionary } from 'common-types';
+import { IState } from '~/types';
 
 /**
  * **serverConfirms**
@@ -17,7 +18,7 @@ import { IDictionary } from 'common-types';
  * back to what it had been before it had been optimistically set by the `local`
  * mutation.
  */
-export function serverRollbacks<TState extends IDictionary<T[]>, T extends Model>(
+export function serverRollbacks<TState extends IState<T>, T extends Model>(
   propOffset?: keyof TState & string
 ): MutationTree<TState> {
   // default to "all"

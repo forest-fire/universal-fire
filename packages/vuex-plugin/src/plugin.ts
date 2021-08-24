@@ -1,4 +1,4 @@
-import type { IFiremodelConfig, IFiremodelState, StoreWithPlugin } from '~/types';
+import type { IFiremodelConfig, StoreWithPlugin } from '~/types';
 import { addNamespace, setInitialState, storeDatabase, storePluginConfig } from '~/util';
 
 import { FireModel } from 'firemodel';
@@ -19,7 +19,10 @@ import { Store } from 'vuex';
  * @param db the database connection (provided by SDK from `universal-fire`)
  * @param config the configuration of the core services this plugin provides
  */
-export const FiremodelPlugin = <TSdk extends ISdk, TStore extends IDictionary = IDictionary>(
+export const FiremodelPlugin = <
+  TSdk extends ISdk = 'RealTimeClient',
+  TStore extends IDictionary = IDictionary
+>(
   /**
    * Provide a connection to the database with one of the SDK's provided
    * by the `universal-fire` library.

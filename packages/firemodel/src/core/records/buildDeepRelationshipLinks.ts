@@ -1,6 +1,6 @@
 import { ISdk } from "@forest-fire/types";
 import { IDictionary } from "common-types";
-import { IModel, PropertyOf } from "~/types";
+import { IModel, IRecordOptions, PropertyOf } from "~/types";
 import { Record } from "~/core";
 import { getModelMeta } from "~/util";
 import { Model } from "~/models/Model";
@@ -13,7 +13,7 @@ import { Model } from "~/models/Model";
 export async function buildDeepRelationshipLinks<
   S extends ISdk,
   T extends Model<T>
->(rec: Record<S, T>, property: keyof IModel<T> & string): Promise<void> {
+>(rec: Record<T, S>, property: keyof IModel<T> & string): Promise<void> {
   const meta = getModelMeta(rec).property(property);
   return meta.relType === "hasMany"
     ? processHasMany(rec, property)
@@ -21,10 +21,10 @@ export async function buildDeepRelationshipLinks<
 }
 
 async function processHasMany<S extends ISdk, T extends Model>(
-  rec: Record<S, T>,
+  rec: Record<T, S>,
   property: keyof IModel<T> & string
 ) {
-  const meta = getModelMeta<S, T>(rec).property(property);
+  const meta = getModelMeta<T, S>(rec).property(property);
   const fks: IDictionary = rec.get(property);
   for (const key of Object.keys(fks)) {
     const fk = fks[key as keyof typeof fks] as true | IDictionary;
@@ -54,16 +54,20 @@ async function processHasMany<S extends ISdk, T extends Model>(
 }
 
 async function processBelongsTo<S extends ISdk, T extends Model>(
-  rec: Record<S, T>,
+  rec: Record<T, S>,
   property: PropertyOf<T>
 ): Promise<void> {
   const fk = rec.get(property);
   const meta = getModelMeta(rec).property(property);
-
+  meta.fkConstructor();
   if (fk && typeof fk === "object") {
-    await Record.add(meta.fkConstructor() as new () => T[PropertyOf<T>], fk, {
-      setDeepRelationships: true,
-      db: rec.db
-    });
+    await Record.add<T[PropertyOf<T>], IRecordOptions<S>, S>(
+      meta.fkConstructor() as new () => T[PropertyOf<T>],
+      fk,
+      {
+        setDeepRelationships: true,
+        db: rec.db,
+      }
+    );
   }
 }

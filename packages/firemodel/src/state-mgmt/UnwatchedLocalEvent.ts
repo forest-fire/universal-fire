@@ -4,7 +4,7 @@ import { Model } from "~/models/Model";
 import { Record } from "~/core";
 
 export function UnwatchedLocalEvent<S extends ISdk, T extends Model>(
-  rec: Record<S, T>,
+  rec: Record<T, S>,
   event: IFmLocalEvent<T>
 ): IUnwatchedLocalEvent<T> {
   const meta: IFmRecordMeta<T> = {
