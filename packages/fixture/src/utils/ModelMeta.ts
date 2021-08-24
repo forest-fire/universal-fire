@@ -22,10 +22,16 @@ export function addModelMeta(
  *
  * @param rec a model or record which exposes META property
  */
-export function getModelMeta<S extends ISdk, T extends Model>(rec: Record<S, T>): IFmModelMeta<T> {
+export function getModelMeta<S extends ISdk, T extends Model>(
+  rec: Record<T, S>
+): IFmModelMeta<T> {
   const localMeta = rec.META;
-  const modelMeta = keys(meta).includes(rec.modelName) ? meta[rec.modelName] : {};
-  return localMeta && localMeta.properties ? localMeta : modelMeta as unknown as IFmModelMeta<T>;
+  const modelMeta = keys(meta).includes(rec.modelName)
+    ? meta[rec.modelName]
+    : {};
+  return localMeta && localMeta.properties
+    ? localMeta
+    : (modelMeta as unknown as IFmModelMeta<T>);
 }
 
 export function modelsWithMeta(): string[] {

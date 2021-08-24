@@ -5,7 +5,7 @@ import { pathJoin } from "native-dash";
 import { Model } from "~/models/Model";
 
 export function extractFksFromPaths<S extends ISdk = ISdk, T extends Model = Model>(
-  rec: Record<S, T>,
+  rec: Record<T, S>,
   prop: PropertyOf<T>,
   paths: IFmPathValuePair[]
 ): (string & keyof T)[] {
