@@ -90,7 +90,7 @@ describe("Dynamic offsets reflected in path", () => {
 });
 
 describe("Dynamic offsets work with relationships", () => {
-  let person: Record<ISdk, DeepPerson>;
+  let person: Record<DeepPerson, ISdk>;
   let db: IDatabaseSdk;
   let hobbies: List<SDK.RealTimeAdmin, Hobby>;
   beforeEach(async () => {

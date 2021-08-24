@@ -4,7 +4,7 @@ import { IMockRelationshipConfig, IMockResponse } from './mocking-types';
 import { Mock } from '~/Mock';
 
 export async function processHasOne<TSdk extends ISdk, T extends Model>(
-  source: Record<TSdk, T>,
+  source: Record<T, TSdk>,
   rel: IFmModelRelationshipMeta<T>,
   config: IMockRelationshipConfig,
   db: IDatabaseSdk<TSdk>

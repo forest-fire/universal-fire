@@ -17,7 +17,7 @@ export function addRelationships<
   M extends Model,
   D extends IDatabaseSdk<TSdk>
 >(db: D, config: IMockRelationshipConfig, _exceptions: IDictionary = {}) {
-  return async (record: Record<TSdk, M>): Promise<Array<IMockResponse<M>>> => {
+  return async (record: Record<M, TSdk>): Promise<Array<IMockResponse<M>>> => {
     const relns = record.META.relationships;
     const relnResults: Array<IMockResponse<M>> = [];
 

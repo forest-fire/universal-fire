@@ -6,7 +6,10 @@ import { ISdk } from "@forest-fire/types";
 import { SerializedQuery } from "@forest-fire/serialized-query";
 import { WatchBase } from "./WatchBase";
 import { Model } from "~/models/Model";
-export class WatchRecord<S extends ISdk = ISdk, T extends Model = Model> extends WatchBase<S, T> {
+export class WatchRecord<
+  S extends ISdk = "RealTimeClient",
+  T extends Model = Model
+> extends WatchBase<S, T> {
   public static record<T extends Model>(
     modelConstructor: new () => T,
     pk: PrimaryKey<T>,
@@ -27,7 +30,7 @@ export class WatchRecord<S extends ISdk = ISdk, T extends Model = Model> extends
     o._eventType = "value";
     o._watcherSource = "record";
 
-    const r = Record.createWith<T>(
+    const r = Record.createWith<T, ISdk>(
       modelConstructor,
       pk,
       options.db ? { db: options.db } : {}
