@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/fixture",
-  "version": "0.60.4",
+  "version": "0.60.5",
   "description": "Build fixtures files/data for your firebase database",
   "license": "MIT",
   "author": "Ken Snyder<ken@ken.net>",
