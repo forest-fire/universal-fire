@@ -31,8 +31,11 @@ import { pathJoin } from "native-dash";
  * @param property the _property_ on the `Record` which holds the FK id
  * @param fkRef the "id" for the FK which is being worked on
  */
-export function buildRelationshipPaths<S extends ISdk, T extends Model>(
-  rec: Record<S, T>,
+export function buildRelationshipPaths<
+  T extends Model,
+  S extends ISdk = "RealTimeClient"
+>(
+  rec: Record<T, S>,
   property: PropertyOf<T>,
   fkRef: ForeignKey,
   options: IFmBuildRelationshipOptions<S> = {}
@@ -42,13 +45,21 @@ export function buildRelationshipPaths<S extends ISdk, T extends Model>(
     const now = options.now || new Date().getTime();
     const operation = options.operation || "add";
     const altHasManyValue = options.altHasManyValue || true;
-    const fkModelConstructor = meta.relationship(property).fkConstructor() as ConstructorFor<T>;
+    const fkModelConstructor = meta
+      .relationship(property)
+      .fkConstructor() as ConstructorFor<T>;
     const inverseProperty = meta.relationship(property).inverseProperty;
-    const fkRecord = Record.createWith(fkModelConstructor, fkRef as Partial<T>, {
-      db: options.db || rec.db,
-    });
+    const fkRecord = Record.createWith(
+      fkModelConstructor,
+      fkRef as Partial<T>,
+      {
+        db: options.db || rec.db,
+      }
+    );
     const results: IFmPathValuePair[] = [];
-    const fkId = createCompositeKeyString(createCompositeKeyFromRecord(fkRecord));
+    const fkId = createCompositeKeyString(
+      createCompositeKeyFromRecord(fkRecord)
+    );
 
     /**
      * boolean flag indicating whether current model has a **hasMany** relationship
@@ -80,20 +91,20 @@ export function buildRelationshipPaths<S extends ISdk, T extends Model>(
       const inverseReln = fkMeta.relationship(inverseProperty);
 
       if (!inverseReln) {
-        throw new MissingInverseProperty<S, T>(rec, property);
+        throw new MissingInverseProperty<T, S>(rec, property);
       }
 
       if (
         !inverseReln.inverseProperty &&
         inverseReln.directionality === "bi-directional"
       ) {
-        throw new MissingReciprocalInverse<S, T>(rec, property);
+        throw new MissingReciprocalInverse<T, S>(rec, property);
       }
       if (
         inverseReln.inverseProperty !== property &&
         inverseReln.directionality === "bi-directional"
       ) {
-        throw new IncorrectReciprocalInverse<S, T>(rec, property);
+        throw new IncorrectReciprocalInverse<T, S>(rec, property);
       }
 
       const fkInverseIsHasManyReln = inverseProperty
@@ -110,8 +121,8 @@ export function buildRelationshipPaths<S extends ISdk, T extends Model>(
           operation === "remove"
             ? null
             : fkInverseIsHasManyReln
-              ? altHasManyValue
-              : rec.compositeKeyRef,
+            ? altHasManyValue
+            : rec.compositeKeyRef,
       });
       results.push({
         path: pathJoin(fkRecord.dbPath, "lastUpdated"),
@@ -127,6 +138,6 @@ export function buildRelationshipPaths<S extends ISdk, T extends Model>(
 
       throw e;
     }
-    throw new UnknownRelationshipProblem(e, rec, property);
+    throw new UnknownRelationshipProblem<T, S>(e, rec, property);
   }
 }

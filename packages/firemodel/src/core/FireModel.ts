@@ -24,12 +24,12 @@ const defaultDispatch: IReduxDispatch = async (context: IReduxAction) => Promise
 export class FireModel<S extends ISdk, T extends Model> {
   public static get defaultDb() {
     const db = DefaultDbCache().get();
-    return db as unknown as IDatabaseSdk<typeof db.sdk>
+    return db as unknown as IDatabaseSdk<typeof db.sdk>;
   }
 
   /**
    * Any FireModel transaction needs to connect to the database
-   * via a passed-in reference to an SDK provided by `universal-fire`. 
+   * via a passed-in reference to an SDK provided by `universal-fire`.
    * These references can be done with any/every transaction via
    * the options hash but it is often more convient to set a "fallback" or
    * "default" database to use should a given transaction not state a DB
@@ -149,19 +149,19 @@ export class FireModel<S extends ISdk, T extends Model> {
   //#region PROTECTED INTERFACE
 
   protected _getPaths(
-    rec: Record<S, T>,
+    rec: Record<T, S>,
     deltas: IFmChangedProperties<T>
   ): IDictionary {
     const added = (deltas.added || []).reduce((agg: IDictionary, curr) => {
-      agg[`${rec.dbPath}/${curr}`.replace(/\/{2,3}/, '/')] = rec.get(curr);
+      agg[`${rec.dbPath}/${curr}`.replace(/\/{2,3}/, "/")] = rec.get(curr);
       return agg;
     }, {});
     const removed = (deltas.removed || []).reduce((agg: IDictionary, curr) => {
-      agg[`${rec.dbPath}/${curr}`.replace(/\/{2,3}/, '/')] = null;
+      agg[`${rec.dbPath}/${curr}`.replace(/\/{2,3}/, "/")] = null;
       return agg;
     }, {});
     const updated = (deltas.changed || []).reduce((agg: IDictionary, curr) => {
-      agg[`${rec.dbPath}/${curr}`.replace(/\/{2,3}/, '/')] = rec.get(curr);
+      agg[`${rec.dbPath}/${curr}`.replace(/\/{2,3}/, "/")] = rec.get(curr);
       return agg;
     }, {});
 

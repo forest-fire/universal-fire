@@ -6,8 +6,9 @@ import { IFmWatchEvent, Model } from 'firemodel';
 import { MutationTree } from 'vuex';
 import Vue from 'vue';
 import { ISdk } from 'universal-fire';
+import { IState } from '~/types';
 
-export function watchEvents<TState extends IDictionary<T[]>, T extends Model>(
+export function watchEvents<TState extends IState<T>, T extends Model>(
   propOffset?: keyof TState & string
 ): MutationTree<TState> {
   const offset = !propOffset ? ('all' as keyof TState & string) : propOffset;
@@ -17,7 +18,7 @@ export function watchEvents<TState extends IDictionary<T[]>, T extends Model>(
      * Bring in the server's current state at the point that a
      * watcher has been setup.
      */
-    [FmCrudMutation.serverStateSync](state: T | IDictionary<T[]>, payload: IFmWatchEvent<ISdk, T>) {
+    [FmCrudMutation.serverStateSync](state, payload: IFmWatchEvent<ISdk, T>) {
       if (isRecord(state, payload)) {
         changeRoot<T>(state, payload.value, payload.localPath);
       } else {

@@ -1,5 +1,5 @@
 import { Store } from 'vuex';
-import { FireModel, Record, Watch } from '~/index';
+import { FireModel, Record } from '~/index';
 import { Product } from './models/Product';
 import { IRootState, setupStore } from './store';
 import { stub } from 'sinon';

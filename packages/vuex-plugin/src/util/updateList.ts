@@ -2,6 +2,7 @@ import { FireModelPluginError } from '../errors/FiremodelPluginError';
 import { IDictionary } from 'common-types';
 import { IModel, Model, PropertyOf } from 'firemodel';
 import Vue from 'vue';
+import { IState } from '~/types';
 
 interface IDictionaryWithId extends IDictionary {
   id: string;
@@ -28,7 +29,7 @@ function isRemoveHash(
  */
 export function updateList<
   TModel extends Model,
-  TState extends IDictionary<TModel[]> = IDictionary<TModel[]>,
+  TState extends IState<TModel> = IState<TModel>,
   TId extends keyof TState & string = keyof TState & string
 >(
   moduleState: TState,
@@ -43,7 +44,7 @@ export function updateList<
     );
   }
 
-  const existing: IModel<TModel>[] = moduleState[offset] || [];
+  const existing: IModel<TModel>[] = (moduleState[offset] as IModel<TModel>[]) || [];
 
   let isNotAddOperation = false;
   const updated: IModel<TModel>[] = existing

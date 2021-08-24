@@ -28,7 +28,7 @@ export async function relationshipOperation<
   TFrom extends Model,
   TTo extends Model = Model
 >(
-  rec: Record<S, TFrom>,
+  rec: Record<TFrom, S>,
   /**
    * **operation**
    *
@@ -90,7 +90,7 @@ export async function relationshipOperation<
   try {
     const [localEvent, confirmEvent, rollbackEvent] = dispatchEvents[operation];
     const fkConstructor = rec.META.relationship(property).fkConstructor();
-    const fkRecord = new Record<S, TTo>(fkConstructor);
+    const fkRecord = new Record<TTo, S>(fkConstructor);
     const transactionId: string =
       "t-reln-" +
       Math.random().toString(36).substr(2, 5) +
@@ -126,8 +126,10 @@ export async function relationshipOperation<
       await relnRollback(rec, event, rollbackEvent);
       throw new FireModelProxyError(
         e,
-        `Encountered an error executing a relationship operation between the "${event.from
-        }" model and "${event.to
+        `Encountered an error executing a relationship operation between the "${
+          event.from
+        }" model and "${
+          event.to
         }". The paths that were being modified were: ${event.paths
           .map((i) => i.path)
           .join("- \n")}\n A dispatch for a rollback event has been issued.`
@@ -142,8 +144,12 @@ export async function relationshipOperation<
   }
 }
 
-export async function localRelnOp<S extends ISdk, TFrom extends Model, TTo extends Model>(
-  rec: Record<S, TFrom>,
+export async function localRelnOp<
+  S extends ISdk,
+  TFrom extends Model,
+  TTo extends Model
+>(
+  rec: Record<TFrom, S>,
   event: Omit<IFmLocalRelationshipEvent<TFrom, TTo>, "type">,
   type: FmEvents
 ): Promise<void> {
@@ -151,13 +157,16 @@ export async function localRelnOp<S extends ISdk, TFrom extends Model, TTo exten
     // locally modify Record's values
     // const ids = extractFksFromPaths(rec, event.property, event.paths);
     event.fks.map((fk) => {
-      locallyUpdateFkOnRecord(rec, fk, { ...event, type } as IFmLocalRelationshipEvent<TFrom>);
+      locallyUpdateFkOnRecord(rec, fk, {
+        ...event,
+        type,
+      } as IFmLocalRelationshipEvent<TFrom>);
     });
     // local optimistic dispatch
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     rec.dispatch({ ...event, type });
     const ref = rec.db.ref("/");
-    await (ref).update(
+    await ref.update(
       event.paths.reduce((acc: IDictionary, curr) => {
         acc[curr.path] = curr.value;
         return acc;
@@ -173,16 +182,24 @@ export async function localRelnOp<S extends ISdk, TFrom extends Model, TTo exten
   }
 }
 
-export async function relnConfirmation<S extends ISdk, F extends Model, T extends Model>(
-  rec: Record<S, F>,
+export async function relnConfirmation<
+  S extends ISdk,
+  F extends Model,
+  T extends Model
+>(
+  rec: Record<F, S>,
   event: Omit<IFmLocalRelationshipEvent<F, T>, "type">,
   type: FmEvents
 ): Promise<void> {
   await rec.dispatch({ ...event, type });
 }
 
-export async function relnRollback<S extends ISdk, F extends Model, T extends Model>(
-  rec: Record<S, F>,
+export async function relnRollback<
+  S extends ISdk,
+  F extends Model,
+  T extends Model
+>(
+  rec: Record<F, S>,
   event: Omit<IFmLocalRelationshipEvent<F, T>, "type">,
   type: FmEvents
 ): Promise<void> {

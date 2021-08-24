@@ -12,7 +12,7 @@ import { getIdFromKey } from "./getIdFromKey";
  * with the relationship CRUD event.
  */
 export function locallyUpdateFkOnRecord<S extends ISdk, T extends Model>(
-  rec: Record<S, T>,
+  rec: Record<T, S>,
   fkId: ForeignKey,
   event: IFmLocalRelationshipEvent<T>
 ): void {
@@ -28,12 +28,11 @@ export function locallyUpdateFkOnRecord<S extends ISdk, T extends Model>(
   const id = getIdFromKey(fkId);
   switch (event.operation) {
     case "set":
-    case "add":{
+    case "add": {
       const record = (rec as any)._data;
-      record[event.property] = record[event.property] || {}
-      record[event.property] = relnType === "hasMany"
-        ? { ...currentValue, ...{ [fk]: true } }
-        : fk;
+      record[event.property] = record[event.property] || {};
+      record[event.property] =
+        relnType === "hasMany" ? { ...currentValue, ...{ [fk]: true } } : fk;
       break;
     }
     case "remove":

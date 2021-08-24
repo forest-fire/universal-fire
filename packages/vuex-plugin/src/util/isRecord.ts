@@ -1,6 +1,7 @@
 import { IDictionary } from "common-types";
 import { IFmWatchEvent, Model } from 'firemodel';
 import { ISdk } from 'universal-fire';
+import { IState } from '~/types';
 
 /**
  * Detects whether the change is a `Record` or a `List` and ensures
@@ -8,15 +9,15 @@ import { ISdk } from 'universal-fire';
  * back a boolean flag at runtime.
  */
 export function isRecord<S extends ISdk, T extends Model>(
-  state: T | IDictionary<T[]>,
+  state: T | IState<T>,
   payload: IFmWatchEvent<S, T>
 ): state is T {
   return payload.watcherSource === 'record';
 }
 
 export function isList<S extends ISdk, T extends Model>(
-  state: T | IDictionary<T[]>,
+  state: T | IState<T>,
   payload: IFmWatchEvent<S, T>
-): state is IDictionary<T[]> {
+): state is IState<T> {
   return payload.watcherSource === 'list';
 }
