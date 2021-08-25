@@ -9,14 +9,14 @@ import { IState } from '~/types';
  * back a boolean flag at runtime.
  */
 export function isRecord<S extends ISdk, T extends Model>(
-  state: T | IState<T>,
+  state: unknown,
   payload: IFmWatchEvent<S, T>
 ): state is T {
   return payload.watcherSource === 'record';
 }
 
 export function isList<S extends ISdk, T extends Model>(
-  state: T | IState<T>,
+  state: unknown,
   payload: IFmWatchEvent<S, T>
 ): state is IState<T> {
   return payload.watcherSource === 'list';

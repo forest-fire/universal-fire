@@ -10,7 +10,7 @@ import { IState } from '~/types';
 export function serverEvents<TState extends IState<T>, T extends Model>(
   propOffset?: keyof TState & string
 ): MutationTree<TState> {
-  const offset = !propOffset ? ('all' as keyof T & string) : propOffset;
+  const offset = !propOffset ? ('all' as keyof TState & string) : propOffset;
   return {
     [FmCrudMutation.serverAdd](
       /**
