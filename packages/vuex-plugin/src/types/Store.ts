@@ -7,4 +7,4 @@ export type StoreWithPlugin<T extends IDictionary = IDictionary> = T & {
 };
 export type FireModelMutationTree<T extends StoreWithPlugin = StoreWithPlugin> = MutationTree<T>;
 
-export type IState<T> = Record<string, unknown> & { [key: string]: T[] };
+export type IState<T> = { [offset in 'all' & string]?: T[] } & Record<string, any>;

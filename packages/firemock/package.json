@@ -27,10 +27,6 @@
     "lint": "scripty",
     "test": "scripty"
   },
-  "devDependencies": {
-    "@forest-fire/fixture": "file:../fixture",
-    "@forest-fire/real-time-client": "file:../real-time-client"
-  },
   "dependencies": {
     "brilliant-errors": "^0.3.1",
     "deepmerge": "^4.2.2",
