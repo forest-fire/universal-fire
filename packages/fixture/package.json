@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/fixture",
-  "version": "0.60.6",
+  "version": "0.60.7",
   "description": "Build fixtures files/data for your firebase database",
   "license": "MIT",
   "author": "Ken Snyder<ken@ken.net>",
@@ -39,10 +39,10 @@
     "universal-fire": "^0.60.6"
   },
   "devDependencies": {
-    "firemock": "^0.60.6",
-    "firemodel": "^0.60.6",
-    "@forest-fire/types": "^0.60.6",
-    "universal-fire": "^0.60.6"
+    "@forest-fire/types": "^0.60.7",
+    "firemock": "^0.60.7",
+    "firemodel": "^0.60.7",
+    "universal-fire": "^0.60.7"
   },
   "dependencies": {
     "firebase-key": "2.0.2"

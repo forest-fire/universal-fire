@@ -1,5 +1,19 @@
 {
   "npmClient": "yarn",
-  "packages": ["packages/*"],
-  "version": "0.60.6"
+  "packages": [
+    "packages/universal-fire",
+    "packages/firemodel",
+    "packages/firemock",
+    "packages/fixture",
+    "packages/firestore-db",
+    "packages/real-time-db",
+    "packages/firestore-admin",
+    "packages/firestore-client",
+    "packages/real-time-client",
+    "packages/real-time-admin",
+    "packages/types",
+    "packages/serialized-query",
+    "packages/utility"
+  ],
+  "version": "0.60.7"
 }
