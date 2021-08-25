@@ -53,7 +53,7 @@ export class MockApi<T extends Model> {
       this._modelConstructor,
       exceptions as Partial<T>,
       { db: this._db }
-    ) as Record<ISdk, T>;
+    );
 
     if (record.hasDynamicPath) {
       // which props -- required for compositeKey -- are not yet

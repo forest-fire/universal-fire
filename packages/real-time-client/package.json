@@ -29,17 +29,23 @@
     "test": "scripty"
   },
   "dependencies": {
-    "@forest-fire/real-time-db": "^0.60.6",
+    "@forest-fire/real-time-db": "^0.60.3",
     "events": "^3.1.0"
   },
   "engines": {
     "node": ">=12"
   },
+  "devDependencies": {
+    "@forest-fire/serialized-query": "^0.60.3",
+    "@forest-fire/types": "^0.60.3",
+    "@forest-fire/utility": "^0.60.3",
+    "firemock": "^0.60.3"
+  },
   "gitHead": "78e25fc502a7e229b11be3586f656ab315553a7d",
   "peerDependencies": {
-    "@firebase/app": "0.6.11",
-    "@firebase/auth": "^0.15.0",
-    "@firebase/database": "^0.6.10",
+    "@firebase/app": "0.6.29",
+    "@firebase/auth": "^0.16.5",
+    "@firebase/database": "^0.10.9",
     "@forest-fire/serialized-query": "^0.60.3",
     "@forest-fire/types": "^0.60.3",
     "@forest-fire/utility": "^0.60.3",

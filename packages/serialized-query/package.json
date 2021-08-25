@@ -23,8 +23,10 @@
     "test": "scripty"
   },
   "license": "MIT",
-  "peerDependencies": {
-    "@forest-fire/types": "^0.60.3",
+  "dependencies": {
     "brilliant-errors": "^0.3.1"
+  },
+  "peerDependencies": {
+    "@forest-fire/types": "^0.60.6"
   }
 }

@@ -31,12 +31,18 @@
     "test": "scripty"
   },
   "peerDependencies": {
-    "@forest-fire/types": "^0.60.3",
+    "@forest-fire/types": "^0.60.6",
     "faker": "5.5.3",
-    "firemock": "^0.60.3",
-    "firemodel": "^0.60.3",
+    "firemock": "^0.60.6",
+    "firemodel": "^0.60.6",
     "native-dash": "1.18.2",
-    "universal-fire": "^0.60.3"
+    "universal-fire": "^0.60.6"
+  },
+  "devDependencies": {
+    "firemock": "^0.60.6",
+    "firemodel": "^0.60.6",
+    "@forest-fire/types": "^0.60.6",
+    "universal-fire": "^0.60.6"
   },
   "dependencies": {
     "firebase-key": "2.0.2"

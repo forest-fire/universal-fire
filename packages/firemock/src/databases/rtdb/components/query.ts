@@ -23,18 +23,29 @@ export const query = <
   serializedQuery: ISerializedQuery<TSdk, TData>
 ): IRtdbQuery => {
   const partialQuery: IRtdbQuery = {
-    // get: async () => {
-    //   await store.networkDelay();
-    //   const data = store.getDb<TData>(serializedQuery.path);
-    //   const results = runQuery(serializedQuery, data as TData);
+    endBefore(_value) {
+      return query(store, serializedQuery);
+    },
+    startAfter(_value, _key?: string) {
+      return query(store, serializedQuery);
+    },
+    toString() {
+      return `FireMock::Query@${
+        process.env.FIREBASE_DATA_ROOT_URL
+      }/${JSON.stringify(serializedQuery.identity)}`;
+    },
+    get: async () => {
+      await store.networkDelay();
+      const data = store.getDb<TData>(serializedQuery.path);
+      const results = runQuery(serializedQuery, data as TData);
 
-    //   // TODO: See how this was implemented before
-    //   return snapshot(
-    //     store,
-    //     leafNode(serializedQuery.path),
-    //     results ? results : null
-    //   );
-    // },
+      // TODO: See how this was implemented before
+      return snapshot(
+        store,
+        leafNode(serializedQuery.path),
+        results ? results : null
+      );
+    },
     endAt: (value, key) => {
       serializedQuery.endAt(value, key as string & keyof TData);
       return query(store, serializedQuery);
