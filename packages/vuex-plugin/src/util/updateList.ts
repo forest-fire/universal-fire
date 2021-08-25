@@ -44,7 +44,7 @@ export function updateList<
     );
   }
 
-  const existing: IModel<TModel>[] = (moduleState[offset] as IModel<TModel>[]) || [];
+  const existing: IModel<TModel>[] = (moduleState[offset] as unknown as IModel<TModel>[]) || [];
 
   let isNotAddOperation = false;
   const updated: IModel<TModel>[] = existing
