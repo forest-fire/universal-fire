@@ -1,10 +1,5 @@
 import { SerializedRealTimeQuery } from '@forest-fire/serialized-query';
-import type {
-  IRtdbDbEvent,
-  IRtdbDataSnapshot,
-  SnapshotFrom,
-  ISdk,
-} from '@forest-fire/types';
+import type { IRtdbDataSnapshot, SnapshotFrom, ISdk } from '@forest-fire/types';
 import { EventFrom, IRtdbSdk } from '@forest-fire/types';
 
 

@@ -3,7 +3,6 @@ import * as helpers from './testing/helpers';
 
 import { IDictionary } from 'common-types';
 import { RealTimeClient } from '../src';
-import { SchemaHelper } from '../../fixture/dist/types';
 
 const config = {
   apiKey: 'AIzaSyDuimhtnMcV1zeTl4m1MphOgWnzS17QhBM',
@@ -56,11 +55,6 @@ describe('Connecting to Database', () => {
 describe('Read operations: ', () => {
   // tslint:disable-next-line:one-variable-per-declaration
   let db: RealTimeClient;
-  let dbMock: RealTimeClient;
-  const personMockGenerator = (h: SchemaHelper<any>) => () => ({
-    name: `${h.faker.name.firstName()} ${h.faker.name.lastName()}`,
-    age: h.faker.datatype.number({ min: 10, max: 99 }),
-  });
   beforeAll(async () => {
     db = await RealTimeClient.connect(config);
     await db.set('client-test-data', {

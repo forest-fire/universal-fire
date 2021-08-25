@@ -35,6 +35,15 @@ export function reference<TSdk extends IRtdbSdk, TData extends unknown = Record<
   const serializedQuery = typeof path === "string" ? new SerializedRealTimeQuery<TSdk, TData>(path) : path;
   const query_ = query(store, serializedQuery);
   const ref: IRtdbReference = {
+    endBefore(_value, key?: string) {
+      return query_.endBefore(key);
+    },
+    get() {
+      return query_.get();
+    },
+    startAfter(_value, key?: string) {
+      return query_.startAfter(key);
+    },
     orderByKey: query_.orderByKey,
     endAt: query_.endAt,
     // eslint-disable-next-line @typescript-eslint/unbound-method

@@ -1,4 +1,3 @@
-import { IDictionary } from 'common-types';
 import {
   IAbstractedEvent,
   IAdminAuth,
@@ -11,22 +10,15 @@ import {
   IClientApp,
   ApiKind,
   Database,
-  IMockDatabase,
+  ISdk,
 } from '../index';
-import {
-  IAdminFirestoreMock,
-  IAdminRtdbMock,
-  IAuthApi,
-  IClientFirestoreMock,
-  IClientRtdbMock,
-} from './db-mocking';
-import { IFirestoreDatabase, IRtdbDatabase } from './fire-proxies';
 
 /**
  * The public contract that any SDK client must meet to behave
  * like an _abstracted database_.
  */
-export interface IBaseAbstractedDatabase extends IDatabaseGenericApi {
+export interface IBaseAbstractedDatabase<TSdk extends ISdk>
+  extends IDatabaseGenericApi<TSdk> {
   /** the Firebase SDK which is being used as an abstracted database */
   sdk: SDK;
   /**
@@ -84,7 +76,7 @@ export interface IBaseAbstractedDatabase extends IDatabaseGenericApi {
  * > to expose while intereacting with the DB's native language to provide the
  * > functionality
  */
-export interface IDatabaseGenericApi {
+export interface IDatabaseGenericApi<TSdk extends ISdk> {
   /**
    * Get a database _reference_ to the underlying database at a given path
    */
@@ -96,7 +88,7 @@ export interface IDatabaseGenericApi {
    * of `id` (unless overriden by the `idProp` param)
    */
   getList: <T = any>(
-    path: string | ISerializedQuery<T>,
+    path: string | ISerializedQuery<TSdk>,
     idProp?: string
   ) => Promise<T[]>;
   /**
@@ -139,7 +131,7 @@ export interface IDatabaseGenericApi {
    * Watch for Firebase events based on a DB path.
    */
   watch: (
-    target: string | ISerializedQuery,
+    target: string | ISerializedQuery<TSdk>,
     events: IAbstractedEvent | IAbstractedEvent[],
     cb: any
   ) => void;
@@ -149,7 +141,8 @@ export interface IDatabaseGenericApi {
   unWatch: (events?: IAbstractedEvent | IAbstractedEvent[], cb?: any) => void;
 }
 
-export interface IRealTimeAdmin extends IBaseAbstractedDatabase {
+export interface IRealTimeAdmin
+  extends IBaseAbstractedDatabase<'RealTimeAdmin'> {
   app: IAdminApp;
   sdk: Readonly<SDK.RealTimeAdmin>;
   dbType: Readonly<Database.RTDB>;
@@ -159,7 +152,8 @@ export interface IRealTimeAdmin extends IBaseAbstractedDatabase {
   CONNECTION_TIMEOUT: number;
 }
 
-export interface IRealTimeClient extends IBaseAbstractedDatabase {
+export interface IRealTimeClient
+  extends IBaseAbstractedDatabase<'RealTimeClient'> {
   app: IClientApp;
   sdk: Readonly<SDK.RealTimeClient>;
   dbType: Readonly<Database.RTDB>;
@@ -169,7 +163,8 @@ export interface IRealTimeClient extends IBaseAbstractedDatabase {
   CONNECTION_TIMEOUT: number;
 }
 
-export interface IFirestoreClient extends IBaseAbstractedDatabase {
+export interface IFirestoreClient
+  extends IBaseAbstractedDatabase<'FirestoreClient'> {
   app: IClientApp;
   sdk: Readonly<SDK.FirestoreClient>;
   dbType: Readonly<Database.Firestore>;
@@ -178,7 +173,8 @@ export interface IFirestoreClient extends IBaseAbstractedDatabase {
   auth: () => Promise<IClientAuth>;
 }
 
-export interface IFirestoreAdmin extends IBaseAbstractedDatabase {
+export interface IFirestoreAdmin
+  extends IBaseAbstractedDatabase<'FirestoreAdmin'> {
   app: IAdminApp;
   sdk: SDK.FirestoreAdmin;
   dbType: Database.Firestore;

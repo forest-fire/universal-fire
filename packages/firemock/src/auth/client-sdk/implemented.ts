@@ -25,9 +25,9 @@ import { FireMockError } from '../../errors';
 import { completeUserCredential, toUser } from '../../auth/util';
 import { createUser } from './createUser';
 
-export const implemented: (
-  api: IMockAuthMgmt<ClientSdk>
-) => Partial<IClientAuth> = (api) => ({
+export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth> = (
+  api
+) => ({
   tenantId: '',
 
   languageCode: '',
@@ -90,7 +90,7 @@ export const implemented: (
     }
   },
 
-  async updateCurrentUser(updates: UpdateRequest) {
+  async updateCurrentUser(updates: User) {
     api.updateUser(api.getCurrentUser().uid, updates);
   },
 

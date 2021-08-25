@@ -47,7 +47,6 @@ export function setupEnv() {
     process.env.MOCK = 'true';
   }
 
-  const current = process.env;
   const yamlConfig = yaml.load(fs.readFileSync('./env.yml', 'utf8')) as Record<string, any>;
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],

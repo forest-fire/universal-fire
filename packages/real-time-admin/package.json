@@ -36,9 +36,15 @@
     "firemock": "^0.60.3",
     "typed-conversions": "^0.12.0"
   },
+  "devDependencies": {
+    "@forest-fire/serialized-query": "^0.60.3",
+    "@forest-fire/types": "^0.60.3",
+    "@forest-fire/utility": "^0.60.3",
+    "firemock": "^0.60.3"
+  },
   "dependencies": {
-    "@forest-fire/real-time-db": "^0.60.6",
-    "firebase-admin": "9.4.1",
+    "@forest-fire/real-time-db": "^0.60.3",
+    "firebase-admin": "9.11.0",
     "is-gzip": "^2.0.0"
   },
   "engines": {

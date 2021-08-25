@@ -55,12 +55,6 @@ describe('Connecting to MOCK Database', () => {
 describe('Read operations: ', () => {
   // tslint:disable-next-line:one-variable-per-declaration
   let db: RealTimeClient;
-  const personMockGenerator = (h: any) => () => ({
-    name: `${h.faker.name.firstName() as string} ${
-      h.faker.name.lastName() as string
-    }`,
-    age: h.faker.datatype.number({ min: 10, max: 99 }),
-  });
   beforeAll(async () => {
     db = await RealTimeClient.connect(config);
     await db.set('client-test-data', {

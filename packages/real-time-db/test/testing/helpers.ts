@@ -7,29 +7,28 @@ import * as yaml from "js-yaml";
 import * as process from "process";
 
 
-
-
 export async function timeout(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms, null));
+  return new Promise((resolve) => setTimeout(resolve, ms, null));
 }
 
 export function setupEnv() {
   if (!process.env.AWS_STAGE) {
-    process.env.AWS_STAGE = "test";
+    process.env.AWS_STAGE = 'test';
   }
 
   if (process.env.MOCK === undefined) {
-    process.env.MOCK = "true";
+    process.env.MOCK = 'true';
   }
 
-  const current = process.env;
-  const yamlConfig = yaml.load(fs.readFileSync("./env.yml", "utf8")) as IDictionary<any>;
+  const yamlConfig = yaml.load(
+    fs.readFileSync('./env.yml', 'utf8')
+  ) as IDictionary<any>;
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
-    ...process.env
+    ...process.env,
   };
 
-  Object.keys(combined).forEach(key => (process.env[key] = combined[key]));
+  Object.keys(combined).forEach((key) => (process.env[key] = combined[key]));
   return combined;
 }
 

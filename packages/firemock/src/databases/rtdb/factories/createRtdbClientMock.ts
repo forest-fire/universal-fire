@@ -11,6 +11,7 @@ export function createRtdbClientMock<T extends IMockStore<'RealTimeClient'>>(
   config: IMockAuthConfig
 ): IMockDatabase<SDK.RealTimeClient> {
   const db: DbFrom<SDK.RealTimeClient> = {
+    useEmulator(_host, _port) {},
     get app() {
       return createFirebaseApp(SDK.RealTimeClient, store);
     },

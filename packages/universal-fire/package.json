@@ -27,12 +27,12 @@
     "test": "scripty"
   },
   "dependencies": {
-    "@forest-fire/firestore-admin": "^0.60.6",
-    "@forest-fire/firestore-client": "^0.60.6",
-    "@forest-fire/real-time-admin": "^0.60.6",
-    "@forest-fire/real-time-client": "^0.60.6",
-    "@forest-fire/serialized-query": "^0.60.6",
-    "@forest-fire/types": "^0.60.6"
+    "@forest-fire/firestore-admin": "file:../firestore-admin",
+    "@forest-fire/firestore-client": "file:../firestore-client",
+    "@forest-fire/real-time-admin": "file:../real-time-admin",
+    "@forest-fire/real-time-client": "file:../real-time-client",
+    "@forest-fire/serialized-query": "file:../serialized-query",
+    "@forest-fire/types": "file:../types"
   },
   "license": "MIT",
   "gitHead": "17c21f30b0bc51984dd3e24d14f87f742b8fe0bc"
