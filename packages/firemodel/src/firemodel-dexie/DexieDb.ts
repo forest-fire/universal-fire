@@ -215,7 +215,7 @@ export class DexieDb {
     });
 
     models.forEach((m) => {
-      const r: Record<ISdk, Model> = Record.create(m as any);
+      const r: Record<Model, ISdk> = Record.create(m as any);
       this._constructors[r.pluralName] = m as any;
       const meta: IDexieModelMeta = {
         ...r.META,

@@ -144,7 +144,8 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     query: IFmQueryDefn<S, T>,
     options: IListQueryOptions<S, T> = {}
   ): Promise<List<S, T>> {
-    const db: IDatabaseSdk<S> = options.db || DefaultDbCache().get() as IDatabaseSdk<S>;
+    const db: IDatabaseSdk<S> =
+      options.db || (DefaultDbCache().get() as IDatabaseSdk<S>);
 
     if (!db) {
       throw new FireModelError(
@@ -163,7 +164,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
       list._pageSize = options.paginate;
     }
 
-    const r = await list._loadQuery(query(q)) as unknown as List<S, T>;
+    const r = (await list._loadQuery(query(q))) as unknown as List<S, T>;
     return r;
   }
 
@@ -208,7 +209,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
       "limitToFirst" | "limitToLast" | "startAt" | "orderBy"
     > = {}
   ): Promise<List<S, T>> {
-    const r = await List.query<S, T>(
+    const r = (await List.query<S, T>(
       model,
       (q) => {
         q.orderByChild("createdAt").limitToLast(howMany);
@@ -224,7 +225,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
         return q;
       },
       reduceOptionsForQuery<S, T>(options)
-    ) as unknown as List<S, T>;
+    )) as unknown as List<S, T>;
 
     return r;
   }
@@ -372,26 +373,52 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
    * Runs a `List.where()` search and returns the first result as a _model_
    * of type `T`. If no results were found it returns `undefined`.
    */
-  public static async findWhere<S extends ISdk, T extends Model, K extends keyof T>(
+  public static async findWhere<
+    S extends ISdk,
+    T extends Model,
+    K extends keyof T
+  >(
     model: ConstructorFor<T>,
     property: K,
     value: T[K] | [IComparisonOperator, T[K]],
     options: IListOptions<S, T> = {}
-  ): Promise<K extends "id" ? T[K] extends string ? Record<ISdk, T> : List<S, T> : List<S, T>> {
-
+  ): Promise<
+    K extends "id"
+      ? T[K] extends string
+        ? Record<T, S>
+        : List<S, T>
+      : List<S, T>
+  > {
     let result: unknown;
 
     if (property === "id" && isString(value)) {
       const modelName = capitalize(model.constructor.name);
       console.warn(
-        `you used List.find(${modelName}, "id", ${String(value)} ) this will be converted to Record.get(${modelName}, ${String(value)}). The List.find() command should be used for properties other than "id"; please make a note of this and change your code accordingly!`
+        `you used List.find(${modelName}, "id", ${String(
+          value
+        )} ) this will be converted to Record.get(${modelName}, ${String(
+          value
+        )}). The List.find() command should be used for properties other than "id"; please make a note of this and change your code accordingly!`
       );
-      result = await Record.get(model, value as string) as unknown as Promise<Record<ISdk, T>>;
+      result = (await Record.get(model, value as string)) as unknown as Promise<
+        Record<T, S>
+      >;
     } else {
-      result = await List.where(model, property as string & keyof T, value, options);
+      result = await List.where(
+        model,
+        property as string & keyof T,
+        value,
+        options
+      );
     }
 
-    return result as Promise<K extends "id" ? T[K] extends string ? Record<ISdk, T> : List<S, T> : List<S, T>>;
+    return result as Promise<
+      K extends "id"
+        ? T[K] extends string
+          ? Record<T, S>
+          : List<S, T>
+        : List<S, T>
+    >;
   }
 
   /**
@@ -515,10 +542,12 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
         throw new FireModelError(
           `While calling List.ids(${capitalize(
             model.name
-          )}, ...) there were some successful results but there were error(s) on ${realErrors.length
-          } of the ${fks.length} requested records.${emptyResults.length > 0
-            ? `There were also ${emptyResults.length} records which came back with empty results (which may be fine). Structured versions of these errors can be found in the "errors" properoty but here is a summary of the error messages recieved:\n\n${errorOverview}`
-            : ""
+          )}, ...) there were some successful results but there were error(s) on ${
+            realErrors.length
+          } of the ${fks.length} requested records.${
+            emptyResults.length > 0
+              ? `There were also ${emptyResults.length} records which came back with empty results (which may be fine). Structured versions of these errors can be found in the "errors" properoty but here is a summary of the error messages recieved:\n\n${errorOverview}`
+              : ""
           }`,
           "errors-in-list-ids"
         );
@@ -542,7 +571,9 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     model: ConstructorFor<T>,
     offsets?: Partial<IModel<T>>
   ): string {
-    const obj = offsets ? List.create<T>(model, { offsets }) : List.create<T>(model);
+    const obj = offsets
+      ? List.create<T>(model, { offsets })
+      : List.create<T>(model);
 
     return obj.dbPath;
   }
@@ -607,7 +638,10 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
 
   public get dbPath(): string {
     // const r = Record.create(this._modelConstructor) as IRecord<S, T>;
-    return [this._injectDynamicDbOffsets(this.META.dbOffset), this.pluralName].join("/");
+    return [
+      this._injectDynamicDbOffsets(this.META.dbOffset),
+      this.pluralName,
+    ].join("/");
   }
 
   /**
@@ -663,11 +697,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     this._query = queryAdjustForNext(this._query, this._page);
     this._page++;
     const data = (
-      await List.query(
-        this._modelConstructor,
-        () => this._query,
-        this._options
-      )
+      await List.query(this._modelConstructor, () => this._query, this._options)
     ).data;
     if (data.length < this._pageSize) {
       this._paginationComplete = true;
@@ -700,7 +730,10 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
   /**
    * runs a `reducer` function across all records in the list
    */
-  public reduce<R extends unknown>(f: (acc: Partial<R>, i: IModel<T>) => R, initialValue = {} as R): R {
+  public reduce<R extends unknown>(
+    f: (acc: Partial<R>, i: IModel<T>) => R,
+    initialValue = {} as R
+  ): R {
     return this.data.reduce<unknown>(f, initialValue) as R;
   }
 
@@ -725,8 +758,7 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
    *
    * If you just want the Model's data then use `getData` instead.
    */
-  public getRecord(id: string): Record<S, T> {
-
+  public getRecord(id: string): Record<T, S> {
     const found = this.filter((f) => f.id === id);
     if (found.length === 0) {
       throw new FireModelError(
@@ -735,13 +767,16 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
       );
     }
 
-    return Record.createWith(this._modelConstructor, found.data[0]) as Record<S, T>;
+    return Record.createWith(this._modelConstructor, found.data[0]) as Record<
+      T,
+      S
+    >;
   }
 
   /**
    * Deprecated: use `List.getRecord()`
    */
-  public findById(id: string): Record<S, T> {
+  public findById(id: string): Record<T, S> {
     console.warn("List.findById() is deprecated. Use List.get() instead.");
     return this.getRecord(id);
   }
@@ -775,8 +810,11 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
     return this.remove(id, ignoreOnNotFound);
   }
 
-  public async add(payload: T): Promise<Record<S, T>> {
-    const newRecord = await Record.add(this._modelConstructor, payload) as Record<S, T>;
+  public async add(payload: T): Promise<Record<T, S>> {
+    const newRecord = (await Record.add(
+      this._modelConstructor,
+      payload
+    )) as Record<T, S>;
     this._data.push(newRecord.data);
     return newRecord;
   }
@@ -827,7 +865,8 @@ export class List<S extends ISdk, T extends Model> extends FireModel<S, T> {
         const value = this._offsets[prop];
         if (!["string", "number"].includes(typeof value)) {
           throw new FireModelError(
-            `The dynamic dbOffset is using the property "${prop}" on ${this.modelName
+            `The dynamic dbOffset is using the property "${prop}" on ${
+              this.modelName
             } as a part of the route path but that property must be either a string or a number and instead was a ${typeof value}`,
             "record/not-allowed"
           );

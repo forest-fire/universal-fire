@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-client",
-  "version": "0.60.5",
+  "version": "0.60.6",
   "description": "Client SDK for the Real Time database",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
@@ -29,7 +29,7 @@
     "test": "scripty"
   },
   "dependencies": {
-    "@forest-fire/real-time-db": "^0.60.5",
+    "@forest-fire/real-time-db": "^0.60.6",
     "events": "^3.1.0"
   },
   "engines": {
