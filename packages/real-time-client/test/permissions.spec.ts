@@ -14,7 +14,7 @@ describe('Permissions', () => {
     const db = await RealTimeClient.connect(config);
 
     try {
-      const result = await db.set('/no-write/foobar', "this shouldn't work");
+      await db.set('/no-write/foobar', "this shouldn't work");
       throw new Error(
         'should not have reached this point due to permissions error'
       );
@@ -29,7 +29,7 @@ describe('Permissions', () => {
     const db = await RealTimeClient.connect(config);
 
     try {
-      const result = await db.update('/no-write/foobar', {
+      await db.update('/no-write/foobar', {
         message: "this shouldn't work",
       });
       throw new Error(

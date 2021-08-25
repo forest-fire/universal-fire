@@ -161,7 +161,7 @@ export interface IMockAuthMgmt<TSdk extends ISdk> {
    */
   updateUser(
     user: User | IMockUserRecord | string,
-    changes: Partial<IMockUserRecord> | UpdateRequest
+    changes: Partial<IMockUserRecord> | User | UpdateRequest
   ): void;
 
   /**

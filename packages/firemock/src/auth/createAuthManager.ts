@@ -276,14 +276,14 @@ export function createAuthManager<TSdk extends ISdk>(
 
   const updateUser = (
     user: IMockUserRecord | string,
-    updates: Partial<IMockUserRecord> | UpdateRequest
+    updates: Partial<IMockUserRecord> | User
   ) => {
     let u: IMockUserRecord;
     if (!isMockUserRecord(updates)) {
       updates = {
-        ...(updates.disabled !== undefined
-          ? { disabled: updates.disabled }
-          : {}),
+        // ...(updates.disabled !== undefined
+        //   ? { disabled: updates.disabled }
+        //   : {}),
         ...(updates.displayName !== undefined
           ? { displayName: updates.displayName }
           : {}),
@@ -291,14 +291,14 @@ export function createAuthManager<TSdk extends ISdk>(
         ...(updates.emailVerified !== undefined
           ? { emailVerified: updates.emailVerified }
           : {}),
-        ...(updates.password !== undefined
-          ? { password: updates.password }
-          : {}),
+        // ...(updates.password !== undefined
+        //   ? { password: updates.password }
+        //   : {}),
         ...(updates.photoURL !== undefined
           ? { photoURL: updates.photoURL }
           : {}),
         ...(updates.multiFactor !== undefined
-          ? { clientMultiFactor: updates.multiFactor }
+          ? { clientMultiFactor: { enrolledFactors: [] } }
           : {}),
       } as Partial<IMockUserRecord>;
     }

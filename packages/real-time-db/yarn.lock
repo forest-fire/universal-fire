@@ -21,9 +21,9 @@ common-types@^1.15.6, common-types@^1.25.0, common-types@^1.26.0:
   integrity sha512-NyxLB6VzJ1RhTbtZ56mOa5m7bhjhw6Bb59DEF+Qwt6yne2KKtFV8L7GCVv/fJjltOuuNJAUwpajMjBx7q31rgg==
 
 inferred-types@^0.9.2:
-  version "0.9.2"
-  resolved "https://registry.npmjs.org/inferred-types/-/inferred-types-0.9.2.tgz#6927059e7581e1f19ef2fe508491a0dd6f4a1a9d"
-  integrity sha512-H7l53Sdau6IFTMVVaChjnCko2t/Ql/oBUdvh6/BfNqmmkCa9be/z3X4JjwQ7jfxDjEn8tIHiPmNyHM30q7XPkQ==
+  version "0.9.3"
+  resolved "https://registry.npmjs.org/inferred-types/-/inferred-types-0.9.3.tgz#c6c28bb7f63cce96d0c52439a9ac6a48127eff22"
+  integrity sha512-oNZITjAj/jM8mBuvbf3T7zkxmvdIjDrrDIHP36Q7meeMrVkca+qQNFutMeM+JfHvJ+CXec8FdyP6CjMbnZQkIg==
   dependencies:
     brilliant-errors "^0.3.1"
     native-dash "^1.15.1"
