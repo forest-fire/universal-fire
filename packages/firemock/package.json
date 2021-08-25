@@ -34,6 +34,11 @@
     "fast-copy": "^2.1.0",
     "fast-equals": "^2.0.0"
   },
+  "devDependencies": {
+    "@forest-fire/serialized-query": "^0.60.3",
+    "@forest-fire/types": "^0.60.3",
+    "@forest-fire/fixture": "^0.60.3"
+  },
   "peerDependencies": {
     "@forest-fire/serialized-query": "^0.60.3",
     "@forest-fire/types": "^0.60.3",

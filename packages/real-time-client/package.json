@@ -39,6 +39,7 @@
     "@forest-fire/serialized-query": "^0.60.3",
     "@forest-fire/types": "^0.60.3",
     "@forest-fire/utility": "^0.60.3",
+    "@forest-fire/fixture": "^0.60.3",
     "firemock": "^0.60.3"
   },
   "gitHead": "78e25fc502a7e229b11be3586f656ab315553a7d",

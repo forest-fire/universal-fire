@@ -1,4 +1,3 @@
-;
 import { IRtdbSdk, ISdk } from '../fire-types';
 import { IFirestoreOrder, IRtdbOrder } from './query-order';
 export interface ISerializedIdentity<TSdk extends ISdk, TData extends unknown> {
@@ -15,4 +14,6 @@ export interface ISerializedIdentity<TSdk extends ISdk, TData extends unknown> {
   startAtKey: string & keyof TData;
 }
 
-export type OrderFrom<T extends ISdk> = T extends IRtdbSdk ? IRtdbOrder : IFirestoreOrder;
+export type OrderFrom<T extends ISdk> = T extends IRtdbSdk
+  ? IRtdbOrder
+  : IFirestoreOrder;

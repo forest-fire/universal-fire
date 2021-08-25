@@ -29,7 +29,7 @@ describe('getPushKey() => ', () => {
 
   it('pushing multiple keys with pushkey works and do not collide', async () => {
     const keys = ['one', 'two', 'three'];
-    for await (const i of keys) {
+    for await (const _i of keys) {
       const key = await db.getPushKey('/pushKey/test');
       await db.set(`/pushKey/test/${key}`, Math.random());
     }

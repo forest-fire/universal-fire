@@ -107,7 +107,7 @@ export interface IReference<T = any> extends IRtdbReference {
       c: IRtdbDataSnapshot | null
     ) => any,
     applyLocally?: boolean
-  ): Promise<ITransactionResult<T>>;
+  ): Promise<ITransactionResult>;
   /** Sets a priority for the data at this Database location. */
   setPriority(
     priority: string | number | null,
@@ -122,7 +122,7 @@ export interface IReference<T = any> extends IRtdbReference {
   onDisconnect(): IRtdbOnDisconnect;
 }
 
-export interface ITransactionResult<T = any> {
+export interface ITransactionResult {
   committed: boolean;
   snapshot: IRtdbDataSnapshot;
   toJSON?: () => IDictionary;

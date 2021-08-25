@@ -11,12 +11,6 @@ describe('Errors => ', () => {
   });
 
   it('Permission Denied', async () => {
-    const fakeError: Error & { code: string } = {
-      name: 'FIREBASE',
-      message: '',
-      stack: new Error().stack,
-      code: 'PERMISSION_DENIED',
-    };
     const e: Error & { code?: string } = new Error('');
     e.code = 'PERMISSION_DENIED';
     const err = new PermissionDenied(
