@@ -5,9 +5,6 @@ import * as helpers from './testing/helpers';
 // tslint:disable:no-implicit-dependencies
 import { RealTimeClient } from '../src';
 import { Fixture, SchemaHelper } from '@forest-fire/fixture';
-import {
-  AuthProviderName,
-} from '@forest-fire/types';
 
 helpers.setupEnv();
 
@@ -29,7 +26,7 @@ describe('Mocking', () => {
 
   it('getSnapshot() returns a mock snapshot', async () => {
     const mockData = addAnimals(10);
-     mockDb.mock.store.updateDb("/animals", mockData.animals);
+    mockDb.mock.store.updateDb('/animals', mockData.animals);
 
     const animals = await mockDb.getSnapshot('/animals');
     expect(animals.numChildren()).toBe(10);
@@ -171,7 +168,7 @@ describe('Mocking', () => {
     const db3 = await RealTimeClient.connect({
       mocking: true,
       mockAuth: {
-        providers: [AuthProviderName.anonymous],
+        providers: ['anonymous'],
       },
     });
     const auth = await db3.auth();

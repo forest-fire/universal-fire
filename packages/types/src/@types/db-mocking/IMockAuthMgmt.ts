@@ -9,7 +9,7 @@ import {
 } from '../../index';
 import { AuthProviderFrom } from '../database';
 import { UpdateRequest } from '../fire-proxies';
-import { AuthProviderName, ISdk } from '../fire-types';
+import { IAuthProviderName, ISdk } from '../fire-types';
 import { NetworkDelay } from './network';
 
 export type IAuthObserver = (user: User | null) => unknown;
@@ -43,16 +43,16 @@ export interface IMockAuthMgmt<TSdk extends ISdk> {
    * Returns a boolean condition representing whether the passed in provider
    * has been configured for.
    */
-  hasProvider(provider: AuthProviderName): boolean;
+  hasProvider(provider: IAuthProviderName): boolean;
 
   /**
    * Adds a provider to the mock Auth service's list of supported services
    */
-  addProvider(provider: AuthProviderName): void;
+  addProvider(provider: IAuthProviderName): void;
   /**
    * Removes a provider to the mock Auth service's list of supported services
    */
-  removeProvider(provider: AuthProviderName): void;
+  removeProvider(provider: IAuthProviderName): void;
 
   /**
    * **setCurrentUser**
@@ -135,7 +135,7 @@ export interface IMockAuthMgmt<TSdk extends ISdk> {
 
   authProviders: AuthProviderFrom<TSdk>;
 
-  getAuthProvidersNames: () => AuthProviderName[];
+  getAuthProvidersNames: () => IAuthProviderName[];
 
   /**
    * **findKnownUser**

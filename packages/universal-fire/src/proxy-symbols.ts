@@ -28,7 +28,7 @@ export type {
   IFakerStatic,
 } from '@forest-fire/types';
 
-export { isClientSdk, isAdminSdk, AuthProviderName } from '@forest-fire/types';
+export { isClientSdk, isAdminSdk } from '@forest-fire/types';
 
 export type {
   SerializedRealTimeQuery,
