@@ -16,17 +16,11 @@ export function setupEnv(): void {
   }
 
   if (process.env.MOCK === undefined) {
-    process.env.MOCK = "true";
+    process.env.MOCK = 'true';
   }
-<<<<<<< HEAD
-  const current = process.env;
-  const yamlConfig: IDictionary = yaml.load(
+  const yamlConfig = yaml.load(
     fs.readFileSync('./env.yml', 'utf8')
   ) as IDictionary;
-=======
-
-  const yamlConfig = yaml.load(fs.readFileSync("./env.yml", "utf8")) as IDictionary;
->>>>>>> feature/refresh_ext
   const combined = {
     ...yamlConfig[process.env.AWS_STAGE],
     ...process.env

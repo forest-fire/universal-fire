@@ -1,13 +1,12 @@
 import {
   AuthCredential,
-  AuthProviderName,
   EmailAuthProvider_Instance,
   GoogleEmailAuthProvider,
 } from '@forest-fire/types';
 
 const data = {
-  providerId: AuthProviderName.emailPassword,
-  signInMethod: AuthProviderName.emailPassword,
+  providerId: 'emailPassword',
+  signInMethod: 'emailPassword',
 };
 
 /**
@@ -15,8 +14,9 @@ const data = {
  * here: https://firebase.google.com/docs/reference/js/firebase.auth.EmailAuthProvider
  */
 export class EmailAuthProvider
-  implements EmailAuthProvider_Instance, GoogleEmailAuthProvider {
-  public static PROVIDER_ID: string = AuthProviderName.emailPassword;
+  implements EmailAuthProvider_Instance, GoogleEmailAuthProvider
+{
+  public static PROVIDER_ID = 'emailPassword';
   public static EMAIL_PASSWORD_SIGN_IN_METHOD: string;
   public static EMAIL_LINK_SIGN_IN_METHOD: string;
 

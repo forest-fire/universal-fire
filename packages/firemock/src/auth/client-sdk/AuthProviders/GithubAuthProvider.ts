@@ -3,13 +3,13 @@ import type {
   AuthCredential,
   AuthProvider,
   GithubAuthProvider_Instance,
-  AuthProviderName,
 } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 
 export class GithubAuthProvider
-  implements GithubAuthProvider_Instance, GoogleGithubAuthProvider {
-  public static PROVIDER_ID: AuthProviderName.github;
+  implements GithubAuthProvider_Instance, GoogleGithubAuthProvider
+{
+  public static PROVIDER_ID = 'github';
   public static GITHUB_SIGN_IN_METHOD: string;
 
   public static credential(

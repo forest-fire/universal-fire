@@ -1,14 +1,6 @@
 import { IDictionary } from 'common-types';
-<<<<<<< HEAD:packages/firemock/test/auth/adminSdk-auth-spec.ts
-import { Mock } from '../../src/mocking';
-import { adminAuthSdk } from '../../src';
-import { clearAuthUsers } from '../../src/auth/user-mgmt';
-import 'jest-extended';
-import { AuthProviderName } from '@forest-fire/types';
-=======
 import { createDatabase } from '../../src';
-import { AuthProviderName, SDK } from '~/auth/admin-sdk';
->>>>>>> feature/refresh_ext:packages/firemock/test/auth/adminSdk-auth.spec.ts
+import { SDK } from '~/auth/admin-sdk';
 
 describe('Admin Auth => ', () => {
   it('using a direct import, primary functions are in place', async () => {
@@ -29,32 +21,18 @@ describe('Admin Auth => ', () => {
       password: 'foobar',
     });
     // UserRecord has correct props
-    expect(typeof response).toEqual("object");
+    expect(typeof response).toEqual('object');
     expect(response.uid).toBe('1234');
     expect(response.email).toBe('test@test.com');
     expect(response.displayName).toBe('John Smith');
     expect(response.disabled).toBe(false);
   });
 
-<<<<<<< HEAD:packages/firemock/test/auth/adminSdk-auth-spec.ts
-  it('creating a User allows the client API to use that user to login', async () => {
-    const m = await Mock.prepare({
-      auth: { providers: [AuthProviderName.emailPassword] },
-    });
-    const auth = await m.auth();
-    const admin = adminAuthSdk;
-    await admin.createUser({
-      email: 'test@test.com',
-      disabled: false,
-      displayName: 'John Smith',
-      emailVerified: true,
-      uid: '1234',
-      password: 'foobar',
-    });
-=======
-  // TODO: Since now we are not using a global state for users, creating in-memory client and admin instances, they will hold their own state. This test does not make sense anymore  
+  // TODO: Since now we are not using a global state for users, creating in-memory client and admin instances, they will hold their own state. This test does not make sense anymore
   it.skip('creating a User allows the client API to use that user to login', async () => {
-    const m = createDatabase(SDK.RealTimeClient,{ auth: { providers: [AuthProviderName.emailPassword] } });
+    const m = createDatabase(SDK.RealTimeClient, {
+      auth: { providers: ['emailPassword'] },
+    });
     const auth = m.auth;
     // const admin = createAdminAuth(m.authManager);
     // await admin.createUser({
@@ -65,7 +43,6 @@ describe('Admin Auth => ', () => {
     //   uid: '1234',
     //   password: 'foobar',
     // });
->>>>>>> feature/refresh_ext:packages/firemock/test/auth/adminSdk-auth.spec.ts
 
     const response = await auth.signInWithEmailAndPassword(
       'test@test.com',
@@ -80,7 +57,7 @@ describe('Admin Auth => ', () => {
 
   it('using admin API ... can create, update, then delete two users; listing at every step', async () => {
     const m = createDatabase(SDK.RealTimeAdmin, {
-      auth: { providers: [AuthProviderName.emailPassword] },
+      auth: { providers: ['emailPassword'] },
     });
 
     const admin = m.auth;
@@ -97,7 +74,7 @@ describe('Admin Auth => ', () => {
       password: 'foobar',
     });
     let users = await admin.listUsers();
-    expect(users.hasOwnProperty('users')).toBeTruthy();
+    expect('users' in users).toBeTruthy();
     expect(Array.isArray(users.users)).toBeTruthy();
     expect(users.users).toHaveLength(2);
 

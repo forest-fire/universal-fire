@@ -1,5 +1,4 @@
 // tslint:disable:no-implicit-dependencies
-import { AuthProviderName } from '../../types/dist/types';
 import { RealTimeAdmin } from '../src';
 import * as helpers from './testing/helpers';
 
@@ -23,7 +22,7 @@ describe('Admin Auth API', () => {
   it('Mock Auth: can access the mocked Admin Auth API', async () => {
     const db = await RealTimeAdmin.connect({
       mocking: true,
-      mockAuth: { users: [], providers: [AuthProviderName.anonymous] },
+      mockAuth: { users: [], providers: ['anonymous'] },
     });
     const auth = await db.auth();
     expect(typeof auth.updateUser === 'function').toBeTruthy();

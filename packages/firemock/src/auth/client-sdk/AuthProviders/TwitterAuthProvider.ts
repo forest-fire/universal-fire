@@ -3,13 +3,13 @@ import {
   AuthCredential,
   TwitterAuthProvider_Instance,
   AuthProvider,
-  AuthProviderName,
 } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 
 export class TwitterAuthProvider
-  implements GoogleTwitterAuthProvider, TwitterAuthProvider_Instance {
-  public static PROVIDER_ID: string = AuthProviderName.twitter;
+  implements GoogleTwitterAuthProvider, TwitterAuthProvider_Instance
+{
+  public static PROVIDER_ID = 'twitter' as const;
   public static TWITTER_SIGN_IN_METHOD: string;
 
   public static credential(
@@ -19,7 +19,7 @@ export class TwitterAuthProvider
     throw new Error('not implemented');
   }
 
-  public providerId: string = AuthProviderName.twitter;
+  public providerId = 'twitter' as const;
   public addScope(scope: string): AuthProvider {
     throw new Error('not implemented');
   }

@@ -5,9 +5,7 @@ import {
   User,
   UserCredential,
   UserRecord,
-  AuthProviderName,
   IMockAuthConfig,
-  UpdateRequest,
   IAuthObserver,
   NetworkDelay,
   IClientAuthProviders,
@@ -17,6 +15,7 @@ import {
   ISdk,
   AuthProviderFrom,
   isAdminSdk,
+  IAuthProviderName,
 } from '@forest-fire/types';
 import { IDictionary } from 'common-types';
 import {
@@ -61,7 +60,7 @@ export function createAuthManager<TSdk extends ISdk>(
   sdk: TSdk
 ): IMockAuthMgmt<TSdk> {
   const _anonymousUidQueue: string[] = [];
-  let _providers: AuthProviderName[];
+  let _providers: IAuthProviderName[];
   const _authObservers: IAuthObserver[] = [];
   let _currentUser: string | null = null;
   let _knownUsers: IMockUserRecord[] = [];
@@ -75,11 +74,11 @@ export function createAuthManager<TSdk extends ISdk>(
     _authObservers.push(ob);
   };
 
-  const hasProvider = (provider: AuthProviderName) => {
+  const hasProvider = (provider: IAuthProviderName) => {
     return _providers.includes(provider);
   };
 
-  const addProvider = (provider: AuthProviderName) => {
+  const addProvider = (provider: IAuthProviderName) => {
     if (_providers.includes(provider)) {
       throw new FireMockError(
         `Failed adding "${provider}" as a new Firemock auth provider as it was already listed as a provider!`,
@@ -89,7 +88,7 @@ export function createAuthManager<TSdk extends ISdk>(
     _providers.push(provider);
   };
 
-  const removeProvider = (provider: AuthProviderName) => {
+  const removeProvider = (provider: IAuthProviderName) => {
     if (!_providers.includes(provider)) {
       throw new FireMockError(
         `Failed to remove "${provider}" as a Firemock auth provider as it was not listed as a provider!`,
@@ -162,7 +161,7 @@ export function createAuthManager<TSdk extends ISdk>(
 
   const logout = () => {
     if (_providers) {
-      if (_providers.includes(AuthProviderName.anonymous)) {
+      if (_providers.includes('anonymous')) {
         setCurrentUser(getAnonymousUid());
       } else {
         setCurrentUser(undefined, true);
@@ -250,7 +249,7 @@ export function createAuthManager<TSdk extends ISdk>(
 
   const initializeAuth = async (config: IMockAuthConfig): Promise<void> => {
     const fullConfig: IMockAuthConfig = {
-      providers: config?.providers || [AuthProviderName.anonymous],
+      providers: config?.providers || ['anonymous'],
       users: config?.users || [],
       options: {
         networkDelay: NetworkDelay.wifi,
