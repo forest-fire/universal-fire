@@ -1,8 +1,5 @@
-import {
-  AuthProviderName,
-  SAMLAuthProvider as GoogleSAMLAuthProvider,
-} from '@forest-fire/types';
+import { SAMLAuthProvider as GoogleSAMLAuthProvider } from '@forest-fire/types';
 
 export class SAMLAuthProvider implements GoogleSAMLAuthProvider {
-  public providerId: string = AuthProviderName.saml;
+  public providerId = 'saml' as const;
 }

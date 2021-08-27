@@ -1,9 +1,4 @@
-import {
-  AuthProviderName,
-  ClientSdk,
-  IMockAuthMgmt,
-  User,
-} from '@forest-fire/types';
+import { ClientSdk, IMockAuthMgmt, User } from '@forest-fire/types';
 import { validate } from 'email-validator';
 import { uuid } from 'native-dash';
 
@@ -39,7 +34,7 @@ export const userUid = (api: IMockAuthMgmt<ClientSdk>) => (email: string) => {
 };
 
 export const emailValidationAllowed = (api: IMockAuthMgmt<ClientSdk>) => () => {
-  return api.hasProvider(AuthProviderName.emailPassword);
+  return api.hasProvider('emailPassword');
 };
 
 export const loggedIn = (api: IMockAuthMgmt<ClientSdk>) => (user: User) => {

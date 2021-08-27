@@ -10,7 +10,6 @@ import FiremodelPlugin, {
 } from '~/index';
 import { IRootState, setupStore } from './store';
 import { RealTimeClient } from '@forest-fire/real-time-client';
-import { AuthProviderName } from '@forest-fire/types';
 import { wait } from 'common-types';
 import Vue from 'vue';
 

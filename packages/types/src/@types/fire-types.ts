@@ -48,7 +48,7 @@ export interface ISimplifiedMockApi extends IDictionary {
  */
 export interface IMockAuthConfig {
   /** The auth providers which have been enabled for this app */
-  providers: AuthProviderName[] | (() => Promise<AuthProviderName[]>);
+  providers: IAuthProviderName[] | (() => Promise<IAuthProviderName[]>);
   /** Arrya of known users who should be in the mock Auth system to start. */
   users?: IMockUser[] | (() => Promise<IMockUser[]>);
   options?: IMockServerOptions;

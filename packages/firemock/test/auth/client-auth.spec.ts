@@ -1,20 +1,7 @@
-<<<<<<< HEAD:packages/firemock/test/auth/client-auth-spec.ts
-import 'jest-extended';
-import { Mock } from '../../src/mocking/index';
-
-import {
-  addAuthObserver,
-  authProviders,
-  setCurrentUser,
-  setDefaultAnonymousUid,
-} from '../../src/auth/user-mgmt/index';
-import { AuthProviderName } from '@forest-fire/types';
-=======
 import { createDatabase } from '~/databases';
-import { AuthProviderName, IMockAuthConfig, SDK } from '~/auth/admin-sdk';
+import { SDK } from '~/auth/admin-sdk';
 import { createAuth } from '~/auth';
 import { IClientAuth } from '@forest-fire/types';
->>>>>>> feature/refresh_ext:packages/firemock/test/auth/client-auth.spec.ts
 
 describe('Firebase Auth →', () => {
   it('Calling auth() gives you API', async () => {
@@ -27,24 +14,18 @@ describe('Firebase Auth →', () => {
   it('Signing in anonymously is defaulted to true', async () => {
     const m = createDatabase('RealTimeClient');
 
-    expect(
-      m.authManager.getAuthProvidersNames().includes(AuthProviderName.anonymous)
-    ).toEqual(true);
+    expect(m.authManager.getAuthProvidersNames().includes('anonymous')).toEqual(
+      true
+    );
   });
 
   it('Signing in with email is defaulted to false', async () => {
-<<<<<<< HEAD:packages/firemock/test/auth/client-auth-spec.ts
-    const m = await Mock.prepare();
-    const auth = await m.auth();
-    expect(authProviders().includes(AuthProviderName.emailPassword)).toEqual(false);
-=======
     const m = createDatabase(SDK.RealTimeClient);
     expect(
       Object.keys(m.authManager.getAuthProvidersNames()).includes(
         'emailPassword'
       )
     ).toEqual(false);
->>>>>>> feature/refresh_ext:packages/firemock/test/auth/client-auth.spec.ts
   });
 
   it('signInAnonymously returns uid of default anonymous user (when set)', async () => {
@@ -63,7 +44,7 @@ describe('Firebase Auth →', () => {
         users: [
           { email: 'test@test.com', password: 'foobar', emailVerified: true },
         ],
-        providers: [AuthProviderName.emailPassword],
+        providers: ['emailPassword'],
       },
     });
     const auth = m.auth;
@@ -84,7 +65,7 @@ describe('Firebase Auth →', () => {
           Promise.resolve([
             { email: 'test@test.com', password: 'foobar', emailVerified: true },
           ]),
-        providers: [AuthProviderName.emailPassword],
+        providers: ['emailPassword'],
       },
     });
     const auth = m.auth;
@@ -103,7 +84,7 @@ describe('Firebase Auth →', () => {
         users: [
           { email: 'test@test.com', password: 'foobar', emailVerified: true },
         ],
-        providers: [AuthProviderName.emailPassword],
+        providers: ['emailPassword'],
       },
     });
     const auth = m.auth;
@@ -122,7 +103,7 @@ describe('Firebase Auth →', () => {
   it('createUserWithEmailAndPassword created unverified user', async () => {
     const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: [AuthProviderName.emailPassword],
+        providers: ['emailPassword'],
         users: [],
       },
     });
@@ -138,7 +119,7 @@ describe('Firebase Auth →', () => {
   it('once user is created, it can be used to login with', async () => {
     const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: [AuthProviderName.emailPassword],
+        providers: ['emailPassword'],
         users: [],
       },
     });
@@ -153,7 +134,7 @@ describe('Firebase Auth →', () => {
   it('userCredential passed back from creation allows password reset', async () => {
     const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: [AuthProviderName.emailPassword],
+        providers: ['emailPassword'],
         users: [],
       },
     });
@@ -174,7 +155,7 @@ describe('Firebase Auth →', () => {
     const expectedToken = '123456789';
     const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: [AuthProviderName.emailPassword],
+        providers: ['emailPassword'],
         users: [
           {
             email: 'test@company.com',
@@ -199,7 +180,7 @@ describe('Firebase Auth →', () => {
     const user = { email: 'test@test.com', password: 'foobar' };
     const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: [AuthProviderName.emailPassword],
+        providers: ['emailPassword'],
         users: [user],
       },
     });
@@ -217,7 +198,7 @@ describe('Firebase Auth →', () => {
     const user = { email: 'test@test.com', password: 'foobar' };
     const m = createDatabase(SDK.RealTimeClient, {
       auth: {
-        providers: [AuthProviderName.emailPassword],
+        providers: ['emailPassword'],
         users: [user],
       },
     });

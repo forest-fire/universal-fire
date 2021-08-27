@@ -14,9 +14,7 @@ import {
   IClientAuth,
   IAuthObserver,
   IMockAuthMgmt,
-  AuthProviderName,
   Unsubscribe,
-  UpdateRequest,
   ClientSdk,
   User,
 } from '@forest-fire/types';
@@ -25,9 +23,9 @@ import { FireMockError } from '../../errors';
 import { completeUserCredential, toUser } from '../../auth/util';
 import { createUser } from './createUser';
 
-export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth> = (
-  api
-) => ({
+export const implemented: (
+  api: IMockAuthMgmt<ClientSdk>
+) => Partial<IClientAuth> = (api) => ({
   tenantId: '',
 
   languageCode: '',
@@ -63,17 +61,17 @@ export const implemented: (api: IMockAuthMgmt<ClientSdk>) => Partial<IClientAuth
 
   signInAnonymously: async (): Promise<UserCredential> => {
     await api.networkDelay();
-    if (api.hasProvider(AuthProviderName.anonymous)) {
+    if (api.hasProvider('anonymous')) {
       const user = createUser(api, {
         isAnonymous: true,
         uid: api.getAnonymousUid(),
       });
       const credential: AuthCredential = {
-        signInMethod: AuthProviderName.anonymous,
-        providerId: AuthProviderName.anonymous,
+        signInMethod: 'anonymous',
+        providerId: 'anonymous',
         toJSON: () => ({
-          signInMethod: AuthProviderName.anonymous,
-          providerId: AuthProviderName.anonymous,
+          signInMethod: 'anonymous',
+          providerId: 'anonymous',
         }),
       };
 
