@@ -30,6 +30,8 @@ import _authProviders from './client-sdk/AuthProviders';
 import { uuid } from 'native-dash';
 import { createUser } from './client-sdk/createUser';
 
+let _currentUser: string | null = null;
+
 const toMockUser = (
   user: User,
   metadata?: UserRecord['metadata']
@@ -62,7 +64,6 @@ export function createAuthManager<TSdk extends ISdk>(
   const _anonymousUidQueue: string[] = [];
   let _providers: IAuthProviderName[];
   const _authObservers: IAuthObserver[] = [];
-  let _currentUser: string | null = null;
   let _knownUsers: IMockUserRecord[] = [];
   let _networkDelay: NetworkDelay | number | [number, number];
 
@@ -106,7 +107,8 @@ export function createAuthManager<TSdk extends ISdk>(
   };
 
   const getCurrentUser = () => {
-    return _currentUser ? findKnownUser('uid', _currentUser) : undefined;
+    const u = _currentUser ? findKnownUser('uid', _currentUser) : undefined;
+    return u;
   };
 
   const setCurrentUser = (
@@ -139,9 +141,7 @@ export function createAuthManager<TSdk extends ISdk>(
       getAuthObservers()?.map((o) => {
         const currentUser = getCurrentUser();
         return o(
-          currentUser
-            ? createUser(createAuthManager(sdk), toUser(currentUser))
-            : undefined
+          currentUser ? createUser(authManager, toUser(currentUser)) : undefined
         );
       });
     }
@@ -156,7 +156,7 @@ export function createAuthManager<TSdk extends ISdk>(
         'not-allowed'
       );
     }
-    return createUser(createAuthManager(sdk), toUser(setCurrentUser(user)));
+    return createUser(authManager, toUser(setCurrentUser(user)));
   };
 
   const logout = () => {
@@ -337,7 +337,7 @@ export function createAuthManager<TSdk extends ISdk>(
     _networkDelay = delay;
   };
 
-  return {
+  const authManager = {
     getAuthObservers,
     addAuthObserver,
     getCurrentUser,
@@ -361,4 +361,6 @@ export function createAuthManager<TSdk extends ISdk>(
     authProviders,
     getAuthProvidersNames,
   };
+
+  return authManager;
 }

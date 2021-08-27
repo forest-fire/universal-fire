@@ -48,7 +48,8 @@ export const implemented: (
     completed?: Unsubscribe
   ): Unsubscribe {
     api.addAuthObserver(observer);
-    observer(createUser(api, toUser(api.getCurrentUser())));
+    const currentUser = api.getCurrentUser();
+    observer(currentUser ? createUser(api, toUser(currentUser)) : undefined);
     return undefined;
   },
 
