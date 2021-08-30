@@ -1,6 +1,6 @@
 {
   "name": "universal-fire",
-  "version": "0.60.8",
+  "version": "0.60.9",
   "description": "Provides a static initializer to all of the Universal Fire SDK's",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",

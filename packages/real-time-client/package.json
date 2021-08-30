@@ -1,6 +1,6 @@
 {
   "name": "@forest-fire/real-time-client",
-  "version": "0.60.8",
+  "version": "0.60.9",
   "description": "Client SDK for the Real Time database",
   "license": "MIT",
   "repository": "https://github.com/forest-fire/universal-fire",
@@ -29,18 +29,18 @@
     "test": "scripty"
   },
   "dependencies": {
-    "@forest-fire/real-time-db": "^0.60.8",
+    "@forest-fire/real-time-db": "^0.60.9",
     "events": "^3.1.0"
   },
   "engines": {
     "node": ">=12"
   },
   "devDependencies": {
-    "@forest-fire/fixture": "^0.60.8",
-    "@forest-fire/serialized-query": "^0.60.8",
-    "@forest-fire/types": "^0.60.8",
-    "@forest-fire/utility": "^0.60.8",
-    "firemock": "^0.60.8"
+    "@forest-fire/fixture": "^0.60.9",
+    "@forest-fire/serialized-query": "^0.60.9",
+    "@forest-fire/types": "^0.60.9",
+    "@forest-fire/utility": "^0.60.9",
+    "firemock": "^0.60.9"
   },
   "gitHead": "78e25fc502a7e229b11be3586f656ab315553a7d",
   "peerDependencies": {
