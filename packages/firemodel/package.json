@@ -1,6 +1,6 @@
 {
   "name": "firemodel",
-  "version": "0.60.8",
+  "version": "0.60.9",
   "description": "Modeling, Access, and Mocking for Firebase Projects",
   "keywords": [
     "typescript",
@@ -63,10 +63,10 @@
     "universal-fire": "^0.60.6"
   },
   "devDependencies": {
-    "@forest-fire/serialized-query": "^0.60.8",
-    "@forest-fire/types": "^0.60.8",
-    "firemock": "^0.60.8",
-    "universal-fire": "^0.60.8"
+    "@forest-fire/serialized-query": "^0.60.9",
+    "@forest-fire/types": "^0.60.9",
+    "firemock": "^0.60.9",
+    "universal-fire": "^0.60.9"
   },
   "engines": {
     "node": ">=10.0.0"
