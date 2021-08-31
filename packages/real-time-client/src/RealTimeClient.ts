@@ -169,7 +169,7 @@ export class RealTimeClient extends RealTimeDb<SDK.RealTimeClient> {
    * mocked DB.
    */
   protected async _connectMockDb(config: IMockConfig): Promise<void> {
-    this.getFiremock(config);
+    await this.getFiremock(config);
     //TODO:
     // this._authProviders = mock.authProviders;
     await this._listenForConnectionStatus();
