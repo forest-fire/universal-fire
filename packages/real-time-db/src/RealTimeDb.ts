@@ -627,8 +627,8 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk> implements IDatabaseSdk<
       this._mock = createDatabase(
         this.sdk,
         { auth: config.mockAuth, db: { mocking: true, name: config.name } },
-        'initial' in config.mockData
-          ? await config.mockData.initial()
+        'connect' in config.mockData
+          ? await config.mockData.connect()
           : config.mockData || {}
       );
     } catch (e) {
