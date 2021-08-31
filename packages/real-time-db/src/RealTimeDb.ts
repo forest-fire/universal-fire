@@ -48,9 +48,7 @@ import { createDatabase } from 'firemock';
 /** time by which the dynamically loaded mock library should be loaded */
 export const MOCK_LOADING_TIMEOUT = 2000;
 
-export abstract class RealTimeDb<TSdk extends IRtdbSdk>
-  implements IDatabaseSdk<TSdk>
-{
+export abstract class RealTimeDb<TSdk extends IRtdbSdk> implements IDatabaseSdk<TSdk> {
   dbType: DbTypeFrom<TSdk>;
   sdk: TSdk;
   isAdminApi: IsAdminSdk<TSdk>;
@@ -624,16 +622,19 @@ export abstract class RealTimeDb<TSdk extends IRtdbSdk>
    *
    * Establishes a mock database using the `firemock` repo
    */
-  protected getFiremock(config: IMockConfig): void {
+  protected async getFiremock(config: IMockConfig): Promise<void> {
     try {
       this._mock = createDatabase(
         this.sdk,
         { auth: config.mockAuth, db: { mocking: true, name: config.name } },
-        config.mockData || {}
+        'initial' in config.mockData
+          ? await config.mockData.initial()
+          : config.mockData || {}
       );
     } catch (e) {
       throw new FireError(
-        `A problem was encountered while trying to setup the mock database: ${(e as Error).message
+        `A problem was encountered while trying to setup the mock database: ${
+          (e as Error).message
         }`,
         'failed-mock-prep'
       );
