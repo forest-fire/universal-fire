@@ -12,6 +12,11 @@
   resolved "https://registry.npmjs.org/@firebase/auth-interop-types/-/auth-interop-types-0.1.6.tgz#5ce13fc1c527ad36f1bb1322c4492680a6cf4964"
   integrity sha512-etIi92fW3CctsmR9e3sYM3Uqnoq861M0Id9mdOPF6PWIg38BXL5k4upCNBggGUpLIS0H1grMOvy/wn1xymwe2g==
 
+"@firebase/auth-types@^0.10.3":
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/@firebase/auth-types/-/auth-types-0.10.3.tgz#2be7dd93959c8f5304c63e09e98718e103464d8c"
+  integrity sha512-zExrThRqyqGUbXOFrH/sowuh2rRtfKHp9SBVY2vOqKWdCX1Ztn682n9WLtlUDsiYVIbBcwautYWk2HyCGFv0OA==
+
 "@firebase/component@0.5.5":
   version "0.5.5"
   resolved "https://registry.npmjs.org/@firebase/component/-/component-0.5.5.tgz#849ccf7cbf0398a43058f274ffcd43620ae9521f"
@@ -40,6 +45,11 @@
     faye-websocket "0.11.3"
     tslib "^2.1.0"
 
+"@firebase/firestore-types@^2.3.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@firebase/firestore-types/-/firestore-types-2.5.0.tgz#16fca40b6980fdb000de86042d7a96635f2bcdd7"
+  integrity sha512-I6c2m1zUhZ5SH0cWPmINabDyH5w0PPFHk2UHsjBpKdZllzJZ2TwTkXbDtpHUZNmnc/zAa0WNMNMvcvbb/xJLKA==
+
 "@firebase/logger@0.2.6":
   version "0.2.6"
   resolved "https://registry.npmjs.org/@firebase/logger/-/logger-0.2.6.tgz#3aa2ca4fe10327cabf7808bd3994e88db26d7989"
@@ -51,6 +61,36 @@
   integrity sha512-8W9TTGImXr9cu+oyjBJ7yjoEd/IVAv0pBZA4c1uIuKrpGZi2ee38m+8xlZOBRmsAaOU/tR9DXz1WF/oeM6Fb7Q==
   dependencies:
     tslib "^2.1.0"
+
+"@forest-fire/real-time-db@^0.60.10":
+  version "0.60.11"
+  resolved "https://registry.yarnpkg.com/@forest-fire/real-time-db/-/real-time-db-0.60.11.tgz#42cbf0ffe6d8571fb7ba697a61310f4f387a6d3d"
+  integrity sha512-zC6lB5DF1LIzWDkDGzpYx9adeEQ8bdjUDXd7DYvZzFDlgZj0o85E000pImaq46Z6Wpl9ZD5KWv/fa1HRjXT1ZQ==
+  dependencies:
+    "@forest-fire/utility" "^0.60.11"
+    brilliant-errors "^0.3.1"
+    typed-conversions "^0.12.0"
+
+"@forest-fire/serialized-query@^0.60.10":
+  version "0.60.11"
+  resolved "https://registry.yarnpkg.com/@forest-fire/serialized-query/-/serialized-query-0.60.11.tgz#5889f25c7b3cccbabdeaf3a409300d468df75d0b"
+  integrity sha512-UO1f8myxDwITkU0ywyDGfVPfJl6myJ+1TnfM2rqKYrJWSQEh+2hJiPA+DDaux+tw66sSGFI9yNvgAAkHCwQKLA==
+  dependencies:
+    brilliant-errors "^0.3.1"
+
+"@forest-fire/types@^0.60.10":
+  version "0.60.11"
+  resolved "https://registry.yarnpkg.com/@forest-fire/types/-/types-0.60.11.tgz#2788ab573697399241bb6899f2aa6ee2c64770c0"
+  integrity sha512-i9EO4xxDXYTT4dfayXnKO/7iMJJnBF7O8XnDOXXfXgslRE3wr2DvSUr7fwv6pTidojaBhHfdIaP3XJJvKlFsLw==
+  dependencies:
+    "@firebase/auth-types" "^0.10.3"
+    "@firebase/database-types" "^0.7.2"
+    "@firebase/firestore-types" "^2.3.0"
+
+"@forest-fire/utility@^0.60.10", "@forest-fire/utility@^0.60.11":
+  version "0.60.11"
+  resolved "https://registry.yarnpkg.com/@forest-fire/utility/-/utility-0.60.11.tgz#a013f8503f4dd2361a913299adf52863ae1b2e08"
+  integrity sha512-d6kJPFaMYe6kJmn9WP2eUSdYmIecHw05Kh3gp4HDGUJ46zUIoF0Bpzs3TrqCxLtvlO2mZ8HOVw/wkJ4M33yoTA==
 
 "@google-cloud/common@^3.7.0":
   version "3.7.1"
@@ -332,10 +372,23 @@ bignumber.js@^9.0.0:
   resolved "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.0.1.tgz#8d7ba124c882bfd8e43260c67475518d0689e4e5"
   integrity sha512-IdZR9mh6ahOBv/hYGiXyVuyCetmGJhtYkqLBpTStdhEGjegpPlUawydyaF3pbIOFynJTpllEs+NP+CS9jKFLjA==
 
+brilliant-errors@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/brilliant-errors/-/brilliant-errors-0.3.1.tgz#c3e59fa01f52069d6cd3f64da77436c0f75aea0f"
+  integrity sha512-oPUlFidgxs6HhTo1ksSoAAEG2nDXdR+73Za2t6s2Yem1MXJzq+tJy9zYs65TWt/suLA3bGE6PLUyS3+yysnbEQ==
+  dependencies:
+    callsites "^3.1.0"
+    common-types "^1.25.0"
+
 buffer-equal-constant-time@1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz#f8e71132f7ffe6e01a5c9697a4c6f3e48d5cc819"
   integrity sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
+
+callsites@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
+  integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
 cliui@^7.0.2:
   version "7.0.4"
@@ -357,6 +410,11 @@ color-name@~1.1.4:
   version "1.1.4"
   resolved "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
+
+common-types@^1.15.6, common-types@^1.25.0, common-types@^1.31.0:
+  version "1.31.1"
+  resolved "https://registry.yarnpkg.com/common-types/-/common-types-1.31.1.tgz#2cfb4f0b67bce8010e0f13f7fdedcfd7257a429b"
+  integrity sha512-eixAd22Gmek1dgsPgyqCSjzMAlp8rpSLkb44iEMfOzR9fwGFYEkH+AWOHmwSFxWmO8MvMND/m1jpZX0Wk4+yJA==
 
 compressible@^2.0.12:
   version "2.0.18"
@@ -394,6 +452,11 @@ debug@4, debug@^4.1.1, debug@^4.3.2:
   dependencies:
     ms "2.1.2"
 
+deepmerge@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
+  integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
+
 dicer@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npmjs.org/dicer/-/dicer-0.3.0.tgz#eacd98b3bfbf92e8ab5c2fdb71aaac44bb06b872"
@@ -424,6 +487,11 @@ ecdsa-sig-formatter@1.0.11, ecdsa-sig-formatter@^1.0.11:
   integrity sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==
   dependencies:
     safe-buffer "^5.0.1"
+
+email-validator@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/email-validator/-/email-validator-2.0.4.tgz#b8dfaa5d0dae28f1b03c95881d904d4e40bfe7ed"
+  integrity sha512-gYCwo7kh5S3IDyZPLZf6hSS0MnZT8QmJFqYvbqlDZSbwdZlY6QZWxJ4i/6UhITOJ4XzyI647Bm2MXKCLqnJ4nQ==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -457,10 +525,20 @@ extend@^3.0.2:
   resolved "https://registry.npmjs.org/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
 
+fast-copy@^2.1.0:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/fast-copy/-/fast-copy-2.1.3.tgz#bf6e05ac3cb7a9d66fbf12c51dd4440e9ddd4afb"
+  integrity sha512-LDzYKNTHhD+XOp8wGMuCkY4eTxFZOOycmpwLBiuF3r3OjOmZnURRD8t2dUAbmKuXGbo/MGggwbSjcBdp8QT0+g==
+
 fast-deep-equal@^3.1.1:
   version "3.1.3"
   resolved "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
+
+fast-equals@^2.0.0:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/fast-equals/-/fast-equals-2.0.4.tgz#3add9410585e2d7364c2deeb6a707beadb24b927"
+  integrity sha512-caj/ZmjHljPrZtbzJ3kfH5ia/k4mTJe/qSiXAGzxZWRZgsgDV0cvNaQULqUX8t0/JVlzzEdYOwCN5DmzTxoD4w==
 
 fast-text-encoding@^1.0.0, fast-text-encoding@^1.0.3:
   version "1.0.3"
@@ -489,6 +567,17 @@ firebase-admin@9.11.0:
   optionalDependencies:
     "@google-cloud/firestore" "^4.5.0"
     "@google-cloud/storage" "^5.3.0"
+
+firemock@^0.60.10:
+  version "0.60.11"
+  resolved "https://registry.yarnpkg.com/firemock/-/firemock-0.60.11.tgz#3931e7bd4ac99c179e2aab6296fe1610f3bf1f51"
+  integrity sha512-AEDtr0Kg5WU+VEqBGH9xpDrJHGoRqOWyPsU41hGym5QjCNEyC4jQ6FYpmMZ9Z+i5+E1mIWD7iOTb//ncPTQzPA==
+  dependencies:
+    brilliant-errors "^0.3.1"
+    deepmerge "^4.2.2"
+    email-validator "^2.0.4"
+    fast-copy "^2.1.0"
+    fast-equals "^2.0.0"
 
 functional-red-black-tree@^1.0.1:
   version "1.0.1"
@@ -623,6 +712,13 @@ imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.npmjs.org/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha1-khi5srkoojixPcT7a21XbyMUU+o=
+
+inferred-types@^0.18.4:
+  version "0.18.4"
+  resolved "https://registry.yarnpkg.com/inferred-types/-/inferred-types-0.18.4.tgz#77361ca50dd7d541f535fad4e70385982a581033"
+  integrity sha512-rdI+5Zuxb7eYKAkU6PxoxqW0TzdFxodMHaUNAmuaxaCg2ngZTKwBTN5LqimfxNyRCOZWyv0DGd7DzNE9mZXVQA==
+  dependencies:
+    common-types "^1.31.0"
 
 inherits@^2.0.3:
   version "2.0.4"
@@ -851,10 +947,19 @@ ms@^2.1.1:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
+native-dash@^1.16.2:
+  version "1.22.1"
+  resolved "https://registry.yarnpkg.com/native-dash/-/native-dash-1.22.1.tgz#2f6a1f7833079bae8806f5d66d68736dfa5210a1"
+  integrity sha512-DLsVXQW8Lo480i4xQ6ObmpxVUY0Qs2X6GOlCnqsdj1j4PxKUAWTme4E2DJ3FCr6/a7qssfrr04u6kh8C6bdYdg==
+  dependencies:
+    inferred-types "^0.18.4"
+
 node-fetch@^2.3.0, node-fetch@^2.6.1:
-  version "2.6.1"
-  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
-  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
+  dependencies:
+    whatwg-url "^5.0.0"
 
 node-forge@^0.10.0:
   version "0.10.0"
@@ -1041,10 +1146,23 @@ teeny-request@^7.0.0:
     stream-events "^1.0.5"
     uuid "^8.0.0"
 
+tr46@~0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+  integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
+
 tslib@^2.1.0:
   version "2.3.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
+
+typed-conversions@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/typed-conversions/-/typed-conversions-0.12.0.tgz#20efbb2341c26294743941446db4ea1a120564fd"
+  integrity sha512-g8bb74wUmiB7gqTMIulESo6tbEL0Q9W9F8HpNzs+giClhbgjGqq9gDnbaNhqkKCqL9csFReli6cpLLxDrAAcDQ==
+  dependencies:
+    common-types "^1.15.6"
+    native-dash "^1.16.2"
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"
@@ -1070,6 +1188,11 @@ uuid@^8.0.0:
   resolved "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
+webidl-conversions@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
+  integrity sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==
+
 websocket-driver@>=0.5.1:
   version "0.7.4"
   resolved "https://registry.npmjs.org/websocket-driver/-/websocket-driver-0.7.4.tgz#89ad5295bbf64b480abcba31e4953aca706f5760"
@@ -1083,6 +1206,14 @@ websocket-extensions@>=0.1.1:
   version "0.1.4"
   resolved "https://registry.npmjs.org/websocket-extensions/-/websocket-extensions-0.1.4.tgz#7f8473bc839dfd87608adb95d7eb075211578a42"
   integrity sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==
+
+whatwg-url@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-5.0.0.tgz#966454e8765462e37644d3626f6742ce8b70965d"
+  integrity sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==
+  dependencies:
+    tr46 "~0.0.3"
+    webidl-conversions "^3.0.0"
 
 wrap-ansi@^7.0.0:
   version "7.0.0"
